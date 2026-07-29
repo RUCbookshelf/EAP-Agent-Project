@@ -53,4 +53,6 @@ Results: Python 3.11.15; dependencies installed from zero; `pip check` reported 
 
 The project environment's pre-final run also reported 58 passed, 1 skipped. One upstream Starlette deprecation warning is emitted by FastAPI's compatibility `TestClient`; it does not affect runtime endpoints and is not suppressed.
 
-The v0.2 implementation commit is recorded immediately after the final acceptance audit; its hash is added to the roadmap during the v0.3 transition.
+v0.2 implementation commit: `155df8a6a6a2800205b6dc821d1e51cf135b78a1` (`feat(v0.2): add local API-first cloud-ready architecture`).
+
+Post-gate architecture backup: `docs/visualizations/V0.2_FUNCTION_ARCHITECTURE.md`.

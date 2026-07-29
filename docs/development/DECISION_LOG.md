@@ -25,3 +25,9 @@
 - Date: 2026-07-29
 - Status: accepted
 - Decision: local FastAPI and Streamlit ports are configured once; startup fails with a clear error when unavailable and never silently selects another port.
+
+## D005 — v0.2 acceptance and transition
+
+- Date: 2026-07-29
+- Status: accepted
+- Decision: v0.2 passed all gates and was committed as `155df8a6a6a2800205b6dc821d1e51cf135b78a1`; the post-gate architecture backup is `docs/visualizations/V0.2_FUNCTION_ARCHITECTURE.md`. v0.3 may begin automatically.
