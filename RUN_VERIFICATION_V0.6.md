@@ -1,5 +1,14 @@
 # v0.6 run verification — 2026-07-29
 
+## Post-release DeepSeek and timed-writing repair
+
+- Reproduced the reported LocalDemo result and confirmed from the persisted audit that DeepSeek had been called twice before `fallback_success`.
+- Root cause: incomplete JSON under the 1,800-token first-call budget, followed by a contradictory correction instruction that prevented repair of non-verbatim evidence quotations.
+- The one permitted correction request now receives a 3,600-token budget (capped at 8,192), actionable field-only validation details, and an explicit exact-substring quotation instruction.
+- A real isolated submission returned provider `deepseek`, model `deepseek-v4-flash`, status `success`, validation `passed`, retry count 1, and no fallback. The API key was neither printed nor persisted.
+- Streamlit now keeps `Time limit (minutes)` editable and persists a tested value of 45 when timed writing is selected.
+- Regression result after the repair: `152 passed, 1 skipped`; `run.bat --verify` returned FastAPI health 200, docs 200, and Streamlit 200.
+
 ## Result
 
 PASS. v0.6 provides API-sourced progress/revision views, versioned non-sensitive configuration and append-only scoped

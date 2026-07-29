@@ -2,7 +2,9 @@ from __future__ import annotations
 
 import json
 
-from app.llm import DeepSeekProvider, LocalDemoProvider, ProviderRouter
+import pytest
+
+from app.llm import DeepSeekProvider, LocalDemoProvider, ProviderOutputError, ProviderRouter
 from app.models import StructuredFeedback
 
 
@@ -39,10 +41,57 @@ def test_deepseek_provider_receives_prebuilt_messages(monkeypatch, prompt_bundle
     assert isinstance(feedback, StructuredFeedback)
     assert captured["payload"]["messages"] == prompt_bundle.messages
     assert captured["payload"]["temperature"] == 0.2
+    assert captured["payload"]["max_tokens"] == 1800
     assert captured["url"] == "https://api.example/chat/completions"
     assert captured["authorization"].startswith("Bearer ")
     assert provider.last_request_metadata["history_evidence_count"] == 0
     assert "writing_prompt" in provider.last_request_metadata["submission_fields"]
+
+
+def test_deepseek_correction_attempt_doubles_output_budget(monkeypatch, prompt_bundle):
+    expected = LocalDemoProvider().generate(prompt_bundle.messages, temperature=0.2)
+    captured = {}
+
+    class FakeResponse:
+        def __enter__(self): return self
+        def __exit__(self, *args): return False
+        def read(self):
+            return json.dumps({"choices": [{"message": {"content": expected.model_dump_json()}}]}).encode()
+
+    def fake_urlopen(request, timeout):
+        captured["payload"] = json.loads(request.data.decode("utf-8"))
+        return FakeResponse()
+
+    monkeypatch.setattr("app.llm.deepseek.urlopen", fake_urlopen)
+    provider = DeepSeekProvider("test-secret", "https://api.example", "deepseek-test", max_tokens=1800)
+    correction_messages = [*prompt_bundle.messages, {"role": "user", "content": "correct it"}]
+
+    provider.generate(correction_messages, temperature=0.2)
+
+    assert captured["payload"]["max_tokens"] == 3600
+    assert provider.last_request_metadata["max_tokens"] == 3600
+
+
+def test_deepseek_schema_failure_reports_actionable_fields_without_response_content(
+    monkeypatch, prompt_bundle,
+):
+    class FakeResponse:
+        def __enter__(self): return self
+        def __exit__(self, *args): return False
+        def read(self):
+            return json.dumps({"choices": [{"message": {"content": '{"positive_finding": {}}'}}]}).encode()
+
+    monkeypatch.setattr("app.llm.deepseek.urlopen", lambda request, timeout: FakeResponse())
+    provider = DeepSeekProvider("test-secret", "https://api.example", "deepseek-test")
+
+    with pytest.raises(ProviderOutputError) as caught:
+        provider.generate(prompt_bundle.messages, temperature=0.2)
+
+    message = str(caught.value)
+    assert "positive_finding.evidence_quote" in message
+    assert "priority_feedback" in message
+    assert "test-secret" not in message
+    assert '{"positive_finding"' not in message
 
 
 def test_api_failure_falls_back_without_interrupting_pipeline(feedback_context):

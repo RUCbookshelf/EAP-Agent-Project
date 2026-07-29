@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased fixes
+
+- Fixed the timed-writing form so the time limit can be edited before submission; the value is persisted only for timed writing.
+- Made DeepSeek schema failures actionable without recording response content or secrets.
+- Corrected the retry instruction so invalid evidence quotations are replaced with exact essay substrings.
+- Doubled the output budget only for the single correction attempt, preventing complete structured feedback from being truncated while retaining the configured first-call budget.
+- Added visible provider configuration and sanitized fallback diagnostics to the Streamlit page.
+
 ## 0.6.0 — 2026-07-29
 
 - Added API-sourced student timelines, issue trajectories, comparability summaries and version-separated metric series.

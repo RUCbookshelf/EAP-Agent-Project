@@ -140,7 +140,10 @@ class PromptBuilder:
     def correction(self, bundle: PromptBundle, validation_error: str) -> PromptBundle:
         correction = (
             "The previous response failed validation. Return a corrected JSON object only. "
-            "Do not change or add diagnosis IDs, categories, quotations, or history evidence IDs. "
+            "Use only diagnosis IDs, diagnosis categories, history evidence IDs, and revision "
+            "evidence IDs supplied in the original payload; do not invent any. Every evidence_quote "
+            "must be copied character-for-character as one contiguous substring of submission.essay_text. "
+            "Replace any invalid or paraphrased quotation with an exact essay substring. "
             f"Validation failure: {validation_error[:800]}"
         )
         messages = [*bundle.messages, {"role": "user", "content": correction}]

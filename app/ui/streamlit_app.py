@@ -155,6 +155,19 @@ def run() -> None:
             f"NLP model: {health.get('nlp_model_name') or 'not applicable'} "
             f"{health.get('nlp_model_version') or ''}"
         )
+        requested_provider = health.get("llm_provider")
+        if requested_provider == "deepseek" and health.get("llm_api_configured"):
+            st.caption(
+                "Feedback provider: DeepSeek is configured. LocalDemo is used only if "
+                "the API request or response validation fails."
+            )
+        elif requested_provider == "deepseek":
+            st.warning(
+                "Feedback provider: DeepSeek is selected, but no API key was loaded by "
+                "the running API process. Restart after saving the local .env file."
+            )
+        else:
+            st.caption("Feedback provider: LocalDemo is explicitly selected for this running API process.")
         if health.get("analyzer_fallback_active"):
             st.warning("The requested NLP analyzer is unavailable; the API will record and use BasicAnalyzer fallback.")
     except ApiClientError:
@@ -202,7 +215,7 @@ def run() -> None:
             timed = st.checkbox("Timed writing")
             time_limit_minutes = st.number_input(
                 "Time limit (minutes)", min_value=1, max_value=1440, value=30,
-                disabled=not timed,
+                help="Editable at all times; saved only when Timed writing is selected.",
             )
             tool_use = st.text_input("Tool use", value="none", help="For example: none, dictionary, spellchecker")
         essay_text = st.text_area("Essay text", height=300)
@@ -241,6 +254,8 @@ def run() -> None:
     provider = result["feedback_result"]
     if provider["success_status"] == "fallback_success":
         st.warning("The configured external provider was unavailable or invalid; LocalDemoProvider generated this feedback.")
+        if provider.get("fallback_reason"):
+            st.caption(f"Fallback reason: {provider['fallback_reason']}")
     st.caption(
         f"Provider: {provider['provider_name']} · Model: {provider['model_name']} · "
         f"Status: {provider['success_status']}"

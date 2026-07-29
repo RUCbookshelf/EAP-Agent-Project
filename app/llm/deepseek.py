@@ -32,12 +32,15 @@ class DeepSeekProvider(LLMProvider):
     def generate(self, messages: list[dict[str, str]], *, temperature: float) -> StructuredFeedback:
         if not self.api_key:
             raise RuntimeError("DEEPSEEK_API_KEY is not configured")
+        # A correction request carries a third message and needs enough room to
+        # regenerate the complete structured object after a truncated response.
+        output_budget = min(self.max_tokens * (2 if len(messages) > 2 else 1), 8192)
         payload = {
             "model": self.model_name,
             "messages": messages,
             "response_format": {"type": "json_object"},
             "temperature": temperature,
-            "max_tokens": self.max_tokens,
+            "max_tokens": output_budget,
         }
         try:
             user_payload = json.loads(messages[1]["content"])
@@ -50,6 +53,7 @@ class DeepSeekProvider(LLMProvider):
             "history_evidence_count": history_count,
             "submission_fields": submission_fields,
             "message_count": len(messages),
+            "max_tokens": output_budget,
         }
         request = Request(
             f"{self.base_url}/chat/completions",
@@ -71,6 +75,20 @@ class DeepSeekProvider(LLMProvider):
         try:
             return StructuredFeedback.model_validate_json(content)
         except ValidationError as exc:
-            raise ProviderOutputError("DeepSeek output failed StructuredFeedback validation") from exc
+            details = self._validation_summary(exc)
+            raise ProviderOutputError(
+                f"DeepSeek output failed StructuredFeedback validation: {details}"
+            ) from exc
         except ValueError as exc:
             raise ProviderOutputError("DeepSeek output was not valid JSON") from exc
+
+    @staticmethod
+    def _validation_summary(exc: ValidationError) -> str:
+        """Return actionable schema errors without echoing model output or secrets."""
+        summaries: list[str] = []
+        for error in exc.errors(include_url=False, include_context=False, include_input=False)[:8]:
+            location = ".".join(str(part) for part in error.get("loc", ())) or "response"
+            summaries.append(
+                f"{location}: {error.get('msg', 'invalid value')} [{error.get('type', 'validation_error')}]"
+            )
+        return "; ".join(summaries) or "schema validation failed"

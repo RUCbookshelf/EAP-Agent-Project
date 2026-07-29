@@ -36,6 +36,8 @@ def test_validation_failure_retries_once_then_succeeds(feedback_context):
     assert result.retry_count == 1
     assert len(provider.messages_seen) == 2
     assert len(provider.messages_seen[1]) == 3
+    assert "character-for-character" in provider.messages_seen[1][-1]["content"]
+    assert "Replace any invalid or paraphrased quotation" in provider.messages_seen[1][-1]["content"]
     assert [audit.validation_status for audit in result.call_audits] == ["failed", "passed"]
 
 
