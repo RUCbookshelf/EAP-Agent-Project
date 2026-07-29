@@ -4,7 +4,7 @@ from app.analyzer import Analyzer
 from app.diagnosis import Diagnoser
 from app.learner import LearnerHistoryService
 from app.llm import FeedbackContext, ProviderRouter
-from app.models import EssaySubmission, PipelineResult
+from app.models import AnalysisResult, DiagnosisResult, EssaySubmission, HistoryResult, PipelineResult
 from app.repositories import (
     DiagnosisRepository,
     EssayRepository,
@@ -51,13 +51,15 @@ class SubmissionService:
         self.learner_profile_service = learner_profile_service
         self.revision_service = revision_service
         self.repository.record_versions({
-            "application": "0.5.0",
+            "application": "0.6.0",
             "analysis": getattr(analyzer, "version", "unknown"),
             "diagnosis": getattr(diagnoser, "version", "unknown"),
             "feedback_schema": "structured-feedback-v0.5.0",
             "api": "v1",
             "metric_registry": "metric-registry-v0.4.0",
             "revision": "revision-analysis-v0.5.0",
+            "configuration": "configuration-schema-v0.6.0",
+            "visualization": "progress-visualization-data-v0.6.0",
         })
 
     def submit(self, submission: EssaySubmission, *, synthetic: bool = False) -> PipelineResult:
@@ -100,3 +102,38 @@ class SubmissionService:
             comparable_history_count=history.comparable_submission_count,
             revision_snapshot=revision_snapshot,
         )
+
+    def regenerate_feedback(self, essay_id: int, analysis: AnalysisResult):
+        """Explicit, auditable LLM path for an existing essay; never creates or overwrites the essay."""
+        row = self.repository.get_submission_bundle(essay_id)
+        if row is None:
+            raise LookupError("Submission not found.")
+        if not row.get("diagnosis"):
+            raise ValueError("Stored structured diagnosis is unavailable.")
+        submission = EssaySubmission.model_validate({
+            name: row[name] for name in EssaySubmission.model_fields if name in row
+        })
+        history = HistoryResult(
+            comparability_status=row.get("comparability_status") or "insufficient_history",
+            comparable_submission_count=int(row.get("comparable_count") or 0),
+            history_evidence=row.get("history_evidence") or [],
+            summary=row.get("history_summary") or "数据不足，无法判断趋势。",
+            limitations=row.get("limitations") or ["Historical evidence is unavailable."],
+            comparability_reasons=row.get("comparability_reasons") or ["No stored comparable history."],
+        )
+        profile = (
+            self.learner_profile_service.latest_or_recalculate(submission.student_id)
+            if self.learner_profile_service else None
+        )
+        revision_snapshot = None
+        if self.revision_service and row.get("revision_group_id"):
+            latest = self.revision_service.latest(row["revision_group_id"])
+            if latest.target_submission_id == essay_id:
+                revision_snapshot = latest
+        context = FeedbackContext(
+            submission, analysis, DiagnosisResult.model_validate(row["diagnosis"]), history,
+            profile, revision_snapshot,
+        )
+        result = self.router.generate(context)
+        self.repository.save_feedback(essay_id, result, analysis.analysis_version)
+        return result

@@ -67,3 +67,33 @@ class WritingFeedbackApiClient:
 
     def get_revision_analysis(self, submission_id: int) -> dict[str, Any]:
         return self._request("GET", f"/api/v1/submissions/{submission_id}/revision-analysis")
+
+    def get_dashboard(self, student_id: str, metric_id: str) -> dict[str, Any]:
+        return self._request("GET", f"/api/v1/students/{student_id}/dashboard", params={"metric_id": metric_id})
+
+    def get_configurations(self) -> dict[str, Any]:
+        return self._request("GET", "/api/v1/admin/configurations")
+
+    def create_configuration(self, payload: dict[str, Any]) -> dict[str, Any]:
+        return self._request("POST", "/api/v1/admin/configurations", json=payload)
+
+    def validate_configuration(self, configuration_id: str) -> dict[str, Any]:
+        return self._request("POST", f"/api/v1/admin/configurations/{configuration_id}/validate")
+
+    def activate_configuration(self, configuration_id: str) -> dict[str, Any]:
+        return self._request("POST", f"/api/v1/admin/configurations/{configuration_id}/activate")
+
+    def rollback_configuration(self, configuration_id: str, reason: str) -> dict[str, Any]:
+        return self._request(
+            "POST", f"/api/v1/admin/configurations/{configuration_id}/rollback",
+            json={"reason": reason, "actor": "local_researcher"},
+        )
+
+    def get_registries(self) -> dict[str, Any]:
+        return self._request("GET", "/api/v1/admin/registries")
+
+    def preview_reanalysis(self, payload: dict[str, Any]) -> dict[str, Any]:
+        return self._request("POST", "/api/v1/admin/reanalysis/preview", json=payload)
+
+    def run_reanalysis(self, payload: dict[str, Any]) -> dict[str, Any]:
+        return self._request("POST", "/api/v1/admin/reanalysis/run", json=payload)

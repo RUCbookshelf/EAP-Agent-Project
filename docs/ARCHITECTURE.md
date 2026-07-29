@@ -1,5 +1,12 @@
 # v0.5 system architecture
 
+## v0.6 additions
+
+`DashboardService` transforms Repository evidence into chart-ready, version-segmented API data. `ConfigurationService`
+owns immutable non-sensitive versions and validation/activation/rollback; SQLite owns the single-active constraint and
+audit history. `AdminReanalysisService` previews scope and appends AnalysisRuns, Revision Snapshots and—only after an
+explicit cost confirmation—feedback records. Registries isolate Analyzer, Metric, Algorithm and Prompt discovery.
+
 `SubmissionService` coordinates repositories and replaceable analyzer, diagnosis, revision and provider services.
 For an explicit revision, `RevisionService` creates or extends a Revision Group, runs local alignment and saves an
 append-only Revision Snapshot before Prompt v0.5 is built. The LLM receives only screened local evidence and must

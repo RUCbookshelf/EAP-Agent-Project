@@ -8,14 +8,18 @@ from app.llm import DeepSeekProvider, LocalDemoProvider, ProviderRouter
 from .submission import SubmissionRepository, SubmissionService
 from .learner_profile import LearnerProfileService
 from .revision import RevisionService
+from .configuration import settings_from_configuration
 
 
 def build_router(settings: Settings) -> ProviderRouter:
     local = LocalDemoProvider()
     primary = local if settings.llm_provider == "local" else DeepSeekProvider(
-        settings.deepseek_api_key, settings.deepseek_base_url, settings.deepseek_model
+        settings.deepseek_api_key, settings.deepseek_base_url, settings.deepseek_model,
+        max_tokens=settings.llm_max_tokens,
     )
-    return ProviderRouter(primary, local)
+    router = ProviderRouter(primary, local)
+    router.temperature = settings.llm_temperature
+    return router
 
 
 def build_analyzer(settings: Settings) -> AnalyzerCoordinator:
@@ -36,12 +40,20 @@ def build_analyzer(settings: Settings) -> AnalyzerCoordinator:
     registry.register(spacy_analyzer)
     if settings.active_analyzer not in {item["analyzer_id"] for item in registry.describe()}:
         raise ValueError(f"ACTIVE_ANALYZER is not registered: {settings.active_analyzer}")
-    return AnalyzerCoordinator(registry, settings.active_analyzer, settings.fallback_analyzer)
+    return AnalyzerCoordinator(
+        registry, settings.active_analyzer, settings.fallback_analyzer,
+        configuration_version=settings.analysis_configuration_version,
+    )
 
 
 def build_submission_service(
     settings: Settings, repository: SubmissionRepository
 ) -> SubmissionService:
+    if hasattr(repository, "get_active_configuration"):
+        try:
+            settings = settings_from_configuration(settings, repository.get_active_configuration())
+        except (LookupError, RuntimeError):
+            pass
     profile_service = LearnerProfileService(repository)
     return SubmissionService(
         repository=repository,

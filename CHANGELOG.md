@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.6.0 — 2026-07-29
+
+- Added API-sourced student timelines, issue trajectories, comparability summaries and version-separated metric series.
+- Added dedicated Streamlit progress, revision-comparison and local-researcher administration pages.
+- Added append-only non-sensitive configuration versions with validation, activation, rollback, content hashes and audit records.
+- Added Analyzer, Metric, Algorithm, Prompt and Configuration registries and comprehensive version transparency.
+- Added scoped reanalysis preview/run for submission, revision group, student and AnalysisRun; local-only by default.
+- Removed the legacy one-feedback-per-essay constraint so explicitly confirmed LLM regeneration is append-only.
+- Added migration 6 and CALF extension seams without any CALF total or proficiency field.
+
 ## 0.5.0 — 2026-07-29
 
 - Added explicit Revision Groups and validated first/revised/final draft chains.

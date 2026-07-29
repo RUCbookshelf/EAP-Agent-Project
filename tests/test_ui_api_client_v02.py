@@ -65,3 +65,22 @@ def test_streamlit_api_client_creates_explicit_revision():
     result = client.create_revision(1, 2)
     assert result["group"]["revision_group_id"] == "RG000001"
     assert session.calls[0][2]["json"] == {"source_submission_id": 1, "target_submission_id": 2}
+
+
+@pytest.mark.parametrize(
+    ("call", "method", "suffix"),
+    [
+        (lambda c: c.get_dashboard("S1", "mattr"), "GET", "/api/v1/students/S1/dashboard"),
+        (lambda c: c.get_configurations(), "GET", "/api/v1/admin/configurations"),
+        (lambda c: c.get_registries(), "GET", "/api/v1/admin/registries"),
+        (lambda c: c.validate_configuration("CFG000002"), "POST", "/api/v1/admin/configurations/CFG000002/validate"),
+        (lambda c: c.activate_configuration("CFG000002"), "POST", "/api/v1/admin/configurations/CFG000002/activate"),
+        (lambda c: c.preview_reanalysis({"scope_type": "submission", "scope_id": "1"}), "POST", "/api/v1/admin/reanalysis/preview"),
+        (lambda c: c.run_reanalysis({"scope_type": "submission", "scope_id": "1"}), "POST", "/api/v1/admin/reanalysis/run"),
+    ],
+)
+def test_v06_streamlit_api_client_routes(call, method, suffix):
+    session = Session(Response(200, {"ok": True}))
+    client = WritingFeedbackApiClient("http://127.0.0.1:8000", session=session)
+    assert call(client) == {"ok": True}
+    assert session.calls[0][0] == method and session.calls[0][1].endswith(suffix)

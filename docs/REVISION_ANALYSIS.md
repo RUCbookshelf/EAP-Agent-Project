@@ -11,3 +11,7 @@ comparability, major-rewrite status, algorithms, resources and limitations.
 
 Every calculation is stored as a new Revision Snapshot. Older Snapshots remain queryable, allowing later algorithm
 comparisons. Outputs describe observed text changes only; they do not measure revision quality or learner ability.
+
+The v0.6 revision page renders the stored API Snapshot: relationships, edit ratios, metric changes, diagnosis
+trajectories, uptake candidates, major-rewrite warning, versions and limitations. Revision changes remain separate
+from the long-term dashboard except for the configured single representative draft.

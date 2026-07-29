@@ -1,5 +1,13 @@
 # 项目状态
 
+## 当前 v0.6 状态
+
+- 应用 0.6.0；数据库迁移 6；active configuration `config-v0.6.1`（可版本化管理）。
+- 进展、修订和管理视图均只通过 FastAPI 获取结构化结果，Streamlit 不重算研究指标。
+- 配置 payload 只允许 Pydantic 白名单中的非敏感字段；Key、密码和完整敏感环境变量不进入数据库/API/UI。
+- 重分析默认仅运行本地 Analyzer；LLM 再生成必须单独勾选并确认可能费用。
+- v0.7/CALF measurement 保持 not_started；v0.6 完成后等待最终人工评审。
+
 ## 当前 v0.5 状态
 
 - 应用 0.5.0；数据库迁移 5；修订 Prompt/Schema 0.5.0。

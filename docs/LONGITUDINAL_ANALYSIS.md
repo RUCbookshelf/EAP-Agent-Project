@@ -7,6 +7,10 @@ Within-task drafts are not treated as independent long-term observations. Each R
 explicit reason in the Snapshot. Draft-to-draft changes remain available through revision analysis. This selection
 does not establish learning, proficiency growth or causal impact.
 
+v0.6 dashboard responses expose every included/excluded point, reason, Analyzer/Metric/configuration version,
+direction, variability, confidence and limitations. Points with incompatible version triples are returned in separate
+segments and the UI never silently connects them.
+
 ## Personal baseline
 
 The newest submission is the comparison anchor. Only the anchor and earlier records classified `comparable` enter the primary cohort. A baseline requires 3 records. Available baselines report mean, median, minimum and maximum for each metric plus structured diagnosis frequencies; insufficient baselines report no metric summaries. This is a descriptive personal reference, not true language ability.

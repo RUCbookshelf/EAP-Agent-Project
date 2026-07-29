@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import sqlite3
+import hashlib
+import json
 from collections.abc import Callable
 
 
-LATEST_MIGRATION_VERSION = 5
+LATEST_MIGRATION_VERSION = 6
 
 
 def _add_column_if_missing(
@@ -180,12 +182,139 @@ def _migration_5(connection: sqlite3.Connection) -> None:
     )
 
 
+def _migration_6(connection: sqlite3.Connection) -> None:
+    _ensure_feedback_append_only(connection)
+    connection.executescript(
+        """
+        CREATE TABLE IF NOT EXISTS configuration_versions (
+            configuration_row_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            configuration_id TEXT UNIQUE,
+            version TEXT NOT NULL UNIQUE,
+            status TEXT NOT NULL CHECK(status IN ('draft','validated','active','inactive','archived')),
+            created_at TEXT NOT NULL,
+            created_by TEXT NOT NULL,
+            parent_version TEXT,
+            payload_json TEXT NOT NULL,
+            schema_version TEXT NOT NULL,
+            change_note TEXT NOT NULL,
+            validation_status TEXT NOT NULL,
+            validation_errors_json TEXT NOT NULL,
+            activated_at TEXT,
+            deactivated_at TEXT,
+            content_hash TEXT NOT NULL
+        );
+        CREATE UNIQUE INDEX IF NOT EXISTS idx_configuration_one_active
+            ON configuration_versions(status) WHERE status='active';
+        CREATE TABLE IF NOT EXISTS configuration_audit (
+            audit_row_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            audit_id TEXT UNIQUE,
+            configuration_id TEXT NOT NULL,
+            action TEXT NOT NULL,
+            actor TEXT NOT NULL,
+            reason TEXT NOT NULL,
+            details_json TEXT NOT NULL,
+            created_at TEXT NOT NULL
+        );
+        CREATE INDEX IF NOT EXISTS idx_configuration_audit_config
+            ON configuration_audit(configuration_id, audit_row_id);
+        """
+    )
+    exists = connection.execute("SELECT 1 FROM configuration_versions LIMIT 1").fetchone()
+    if not exists:
+        payload = {
+            "active_analyzer": "spacy", "fallback_analyzer": "basic", "mattr_window": 50,
+            "local_repetition_window": 30, "long_sentence_threshold": 30,
+            "prompt_keyword_weight": 0.35, "repetition_threshold": 3,
+            "connective_resource_version": "connectives-v0.4.0",
+            "comparability_rule_version": "comparability-v0.3.0", "minimum_baseline_points": 3,
+            "persistent_threshold": 3, "recently_reduced_window": 2,
+            "trend_relative_change": 0.10, "low_variability_cv": 0.10,
+            "high_variability_cv": 0.30, "feedback_priority_count": 2,
+            "llm_temperature": 0.2, "llm_max_tokens": 1800,
+            "active_prompt_version": "feedback-prompt-v0.5.0",
+            "revision_alignment_version": "local-sequence-alignment-v0.5.0",
+            "uptake_rule_version": "feedback-uptake-v0.5.0",
+        }
+        canonical = json.dumps(payload, sort_keys=True, separators=(",", ":"))
+        content_hash = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+        now = "2026-07-29T00:00:00+00:00"
+        cursor = connection.execute(
+            """INSERT INTO configuration_versions(
+                version,status,created_at,created_by,parent_version,payload_json,schema_version,
+                change_note,validation_status,validation_errors_json,activated_at,content_hash
+            ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)""",
+            ("config-v0.6.1", "active", now, "system", None, canonical,
+             "configuration-schema-v0.6.0", "Initial non-sensitive v0.6 configuration.",
+             "passed", "[]", now, content_hash),
+        )
+        configuration_id = f"CFG{int(cursor.lastrowid):06d}"
+        connection.execute(
+            "UPDATE configuration_versions SET configuration_id=? WHERE configuration_row_id=?",
+            (configuration_id, int(cursor.lastrowid)),
+        )
+        audit = connection.execute(
+            """INSERT INTO configuration_audit(
+                configuration_id,action,actor,reason,details_json,created_at
+            ) VALUES (?,?,?,?,?,?)""",
+            (configuration_id, "activate", "system", "Initial migration activation.", "{}", now),
+        )
+        connection.execute(
+            "UPDATE configuration_audit SET audit_id=? WHERE audit_row_id=?",
+            (f"CA{int(audit.lastrowid):06d}", int(audit.lastrowid)),
+        )
+
+
+def _ensure_feedback_append_only(connection: sqlite3.Connection) -> None:
+    indexes = connection.execute("PRAGMA index_list(feedback_records)").fetchall()
+    unique_essay = False
+    for index in indexes:
+        if not index[2]:
+            continue
+        columns = connection.execute(f"PRAGMA index_info({index[1]})").fetchall()
+        if [column[2] for column in columns] == ["essay_id"]:
+            unique_essay = True
+            break
+    if not unique_essay:
+        return
+    connection.executescript(
+        """
+        ALTER TABLE feedback_records RENAME TO feedback_records_v05_unique;
+        CREATE TABLE feedback_records (
+            feedback_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            essay_id INTEGER NOT NULL REFERENCES essays(essay_id),
+            feedback_json TEXT NOT NULL,
+            provider_name TEXT NOT NULL,
+            model_name TEXT NOT NULL,
+            success_status TEXT NOT NULL,
+            fallback_reason TEXT,
+            prompt_version TEXT NOT NULL,
+            analysis_version TEXT NOT NULL,
+            system_template_hash TEXT NOT NULL DEFAULT '',
+            user_template_hash TEXT NOT NULL DEFAULT '',
+            rendered_prompt_hash TEXT NOT NULL DEFAULT '',
+            schema_version TEXT NOT NULL DEFAULT '',
+            temperature REAL NOT NULL DEFAULT 0.0,
+            request_time TEXT,
+            response_time TEXT,
+            validation_status TEXT NOT NULL DEFAULT 'not_run',
+            retry_count INTEGER NOT NULL DEFAULT 0,
+            created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+        );
+        INSERT INTO feedback_records SELECT * FROM feedback_records_v05_unique;
+        DROP TABLE feedback_records_v05_unique;
+        CREATE INDEX IF NOT EXISTS idx_feedback_records_essay
+            ON feedback_records(essay_id, feedback_id);
+        """
+    )
+
+
 MIGRATIONS: dict[int, tuple[str, Callable[[sqlite3.Connection], None]]] = {
     1: ("preserve_v0_1_1_schema", _migration_1),
     2: ("cloud_ready_repository_indexes", _migration_2),
     3: ("longitudinal_profile_snapshots", _migration_3),
     4: ("versioned_nlp_analysis_runs", _migration_4),
     5: ("revision_relationships_and_snapshots", _migration_5),
+    6: ("versioned_non_sensitive_configuration", _migration_6),
 }
 
 
@@ -203,4 +332,7 @@ def upgrade(connection: sqlite3.Connection) -> int:
                 (version, name),
             )
             connection.execute(f"PRAGMA user_version = {version}")
+    if int(connection.execute("PRAGMA user_version").fetchone()[0]) >= 6:
+        with connection:
+            _ensure_feedback_append_only(connection)
     return int(connection.execute("PRAGMA user_version").fetchone()[0])

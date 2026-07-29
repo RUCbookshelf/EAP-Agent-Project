@@ -13,13 +13,20 @@ from app.api.schemas import (
     SubmissionResponse, VersionResponse,
     ReanalysisResponse,
     RevisionCreateRequest, RevisionGroupResponse,
+    ConfigurationRollbackRequest,
 )
 from app.config import Settings, load_settings
 from app.database import Database
-from app.services import SubmissionService, build_submission_service, ReanalysisService, RevisionService
+from app.services import (
+    AdminReanalysisService, ConfigurationService, DashboardService, ReanalysisRequest,
+    SubmissionService, build_submission_service, ReanalysisService, RevisionService,
+)
 from app.services.factory import build_analyzer
 from app.services import LearnerProfileService
 from app.core import LearnerProfileSnapshot
+from app.analysis import default_metric_registry
+from app.configuration import ConfigurationCreate, ConfigurationVersion
+from app.services.configuration import settings_from_configuration
 
 
 def _error(status: int, code: str, message: str, details=None) -> JSONResponse:
@@ -43,10 +50,29 @@ def create_app(
     api.state.submission_service = submission_service
     api.state.learner_profiles = learner_profiles
     analyzer = submission_service.analyzer if hasattr(submission_service, "analyzer") else build_analyzer(settings)
+    metrics = default_metric_registry()
+    configurations = ConfigurationService(repository, analyzer.registry, metrics)
+    dashboards = DashboardService(repository, metrics)
     reanalysis = ReanalysisService(repository, analyzer)
     revisions = RevisionService(repository)
     api.state.reanalysis = reanalysis
     api.state.revisions = revisions
+    api.state.configurations = configurations
+    api.state.dashboards = dashboards
+    api.state.admin_reanalysis = AdminReanalysisService(
+        repository, settings, configurations, submission_service,
+    )
+
+    def apply_runtime_configuration(configuration: ConfigurationVersion) -> None:
+        nonlocal analyzer
+        effective = settings_from_configuration(settings, configuration)
+        analyzer = build_analyzer(effective)
+        submission_service.analyzer = analyzer
+        reanalysis.analyzer = analyzer
+        configurations.registry.analyzers = analyzer.registry
+        submission_service.router.temperature = configuration.payload.llm_temperature
+        if hasattr(submission_service.router.primary, "max_tokens"):
+            submission_service.router.primary.max_tokens = configuration.payload.llm_max_tokens
 
     @api.exception_handler(RequestValidationError)
     async def validation_handler(_: Request, exc: RequestValidationError):
@@ -94,15 +120,23 @@ def create_app(
 
     @api.get("/api/v1/system/version", response_model=VersionResponse)
     def version() -> VersionResponse:
+        registry_versions: dict[str, list[str]] = {}
+        for metric in metrics.list():
+            registry_versions.setdefault(metric.metric_id, []).append(metric.metric_version)
+        active_configuration = configurations.active()
         return VersionResponse(
             application_version=settings.application_version, api_version=settings.api_version,
-            prompt_version=settings.prompt_version, schema_version="structured-feedback-v0.5.0",
+            prompt_version=active_configuration.payload.active_prompt_version, schema_version="structured-feedback-v0.5.0",
             analysis_version=settings.analysis_version, diagnosis_version=settings.diagnosis_version,
             database_migration_version=repository.migration_version(),
-            active_analyzer=settings.active_analyzer,
+            active_analyzer=getattr(analyzer, "active_analyzer", getattr(analyzer, "analyzer_id", "unknown")),
             nlp_library_version=getattr(getattr(analyzer, "registry", None).get("spacy"), "spacy", None).__version__ if getattr(analyzer, "registry", None) and hasattr(getattr(analyzer, "registry", None).get("spacy"), "spacy") else None,
             nlp_model_name=settings.spacy_model,
             nlp_model_version=getattr(getattr(analyzer, "registry", None).get("spacy"), "model_version", None) if getattr(analyzer, "registry", None) else None,
+            metric_versions=registry_versions,
+            provider=getattr(submission_service.router.primary, "provider_name", settings.llm_provider),
+            model=getattr(submission_service.router.primary, "model_name", settings.deepseek_model),
+            active_configuration_version=active_configuration.version,
         )
 
     @api.post("/api/v1/submissions", response_model=SubmissionResponse, status_code=201)
@@ -254,6 +288,88 @@ def create_app(
                 student_id, metric=metric, start_date=start_date, end_date=end_date,
                 comparable_only=comparable_only, analysis_version=analysis_version,
             )
+        except ValueError as exc:
+            raise HTTPException(422, str(exc)) from None
+
+    @api.get("/api/v1/students/{student_id}/dashboard")
+    def get_dashboard(student_id: str, metric_id: str = Query(default="word_count", max_length=100)) -> dict:
+        require_student(student_id)
+        try:
+            return dashboards.build(student_id, metric_id)
+        except (LookupError, ValueError) as exc:
+            raise HTTPException(422 if isinstance(exc, ValueError) else 404, str(exc)) from None
+
+    @api.get("/api/v1/admin/configurations")
+    def list_configurations() -> dict:
+        return {
+            "active_configuration_id": configurations.active().configuration_id,
+            "configurations": [item.model_dump(mode="json") for item in configurations.list()],
+            "audit": configurations.audit(),
+            "security_note": "Only non-sensitive research parameters are versioned; local-only administration.",
+        }
+
+    @api.post("/api/v1/admin/configurations", response_model=ConfigurationVersion, status_code=201)
+    def create_configuration(payload: ConfigurationCreate) -> ConfigurationVersion:
+        return configurations.create(payload)
+
+    @api.post("/api/v1/admin/configurations/{configuration_id}/validate", response_model=ConfigurationVersion)
+    def validate_configuration(configuration_id: str) -> ConfigurationVersion:
+        try:
+            return configurations.validate(configuration_id)
+        except LookupError as exc:
+            raise HTTPException(404, str(exc)) from None
+        except ValueError as exc:
+            raise HTTPException(422, str(exc)) from None
+
+    @api.post("/api/v1/admin/configurations/{configuration_id}/activate", response_model=ConfigurationVersion)
+    def activate_configuration(configuration_id: str) -> ConfigurationVersion:
+        try:
+            activated = configurations.activate(configuration_id)
+            apply_runtime_configuration(activated)
+            return activated
+        except LookupError as exc:
+            raise HTTPException(404, str(exc)) from None
+        except ValueError as exc:
+            raise HTTPException(422, str(exc)) from None
+
+    @api.post("/api/v1/admin/configurations/{configuration_id}/rollback", response_model=ConfigurationVersion)
+    def rollback_configuration(configuration_id: str, payload: ConfigurationRollbackRequest) -> ConfigurationVersion:
+        try:
+            activated = configurations.rollback(configuration_id, reason=payload.reason, actor=payload.actor)
+            apply_runtime_configuration(activated)
+            return activated
+        except LookupError as exc:
+            raise HTTPException(404, str(exc)) from None
+        except ValueError as exc:
+            raise HTTPException(422, str(exc)) from None
+
+    @api.get("/api/v1/admin/algorithms")
+    def list_algorithms() -> dict:
+        return {"algorithms": configurations.registries()["algorithms"]}
+
+    @api.get("/api/v1/admin/metrics")
+    def list_metrics() -> dict:
+        return {"metrics": configurations.registries()["metrics"]}
+
+    @api.get("/api/v1/admin/registries")
+    def list_registries() -> dict:
+        return configurations.registries()
+
+    @api.post("/api/v1/admin/reanalysis/preview")
+    def preview_admin_reanalysis(payload: ReanalysisRequest) -> dict:
+        try:
+            return api.state.admin_reanalysis.preview(payload)
+        except LookupError as exc:
+            raise HTTPException(404, str(exc)) from None
+        except ValueError as exc:
+            raise HTTPException(422, str(exc)) from None
+
+    @api.post("/api/v1/admin/reanalysis/run")
+    def run_admin_reanalysis(payload: ReanalysisRequest) -> dict:
+        try:
+            return api.state.admin_reanalysis.run(payload)
+        except LookupError as exc:
+            raise HTTPException(404, str(exc)) from None
         except ValueError as exc:
             raise HTTPException(422, str(exc)) from None
 

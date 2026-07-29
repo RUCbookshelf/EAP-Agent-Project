@@ -1,6 +1,8 @@
-# 数据模型（迁移 5）
+# 数据模型（迁移 6）
 
 迁移 5 在保留 `original_draft_stage` 的同时向 `essays` 追加修订元数据。`revision_groups` 保存任务内成员关系和元数据一致性；`revision_snapshots` 追加保存结构化比较、算法/资源/配置版本及限制。重算只插入新 Snapshot，不覆盖旧记录。数据库不保存 API Key。
+
+迁移 6 新增 `configuration_versions` 与 `configuration_audit`。配置表保存白名单化 payload、状态、父版本、change note、验证结果、激活/停用时间和 SHA-256 content hash；部分唯一索引保证恰好至多一个 active。初始配置由迁移创建。旧反馈唯一约束被安全迁移为 append-only 结构，以支持明确确认的反馈再生成。API Key 仍不保存。
 
 SQLite 默认文件为 `data/writing_feedback.db`，外键约束在每个连接上启用。v0.2 通过 Repository 协议访问数据；API 不返回原始 SQL 行或连接对象。
 

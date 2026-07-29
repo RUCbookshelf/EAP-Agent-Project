@@ -75,3 +75,11 @@
 - Decision: revision relationships must be explicit; use deterministic local paragraph/sentence/token alignment and append-only Revision Snapshots; default longitudinal analysis uses final-draft-else-latest per Revision Group.
 - Evidence: 121 passed, 1 opt-in live test skipped; migration 5; real DeepSeek Prompt/Schema v0.5 revision call cited R001–R005 and passed after one correction retry without fallback; FastAPI/docs/Streamlit and `run.bat --verify` passed.
 - Research boundary: alignment and uptake are observed heuristic candidates, not revision-quality scores, proficiency growth or causal feedback effects.
+
+## D012 — Accept v0.6 and stop before v0.7
+
+- Date: 2026-07-29
+- Status: accepted for final human review
+- Decision: expose only API-computed, version-separated progress evidence; version only allowlisted non-sensitive configuration; preserve exactly one active configuration with append-only audit; make reanalysis local-only by default and require explicit LLM cost confirmation.
+- Evidence: 149 passed, 1 opt-in live test skipped; migration 6; configuration activate/rollback/persistence, four reanalysis scopes, FastAPI/docs/Streamlit and `run.bat --verify` passed.
+- Boundary: registries and verification statuses prepare CALF-family extensions but no CALF total, proficiency score or CEFR inference exists. Stop now; v0.7 remains not started until explicit authorization after final human review.

@@ -3,12 +3,14 @@ from __future__ import annotations
 import json
 import sqlite3
 from contextlib import contextmanager
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 from app.core import LearnerProfileSnapshot
 from app.models import AnalysisResult, DiagnosisResult, EssaySubmission, HistoryResult, ProviderResult
 from app.revision import RevisionGroup, RevisionSnapshot
+from app.configuration import ConfigurationCreate, ConfigurationPayload, ConfigurationVersion, configuration_hash
 
 
 SCHEMA = """
@@ -32,7 +34,7 @@ CREATE TABLE IF NOT EXISTS essays (
 );
 CREATE TABLE IF NOT EXISTS metrics (
     metric_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    essay_id INTEGER NOT NULL UNIQUE REFERENCES essays(essay_id),
+    essay_id INTEGER NOT NULL REFERENCES essays(essay_id),
     metrics_json TEXT NOT NULL,
     analysis_version TEXT NOT NULL,
     limitations TEXT NOT NULL,
@@ -285,7 +287,34 @@ class Database:
             return None
         item = runs[-1]
         item["artifact"] = self.get_analysis_artifact(item["analysis_run_id"])
+        item["metric_results"] = self.get_metric_results(item["analysis_run_id"])
         return item
+
+    def get_analysis_run(self, analysis_run_id: str) -> dict[str, Any] | None:
+        with self.connect() as connection:
+            row = connection.execute(
+                "SELECT essay_id FROM analysis_runs WHERE analysis_run_id=?", (analysis_run_id,)
+            ).fetchone()
+        if row is None:
+            return None
+        return next(
+            (item for item in self.list_analysis_runs(int(row[0])) if item["analysis_run_id"] == analysis_run_id),
+            None,
+        )
+
+    def get_metric_results(self, analysis_run_id: str) -> list[dict[str, Any]]:
+        with self.connect() as connection:
+            rows = connection.execute(
+                "SELECT * FROM metric_results WHERE analysis_run_id=? ORDER BY metric_result_id",
+                (analysis_run_id,),
+            ).fetchall()
+        results = []
+        for row in rows:
+            item = dict(row)
+            for name in ("value_json", "parameters_json", "resource_versions_json", "evidence_json", "limitations_json"):
+                item[name.removesuffix("_json")] = json.loads(item.pop(name))
+            results.append(item)
+        return results
 
     def get_analysis_artifact(self, analysis_run_id: str) -> dict[str, Any] | None:
         with self.connect() as connection:
@@ -456,7 +485,9 @@ class Database:
                 FROM essays e
                 LEFT JOIN metrics m ON m.essay_id=e.essay_id
                 LEFT JOIN diagnoses d ON d.essay_id=e.essay_id
-                LEFT JOIN feedback_records f ON f.essay_id=e.essay_id
+                LEFT JOIN feedback_records f ON f.feedback_id=(
+                    SELECT MAX(f2.feedback_id) FROM feedback_records f2 WHERE f2.essay_id=e.essay_id
+                )
                 LEFT JOIN learner_history h ON h.essay_id=e.essay_id
                 WHERE e.essay_id=?""",
                 (essay_id,),
@@ -721,6 +752,170 @@ class Database:
     def get_latest_revision_snapshot(self, revision_group_id: str) -> dict[str, Any] | None:
         items = self.list_revision_snapshots(revision_group_id)
         return items[-1] if items else None
+
+    @staticmethod
+    def _configuration_from_row(row: sqlite3.Row) -> ConfigurationVersion:
+        item = dict(row)
+        return ConfigurationVersion(
+            configuration_id=item["configuration_id"], version=item["version"], status=item["status"],
+            created_at=item["created_at"], created_by=item["created_by"], parent_version=item["parent_version"],
+            payload=ConfigurationPayload.model_validate_json(item["payload_json"]),
+            schema_version=item["schema_version"], change_note=item["change_note"],
+            validation_status=item["validation_status"],
+            validation_errors=json.loads(item["validation_errors_json"]),
+            activated_at=item["activated_at"], deactivated_at=item["deactivated_at"],
+            content_hash=item["content_hash"],
+        )
+
+    def list_configurations(self) -> list[ConfigurationVersion]:
+        with self.connect() as connection:
+            rows = connection.execute(
+                "SELECT * FROM configuration_versions ORDER BY configuration_row_id"
+            ).fetchall()
+        return [self._configuration_from_row(row) for row in rows]
+
+    def get_configuration(self, configuration_id_or_version: str) -> ConfigurationVersion | None:
+        with self.connect() as connection:
+            row = connection.execute(
+                "SELECT * FROM configuration_versions WHERE configuration_id=? OR version=?",
+                (configuration_id_or_version, configuration_id_or_version),
+            ).fetchone()
+        return self._configuration_from_row(row) if row else None
+
+    def get_active_configuration(self) -> ConfigurationVersion:
+        with self.connect() as connection:
+            row = connection.execute(
+                "SELECT * FROM configuration_versions WHERE status='active'"
+            ).fetchone()
+        if row is None:
+            raise RuntimeError("No active configuration exists.")
+        return self._configuration_from_row(row)
+
+    def create_configuration(self, request: ConfigurationCreate, parent_version: str | None) -> ConfigurationVersion:
+        now = datetime.now(timezone.utc).isoformat()
+        with self.connect() as connection:
+            number = int(connection.execute(
+                "SELECT COALESCE(MAX(configuration_row_id),0)+1 FROM configuration_versions"
+            ).fetchone()[0])
+            version = f"config-v0.6.{number}"
+            cursor = connection.execute(
+                """INSERT INTO configuration_versions(
+                    version,status,created_at,created_by,parent_version,payload_json,schema_version,
+                    change_note,validation_status,validation_errors_json,content_hash
+                ) VALUES (?,?,?,?,?,?,?,?,?,?,?)""",
+                (version, "draft", now, request.created_by, parent_version,
+                 request.payload.model_dump_json(), "configuration-schema-v0.6.0", request.change_note,
+                 "not_validated", "[]", configuration_hash(request.payload)),
+            )
+            configuration_id = f"CFG{int(cursor.lastrowid):06d}"
+            connection.execute(
+                "UPDATE configuration_versions SET configuration_id=? WHERE configuration_row_id=?",
+                (configuration_id, int(cursor.lastrowid)),
+            )
+            self._insert_configuration_audit(
+                connection, configuration_id, "create", request.created_by, request.change_note,
+                {"parent_version": parent_version}, now,
+            )
+        result = self.get_configuration(configuration_id)
+        assert result is not None
+        return result
+
+    def set_configuration_validation(self, configuration_id: str, *, passed: bool,
+                                     errors: list[str], actor: str) -> ConfigurationVersion:
+        now = datetime.now(timezone.utc).isoformat()
+        with self.connect() as connection:
+            updated = connection.execute(
+                """UPDATE configuration_versions SET status=?, validation_status=?, validation_errors_json=?
+                   WHERE configuration_id=? AND status IN ('draft','validated')""",
+                ("validated" if passed else "draft", "passed" if passed else "failed",
+                 json.dumps(errors), configuration_id),
+            ).rowcount
+            if not updated:
+                raise ValueError("Only draft or validated configurations can be validated.")
+            self._insert_configuration_audit(
+                connection, configuration_id, "validate", actor,
+                "Validation passed." if passed else "Validation failed.", {"errors": errors}, now,
+            )
+        result = self.get_configuration(configuration_id)
+        assert result is not None
+        return result
+
+    def activate_configuration(self, configuration_id: str, *, actor: str, reason: str,
+                               action: str = "activate") -> ConfigurationVersion:
+        now = datetime.now(timezone.utc).isoformat()
+        with self.connect() as connection:
+            target = connection.execute(
+                "SELECT * FROM configuration_versions WHERE configuration_id=?", (configuration_id,)
+            ).fetchone()
+            if target is None:
+                raise LookupError("Configuration not found.")
+            if target["validation_status"] != "passed":
+                raise ValueError("Invalid or unvalidated configuration cannot be activated.")
+            connection.execute(
+                "UPDATE configuration_versions SET status='inactive', deactivated_at=? WHERE status='active' AND configuration_id<>?",
+                (now, configuration_id),
+            )
+            connection.execute(
+                "UPDATE configuration_versions SET status='active', activated_at=?, deactivated_at=NULL WHERE configuration_id=?",
+                (now, configuration_id),
+            )
+            self._insert_configuration_audit(
+                connection, configuration_id, action, actor, reason, {}, now,
+            )
+        result = self.get_configuration(configuration_id)
+        assert result is not None
+        return result
+
+    def list_configuration_audit(self, configuration_id: str | None = None) -> list[dict[str, Any]]:
+        with self.connect() as connection:
+            if configuration_id:
+                rows = connection.execute(
+                    "SELECT * FROM configuration_audit WHERE configuration_id=? ORDER BY audit_row_id",
+                    (configuration_id,),
+                ).fetchall()
+            else:
+                rows = connection.execute("SELECT * FROM configuration_audit ORDER BY audit_row_id").fetchall()
+        return [{**dict(row), "details": json.loads(row["details_json"])} for row in rows]
+
+    @staticmethod
+    def _insert_configuration_audit(connection: sqlite3.Connection, configuration_id: str,
+                                    action: str, actor: str, reason: str,
+                                    details: dict[str, Any], created_at: str) -> None:
+        cursor = connection.execute(
+            """INSERT INTO configuration_audit(
+                configuration_id,action,actor,reason,details_json,created_at
+            ) VALUES (?,?,?,?,?,?)""",
+            (configuration_id, action, actor, reason, json.dumps(details), created_at),
+        )
+        connection.execute(
+            "UPDATE configuration_audit SET audit_id=? WHERE audit_row_id=?",
+            (f"CA{int(cursor.lastrowid):06d}", int(cursor.lastrowid)),
+        )
+
+    def list_visualization_records(self, student_id: str) -> list[dict[str, Any]]:
+        records = self.list_longitudinal_records(student_id)
+        for item in records:
+            run = self.get_latest_analysis_run(int(item["essay_id"]))
+            item["analysis_run_id"] = run.get("analysis_run_id") if run else None
+            item["analyzer_id"] = run.get("analyzer_id") if run else "legacy"
+            item["analyzer_version"] = run.get("analyzer_version") if run else item.get("analysis_version")
+            item["configuration_version"] = run.get("configuration_version") if run else "legacy"
+            metric_results = run.get("metric_results", []) if run else []
+            item["versioned_metrics"] = {
+                metric["metric_id"]: {
+                    "value": metric["value"], "metric_version": metric["metric_version"],
+                    "status": metric["status"], "limitations": metric["limitations"],
+                }
+                for metric in metric_results
+            }
+            legacy_metrics = (run.get("artifact") or {}).get("legacy_metrics", {}) if run else {}
+            for metric_id, value in legacy_metrics.items():
+                item["versioned_metrics"].setdefault(metric_id, {
+                    "value": value, "metric_version": "legacy-v0.1",
+                    "status": "available",
+                    "limitations": ["Legacy compatibility metric; use only with the displayed version."],
+                })
+        return records
 
 
 SQLiteRepository = Database

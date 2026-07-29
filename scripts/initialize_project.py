@@ -24,6 +24,7 @@ def initialize() -> dict[str, object]:
     prompt_manifest = versioning_v05.validate_prompt_versioning()
     database = Database(settings.database_path)
     database.initialize()
+    active_configuration = database.get_active_configuration()
     with database.connect() as connection:
         tables = sorted(
             row[0] for row in connection.execute(
@@ -41,6 +42,8 @@ def initialize() -> dict[str, object]:
             and versioning_v05.PROMPT_MANIFEST_PATH.is_file()
         ),
         "prompt_version": prompt_manifest["prompt_version"],
+        "database_migration_version": database.migration_version(),
+        "active_configuration_version": active_configuration.version,
         "system_template_hash": versioning_v05.system_template_hash(),
         "llm_provider": settings.llm_provider,
         "deepseek_model": settings.deepseek_model,

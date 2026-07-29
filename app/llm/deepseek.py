@@ -16,11 +16,13 @@ class DeepSeekProvider(LLMProvider):
 
     provider_name = "deepseek"
 
-    def __init__(self, api_key: str | None, base_url: str, model_name: str, timeout: float = 30.0):
+    def __init__(self, api_key: str | None, base_url: str, model_name: str, timeout: float = 30.0,
+                 max_tokens: int = 1800):
         self.api_key = api_key
         self.base_url = base_url.rstrip("/")
         self.model_name = model_name
         self.timeout = timeout
+        self.max_tokens = max_tokens
         self.last_request_metadata: dict[str, object] = {}
 
     @property
@@ -35,6 +37,7 @@ class DeepSeekProvider(LLMProvider):
             "messages": messages,
             "response_format": {"type": "json_object"},
             "temperature": temperature,
+            "max_tokens": self.max_tokens,
         }
         try:
             user_payload = json.loads(messages[1]["content"])

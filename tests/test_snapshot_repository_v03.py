@@ -14,7 +14,7 @@ def test_snapshot_save_latest_history_and_restart(tmp_path):
     second = service.create_snapshot("SNAP001")
     assert first.snapshot_id != second.snapshot_id
     reopened = Database(path); reopened.initialize()
-    assert reopened.migration_version() == LATEST_MIGRATION_VERSION == 5
+    assert reopened.migration_version() == LATEST_MIGRATION_VERSION == 6
     assert reopened.get_latest_learner_profile("SNAP001")["snapshot_id"] == second.snapshot_id
     history = reopened.list_learner_profile_snapshots("SNAP001")
     assert [item["snapshot_id"] for item in history] == [first.snapshot_id, second.snapshot_id]
@@ -29,6 +29,6 @@ def test_v02_database_upgrades_to_snapshot_schema_without_losing_rows(tmp_path):
         connection.execute("PRAGMA user_version = 2")
         connection.execute("DROP TABLE learner_profile_snapshots")
     repository.initialize()
-    assert repository.migration_version() == 5
+    assert repository.migration_version() == 6
     assert repository.get_student("UPGRADE03")["submission_count"] == 1
     assert repository.get_latest_learner_profile("UPGRADE03") is None

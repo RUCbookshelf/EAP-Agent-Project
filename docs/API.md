@@ -15,9 +15,22 @@ Base URL defaults to `http://127.0.0.1:8000`. Interactive OpenAPI documentation 
 | GET | `/api/v1/revisions/{revision_group_id}` | group and latest append-only Snapshot |
 | GET | `/api/v1/revisions/{revision_group_id}/comparison` | latest structured revision comparison |
 | GET | `/api/v1/submissions/{submission_id}/revision-analysis` | Snapshot history relevant to one submission |
+| GET | `/api/v1/students/{student_id}/dashboard` | API-computed timeline, version-separated metric series, issue and exclusion evidence |
+| GET/POST | `/api/v1/admin/configurations` | list/audit configurations or create an immutable draft |
+| POST | `/api/v1/admin/configurations/{id}/validate` | validate registered resources and parameter compatibility |
+| POST | `/api/v1/admin/configurations/{id}/activate` | activate a validated configuration; exactly one remains active |
+| POST | `/api/v1/admin/configurations/{id}/rollback` | reactivate the parent without deleting either version |
+| GET | `/api/v1/admin/algorithms` | safe Algorithm Registry metadata |
+| GET | `/api/v1/admin/metrics` | safe Metric Registry metadata |
+| GET | `/api/v1/admin/registries` | Analyzer/Metric/Algorithm/Prompt registry summary |
+| POST | `/api/v1/admin/reanalysis/preview` | preview scope, versions and LLM-cost state |
+| POST | `/api/v1/admin/reanalysis/run` | append reanalysis outputs; LLM off by default |
 
 `POST /api/v1/submissions` also accepts optional `revision_of_submission_id`. Cross-student, self, cyclic and
 duplicate links return the standard structured error envelope.
+
+Admin routes are local-research-prototype interfaces without production authentication and must not be publicly exposed.
+Their schemas do not contain keys, passwords, database credentials or complete environment values.
 | GET | `/api/v1/students/{student_id}/profile` | student counts, latest Snapshot, sufficiency, issues, priorities and limits |
 | GET | `/api/v1/students/{student_id}/progress` | recalculates and saves a versioned longitudinal Snapshot |
 | GET | `/api/v1/submissions/{submission_id}/analyses` | list append-only AnalysisRuns |

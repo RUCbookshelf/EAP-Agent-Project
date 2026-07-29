@@ -11,10 +11,139 @@ def get_api_client(base_url: str) -> WritingFeedbackApiClient:
     return WritingFeedbackApiClient(base_url)
 
 
+def render_progress(api_client: WritingFeedbackApiClient) -> None:
+    st.header("Student progress evidence")
+    st.caption("API-sourced descriptive observations; trends are not ability growth.")
+    student_id = st.text_input("Student ID", key="progress_student")
+    metric_id = st.selectbox(
+        "Registered metric",
+        ["word_count", "average_sentence_length", "mattr", "lexical_density", "connective_count"],
+    )
+    if not st.button("Load progress evidence"):
+        return
+    try:
+        data = api_client.get_dashboard(student_id.strip(), metric_id)
+    except ApiClientError as exc:
+        st.error(str(exc)); return
+    st.subheader("Submission timeline")
+    st.dataframe(data["timeline"], use_container_width=True)
+    st.subheader("Version-separated metric segments")
+    for segment in data["metric_segments"]:
+        st.caption(
+            f"{segment['segment_id']} · Analyzer {segment['analyzer_version']} · "
+            f"Metric {segment['metric_version']} · Config {segment['configuration_version']}"
+        )
+        st.line_chart(
+            {str(point["submission_id"]): point["value"] for point in segment["points"]},
+            x_label="submission", y_label=metric_id,
+        )
+    st.caption(
+        f"Direction: {data['trend_summary']['direction']} · Variability: "
+        f"{data['trend_summary']['variability']} · Confidence: {data['trend_summary']['confidence']}"
+    )
+    for limitation in data["trend_summary"]["limitations"]:
+        st.caption(limitation)
+    st.subheader("Comparability and exclusions")
+    st.json(data["comparability_summary"])
+    st.subheader("Issue trajectories")
+    st.json(data["issue_trajectories"])
+    for limitation in data["limitations"]:
+        st.caption(limitation)
+
+
+def render_revision_page(api_client: WritingFeedbackApiClient) -> None:
+    st.header("Revision comparison")
+    st.caption("Observed draft changes are not proof of learning or feedback causation.")
+    group_id = st.text_input("Revision Group ID", placeholder="RG000001")
+    if not st.button("Load revision comparison"):
+        return
+    try:
+        group = api_client.get_revision_group(group_id.strip())
+        comparison = api_client.get_revision_comparison(group_id.strip())
+    except ApiClientError as exc:
+        st.error(str(exc)); return
+    st.json(group["group"])
+    if comparison.get("major_rewrite"):
+        st.warning("Major rewrite candidate: feedback attribution is especially limited.")
+    st.subheader("Observed token changes")
+    st.json(comparison["token_changes"])
+    st.subheader("Metric and diagnosis changes")
+    st.dataframe(comparison["metric_changes"], use_container_width=True)
+    st.dataframe(comparison["diagnosis_trajectories"], use_container_width=True)
+    st.subheader("Feedback-uptake candidates")
+    st.dataframe(comparison["uptake_candidates"], use_container_width=True)
+    for limitation in comparison["limitations"]:
+        st.caption(limitation)
+
+
+def render_admin(api_client: WritingFeedbackApiClient) -> None:
+    st.header("Local researcher administration")
+    st.warning("Local-only prototype. Do not expose this interface directly on a public network.")
+    try:
+        configs = api_client.get_configurations()
+        registries = api_client.get_registries()
+    except ApiClientError as exc:
+        st.error(str(exc)); return
+    st.subheader("Active and historical configurations")
+    st.caption(f"Active: {configs['active_configuration_id']}")
+    st.dataframe(configs["configurations"], use_container_width=True)
+    active = next(item for item in configs["configurations"] if item["status"] == "active")
+    with st.expander("All active prototype parameters and ranges"):
+        st.json(active["payload"])
+        st.caption("These values are working assumptions, not literature-validated thresholds.")
+    with st.expander("Create a configuration draft"):
+        mattr = st.number_input("MATTR window", 10, 500, int(active["payload"]["mattr_window"]))
+        long_sentence = st.number_input("Long-sentence threshold", 10, 100, int(active["payload"]["long_sentence_threshold"]))
+        temperature = st.number_input("LLM temperature", 0.0, 2.0, float(active["payload"]["llm_temperature"]), 0.1)
+        note = st.text_input("Required change note")
+        if st.button("Create draft"):
+            payload = dict(active["payload"])
+            payload.update(mattr_window=int(mattr), long_sentence_threshold=int(long_sentence), llm_temperature=float(temperature))
+            try:
+                created = api_client.create_configuration({"payload": payload, "change_note": note})
+                st.success(f"Created {created['configuration_id']}; validate before activation.")
+            except ApiClientError as exc:
+                st.error(str(exc))
+    selected = st.selectbox("Configuration action target", [item["configuration_id"] for item in configs["configurations"]])
+    selected_item = next(item for item in configs["configurations"] if item["configuration_id"] == selected)
+    differences = {
+        key: {"active": active["payload"].get(key), "selected": selected_item["payload"].get(key)}
+        for key in active["payload"]
+        if active["payload"].get(key) != selected_item["payload"].get(key)
+    }
+    st.caption("Differences from active configuration")
+    st.json(differences)
+    confirm_configuration_action = st.checkbox("I confirm this local activation or rollback action.")
+    left, middle, right = st.columns(3)
+    try:
+        if left.button("Validate"): st.json(api_client.validate_configuration(selected))
+        if middle.button("Activate validated version", disabled=not confirm_configuration_action):
+            st.json(api_client.activate_configuration(selected))
+        if right.button("Rollback active version", disabled=not confirm_configuration_action):
+            st.json(api_client.rollback_configuration(selected, "Confirmed local rollback."))
+    except ApiClientError as exc:
+        st.error(str(exc))
+    st.subheader("Registries and resource status")
+    for name in ("analyzers", "metrics", "algorithms", "prompts"):
+        with st.expander(name.title()): st.json(registries[name])
+    st.subheader("Append-only reanalysis")
+    scope_type = st.selectbox("Scope", ["submission", "revision_group", "student", "analysis_run"])
+    scope_id = st.text_input("Scope ID")
+    call_llm = st.checkbox("Explicitly regenerate LLM feedback (may incur API charges)")
+    confirm_reanalysis = st.checkbox("I confirm this append-only reanalysis scope.")
+    request = {"scope_type": scope_type, "scope_id": scope_id, "call_llm": call_llm, "confirm_llm_cost": call_llm}
+    try:
+        if st.button("Preview reanalysis"): st.json(api_client.preview_reanalysis(request))
+        if st.button("Run reanalysis", type="primary", disabled=not confirm_reanalysis):
+            st.json(api_client.run_reanalysis(request))
+    except ApiClientError as exc:
+        st.error(str(exc))
+
+
 def run() -> None:
     api_client = get_api_client(load_settings().api_base_url)
     st.set_page_config(page_title="English Writing Feedback Prototype", page_icon="✍️", layout="wide")
-    st.title("Intelligent English Writing Feedback Prototype v0.5")
+    st.title("Intelligent English Writing Feedback Prototype v0.6")
     st.caption("Formative feedback from prototype heuristics and optional LLM support — not automatic scoring.")
     st.warning(
         "This prototype is not educationally validated, does not measure proficiency, and does not replace teacher judgment."
@@ -30,6 +159,17 @@ def run() -> None:
             st.warning("The requested NLP analyzer is unavailable; the API will record and use BasicAnalyzer fallback.")
     except ApiClientError:
         st.info("Analyzer status will appear after the local API is available.")
+
+    page = st.sidebar.radio(
+        "Research prototype page",
+        ["Essay submission", "Student progress", "Revision comparison", "Local administration"],
+    )
+    if page == "Student progress":
+        render_progress(api_client); return
+    if page == "Revision comparison":
+        render_revision_page(api_client); return
+    if page == "Local administration":
+        render_admin(api_client); return
 
     student_id = st.text_input("Student ID", placeholder="Use a pseudonymous ID")
     draft_stage = st.selectbox(

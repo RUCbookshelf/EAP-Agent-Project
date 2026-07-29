@@ -8,6 +8,8 @@ from pydantic import BaseModel, Field
 from app.core import IssueTrajectory, LearnerProfileSnapshot, PriorityCandidate
 from app.models import AnalysisResult, DiagnosisResult, EssaySubmission, HistoryResult, ProviderResult
 from app.revision import RevisionGroup, RevisionSnapshot
+from app.configuration import ConfigurationCreate, ConfigurationVersion
+from app.services.admin_reanalysis import ReanalysisRequest
 
 
 class ErrorBody(BaseModel):
@@ -98,6 +100,20 @@ class VersionResponse(BaseModel):
     nlp_library_version: str | None = None
     nlp_model_name: str | None = None
     nlp_model_version: str | None = None
+    metric_versions: dict[str, list[str]] = Field(default_factory=dict)
+    comparability_version: str = "comparability-v0.3.0"
+    baseline_version: str = "longitudinal-baseline-v0.3.0"
+    trend_version: str = "longitudinal-trend-v0.3.0"
+    revision_alignment_version: str = "local-sequence-alignment-v0.5.0"
+    feedback_uptake_version: str = "feedback-uptake-v0.5.0"
+    provider: str
+    model: str
+    active_configuration_version: str
+
+
+class ConfigurationRollbackRequest(BaseModel):
+    reason: str = Field(min_length=3, max_length=500)
+    actor: str = Field(default="local_researcher", min_length=1, max_length=100)
 
 
 class ReanalysisResponse(BaseModel):

@@ -22,9 +22,9 @@ class Settings:
     api_port: int = 8000
     streamlit_port: int = 8501
     api_base_url: str = "http://127.0.0.1:8000"
-    application_version: str = "0.5.0"
+    application_version: str = "0.6.0"
     api_version: str = "v1"
-    database_migration_version: int = 5
+    database_migration_version: int = 6
     prompt_version: str = "feedback-prompt-v0.5.0"
     analysis_version: str = "spacy-analyzer-v0.4.0"
     diagnosis_version: str = "prototype-diagnosis-v0.4.0"
@@ -35,6 +35,8 @@ class Settings:
     local_repetition_window: int = 30
     long_sentence_threshold: int = 30
     analysis_configuration_version: str = "nlp-config-v0.4.0"
+    llm_temperature: float = 0.2
+    llm_max_tokens: int = 1800
 
 
 def load_settings(env_file: Path | None = None) -> Settings:
