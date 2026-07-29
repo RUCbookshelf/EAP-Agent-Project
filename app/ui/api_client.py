@@ -74,6 +74,23 @@ class WritingFeedbackApiClient:
     def get_dashboard(self, student_id: str, metric_id: str) -> dict[str, Any]:
         return self._request("GET", f"/api/v1/students/{student_id}/dashboard", params={"metric_id": metric_id})
 
+    def get_learner_model(self, student_id: str) -> dict[str, Any]:
+        return self._request("GET", f"/api/v1/students/{student_id}/learner-model")
+
+    def get_learner_model_snapshots(self, student_id: str) -> dict[str, Any]:
+        return self._request("GET", f"/api/v1/students/{student_id}/learner-model/snapshots")
+
+    def get_learner_model_snapshot(self, student_id: str, snapshot_id: str) -> dict[str, Any]:
+        return self._request("GET", f"/api/v1/students/{student_id}/learner-model/snapshots/{snapshot_id}")
+
+    def preview_learner_model(self, student_id: str, strategy: str) -> dict[str, Any]:
+        return self._request("POST", f"/api/v1/students/{student_id}/learner-model/preview",
+                             json={"representative_draft_strategy": strategy, "max_submissions": 200})
+
+    def rebuild_learner_model(self, student_id: str, strategy: str) -> dict[str, Any]:
+        return self._request("POST", f"/api/v1/students/{student_id}/learner-model/rebuild",
+                             json={"representative_draft_strategy": strategy, "max_submissions": 200})
+
     def get_configurations(self) -> dict[str, Any]:
         return self._request("GET", "/api/v1/admin/configurations")
 

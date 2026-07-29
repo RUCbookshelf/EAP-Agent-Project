@@ -6,7 +6,7 @@ import json
 from collections.abc import Callable
 
 
-LATEST_MIGRATION_VERSION = 7
+LATEST_MIGRATION_VERSION = 8
 
 
 def _add_column_if_missing(
@@ -393,6 +393,75 @@ def _ensure_feedback_append_only(connection: sqlite3.Connection) -> None:
     )
 
 
+def _migration_8(connection: sqlite3.Connection) -> None:
+    for column, definition in {
+        "profile_version": "TEXT NOT NULL DEFAULT 'learner-profile-v0.3.0'",
+        "source_submission_ids_json": "TEXT NOT NULL DEFAULT '[]'",
+        "representative_submission_ids_json": "TEXT NOT NULL DEFAULT '[]'",
+    }.items():
+        _add_column_if_missing(connection, "learner_profile_snapshots", column, definition)
+    connection.executescript(
+        """
+        CREATE TABLE IF NOT EXISTS history_evidence_registry (
+            history_evidence_row_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            history_evidence_id TEXT UNIQUE,
+            student_id TEXT NOT NULL REFERENCES students(student_id),
+            snapshot_id TEXT,
+            task_cluster_id TEXT NOT NULL,
+            evidence_type TEXT NOT NULL,
+            evidence_json TEXT NOT NULL,
+            registry_version TEXT NOT NULL,
+            created_at TEXT NOT NULL
+        );
+        CREATE INDEX IF NOT EXISTS idx_history_evidence_student
+            ON history_evidence_registry(student_id, history_evidence_row_id);
+        """
+    )
+    active = connection.execute(
+        "SELECT * FROM configuration_versions WHERE status='active' ORDER BY configuration_row_id DESC LIMIT 1"
+    ).fetchone()
+    if active is None or connection.execute(
+        "SELECT 1 FROM configuration_versions WHERE version='config-v0.7.0' LIMIT 1"
+    ).fetchone():
+        return
+    from app.configuration import ConfigurationPayload
+    old = dict(active)
+    payload = ConfigurationPayload.model_validate(json.loads(old["payload_json"])).model_dump(mode="json")
+    payload.update({"active_prompt_version": "feedback-prompt-v0.7.0", "representative_draft_strategy": "final_or_latest"})
+    canonical = json.dumps(payload, sort_keys=True, separators=(",", ":"))
+    content_hash = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    now = "2026-07-30T12:00:00+00:00"
+    connection.execute(
+        "UPDATE configuration_versions SET status='inactive', deactivated_at=? WHERE configuration_id=?",
+        (now, old["configuration_id"]),
+    )
+    cursor = connection.execute(
+        """INSERT INTO configuration_versions(
+            version,status,created_at,created_by,parent_version,payload_json,schema_version,
+            change_note,validation_status,validation_errors_json,activated_at,content_hash
+        ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)""",
+        ("config-v0.7.0", "active", now, "system", old["version"], canonical,
+         "configuration-schema-v0.7.0", "Activate conservative v0.7 learner-model defaults.",
+         "passed", "[]", now, content_hash),
+    )
+    configuration_id = f"CFG{int(cursor.lastrowid):06d}"
+    connection.execute(
+        "UPDATE configuration_versions SET configuration_id=? WHERE configuration_row_id=?",
+        (configuration_id, int(cursor.lastrowid)),
+    )
+    audit = connection.execute(
+        """INSERT INTO configuration_audit(
+            configuration_id,action,actor,reason,details_json,created_at
+        ) VALUES (?,?,?,?,?,?)""",
+        (configuration_id, "activate", "system", "v0.7 learner model migration activation.",
+         json.dumps({"parent_version": old["version"], "prototype_defaults_unvalidated": True}), now),
+    )
+    connection.execute(
+        "UPDATE configuration_audit SET audit_id=? WHERE audit_row_id=?",
+        (f"CA{int(audit.lastrowid):06d}", int(audit.lastrowid)),
+    )
+
+
 MIGRATIONS: dict[int, tuple[str, Callable[[sqlite3.Connection], None]]] = {
     1: ("preserve_v0_1_1_schema", _migration_1),
     2: ("cloud_ready_repository_indexes", _migration_2),
@@ -401,6 +470,7 @@ MIGRATIONS: dict[int, tuple[str, Callable[[sqlite3.Connection], None]]] = {
     5: ("revision_relationships_and_snapshots", _migration_5),
     6: ("versioned_non_sensitive_configuration", _migration_6),
     7: ("diagnostic_calibration_and_metric_confidence", _migration_7),
+    8: ("learner_model_v2_and_history_evidence", _migration_8),
 }
 
 

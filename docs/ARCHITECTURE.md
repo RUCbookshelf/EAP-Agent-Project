@@ -1,4 +1,12 @@
-# v0.6.1 system architecture
+# v0.7 system architecture
+
+The existing submission pipeline is preserved. After calibrated diagnosis persistence, `ProgressService` delegates task-aware calculations to `LearnerModelEngine` and saves an immutable Snapshot v2 through the same repository abstraction. The path is:
+
+`Essay/AnalysisRun/Calibration → representative draft selection → Task Cluster → Data Sufficiency → version-separated Metric/Diagnostic Trajectory → current targets/strength patterns → History Evidence registry → screened FeedbackContext → DeepSeek/LocalDemo`.
+
+Streamlit remains an API-only client. Migration 8 extends the existing snapshot store rather than creating a second profile system. The LLM never receives suppressed diagnostics or an unscreened history dump.
+
+## Retained v0.6.1 architecture
 
 ## v0.6.1 diagnostic calibration flow
 

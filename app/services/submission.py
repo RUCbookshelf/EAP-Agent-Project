@@ -54,15 +54,16 @@ class SubmissionService:
         self.revision_service = revision_service
         self.calibrator = calibrator
         self.repository.record_versions({
-            "application": "0.6.1",
+            "application": "0.7.0",
             "analysis": getattr(analyzer, "version", "unknown"),
             "diagnosis": getattr(diagnoser, "version", "unknown"),
             "diagnostic_calibration": "diagnostic-calibration-v0.6.1",
-            "feedback_schema": "structured-feedback-v0.6.1",
+            "feedback_schema": "structured-feedback-v0.7.0",
             "api": "v1",
             "metric_registry": "metric-registry-v0.6.1",
             "revision": "revision-analysis-v0.5.0",
-            "configuration": "configuration-schema-v0.6.1",
+            "configuration": "configuration-schema-v0.7.0",
+            "learner_model": "learner-profile-v0.7.0",
             "visualization": "progress-visualization-data-v0.6.0",
         })
 

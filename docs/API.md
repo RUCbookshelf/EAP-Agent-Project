@@ -1,5 +1,19 @@
 # FastAPI v1
 
+## v0.7 Learner Model endpoints
+
+- `GET /api/v1/students/{student_id}/learner-model`
+- `GET .../task-clusters`
+- `GET .../metric-trajectories`
+- `GET .../diagnostic-trajectories`
+- `GET .../learning-targets`
+- `GET .../history-evidence`
+- `GET .../snapshots` and `GET .../snapshots/{snapshot_id}` for append-only history selection.
+- `POST .../preview` rebuilds without persistence.
+- `POST .../rebuild` creates a new append-only snapshot.
+
+Preview/rebuild accept one of four representative strategies and are bounded to at most 200 submissions. Rebuild performs no LLM call. Snapshot responses include version and source IDs. Student-facing clients should not display raw trajectory internals or numeric research confidence details.
+
 Base URL defaults to `http://127.0.0.1:8000`. Interactive OpenAPI documentation is at `/docs`.
 
 | Method | Path | Current behavior |

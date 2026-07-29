@@ -14,6 +14,7 @@ from app.api.schemas import (
     ReanalysisResponse,
     RevisionCreateRequest, RevisionGroupResponse,
     ConfigurationRollbackRequest,
+    LearnerModelBuildRequest,
 )
 from app.config import Settings, load_settings
 from app.database import Database
@@ -107,7 +108,7 @@ def create_app(
             database_status="connected" if connected else "unavailable",
             database_migration_version=repository.migration_version() if connected else 0,
             prompt_version=settings.prompt_version,
-            schema_version="structured-feedback-v0.6.1",
+            schema_version="structured-feedback-v0.7.0",
             llm_provider=settings.llm_provider,
             llm_api_configured=bool(settings.deepseek_api_key) if settings.llm_provider == "deepseek" else False,
             active_analyzer=analyzer_health["active_analyzer"],
@@ -128,7 +129,7 @@ def create_app(
         active_configuration = configurations.active()
         return VersionResponse(
             application_version=settings.application_version, api_version=settings.api_version,
-            prompt_version=active_configuration.payload.active_prompt_version, schema_version="structured-feedback-v0.6.1",
+            prompt_version=active_configuration.payload.active_prompt_version, schema_version="structured-feedback-v0.7.0",
             analysis_version=settings.analysis_version, diagnosis_version=settings.diagnosis_version,
             database_migration_version=repository.migration_version(),
             active_analyzer=getattr(analyzer, "active_analyzer", getattr(analyzer, "analyzer_id", "unknown")),
@@ -302,6 +303,81 @@ def create_app(
             )
         except ValueError as exc:
             raise HTTPException(422, str(exc)) from None
+
+    def learner_model_snapshot(student_id: str) -> LearnerProfileSnapshot:
+        require_student(student_id)
+        return learner_profiles.latest_or_recalculate(student_id)
+
+    @api.get("/api/v1/students/{student_id}/learner-model")
+    def get_learner_model(student_id: str) -> LearnerProfileSnapshot:
+        return learner_model_snapshot(student_id)
+
+    @api.get("/api/v1/students/{student_id}/learner-model/task-clusters")
+    def get_task_clusters(student_id: str) -> dict:
+        snapshot = learner_model_snapshot(student_id)
+        return {"student_id": student_id, "snapshot_id": snapshot.snapshot_id,
+                "task_clusters": snapshot.task_clusters}
+
+    @api.get("/api/v1/students/{student_id}/learner-model/metric-trajectories")
+    def get_metric_trajectories(student_id: str) -> dict:
+        snapshot = learner_model_snapshot(student_id)
+        return {"student_id": student_id, "snapshot_id": snapshot.snapshot_id,
+                "metric_trajectories": snapshot.metric_trajectories}
+
+    @api.get("/api/v1/students/{student_id}/learner-model/diagnostic-trajectories")
+    def get_diagnostic_trajectories(student_id: str) -> dict:
+        snapshot = learner_model_snapshot(student_id)
+        return {"student_id": student_id, "snapshot_id": snapshot.snapshot_id,
+                "diagnostic_trajectories": snapshot.diagnostic_trajectories}
+
+    @api.get("/api/v1/students/{student_id}/learner-model/learning-targets")
+    def get_learning_targets(student_id: str) -> dict:
+        snapshot = learner_model_snapshot(student_id)
+        return {"student_id": student_id, "snapshot_id": snapshot.snapshot_id,
+                "current_learning_targets": snapshot.current_learning_targets,
+                "strength_patterns": snapshot.strength_patterns,
+                "data_sufficiency": snapshot.data_sufficiency}
+
+    @api.get("/api/v1/students/{student_id}/learner-model/history-evidence")
+    def get_history_evidence(student_id: str) -> dict:
+        require_student(student_id)
+        return {"student_id": student_id,
+                "history_evidence": repository.list_history_evidence(student_id)}
+
+    @api.get("/api/v1/students/{student_id}/learner-model/snapshots")
+    def list_learner_model_snapshots(student_id: str) -> dict:
+        require_student(student_id)
+        snapshots = repository.list_learner_profile_snapshots(student_id)
+        return {"student_id": student_id, "snapshots": snapshots, "count": len(snapshots)}
+
+    @api.get("/api/v1/students/{student_id}/learner-model/snapshots/{snapshot_id}")
+    def get_learner_model_snapshot(student_id: str, snapshot_id: str) -> dict:
+        require_student(student_id)
+        item = next((snapshot for snapshot in repository.list_learner_profile_snapshots(student_id)
+                     if snapshot.get("snapshot_id") == snapshot_id), None)
+        if item is None:
+            raise HTTPException(404, "Learner profile snapshot not found.")
+        return item
+
+    @api.post("/api/v1/students/{student_id}/learner-model/preview")
+    def preview_learner_model(student_id: str, payload: LearnerModelBuildRequest) -> LearnerProfileSnapshot:
+        student = require_student(student_id)
+        if int(student["submission_count"]) > payload.max_submissions:
+            raise HTTPException(422, "Submission count exceeds the bounded learner-model preview limit.")
+        return learner_profiles.recalculate(
+            student_id, representative_draft_strategy=payload.representative_draft_strategy,
+            persist=False,
+        )
+
+    @api.post("/api/v1/students/{student_id}/learner-model/rebuild", status_code=201)
+    def rebuild_learner_model(student_id: str, payload: LearnerModelBuildRequest) -> LearnerProfileSnapshot:
+        student = require_student(student_id)
+        if int(student["submission_count"]) > payload.max_submissions:
+            raise HTTPException(422, "Submission count exceeds the bounded learner-model rebuild limit.")
+        return learner_profiles.recalculate(
+            student_id, representative_draft_strategy=payload.representative_draft_strategy,
+            persist=True,
+        )
 
     @api.get("/api/v1/students/{student_id}/dashboard")
     def get_dashboard(student_id: str, metric_id: str = Query(default="word_count", max_length=100)) -> dict:

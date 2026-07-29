@@ -1,0 +1,15 @@
+{
+  "fixture_version": "learner-model-regression-v0.7.0",
+  "cases": {
+    "A": {"tasks": 1, "expected": "insufficient"},
+    "B": {"tasks": 2, "expected": "limited_pairwise_comparison"},
+    "C": {"tasks": 3, "selected_occurrences": 2, "current_selected": true},
+    "D": {"historical_selected": 2, "current_suppressed": true, "expected_current_targets": 0},
+    "E": {"revision_drafts": ["first_draft", "revised_draft", "final_draft"], "expected_representatives": 1},
+    "F": {"genres": ["argumentative essay", "expository essay"], "expected_clusters": 2},
+    "G": {"tool_use": ["none", "AI-assisted"], "expected_clusters": 2},
+    "H": {"analyzers": ["basic-analyzer-v0.1", "spacy-analyzer-v0.6.1"], "expected_clusters": 2},
+    "I": {"current_selected": false, "expected_current_targets": 0}
+  },
+  "privacy": "Synthetic metadata only; no real student information or API key."
+}

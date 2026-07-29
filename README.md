@@ -1,4 +1,10 @@
-# 1 智能英语写作反馈系统原型 v0.6.1
+# 智能英语写作反馈系统原型 v0.7
+
+v0.7 将原有纵向模块升级为任务感知、版本隔离、证据可追溯的 Learner Model 2.0。系统先选择每个修订任务的代表稿，再按写作条件建立 Task Cluster；Metric 与 Diagnostic Trajectory 只在兼容集内计算。当前学习目标只能来自当前作文已通过 Diagnostic Gate 且证据相关性已验证的诊断，允许零目标。
+
+研究者可在 Streamlit 的 **Learner Model audit** 查看代表稿、排除原因、数据充分性、轨迹、学习目标和 History Evidence；学生视图只显示简化后的当前关注点。所有输出仍是形成性研究原型，不是能力、进步、CEFR、CALF 或作文总分。详见 [Learner Model](docs/LEARNER_MODEL.md) 与 [API](docs/API.md)。
+
+## v0.6.1 retained baseline
 
 v0.6.1 新增独立诊断校准层：指标可信度、诊断准入、透明优先级、证据相关性验证，以及受准入结果约束的 DeepSeek/LocalDemo 反馈和练习。自动指标仍只是研究原型信号，不是能力、CEFR、CALF 或作文总分。
 

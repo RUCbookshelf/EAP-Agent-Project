@@ -1,5 +1,20 @@
 # Master roadmap
 
+## v0.7 authorized release state — 2026-07-30
+
+| Item | State |
+|---|---|
+| v0.7 Learner Model 2.0 | completed |
+| Database | migration 8, additive |
+| Active configuration | `config-v0.7.0`, parent `config-v0.6.2` preserved |
+| Prompt/schema | `feedback-prompt-v0.7.0` / `structured-feedback-v0.7.0` |
+| Snapshot | `learner-profile-v0.7.0` |
+| v0.8 and CALF | `not_started` |
+
+The v0.7 boundary is a task-aware descriptive evidence model. It does not estimate proficiency, mastery, causal learning, CEFR, CALF, or an overall score. Completion requires the v0.7 verification report and one isolated Git commit; work then stops.
+
+---
+
 Last updated: 2026-07-29.
 
 | Item | Current value |

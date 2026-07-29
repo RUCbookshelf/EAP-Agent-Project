@@ -23,6 +23,7 @@ def render_progress(api_client: WritingFeedbackApiClient) -> None:
         return
     try:
         data = api_client.get_dashboard(student_id.strip(), metric_id)
+        profile = api_client.get_learner_model(student_id.strip())
     except ApiClientError as exc:
         st.error(str(exc)); return
     st.subheader("Submission timeline")
@@ -49,6 +50,63 @@ def render_progress(api_client: WritingFeedbackApiClient) -> None:
     st.json(data["issue_trajectories"])
     for limitation in data["limitations"]:
         st.caption(limitation)
+    st.subheader("Current formative focus")
+    sufficiency = profile.get("data_sufficiency") or {}
+    st.caption(sufficiency.get("explanation", "Historical evidence is unavailable."))
+    targets = profile.get("current_learning_targets", [])
+    if not targets:
+        st.info("No current learning target passed the current Diagnostic Gate; the system will not invent one.")
+    for item in targets:
+        st.write(f"- {item['category'].replace('_', ' ').title()}: {item['selection_reason']}")
+    st.caption("These are task-aware text observations, not proficiency or mastery judgments.")
+
+
+def render_learner_model_audit(api_client: WritingFeedbackApiClient) -> None:
+    st.header("Learner Model 2.0 audit")
+    st.caption("Researcher view: task clusters, exclusions, evidence lineage and version-separated trajectories.")
+    student_id = st.text_input("Student ID", key="learner_model_student")
+    strategy = st.selectbox(
+        "Representative draft strategy",
+        ["final_or_latest", "first_draft_only", "latest_draft_only", "all_drafts_research_mode"],
+    )
+    preview, rebuild = st.columns(2)
+    try:
+        if preview.button("Preview without saving"):
+            st.session_state["learner_model_audit"] = api_client.preview_learner_model(student_id.strip(), strategy)
+        if rebuild.button("Rebuild append-only snapshot"):
+            st.session_state["learner_model_audit"] = api_client.rebuild_learner_model(student_id.strip(), strategy)
+        if student_id.strip():
+            history = api_client.get_learner_model_snapshots(student_id.strip()).get("snapshots", [])
+            if history:
+                labels = [item.get("snapshot_id") for item in reversed(history)]
+                selected_snapshot = st.selectbox("Historical snapshot", labels)
+                if st.button("Load selected historical snapshot"):
+                    st.session_state["learner_model_audit"] = api_client.get_learner_model_snapshot(
+                        student_id.strip(), selected_snapshot
+                    )
+    except ApiClientError as exc:
+        st.error(str(exc)); return
+    profile = st.session_state.get("learner_model_audit")
+    if not profile:
+        return
+    st.caption(
+        f"Snapshot {profile.get('snapshot_id') or 'preview'} · {profile['profile_version']} · "
+        f"Config {profile['configuration_version']}"
+    )
+    st.subheader("Data sufficiency and representative drafts")
+    st.json({"data_sufficiency": profile["data_sufficiency"],
+             "strategy": profile["representative_draft_strategy"],
+             "source_submission_ids": profile["source_submission_ids"],
+             "representative_submission_ids": profile["representative_submission_ids"],
+             "excluded_submission_ids": profile["excluded_submission_ids"]})
+    for title, key in (
+        ("Task clusters", "task_clusters"), ("Metric trajectories", "metric_trajectories"),
+        ("Diagnostic trajectories", "diagnostic_trajectories"),
+        ("Current learning targets", "current_learning_targets"),
+        ("Strength patterns", "strength_patterns"), ("History evidence registry", "history_evidence"),
+    ):
+        with st.expander(title, expanded=key in {"current_learning_targets", "diagnostic_trajectories"}):
+            st.json(profile[key])
 
 
 def render_revision_page(api_client: WritingFeedbackApiClient) -> None:
@@ -174,7 +232,7 @@ def render_admin(api_client: WritingFeedbackApiClient) -> None:
 def run() -> None:
     api_client = get_api_client(load_settings().api_base_url)
     st.set_page_config(page_title="English Writing Feedback Prototype", page_icon="✍️", layout="wide")
-    st.title("Intelligent English Writing Feedback Prototype v0.6.1")
+    st.title("Intelligent English Writing Feedback Prototype v0.7")
     st.caption("Formative feedback from prototype heuristics and optional LLM support — not automatic scoring.")
     st.warning(
         "This prototype is not educationally validated, does not measure proficiency, and does not replace teacher judgment."
@@ -206,12 +264,14 @@ def run() -> None:
 
     page = st.sidebar.radio(
         "Research prototype page",
-        ["Essay submission", "Student progress", "Revision comparison", "Diagnostic audit", "Local administration"],
+        ["Essay submission", "Student progress", "Learner Model audit", "Revision comparison", "Diagnostic audit", "Local administration"],
     )
     if page == "Student progress":
         render_progress(api_client); return
     if page == "Revision comparison":
         render_revision_page(api_client); return
+    if page == "Learner Model audit":
+        render_learner_model_audit(api_client); return
     if page == "Diagnostic audit":
         render_diagnostic_audit(api_client); return
     if page == "Local administration":

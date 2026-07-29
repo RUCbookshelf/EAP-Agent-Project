@@ -50,10 +50,23 @@ class ConfigurationPayload(BaseModel):
     llm_max_tokens: int = Field(default=1800, ge=128, le=8192)
     active_prompt_version: Literal[
         "feedback-prompt-v0.3.0", "feedback-prompt-v0.4.0", "feedback-prompt-v0.5.0",
-        "feedback-prompt-v0.6.1",
-    ] = "feedback-prompt-v0.6.1"
+        "feedback-prompt-v0.6.1", "feedback-prompt-v0.7.0",
+    ] = "feedback-prompt-v0.7.0"
     revision_alignment_version: Literal["local-sequence-alignment-v0.5.0"] = "local-sequence-alignment-v0.5.0"
     uptake_rule_version: Literal["feedback-uptake-v0.5.0"] = "feedback-uptake-v0.5.0"
+    representative_draft_strategy: Literal[
+        "final_or_latest", "first_draft_only", "latest_draft_only", "all_drafts_research_mode",
+    ] = "final_or_latest"
+    learner_model_max_targets: int = Field(default=2, ge=0, le=2)
+    learner_model_min_pairwise_tasks: int = Field(default=2, ge=2, le=20)
+    learner_model_min_direction_tasks: int = Field(default=3, ge=3, le=20)
+    learner_model_adequate_tasks: int = Field(default=5, ge=3, le=50)
+    diagnostic_emerging_threshold: int = Field(default=2, ge=2, le=20)
+    diagnostic_recurring_threshold: int = Field(default=3, ge=2, le=20)
+    diagnostic_persistent_threshold: int = Field(default=3, ge=3, le=20)
+    diagnostic_persistent_selected_threshold: int = Field(default=2, ge=2, le=20)
+    diagnostic_reduction_window: int = Field(default=2, ge=1, le=10)
+    learner_model_max_feedback_evidence: int = Field(default=5, ge=1, le=10)
 
     @model_validator(mode="after")
     def ordered_variability_thresholds(self) -> "ConfigurationPayload":
@@ -71,13 +84,13 @@ class ConfigurationCreate(BaseModel):
 
 class ConfigurationVersion(BaseModel):
     configuration_id: str = Field(pattern=r"^CFG\d{6}$")
-    version: str = Field(pattern=r"^config-v0\.6\.\d+$")
+    version: str = Field(pattern=r"^config-v0\.(6|7)\.\d+$")
     status: ConfigurationStatus
     created_at: datetime = Field(default_factory=utc_now)
     created_by: str
     parent_version: str | None = None
     payload: ConfigurationPayload
-    schema_version: str = "configuration-schema-v0.6.1"
+    schema_version: str = "configuration-schema-v0.7.0"
     change_note: str
     validation_status: Literal["not_validated", "passed", "failed"] = "not_validated"
     validation_errors: list[str] = Field(default_factory=list)

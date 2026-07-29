@@ -21,6 +21,7 @@ from .versioning import (
 from . import versioning_v04
 from . import versioning_v05
 from . import versioning_v061
+from . import versioning_v07
 
 
 @dataclass(frozen=True)
@@ -38,10 +39,17 @@ class PromptBuilder:
     """Build versioned messages; providers never splice student text into control instructions."""
 
     def build(self, context: "FeedbackContext") -> PromptBundle:
-        is_v061 = context.diagnostic_calibration is not None
+        is_v07 = bool(
+            context.diagnostic_calibration is not None
+            and context.learner_profile_snapshot is not None
+            and context.learner_profile_snapshot.profile_version == "learner-profile-v0.7.0"
+        )
+        is_v061 = context.diagnostic_calibration is not None and not is_v07
         is_v05 = not is_v061 and context.revision_snapshot is not None
         is_v04 = not is_v061 and not is_v05 and (context.analysis.analyzer_id == "spacy" or context.analysis.analysis_version.startswith("spacy-analyzer-v0.4"))
-        if is_v061:
+        if is_v07:
+            versioning_v07.validate_prompt_versioning()
+        elif is_v061:
             versioning_v061.validate_prompt_versioning()
         elif is_v05:
             versioning_v05.validate_prompt_versioning()
@@ -82,7 +90,33 @@ class PromptBuilder:
             "learner_profile_snapshot": self._screened_snapshot(context.learner_profile_snapshot),
             "required_schema": StructuredFeedback.model_json_schema(),
         }
-        if is_v061:
+        if is_v07:
+            payload["diagnostic_calibration"] = context.diagnostic_calibration
+            payload["analysis_evidence"] = self._calibrated_analysis_evidence(context)
+            payload["learner_model_context"] = self._screened_learner_model(context.learner_profile_snapshot)
+            allowed_history_ids = {
+                evidence_id for target in context.learner_profile_snapshot.current_learning_targets
+                for evidence_id in target.history_evidence_ids
+            }
+            screened_history = [
+                item.model_dump(mode="json") for item in context.history.history_evidence
+                if item.history_evidence_id in allowed_history_ids
+            ]
+            payload["learner_history"] = {
+                "comparability_status": context.history.comparability_status,
+                "comparable_submission_count": context.history.comparable_submission_count,
+                "history_evidence": screened_history,
+                "summary": (
+                    "Task-aware history evidence is supplied by ID."
+                    if screened_history else "No relevant compatible history evidence is available."
+                ),
+                "limitations": context.history.limitations,
+                "comparability_reasons": context.history.comparability_reasons,
+            }
+            payload.pop("learner_profile_snapshot", None)
+            if context.revision_snapshot is not None:
+                payload["revision_snapshot"] = context.revision_snapshot.model_dump(mode="json")
+        elif is_v061:
             payload["diagnostic_calibration"] = context.diagnostic_calibration
             payload["analysis_evidence"] = self._calibrated_analysis_evidence(context)
             if context.revision_snapshot is not None:
@@ -93,10 +127,10 @@ class PromptBuilder:
             payload["analysis_evidence"] = self._analysis_evidence(context.analysis)
             payload["revision_snapshot"] = context.revision_snapshot.model_dump(mode="json")
         messages = [
-            {"role": "system", "content": versioning_v061.system_template() if is_v061 else versioning_v05.system_template() if is_v05 else versioning_v04.system_template() if is_v04 else system_template()},
+            {"role": "system", "content": versioning_v07.system_template() if is_v07 else versioning_v061.system_template() if is_v061 else versioning_v05.system_template() if is_v05 else versioning_v04.system_template() if is_v04 else system_template()},
             {"role": "user", "content": json.dumps(payload, ensure_ascii=False)},
         ]
-        return self._bundle(messages, payload, is_v04=is_v04, is_v05=is_v05, is_v061=is_v061)
+        return self._bundle(messages, payload, is_v04=is_v04, is_v05=is_v05, is_v061=is_v061, is_v07=is_v07)
 
     @staticmethod
     def _selected_metric_ids(context: "FeedbackContext") -> set[str]:
@@ -172,6 +206,34 @@ class PromptBuilder:
             "configuration_version": snapshot.configuration_version,
         }
 
+    @staticmethod
+    def _screened_learner_model(snapshot):
+        if snapshot is None:
+            return None
+        target_categories = {item.category for item in snapshot.current_learning_targets}
+        evidence_ids = {
+            evidence_id for item in snapshot.current_learning_targets
+            for evidence_id in item.history_evidence_ids
+        }
+        return {
+            "snapshot_id": snapshot.snapshot_id,
+            "profile_version": snapshot.profile_version,
+            "representative_draft_strategy": snapshot.representative_draft_strategy,
+            "current_learning_targets": [
+                item.model_dump(mode="json") for item in snapshot.current_learning_targets
+            ],
+            "relevant_diagnostic_trajectories": [
+                item.model_dump(mode="json") for item in snapshot.diagnostic_trajectories
+                if item.diagnosis_category in target_categories
+            ],
+            "relevant_history_evidence": [
+                item.model_dump(mode="json") for item in snapshot.history_evidence
+                if item.history_evidence_id in evidence_ids
+            ],
+            "data_sufficiency": snapshot.data_sufficiency.model_dump(mode="json") if snapshot.data_sufficiency else None,
+            "limitations": snapshot.limitations,
+        }
+
     def correction(self, bundle: PromptBundle, validation_error: str) -> PromptBundle:
         correction = (
             "The previous response failed validation. Return a corrected JSON object only. "
@@ -187,11 +249,21 @@ class PromptBuilder:
             is_v04=bundle.prompt_version == versioning_v04.PROMPT_VERSION,
             is_v05=bundle.prompt_version == versioning_v05.PROMPT_VERSION,
             is_v061=bundle.prompt_version == versioning_v061.PROMPT_VERSION,
+            is_v07=bundle.prompt_version == versioning_v07.PROMPT_VERSION,
         )
 
     @staticmethod
     def _bundle(messages: list[dict[str, str]], payload: dict[str, Any], *, is_v04: bool = False, is_v05: bool = False,
-                is_v061: bool = False) -> PromptBundle:
+                is_v061: bool = False, is_v07: bool = False) -> PromptBundle:
+        if is_v07:
+            return PromptBundle(
+                messages=messages, user_payload=payload,
+                prompt_version=versioning_v07.PROMPT_VERSION,
+                schema_version=versioning_v07.SCHEMA_VERSION,
+                system_template_hash=versioning_v07.system_template_hash(),
+                user_template_hash=versioning_v07.user_template_hash(),
+                rendered_prompt_hash=versioning_v07.rendered_prompt_hash(messages),
+            )
         if is_v061:
             return PromptBundle(
                 messages=messages, user_payload=payload,

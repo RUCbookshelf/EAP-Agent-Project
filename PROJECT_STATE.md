@@ -1,5 +1,14 @@
 # 项目状态
 
+## 当前 v0.7 状态
+
+- 状态：`completed`；应用 0.7.0；数据库迁移 8；active configuration `config-v0.7.0`，父版本 `config-v0.6.2` 保留。
+- Snapshot v2 为 `learner-profile-v0.7.0`；Task Cluster、Data Sufficiency、Metric/Diagnostic Trajectory、Learning Target、Strength Pattern 与 History Evidence 独立版本化。
+- 默认代表稿策略为 `final_or_latest`；另支持 `first_draft_only`、`latest_draft_only` 和 `all_drafts_research_mode`。
+- 两个任务只允许成对描述；三个任务才允许临时方向；五个任务才达到 adequate descriptive trend。它们都不是能力或学习增长判断。
+- 当前 Diagnostic Gate 始终优先，允许零当前学习目标。
+- v0.8、CALF、T-unit、CEFR、总分、云端与微信小程序均保持 `not_started`。
+
 ## 当前 v0.6.1 状态
 
 - 状态：`completed`；应用 0.6.1；数据库迁移 7；active configuration `config-v0.6.2`。

@@ -69,10 +69,10 @@ def _configuration_service(repository):
 
 def test_migration_6_creates_active_configuration_and_audit(tmp_path):
     repository = Database(tmp_path / "migration.db"); repository.initialize()
-    assert repository.migration_version() == 7
+    assert repository.migration_version() == 8
     active = repository.get_active_configuration()
-    assert active.version == "config-v0.6.2" and active.status == "active"
-    assert len(repository.list_configuration_audit()) == 2
+    assert active.version == "config-v0.7.0" and active.status == "active"
+    assert len(repository.list_configuration_audit()) == 3
 
 
 def test_configuration_create_hash_change_note_and_append_only(tmp_path):
@@ -80,10 +80,10 @@ def test_configuration_create_hash_change_note_and_append_only(tmp_path):
     service = _configuration_service(repository)
     payload = ConfigurationPayload(active_analyzer="basic", mattr_window=60)
     created = service.create(ConfigurationCreate(payload=payload, change_note="Increase MATTR window."))
-    assert created.status == "draft" and created.parent_version == "config-v0.6.2"
+    assert created.status == "draft" and created.parent_version == "config-v0.7.0"
     assert created.content_hash == configuration_hash(payload)
     assert created.change_note == "Increase MATTR window."
-    assert len(service.list()) == 3
+    assert len(service.list()) == 4
 
 
 def test_configuration_validation_activation_single_active_and_rollback(tmp_path):
@@ -99,7 +99,7 @@ def test_configuration_validation_activation_single_active_and_rollback(tmp_path
     assert active.status == "active"
     assert sum(item.status == "active" for item in service.list()) == 1
     rolled = service.rollback(active.configuration_id, reason="Restore reviewed baseline.")
-    assert rolled.version == "config-v0.6.2"
+    assert rolled.version == "config-v0.7.0"
     preserved = service.repository.get_configuration(created.configuration_id)
     assert preserved.status == "inactive"
     actions = [item["action"] for item in service.audit()]
@@ -272,12 +272,12 @@ def test_admin_api_configuration_dashboard_registries_and_reanalysis(tmp_path):
             f"/api/v1/admin/configurations/{config_id}/rollback",
             json={"reason": "Return to the prior reviewed configuration."},
         )
-        assert rolled.status_code == 200 and rolled.json()["version"] == "config-v0.6.2"
+        assert rolled.status_code == 200 and rolled.json()["version"] == "config-v0.7.0"
         rollback_submission = client.post("/api/v1/submissions", json=_essay(
             "API-V06-ROLLBACK", "A later submission should record the restored configuration version.",
             now + timedelta(days=2),
         ).model_dump(mode="json"))
-        assert rollback_submission.json()["analysis"]["configuration_version"] == "config-v0.6.2"
+        assert rollback_submission.json()["analysis"]["configuration_version"] == "config-v0.7.0"
         assert client.get("/api/v1/admin/algorithms").status_code == 200
         assert client.get("/api/v1/admin/metrics").status_code == 200
         preview = client.post("/api/v1/admin/reanalysis/preview", json={
@@ -289,7 +289,7 @@ def test_admin_api_configuration_dashboard_registries_and_reanalysis(tmp_path):
         })
         assert run.status_code == 200 and run.json()["llm_called"] is False
         version = client.get("/api/v1/system/version").json()
-        assert version["application_version"] == "0.6.1" and version["active_configuration_version"].startswith("config-v0.6")
+        assert version["application_version"] == "0.7.0" and version["active_configuration_version"].startswith("config-v0.7")
 
 
 def test_sensitive_configuration_fields_never_enter_api_or_database(tmp_path):

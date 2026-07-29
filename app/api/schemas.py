@@ -111,6 +111,11 @@ class VersionResponse(BaseModel):
     provider: str
     model: str
     active_configuration_version: str
+    learner_profile_version: str = "learner-profile-v0.7.0"
+    task_cluster_version: str = "task-cluster-v0.7.0"
+    metric_trajectory_version: str = "metric-trajectory-v0.7.0"
+    diagnostic_trajectory_version: str = "diagnostic-trajectory-v0.7.0"
+    history_evidence_version: str = "history-evidence-v0.7.0"
 
 
 class ConfigurationRollbackRequest(BaseModel):
@@ -157,3 +162,10 @@ class LearnerProfileResponse(BaseModel):
     current_priority_candidates: list[PriorityCandidate]
     limitations: list[str]
     snapshot_history_count: int
+
+
+class LearnerModelBuildRequest(BaseModel):
+    representative_draft_strategy: Literal[
+        "final_or_latest", "first_draft_only", "latest_draft_only", "all_drafts_research_mode",
+    ] = "final_or_latest"
+    max_submissions: int = Field(default=200, ge=1, le=200)

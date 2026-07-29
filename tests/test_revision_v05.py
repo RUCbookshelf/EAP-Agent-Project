@@ -249,7 +249,7 @@ def test_migration_5_preserves_existing_essay_and_adds_revision_tables(tmp_path)
         tables = {row[0] for row in connection.execute("SELECT name FROM sqlite_master WHERE type='table'")}
         columns = {row[1] for row in connection.execute("PRAGMA table_info(essays)")}
         count = connection.execute("SELECT COUNT(*) FROM essays WHERE essay_id=?", (saved.essay_id,)).fetchone()[0]
-    assert repository.migration_version() == 7
+    assert repository.migration_version() == 8
     assert {"revision_groups", "revision_snapshots"} <= tables
     assert {"revision_of_submission_id", "revision_group_id", "revision_sequence", "revision_stage", "original_draft_stage"} <= columns
     assert count == 1

@@ -1,4 +1,8 @@
-# 数据模型（迁移 7）
+# 数据模型（迁移 8）
+
+Migration 8 is additive. It adds `profile_version`, `source_submission_ids_json`, and `representative_submission_ids_json` to `learner_profile_snapshots`, plus `history_evidence_registry`. The registry is append-only and stores `history_evidence_id`, student, snapshot, Task Cluster, evidence type, complete evidence JSON, registry version, and creation time.
+
+Snapshot v2 retains old v0.3 fields for compatibility and adds source/representative/excluded IDs, Task Clusters, Data Sufficiency, Metric/Diagnostic Trajectories, current targets, strength patterns, analysis/algorithm versions, and History Evidence. Old `LP######` JSON remains readable; new v0.7 rows use `LPS######`. No historical row is updated or deleted during migration.
 
 迁移 7 原位扩展 `metric_results`，保存 measurement status、metric confidence、reasons、risk factors、诊断/纵向准入标志和可复算 measurement metadata；旧行和旧 metric version 不覆盖。新增 append-only `diagnostic_calibrations`，保存 gate/priority/calibration 版本、完整状态集合、证据相关性、排除原因和 score components。迁移在事务中执行，失败回滚，不删除历史作文或分析。
 

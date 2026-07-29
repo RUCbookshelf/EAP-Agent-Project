@@ -115,16 +115,24 @@ class DiagnosisResult(BaseModel):
 
 
 class HistoryEvidence(BaseModel):
-    history_evidence_id: str = Field(pattern=r"^H\d{3}$")
+    history_evidence_id: str = Field(pattern=r"^(H\d{3}|HE\d{6})$")
     evidence_type: Literal[
         "metric_change", "repeated_diagnosis", "previous_flag_not_current",
-        "metric_trend", "issue_trajectory",
+        "metric_trend", "issue_trajectory", "metric_pairwise", "metric_trajectory",
+        "diagnostic_trajectory", "current_learning_target", "strength_pattern",
     ]
     description: str
     supporting_submission_ids: list[str]
     comparable_submission_count: int = Field(ge=1)
     confidence: Confidence
     limitation: str
+    source_analysis_run_ids: list[str] = Field(default_factory=list)
+    source_diagnosis_ids: list[str] = Field(default_factory=list)
+    source_metric_ids: list[str] = Field(default_factory=list)
+    source_snapshot_id: str | None = None
+    task_cluster_id: str | None = None
+    evidence_status: str | None = None
+    version_compatibility: str | None = None
 
 
 class HistoryResult(BaseModel):

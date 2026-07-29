@@ -76,5 +76,5 @@ def test_migration_4_preserves_legacy_metrics_and_adds_analysis_tables(tmp_path)
     database.initialize()
     with database.connect() as connection:
         tables = {row[0] for row in connection.execute("select name from sqlite_master where type='table'")}
-    assert database.migration_version() == 7
+    assert database.migration_version() == 8
     assert {"metrics", "analysis_runs", "metric_results", "analysis_artifacts"} <= tables

@@ -1,4 +1,10 @@
-# Versioned configuration management v0.6.1
+# Versioned configuration management v0.7
+
+Migration 8 activates `config-v0.7.0` as a child of preserved `config-v0.6.2`. New non-sensitive fields configure representative draft strategy, target maximum (2), sufficiency thresholds (2/3/5), diagnostic occurrence thresholds, reduction window, and maximum screened history evidence (5). Draft creation now uses the `config-v0.7.x` sequence. Rollback activates the preserved parent without deleting newer versions.
+
+All thresholds are prototype defaults. API keys remain environment-only and are never part of configuration payloads.
+
+## Retained v0.6.1 management contract
 
 Migration 7 preserves the existing `config-v0.6.1` and activates its child `config-v0.6.2`, because the requested name was already occupied. The child adds diagnostic calibration parameters: maximum priorities 2, score threshold 0.52, repetition count/density 4/0.025, local-cluster requirement, prompt/necessary-term penalties 1.0/0.7, specific connective-location requirement, exercise maxima 3/2/1, and no monitored-signal exercises.
 

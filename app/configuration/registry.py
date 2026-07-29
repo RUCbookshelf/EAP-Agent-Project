@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from app.analysis import AlgorithmRegistry, AlgorithmVersion, AnalyzerRegistry, MetricRegistry, default_metric_registry
-from app.prompts import versioning, versioning_v04, versioning_v05, versioning_v061
+from app.prompts import versioning, versioning_v04, versioning_v05, versioning_v061, versioning_v07
 
 
 class PromptRegistry:
@@ -39,7 +39,7 @@ class ConfigurationRegistry:
 
 def default_prompt_registry() -> PromptRegistry:
     registry = PromptRegistry()
-    for item in (versioning, versioning_v04, versioning_v05, versioning_v061):
+    for item in (versioning, versioning_v04, versioning_v05, versioning_v061, versioning_v07):
         registry.register(
             prompt_version=item.PROMPT_VERSION,
             schema_version=item.SCHEMA_VERSION,
@@ -57,6 +57,14 @@ def default_algorithm_registry() -> AlgorithmRegistry:
             compatible_input_versions=["basic-analyzer-v0.1", "spacy-analyzer-v0.4.0", "spacy-analyzer-v0.6.1"],
             output_schema_version="learner-profile-snapshot-v0.3.0",
             limitations=["Descriptive prototype trend; not ability growth."],
+        ),
+        AlgorithmVersion(
+            algorithm_id="learner-model", version="0.7.0",
+            implementation="app.services.learner_model.LearnerModelEngine",
+            parameter_schema={"representative_draft_strategy": "enum", "minimum_direction_tasks": "integer"},
+            compatible_input_versions=["diagnostic-calibration-v0.6.1", "metric-confidence-v0.6.1"],
+            output_schema_version="learner-profile-snapshot-v0.7.0",
+            limitations=["Task-aware descriptive prototype; not a validated learner model or ability estimate."],
         ),
         AlgorithmVersion(
             algorithm_id="revision-alignment", version="0.5.0",

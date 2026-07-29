@@ -13,9 +13,11 @@ from app.core import (
 )
 from app.repositories import LearnerProfileRepository
 from app.models import HistoryEvidence, HistoryResult
+from app.configuration import ConfigurationPayload
 
 from .baseline import BaselineService
 from .comparability import ComparabilityService
+from .learner_model import LearnerModelEngine
 
 
 class LongitudinalRepository(LearnerProfileRepository):
@@ -40,16 +42,34 @@ class ProgressService:
         end_date: date | None = None,
         comparable_only: bool = True,
         analysis_version: str | None = None,
+        representative_draft_strategy: str | None = None,
         persist: bool = True,
     ) -> LearnerProfileSnapshot:
-        records = self.repository.list_longitudinal_records(student_id)
-        records = [record for record in records if self._within(record, start_date, end_date)]
+        raw_records = (
+            self.repository.list_visualization_records(student_id)
+            if hasattr(self.repository, "list_visualization_records")
+            else self.repository.list_longitudinal_records(student_id)
+        )
+        raw_records = [record for record in raw_records if self._within(record, start_date, end_date)]
         if analysis_version:
-            records = [record for record in records if record.get("analysis_version") == analysis_version]
-        if not records:
+            raw_records = [record for record in raw_records if record.get("analysis_version") == analysis_version]
+        if not raw_records:
             raise ValueError("No submissions are available for the requested longitudinal window.")
-        revision_excluded = [record for record in records if not record.get("is_longitudinal_representative", True)]
-        records = [record for record in records if record.get("is_longitudinal_representative", True)]
+        configuration_version = self.rules.configuration_version
+        configuration = ConfigurationPayload()
+        if hasattr(self.repository, "get_active_configuration"):
+            try:
+                active = self.repository.get_active_configuration()
+                configuration = active.payload
+                configuration_version = active.version
+            except (LookupError, RuntimeError):
+                pass
+        if representative_draft_strategy is not None:
+            configuration = configuration.model_copy(update={
+                "representative_draft_strategy": representative_draft_strategy
+            })
+        learner_model = LearnerModelEngine(configuration)
+        records, revision_excluded = learner_model.choose_representatives(raw_records)
         current = records[-1]
         current_id = self._id(current)
         comparisons = {
@@ -77,7 +97,8 @@ class ProgressService:
         excluded.extend(
             ExcludedSubmission(
                 submission_id=self._id(record), status="partially_comparable",
-                reasons=[record["revision_exclusion_reason"]],
+                reasons=[record.get("revision_exclusion_reason") or
+                         f"Excluded by representative strategy {configuration.representative_draft_strategy}."],
             )
             for record in revision_excluded
         )
@@ -89,6 +110,13 @@ class ProgressService:
             if confidences else
             "Insufficient comparable history; no metric trend is reported."
         )
+        clusters = learner_model.task_clusters(student_id, records)
+        sufficiency = learner_model.data_sufficiency(raw_records, records, revision_excluded, clusters)
+        metric_trajectories = learner_model.metric_trajectories(clusters, records)
+        diagnostic_trajectories = learner_model.diagnostic_trajectories(clusters, records)
+        targets, history_evidence = learner_model.targets_and_evidence(diagnostic_trajectories, records)
+        strength_patterns = learner_model.strength_patterns(clusters, records)
+        snapshot_time = datetime.now(timezone.utc)
         snapshot = LearnerProfileSnapshot(
             student_id=student_id, snapshot_time=datetime.now(timezone.utc),
             included_submission_ids=included_ids, excluded_submissions=excluded,
@@ -103,13 +131,77 @@ class ProgressService:
                 "Each revision group contributes only its final draft, or otherwise its latest draft, to default long-term trends.",
             ],
             analysis_version=self.rules.analysis_version,
-            configuration_version=self.rules.configuration_version,
+            configuration_version=configuration_version,
             revision_representative_submission_ids=[self._id(record) for record in records if record.get("revision_group_id")],
+            profile_version=learner_model.profile_version, generated_at=snapshot_time,
+            source_submission_ids=[self._id(record) for record in raw_records],
+            representative_submission_ids=[self._id(record) for record in records],
+            excluded_submission_ids=[self._id(record) for record in revision_excluded],
+            task_clusters=clusters, metric_trajectories=metric_trajectories,
+            diagnostic_trajectories=diagnostic_trajectories,
+            current_learning_targets=targets, strength_patterns=strength_patterns,
+            data_sufficiency=sufficiency,
+            comparability_summary={
+                "task_cluster_count": len(clusters), "representative_task_count": len(records),
+                "excluded_revision_draft_count": len(revision_excluded),
+            },
+            analysis_versions={
+                "analysis": sorted({str(record.get("analysis_version", "unknown")) for record in records}),
+                "analyzer": sorted({str(record.get("analyzer_version", "unknown")) for record in records}),
+                "diagnosis": sorted({str(record.get("diagnosis_version", "unknown")) for record in records}),
+            },
+            algorithm_versions={
+                "task_cluster": learner_model.task_cluster_version,
+                "metric_trajectory": learner_model.metric_version,
+                "diagnostic_trajectory": learner_model.diagnostic_version,
+                "data_sufficiency": "data-sufficiency-v0.7.0",
+                "learning_target": "learning-target-v0.7.0",
+            },
+            history_evidence=history_evidence,
+            representative_draft_strategy=configuration.representative_draft_strategy,
         )
-        return self.repository.save_learner_profile_snapshot(snapshot) if persist else snapshot
+        if persist:
+            return self.repository.save_learner_profile_snapshot(snapshot)
+        return snapshot.model_copy(update={
+            "current_learning_targets": [
+                item.model_copy(update={
+                    "history_evidence_ids": [
+                        value for value in item.history_evidence_ids if not value.startswith("PENDING-")
+                    ]
+                })
+                for item in snapshot.current_learning_targets
+            ]
+        })
 
     def enrich_history(self, history: HistoryResult, snapshot: LearnerProfileSnapshot) -> HistoryResult:
         evidence = list(history.history_evidence)
+        if snapshot.profile_version == "learner-profile-v0.7.0" and snapshot.history_evidence:
+            screened = [
+                HistoryEvidence(
+                    history_evidence_id=item.history_evidence_id,
+                    evidence_type=item.evidence_type,
+                    description=item.evidence_text,
+                    supporting_submission_ids=item.source_submission_ids,
+                    comparable_submission_count=max(1, len(item.source_submission_ids)),
+                    confidence="low" if item.confidence == "insufficient" else item.confidence,
+                    limitation="; ".join(item.limitations) or "Prototype learner-model evidence.",
+                    source_analysis_run_ids=item.source_analysis_run_ids,
+                    source_diagnosis_ids=item.source_diagnosis_ids,
+                    source_metric_ids=item.source_metric_ids,
+                    source_snapshot_id=snapshot.snapshot_id,
+                    task_cluster_id=item.task_cluster_id,
+                    evidence_status=item.evidence_status,
+                    version_compatibility=item.version_compatibility,
+                )
+                for item in snapshot.history_evidence
+                if item.history_evidence_id is not None
+            ][:5]
+            if screened:
+                return history.model_copy(update={
+                    "history_evidence": [*evidence, *screened],
+                    "summary": history.summary + " Screened task-aware learner-model evidence is attached by ID.",
+                    "limitations": [*history.limitations, *snapshot.limitations],
+                })
         next_number = len(evidence) + 1
         candidates: list[HistoryEvidence] = []
         for trend in snapshot.metric_trends.values():

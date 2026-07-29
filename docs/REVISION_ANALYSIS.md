@@ -1,5 +1,9 @@
 # Revision analysis v0.5
 
+## v0.7 integration
+
+Revision Snapshot v0.5 remains unchanged and continues to compare all explicitly linked drafts. Learner Model v0.7 separately selects one representative per Revision Group for default long-term description (`final_or_latest`). Excluding earlier drafts from a long-term trajectory does not delete or suppress revision alignment evidence. Alternative representative strategies are versioned configuration choices.
+
 Revision analysis starts only from an explicit `revision_of_submission_id`. Matching prompts or student IDs may
 produce candidates but never create a relationship. The service rejects cross-student, self, cyclic and duplicate
 links and preserves every essay.

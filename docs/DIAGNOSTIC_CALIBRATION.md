@@ -1,5 +1,9 @@
 # Diagnostic Calibration v0.6.1
 
+## v0.7 longitudinal use
+
+Calibration v0.6.1 remains authoritative for the current essay. Learner Model v0.7 may summarize prior selected diagnoses within a compatible Task Cluster, but it cannot re-enable a current monitored or suppressed signal. Current learning targets require current `selected_priority` plus `evidence_relevance_status=verified`; zero targets is valid. The calibration version is recorded on every trajectory.
+
 v0.6.1 inserts a deterministic calibration layer between NLP analysis and formative feedback. It does not score proficiency and does not implement CALF.
 
 ## Processing contract

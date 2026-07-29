@@ -17,7 +17,11 @@ class LearnerProfileService:
 
     def latest_or_recalculate(self, student_id: str) -> LearnerProfileSnapshot:
         latest = self.repository.get_latest_learner_profile(student_id)
-        return LearnerProfileSnapshot.model_validate(latest) if latest else self.recalculate(student_id)
+        if latest:
+            snapshot = LearnerProfileSnapshot.model_validate(latest)
+            if snapshot.profile_version == "learner-profile-v0.7.0":
+                return snapshot
+        return self.recalculate(student_id)
 
     def history(self, student_id: str) -> list[dict]:
         return self.repository.list_learner_profile_snapshots(student_id)

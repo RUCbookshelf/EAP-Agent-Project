@@ -1,5 +1,27 @@
 # Decision log
 
+## D014 — Upgrade the existing profile path
+
+Migration 8 extends `learner_profile_snapshots` and adds append-only `history_evidence_registry`. `ProgressService` remains the single snapshot builder and preserves v0.3 compatibility fields. Historical JSON is never rewritten. New snapshots use `LPS######` and `learner-profile-v0.7.0`.
+
+## D015 — Conservative task-aware sufficiency
+
+Default representative strategy is `final_or_latest`. Two representative tasks permit pairwise description, three permit a provisional direction, and five permit an adequate descriptive trend. Genre, timing band, tool class, revision mode, analyzer family and metric-version signature divide Task Clusters. These defaults are transparent working assumptions without educational or measurement validation.
+
+## D016 — Current Gate remains authoritative
+
+Only a current `selected_priority` with verified evidence may become a current learning target. History cannot reactivate a monitored or suppressed current signal. Zero targets are valid. Strength patterns require verified textual evidence and never imply a stable learner trait.
+
+## D017 — Screen and trace LLM history
+
+`feedback-prompt-v0.7.0` receives only current selected diagnoses plus relevant targets, compatible trajectories, bounded History Evidence IDs, Data Sufficiency and limitations. Raw histories, suppressed diagnoses and unrelated metrics remain outside the prompt. Evidence traces submissions, runs, diagnoses, metrics, cluster and snapshot.
+
+## D018 — Preserve the release boundary
+
+v0.7 adds no CALF, T-unit, grammar-error totals, CEFR, scores, paid embeddings, cloud deployment or v0.8 work. Work stops after verification and commit.
+
+---
+
 ## D013 — Calibrate automatic signals before formative feedback
 
 v0.6.1 inserts deterministic Metric Confidence, Diagnostic Gate, Evidence Relevance, and transparent Priority Score layers. Metrics may remain research evidence without becoming diagnoses; diagnoses may remain monitored without entering student feedback. Zero priorities are valid. Distributed count-three repetition without a local cluster remains monitored, prompt/necessary terms are penalized, and connective priorities require a specific relevant location. Word count and parser measurements are descriptive signals, not strengths. Defaults (2 priorities, 0.52 score threshold, repetition 4/0.025, penalties 1.0/0.7, exercise maxima 3/2/1) are versioned prototype assumptions requiring future literature and human calibration. Since `config-v0.6.1` already existed, migration 7 preserves it and activates child `config-v0.6.2`. v0.7/CALF remain `not_started`.

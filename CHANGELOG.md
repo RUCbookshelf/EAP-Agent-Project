@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.7.0 — 2026-07-30
+
+- Added immutable Learner Profile Snapshot v2, task clustering, four revision representative strategies, explicit Data Sufficiency, version-separated Metric/Diagnostic Trajectory v2, current learning targets, strength patterns, and append-only History Evidence.
+- Added migration 8 and active `config-v0.7.0` as a child of preserved `config-v0.6.2`; historical essays, analysis runs, diagnoses, revisions and snapshots remain readable.
+- Added screened `feedback-prompt-v0.7.0`, Learner Model APIs/UI, Case A–I fixtures, and an opt-in three-task live DeepSeek test.
+- No CALF/CEFR/overall score, causal learning claim, cloud deployment, paid embedding service, or v0.8 feature was added.
+
 ## 0.6.1 — 2026-07-29
 
 - Added versioned Metric Confidence with reproducible lexical measurement metadata.

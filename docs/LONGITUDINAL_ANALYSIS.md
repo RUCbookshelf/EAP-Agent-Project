@@ -1,4 +1,10 @@
-# v0.3 longitudinal analysis
+# v0.7 task-aware longitudinal analysis
+
+v0.7 supersedes the default v0.3 calculation with Task Cluster scoped Snapshot v2 while retaining v0.3 fields for readers. Revision groups contribute one representative draft by default. Metric values are segmented by metric and analyzer version; two observations are only pairwise, three or four are provisional, and five or more may be labelled an adequate descriptive trend.
+
+Diagnostic trajectories use selected priorities as primary evidence, eligible diagnoses as auxiliary evidence, and monitored/suppressed signals as research-only evidence. A current target always requires a current verified selected priority. “Recently reduced” cannot be used as a current target by itself. See `LEARNER_MODEL.md`, `METRIC_TRAJECTORIES.md`, and `DIAGNOSTIC_TRAJECTORIES.md`.
+
+## Retained v0.3 contract
 
 ## v0.5 revision-group policy
 

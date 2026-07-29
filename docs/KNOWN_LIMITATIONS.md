@@ -1,4 +1,15 @@
-# v0.6.1 已知限制
+# v0.7 已知限制
+
+- Task clustering uses transparent metadata classes, not validated semantic task equivalence.
+- Representative-draft rules are workflow assumptions; different strategies can change the displayed evidence set.
+- Two-point comparisons are not trends. Three/four-point directions remain provisional; five-point labels remain descriptive only.
+- Metric trajectories do not standardize for prompt difficulty, instruction, interval, genre effects, or external learning.
+- Diagnostic trajectories inherit analyzer, gate, evidence and rule limitations. “Persistent” names repeated observations, not a stable learner trait.
+- Strength patterns are conservative verified text-feature recurrences, not general strengths or mastery.
+- History Evidence provides lineage but does not prove validity or causality.
+- No CALF, T-unit, grammar-error total, CEFR, proficiency score, overall score, cloud deployment, paid embedding service, or v0.8 functionality is included.
+
+## Retained v0.6.1 limitations
 
 - Metric and diagnosis confidence are transparent engineering heuristics, not validated probabilities.
 - Repetition, necessary-task-term, local-cluster, priority, and exercise thresholds are working assumptions awaiting literature and human-coded calibration.

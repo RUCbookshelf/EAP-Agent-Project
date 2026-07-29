@@ -123,6 +123,9 @@ def test_three_api_submissions_feed_filtered_snapshot_evidence_to_feedback(tmp_p
         assert any(item["evidence_type"] == "metric_trend" for item in evidence)
         allowed = {item["history_evidence_id"] for item in evidence}
         used = set(third["feedback_result"]["feedback"]["longitudinal"]["history_evidence_ids"])
-        assert used and used <= allowed
+        assert used <= allowed
+        profile = repository.get_latest_learner_profile("LLMSNAP01")
+        if not profile.get("current_learning_targets"):
+            assert not used
         snapshots = repository.list_learner_profile_snapshots("LLMSNAP01")
         assert len(snapshots) == 3 and snapshots[-1]["baseline_status"] == "available"

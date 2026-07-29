@@ -30,6 +30,16 @@ class FeedbackValidator:
         history_ids = {
             evidence.history_evidence_id for evidence in context.history.history_evidence
         }
+        if (
+            context.learner_profile_snapshot is not None
+            and context.learner_profile_snapshot.profile_version == "learner-profile-v0.7.0"
+            and context.diagnostic_calibration is not None
+        ):
+            history_ids = {
+                evidence_id
+                for target in context.learner_profile_snapshot.current_learning_targets
+                for evidence_id in target.history_evidence_ids
+            }
         revision_ids = {
             item["revision_evidence_id"]
             for item in (context.revision_snapshot.revision_evidence if context.revision_snapshot else [])
