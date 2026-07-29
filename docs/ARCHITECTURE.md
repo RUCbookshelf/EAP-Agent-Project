@@ -1,4 +1,10 @@
-# v0.5 system architecture
+# v0.6.1 system architecture
+
+## v0.6.1 diagnostic calibration flow
+
+`SpacyAnalyzer -> MetricResult/Metric Confidence -> NlpHeuristicDiagnoser raw candidates -> DiagnosticCalibrationService -> EvidenceRelevanceValidator -> selected DiagnosisResult -> FeedbackContext -> DeepSeek or LocalDemo -> FeedbackValidator -> Repository`
+
+The calibration layer is deterministic and provider-independent. Raw and suppressed candidates are saved in `diagnostic_calibrations`; only selected, evidence-verified priorities enter provider context and exercises. Streamlit remains an HTTP-only client. The researcher audit page calls FastAPI and never recalculates scores.
 
 ## v0.6 additions
 

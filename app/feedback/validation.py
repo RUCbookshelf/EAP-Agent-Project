@@ -4,6 +4,7 @@ import re
 from typing import TYPE_CHECKING
 
 from app.models import StructuredFeedback
+from app.calibration import EvidenceRelevanceValidator
 
 if TYPE_CHECKING:
     from app.llm.base import FeedbackContext
@@ -25,6 +26,7 @@ class FeedbackValidator:
             signal.diagnosis_id: signal
             for signal in context.diagnosis.improvement_priorities
         }
+        relevance_validator = EvidenceRelevanceValidator()
         history_ids = {
             evidence.history_evidence_id for evidence in context.history.history_evidence
         }
@@ -34,6 +36,10 @@ class FeedbackValidator:
         }
 
         self._validate_quote(feedback.positive_finding.evidence_quote, essay, "positive_finding", failures)
+        if context.diagnosis.strengths and relevance_validator.validate_feedback_quote(
+            context.diagnosis.strengths[0], feedback.positive_finding.evidence_quote, context.analysis
+        ) != "verified":
+            failures.append("positive_finding evidence_quote is not relevant to the verified textual feature")
         for index, item in enumerate(feedback.priority_feedback):
             signal = improvement.get(item.diagnosis_id)
             if signal is None:
@@ -42,6 +48,8 @@ class FeedbackValidator:
                 failures.append(
                     f"priority_feedback[{index}] category does not match {item.diagnosis_id}"
                 )
+            elif relevance_validator.validate_feedback_quote(signal, item.evidence_quote, context.analysis) != "verified":
+                failures.append(f"priority_feedback[{index}] evidence_quote is not relevant to {item.diagnosis_id}")
             self._validate_quote(item.evidence_quote, essay, f"priority_feedback[{index}]", failures)
 
         used_history = feedback.longitudinal.history_evidence_ids
@@ -83,6 +91,17 @@ class FeedbackValidator:
                 failures.append(
                     f"exercises[{index}] category does not match {exercise.diagnosis_id}"
                 )
+        exercise_counts: dict[str, int] = {}
+        for exercise in feedback.exercises:
+            exercise_counts[exercise.diagnosis_id] = exercise_counts.get(exercise.diagnosis_id, 0) + 1
+        calibration = context.diagnostic_calibration or {}
+        limits = calibration.get("exercise_generation", {})
+        for diagnosis_id, count in exercise_counts.items():
+            signal = improvement.get(diagnosis_id)
+            if signal:
+                maximum = int(limits.get(f"max_for_{signal.confidence}_confidence", 3))
+                if count > maximum:
+                    failures.append(f"exercises for {diagnosis_id} exceed confidence limit {maximum}")
 
         if failures:
             raise FeedbackValidationError(failures)

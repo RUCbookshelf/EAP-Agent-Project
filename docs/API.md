@@ -8,6 +8,7 @@ Base URL defaults to `http://127.0.0.1:8000`. Interactive OpenAPI documentation 
 | GET | `/api/v1/system/version` | application, API, Prompt, Schema, analysis, diagnosis and migration versions |
 | POST | `/api/v1/submissions` | complete protected feedback workflow |
 | GET | `/api/v1/submissions/{submission_id}` | stored submission and structured results |
+| GET | `/api/v1/submissions/{submission_id}/diagnostic-audit` | raw/monitored/eligible/selected/suppressed calibration audit and metric confidence |
 | GET | `/api/v1/students/{student_id}` | pseudonymous student metadata and submission count |
 | GET | `/api/v1/students/{student_id}/history` | submissions and saved history records |
 | GET | `/api/v1/submissions/{submission_id}/revision-candidates` | same-student candidates; never auto-links |
@@ -26,7 +27,7 @@ Base URL defaults to `http://127.0.0.1:8000`. Interactive OpenAPI documentation 
 | POST | `/api/v1/admin/reanalysis/preview` | preview scope, versions and LLM-cost state |
 | POST | `/api/v1/admin/reanalysis/run` | append reanalysis outputs; LLM off by default |
 
-`POST /api/v1/submissions` also accepts optional `revision_of_submission_id`. Cross-student, self, cyclic and
+`POST /api/v1/submissions` also accepts optional `revision_of_submission_id`. Its v0.6.1 response includes a `diagnostic_calibration` summary; student feedback contains only selected evidence-verified priorities. Cross-student, self, cyclic and
 duplicate links return the standard structured error envelope.
 
 Admin routes are local-research-prototype interfaces without production authentication and must not be publicly exposed.

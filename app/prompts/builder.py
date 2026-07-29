@@ -20,6 +20,7 @@ from .versioning import (
 )
 from . import versioning_v04
 from . import versioning_v05
+from . import versioning_v061
 
 
 @dataclass(frozen=True)
@@ -37,9 +38,12 @@ class PromptBuilder:
     """Build versioned messages; providers never splice student text into control instructions."""
 
     def build(self, context: "FeedbackContext") -> PromptBundle:
-        is_v05 = context.revision_snapshot is not None
-        is_v04 = not is_v05 and (context.analysis.analyzer_id == "spacy" or context.analysis.analysis_version.startswith("spacy-analyzer-v0.4"))
-        if is_v05:
+        is_v061 = context.diagnostic_calibration is not None
+        is_v05 = not is_v061 and context.revision_snapshot is not None
+        is_v04 = not is_v061 and not is_v05 and (context.analysis.analyzer_id == "spacy" or context.analysis.analysis_version.startswith("spacy-analyzer-v0.4"))
+        if is_v061:
+            versioning_v061.validate_prompt_versioning()
+        elif is_v05:
             versioning_v05.validate_prompt_versioning()
         elif is_v04:
             versioning_v04.validate_prompt_versioning()
@@ -60,6 +64,7 @@ class PromptBuilder:
             "metrics": [
                 {"name": name, "value": value}
                 for name, value in context.analysis.metrics.items()
+                if not is_v061 or name in self._selected_metric_ids(context)
             ],
             "diagnoses": [
                 signal.model_dump(mode="json") for signal in context.diagnosis.all_signals
@@ -77,16 +82,46 @@ class PromptBuilder:
             "learner_profile_snapshot": self._screened_snapshot(context.learner_profile_snapshot),
             "required_schema": StructuredFeedback.model_json_schema(),
         }
-        if is_v04:
+        if is_v061:
+            payload["diagnostic_calibration"] = context.diagnostic_calibration
+            payload["analysis_evidence"] = self._calibrated_analysis_evidence(context)
+            if context.revision_snapshot is not None:
+                payload["revision_snapshot"] = context.revision_snapshot.model_dump(mode="json")
+        elif is_v04:
             payload["analysis_evidence"] = self._analysis_evidence(context.analysis)
         elif is_v05:
             payload["analysis_evidence"] = self._analysis_evidence(context.analysis)
             payload["revision_snapshot"] = context.revision_snapshot.model_dump(mode="json")
         messages = [
-            {"role": "system", "content": versioning_v05.system_template() if is_v05 else versioning_v04.system_template() if is_v04 else system_template()},
+            {"role": "system", "content": versioning_v061.system_template() if is_v061 else versioning_v05.system_template() if is_v05 else versioning_v04.system_template() if is_v04 else system_template()},
             {"role": "user", "content": json.dumps(payload, ensure_ascii=False)},
         ]
-        return self._bundle(messages, payload, is_v04=is_v04, is_v05=is_v05)
+        return self._bundle(messages, payload, is_v04=is_v04, is_v05=is_v05, is_v061=is_v061)
+
+    @staticmethod
+    def _selected_metric_ids(context: "FeedbackContext") -> set[str]:
+        return {
+            metric_id
+            for signal in context.diagnosis.all_signals
+            for metric_id in signal.source_metrics
+        }
+
+    def _calibrated_analysis_evidence(self, context: "FeedbackContext") -> dict:
+        selected_ids = self._selected_metric_ids(context)
+        return {
+            "analysis_run_id": context.analysis.analysis_run_id,
+            "analyzer_id": context.analysis.analyzer_id,
+            "analyzer_version": context.analysis.analyzer_version,
+            "configuration_version": context.analysis.configuration_version,
+            "fallback_used": context.analysis.fallback_used,
+            "selected_metric_results": [
+                item for item in context.analysis.metric_results if item.get("metric_id") in selected_ids
+            ],
+            "input_quality": context.analysis.input_quality if any(
+                signal.category == "input_quality" for signal in context.diagnosis.improvement_priorities
+            ) else {"quality_flags": []},
+            "limitations": context.analysis.limitations,
+        }
 
     @staticmethod
     def _analysis_evidence(analysis):
@@ -151,10 +186,21 @@ class PromptBuilder:
             messages, bundle.user_payload,
             is_v04=bundle.prompt_version == versioning_v04.PROMPT_VERSION,
             is_v05=bundle.prompt_version == versioning_v05.PROMPT_VERSION,
+            is_v061=bundle.prompt_version == versioning_v061.PROMPT_VERSION,
         )
 
     @staticmethod
-    def _bundle(messages: list[dict[str, str]], payload: dict[str, Any], *, is_v04: bool = False, is_v05: bool = False) -> PromptBundle:
+    def _bundle(messages: list[dict[str, str]], payload: dict[str, Any], *, is_v04: bool = False, is_v05: bool = False,
+                is_v061: bool = False) -> PromptBundle:
+        if is_v061:
+            return PromptBundle(
+                messages=messages, user_payload=payload,
+                prompt_version=versioning_v061.PROMPT_VERSION,
+                schema_version=versioning_v061.SCHEMA_VERSION,
+                system_template_hash=versioning_v061.system_template_hash(),
+                user_template_hash=versioning_v061.user_template_hash(),
+                rendered_prompt_hash=versioning_v061.rendered_prompt_hash(messages),
+            )
         if is_v05:
             return PromptBundle(
                 messages=messages, user_payload=payload,

@@ -1,0 +1,10 @@
+{
+  "student_id": "S01",
+  "writing_prompt": "Is history a lie?",
+  "genre": "argumentative essay",
+  "draft_stage": "revised draft",
+  "timed": true,
+  "time_limit_minutes": 45,
+  "tool_use": "none",
+  "essay_text": "People sometimes call history a lie because every account is written from a particular position. A writer's perspective can shape which events are selected, but selection does not automatically make every account false. Historians compare letters, laws, photographs, objects, and testimony to test claims against several kinds of evidence. Furthermore, disagreement can reveal assumptions that need closer examination rather than proving that evidence is useless.\n\nPublic memory creates another difficulty because communities often prefer stories that support a shared identity. Governments may celebrate victories and avoid painful events that complicate a national story. However, later researchers can reopen archives, compare neglected voices, and explain why an earlier interpretation was incomplete. This process shows that historical knowledge can be corrected without pretending that a perfectly neutral account is possible.\n\nA responsible reader should therefore ask who created a source, when it was created, and what purpose it served. The reader should then compare independent evidence before accepting a dramatic claim about the past. Perspective matters in debates about history, yet a named viewpoint is more useful than an unsupported accusation of lying. Ultimately, history is not simply a lie; it is a disciplined argument that remains open to revision when stronger evidence appears."
+}

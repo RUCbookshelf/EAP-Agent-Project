@@ -1,4 +1,6 @@
-# 1 智能英语写作反馈系统原型 v0.6
+# 1 智能英语写作反馈系统原型 v0.6.1
+
+v0.6.1 新增独立诊断校准层：指标可信度、诊断准入、透明优先级、证据相关性验证，以及受准入结果约束的 DeepSeek/LocalDemo 反馈和练习。自动指标仍只是研究原型信号，不是能力、CEFR、CALF 或作文总分。
 
 v0.6 在修订分析基础上新增 API 驱动的学习者时间线、版本分段指标图、问题轨迹、修订比较、本地研究者管理界面、非敏感配置版本/验证/激活/回滚、注册表和追加式重分析。它仍是本地研究原型，不是能力评分、CALF 总分、CEFR、班级排名或可公开部署的管理系统。
 
@@ -80,7 +82,18 @@ Step 2. 在智能体安装文件夹下，复制 `.env.example` 为 `.env`，随�
 
 更多说明见 [架构](docs/ARCHITECTURE.md)、[数据模型](docs/DATA_MODEL.md)、[升级路径](docs/UPGRADE_PATH.md)和[已知限制](docs/KNOWN_LIMITATIONS.md)。
 
-## 1.6 当前限制
+## 1.6 v0.6.1 诊断校准
+
+研究者可在 Streamlit 侧栏进入 **Diagnostic audit**，查看 raw、monitored、eligible、selected、suppressed 信号及原因；学生页面只显示经筛选的反馈。词汇指标保存可复算 token 口径，句法输出保持 candidate 命名。详见 [Diagnostic Calibration](docs/DIAGNOSTIC_CALIBRATION.md)、[Evidence Validation](docs/EVIDENCE_VALIDATION.md) 和 [人工评审指南](docs/development/V0.6.1_HUMAN_REVIEW_GUIDE.md)。
+
+普通测试不调用付费 API。显式真实验证命令：
+
+```powershell
+$env:RUN_LIVE_LLM_TESTS='1'
+& ".\.venv\Scripts\python.exe" -m scripts.verify_live_deepseek_v061
+```
+
+## 1.7 当前限制
 
 v0.3 的所有阈值仍是工作假设，尚未完成文献校准、教学效度、测量效度、公平性或跨任务稳定性研究。SQLite 适合本地研究原型；PostgreSQL、微信小程序和云部署均未实现。任何方向都只能称为“观察到的指标趋势”，不能被解释为真实能力变化。
 

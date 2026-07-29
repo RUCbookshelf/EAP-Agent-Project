@@ -1,0 +1,23 @@
+{
+  "resource_id": "english-connectives",
+  "version": "connectives-v0.6.1",
+  "items": {
+    "addition": ["also", "in addition", "moreover", "furthermore", "and"],
+    "contrast": ["however", "although", "nevertheless", "on the other hand", "in contrast", "but"],
+    "cause": ["because", "since", "due to"],
+    "consequence": ["therefore", "consequently", "as a result", "thus"],
+    "exemplification": ["for example", "for instance", "such as"],
+    "sequence": ["first", "firstly", "second", "secondly", "then", "finally"],
+    "conclusion": ["in conclusion", "to conclude", "overall", "ultimately"]
+  },
+  "expression_classes": {
+    "discourse_connective": ["also", "in addition", "moreover", "furthermore", "however", "nevertheless", "on the other hand", "in contrast", "therefore", "consequently", "as a result", "thus", "for example", "for instance", "such as"],
+    "coordinating_conjunction": ["and", "but"],
+    "subordinating_conjunction": ["although", "because", "since", "due to"],
+    "paragraph_organization_expression": ["first", "firstly", "second", "secondly", "then", "finally", "in conclusion", "to conclude", "overall", "ultimately"]
+  },
+  "limitations": [
+    "Dictionary coverage is incomplete; undetected forms do not prove absence of cohesion.",
+    "A detected form does not by itself establish that the intended discourse relation is accurate or effective."
+  ]
+}

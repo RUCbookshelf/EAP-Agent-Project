@@ -30,7 +30,7 @@ def test_analysis_runs_are_append_only_and_reanalysis_does_not_call_llm(tmp_path
         assert response.status_code == 201
         first = response.json()["analysis"]
         assert first["analysis_run_id"] == "AR000001"
-        assert first["analyzer_version"] == "spacy-analyzer-v0.4.0"
+        assert first["analyzer_version"] == "spacy-analyzer-v0.6.1"
         rerun = client.post("/api/v1/submissions/1/analyses")
         assert rerun.status_code == 201
         assert rerun.json()["llm_called"] is False
@@ -76,5 +76,5 @@ def test_migration_4_preserves_legacy_metrics_and_adds_analysis_tables(tmp_path)
     database.initialize()
     with database.connect() as connection:
         tables = {row[0] for row in connection.execute("select name from sqlite_master where type='table'")}
-    assert database.migration_version() == 6
+    assert database.migration_version() == 7
     assert {"metrics", "analysis_runs", "metric_results", "analysis_artifacts"} <= tables

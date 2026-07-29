@@ -14,6 +14,7 @@ from app.repositories import (
     SystemVersionRepository,
 )
 from typing import TYPE_CHECKING
+from app.calibration import DiagnosticCalibrationService
 
 if TYPE_CHECKING:
     from app.services.learner_profile import LearnerProfileService
@@ -42,6 +43,7 @@ class SubmissionService:
         router: ProviderRouter,
         learner_profile_service: "LearnerProfileService | None" = None,
         revision_service: "RevisionService | None" = None,
+        calibrator: DiagnosticCalibrationService | None = None,
     ) -> None:
         self.repository = repository
         self.analyzer = analyzer
@@ -50,15 +52,17 @@ class SubmissionService:
         self.history = LearnerHistoryService(repository)
         self.learner_profile_service = learner_profile_service
         self.revision_service = revision_service
+        self.calibrator = calibrator
         self.repository.record_versions({
-            "application": "0.6.0",
+            "application": "0.6.1",
             "analysis": getattr(analyzer, "version", "unknown"),
             "diagnosis": getattr(diagnoser, "version", "unknown"),
-            "feedback_schema": "structured-feedback-v0.5.0",
+            "diagnostic_calibration": "diagnostic-calibration-v0.6.1",
+            "feedback_schema": "structured-feedback-v0.6.1",
             "api": "v1",
-            "metric_registry": "metric-registry-v0.4.0",
+            "metric_registry": "metric-registry-v0.6.1",
             "revision": "revision-analysis-v0.5.0",
-            "configuration": "configuration-schema-v0.6.0",
+            "configuration": "configuration-schema-v0.6.1",
             "visualization": "progress-visualization-data-v0.6.0",
         })
 
@@ -76,8 +80,28 @@ class SubmissionService:
         )
         analysis = self.repository.save_analysis_run(essay_id, analysis)
         self.repository.save_analysis(essay_id, analysis)
-        diagnosis = self.diagnoser.diagnose(analysis)
+        raw_diagnosis = self.diagnoser.diagnose(analysis)
+        prior_selected_categories: set[str] = set()
+        if self.calibrator:
+            for prior in self.repository.prior_records(submission):
+                if prior.get("genre") != submission.genre:
+                    continue
+                diagnosis = prior.get("diagnosis") or {}
+                prior_selected_categories.update(
+                    item.get("category", "") for item in diagnosis.get("improvement_priorities", [])
+                    if item.get("category")
+                )
+        calibration = (
+            self.calibrator.calibrate(
+                submission, analysis, raw_diagnosis,
+                prior_selected_categories=prior_selected_categories,
+            )
+            if self.calibrator else None
+        )
+        diagnosis = calibration.selected_diagnosis if calibration else raw_diagnosis
         self.repository.save_diagnosis(essay_id, diagnosis)
+        if calibration is not None and hasattr(self.repository, "save_diagnostic_calibration"):
+            calibration = self.repository.save_diagnostic_calibration(essay_id, calibration)
         revision_snapshot = None
         if submission.revision_of_submission_id is not None and self.revision_service is not None:
             revision_snapshot = self.revision_service.create_relationship(
@@ -88,7 +112,10 @@ class SubmissionService:
         if self.learner_profile_service is not None:
             snapshot = self.learner_profile_service.recalculate(submission.student_id)
             history = self.learner_profile_service.progress.enrich_history(history, snapshot)
-        context = FeedbackContext(submission, analysis, diagnosis, history, snapshot, revision_snapshot)
+        context = FeedbackContext(
+            submission, analysis, diagnosis, history, snapshot, revision_snapshot,
+            calibration.prompt_payload() if calibration else None,
+        )
         provider_result = self.router.generate(context)
         self.repository.save_feedback(essay_id, provider_result, analysis.analysis_version)
         self.repository.save_history(submission.student_id, essay_id, history)
@@ -101,6 +128,7 @@ class SubmissionService:
             history_summary=history.summary,
             comparable_history_count=history.comparable_submission_count,
             revision_snapshot=revision_snapshot,
+            diagnostic_calibration=calibration,
         )
 
     def regenerate_feedback(self, essay_id: int, analysis: AnalysisResult):
@@ -130,9 +158,10 @@ class SubmissionService:
             latest = self.revision_service.latest(row["revision_group_id"])
             if latest.target_submission_id == essay_id:
                 revision_snapshot = latest
+        calibration = self.repository.get_diagnostic_calibration(essay_id) if hasattr(self.repository, "get_diagnostic_calibration") else None
         context = FeedbackContext(
             submission, analysis, DiagnosisResult.model_validate(row["diagnosis"]), history,
-            profile, revision_snapshot,
+            profile, revision_snapshot, calibration.prompt_payload() if calibration else None,
         )
         result = self.router.generate(context)
         self.repository.save_feedback(essay_id, result, analysis.analysis_version)

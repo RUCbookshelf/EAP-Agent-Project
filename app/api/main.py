@@ -27,6 +27,7 @@ from app.core import LearnerProfileSnapshot
 from app.analysis import default_metric_registry
 from app.configuration import ConfigurationCreate, ConfigurationVersion
 from app.services.configuration import settings_from_configuration
+from app.calibration import DiagnosticCalibrationService
 
 
 def _error(status: int, code: str, message: str, details=None) -> JSONResponse:
@@ -71,6 +72,7 @@ def create_app(
         reanalysis.analyzer = analyzer
         configurations.registry.analyzers = analyzer.registry
         submission_service.router.temperature = configuration.payload.llm_temperature
+        submission_service.calibrator = DiagnosticCalibrationService(configuration.payload)
         if hasattr(submission_service.router.primary, "max_tokens"):
             submission_service.router.primary.max_tokens = configuration.payload.llm_max_tokens
 
@@ -105,7 +107,7 @@ def create_app(
             database_status="connected" if connected else "unavailable",
             database_migration_version=repository.migration_version() if connected else 0,
             prompt_version=settings.prompt_version,
-            schema_version="structured-feedback-v0.5.0",
+            schema_version="structured-feedback-v0.6.1",
             llm_provider=settings.llm_provider,
             llm_api_configured=bool(settings.deepseek_api_key) if settings.llm_provider == "deepseek" else False,
             active_analyzer=analyzer_health["active_analyzer"],
@@ -126,7 +128,7 @@ def create_app(
         active_configuration = configurations.active()
         return VersionResponse(
             application_version=settings.application_version, api_version=settings.api_version,
-            prompt_version=active_configuration.payload.active_prompt_version, schema_version="structured-feedback-v0.5.0",
+            prompt_version=active_configuration.payload.active_prompt_version, schema_version="structured-feedback-v0.6.1",
             analysis_version=settings.analysis_version, diagnosis_version=settings.diagnosis_version,
             database_migration_version=repository.migration_version(),
             active_analyzer=getattr(analyzer, "active_analyzer", getattr(analyzer, "analyzer_id", "unknown")),
@@ -151,7 +153,17 @@ def create_app(
             submission_id=result.essay_id, analysis=result.analysis, diagnosis=result.diagnosis,
             feedback_result=result.provider, history=result.history,
             revision_snapshot=result.revision_snapshot,
+            diagnostic_calibration=result.diagnostic_calibration,
         )
+
+    @api.get("/api/v1/submissions/{submission_id}/diagnostic-audit")
+    def diagnostic_audit(submission_id: int) -> dict:
+        if repository.get_submission_bundle(submission_id) is None:
+            raise HTTPException(404, "Submission not found.")
+        calibration = repository.get_diagnostic_calibration(submission_id)
+        if calibration is None:
+            raise HTTPException(404, "No v0.6.1 diagnostic calibration exists for this submission.")
+        return calibration.model_dump(mode="json")
 
     @api.get("/api/v1/submissions/{submission_id}", response_model=SubmissionRecordResponse)
     def get_submission(submission_id: int) -> SubmissionRecordResponse:

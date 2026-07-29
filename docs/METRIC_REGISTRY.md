@@ -1,4 +1,10 @@
-# Metric Registry v0.4
+# Metric Registry v0.6.1
+
+The registry retains old definitions while `latest_list()` selects current versions for new AnalysisRuns. Lexical versions are word count 2.0.0, unique word count 2.0.0, TTR 2.0.0, MATTR 0.6.1, lexical density 0.6.1, repetition density 0.6.1, repeated-content evidence 3.0.0, and connective count 2.1.0. Old/new versions are separate longitudinal series and are never bridged silently.
+
+Current syntax candidates are finite verbs 0.6.1, clause-like dependencies 0.6.1, coordinator tokens 0.6.1, conjunct dependencies 0.6.1, and coordinated-structure candidates 0.6.1. Older aggregate names remain readable only for historical audit.
+
+`MetricResult.measurement_metadata` stores sufficient numerator, denominator, token, type, window, POS, parameter, and resource details for the applicable metric to be independently checked. `confidence` describes measurement trust, while Diagnosis Confidence describes the later teaching inference; the two must not be merged.
 
 `MetricDefinition` describes identity, version, unit, value type, parameters and limitations. `MetricResult` binds a value/status to Analyzer/resource versions, evidence and a human-verification status. `MetricRegistry` permits multiple versions of one metric and rejects duplicate registrations.
 

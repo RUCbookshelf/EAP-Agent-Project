@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.6.1 — 2026-07-29
+
+- Added versioned Metric Confidence with reproducible lexical measurement metadata.
+- Added an append-only Diagnostic Gate, transparent Priority Score, and evidence-relevance validation.
+- Calibrated distributed lexical repetition, necessary task terms, and connective-location requirements.
+- Separated verified strengths from descriptive signals and calibrated parser-candidate names/counts.
+- Restricted FeedbackContext and exercise generation to evidence-verified selected priorities; zero priorities are valid.
+- Added migration 7, active `config-v0.6.2`, researcher audit API/UI, fixed first/revised-draft fixtures, and live DeepSeek verification.
+- Preserved the one-retry/3,600-token correction path, exact quotations, redaction, Pydantic validation, and LocalDemo fallback.
+
 ## Unreleased fixes
 
 - Fixed the timed-writing form so the time limit can be edited before submission; the value is persisted only for timed writing.

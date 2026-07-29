@@ -45,6 +45,9 @@ class WritingFeedbackApiClient:
     def get_analyses(self, submission_id: int) -> dict[str, Any]:
         return self._request("GET", f"/api/v1/submissions/{submission_id}/analyses")
 
+    def get_diagnostic_audit(self, submission_id: int) -> dict[str, Any]:
+        return self._request("GET", f"/api/v1/submissions/{submission_id}/diagnostic-audit")
+
     def reanalyze(self, submission_id: int) -> dict[str, Any]:
         return self._request("POST", f"/api/v1/submissions/{submission_id}/analyses")
 

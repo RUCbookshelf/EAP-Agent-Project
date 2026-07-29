@@ -1,5 +1,15 @@
 # 项目状态
 
+## 当前 v0.6.1 状态
+
+- 状态：`completed`；应用 0.6.1；数据库迁移 7；active configuration `config-v0.6.2`。
+- Analyzer、Diagnosis、Diagnostic Gate、Priority、Prompt 与 StructuredFeedback 均记录 v0.6.1 版本。
+- Metric Confidence、可复算词汇口径、raw/monitored/selected 分离、证据相关性验证、保守练习上限和研究者审计视图均可用。
+- First Draft 与绑定 Revised Draft 回归通过；分散出现 3 次且无局部聚集的 `bias` 保持 monitored，不进入学生优先反馈。
+- 真实 DeepSeek First Draft：provider `deepseek`，model `deepseek-v4-flash`，validation `passed`，retry 0，fallback false。
+- 完整测试：183 passed，2 skipped；FastAPI、API docs、Streamlit 均 HTTP 200；`run.bat --verify` PASS。
+- v0.7 与 CALF 开发保持 `not_started`；所有阈值仍是未经教育或测量学验证的原型参数。
+
 ## 当前 v0.6 状态
 
 - 应用 0.6.0；数据库迁移 6；active configuration `config-v0.6.1`（可版本化管理）。

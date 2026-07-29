@@ -12,6 +12,7 @@ HumanVerificationStatus = Literal[
     "automatic_unverified", "automatically_cross_checked", "human_reviewed",
     "human_confirmed", "rejected", "not_applicable",
 ]
+MetricConfidence = Literal["high", "medium", "low", "insufficient", "not_applicable"]
 
 
 class QualityFlag(BaseModel):
@@ -70,6 +71,13 @@ class MetricResult(BaseModel):
     resource_versions: dict[str, str] = Field(default_factory=dict)
     verification_status: HumanVerificationStatus = "automatic_unverified"
     status: Literal["available", "insufficient_data", "not_applicable"] = "available"
+    measurement_status: Literal["available", "insufficient_data", "not_applicable"] = "available"
+    confidence: MetricConfidence = "insufficient"
+    confidence_reasons: list[str] = Field(default_factory=list)
+    risk_factors: list[str] = Field(default_factory=list)
+    eligible_for_diagnosis: bool = False
+    eligible_for_longitudinal_comparison: bool = False
+    measurement_metadata: dict[str, Any] = Field(default_factory=dict)
     evidence: list[dict[str, Any]] = Field(default_factory=list)
     limitations: list[str] = Field(default_factory=list)
 
@@ -92,4 +100,3 @@ class AnalysisRun(BaseModel):
     analysis_duration_ms: float = Field(ge=0)
     created_at: datetime = Field(default_factory=utc_now)
     limitations: list[str] = Field(default_factory=list)
-

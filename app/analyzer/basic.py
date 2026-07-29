@@ -57,6 +57,32 @@ class BasicAnalyzer(Analyzer):
             "repeated_content_words": repeated,
         }
         quality = InputQualityService().inspect(text, draft_stage=draft_stage, tool_use=tool_use)
+        metric_versions = {
+            "word_count": "1.0.0", "sentence_count": "1.0.0", "paragraph_count": "1.0.0",
+            "average_sentence_length": "1.0.0", "unique_word_count": "1.0.0",
+            "type_token_ratio": "1.0.0", "connective_count": "2.0.0",
+            "repeated_content_words": "2.0.0",
+        }
+        metric_results = [
+            {
+                "metric_id": metric_id, "metric_version": metric_versions[metric_id],
+                "value": value, "unit": "prototype", "parameters": {},
+                "analyzer_version": self.version, "resource_versions": {},
+                "verification_status": "automatic_unverified", "status": "available",
+                "measurement_status": "available", "confidence": "low",
+                "confidence_reasons": ["A regex-only fallback Analyzer produced this metric."],
+                "risk_factors": ["Tokenization and linguistic resources differ from the spaCy pipeline."],
+                "eligible_for_diagnosis": metric_id in {"word_count", "sentence_count", "paragraph_count"},
+                "eligible_for_longitudinal_comparison": False,
+                "measurement_metadata": {
+                    "token_definition": "basic_regex_words", "normalization": "lowercase_surface",
+                    "lemma_used": False, "punctuation_excluded": True, "numbers_excluded": True,
+                    "token_count_used": word_count, "type_count_used": len(set(words)),
+                } if metric_id in {"word_count", "unique_word_count", "type_token_ratio"} else {},
+                "evidence": [], "limitations": ["Fallback metric; do not silently compare with spaCy metric versions."],
+            }
+            for metric_id, value in metrics.items()
+        ]
         return AnalysisResult(
             metrics=metrics,
             analysis_version=self.version,
@@ -69,6 +95,7 @@ class BasicAnalyzer(Analyzer):
             analysis_duration_ms=round((time.perf_counter() - started) * 1000, 3),
             input_quality=quality.model_dump(mode="json"),
             artifacts={"analysis_text_hash": quality.analysis_text_hash},
+            metric_results=metric_results,
             limitations=(
                 "Prototype heuristic counts based on surface forms. This is not a complete CALF analysis "
                 "and must not be interpreted as a measure of learner ability."

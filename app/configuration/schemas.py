@@ -25,7 +25,7 @@ class ConfigurationPayload(BaseModel):
     long_sentence_threshold: int = Field(default=30, ge=10, le=100)
     prompt_keyword_weight: float = Field(default=0.35, ge=0, le=1)
     repetition_threshold: int = Field(default=3, ge=2, le=20)
-    connective_resource_version: str = Field(default="connectives-v0.4.0", min_length=1, max_length=100)
+    connective_resource_version: str = Field(default="connectives-v0.6.1", min_length=1, max_length=100)
     comparability_rule_version: str = Field(default="comparability-v0.3.0", min_length=1, max_length=100)
     minimum_baseline_points: int = Field(default=3, ge=2, le=20)
     persistent_threshold: int = Field(default=3, ge=2, le=20)
@@ -34,11 +34,24 @@ class ConfigurationPayload(BaseModel):
     low_variability_cv: float = Field(default=0.10, ge=0, le=2)
     high_variability_cv: float = Field(default=0.30, ge=0, le=3)
     feedback_priority_count: int = Field(default=2, ge=1, le=3)
+    diagnostic_max_selected_priorities: int = Field(default=2, ge=0, le=2)
+    diagnostic_priority_threshold: float = Field(default=0.52, ge=0, le=1)
+    lexical_repetition_minimum_count: int = Field(default=4, ge=3, le=20)
+    lexical_repetition_minimum_density: float = Field(default=0.025, ge=0, le=1)
+    lexical_repetition_require_local_cluster_for_low_count: bool = True
+    lexical_repetition_prompt_keyword_penalty: float = Field(default=1.0, ge=0, le=1)
+    lexical_repetition_necessary_term_penalty: float = Field(default=0.7, ge=0, le=1)
+    connective_require_specific_location: bool = True
+    exercise_max_for_high_confidence: int = Field(default=3, ge=0, le=3)
+    exercise_max_for_medium_confidence: int = Field(default=2, ge=0, le=3)
+    exercise_max_for_low_confidence: int = Field(default=1, ge=0, le=1)
+    exercise_allow_for_monitored_signal: bool = False
     llm_temperature: float = Field(default=0.2, ge=0, le=2)
     llm_max_tokens: int = Field(default=1800, ge=128, le=8192)
     active_prompt_version: Literal[
-        "feedback-prompt-v0.3.0", "feedback-prompt-v0.4.0", "feedback-prompt-v0.5.0"
-    ] = "feedback-prompt-v0.5.0"
+        "feedback-prompt-v0.3.0", "feedback-prompt-v0.4.0", "feedback-prompt-v0.5.0",
+        "feedback-prompt-v0.6.1",
+    ] = "feedback-prompt-v0.6.1"
     revision_alignment_version: Literal["local-sequence-alignment-v0.5.0"] = "local-sequence-alignment-v0.5.0"
     uptake_rule_version: Literal["feedback-uptake-v0.5.0"] = "feedback-uptake-v0.5.0"
 
@@ -64,7 +77,7 @@ class ConfigurationVersion(BaseModel):
     created_by: str
     parent_version: str | None = None
     payload: ConfigurationPayload
-    schema_version: str = "configuration-schema-v0.6.0"
+    schema_version: str = "configuration-schema-v0.6.1"
     change_note: str
     validation_status: Literal["not_validated", "passed", "failed"] = "not_validated"
     validation_errors: list[str] = Field(default_factory=list)

@@ -7,6 +7,11 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_valida
 
 
 Confidence = Literal["low", "medium", "high"]
+DiagnosticSelectionStatus = Literal[
+    "raw_signal", "monitored_signal", "eligible_diagnosis", "selected_priority",
+    "suppressed", "insufficient_evidence",
+]
+EvidenceRelevanceStatus = Literal["verified", "partially_verified", "irrelevant", "insufficient_evidence"]
 ComparabilityStatus = Literal[
     "comparable", "partially_comparable", "not_comparable", "insufficient_history"
 ]
@@ -77,12 +82,30 @@ class DiagnosisSignal(BaseModel):
     confidence: Confidence
     limitation: str
     rule_version: str
-    kind: Literal["strength", "improvement"]
+    kind: Literal["strength", "descriptive_signal", "improvement"]
+    signal_id: str | None = None
+    selection_status: DiagnosticSelectionStatus = "raw_signal"
+    gate_rule: str | None = None
+    gate_version: str | None = None
+    gate_result: str | None = None
+    exclusion_reasons: list[str] = Field(default_factory=list)
+    metric_confidence: Literal["high", "medium", "low", "insufficient", "not_applicable"] = "insufficient"
+    priority_score: float | None = Field(default=None, ge=0, le=1)
+    score_components: dict[str, float] = Field(default_factory=dict)
+    selection_reason: str | None = None
+    evidence_relevance_status: EvidenceRelevanceStatus = "insufficient_evidence"
+    evidence_metadata: dict[str, Any] = Field(default_factory=dict)
+    evidence_quote_candidates: list[str] = Field(default_factory=list)
 
 
 class DiagnosisResult(BaseModel):
     strengths: list[DiagnosisSignal] = Field(max_length=1)
-    improvement_priorities: list[DiagnosisSignal] = Field(min_length=1, max_length=2)
+    improvement_priorities: list[DiagnosisSignal] = Field(max_length=2)
+    descriptive_signals: list[DiagnosisSignal] = Field(default_factory=list)
+    raw_signals: list[DiagnosisSignal] = Field(default_factory=list)
+    monitored_signals: list[DiagnosisSignal] = Field(default_factory=list)
+    suppressed_signals: list[DiagnosisSignal] = Field(default_factory=list)
+    calibration_version: str | None = None
     diagnosis_version: str
     limitation: str
 
@@ -162,8 +185,8 @@ class RevisionFeedback(BaseModel):
 
 class StructuredFeedback(BaseModel):
     positive_finding: PositiveFinding
-    priority_feedback: list[FeedbackItem] = Field(min_length=1, max_length=2)
-    exercises: list[ExerciseItem] = Field(min_length=1)
+    priority_feedback: list[FeedbackItem] = Field(max_length=2)
+    exercises: list[ExerciseItem] = Field(default_factory=list)
     longitudinal: LongitudinalFeedback
     revision: RevisionFeedback | None = None
     uncertainty_note: str = Field(min_length=1)
@@ -216,3 +239,4 @@ class PipelineResult(BaseModel):
     history_summary: str
     comparable_history_count: int
     revision_snapshot: Any | None = None
+    diagnostic_calibration: Any | None = None

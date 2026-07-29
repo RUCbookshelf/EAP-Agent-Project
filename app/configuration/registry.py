@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from app.analysis import AlgorithmRegistry, AlgorithmVersion, AnalyzerRegistry, MetricRegistry, default_metric_registry
-from app.prompts import versioning, versioning_v04, versioning_v05
+from app.prompts import versioning, versioning_v04, versioning_v05, versioning_v061
 
 
 class PromptRegistry:
@@ -39,7 +39,7 @@ class ConfigurationRegistry:
 
 def default_prompt_registry() -> PromptRegistry:
     registry = PromptRegistry()
-    for item in (versioning, versioning_v04, versioning_v05):
+    for item in (versioning, versioning_v04, versioning_v05, versioning_v061):
         registry.register(
             prompt_version=item.PROMPT_VERSION,
             schema_version=item.SCHEMA_VERSION,
@@ -54,7 +54,7 @@ def default_algorithm_registry() -> AlgorithmRegistry:
             algorithm_id="longitudinal-trend", version="0.3.0",
             implementation="app.services.progress.ProgressService",
             parameter_schema={"minimum_trend_points": "integer", "direction_relative_change": "number"},
-            compatible_input_versions=["basic-analyzer-v0.1", "spacy-analyzer-v0.4.0"],
+            compatible_input_versions=["basic-analyzer-v0.1", "spacy-analyzer-v0.4.0", "spacy-analyzer-v0.6.1"],
             output_schema_version="learner-profile-snapshot-v0.3.0",
             limitations=["Descriptive prototype trend; not ability growth."],
         ),
@@ -70,8 +70,16 @@ def default_algorithm_registry() -> AlgorithmRegistry:
             algorithm_id="feedback-uptake", version="0.5.0",
             implementation="app.services.revision.RevisionService",
             parameter_schema={"trajectory_status": "categorical"},
-            compatible_input_versions=["structured-feedback-v0.1.1", "structured-feedback-v0.5.0"],
+            compatible_input_versions=["structured-feedback-v0.1.1", "structured-feedback-v0.5.0", "structured-feedback-v0.6.1"],
             output_schema_version="revision-snapshot-v0.5.0",
             limitations=["Observable consistency is not causal evidence."],
+        ),
+        AlgorithmVersion(
+            algorithm_id="diagnostic-gate", version="0.6.1",
+            implementation="app.calibration.service.DiagnosticCalibrationService",
+            parameter_schema={"thresholds": "versioned non-sensitive configuration"},
+            compatible_input_versions=["spacy-analyzer-v0.6.1", "basic-analyzer-v0.1"],
+            output_schema_version="diagnostic-calibration-v0.6.1",
+            limitations=["Transparent prototype admission and ranking rules; not educationally validated."],
         ),
     ])

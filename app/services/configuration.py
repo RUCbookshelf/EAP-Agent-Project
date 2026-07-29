@@ -60,7 +60,7 @@ class ConfigurationService:
         if not {"word_count", "mattr", "lexical_density"} <= metric_ids:
             errors.append("Required metric registry entries are missing.")
         algorithm_ids = {algorithm.algorithm_id for algorithm in self.registry.algorithms.list()}
-        if not {"longitudinal-trend", "revision-alignment", "feedback-uptake"} <= algorithm_ids:
+        if not {"longitudinal-trend", "revision-alignment", "feedback-uptake", "diagnostic-gate"} <= algorithm_ids:
             errors.append("Required algorithms are not registered.")
         return self.repository.set_configuration_validation(
             configuration_id, passed=not errors, errors=errors, actor=actor,

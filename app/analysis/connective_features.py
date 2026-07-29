@@ -7,7 +7,7 @@ from collections import Counter
 from pathlib import Path
 
 
-RESOURCE_PATH = Path(__file__).resolve().parent / "resources" / "connectives_v0_4.json"
+RESOURCE_PATH = Path(__file__).resolve().parent / "resources" / "connectives_v0_6_1.json"
 
 
 class ConnectiveFeatureExtractor:
@@ -20,6 +20,11 @@ class ConnectiveFeatureExtractor:
     def extract(self, text: str, sentence_spans: list[tuple[int, int]], paragraph_spans: list[tuple[int, int]]) -> dict:
         found: list[dict] = []
         lowered = text.lower()
+        expression_classes = {
+            form: class_name
+            for class_name, forms in self.resource.get("expression_classes", {}).items()
+            for form in forms
+        }
         for category, forms in self.resource["items"].items():
             for form in sorted(forms, key=len, reverse=True):
                 for match in re.finditer(rf"\b{re.escape(form)}\b", lowered):
@@ -29,7 +34,8 @@ class ConnectiveFeatureExtractor:
                         "connective_id": f"C{len(found)+1:03d}", "text": text[match.start():match.end()],
                         "normalized_form": form, "sentence_id": sentence_id,
                         "start_offset": match.start(), "end_offset": match.end(),
-                        "function_category": category, "paragraph_id": paragraph_id,
+                        "function_category": category, "expression_class": expression_classes.get(form, "discourse_connective"),
+                        "paragraph_id": paragraph_id,
                     })
         found.sort(key=lambda item: (item["start_offset"], -(item["end_offset"] - item["start_offset"])))
         # Prevent nested duplicate dictionary matches at the same start.
@@ -49,8 +55,8 @@ class ConnectiveFeatureExtractor:
         return {
             "detected_connectives": deduped,
             "category_distribution": dict(Counter(item["function_category"] for item in deduped)),
+            "expression_class_distribution": dict(Counter(item["expression_class"] for item in deduped)),
             "resource_version": self.version,
             "resource_hash": self.resource_hash,
             "limitations": self.resource["limitations"],
         }
-

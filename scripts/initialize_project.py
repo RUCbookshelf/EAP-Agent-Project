@@ -11,7 +11,7 @@ from app.prompts.versioning import (
     system_template_hash,
     validate_prompt_versioning,
 )
-from app.prompts import versioning_v04, versioning_v05
+from app.prompts import versioning_v04, versioning_v05, versioning_v061
 
 
 def initialize() -> dict[str, object]:
@@ -21,7 +21,8 @@ def initialize() -> dict[str, object]:
         raise RuntimeError("Required system prompt template is missing or empty")
     validate_prompt_versioning()
     versioning_v04.validate_prompt_versioning()
-    prompt_manifest = versioning_v05.validate_prompt_versioning()
+    versioning_v05.validate_prompt_versioning()
+    prompt_manifest = versioning_v061.validate_prompt_versioning()
     database = Database(settings.database_path)
     database.initialize()
     active_configuration = database.get_active_configuration()
@@ -40,11 +41,12 @@ def initialize() -> dict[str, object]:
             PROMPT_MANIFEST_PATH.is_file()
             and versioning_v04.PROMPT_MANIFEST_PATH.is_file()
             and versioning_v05.PROMPT_MANIFEST_PATH.is_file()
+            and versioning_v061.PROMPT_MANIFEST_PATH.is_file()
         ),
         "prompt_version": prompt_manifest["prompt_version"],
         "database_migration_version": database.migration_version(),
         "active_configuration_version": active_configuration.version,
-        "system_template_hash": versioning_v05.system_template_hash(),
+        "system_template_hash": versioning_v061.system_template_hash(),
         "llm_provider": settings.llm_provider,
         "deepseek_model": settings.deepseek_model,
         "deepseek_base_url_configured": bool(settings.deepseek_base_url),

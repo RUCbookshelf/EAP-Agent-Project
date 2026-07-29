@@ -10,6 +10,7 @@ from app.models import AnalysisResult, DiagnosisResult, EssaySubmission, History
 from app.revision import RevisionGroup, RevisionSnapshot
 from app.configuration import ConfigurationCreate, ConfigurationVersion
 from app.services.admin_reanalysis import ReanalysisRequest
+from app.calibration import DiagnosticCalibrationResult
 
 
 class ErrorBody(BaseModel):
@@ -33,6 +34,7 @@ class SubmissionResponse(BaseModel):
     feedback_result: ProviderResult
     history: HistoryResult
     revision_snapshot: RevisionSnapshot | None = None
+    diagnostic_calibration: DiagnosticCalibrationResult | None = None
 
 
 class RevisionCreateRequest(BaseModel):

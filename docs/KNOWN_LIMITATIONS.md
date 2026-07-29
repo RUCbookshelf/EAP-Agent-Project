@@ -1,4 +1,12 @@
-# v0.5 已知限制
+# v0.6.1 已知限制
+
+- Metric and diagnosis confidence are transparent engineering heuristics, not validated probabilities.
+- Repetition, necessary-task-term, local-cluster, priority, and exercise thresholds are working assumptions awaiting literature and human-coded calibration.
+- `necessary_task_term` uses conservative lexical/distributional rules, not semantic certainty or embeddings.
+- Connective evidence is limited by a curated dictionary and explicit locations; implicit cohesion is not measured.
+- spaCy dependency and morphology outputs remain parser candidates. They are not true clause, T-unit, CALF, or grammar-error counts.
+- Evidence relevance uses category-specific deterministic checks and can miss valid pedagogical interpretations.
+- A zero-priority response means automatic evidence was insufficient, not that the draft has no issues.
 
 v0.6 图表只是已有自动信号的透明展示，不增加测量效度。配置管理没有身份认证、权限隔离或多租户能力，只适合本地研究。参数验证检查类型、范围和资源兼容性，不代表阈值已有文献或实验支持。重分析可比较算法版本，但不会使旧结果自动变得可比。CALF 扩展目前只有接口，不含完整 CALF、总分、CEFR 或准确性定论。
 

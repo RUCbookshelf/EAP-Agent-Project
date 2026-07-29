@@ -6,7 +6,7 @@ import json
 from collections.abc import Callable
 
 
-LATEST_MIGRATION_VERSION = 6
+LATEST_MIGRATION_VERSION = 7
 
 
 def _add_column_if_missing(
@@ -264,6 +264,91 @@ def _migration_6(connection: sqlite3.Connection) -> None:
         )
 
 
+def _migration_7(connection: sqlite3.Connection) -> None:
+    metric_columns = {
+        "measurement_status": "TEXT NOT NULL DEFAULT 'insufficient_data'",
+        "confidence": "TEXT NOT NULL DEFAULT 'insufficient'",
+        "confidence_reasons_json": "TEXT NOT NULL DEFAULT '[]'",
+        "risk_factors_json": "TEXT NOT NULL DEFAULT '[]'",
+        "eligible_for_diagnosis": "INTEGER NOT NULL DEFAULT 0",
+        "eligible_for_longitudinal_comparison": "INTEGER NOT NULL DEFAULT 0",
+        "measurement_metadata_json": "TEXT NOT NULL DEFAULT '{}'",
+    }
+    for column, definition in metric_columns.items():
+        _add_column_if_missing(connection, "metric_results", column, definition)
+    connection.executescript(
+        """
+        CREATE TABLE IF NOT EXISTS diagnostic_calibrations (
+            calibration_row_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            calibration_id TEXT UNIQUE,
+            essay_id INTEGER NOT NULL REFERENCES essays(essay_id),
+            analysis_run_id TEXT REFERENCES analysis_runs(analysis_run_id),
+            calibration_json TEXT NOT NULL,
+            calibration_version TEXT NOT NULL,
+            gate_version TEXT NOT NULL,
+            priority_version TEXT NOT NULL,
+            evidence_validation_version TEXT NOT NULL,
+            diagnosis_version TEXT NOT NULL,
+            configuration_version TEXT NOT NULL,
+            created_at TEXT NOT NULL
+        );
+        CREATE INDEX IF NOT EXISTS idx_diagnostic_calibration_essay
+            ON diagnostic_calibrations(essay_id, calibration_row_id);
+        """
+    )
+    active = connection.execute(
+        "SELECT * FROM configuration_versions WHERE status='active' ORDER BY configuration_row_id DESC LIMIT 1"
+    ).fetchone()
+    if active is None:
+        return
+    existing = connection.execute(
+        "SELECT 1 FROM configuration_versions WHERE schema_version='configuration-schema-v0.6.1' LIMIT 1"
+    ).fetchone()
+    if existing:
+        return
+    from app.configuration import ConfigurationPayload
+
+    old = dict(active)
+    payload = ConfigurationPayload.model_validate(json.loads(old["payload_json"])).model_dump(mode="json")
+    payload.update({
+        "connective_resource_version": "connectives-v0.6.1",
+        "active_prompt_version": "feedback-prompt-v0.6.1",
+    })
+    canonical = json.dumps(payload, sort_keys=True, separators=(",", ":"))
+    content_hash = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    versions = [str(row[0]) for row in connection.execute("SELECT version FROM configuration_versions")]
+    suffixes = [int(value.rsplit(".", 1)[1]) for value in versions if value.startswith("config-v0.6.")]
+    version = f"config-v0.6.{max(suffixes, default=0) + 1}"
+    now = "2026-07-29T12:00:00+00:00"
+    connection.execute(
+        "UPDATE configuration_versions SET status='inactive', deactivated_at=? WHERE configuration_id=?",
+        (now, old["configuration_id"]),
+    )
+    cursor = connection.execute(
+        """INSERT INTO configuration_versions(
+            version,status,created_at,created_by,parent_version,payload_json,schema_version,
+            change_note,validation_status,validation_errors_json,activated_at,content_hash
+        ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)""",
+        (version, "active", now, "system", old["version"], canonical,
+         "configuration-schema-v0.6.1", "Activate conservative v0.6.1 diagnostic calibration defaults.",
+         "passed", "[]", now, content_hash),
+    )
+    configuration_id = f"CFG{int(cursor.lastrowid):06d}"
+    connection.execute(
+        "UPDATE configuration_versions SET configuration_id=? WHERE configuration_row_id=?",
+        (configuration_id, int(cursor.lastrowid)),
+    )
+    audit = connection.execute(
+        """INSERT INTO configuration_audit(
+            configuration_id,action,actor,reason,details_json,created_at
+        ) VALUES (?,?,?,?,?,?)""",
+        (configuration_id, "activate", "system", "v0.6.1 diagnostic calibration migration activation.",
+         json.dumps({"parent_version": old["version"], "prototype_defaults_unvalidated": True}), now),
+    )
+    connection.execute(
+        "UPDATE configuration_audit SET audit_id=? WHERE audit_row_id=?",
+        (f"CA{int(audit.lastrowid):06d}", int(audit.lastrowid)),
+    )
 def _ensure_feedback_append_only(connection: sqlite3.Connection) -> None:
     indexes = connection.execute("PRAGMA index_list(feedback_records)").fetchall()
     unique_essay = False
@@ -315,6 +400,7 @@ MIGRATIONS: dict[int, tuple[str, Callable[[sqlite3.Connection], None]]] = {
     4: ("versioned_nlp_analysis_runs", _migration_4),
     5: ("revision_relationships_and_snapshots", _migration_5),
     6: ("versioned_non_sensitive_configuration", _migration_6),
+    7: ("diagnostic_calibration_and_metric_confidence", _migration_7),
 }
 
 

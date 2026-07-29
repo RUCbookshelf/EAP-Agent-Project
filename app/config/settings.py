@@ -22,12 +22,12 @@ class Settings:
     api_port: int = 8000
     streamlit_port: int = 8501
     api_base_url: str = "http://127.0.0.1:8000"
-    application_version: str = "0.6.0"
+    application_version: str = "0.6.1"
     api_version: str = "v1"
-    database_migration_version: int = 6
-    prompt_version: str = "feedback-prompt-v0.5.0"
-    analysis_version: str = "spacy-analyzer-v0.4.0"
-    diagnosis_version: str = "prototype-diagnosis-v0.4.0"
+    database_migration_version: int = 7
+    prompt_version: str = "feedback-prompt-v0.6.1"
+    analysis_version: str = "spacy-analyzer-v0.6.1"
+    diagnosis_version: str = "prototype-diagnosis-v0.6.1"
     active_analyzer: str = "spacy"
     fallback_analyzer: str = "basic"
     spacy_model: str = "en_core_web_sm"

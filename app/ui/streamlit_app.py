@@ -76,6 +76,37 @@ def render_revision_page(api_client: WritingFeedbackApiClient) -> None:
         st.caption(limitation)
 
 
+def render_diagnostic_audit(api_client: WritingFeedbackApiClient) -> None:
+    st.header("Diagnostic calibration audit")
+    st.caption("Researcher-only prototype evidence. Priority scores are workflow rankings, not student scores.")
+    submission_id = st.number_input("Submission ID", min_value=1, value=1, step=1, key="audit_submission_id")
+    if not st.button("Load diagnostic audit"):
+        return
+    try:
+        audit = api_client.get_diagnostic_audit(int(submission_id))
+    except ApiClientError as exc:
+        st.error(str(exc)); return
+    st.caption(
+        f"Calibration {audit['calibration_version']} · Gate {audit['gate_version']} · "
+        f"Diagnosis {audit['diagnosis_version']} · Config {audit['configuration_version']}"
+    )
+    for title, key in (
+        ("Raw signals", "raw_signals"), ("Monitored signals", "monitored_signals"),
+        ("Eligible diagnoses", "eligible_diagnoses"), ("Selected priorities", "selected_priorities"),
+        ("Suppressed diagnoses", "suppressed_diagnostics"),
+    ):
+        with st.expander(title, expanded=key == "selected_priorities"):
+            st.dataframe(audit[key], use_container_width=True)
+    with st.expander("Metric confidence and measurement protocols"):
+        st.json(audit["metric_confidence_summary"])
+    with st.expander("Evidence relevance, priority components and suppression reasons"):
+        st.json({
+            "selected": audit["selected_priorities"],
+            "monitored": audit["monitored_signals"],
+            "suppressed": audit["suppressed_diagnostics"],
+        })
+
+
 def render_admin(api_client: WritingFeedbackApiClient) -> None:
     st.header("Local researcher administration")
     st.warning("Local-only prototype. Do not expose this interface directly on a public network.")
@@ -143,7 +174,7 @@ def render_admin(api_client: WritingFeedbackApiClient) -> None:
 def run() -> None:
     api_client = get_api_client(load_settings().api_base_url)
     st.set_page_config(page_title="English Writing Feedback Prototype", page_icon="✍️", layout="wide")
-    st.title("Intelligent English Writing Feedback Prototype v0.6")
+    st.title("Intelligent English Writing Feedback Prototype v0.6.1")
     st.caption("Formative feedback from prototype heuristics and optional LLM support — not automatic scoring.")
     st.warning(
         "This prototype is not educationally validated, does not measure proficiency, and does not replace teacher judgment."
@@ -175,12 +206,14 @@ def run() -> None:
 
     page = st.sidebar.radio(
         "Research prototype page",
-        ["Essay submission", "Student progress", "Revision comparison", "Local administration"],
+        ["Essay submission", "Student progress", "Revision comparison", "Diagnostic audit", "Local administration"],
     )
     if page == "Student progress":
         render_progress(api_client); return
     if page == "Revision comparison":
         render_revision_page(api_client); return
+    if page == "Diagnostic audit":
+        render_diagnostic_audit(api_client); return
     if page == "Local administration":
         render_admin(api_client); return
 

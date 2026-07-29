@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
+from typing import Any
 
 from app.models import (
     AnalysisResult,
@@ -22,6 +23,7 @@ class FeedbackContext:
     history: HistoryResult
     learner_profile_snapshot: LearnerProfileSnapshot | None = None
     revision_snapshot: RevisionSnapshot | None = None
+    diagnostic_calibration: dict[str, Any] | None = None
 
 
 class ProviderOutputError(RuntimeError):

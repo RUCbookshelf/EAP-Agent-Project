@@ -11,6 +11,7 @@ from app.core import LearnerProfileSnapshot
 from app.models import AnalysisResult, DiagnosisResult, EssaySubmission, HistoryResult, ProviderResult
 from app.revision import RevisionGroup, RevisionSnapshot
 from app.configuration import ConfigurationCreate, ConfigurationPayload, ConfigurationVersion, configuration_hash
+from app.calibration import DiagnosticCalibrationResult
 
 
 SCHEMA = """
@@ -247,13 +248,20 @@ class Database:
                     """INSERT INTO metric_results(
                         analysis_run_id, metric_id, metric_version, value_json, unit,
                         parameters_json, analyzer_version, resource_versions_json,
-                        verification_status, status, evidence_json, limitations_json
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                        verification_status, status, measurement_status, confidence,
+                        confidence_reasons_json, risk_factors_json, eligible_for_diagnosis,
+                        eligible_for_longitudinal_comparison, measurement_metadata_json,
+                        evidence_json, limitations_json
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
                     (
                         run_id, item["metric_id"], item["metric_version"], json.dumps(item.get("value")),
                         item["unit"], json.dumps(item.get("parameters", {})), item["analyzer_version"],
                         json.dumps(item.get("resource_versions", {})), item["verification_status"],
-                        item.get("status", "available"), json.dumps(item.get("evidence", [])),
+                        item.get("status", "available"), item.get("measurement_status", item.get("status", "available")),
+                        item.get("confidence", "insufficient"), json.dumps(item.get("confidence_reasons", [])),
+                        json.dumps(item.get("risk_factors", [])), int(item.get("eligible_for_diagnosis", False)),
+                        int(item.get("eligible_for_longitudinal_comparison", False)),
+                        json.dumps(item.get("measurement_metadata", {})), json.dumps(item.get("evidence", [])),
                         json.dumps(item.get("limitations", [])),
                     ),
                 )
@@ -311,8 +319,11 @@ class Database:
         results = []
         for row in rows:
             item = dict(row)
-            for name in ("value_json", "parameters_json", "resource_versions_json", "evidence_json", "limitations_json"):
+            for name in ("value_json", "parameters_json", "resource_versions_json", "confidence_reasons_json",
+                         "risk_factors_json", "measurement_metadata_json", "evidence_json", "limitations_json"):
                 item[name.removesuffix("_json")] = json.loads(item.pop(name))
+            item["eligible_for_diagnosis"] = bool(item.get("eligible_for_diagnosis"))
+            item["eligible_for_longitudinal_comparison"] = bool(item.get("eligible_for_longitudinal_comparison"))
             results.append(item)
         return results
 
@@ -330,6 +341,37 @@ class Database:
                 "INSERT INTO diagnoses(essay_id, diagnosis_json, diagnosis_version) VALUES (?, ?, ?)",
                 (essay_id, diagnosis.model_dump_json(), diagnosis.diagnosis_version),
             )
+
+    def save_diagnostic_calibration(self, essay_id: int,
+                                    calibration: DiagnosticCalibrationResult) -> DiagnosticCalibrationResult:
+        persisted = calibration.model_copy(update={"essay_id": essay_id})
+        with self.connect() as connection:
+            cursor = connection.execute(
+                """INSERT INTO diagnostic_calibrations(
+                    essay_id,analysis_run_id,calibration_json,calibration_version,gate_version,
+                    priority_version,evidence_validation_version,diagnosis_version,
+                    configuration_version,created_at
+                ) VALUES (?,?,?,?,?,?,?,?,?,?)""",
+                (essay_id, persisted.analysis_run_id, persisted.model_dump_json(),
+                 persisted.calibration_version, persisted.gate_version, persisted.priority_version,
+                 persisted.evidence_validation_version, persisted.diagnosis_version,
+                 persisted.configuration_version, persisted.created_at.isoformat()),
+            )
+            calibration_id = f"DC{int(cursor.lastrowid):06d}"
+            persisted = persisted.model_copy(update={"calibration_id": calibration_id})
+            connection.execute(
+                "UPDATE diagnostic_calibrations SET calibration_id=?, calibration_json=? WHERE calibration_row_id=?",
+                (calibration_id, persisted.model_dump_json(), int(cursor.lastrowid)),
+            )
+        return persisted
+
+    def get_diagnostic_calibration(self, essay_id: int) -> DiagnosticCalibrationResult | None:
+        with self.connect() as connection:
+            row = connection.execute(
+                "SELECT calibration_json FROM diagnostic_calibrations WHERE essay_id=? ORDER BY calibration_row_id DESC LIMIT 1",
+                (essay_id,),
+            ).fetchone()
+        return DiagnosticCalibrationResult.model_validate_json(row[0]) if row else None
 
     def save_feedback(self, essay_id: int, result: ProviderResult, analysis_version: str) -> None:
         with self.connect() as connection:
@@ -414,7 +456,7 @@ class Database:
         return records
 
     def counts(self) -> dict[str, int]:
-        tables = ("students", "essays", "metrics", "diagnoses", "feedback_records", "exercises", "learner_history", "llm_call_records", "learner_profile_snapshots", "analysis_runs", "metric_results", "analysis_artifacts", "revision_groups", "revision_snapshots", "system_versions")
+        tables = ("students", "essays", "metrics", "diagnoses", "feedback_records", "exercises", "learner_history", "llm_call_records", "learner_profile_snapshots", "analysis_runs", "metric_results", "analysis_artifacts", "revision_groups", "revision_snapshots", "diagnostic_calibrations", "system_versions")
         with self.connect() as connection:
             return {table: int(connection.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0]) for table in tables}
 
@@ -804,7 +846,7 @@ class Database:
                     change_note,validation_status,validation_errors_json,content_hash
                 ) VALUES (?,?,?,?,?,?,?,?,?,?,?)""",
                 (version, "draft", now, request.created_by, parent_version,
-                 request.payload.model_dump_json(), "configuration-schema-v0.6.0", request.change_note,
+                request.payload.model_dump_json(), "configuration-schema-v0.6.1", request.change_note,
                  "not_validated", "[]", configuration_hash(request.payload)),
             )
             configuration_id = f"CFG{int(cursor.lastrowid):06d}"

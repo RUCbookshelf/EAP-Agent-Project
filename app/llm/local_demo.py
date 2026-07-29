@@ -38,9 +38,12 @@ class LocalDemoProvider(LLMProvider):
         essay_text = payload["submission"]["essay_text"]
         diagnoses = [DiagnosisSignal.model_validate(item) for item in payload["diagnoses"]]
         strengths = [item for item in diagnoses if item.kind == "strength"]
-        priorities = [item for item in diagnoses if item.kind == "improvement"][:2]
+        priorities = [
+            item for item in diagnoses
+            if item.kind == "improvement" and item.selection_status in {"selected_priority", "raw_signal"}
+        ][:2]
         quotes = self._verbatim_fragments(essay_text)
-        strength = strengths[0]
+        strength = strengths[0] if strengths else None
         history = payload["learner_history"]
         history_evidence = history["history_evidence"]
         if history_evidence:
@@ -75,23 +78,27 @@ class LocalDemoProvider(LLMProvider):
             )
         return StructuredFeedback(
             positive_finding=PositiveFinding(
-                evidence_quote=quotes[0],
+                evidence_quote=(strength.evidence_quote_candidates[0] if strength and strength.evidence_quote_candidates else quotes[0]),
                 explanation=(
-                    f"This exact passage provides a starting point for discussing {strength.category.replace('_', ' ')}; "
-                    "the signal remains heuristic."
+                    f"This exact passage contains the observable {strength.category.replace('_', ' ')} feature; "
+                    "the local observation does not establish overall writing ability."
+                    if strength else
+                    "This exact passage provides a neutral text location for formative review; no reliable automatic strength was inferred."
                 ),
             ),
             priority_feedback=[
                 FeedbackItem(
                     diagnosis_id=item.diagnosis_id,
                     category=item.category,
-                    evidence_quote=quotes[min(index + 1, len(quotes) - 1)],
+                    evidence_quote=(item.evidence_quote_candidates[0] if item.evidence_quote_candidates else quotes[min(index + 1, len(quotes) - 1)]),
                     explanation=item.interpretation,
                     revision_guidance=GUIDANCE.get(item.category, GUIDANCE["targeted_review"]),
                 )
                 for index, item in enumerate(priorities)
             ],
-            exercises=self.exercise_generator.generate(priorities),
+            exercises=self.exercise_generator.generate(
+                priorities, payload.get("diagnostic_calibration", {}).get("exercise_generation")
+            ),
             longitudinal=longitudinal,
             revision=revision,
             uncertainty_note=(

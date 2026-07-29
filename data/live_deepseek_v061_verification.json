@@ -1,0 +1,25 @@
+{
+  "verification_time": "2026-07-29T12:52:47.240003+00:00",
+  "status": "PASS",
+  "provider": "deepseek",
+  "model": "deepseek-v4-flash",
+  "prompt_version": "feedback-prompt-v0.6.1",
+  "schema_version": "structured-feedback-v0.6.1",
+  "validation_status": "passed",
+  "retry_count": 0,
+  "fallback": false,
+  "selected_priority_count": 0,
+  "exercise_count": 0,
+  "bias_count": 3,
+  "bias_sentence_ids": [
+    2,
+    6,
+    11
+  ],
+  "bias_local_cluster": false,
+  "bias_selected": false,
+  "calibration_version": "diagnostic-calibration-v0.6.1",
+  "configuration_version": "config-v0.6.2",
+  "api_key_recorded": false,
+  "raw_response_recorded": false
+}

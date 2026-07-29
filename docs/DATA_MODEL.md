@@ -1,4 +1,6 @@
-# 数据模型（迁移 6）
+# 数据模型（迁移 7）
+
+迁移 7 原位扩展 `metric_results`，保存 measurement status、metric confidence、reasons、risk factors、诊断/纵向准入标志和可复算 measurement metadata；旧行和旧 metric version 不覆盖。新增 append-only `diagnostic_calibrations`，保存 gate/priority/calibration 版本、完整状态集合、证据相关性、排除原因和 score components。迁移在事务中执行，失败回滚，不删除历史作文或分析。
 
 迁移 5 在保留 `original_draft_stage` 的同时向 `essays` 追加修订元数据。`revision_groups` 保存任务内成员关系和元数据一致性；`revision_snapshots` 追加保存结构化比较、算法/资源/配置版本及限制。重算只插入新 Snapshot，不覆盖旧记录。数据库不保存 API Key。
 
@@ -23,6 +25,7 @@ SQLite 默认文件为 `data/writing_feedback.db`，外键约束在每个连接�
 | `analysis_runs` | `analysis_run_id`, `essay_id`, Analyzer/NLP/model/configuration versions, parameters/resources, fallback, duration, limitations | 每次本地分析的追加式运行记录 |
 | `metric_results` | AnalysisRun, metric/version/value/unit/parameters/resources/status/evidence/limitations | 通用指标结果，不要求新增固定列 |
 | `analysis_artifacts` | AnalysisRun, artifact type/schema, JSON | token、位置与词汇/衔接/句法证据 |
+| `diagnostic_calibrations` | essay/AnalysisRun IDs, calibration JSON, calibration/gate/priority/configuration versions, created_at | 追加式诊断准入、排序、证据和抑制审计 |
 
 ## 关系
 

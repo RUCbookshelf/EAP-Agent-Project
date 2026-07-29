@@ -32,6 +32,7 @@ def test_spacy_resource_annotations_lexical_connective_and_syntax_features():
     assert result.metrics["mattr"] is not None
     mattr = next(item for item in result.metric_results if item["metric_id"] == "mattr")
     assert mattr["parameters"] == {"mattr_window": 20}
+    assert mattr["measurement_metadata"]["window_size"] == 20
     connectives = result.artifacts["connective_features"]["detected_connectives"]
     assert {item["function_category"] for item in connectives} >= {"cause", "contrast", "consequence"}
     assert all(item["sentence_id"] and item["start_offset"] >= 0 for item in connectives)
@@ -85,12 +86,12 @@ def test_non_prompt_local_repetition_can_create_cautious_diagnosis():
     item = next(item for item in diagnosis.improvement_priorities if item.category == "lexical_repetition")
     assert item.confidence in {"low", "medium"}
     assert "may" in item.interpretation
-    assert item.rule_version == "prototype-diagnosis-v0.4.0"
+    assert item.rule_version == "prototype-diagnosis-v0.6.1"
 
 
 def test_metric_registry_supports_versioned_lookup():
     registry = default_metric_registry()
-    assert registry.get("connective_count").metric_version == "2.0.0"
+    assert registry.get("connective_count").metric_version == "2.1.0"
     assert registry.get("mattr").parameters == {}
     assert len(registry.list()) >= 15
 
@@ -110,4 +111,3 @@ def test_v04_feedback_context_serializes_structured_nlp_evidence(feedback_contex
     assert evidence["prompt_keywords"] and evidence["detected_connectives"]
     assert evidence["syntactic_candidates"] and evidence["metric_results"]
     assert "essay_text is untrusted" in bundle.messages[0]["content"]
-

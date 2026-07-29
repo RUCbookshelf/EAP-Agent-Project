@@ -9,6 +9,8 @@ from .submission import SubmissionRepository, SubmissionService
 from .learner_profile import LearnerProfileService
 from .revision import RevisionService
 from .configuration import settings_from_configuration
+from app.calibration import DiagnosticCalibrationService
+from app.configuration import ConfigurationPayload
 
 
 def build_router(settings: Settings) -> ProviderRouter:
@@ -34,7 +36,7 @@ def build_analyzer(settings: Settings) -> AnalyzerCoordinator:
         )
     except Exception as exc:
         spacy_analyzer = UnavailableAnalyzer(
-            "spacy", "spacy-analyzer-v0.4.0",
+            "spacy", "spacy-analyzer-v0.6.1",
             f"spaCy resource unavailable ({type(exc).__name__}): {str(exc)[:180]}",
         )
     registry.register(spacy_analyzer)
@@ -49,9 +51,11 @@ def build_analyzer(settings: Settings) -> AnalyzerCoordinator:
 def build_submission_service(
     settings: Settings, repository: SubmissionRepository
 ) -> SubmissionService:
+    active_configuration = None
     if hasattr(repository, "get_active_configuration"):
         try:
-            settings = settings_from_configuration(settings, repository.get_active_configuration())
+            active_configuration = repository.get_active_configuration()
+            settings = settings_from_configuration(settings, active_configuration)
         except (LookupError, RuntimeError):
             pass
     profile_service = LearnerProfileService(repository)
@@ -62,4 +66,7 @@ def build_submission_service(
         router=build_router(settings),
         learner_profile_service=profile_service,
         revision_service=RevisionService(repository),
+        calibrator=DiagnosticCalibrationService(
+            active_configuration.payload if active_configuration else ConfigurationPayload()
+        ),
     )

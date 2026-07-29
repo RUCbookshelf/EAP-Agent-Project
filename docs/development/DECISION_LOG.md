@@ -1,5 +1,9 @@
 # Decision log
 
+## D013 — Calibrate automatic signals before formative feedback
+
+v0.6.1 inserts deterministic Metric Confidence, Diagnostic Gate, Evidence Relevance, and transparent Priority Score layers. Metrics may remain research evidence without becoming diagnoses; diagnoses may remain monitored without entering student feedback. Zero priorities are valid. Distributed count-three repetition without a local cluster remains monitored, prompt/necessary terms are penalized, and connective priorities require a specific relevant location. Word count and parser measurements are descriptive signals, not strengths. Defaults (2 priorities, 0.52 score threshold, repetition 4/0.025, penalties 1.0/0.7, exercise maxima 3/2/1) are versioned prototype assumptions requiring future literature and human calibration. Since `config-v0.6.1` already existed, migration 7 preserves it and activates child `config-v0.6.2`. v0.7/CALF remain `not_started`.
+
 ## D001 — Preserve v0.1.1 as an incremental compatibility layer
 
 - Date: 2026-07-29

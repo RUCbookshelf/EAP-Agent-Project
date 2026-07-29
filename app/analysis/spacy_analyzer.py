@@ -10,6 +10,7 @@ from app.models import AnalysisResult
 from .connective_features import ConnectiveFeatureExtractor
 from .input_quality import InputQualityService
 from .lexical_features import extract_lexical_features
+from .metric_confidence import assess_metric_confidence
 from .registry import MetricRegistry, default_metric_registry
 from .schemas import MetricResult
 from .syntactic_features import extract_syntactic_features
@@ -17,7 +18,7 @@ from .syntactic_features import extract_syntactic_features
 
 class SpacyAnalyzer:
     analyzer_id = "spacy"
-    version = "spacy-analyzer-v0.4.0"
+    version = "spacy-analyzer-v0.6.1"
     backend = "spacy"
 
     def __init__(
@@ -63,10 +64,17 @@ class SpacyAnalyzer:
             "type_token_ratio": lexical["type_token_ratio"],
             "connective_count": len(connective["detected_connectives"]),
             "repeated_content_words": lexical["repeated_content_words"],
+            "repetition_density": lexical["repetition_density"],
             "lexical_density": lexical["lexical_density"], "mattr": lexical["mattr"],
             "finite_verb_candidates": len(syntactic["finite_verb_candidates"]),
             "subordinate_clause_candidates": len(syntactic["subordinate_clause_candidates"]),
             "coordination_candidates": len(syntactic["coordination_candidates"]),
+            "clause_like_dependency_candidates": {
+                dep: len(items) for dep, items in syntactic["clause_like_dependency_candidates_by_type"].items()
+            },
+            "coordinator_token_count": len(syntactic["coordinator_tokens"]),
+            "conjunct_dependency_count": len(syntactic["conjunct_dependencies"]),
+            "coordinated_structure_candidates": len(syntactic["coordinated_structure_candidates"]),
             "mean_dependency_tree_depth": syntactic["mean_dependency_tree_depth"],
             "mean_noun_phrase_length": syntactic["mean_noun_phrase_length"],
         }
@@ -103,7 +111,10 @@ class SpacyAnalyzer:
 
     def _metric_results(self, metrics: dict, lexical: dict, connective: dict, syntactic: dict) -> list[MetricResult]:
         results: list[MetricResult] = []
-        for definition in self.registry.list():
+        deprecated_aggregate_ids = {"subordinate_clause_candidates", "coordination_candidates"}
+        for definition in self.registry.latest_list():
+            if definition.metric_id in deprecated_aggregate_ids:
+                continue
             value = metrics.get(definition.metric_id)
             status = "available"
             if definition.metric_id == "mattr" and lexical["mattr_status"] == "insufficient_data":
@@ -115,15 +126,57 @@ class SpacyAnalyzer:
                 evidence = lexical["repeated_content_word_details"]
             elif definition.metric_id == "finite_verb_candidates":
                 evidence = syntactic["finite_verb_candidates"]
+            elif definition.metric_id == "clause_like_dependency_candidates":
+                evidence = [item for items in syntactic["clause_like_dependency_candidates_by_type"].values() for item in items]
+            elif definition.metric_id == "coordinator_token_count":
+                evidence = syntactic["coordinator_tokens"]
+            elif definition.metric_id == "conjunct_dependency_count":
+                evidence = syntactic["conjunct_dependencies"]
+            elif definition.metric_id == "coordinated_structure_candidates":
+                evidence = syntactic["coordinated_structure_candidates"]
+            metadata = self._measurement_metadata(definition.metric_id, lexical, syntactic)
             parameters = {"mattr_window": self.mattr_window} if definition.metric_id == "mattr" else {}
+            confidence = assess_metric_confidence(
+                definition.metric_id, status=status, token_count=lexical["type_token_ratio_protocol"]["token_count_used"],
+                fallback_used=False, model_available=bool(self.model_version), parameters={**parameters, **metadata},
+                resource_versions={"connectives": self.connectives.version} if definition.metric_id == "connective_count" else {},
+            )
             results.append(MetricResult(
                 metric_id=definition.metric_id, metric_version=definition.metric_version,
                 value=value, unit=definition.unit, parameters=parameters,
                 analyzer_version=self.version,
                 resource_versions={"connectives": self.connectives.version} if definition.metric_id == "connective_count" else {},
-                status=status, evidence=evidence, limitations=definition.limitations,
+                status=status, evidence=evidence, limitations=[*definition.limitations, *confidence.pop("limitations")],
+                measurement_metadata=metadata, **confidence,
             ))
         return results
+
+    @staticmethod
+    def _measurement_metadata(metric_id: str, lexical: dict, syntactic: dict) -> dict:
+        if metric_id in {"word_count", "unique_word_count", "type_token_ratio"}:
+            return lexical["type_token_ratio_protocol"]
+        if metric_id == "mattr":
+            return lexical["mattr_protocol"]
+        if metric_id == "lexical_density":
+            return lexical["lexical_density_protocol"]
+        if metric_id in {"repeated_content_words", "repetition_density"}:
+            return {
+                **lexical["repetition_protocol"],
+                "numerator_count": lexical["repetition_density_numerator"],
+                "denominator_count": lexical["repetition_density_denominator"],
+            }
+        if metric_id == "finite_verb_candidates":
+            return {
+                "finite_tags": ["VBD", "VBP", "VBZ", "MD"], "finite_morphology": "VerbForm=Fin",
+                "auxiliary_policy": "finite AUX counted once; non-finite lexical participle not independently finite",
+                "coordinated_verb_policy": "each parser token meeting the finite rule is a candidate",
+            }
+        if metric_id == "clause_like_dependency_candidates":
+            return {"dependency_types": sorted(syntactic["clause_like_dependency_candidates_by_type"]),
+                    "confirmed_clause_count": False}
+        if metric_id in {"coordinator_token_count", "conjunct_dependency_count", "coordinated_structure_candidates"}:
+            return {"counts_are_separate": True, "confirmed_structure_count": False}
+        return {}
 
 
 def _paragraph_spans(text: str) -> list[tuple[int, int]]:
