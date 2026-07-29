@@ -1,0 +1,5 @@
+# v0.1.1 runtime and test dependencies (Python 3.11)
+streamlit==1.60.0
+pydantic==2.13.4
+python-dotenv==1.2.2
+pytest==9.1.1

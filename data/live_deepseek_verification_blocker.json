@@ -1,0 +1,8 @@
+{
+  "verification_time": "2026-07-29T05:12:12.991546+00:00",
+  "status": "BLOCKED_NOT_RUN",
+  "reason": "DEEPSEEK_API_KEY is not configured",
+  "run_live_llm_tests_enabled": true,
+  "deepseek_api_key_configured": false,
+  "api_key_recorded": false
+}

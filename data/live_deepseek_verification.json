@@ -1,0 +1,25 @@
+{
+  "verification_time": "2026-07-29T05:14:53.233502+00:00",
+  "status": "PASS",
+  "submission_ids": [
+    "E000001",
+    "E000002"
+  ],
+  "provider": "deepseek",
+  "model": "deepseek-v4-flash",
+  "prompt_version": "feedback-prompt-v0.1.1",
+  "system_template_hash": "7de3020bbfe7d9434777207b66f17e9325f1c872d6c5db20ecbba8f730f91118",
+  "user_template_hash": "e49061a97361326f0b7ee6a82d3d2542279b02ed23bd19bf9b3e66afd8bebbd6",
+  "rendered_prompt_hash": "1e2c3c5e780cb7a3997859662b751ab224ebea88bd1963481a10752a04fe8a7c",
+  "schema_version": "structured-feedback-v0.1.1",
+  "second_request_history_evidence_count": 2,
+  "returned_history_evidence_ids": [
+    "H001",
+    "H002"
+  ],
+  "validation_status": "passed",
+  "retry_count": 0,
+  "fallback": false,
+  "api_key_recorded": false,
+  "sensitive_request_recorded": false
+}

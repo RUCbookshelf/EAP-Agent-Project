@@ -1,0 +1,47 @@
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+from app.config import PROJECT_ROOT, load_settings
+from app.database import Database
+from app.prompts.versioning import (
+    PROMPT_MANIFEST_PATH,
+    SYSTEM_TEMPLATE_PATH,
+    system_template_hash,
+    validate_prompt_versioning,
+)
+
+
+def initialize() -> dict[str, object]:
+    settings = load_settings()
+    (PROJECT_ROOT / "data").mkdir(parents=True, exist_ok=True)
+    if not SYSTEM_TEMPLATE_PATH.is_file() or not SYSTEM_TEMPLATE_PATH.read_text(encoding="utf-8").strip():
+        raise RuntimeError("Required system prompt template is missing or empty")
+    prompt_manifest = validate_prompt_versioning()
+    database = Database(settings.database_path)
+    database.initialize()
+    with database.connect() as connection:
+        tables = sorted(
+            row[0] for row in connection.execute(
+                "SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%'"
+            )
+        )
+    return {
+        "status": "PASS",
+        "database_path": str(settings.database_path),
+        "database_table_count": len(tables),
+        "prompt_template_found": True,
+        "prompt_manifest_found": PROMPT_MANIFEST_PATH.is_file(),
+        "prompt_version": prompt_manifest["prompt_version"],
+        "system_template_hash": system_template_hash(),
+        "llm_provider": settings.llm_provider,
+        "deepseek_model": settings.deepseek_model,
+        "deepseek_base_url_configured": bool(settings.deepseek_base_url),
+        "deepseek_key_configured": bool(settings.deepseek_api_key),
+        "api_key_recorded": False,
+    }
+
+
+if __name__ == "__main__":
+    print(json.dumps(initialize(), indent=2))
