@@ -22,7 +22,7 @@ Git status/log, migration version, active configuration, prompt manifest hashes,
 
 ## Automated results
 
-- Default pytest: `183 passed, 2 skipped` in 79.18 seconds. The skips are opt-in live external-API tests.
+- Default pytest: `183 passed, 2 skipped` in 79.29 seconds. The skips are opt-in live external-API tests.
 - Compile: PASS.
 - Initialization: PASS; 19 tables; migration 7; prompt `feedback-prompt-v0.6.1`; active `config-v0.6.2`.
 - Empty database initialization: covered and PASS.
