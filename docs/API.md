@@ -12,6 +12,10 @@ Base URL defaults to `http://127.0.0.1:8000`. Interactive OpenAPI documentation 
 | GET | `/api/v1/students/{student_id}/history` | submissions and saved history records |
 | GET | `/api/v1/students/{student_id}/profile` | student counts, latest Snapshot, sufficiency, issues, priorities and limits |
 | GET | `/api/v1/students/{student_id}/progress` | recalculates and saves a versioned longitudinal Snapshot |
+| GET | `/api/v1/submissions/{submission_id}/analyses` | list append-only AnalysisRuns |
+| POST | `/api/v1/submissions/{submission_id}/analyses` | append one local reanalysis; never call an LLM |
+
+v0.4 health also returns active Analyzer/version, spaCy and English-model availability/version, and explicit fallback state/reason. It never returns credentials. Submission analysis includes input-quality flags, metric results, resource/parameter versions and evidence artifacts.
 
 Errors use `{"error":{"code":"...","message":"...","details":[]}}`. Validation is 422 and missing records are 404. Errors do not expose keys, full Prompt text, or internal stack traces. Essay text is limited to 50,000 characters; required strings are stripped and cannot be blank.
 

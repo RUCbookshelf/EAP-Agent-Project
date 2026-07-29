@@ -51,3 +51,19 @@
 - Status: accepted
 - Decision: v0.3 passed the 27-item acceptance gate and real DeepSeek verification. The implementation commit is `0ce8f1a`; the post-gate architecture backup is `docs/visualizations/V0.3_FUNCTION_ARCHITECTURE.md`.
 - Stop condition: do not implement v0.4 or later work until a human reviews the architecture, comparability rules, longitudinal heuristics, learner profile, and research assumptions documented in `docs/development/V0.3_HUMAN_REVIEW_GUIDE.md`.
+
+## D009 — Authorize the bounded v0.4 → v0.5 → v0.6 sequence
+
+- Date: 2026-07-29
+- Status: accepted
+- Decision: the project owner supplied an explicit continuation goal authorizing v0.4, v0.5 and v0.6 in sequence. This satisfies the v0.3 human-review stop gate for engineering continuation without treating the reviewed heuristics as educationally validated.
+- Boundary: complete each independent acceptance gate and Git commit; stop after v0.6. Do not begin v0.7, full CALF measurement, cloud deployment or a WeChat client.
+- Recovery point: annotated Git tag `pre-v0.4-baseline-20260729` points to the verified v0.3 documentation commit.
+
+## D010 — Accept v0.4 Analyzer 2.0 and continue to v0.5
+
+- Date: 2026-07-29
+- Status: accepted
+- Decision: use spaCy 3.8.7 and en_core_web_sm 3.8.0 as the default local backend, with an explicit BasicAnalyzer fallback; store token-scale evidence in append-only JSON artifacts and versioned MetricResults rather than fixed columns.
+- Evidence: 97 passed, 1 opt-in live test skipped; migration 4; current and clean-environment `run.bat --verify` passed; FastAPI/docs/Streamlit returned 200; clean Python 3.11.15 environment passed `pip check`.
+- Research boundary: parser, dictionary, MATTR, lexical density and diagnostic thresholds remain automatic unverified prototype signals.

@@ -35,5 +35,5 @@ def test_streamlit_is_api_client_only():
     forbidden = ("app.database", "app.repositories", "app.llm", "app.analyzer", "app.diagnosis", "app.feedback")
     assert not any(name.startswith(forbidden) for name in imports)
     source = (ROOT / "app" / "ui" / "streamlit_app.py").read_text(encoding="utf-8")
-    assert "get_api_client().submit" in source
+    assert "api_client.submit" in source
     assert "FeedbackPipeline" not in source and "sqlite3" not in source

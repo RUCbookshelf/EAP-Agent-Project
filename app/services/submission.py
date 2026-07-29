@@ -48,16 +48,21 @@ class SubmissionService:
         self.history = LearnerHistoryService(repository)
         self.learner_profile_service = learner_profile_service
         self.repository.record_versions({
-            "application": "0.3.0",
+            "application": "0.4.0",
             "analysis": getattr(analyzer, "version", "unknown"),
             "diagnosis": getattr(diagnoser, "version", "unknown"),
             "feedback_schema": "structured-feedback-v0.1.1",
             "api": "v1",
+            "metric_registry": "metric-registry-v0.4.0",
         })
 
     def submit(self, submission: EssaySubmission, *, synthetic: bool = False) -> PipelineResult:
         essay_id = self.repository.save_essay(submission, synthetic=synthetic)
-        analysis = self.analyzer.analyze(submission.essay_text)
+        analysis = self.analyzer.analyze(
+            submission.essay_text, writing_prompt=submission.writing_prompt,
+            draft_stage=submission.draft_stage, tool_use=submission.tool_use,
+        )
+        analysis = self.repository.save_analysis_run(essay_id, analysis)
         self.repository.save_analysis(essay_id, analysis)
         diagnosis = self.diagnoser.diagnose(analysis)
         self.repository.save_diagnosis(essay_id, diagnosis)

@@ -4,7 +4,7 @@ import sqlite3
 from collections.abc import Callable
 
 
-LATEST_MIGRATION_VERSION = 3
+LATEST_MIGRATION_VERSION = 4
 
 
 def _add_column_if_missing(
@@ -74,10 +74,68 @@ def _migration_3(connection: sqlite3.Connection) -> None:
     )
 
 
+def _migration_4(connection: sqlite3.Connection) -> None:
+    connection.executescript(
+        """
+        CREATE TABLE IF NOT EXISTS analysis_runs (
+            analysis_run_row_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            analysis_run_id TEXT UNIQUE,
+            essay_id INTEGER NOT NULL REFERENCES essays(essay_id),
+            analyzer_id TEXT NOT NULL,
+            analyzer_version TEXT NOT NULL,
+            backend TEXT NOT NULL,
+            nlp_library TEXT,
+            nlp_library_version TEXT,
+            nlp_model_name TEXT,
+            nlp_model_version TEXT,
+            parameters_json TEXT NOT NULL,
+            resource_versions_json TEXT NOT NULL,
+            configuration_version TEXT NOT NULL,
+            fallback_used INTEGER NOT NULL DEFAULT 0,
+            fallback_reason TEXT,
+            analysis_duration_ms REAL NOT NULL,
+            limitations TEXT NOT NULL,
+            created_at TEXT NOT NULL
+        );
+        CREATE INDEX IF NOT EXISTS idx_analysis_runs_essay_created
+            ON analysis_runs(essay_id, analysis_run_row_id);
+        CREATE TABLE IF NOT EXISTS metric_results (
+            metric_result_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            analysis_run_id TEXT NOT NULL REFERENCES analysis_runs(analysis_run_id),
+            metric_id TEXT NOT NULL,
+            metric_version TEXT NOT NULL,
+            value_json TEXT,
+            unit TEXT NOT NULL,
+            parameters_json TEXT NOT NULL,
+            analyzer_version TEXT NOT NULL,
+            resource_versions_json TEXT NOT NULL,
+            verification_status TEXT NOT NULL,
+            status TEXT NOT NULL,
+            evidence_json TEXT NOT NULL,
+            limitations_json TEXT NOT NULL,
+            created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+        );
+        CREATE INDEX IF NOT EXISTS idx_metric_results_run_metric
+            ON metric_results(analysis_run_id, metric_id, metric_version);
+        CREATE TABLE IF NOT EXISTS analysis_artifacts (
+            artifact_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            analysis_run_id TEXT NOT NULL REFERENCES analysis_runs(analysis_run_id),
+            artifact_type TEXT NOT NULL,
+            schema_version TEXT NOT NULL,
+            artifact_json TEXT NOT NULL,
+            created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+        );
+        CREATE INDEX IF NOT EXISTS idx_analysis_artifacts_run
+            ON analysis_artifacts(analysis_run_id, artifact_id);
+        """
+    )
+
+
 MIGRATIONS: dict[int, tuple[str, Callable[[sqlite3.Connection], None]]] = {
     1: ("preserve_v0_1_1_schema", _migration_1),
     2: ("cloud_ready_repository_indexes", _migration_2),
     3: ("longitudinal_profile_snapshots", _migration_3),
+    4: ("versioned_nlp_analysis_runs", _migration_4),
 }
 
 

@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.4.0 — 2026-07-29
+
+- 新增可注册的 `SpacyAnalyzer` 与显式 `BasicAnalyzer` 回退，固定 spaCy 3.8.7 / en_core_web_sm 3.8.0。
+- 新增输入质量提醒、词元和内容词分析、题目关键词降权、MATTR、lexical density、连接表达位置/功能分类及原型句法候选。
+- 数据库迁移 4 新增 append-only AnalysisRun、MetricResult 与分析 Artifact；单篇重分析不覆盖旧结果且默认不调用 LLM。
+- Prompt v0.4 仅向 Provider 暴露结构化 NLP 证据，并继续执行 Pydantic、诊断 ID、历史 ID 和逐字引文验证。
+- health/API/Streamlit/run.bat 同步显示 NLP 资源、活动 Analyzer 和显式回退状态。
+
 ## 0.1.0 — 2026-07-29
 
 - 建立分层 Streamlit、SQLite、Pydantic MVP。

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import re
+import time
 from collections import Counter
 
 from app.models import AnalysisResult
@@ -24,9 +25,15 @@ STOPWORDS = {
 
 
 class BasicAnalyzer(Analyzer):
+    analyzer_id = "basic"
     version = "basic-analyzer-v0.1"
+    backend = "regex"
 
-    def analyze(self, text: str) -> AnalysisResult:
+    def analyze(self, text: str, *, writing_prompt: str = "", draft_stage: str | None = None,
+                tool_use: str | None = None) -> AnalysisResult:
+        from app.analysis.input_quality import InputQualityService
+
+        started = time.perf_counter()
         words = [w.lower().replace("’", "'") for w in WORD_RE.findall(text)]
         sentences = [s.strip() for s in SENTENCE_RE.findall(text) if WORD_RE.search(s)]
         paragraphs = [p for p in re.split(r"\r?\n\s*\r?\n", text.strip()) if p.strip()]
@@ -49,12 +56,21 @@ class BasicAnalyzer(Analyzer):
             "connective_count": connective_count,
             "repeated_content_words": repeated,
         }
+        quality = InputQualityService().inspect(text, draft_stage=draft_stage, tool_use=tool_use)
         return AnalysisResult(
             metrics=metrics,
             analysis_version=self.version,
+            analyzer_id=self.analyzer_id,
+            analyzer_version=self.version,
+            backend=self.backend,
+            parameters={},
+            resource_versions={"input_quality": InputQualityService.version},
+            configuration_version="basic-config-v0.1",
+            analysis_duration_ms=round((time.perf_counter() - started) * 1000, 3),
+            input_quality=quality.model_dump(mode="json"),
+            artifacts={"analysis_text_hash": quality.analysis_text_hash},
             limitations=(
                 "Prototype heuristic counts based on surface forms. This is not a complete CALF analysis "
                 "and must not be interpreted as a measure of learner ability."
             ),
         )
-

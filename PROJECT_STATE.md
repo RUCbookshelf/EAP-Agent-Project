@@ -52,3 +52,11 @@
 - Comparability, baseline, metric trends, variability, conservative confidence, issue trajectories, priorities and append-only Snapshots are implemented.
 - progress/profile APIs are active; no CEFR, overall score, ranking or validated ability-change output exists.
 - v0.4 remains not_started and is outside the current authorization.
+
+## v0.4 current state
+
+- Owner authorization received for the bounded v0.4 → v0.5 → v0.6 sequence; v0.7 remains unauthorized.
+- Application 0.4.0; migration 4; `spacy-analyzer-v0.4.0`; `prototype-diagnosis-v0.4.0`; `feedback-prompt-v0.4.0`.
+- spaCy 3.8.7 and en_core_web_sm 3.8.0 are pinned; model failure is visible and falls back to BasicAnalyzer.
+- AnalysisRun, MetricResult and analysis artifacts are append-only. Reanalysis does not overwrite v0.1 compatibility metrics or call DeepSeek by default.
+- Input quality, lexical, connective and parser candidates remain automatic unverified signals requiring human review.

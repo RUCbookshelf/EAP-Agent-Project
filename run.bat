@@ -7,7 +7,7 @@ set "PYTHONUTF8=1"
 if not defined WRITING_FEEDBACK_VENV set "WRITING_FEEDBACK_VENV=.venv"
 set "VENV_PYTHON=%WRITING_FEEDBACK_VENV%\Scripts\python.exe"
 
-echo [1/6] Checking for Python 3.11 and the isolated project environment...
+echo [1/7] Checking for Python 3.11 and the isolated project environment...
 if not exist "%VENV_PYTHON%" (
     py -V:Astral/CPython3.11.15 --version >nul 2>&1
     if not errorlevel 1 (
@@ -23,13 +23,23 @@ if not exist "%VENV_PYTHON%" (
 "%VENV_PYTHON%" -c "import sys; raise SystemExit(0 if sys.version_info[:2] == (3, 11) else 1)"
 if errorlevel 1 goto :wrong_python
 
-echo [2/6] Ensuring pip is available and installing project dependencies...
+echo [2/7] Ensuring pip is available and installing project dependencies...
 "%VENV_PYTHON%" -m ensurepip --upgrade >nul
 if errorlevel 1 goto :pip_failed
 "%VENV_PYTHON%" -m pip install --disable-pip-version-check -r requirements.txt
 if errorlevel 1 goto :install_failed
 
-echo [3/6] Checking optional local configuration...
+echo [3/7] Installing and checking the pinned English NLP resource...
+"%VENV_PYTHON%" -m scripts.verify_nlp_resources --require-model >nul 2>&1
+if errorlevel 1 (
+    "%VENV_PYTHON%" -m pip install --disable-pip-version-check -r requirements-nlp.txt
+    if errorlevel 1 (
+        echo WARNING: The English spaCy model could not be installed. BasicAnalyzer fallback will remain available and visible in health status.
+    )
+)
+"%VENV_PYTHON%" -m scripts.verify_nlp_resources
+
+echo [4/7] Checking optional local configuration...
 set "ENV_CHECK_FILE=.env"
 if defined WRITING_FEEDBACK_ENV_FILE set "ENV_CHECK_FILE=%WRITING_FEEDBACK_ENV_FILE%"
 if not exist "%ENV_CHECK_FILE%" (
@@ -40,11 +50,11 @@ if not exist "%ENV_CHECK_FILE%" (
     echo INFO: Environment file found. Configuration values will be loaded by the application.
 )
 
-echo [4/6] Applying versioned database migrations...
+echo [5/7] Applying versioned database migrations...
 "%VENV_PYTHON%" -m scripts.migrate_database
 if errorlevel 1 goto :migration_failed
 
-echo [5/6] Checking data directories, database, and prompt templates...
+echo [6/7] Checking data directories, database, and prompt templates...
 "%VENV_PYTHON%" -m scripts.initialize_project
 if errorlevel 1 goto :initialize_failed
 
@@ -54,14 +64,14 @@ if /I "%~1"=="--install-only" (
 )
 
 if /I "%~1"=="--verify" (
-    echo [6/6] Running bounded FastAPI, docs, and Streamlit startup verification...
+    echo [7/7] Running bounded FastAPI, docs, and Streamlit startup verification...
     "%VENV_PYTHON%" -m scripts.smoke_stack --python "%VENV_PYTHON%"
     if errorlevel 1 goto :start_failed
     echo run.bat verification completed successfully.
     exit /b 0
 )
 
-echo [6/6] Starting FastAPI and the Streamlit API client for v0.3...
+echo [7/7] Starting FastAPI and the Streamlit API client for v0.4...
 echo Keep this window open while using the application. Press Ctrl+C to stop.
 "%VENV_PYTHON%" -m scripts.run_local
 if errorlevel 1 goto :start_failed

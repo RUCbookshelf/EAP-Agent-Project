@@ -1,0 +1,14 @@
+{
+  "resource_id": "english-connectives",
+  "version": "connectives-v0.4.0",
+  "items": {
+    "addition": ["also", "in addition", "moreover", "furthermore"],
+    "contrast": ["however", "although", "nevertheless", "on the other hand", "in contrast"],
+    "cause": ["because", "since", "due to"],
+    "consequence": ["therefore", "consequently", "as a result", "thus"],
+    "exemplification": ["for example", "for instance", "such as"],
+    "sequence": ["first", "firstly", "second", "secondly", "then", "finally"],
+    "conclusion": ["in conclusion", "to conclude", "overall"]
+  },
+  "limitations": ["Dictionary coverage is incomplete; undetected forms do not prove absence of cohesion."]
+}

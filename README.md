@@ -1,6 +1,6 @@
-# 智能英语写作反馈系统原型 v0.3
+# 智能英语写作反馈系统原型 v0.4
 
-这是一个本地可运行、API-first、模块可替换的研究原型。v0.3 在 v0.2 本地 FastAPI/Repository 架构上增加可比较性、个人描述性基线、指标时间序列、问题轨迹和版本化 Learner Profile Snapshot。所有结果都是有限的原型证据，不是语言能力分数或经验证的成长判断。
+这是一个本地可运行、API-first、模块可替换的研究原型。v0.4 在既有纵向引擎上增加可插拔 spaCy 英语分析、输入质量提醒、版本化 Metric Registry 和追加式 AnalysisRun。所有结果都是有限的自动分析信号，不是语言能力分数或经验证的成长判断。
 
 本项目不是自动评分系统，不是完整 CALF 分析系统，也不能替代教师判断。所有规则均为 `prototype / heuristic / working assumption`，尚未经过教育实验验证。
 
@@ -62,6 +62,7 @@ Step 2. 在智能体安装文件夹下，复制 `.env.example` 为 `.env`，随�
 ## 1.5 结构
 
 - `app/analyzer`：可替换的 Analyzer 接口与基础分析器。
+- `app/analysis`：spaCy Analyzer、资源检查、输入质量、词汇/衔接/句法特征与版本化注册表。
 - `app/diagnosis`：可替换的 Diagnoser 接口与启发式规则。
 - `app/llm`：Provider 接口、DeepSeek、LocalDemo 和自动回退路由。
 - `app/services`：框架无关的提交应用服务。
@@ -80,3 +81,5 @@ Step 2. 在智能体安装文件夹下，复制 `.env.example` 为 `.env`，随�
 ## 1.6 当前限制
 
 v0.3 的所有阈值仍是工作假设，尚未完成文献校准、教学效度、测量效度、公平性或跨任务稳定性研究。SQLite 适合本地研究原型；PostgreSQL、微信小程序和云部署均未实现。任何方向都只能称为“观察到的指标趋势”，不能被解释为真实能力变化。
+
+v0.4 使用固定的 `spaCy 3.8.7` 与 `en_core_web_sm 3.8.0`。解析、词性、词元、名词短语、句法和连接表达仍可能误判学习者文本；MATTR、lexical density 和所有阈值都是可替换的原型参数，不是 CALF 总分或能力测量。模型缺失时会显式记录并回退 BasicAnalyzer。

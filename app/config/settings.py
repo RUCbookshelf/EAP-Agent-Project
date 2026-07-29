@@ -22,12 +22,19 @@ class Settings:
     api_port: int = 8000
     streamlit_port: int = 8501
     api_base_url: str = "http://127.0.0.1:8000"
-    application_version: str = "0.3.0"
+    application_version: str = "0.4.0"
     api_version: str = "v1"
-    database_migration_version: int = 3
-    prompt_version: str = "feedback-prompt-v0.3.0"
-    analysis_version: str = "basic-analyzer-v0.1"
-    diagnosis_version: str = "prototype-diagnosis-v0.1.1"
+    database_migration_version: int = 4
+    prompt_version: str = "feedback-prompt-v0.4.0"
+    analysis_version: str = "spacy-analyzer-v0.4.0"
+    diagnosis_version: str = "prototype-diagnosis-v0.4.0"
+    active_analyzer: str = "spacy"
+    fallback_analyzer: str = "basic"
+    spacy_model: str = "en_core_web_sm"
+    mattr_window: int = 50
+    local_repetition_window: int = 30
+    long_sentence_threshold: int = 30
+    analysis_configuration_version: str = "nlp-config-v0.4.0"
 
 
 def load_settings(env_file: Path | None = None) -> Settings:
@@ -53,4 +60,11 @@ def load_settings(env_file: Path | None = None) -> Settings:
         api_port=api_port,
         streamlit_port=int(os.getenv("STREAMLIT_PORT", "8501")),
         api_base_url=os.getenv("API_BASE_URL", f"http://{api_host}:{api_port}").rstrip("/"),
+        active_analyzer=os.getenv("ACTIVE_ANALYZER", "spacy").lower(),
+        fallback_analyzer=os.getenv("FALLBACK_ANALYZER", "basic").lower(),
+        spacy_model=os.getenv("SPACY_MODEL", "en_core_web_sm"),
+        mattr_window=int(os.getenv("MATTR_WINDOW", "50")),
+        local_repetition_window=int(os.getenv("LOCAL_REPETITION_WINDOW", "30")),
+        long_sentence_threshold=int(os.getenv("LONG_SENTENCE_THRESHOLD", "30")),
+        analysis_configuration_version=os.getenv("ANALYSIS_CONFIGURATION_VERSION", "nlp-config-v0.4.0"),
     )

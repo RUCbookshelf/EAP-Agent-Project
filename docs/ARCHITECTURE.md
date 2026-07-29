@@ -36,3 +36,7 @@ v0.3 adds `ComparabilityService → BaselineService → ProgressService → Lear
 - Analyzer, Diagnoser, Provider and longitudinal services remain versioned replaceable components.
 
 All services currently run on one local Windows computer. “Cloud-ready” describes boundaries and configuration, not deployment.
+
+## v0.4 NLP boundary
+
+`SubmissionService → AnalyzerCoordinator → AnalyzerRegistry → SpacyAnalyzer | BasicAnalyzer` keeps spaCy outside routes and UI. `SpacyAnalyzer` composes input-quality, lexical, connective and syntactic extractors plus `MetricRegistry`. The SQLite adapter appends AnalysisRun, MetricResult and JSON artifacts; the old `metrics` row remains a compatibility view. `POST /submissions/{id}/analyses` appends local analysis only and never calls a Provider.

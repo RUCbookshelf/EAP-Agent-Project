@@ -63,6 +63,14 @@ class HealthResponse(BaseModel):
     schema_version: str
     llm_provider: str
     llm_api_configured: bool
+    active_analyzer: str = "basic"
+    active_analyzer_version: str = "basic-analyzer-v0.1"
+    spacy_installed: bool = False
+    nlp_model_name: str | None = None
+    nlp_model_installed: bool = False
+    nlp_model_version: str | None = None
+    analyzer_fallback_active: bool = False
+    analyzer_fallback_reason: str | None = None
 
 
 class VersionResponse(BaseModel):
@@ -73,6 +81,16 @@ class VersionResponse(BaseModel):
     analysis_version: str
     diagnosis_version: str
     database_migration_version: int
+    active_analyzer: str = "basic"
+    nlp_library_version: str | None = None
+    nlp_model_name: str | None = None
+    nlp_model_version: str | None = None
+
+
+class ReanalysisResponse(BaseModel):
+    submission_id: int
+    analysis: AnalysisResult
+    llm_called: Literal[False] = False
 
 
 class StudentResponse(BaseModel):

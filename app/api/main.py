@@ -11,10 +11,12 @@ from app.api.schemas import (
     ErrorResponse, HealthResponse, HistoryResponse, LearnerProfileResponse,
     StudentResponse, SubmissionCreateRequest, SubmissionRecordResponse,
     SubmissionResponse, VersionResponse,
+    ReanalysisResponse,
 )
 from app.config import Settings, load_settings
 from app.database import Database
-from app.services import SubmissionService, build_submission_service
+from app.services import SubmissionService, build_submission_service, ReanalysisService
+from app.services.factory import build_analyzer
 from app.services import LearnerProfileService
 from app.core import LearnerProfileSnapshot
 
@@ -39,6 +41,9 @@ def create_app(
     api.state.repository = repository
     api.state.submission_service = submission_service
     api.state.learner_profiles = learner_profiles
+    analyzer = submission_service.analyzer if hasattr(submission_service, "analyzer") else build_analyzer(settings)
+    reanalysis = ReanalysisService(repository, analyzer)
+    api.state.reanalysis = reanalysis
 
     @api.exception_handler(RequestValidationError)
     async def validation_handler(_: Request, exc: RequestValidationError):
@@ -57,6 +62,13 @@ def create_app(
     @api.get("/api/v1/system/health", response_model=HealthResponse)
     def health() -> HealthResponse:
         connected = repository.ping()
+        analyzer_health = analyzer.health() if hasattr(analyzer, "health") else {
+            "active_analyzer": getattr(analyzer, "analyzer_id", "basic"),
+            "active_analyzer_version": getattr(analyzer, "version", "unknown"),
+            "available": True, "fallback_active": False, "fallback_reason": None,
+        }
+        selected = getattr(analyzer, "registry", None)
+        active_impl = selected.get(analyzer.active_analyzer) if selected and hasattr(analyzer, "active_analyzer") else analyzer
         return HealthResponse(
             status="ok" if connected else "degraded",
             application_version=settings.application_version,
@@ -67,6 +79,14 @@ def create_app(
             schema_version="structured-feedback-v0.1.1",
             llm_provider=settings.llm_provider,
             llm_api_configured=bool(settings.deepseek_api_key) if settings.llm_provider == "deepseek" else False,
+            active_analyzer=analyzer_health["active_analyzer"],
+            active_analyzer_version=analyzer_health["active_analyzer_version"],
+            spacy_installed=hasattr(active_impl, "spacy") or analyzer_health["active_analyzer"] != "spacy" and _package_available("spacy"),
+            nlp_model_name=settings.spacy_model,
+            nlp_model_installed=hasattr(active_impl, "nlp"),
+            nlp_model_version=getattr(active_impl, "model_version", None),
+            analyzer_fallback_active=analyzer_health["fallback_active"],
+            analyzer_fallback_reason=analyzer_health["fallback_reason"],
         )
 
     @api.get("/api/v1/system/version", response_model=VersionResponse)
@@ -76,6 +96,10 @@ def create_app(
             prompt_version=settings.prompt_version, schema_version="structured-feedback-v0.1.1",
             analysis_version=settings.analysis_version, diagnosis_version=settings.diagnosis_version,
             database_migration_version=repository.migration_version(),
+            active_analyzer=settings.active_analyzer,
+            nlp_library_version=getattr(getattr(analyzer, "registry", None).get("spacy"), "spacy", None).__version__ if getattr(analyzer, "registry", None) and hasattr(getattr(analyzer, "registry", None).get("spacy"), "spacy") else None,
+            nlp_model_name=settings.spacy_model,
+            nlp_model_version=getattr(getattr(analyzer, "registry", None).get("spacy"), "model_version", None) if getattr(analyzer, "registry", None) else None,
         )
 
     @api.post("/api/v1/submissions", response_model=SubmissionResponse, status_code=201)
@@ -97,6 +121,20 @@ def create_app(
             submission_id=submission_id_value, analysis=analysis,
             **{k: v for k, v in row.items() if k in SubmissionRecordResponse.model_fields},
         )
+
+    @api.get("/api/v1/submissions/{submission_id}/analyses")
+    def get_analyses(submission_id: int) -> dict:
+        if repository.get_submission_bundle(submission_id) is None:
+            raise HTTPException(404, "Submission not found.")
+        return {"submission_id": submission_id, "analysis_runs": repository.list_analysis_runs(submission_id)}
+
+    @api.post("/api/v1/submissions/{submission_id}/analyses", response_model=ReanalysisResponse, status_code=201)
+    def reanalyze_submission(submission_id: int) -> ReanalysisResponse:
+        try:
+            result = reanalysis.run(submission_id)
+        except LookupError as exc:
+            raise HTTPException(404, str(exc)) from None
+        return ReanalysisResponse(submission_id=submission_id, analysis=result, llm_called=False)
 
     def require_student(student_id: str) -> dict:
         student = repository.get_student(student_id)
@@ -159,6 +197,14 @@ def create_app(
             raise HTTPException(422, str(exc)) from None
 
     return api
+
+
+def _package_available(package: str) -> bool:
+    try:
+        import importlib.util
+        return importlib.util.find_spec(package) is not None
+    except (ImportError, ValueError):
+        return False
 
 
 app = create_app()

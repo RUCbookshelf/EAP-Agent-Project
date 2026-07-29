@@ -7,17 +7,29 @@ from app.ui.api_client import ApiClientError, WritingFeedbackApiClient
 
 
 @st.cache_resource
-def get_api_client() -> WritingFeedbackApiClient:
-    return WritingFeedbackApiClient(load_settings().api_base_url)
+def get_api_client(base_url: str) -> WritingFeedbackApiClient:
+    return WritingFeedbackApiClient(base_url)
 
 
 def run() -> None:
+    api_client = get_api_client(load_settings().api_base_url)
     st.set_page_config(page_title="English Writing Feedback Prototype", page_icon="✍️", layout="wide")
-    st.title("Intelligent English Writing Feedback Prototype v0.3")
+    st.title("Intelligent English Writing Feedback Prototype v0.4")
     st.caption("Formative feedback from prototype heuristics and optional LLM support — not automatic scoring.")
     st.warning(
         "This prototype is not educationally validated, does not measure proficiency, and does not replace teacher judgment."
     )
+    try:
+        health = api_client.health()
+        st.caption(
+            f"Analyzer: {health.get('active_analyzer')} · {health.get('active_analyzer_version')} · "
+            f"NLP model: {health.get('nlp_model_name') or 'not applicable'} "
+            f"{health.get('nlp_model_version') or ''}"
+        )
+        if health.get("analyzer_fallback_active"):
+            st.warning("The requested NLP analyzer is unavailable; the API will record and use BasicAnalyzer fallback.")
+    except ApiClientError:
+        st.info("Analyzer status will appear after the local API is available.")
 
     with st.form("essay_submission"):
         left, right = st.columns(2)
@@ -52,7 +64,7 @@ def run() -> None:
             "essay_text": essay_text,
         }
         with st.spinner("Saving, analyzing, and generating feedback…"):
-            result = get_api_client().submit(submission)
+            result = api_client.submit(submission)
     except ApiClientError as exc:
         st.error(str(exc))
         return
@@ -93,7 +105,28 @@ def run() -> None:
     st.caption("History evidence IDs: " + (", ".join(feedback["longitudinal"]["history_evidence_ids"]) or "none"))
     st.caption(feedback["uncertainty_note"])
 
+    analysis = result["analysis"]
+    quality_flags = analysis.get("input_quality", {}).get("quality_flags", [])
+    if quality_flags:
+        st.subheader("Input quality reminders")
+        st.warning("These flags request confirmation; they do not prove AI use or misconduct, and no text was removed.")
+        for flag in quality_flags:
+            st.write(f"- {flag['category']}: `{flag['text_span']}` — {flag['recommended_action']}")
+    artifacts = analysis.get("artifacts", {})
+    lexical = artifacts.get("lexical_features", {})
+    connective = artifacts.get("connective_features", {})
+    syntactic = artifacts.get("syntactic_features", {})
+    if lexical or connective or syntactic:
+        st.subheader("Prototype NLP evidence")
+        st.write("Prompt keywords:", ", ".join(lexical.get("prompt_keywords", [])) or "none detected")
+        st.write("Detected connective expressions:", ", ".join(item["text"] for item in connective.get("detected_connectives", [])) or "none in the current dictionary")
+        cols = st.columns(3)
+        cols[0].metric("Prototype lexical density", analysis["metrics"].get("lexical_density", "insufficient"))
+        cols[1].metric("Prototype MATTR", analysis["metrics"].get("mattr") or "insufficient")
+        cols[2].metric("Long-sentence candidates", len(syntactic.get("long_sentence_candidates", [])))
+        st.caption("Automatic parser and dictionary signals can be wrong; they are feedback inputs, not ability measures.")
+
     with st.expander("Prototype language metrics"):
-        st.json(result["analysis"])
+        st.json(analysis)
     with st.expander("Structured diagnosis signals"):
         st.json(result["diagnosis"])

@@ -215,6 +215,76 @@ class Database:
                 (essay_id, json.dumps(analysis.metrics), analysis.analysis_version, analysis.limitations),
             )
 
+    def save_analysis_run(self, essay_id: int, analysis: AnalysisResult) -> AnalysisResult:
+        with self.connect() as connection:
+            cursor = connection.execute(
+                """INSERT INTO analysis_runs(
+                    essay_id, analyzer_id, analyzer_version, backend, nlp_library,
+                    nlp_library_version, nlp_model_name, nlp_model_version, parameters_json,
+                    resource_versions_json, configuration_version, fallback_used, fallback_reason,
+                    analysis_duration_ms, limitations, created_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                (
+                    essay_id, analysis.analyzer_id, analysis.analyzer_version, analysis.backend,
+                    analysis.nlp_library, analysis.nlp_library_version, analysis.nlp_model_name,
+                    analysis.nlp_model_version, json.dumps(analysis.parameters),
+                    json.dumps(analysis.resource_versions), analysis.configuration_version,
+                    int(analysis.fallback_used), analysis.fallback_reason,
+                    analysis.analysis_duration_ms, analysis.limitations, analysis.created_at.isoformat(),
+                ),
+            )
+            run_id = f"AR{int(cursor.lastrowid):06d}"
+            connection.execute(
+                "UPDATE analysis_runs SET analysis_run_id=? WHERE analysis_run_row_id=?",
+                (run_id, int(cursor.lastrowid)),
+            )
+            for item in analysis.metric_results:
+                connection.execute(
+                    """INSERT INTO metric_results(
+                        analysis_run_id, metric_id, metric_version, value_json, unit,
+                        parameters_json, analyzer_version, resource_versions_json,
+                        verification_status, status, evidence_json, limitations_json
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                    (
+                        run_id, item["metric_id"], item["metric_version"], json.dumps(item.get("value")),
+                        item["unit"], json.dumps(item.get("parameters", {})), item["analyzer_version"],
+                        json.dumps(item.get("resource_versions", {})), item["verification_status"],
+                        item.get("status", "available"), json.dumps(item.get("evidence", [])),
+                        json.dumps(item.get("limitations", [])),
+                    ),
+                )
+            artifact_payload = {
+                "input_quality": analysis.input_quality, "artifacts": analysis.artifacts,
+                "legacy_metrics": analysis.metrics,
+            }
+            connection.execute(
+                "INSERT INTO analysis_artifacts(analysis_run_id, artifact_type, schema_version, artifact_json) VALUES (?, ?, ?, ?)",
+                (run_id, "nlp_analysis", "nlp-analysis-artifact-v0.4.0", json.dumps(artifact_payload)),
+            )
+        return analysis.model_copy(update={"analysis_run_id": run_id})
+
+    def list_analysis_runs(self, essay_id: int) -> list[dict[str, Any]]:
+        with self.connect() as connection:
+            rows = connection.execute(
+                "SELECT * FROM analysis_runs WHERE essay_id=? ORDER BY analysis_run_row_id", (essay_id,)
+            ).fetchall()
+        results = []
+        for row in rows:
+            item = dict(row)
+            item["fallback_used"] = bool(item["fallback_used"])
+            item["parameters"] = json.loads(item.pop("parameters_json"))
+            item["resource_versions"] = json.loads(item.pop("resource_versions_json"))
+            results.append(item)
+        return results
+
+    def get_analysis_artifact(self, analysis_run_id: str) -> dict[str, Any] | None:
+        with self.connect() as connection:
+            row = connection.execute(
+                "SELECT artifact_json FROM analysis_artifacts WHERE analysis_run_id=? ORDER BY artifact_id DESC LIMIT 1",
+                (analysis_run_id,),
+            ).fetchone()
+        return json.loads(row[0]) if row else None
+
     def save_diagnosis(self, essay_id: int, diagnosis: DiagnosisResult) -> None:
         with self.connect() as connection:
             connection.execute(
@@ -305,7 +375,7 @@ class Database:
         return records
 
     def counts(self) -> dict[str, int]:
-        tables = ("students", "essays", "metrics", "diagnoses", "feedback_records", "exercises", "learner_history", "llm_call_records", "learner_profile_snapshots", "system_versions")
+        tables = ("students", "essays", "metrics", "diagnoses", "feedback_records", "exercises", "learner_history", "llm_call_records", "learner_profile_snapshots", "analysis_runs", "metric_results", "analysis_artifacts", "system_versions")
         with self.connect() as connection:
             return {table: int(connection.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0]) for table in tables}
 

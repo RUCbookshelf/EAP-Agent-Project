@@ -1,4 +1,5 @@
 .venv/
+.venv*/
 .env
 __pycache__/
 **/__pycache__/
@@ -9,3 +10,7 @@ __pycache__/
 *.db
 *.db-*
 *.log
+*.tmp
+.cache/
+models/
+/writing-feedback-mvp.zip

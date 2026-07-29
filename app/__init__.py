@@ -1,3 +1,3 @@
-"""Intelligent English writing feedback prototype v0.1.1."""
+"""Intelligent English writing feedback research prototype."""
 
-__version__ = "0.1.1"
+__version__ = "0.4.0"

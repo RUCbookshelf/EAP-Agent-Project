@@ -37,10 +37,11 @@
 2. 优先查找指定的 Astral CPython 3.11.15，否则查找标准 `py -3.11`；
 3. 在项目内创建 `.venv`；
 4. 使用 `.venv\Scripts\python.exe` 安装或核对 `requirements.txt`；
-5. 检查环境确实是 Python 3.11；
-6. 执行版本化数据库迁移；
-7. 启动 FastAPI，等待 health endpoint 正常；
-8. 启动 Streamlit API 客户端。
+5. 安装并检查 `requirements-nlp.txt` 中固定的 spaCy 英语模型；模型失败时明确保留 BasicAnalyzer 回退；
+6. 检查环境确实是 Python 3.11；
+7. 执行版本化数据库迁移；
+8. 启动 FastAPI，等待 health endpoint 正常；
+9. 启动 Streamlit API 客户端。
 
 默认 FastAPI 为 `http://127.0.0.1:8000`，API 文档为 `http://127.0.0.1:8000/docs`，Streamlit 为 `http://127.0.0.1:8501`。使用期间不要关闭启动窗口；按 `Ctrl+C` 可停止两项服务。
 
@@ -66,6 +67,8 @@
 ```powershell
 py -V:Astral/CPython3.11.15 -m venv .venv
 & ".\.venv\Scripts\python.exe" -m pip install -r requirements.txt
+& ".\.venv\Scripts\python.exe" -m pip install -r requirements-nlp.txt
+& ".\.venv\Scripts\python.exe" -m scripts.verify_nlp_resources
 & ".\.venv\Scripts\python.exe" -m scripts.migrate_database
 & ".\.venv\Scripts\python.exe" -m scripts.run_local
 ```

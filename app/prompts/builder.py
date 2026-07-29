@@ -18,6 +18,7 @@ from .versioning import (
     user_template_hash,
     validate_prompt_versioning,
 )
+from . import versioning_v04
 
 
 @dataclass(frozen=True)
@@ -35,7 +36,11 @@ class PromptBuilder:
     """Build versioned messages; providers never splice student text into control instructions."""
 
     def build(self, context: "FeedbackContext") -> PromptBundle:
-        validate_prompt_versioning()
+        is_v04 = context.analysis.analyzer_id == "spacy" or context.analysis.analysis_version.startswith("spacy-analyzer-v0.4")
+        if is_v04:
+            versioning_v04.validate_prompt_versioning()
+        else:
+            validate_prompt_versioning()
         submission = context.submission
         payload = {
             "submission": {
@@ -68,11 +73,35 @@ class PromptBuilder:
             "learner_profile_snapshot": self._screened_snapshot(context.learner_profile_snapshot),
             "required_schema": StructuredFeedback.model_json_schema(),
         }
+        if is_v04:
+            payload["analysis_evidence"] = self._analysis_evidence(context.analysis)
         messages = [
-            {"role": "system", "content": system_template()},
+            {"role": "system", "content": versioning_v04.system_template() if is_v04 else system_template()},
             {"role": "user", "content": json.dumps(payload, ensure_ascii=False)},
         ]
-        return self._bundle(messages, payload)
+        return self._bundle(messages, payload, is_v04=is_v04)
+
+    @staticmethod
+    def _analysis_evidence(analysis):
+        artifacts = analysis.artifacts
+        lexical = artifacts.get("lexical_features", {})
+        connective = artifacts.get("connective_features", {})
+        syntactic = artifacts.get("syntactic_features", {})
+        return {
+            "analysis_run_id": analysis.analysis_run_id,
+            "analyzer_id": analysis.analyzer_id, "analyzer_version": analysis.analyzer_version,
+            "backend": analysis.backend, "nlp_library": analysis.nlp_library,
+            "nlp_library_version": analysis.nlp_library_version,
+            "nlp_model_name": analysis.nlp_model_name, "nlp_model_version": analysis.nlp_model_version,
+            "parameters": analysis.parameters, "resource_versions": analysis.resource_versions,
+            "configuration_version": analysis.configuration_version,
+            "fallback_used": analysis.fallback_used, "fallback_reason": analysis.fallback_reason,
+            "input_quality": analysis.input_quality,
+            "lexical_features": lexical, "prompt_keywords": lexical.get("prompt_keywords", []),
+            "detected_connectives": connective.get("detected_connectives", []),
+            "syntactic_candidates": syntactic,
+            "metric_results": analysis.metric_results, "limitations": analysis.limitations,
+        }
 
     @staticmethod
     def _screened_snapshot(snapshot):
@@ -108,10 +137,19 @@ class PromptBuilder:
             f"Validation failure: {validation_error[:800]}"
         )
         messages = [*bundle.messages, {"role": "user", "content": correction}]
-        return self._bundle(messages, bundle.user_payload)
+        return self._bundle(messages, bundle.user_payload, is_v04=bundle.prompt_version == versioning_v04.PROMPT_VERSION)
 
     @staticmethod
-    def _bundle(messages: list[dict[str, str]], payload: dict[str, Any]) -> PromptBundle:
+    def _bundle(messages: list[dict[str, str]], payload: dict[str, Any], *, is_v04: bool = False) -> PromptBundle:
+        if is_v04:
+            return PromptBundle(
+                messages=messages, user_payload=payload,
+                prompt_version=versioning_v04.PROMPT_VERSION,
+                schema_version=versioning_v04.SCHEMA_VERSION,
+                system_template_hash=versioning_v04.system_template_hash(),
+                user_template_hash=versioning_v04.user_template_hash(),
+                rendered_prompt_hash=versioning_v04.rendered_prompt_hash(messages),
+            )
         return PromptBundle(
             messages=messages, user_payload=payload,
             prompt_version=PROMPT_VERSION, schema_version=SCHEMA_VERSION,

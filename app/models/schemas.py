@@ -47,6 +47,24 @@ class AnalysisResult(BaseModel):
     metrics: dict[str, Any]
     analysis_version: str
     limitations: str
+    analysis_run_id: str | None = None
+    analyzer_id: str = "basic"
+    analyzer_version: str = "basic-analyzer-v0.1"
+    backend: str = "regex"
+    nlp_library: str | None = None
+    nlp_library_version: str | None = None
+    nlp_model_name: str | None = None
+    nlp_model_version: str | None = None
+    parameters: dict[str, Any] = Field(default_factory=dict)
+    resource_versions: dict[str, str] = Field(default_factory=dict)
+    configuration_version: str = "legacy-default"
+    fallback_used: bool = False
+    fallback_reason: str | None = None
+    analysis_duration_ms: float = Field(default=0.0, ge=0)
+    created_at: datetime = Field(default_factory=utc_now)
+    input_quality: dict[str, Any] = Field(default_factory=dict)
+    artifacts: dict[str, Any] = Field(default_factory=dict)
+    metric_results: list[dict[str, Any]] = Field(default_factory=list)
 
 
 class DiagnosisSignal(BaseModel):
