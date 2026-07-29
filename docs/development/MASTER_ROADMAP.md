@@ -6,19 +6,19 @@ Last updated: 2026-07-29.
 |---|---|
 | Current project version | 0.3.0 |
 | v0.2 status | completed |
-| v0.3 status | in_progress |
-| Current Git commit | `efe3b8f84601fa889bfaf961b4e7c6e5c00ed6f5` (pre-v0.3 implementation) |
+| v0.3 status | completed; awaiting human architecture/research review |
+| v0.3 implementation commit | `0ce8f1a` |
 | Database migration version | 3 |
 | Prompt version | `feedback-prompt-v0.3.0` |
 | Feedback Schema version | `structured-feedback-v0.1.1` |
 | API version | v1 |
 | Current blocker | none |
-| Next step | implement and verify v0.3 longitudinal analysis, then stop for human review |
+| Next step | STOP: human review of architecture, longitudinal rules, and research assumptions; v0.4 is not authorized |
 
 ## Version sequence
 
 - v0.2 — local API-first cloud-ready architecture: `completed`
-- v0.3 — longitudinal analysis engine: `in_progress`
+- v0.3 — longitudinal analysis engine: `completed`
 - v0.4 — future only: `not_started`
 - v0.5 — future only: `not_started`
 - v0.6 — future only: `not_started`

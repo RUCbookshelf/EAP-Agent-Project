@@ -1,6 +1,6 @@
 # v0.3 acceptance verification
 
-Date: 2026-07-29 (Asia/Shanghai). v0.2 implementation commit: `155df8a6a6a2800205b6dc821d1e51cf135b78a1`.
+Date: 2026-07-29 (Asia/Shanghai). v0.2 implementation commit: `155df8a6a6a2800205b6dc821d1e51cf135b78a1`. v0.3 implementation commit: `0ce8f1a`.
 
 ## Executed commands
 
@@ -55,9 +55,11 @@ $env:RUN_LIVE_LLM_TESTS="1"
 | 23 | Database migration | PASS | empty/v0.1.1/v0.2/idempotent/current DB tests |
 | 24 | Restart persistence | PASS | reopened Snapshot database test |
 | 25 | Documentation | PASS | named v0.3 docs and review guide |
-| 26 | Independent Git commit | PENDING_FINAL_COMMIT | created after final audit |
+| 26 | Independent Git commit | PASS | `0ce8f1a` (`feat(v0.3): add longitudinal analysis and learner profile snapshots`) |
 | 27 | Real verification report | PASS | this file plus `data/live_deepseek_verification.json`; database audit passed |
 
 ## Research boundary
 
 This acceptance proves software behavior and traceability only. It does not prove educational validity, language ability, genuine development, measurement reliability, fairness or suitability for automated instructional decisions.
+
+Post-gate architecture backup: `docs/visualizations/V0.3_FUNCTION_ARCHITECTURE.md`. Human review guide: `docs/development/V0.3_HUMAN_REVIEW_GUIDE.md`. Work stops at v0.3; no v0.4 implementation is included.
