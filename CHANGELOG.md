@@ -29,3 +29,13 @@
 - 引入 `PRAGMA user_version` + `schema_migrations` 的可重复非破坏迁移；支持空库、v0.1.1 旧库和重复升级。
 - `run.bat` 现会迁移数据库、启动 FastAPI、轮询 health，再启动 Streamlit；`--verify` 同时探测 health、`/docs` 与 Streamlit。
 - 保留 v0.1.1 Prompt、证据 ID、引文校验、Pydantic、重试和回退链路。
+
+## 0.3.0 — 2026-07-29
+
+- 增加版本化 ComparabilityResult、BaselineProfile、MetricTrend、IssueTrajectory、PriorityCandidate 和 LearnerProfileSnapshot。
+- 增加可解释的可比较性、个人描述性基线、线性趋势、相对变化、波动性和保守置信度规则。
+- 使用结构化诊断追踪 persistent、recurring、inconsistent、recently_reduced 和 insufficient_evidence。
+- 数据库迁移 3 新增 append-only `learner_profile_snapshots`；重算不覆盖旧 Snapshot。
+- progress/profile API 返回真实 v0.3 结构，并支持 metric、日期、comparable_only 和 analysis_version 查询。
+- Prompt 升级至 `feedback-prompt-v0.3.0`；只发送筛选后的 Snapshot，纵向评论仍必须绑定经验证的 H 证据 ID。
+- 增加四类纯虚拟纵向场景和完整回归/纵向/API/持久化测试。

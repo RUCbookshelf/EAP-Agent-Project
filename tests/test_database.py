@@ -49,7 +49,7 @@ def test_essay_and_full_pipeline_are_saved(settings, submission):
     assert counts["llm_call_records"] == 1
     record = database.get_feedback_record(1)
     assert record["analysis_version"] == "basic-analyzer-v0.1"
-    assert record["prompt_version"] == "feedback-prompt-v0.1.1"
+    assert record["prompt_version"] == "feedback-prompt-v0.3.0"
     assert len(record["system_template_hash"]) == 64
     assert len(record["user_template_hash"]) == 64
     assert len(record["rendered_prompt_hash"]) == 64

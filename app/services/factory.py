@@ -5,6 +5,7 @@ from app.config import Settings
 from app.diagnosis import HeuristicDiagnoser
 from app.llm import DeepSeekProvider, LocalDemoProvider, ProviderRouter
 from .submission import SubmissionRepository, SubmissionService
+from .learner_profile import LearnerProfileService
 
 
 def build_router(settings: Settings) -> ProviderRouter:
@@ -18,9 +19,11 @@ def build_router(settings: Settings) -> ProviderRouter:
 def build_submission_service(
     settings: Settings, repository: SubmissionRepository
 ) -> SubmissionService:
+    profile_service = LearnerProfileService(repository)
     return SubmissionService(
         repository=repository,
         analyzer=BasicAnalyzer(),
         diagnoser=HeuristicDiagnoser(),
         router=build_router(settings),
+        learner_profile_service=profile_service,
     )

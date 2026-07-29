@@ -1,17 +1,22 @@
 from __future__ import annotations
 
-from fastapi import FastAPI, HTTPException, Request
+from datetime import date
+from typing import Literal
+
+from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
 from app.api.schemas import (
-    ErrorResponse, HealthResponse, HistoryResponse, PlannedLongitudinalResponse,
+    ErrorResponse, HealthResponse, HistoryResponse, LearnerProfileResponse,
     StudentResponse, SubmissionCreateRequest, SubmissionRecordResponse,
     SubmissionResponse, VersionResponse,
 )
 from app.config import Settings, load_settings
 from app.database import Database
 from app.services import SubmissionService, build_submission_service
+from app.services import LearnerProfileService
+from app.core import LearnerProfileSnapshot
 
 
 def _error(status: int, code: str, message: str, details=None) -> JSONResponse:
@@ -28,10 +33,12 @@ def create_app(
     repository = repository or Database(settings.database_path)
     repository.initialize()
     submission_service = submission_service or build_submission_service(settings, repository)
+    learner_profiles = LearnerProfileService(repository)
     api = FastAPI(title="Writing Feedback API", version=settings.application_version)
     api.state.settings = settings
     api.state.repository = repository
     api.state.submission_service = submission_service
+    api.state.learner_profiles = learner_profiles
 
     @api.exception_handler(RequestValidationError)
     async def validation_handler(_: Request, exc: RequestValidationError):
@@ -112,23 +119,44 @@ def create_app(
             history_records=repository.list_student_history(student_id),
         )
 
-    def planned(student_id: str) -> PlannedLongitudinalResponse:
+    @api.get("/api/v1/students/{student_id}/profile", response_model=LearnerProfileResponse)
+    def get_profile(student_id: str) -> LearnerProfileResponse:
         student = require_student(student_id)
-        count = int(student["submission_count"])
-        status = "insufficient_history" if count < 2 else "planned_for_v0.3"
-        return PlannedLongitudinalResponse(
-            student_id=student_id, status=status, submission_count=count,
-            message="Formal prototype longitudinal analysis is planned for v0.3.",
-            limitations=["No proficiency, CEFR, score, or validated growth conclusion is available."],
+        snapshot = learner_profiles.latest_or_recalculate(student_id)
+        return LearnerProfileResponse(
+            student_id=student_id, submission_count=int(student["submission_count"]),
+            comparable_submission_count=len(snapshot.included_submission_ids),
+            latest_snapshot=snapshot, analysis_version=snapshot.analysis_version,
+            history_sufficiency=snapshot.baseline_status,
+            persistent_issues=snapshot.persistent_issues,
+            recently_reduced_issues=snapshot.recently_reduced_issues,
+            current_priority_candidates=snapshot.current_priority_candidates,
+            limitations=snapshot.limitations,
+            snapshot_history_count=len(learner_profiles.history(student_id)),
         )
 
-    @api.get("/api/v1/students/{student_id}/profile", response_model=PlannedLongitudinalResponse)
-    def get_profile(student_id: str) -> PlannedLongitudinalResponse:
-        return planned(student_id)
-
-    @api.get("/api/v1/students/{student_id}/progress", response_model=PlannedLongitudinalResponse)
-    def get_progress(student_id: str) -> PlannedLongitudinalResponse:
-        return planned(student_id)
+    @api.get("/api/v1/students/{student_id}/progress", response_model=LearnerProfileSnapshot)
+    def get_progress(
+        student_id: str,
+        metric: Literal[
+            "word_count", "sentence_count", "paragraph_count", "average_sentence_length",
+            "unique_word_count", "type_token_ratio", "connective_count", "repeated_content_words",
+        ] | None = None,
+        start_date: date | None = None,
+        end_date: date | None = None,
+        comparable_only: bool = True,
+        analysis_version: str | None = Query(default=None, max_length=100),
+    ) -> LearnerProfileSnapshot:
+        require_student(student_id)
+        if start_date and end_date and start_date > end_date:
+            raise HTTPException(422, "start_date must not be after end_date.")
+        try:
+            return learner_profiles.recalculate(
+                student_id, metric=metric, start_date=start_date, end_date=end_date,
+                comparable_only=comparable_only, analysis_version=analysis_version,
+            )
+        except ValueError as exc:
+            raise HTTPException(422, str(exc)) from None
 
     return api
 

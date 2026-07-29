@@ -1,0 +1,45 @@
+{
+  "description": "Synthetic v0.3 longitudinal scenarios; no real student data.",
+  "students": [
+    {
+      "student_id": "V03_SYNTH_A",
+      "scenario": "five comparable submissions, clear descriptive word-count trend, persistent and recently reduced diagnoses",
+      "submissions": [
+        {"word_count": 100, "categories": ["lexical_repetition", "connective_use"]},
+        {"word_count": 120, "categories": ["lexical_repetition", "connective_use"]},
+        {"word_count": 140, "categories": ["lexical_repetition", "connective_use"]},
+        {"word_count": 160, "categories": ["lexical_repetition"]},
+        {"word_count": 180, "categories": ["lexical_repetition"]}
+      ]
+    },
+    {
+      "student_id": "V03_SYNTH_B",
+      "scenario": "task conditions differ and primary comparable history is limited",
+      "submissions": [
+        {"word_count": 100, "categories": ["connective_use"], "genre": "narrative essay"},
+        {"word_count": 110, "categories": ["connective_use"], "timed": true, "time_limit_minutes": 30},
+        {"word_count": 120, "categories": ["connective_use"], "tool_use": "dictionary"},
+        {"word_count": 130, "categories": ["connective_use"]}
+      ]
+    },
+    {
+      "student_id": "V03_SYNTH_C",
+      "scenario": "insufficient history",
+      "submissions": [
+        {"word_count": 100, "categories": ["essay_length"]},
+        {"word_count": 105, "categories": ["essay_length"]}
+      ]
+    },
+    {
+      "student_id": "V03_SYNTH_D",
+      "scenario": "highly variable metric values",
+      "submissions": [
+        {"word_count": 100, "categories": ["sentence_length_pattern"]},
+        {"word_count": 190, "categories": ["sentence_length_pattern"]},
+        {"word_count": 105, "categories": ["sentence_length_pattern"]},
+        {"word_count": 180, "categories": ["sentence_length_pattern"]},
+        {"word_count": 110, "categories": ["sentence_length_pattern"]}
+      ]
+    }
+  ]
+}

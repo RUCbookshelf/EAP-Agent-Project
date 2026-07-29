@@ -6,10 +6,10 @@ from pathlib import Path
 from typing import Any
 
 
-PROMPT_VERSION = "feedback-prompt-v0.1.1"
+PROMPT_VERSION = "feedback-prompt-v0.3.0"
 SCHEMA_VERSION = "structured-feedback-v0.1.1"
-SYSTEM_TEMPLATE_PATH = Path(__file__).with_name("system_prompt_v0_1_1.txt")
-PROMPT_MANIFEST_PATH = Path(__file__).with_name("prompt_manifest_v0_1_1.json")
+SYSTEM_TEMPLATE_PATH = Path(__file__).with_name("system_prompt_v0_3_0.txt")
+PROMPT_MANIFEST_PATH = Path(__file__).with_name("prompt_manifest_v0_3_0.json")
 USER_TEMPLATE_CONTRACT = {
     "submission": [
         "essay_text", "writing_prompt", "genre", "draft_stage", "timed",
@@ -20,6 +20,11 @@ USER_TEMPLATE_CONTRACT = {
     "learner_history": [
         "comparability_status", "comparable_submission_count", "history_evidence",
         "summary", "limitations", "comparability_reasons",
+    ],
+    "learner_profile_snapshot": [
+        "snapshot_id", "baseline_status", "included_submission_ids", "metric_trends",
+        "persistent_issues", "recently_reduced_issues", "current_priority_candidates",
+        "confidence_summary", "limitations", "analysis_version", "configuration_version",
     ],
     "required_schema": SCHEMA_VERSION,
 }

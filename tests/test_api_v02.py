@@ -33,7 +33,7 @@ def test_health_version_and_docs(tmp_path):
         assert health.json()["database_status"] == "connected"
         assert health.json()["llm_api_configured"] is False
         assert "deepseek_api_key" not in health.text.casefold()
-        assert client.get("/api/v1/system/version").json()["application_version"] == "0.2.0"
+        assert client.get("/api/v1/system/version").json()["application_version"] == "0.3.0"
         assert client.get("/docs").status_code == 200
 
 
@@ -48,8 +48,8 @@ def test_submission_get_history_and_v02_placeholders(tmp_path):
         assert client.get(f"/api/v1/submissions/{submission_id}").status_code == 200
         assert client.get("/api/v1/students/API001").json()["submission_count"] == 1
         assert len(client.get("/api/v1/students/API001/history").json()["submissions"]) == 1
-        assert client.get("/api/v1/students/API001/profile").json()["status"] == "insufficient_history"
-        assert client.get("/api/v1/students/API001/progress").json()["status"] == "insufficient_history"
+        assert client.get("/api/v1/students/API001/profile").json()["history_sufficiency"] == "insufficient_history"
+        assert client.get("/api/v1/students/API001/progress").json()["baseline_status"] == "insufficient_history"
 
 
 def test_api_errors_are_consistent_and_safe(tmp_path):

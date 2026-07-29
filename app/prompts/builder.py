@@ -65,6 +65,7 @@ class PromptBuilder:
                 "limitations": context.history.limitations,
                 "comparability_reasons": context.history.comparability_reasons,
             },
+            "learner_profile_snapshot": self._screened_snapshot(context.learner_profile_snapshot),
             "required_schema": StructuredFeedback.model_json_schema(),
         }
         messages = [
@@ -72,6 +73,33 @@ class PromptBuilder:
             {"role": "user", "content": json.dumps(payload, ensure_ascii=False)},
         ]
         return self._bundle(messages, payload)
+
+    @staticmethod
+    def _screened_snapshot(snapshot):
+        if snapshot is None:
+            return None
+        return {
+            "snapshot_id": snapshot.snapshot_id,
+            "baseline_status": snapshot.baseline_status,
+            "included_submission_ids": snapshot.included_submission_ids,
+            "metric_trends": {
+                name: {
+                    "metric_name": trend.metric_name, "direction": trend.direction,
+                    "slope": trend.slope, "variability": trend.variability,
+                    "data_points": trend.data_points, "confidence": trend.confidence,
+                    "interpretation": trend.interpretation, "limitations": trend.limitations,
+                    "analysis_version": trend.analysis_version,
+                }
+                for name, trend in snapshot.metric_trends.items()
+            },
+            "persistent_issues": [item.model_dump(mode="json") for item in snapshot.persistent_issues],
+            "recently_reduced_issues": [item.model_dump(mode="json") for item in snapshot.recently_reduced_issues],
+            "current_priority_candidates": [item.model_dump(mode="json") for item in snapshot.current_priority_candidates],
+            "confidence_summary": snapshot.confidence_summary,
+            "limitations": snapshot.limitations,
+            "analysis_version": snapshot.analysis_version,
+            "configuration_version": snapshot.configuration_version,
+        }
 
     def correction(self, bundle: PromptBundle, validation_error: str) -> PromptBundle:
         correction = (

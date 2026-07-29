@@ -43,3 +43,12 @@
 - Health, `/docs`, submission, retrieval, student, history, placeholder profile and placeholder progress APIs are implemented.
 - LocalDemo, no-environment-file, actual dual-service startup and Streamlit-through-API submission have passed.
 - Cloud deployment, PostgreSQL and WeChat are not implemented or claimed.
+
+## v0.3 current state
+
+- Application version 0.3.0; API v1; database migration 3.
+- Longitudinal analysis version `longitudinal-v0.3.0`; configuration `longitudinal-config-v0.3.0`; comparability rules `comparability-v0.3.0`.
+- Prompt version `feedback-prompt-v0.3.0`; StructuredFeedback Schema remains `structured-feedback-v0.1.1`.
+- Comparability, baseline, metric trends, variability, conservative confidence, issue trajectories, priorities and append-only Snapshots are implemented.
+- progress/profile APIs are active; no CEFR, overall score, ranking or validated ability-change output exists.
+- v0.4 remains not_started and is outside the current authorization.

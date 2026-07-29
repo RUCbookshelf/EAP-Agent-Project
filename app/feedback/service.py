@@ -8,6 +8,7 @@ from app.learner import LearnerHistoryService
 from app.llm import DeepSeekProvider, FeedbackContext, LocalDemoProvider, ProviderRouter
 from app.models import EssaySubmission, PipelineResult
 from app.services.submission import SubmissionService
+from app.services.learner_profile import LearnerProfileService
 
 
 class FeedbackPipeline:
@@ -28,7 +29,7 @@ class FeedbackPipeline:
         self.history = LearnerHistoryService(self.database)
         self.database.initialize()
         self.database.record_versions({
-            "application": "0.1.1", "analysis": settings.analysis_version,
+            "application": settings.application_version, "analysis": settings.analysis_version,
             "diagnosis": settings.diagnosis_version, "prompt": settings.prompt_version,
             "feedback_schema": "structured-feedback-v0.1.1",
         })
@@ -37,6 +38,7 @@ class FeedbackPipeline:
             analyzer=self.analyzer,
             diagnoser=self.diagnoser,
             router=self.router,
+            learner_profile_service=LearnerProfileService(self.database),
         )
 
     def submit(self, submission: EssaySubmission, *, synthetic: bool = False) -> PipelineResult:

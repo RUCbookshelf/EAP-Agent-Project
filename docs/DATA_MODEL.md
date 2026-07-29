@@ -15,6 +15,7 @@ SQLite 默认文件为 `data/writing_feedback.db`，外键约束在每个连接�
 | `learner_history` | `student_id`, `essay_id`, history_summary, comparable_count | 每次提交所用的纵向摘要 |
 | `system_versions` | `component`, `version`, `recorded_at` | 当前应用、分析、诊断和 prompt 版本 |
 | `schema_migrations` | `version`, `name`, `applied_at` | 已应用的版本化数据库迁移 |
+| `learner_profile_snapshots` | `snapshot_row_id`, `student_id`, `snapshot_json`, `analysis_version`, `configuration_version`, `included_submission_ids_json`, `created_at` | 追加式纵向 Snapshot 历史 |
 
 ## 关系
 
@@ -38,3 +39,5 @@ SQLite 默认文件为 `data/writing_feedback.db`，外键约束在每个连接�
 ## Repository boundary
 
 协议分别覆盖 Student、Essay/Submission、Metric、Diagnosis、Feedback、Exercise、LearnerHistory、LearnerProfile、Configuration 和 SystemVersion。当前 SQLite 类实现这些结构契约。PostgreSQL 只是未来扩展点，尚无可用实现。
+
+Snapshot JSON 保存比较纳入/排除记录、个人基线、八类指标观察与趋势、结构化问题轨迹、重点候选、置信度和限制。每次重算插入新行并获得 `LPnnnnnn`，不会覆盖旧算法版本。

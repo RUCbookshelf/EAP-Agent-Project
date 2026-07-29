@@ -31,3 +31,16 @@
 - Date: 2026-07-29
 - Status: accepted
 - Decision: v0.2 passed all gates and was committed as `155df8a6a6a2800205b6dc821d1e51cf135b78a1`; the post-gate architecture backup is `docs/visualizations/V0.2_FUNCTION_ARCHITECTURE.md`. v0.3 may begin automatically.
+
+## D006 — Transparent v0.3 longitudinal heuristics
+
+- Date: 2026-07-29
+- Status: accepted for prototype review
+- Decision: anchor comparisons on the newest submission; admit only `comparable` records to primary baselines/trends; require 3 observations; use ordered-index OLS slope, ±10% first/last change, CV variability, and at most `medium` confidence. Track issue trajectories from structured diagnoses only.
+- Reason: this is the smallest explainable approach that preserves uncertainty and can be replaced after literature and empirical calibration. It is not claimed as a validated theoretical or measurement model.
+
+## D007 — Screen Snapshot evidence before LLM use
+
+- Date: 2026-07-29
+- Status: accepted
+- Decision: FeedbackContext receives a screened Snapshot without excluded submissions or raw historical observations. Local code converts selected conclusions into H evidence IDs. The LLM may cite those IDs but may not recalculate trends or strengthen confidence.

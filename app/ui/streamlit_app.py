@@ -13,7 +13,7 @@ def get_api_client() -> WritingFeedbackApiClient:
 
 def run() -> None:
     st.set_page_config(page_title="English Writing Feedback Prototype", page_icon="✍️", layout="wide")
-    st.title("Intelligent English Writing Feedback Prototype v0.2")
+    st.title("Intelligent English Writing Feedback Prototype v0.3")
     st.caption("Formative feedback from prototype heuristics and optional LLM support — not automatic scoring.")
     st.warning(
         "This prototype is not educationally validated, does not measure proficiency, and does not replace teacher judgment."

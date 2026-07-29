@@ -74,7 +74,10 @@ class DiagnosisResult(BaseModel):
 
 class HistoryEvidence(BaseModel):
     history_evidence_id: str = Field(pattern=r"^H\d{3}$")
-    evidence_type: Literal["metric_change", "repeated_diagnosis", "previous_flag_not_current"]
+    evidence_type: Literal[
+        "metric_change", "repeated_diagnosis", "previous_flag_not_current",
+        "metric_trend", "issue_trajectory",
+    ]
     description: str
     supporting_submission_ids: list[str]
     comparable_submission_count: int = Field(ge=1)
@@ -182,4 +185,3 @@ class PipelineResult(BaseModel):
     history: HistoryResult
     history_summary: str
     comparable_history_count: int
-

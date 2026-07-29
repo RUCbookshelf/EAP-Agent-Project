@@ -1,4 +1,4 @@
-# LLM Provider v0.1.1
+# LLM Provider through v0.3
 
 ## 职责边界
 
@@ -7,6 +7,8 @@
 `LocalDemoProvider` 使用同一个结构化 User Prompt 生成确定性、可验证的离线反馈。它不是语言模型，也不代表真实教学判断。
 
 `ProviderRouter` 负责 Prompt 构建、后置证据验证、一次纠错重试、回退和调用审计。
+
+v0.3 的 FeedbackContext 可携带筛选后的 Learner Profile Snapshot。不可比较作文和原始历史观察不会发送；本地引擎先把可用趋势/问题轨迹转换为 H 证据 ID，Provider 的纵向评论仍由现有 ID 后置验证约束。
 
 ## 调用顺序
 
@@ -32,4 +34,3 @@
 - 缺 `.env` 时 `run.bat` 在本次进程设置 LocalDemo；不修改系统环境变量。
 
 真实集成测试只在 `RUN_LIVE_LLM_TESTS=1` 时运行。
-

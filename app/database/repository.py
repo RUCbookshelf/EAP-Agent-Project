@@ -6,6 +6,7 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Any
 
+from app.core import LearnerProfileSnapshot
 from app.models import AnalysisResult, DiagnosisResult, EssaySubmission, HistoryResult, ProviderResult
 
 
@@ -304,7 +305,7 @@ class Database:
         return records
 
     def counts(self) -> dict[str, int]:
-        tables = ("students", "essays", "metrics", "diagnoses", "feedback_records", "exercises", "learner_history", "llm_call_records", "system_versions")
+        tables = ("students", "essays", "metrics", "diagnoses", "feedback_records", "exercises", "learner_history", "llm_call_records", "learner_profile_snapshots", "system_versions")
         with self.connect() as connection:
             return {table: int(connection.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0]) for table in tables}
 
@@ -419,7 +420,61 @@ class Database:
         return [json.loads(row[0]) for row in rows]
 
     def get_latest_learner_profile(self, student_id: str) -> dict[str, Any] | None:
-        return None
+        with self.connect() as connection:
+            row = connection.execute(
+                "SELECT snapshot_json FROM learner_profile_snapshots WHERE student_id=? ORDER BY snapshot_row_id DESC LIMIT 1",
+                (student_id,),
+            ).fetchone()
+        return json.loads(row[0]) if row else None
+
+    def save_learner_profile_snapshot(self, snapshot: LearnerProfileSnapshot) -> LearnerProfileSnapshot:
+        with self.connect() as connection:
+            cursor = connection.execute(
+                """INSERT INTO learner_profile_snapshots(
+                student_id, snapshot_json, analysis_version, configuration_version,
+                included_submission_ids_json, created_at
+                ) VALUES (?, ?, ?, ?, ?, ?)""",
+                (
+                    snapshot.student_id, snapshot.model_dump_json(), snapshot.analysis_version,
+                    snapshot.configuration_version, json.dumps(snapshot.included_submission_ids),
+                    snapshot.snapshot_time.isoformat(),
+                ),
+            )
+            snapshot_id = f"LP{int(cursor.lastrowid):06d}"
+            stored = snapshot.model_copy(update={"snapshot_id": snapshot_id})
+            connection.execute(
+                "UPDATE learner_profile_snapshots SET snapshot_json=? WHERE snapshot_row_id=?",
+                (stored.model_dump_json(), int(cursor.lastrowid)),
+            )
+        return stored
+
+    def list_learner_profile_snapshots(self, student_id: str) -> list[dict[str, Any]]:
+        with self.connect() as connection:
+            rows = connection.execute(
+                "SELECT snapshot_json FROM learner_profile_snapshots WHERE student_id=? ORDER BY snapshot_row_id",
+                (student_id,),
+            ).fetchall()
+        return [json.loads(row[0]) for row in rows]
+
+    def list_longitudinal_records(self, student_id: str) -> list[dict[str, Any]]:
+        with self.connect() as connection:
+            rows = connection.execute(
+                """SELECT e.*, m.metrics_json, m.analysis_version,
+                d.diagnosis_json, d.diagnosis_version
+                FROM essays e
+                JOIN metrics m ON m.essay_id=e.essay_id
+                JOIN diagnoses d ON d.essay_id=e.essay_id
+                WHERE e.student_id=? ORDER BY e.submitted_at, e.essay_id""",
+                (student_id,),
+            ).fetchall()
+        results = []
+        for row in rows:
+            item = dict(row)
+            item["metrics"] = json.loads(item.pop("metrics_json"))
+            item["diagnosis"] = json.loads(item.pop("diagnosis_json"))
+            item["timed"] = bool(item["timed"])
+            results.append(item)
+        return results
 
     def get_system_versions(self) -> dict[str, str]:
         with self.connect() as connection:

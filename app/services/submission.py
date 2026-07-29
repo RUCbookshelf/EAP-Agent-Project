@@ -13,6 +13,10 @@ from app.repositories import (
     MetricRepository,
     SystemVersionRepository,
 )
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from app.services.learner_profile import LearnerProfileService
 
 
 class SubmissionRepository(
@@ -35,14 +39,16 @@ class SubmissionService:
         analyzer: Analyzer,
         diagnoser: Diagnoser,
         router: ProviderRouter,
+        learner_profile_service: "LearnerProfileService | None" = None,
     ) -> None:
         self.repository = repository
         self.analyzer = analyzer
         self.diagnoser = diagnoser
         self.router = router
         self.history = LearnerHistoryService(repository)
+        self.learner_profile_service = learner_profile_service
         self.repository.record_versions({
-            "application": "0.2.0",
+            "application": "0.3.0",
             "analysis": getattr(analyzer, "version", "unknown"),
             "diagnosis": getattr(diagnoser, "version", "unknown"),
             "feedback_schema": "structured-feedback-v0.1.1",
@@ -56,7 +62,11 @@ class SubmissionService:
         diagnosis = self.diagnoser.diagnose(analysis)
         self.repository.save_diagnosis(essay_id, diagnosis)
         history = self.history.summarize(essay_id, submission, analysis, diagnosis)
-        context = FeedbackContext(submission, analysis, diagnosis, history)
+        snapshot = None
+        if self.learner_profile_service is not None:
+            snapshot = self.learner_profile_service.recalculate(submission.student_id)
+            history = self.learner_profile_service.progress.enrich_history(history, snapshot)
+        context = FeedbackContext(submission, analysis, diagnosis, history, snapshot)
         provider_result = self.router.generate(context)
         self.repository.save_feedback(essay_id, provider_result, analysis.analysis_version)
         self.repository.save_history(submission.student_id, essay_id, history)

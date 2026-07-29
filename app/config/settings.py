@@ -22,10 +22,10 @@ class Settings:
     api_port: int = 8000
     streamlit_port: int = 8501
     api_base_url: str = "http://127.0.0.1:8000"
-    application_version: str = "0.2.0"
+    application_version: str = "0.3.0"
     api_version: str = "v1"
-    database_migration_version: int = 2
-    prompt_version: str = "feedback-prompt-v0.1.1"
+    database_migration_version: int = 3
+    prompt_version: str = "feedback-prompt-v0.3.0"
     analysis_version: str = "basic-analyzer-v0.1"
     diagnosis_version: str = "prototype-diagnosis-v0.1.1"
 

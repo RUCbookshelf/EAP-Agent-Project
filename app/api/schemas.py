@@ -5,6 +5,7 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
+from app.core import IssueTrajectory, LearnerProfileSnapshot, PriorityCandidate
 from app.models import AnalysisResult, DiagnosisResult, EssaySubmission, HistoryResult, ProviderResult
 
 
@@ -93,3 +94,17 @@ class PlannedLongitudinalResponse(BaseModel):
     submission_count: int
     message: str
     limitations: list[str]
+
+
+class LearnerProfileResponse(BaseModel):
+    student_id: str
+    submission_count: int
+    comparable_submission_count: int
+    latest_snapshot: LearnerProfileSnapshot
+    analysis_version: str
+    history_sufficiency: Literal["available", "insufficient_history"]
+    persistent_issues: list[IssueTrajectory]
+    recently_reduced_issues: list[IssueTrajectory]
+    current_priority_candidates: list[PriorityCandidate]
+    limitations: list[str]
+    snapshot_history_count: int

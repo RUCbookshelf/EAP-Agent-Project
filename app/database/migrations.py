@@ -4,7 +4,7 @@ import sqlite3
 from collections.abc import Callable
 
 
-LATEST_MIGRATION_VERSION = 2
+LATEST_MIGRATION_VERSION = 3
 
 
 def _add_column_if_missing(
@@ -57,9 +57,27 @@ def _migration_2(connection: sqlite3.Connection) -> None:
     )
 
 
+def _migration_3(connection: sqlite3.Connection) -> None:
+    connection.execute(
+        """CREATE TABLE IF NOT EXISTS learner_profile_snapshots (
+        snapshot_row_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        student_id TEXT NOT NULL REFERENCES students(student_id),
+        snapshot_json TEXT NOT NULL,
+        analysis_version TEXT NOT NULL,
+        configuration_version TEXT NOT NULL,
+        included_submission_ids_json TEXT NOT NULL,
+        created_at TEXT NOT NULL
+        )"""
+    )
+    connection.execute(
+        "CREATE INDEX IF NOT EXISTS idx_profile_student_created ON learner_profile_snapshots(student_id, created_at, snapshot_row_id)"
+    )
+
+
 MIGRATIONS: dict[int, tuple[str, Callable[[sqlite3.Connection], None]]] = {
     1: ("preserve_v0_1_1_schema", _migration_1),
     2: ("cloud_ready_repository_indexes", _migration_2),
+    3: ("longitudinal_profile_snapshots", _migration_3),
 }
 
 

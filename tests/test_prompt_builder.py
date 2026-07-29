@@ -90,7 +90,7 @@ def test_system_prompt_contains_all_governing_constraints():
 
 def test_prompt_manifest_matches_templates_and_contract():
     manifest = validate_prompt_versioning()
-    assert manifest["prompt_version"] == "feedback-prompt-v0.1.1"
+    assert manifest["prompt_version"] == "feedback-prompt-v0.3.0"
     assert manifest["schema_version"] == "structured-feedback-v0.1.1"
     assert len(manifest["system_template_hash"]) == 64
     assert len(manifest["user_template_hash"]) == 64

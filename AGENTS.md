@@ -26,3 +26,5 @@ Every version must run all tests, verify FastAPI, Streamlit, `run.bat`, and migr
 All longitudinal outputs are prototype observations, not proficiency, CEFR, validated growth, rankings, or high-risk instructional decisions. API keys may only come from `.env` or process environment and may never enter code, tests, logs, databases, documentation, or Git.
 
 After v0.3 is complete, stop. Do not implement v0.4, dashboards, exercise-transfer loops, configuration administration, WeChat clients, or cloud deployment without human review.
+
+v0.3 longitudinal rules live only in versioned configuration/services. Any later threshold or interpretation change requires a new configuration/analysis version, migration review when persisted structures change, and explicit human research review before v0.4.

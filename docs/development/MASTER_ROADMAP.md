@@ -4,12 +4,12 @@ Last updated: 2026-07-29.
 
 | Item | Current value |
 |---|---|
-| Current project version | 0.2.0 |
+| Current project version | 0.3.0 |
 | v0.2 status | completed |
 | v0.3 status | in_progress |
-| Current Git commit | `155df8a6a6a2800205b6dc821d1e51cf135b78a1` |
-| Database migration version | 2 |
-| Prompt version | `feedback-prompt-v0.1.1` |
+| Current Git commit | `efe3b8f84601fa889bfaf961b4e7c6e5c00ed6f5` (pre-v0.3 implementation) |
+| Database migration version | 3 |
+| Prompt version | `feedback-prompt-v0.3.0` |
 | Feedback Schema version | `structured-feedback-v0.1.1` |
 | API version | v1 |
 | Current blocker | none |

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Any, Protocol
 
+from app.core import LearnerProfileSnapshot
 from app.models import AnalysisResult, DiagnosisResult, EssaySubmission, HistoryResult, ProviderResult
 
 
@@ -39,6 +40,9 @@ class LearnerHistoryRepository(Protocol):
 
 class LearnerProfileRepository(Protocol):
     def get_latest_learner_profile(self, student_id: str) -> dict[str, Any] | None: ...
+    def save_learner_profile_snapshot(self, snapshot: LearnerProfileSnapshot) -> LearnerProfileSnapshot: ...
+    def list_learner_profile_snapshots(self, student_id: str) -> list[dict[str, Any]]: ...
+    def list_longitudinal_records(self, student_id: str) -> list[dict[str, Any]]: ...
 
 
 class ConfigurationRepository(Protocol):

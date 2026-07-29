@@ -1,6 +1,6 @@
-# 智能英语写作反馈系统原型 v0.2
+# 智能英语写作反馈系统原型 v0.3
 
-这是一个本地可运行、API-first、模块可替换的研究原型。Streamlit 只收集和展示数据；所有提交、分析、诊断、历史、Prompt、LLM 验证和保存都由本机 FastAPI 统一后端完成。当前仍是本地 SQLite，不代表已经部署到云端。
+这是一个本地可运行、API-first、模块可替换的研究原型。v0.3 在 v0.2 本地 FastAPI/Repository 架构上增加可比较性、个人描述性基线、指标时间序列、问题轨迹和版本化 Learner Profile Snapshot。所有结果都是有限的原型证据，不是语言能力分数或经验证的成长判断。
 
 本项目不是自动评分系统，不是完整 CALF 分析系统，也不能替代教师判断。所有规则均为 `prototype / heuristic / working assumption`，尚未经过教育实验验证。
 
@@ -51,8 +51,8 @@ Step 2. 在智能体安装文件夹下，复制 `.env.example` 为 `.env`，随�
 & ".\.venv\Scripts\python.exe" -m pytest tests -v
 & ".\.venv\Scripts\python.exe" -m scripts.seed_demo_data
 & ".\.venv\Scripts\python.exe" -m scripts.verify_closed_loop
-& ".\.venv\Scripts\python.exe" -m scripts.smoke_streamlit
 & ".\.venv\Scripts\python.exe" -m scripts.smoke_stack
+& ".\.venv\Scripts\python.exe" -m scripts.seed_longitudinal_data
 ```
 
 `data/demo_students.json` 包含 3 个虚拟学生、每人 3 篇作文，覆盖持续性信号、描述性指标变化、历史不足和任务不可比较情形。`seed_demo_data` 生成 `data/demo_writing_feedback.db`；全部数据均为虚构。
@@ -69,6 +69,8 @@ Step 2. 在智能体安装文件夹下，复制 `.env.example` 为 `.env`，随�
 - `app/api`：FastAPI v1 路由和 API Schema。
 - `app/feedback`：v0.1.1 兼容外壳、验证与诊断关联练习。
 - `app/learner`：历史可比性判断和纵向摘要。
+- `app/core`：v0.3 可比较性、基线、趋势、问题轨迹和 Snapshot 领域模型。
+- `app/services/comparability.py`、`baseline.py`、`progress.py`、`learner_profile.py`：本地纵向引擎。
 - `app/database`：SQLite Repository、事务与版本化迁移。
 - `app/models`：Pydantic 输入、分析、诊断、反馈与结果模型。
 - `app/ui`：Streamlit 页面和 HTTP API 客户端，不导入数据库、Analyzer、Diagnoser 或 Provider。
@@ -77,4 +79,4 @@ Step 2. 在智能体安装文件夹下，复制 `.env.example` 为 `.env`，随�
 
 ## 1.6 当前限制
 
-v0.2 仍只做基础表层指标和有限历史描述；正式原型纵向分析在 v0.3 实现。SQLite 适合本地研究原型；PostgreSQL、微信小程序和云部署均未实现。任何趋势都不能被解释为真实能力变化。
+v0.3 的所有阈值仍是工作假设，尚未完成文献校准、教学效度、测量效度、公平性或跨任务稳定性研究。SQLite 适合本地研究原型；PostgreSQL、微信小程序和云部署均未实现。任何方向都只能称为“观察到的指标趋势”，不能被解释为真实能力变化。

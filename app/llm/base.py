@@ -10,6 +10,7 @@ from app.models import (
     HistoryResult,
     StructuredFeedback,
 )
+from app.core import LearnerProfileSnapshot
 
 
 @dataclass(frozen=True)
@@ -18,6 +19,7 @@ class FeedbackContext:
     analysis: AnalysisResult
     diagnosis: DiagnosisResult
     history: HistoryResult
+    learner_profile_snapshot: LearnerProfileSnapshot | None = None
 
 
 class ProviderOutputError(RuntimeError):
@@ -31,4 +33,3 @@ class LLMProvider(ABC):
     @abstractmethod
     def generate(self, messages: list[dict[str, str]], *, temperature: float) -> StructuredFeedback:
         """Generate schema-valid feedback from already-rendered messages."""
-
