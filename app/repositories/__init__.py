@@ -7,6 +7,7 @@ from .protocols import (
     LearnerHistoryRepository,
     LearnerProfileRepository,
     MetricRepository,
+    RevisionRepository,
     StudentRepository,
     SystemVersionRepository,
 )
@@ -14,6 +15,6 @@ from .protocols import (
 __all__ = [
     "ConfigurationRepository", "DiagnosisRepository", "EssayRepository",
     "ExerciseRepository", "FeedbackRepository", "LearnerHistoryRepository",
-    "LearnerProfileRepository", "MetricRepository", "StudentRepository",
+    "LearnerProfileRepository", "MetricRepository", "RevisionRepository", "StudentRepository",
     "SystemVersionRepository",
 ]

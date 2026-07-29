@@ -8,6 +8,7 @@ from typing import Any
 
 from app.core import LearnerProfileSnapshot
 from app.models import AnalysisResult, DiagnosisResult, EssaySubmission, HistoryResult, ProviderResult
+from app.revision import RevisionGroup, RevisionSnapshot
 
 
 SCHEMA = """
@@ -197,13 +198,14 @@ class Database:
             cursor = connection.execute(
                 """INSERT INTO essays(
                     student_id, writing_prompt, genre, draft_stage, timed, time_limit_minutes,
-                    tool_use, essay_text, submitted_at
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                    tool_use, essay_text, submitted_at, original_draft_stage, revision_stage
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
                 (
                     submission.student_id, submission.writing_prompt, submission.genre,
                     submission.draft_stage, int(submission.timed), submission.time_limit_minutes,
                     submission.tool_use,
                     submission.essay_text, submission.submitted_at.isoformat(),
+                    submission.draft_stage, self.normalize_revision_stage(submission.draft_stage),
                 ),
             )
             return int(cursor.lastrowid)
@@ -276,6 +278,14 @@ class Database:
             item["resource_versions"] = json.loads(item.pop("resource_versions_json"))
             results.append(item)
         return results
+
+    def get_latest_analysis_run(self, essay_id: int) -> dict[str, Any] | None:
+        runs = self.list_analysis_runs(essay_id)
+        if not runs:
+            return None
+        item = runs[-1]
+        item["artifact"] = self.get_analysis_artifact(item["analysis_run_id"])
+        return item
 
     def get_analysis_artifact(self, analysis_run_id: str) -> dict[str, Any] | None:
         with self.connect() as connection:
@@ -375,7 +385,7 @@ class Database:
         return records
 
     def counts(self) -> dict[str, int]:
-        tables = ("students", "essays", "metrics", "diagnoses", "feedback_records", "exercises", "learner_history", "llm_call_records", "learner_profile_snapshots", "analysis_runs", "metric_results", "analysis_artifacts", "system_versions")
+        tables = ("students", "essays", "metrics", "diagnoses", "feedback_records", "exercises", "learner_history", "llm_call_records", "learner_profile_snapshots", "analysis_runs", "metric_results", "analysis_artifacts", "revision_groups", "revision_snapshots", "system_versions")
         with self.connect() as connection:
             return {table: int(connection.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0]) for table in tables}
 
@@ -437,7 +447,8 @@ class Database:
         with self.connect() as connection:
             row = connection.execute(
                 """SELECT e.*, m.metrics_json, m.analysis_version, m.limitations AS analysis_limitations,
-                d.diagnosis_json, f.feedback_json, f.provider_name, f.model_name,
+                d.diagnosis_json, d.diagnosis_version, f.feedback_json, f.provider_name, f.model_name,
+                f.feedback_id,
                 f.success_status, f.fallback_reason, f.prompt_version, f.schema_version,
                 f.validation_status, f.retry_count, h.history_summary, h.comparable_count,
                 h.comparability_status, h.history_evidence_json, h.limitations_json,
@@ -462,7 +473,7 @@ class Database:
     def list_student_submissions(self, student_id: str) -> list[dict[str, Any]]:
         with self.connect() as connection:
             rows = connection.execute(
-                "SELECT essay_id, student_id, writing_prompt, genre, draft_stage, timed, time_limit_minutes, tool_use, submitted_at FROM essays WHERE student_id=? ORDER BY submitted_at, essay_id",
+                "SELECT essay_id, student_id, writing_prompt, genre, draft_stage, timed, time_limit_minutes, tool_use, submitted_at, revision_of_submission_id, revision_group_id, revision_sequence, revision_stage, original_draft_stage FROM essays WHERE student_id=? ORDER BY submitted_at, essay_id",
                 (student_id,),
             ).fetchall()
         return [{**dict(row), "timed": bool(row["timed"])} for row in rows]
@@ -544,12 +555,172 @@ class Database:
             item["diagnosis"] = json.loads(item.pop("diagnosis_json"))
             item["timed"] = bool(item["timed"])
             results.append(item)
+        groups: dict[str, list[dict[str, Any]]] = {}
+        for item in results:
+            group_id = item.get("revision_group_id")
+            if group_id:
+                groups.setdefault(str(group_id), []).append(item)
+        representative_ids: set[int] = set()
+        for members in groups.values():
+            final_drafts = [
+                item for item in members
+                if self.normalize_revision_stage(str(item.get("revision_stage") or "")) == "final_draft"
+            ]
+            candidates = final_drafts or members
+            representative = max(
+                candidates,
+                key=lambda item: (int(item.get("revision_sequence") or 0), int(item["essay_id"])),
+            )
+            representative_ids.add(int(representative["essay_id"]))
+        for item in results:
+            group_id = item.get("revision_group_id")
+            is_representative = not group_id or int(item["essay_id"]) in representative_ids
+            item["is_longitudinal_representative"] = is_representative
+            item["revision_exclusion_reason"] = (
+                None if is_representative else
+                "An earlier draft in the same Revision Group is excluded from the default long-term trend."
+            )
         return results
 
     def get_system_versions(self) -> dict[str, str]:
         with self.connect() as connection:
             rows = connection.execute("SELECT component, version FROM system_versions").fetchall()
         return {row["component"]: row["version"] for row in rows}
+
+    @staticmethod
+    def normalize_revision_stage(value: str) -> str:
+        normalized = value.strip().casefold().replace("-", "_").replace(" ", "_")
+        aliases = {
+            "first": "first_draft", "first_draft": "first_draft",
+            "revised": "revised_draft", "revision": "revised_draft", "revised_draft": "revised_draft",
+            "final": "final_draft", "final_draft": "final_draft",
+            "independent": "independent_submission", "independent_submission": "independent_submission",
+        }
+        return aliases.get(normalized, "independent_submission")
+
+    def create_revision_group(self, source_submission_id: int) -> RevisionGroup:
+        existing = self.get_revision_group_for_submission(source_submission_id)
+        if existing:
+            return existing
+        source = self.get_submission_bundle(source_submission_id)
+        if source is None:
+            raise LookupError("Source submission not found.")
+        now = __import__("datetime").datetime.now(__import__("datetime").timezone.utc).isoformat()
+        consistency = {"writing_prompt": True, "genre": True, "timed": True, "time_limit_minutes": True, "tool_use": True}
+        limitations = ["Revision grouping is explicit metadata, not evidence of learning or proficiency change."]
+        with self.connect() as connection:
+            cursor = connection.execute(
+                """INSERT INTO revision_groups(
+                    student_id, writing_prompt, genre, root_submission_id, created_at, updated_at,
+                    metadata_consistency_json, limitations_json
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+                (source["student_id"], source["writing_prompt"], source["genre"], source_submission_id,
+                 now, now, json.dumps(consistency), json.dumps(limitations)),
+            )
+            group_id = f"RG{int(cursor.lastrowid):06d}"
+            connection.execute(
+                "UPDATE revision_groups SET revision_group_id=? WHERE revision_group_row_id=?",
+                (group_id, int(cursor.lastrowid)),
+            )
+            connection.execute(
+                "UPDATE essays SET revision_group_id=?, revision_sequence=1, revision_stage=? WHERE essay_id=?",
+                (group_id, self.normalize_revision_stage(source["draft_stage"]), source_submission_id),
+            )
+        group = self.get_revision_group(group_id)
+        assert group is not None
+        return group
+
+    def link_revision(self, source_submission_id: int, target_submission_id: int, revision_group_id: str) -> None:
+        source = self.get_submission_bundle(source_submission_id)
+        target = self.get_submission_bundle(target_submission_id)
+        if source is None or target is None:
+            raise LookupError("Source or target submission not found.")
+        sequence = int(source.get("revision_sequence") or 1) + 1
+        consistency = {
+            field: source.get(field) == target.get(field)
+            for field in ("writing_prompt", "genre", "timed", "time_limit_minutes", "tool_use")
+        }
+        now = __import__("datetime").datetime.now(__import__("datetime").timezone.utc).isoformat()
+        with self.connect() as connection:
+            connection.execute(
+                """UPDATE essays SET revision_of_submission_id=?, revision_group_id=?,
+                   revision_sequence=?, revision_stage=? WHERE essay_id=?""",
+                (source_submission_id, revision_group_id, sequence,
+                 self.normalize_revision_stage(target["draft_stage"]), target_submission_id),
+            )
+            connection.execute(
+                "UPDATE revision_groups SET updated_at=?, metadata_consistency_json=? WHERE revision_group_id=?",
+                (now, json.dumps(consistency), revision_group_id),
+            )
+
+    def get_revision_group(self, revision_group_id: str) -> RevisionGroup | None:
+        with self.connect() as connection:
+            row = connection.execute("SELECT * FROM revision_groups WHERE revision_group_id=?", (revision_group_id,)).fetchone()
+            members = connection.execute(
+                "SELECT essay_id FROM essays WHERE revision_group_id=? ORDER BY revision_sequence, essay_id", (revision_group_id,)
+            ).fetchall() if row else []
+        if not row:
+            return None
+        item = dict(row)
+        member_ids = [int(member[0]) for member in members]
+        return RevisionGroup(
+            revision_group_id=item["revision_group_id"], student_id=item["student_id"],
+            writing_prompt=item["writing_prompt"], genre=item["genre"], root_submission_id=item["root_submission_id"],
+            member_submission_ids=member_ids, current_revision_id=member_ids[-1],
+            created_at=item["created_at"], updated_at=item["updated_at"],
+            metadata_consistency=json.loads(item["metadata_consistency_json"]),
+            limitations=json.loads(item["limitations_json"]),
+        )
+
+    def get_revision_group_for_submission(self, submission_id: int) -> RevisionGroup | None:
+        with self.connect() as connection:
+            row = connection.execute("SELECT revision_group_id FROM essays WHERE essay_id=?", (submission_id,)).fetchone()
+        return self.get_revision_group(row[0]) if row and row[0] else None
+
+    def list_revision_candidates(self, submission_id: int) -> list[dict[str, Any]]:
+        target = self.get_submission_bundle(submission_id)
+        if target is None:
+            raise LookupError("Submission not found.")
+        with self.connect() as connection:
+            rows = connection.execute(
+                """SELECT essay_id, submitted_at, writing_prompt, genre, draft_stage, revision_group_id,
+                   revision_sequence FROM essays WHERE student_id=? AND essay_id<>? AND submitted_at<=?
+                   ORDER BY submitted_at DESC, essay_id DESC""",
+                (target["student_id"], submission_id, target["submitted_at"]),
+            ).fetchall()
+        return [dict(row) for row in rows]
+
+    def save_revision_snapshot(self, snapshot: RevisionSnapshot) -> RevisionSnapshot:
+        with self.connect() as connection:
+            cursor = connection.execute(
+                """INSERT INTO revision_snapshots(
+                    revision_group_id, source_submission_id, target_submission_id, snapshot_json,
+                    alignment_version, uptake_version, configuration_version, created_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+                (snapshot.revision_group_id, snapshot.source_submission_id, snapshot.target_submission_id,
+                 snapshot.model_dump_json(), snapshot.algorithm_versions["alignment"],
+                 snapshot.algorithm_versions["uptake"], snapshot.configuration_version,
+                 snapshot.generated_at.isoformat()),
+            )
+            snapshot_id = f"RS{int(cursor.lastrowid):06d}"
+            stored = snapshot.model_copy(update={"revision_snapshot_id": snapshot_id})
+            connection.execute(
+                "UPDATE revision_snapshots SET revision_snapshot_id=?, snapshot_json=? WHERE revision_snapshot_row_id=?",
+                (snapshot_id, stored.model_dump_json(), int(cursor.lastrowid)),
+            )
+        return stored
+
+    def list_revision_snapshots(self, revision_group_id: str) -> list[dict[str, Any]]:
+        with self.connect() as connection:
+            rows = connection.execute(
+                "SELECT snapshot_json FROM revision_snapshots WHERE revision_group_id=? ORDER BY revision_snapshot_row_id",
+                (revision_group_id,),
+            ).fetchall()
+        return [json.loads(row[0]) for row in rows]
+
+    def get_latest_revision_snapshot(self, revision_group_id: str) -> dict[str, Any] | None:
+        items = self.list_revision_snapshots(revision_group_id)
+        return items[-1] if items else None
 
 
 SQLiteRepository = Database

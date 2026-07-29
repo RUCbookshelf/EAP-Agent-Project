@@ -7,6 +7,7 @@ from app.diagnosis import NlpHeuristicDiagnoser
 from app.llm import DeepSeekProvider, LocalDemoProvider, ProviderRouter
 from .submission import SubmissionRepository, SubmissionService
 from .learner_profile import LearnerProfileService
+from .revision import RevisionService
 
 
 def build_router(settings: Settings) -> ProviderRouter:
@@ -48,4 +49,5 @@ def build_submission_service(
         diagnoser=NlpHeuristicDiagnoser(),
         router=build_router(settings),
         learner_profile_service=profile_service,
+        revision_service=RevisionService(repository),
     )

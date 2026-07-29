@@ -12,10 +12,11 @@ from app.api.schemas import (
     StudentResponse, SubmissionCreateRequest, SubmissionRecordResponse,
     SubmissionResponse, VersionResponse,
     ReanalysisResponse,
+    RevisionCreateRequest, RevisionGroupResponse,
 )
 from app.config import Settings, load_settings
 from app.database import Database
-from app.services import SubmissionService, build_submission_service, ReanalysisService
+from app.services import SubmissionService, build_submission_service, ReanalysisService, RevisionService
 from app.services.factory import build_analyzer
 from app.services import LearnerProfileService
 from app.core import LearnerProfileSnapshot
@@ -43,7 +44,9 @@ def create_app(
     api.state.learner_profiles = learner_profiles
     analyzer = submission_service.analyzer if hasattr(submission_service, "analyzer") else build_analyzer(settings)
     reanalysis = ReanalysisService(repository, analyzer)
+    revisions = RevisionService(repository)
     api.state.reanalysis = reanalysis
+    api.state.revisions = revisions
 
     @api.exception_handler(RequestValidationError)
     async def validation_handler(_: Request, exc: RequestValidationError):
@@ -76,7 +79,7 @@ def create_app(
             database_status="connected" if connected else "unavailable",
             database_migration_version=repository.migration_version() if connected else 0,
             prompt_version=settings.prompt_version,
-            schema_version="structured-feedback-v0.1.1",
+            schema_version="structured-feedback-v0.5.0",
             llm_provider=settings.llm_provider,
             llm_api_configured=bool(settings.deepseek_api_key) if settings.llm_provider == "deepseek" else False,
             active_analyzer=analyzer_health["active_analyzer"],
@@ -93,7 +96,7 @@ def create_app(
     def version() -> VersionResponse:
         return VersionResponse(
             application_version=settings.application_version, api_version=settings.api_version,
-            prompt_version=settings.prompt_version, schema_version="structured-feedback-v0.1.1",
+            prompt_version=settings.prompt_version, schema_version="structured-feedback-v0.5.0",
             analysis_version=settings.analysis_version, diagnosis_version=settings.diagnosis_version,
             database_migration_version=repository.migration_version(),
             active_analyzer=settings.active_analyzer,
@@ -104,10 +107,16 @@ def create_app(
 
     @api.post("/api/v1/submissions", response_model=SubmissionResponse, status_code=201)
     def create_submission(payload: SubmissionCreateRequest) -> SubmissionResponse:
-        result = submission_service.submit(payload)
+        try:
+            result = submission_service.submit(payload)
+        except LookupError as exc:
+            raise HTTPException(404, str(exc)) from None
+        except ValueError as exc:
+            raise HTTPException(422, str(exc)) from None
         return SubmissionResponse(
             submission_id=result.essay_id, analysis=result.analysis, diagnosis=result.diagnosis,
             feedback_result=result.provider, history=result.history,
+            revision_snapshot=result.revision_snapshot,
         )
 
     @api.get("/api/v1/submissions/{submission_id}", response_model=SubmissionRecordResponse)
@@ -135,6 +144,58 @@ def create_app(
         except LookupError as exc:
             raise HTTPException(404, str(exc)) from None
         return ReanalysisResponse(submission_id=submission_id, analysis=result, llm_called=False)
+
+    @api.get("/api/v1/submissions/{submission_id}/revision-candidates")
+    def revision_candidates(submission_id: int) -> dict:
+        try:
+            return {"submission_id": submission_id, "candidates": revisions.candidates(submission_id)}
+        except LookupError as exc:
+            raise HTTPException(404, str(exc)) from None
+
+    @api.get("/api/v1/students/{student_id}/revision-candidates")
+    def student_revision_candidates(student_id: str) -> dict:
+        require_student(student_id)
+        items = repository.list_student_submissions(student_id)
+        return {"student_id": student_id, "candidates": list(reversed(items))}
+
+    @api.post("/api/v1/revisions", response_model=RevisionGroupResponse, status_code=201)
+    def create_revision(payload: RevisionCreateRequest) -> RevisionGroupResponse:
+        try:
+            snapshot = revisions.create_relationship(payload.source_submission_id, payload.target_submission_id)
+            group = revisions.group(snapshot.revision_group_id)
+            return RevisionGroupResponse(group=group, latest_snapshot=snapshot,
+                                         snapshot_history_count=len(revisions.history(group.revision_group_id)))
+        except LookupError as exc:
+            raise HTTPException(404, str(exc)) from None
+        except ValueError as exc:
+            raise HTTPException(422, str(exc)) from None
+
+    @api.get("/api/v1/revisions/{revision_group_id}", response_model=RevisionGroupResponse)
+    def get_revision_group(revision_group_id: str) -> RevisionGroupResponse:
+        try:
+            group = revisions.group(revision_group_id)
+            history = revisions.history(revision_group_id)
+            return RevisionGroupResponse(group=group, latest_snapshot=history[-1] if history else None,
+                                         snapshot_history_count=len(history))
+        except LookupError as exc:
+            raise HTTPException(404, str(exc)) from None
+
+    @api.get("/api/v1/revisions/{revision_group_id}/comparison")
+    def get_revision_comparison(revision_group_id: str):
+        try:
+            return revisions.latest(revision_group_id)
+        except LookupError as exc:
+            raise HTTPException(404, str(exc)) from None
+
+    @api.get("/api/v1/submissions/{submission_id}/revision-analysis")
+    def get_submission_revision_analysis(submission_id: int) -> dict:
+        group = repository.get_revision_group_for_submission(submission_id)
+        if group is None:
+            raise HTTPException(404, "Submission is not part of a revision group.")
+        history = revisions.history(group.revision_group_id)
+        relevant = [item for item in history if item.target_submission_id == submission_id or item.source_submission_id == submission_id]
+        return {"group": group, "latest_snapshot": relevant[-1] if relevant else None,
+                "snapshot_history": relevant}
 
     def require_student(student_id: str) -> dict:
         student = repository.get_student(student_id)

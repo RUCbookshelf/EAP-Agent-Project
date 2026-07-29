@@ -71,7 +71,7 @@ if /I "%~1"=="--verify" (
     exit /b 0
 )
 
-echo [7/7] Starting FastAPI and the Streamlit API client for v0.4...
+echo [7/7] Starting FastAPI and the Streamlit API client for v0.5...
 echo Keep this window open while using the application. Press Ctrl+C to stop.
 "%VENV_PYTHON%" -m scripts.run_local
 if errorlevel 1 goto :start_failed

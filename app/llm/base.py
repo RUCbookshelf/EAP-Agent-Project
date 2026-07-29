@@ -11,6 +11,7 @@ from app.models import (
     StructuredFeedback,
 )
 from app.core import LearnerProfileSnapshot
+from app.revision import RevisionSnapshot
 
 
 @dataclass(frozen=True)
@@ -20,6 +21,7 @@ class FeedbackContext:
     diagnosis: DiagnosisResult
     history: HistoryResult
     learner_profile_snapshot: LearnerProfileSnapshot | None = None
+    revision_snapshot: RevisionSnapshot | None = None
 
 
 class ProviderOutputError(RuntimeError):

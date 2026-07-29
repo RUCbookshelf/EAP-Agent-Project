@@ -67,3 +67,11 @@
 - Decision: use spaCy 3.8.7 and en_core_web_sm 3.8.0 as the default local backend, with an explicit BasicAnalyzer fallback; store token-scale evidence in append-only JSON artifacts and versioned MetricResults rather than fixed columns.
 - Evidence: 97 passed, 1 opt-in live test skipped; migration 4; current and clean-environment `run.bat --verify` passed; FastAPI/docs/Streamlit returned 200; clean Python 3.11.15 environment passed `pip check`.
 - Research boundary: parser, dictionary, MATTR, lexical density and diagnostic thresholds remain automatic unverified prototype signals.
+
+## D011 — Accept v0.5 revision-aware feedback and continue to v0.6
+
+- Date: 2026-07-29
+- Status: accepted
+- Decision: revision relationships must be explicit; use deterministic local paragraph/sentence/token alignment and append-only Revision Snapshots; default longitudinal analysis uses final-draft-else-latest per Revision Group.
+- Evidence: 121 passed, 1 opt-in live test skipped; migration 5; real DeepSeek Prompt/Schema v0.5 revision call cited R001–R005 and passed after one correction retry without fallback; FastAPI/docs/Streamlit and `run.bat --verify` passed.
+- Research boundary: alignment and uptake are observed heuristic candidates, not revision-quality scores, proficiency growth or causal feedback effects.

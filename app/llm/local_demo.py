@@ -9,6 +9,7 @@ from app.models import (
     FeedbackItem,
     LongitudinalFeedback,
     PositiveFinding,
+    RevisionFeedback,
     StructuredFeedback,
 )
 
@@ -59,6 +60,19 @@ class LocalDemoProvider(LLMProvider):
                 history_evidence_ids=[], confidence="low",
                 limitation=history["limitations"][0],
             )
+        revision_payload = payload.get("revision_snapshot")
+        revision = None
+        if revision_payload:
+            evidence = revision_payload.get("revision_evidence", [])
+            evidence_ids = [item["revision_evidence_id"] for item in evidence[:3]]
+            revision = RevisionFeedback(
+                comment=(
+                    "The local revision engine reports observed text-level changes only; these do not prove "
+                    "proficiency growth or that feedback caused the revision. Evidence used: " + ", ".join(evidence_ids) + "."
+                ),
+                revision_evidence_ids=evidence_ids, confidence="low",
+                limitation=revision_payload["limitations"][0],
+            )
         return StructuredFeedback(
             positive_finding=PositiveFinding(
                 evidence_quote=quotes[0],
@@ -79,6 +93,7 @@ class LocalDemoProvider(LLMProvider):
             ],
             exercises=self.exercise_generator.generate(priorities),
             longitudinal=longitudinal,
+            revision=revision,
             uncertainty_note=(
                 "This feedback uses prototype surface-form heuristics and is not a proficiency assessment, "
                 "a validated longitudinal judgment, or a replacement for teacher review."
@@ -93,4 +108,3 @@ class LocalDemoProvider(LLMProvider):
             if match.group(0).strip()
         ]
         return fragments or [essay_text]
-

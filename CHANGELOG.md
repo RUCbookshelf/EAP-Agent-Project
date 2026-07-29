@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.5.0 — 2026-07-29
+
+- Added explicit Revision Groups and validated first/revised/final draft chains.
+- Added deterministic paragraph, sentence and token alignment with major-rewrite detection.
+- Added observed metric changes, diagnosis trajectories and non-causal feedback-uptake candidates.
+- Added append-only Revision Snapshots, revision APIs and a Streamlit revision workflow.
+- Default longitudinal trends use one representative draft per Revision Group: final, otherwise latest.
+- Added Prompt/Schema v0.5 evidence-ID validation and explicit exercise-source metadata.
+
 ## 0.4.0 — 2026-07-29
 
 - 新增可注册的 `SpacyAnalyzer` 与显式 `BasicAnalyzer` 回退，固定 spaCy 3.8.7 / en_core_web_sm 3.8.0。

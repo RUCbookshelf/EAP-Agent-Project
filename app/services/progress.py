@@ -48,6 +48,8 @@ class ProgressService:
             records = [record for record in records if record.get("analysis_version") == analysis_version]
         if not records:
             raise ValueError("No submissions are available for the requested longitudinal window.")
+        revision_excluded = [record for record in records if not record.get("is_longitudinal_representative", True)]
+        records = [record for record in records if record.get("is_longitudinal_representative", True)]
         current = records[-1]
         current_id = self._id(current)
         comparisons = {
@@ -72,6 +74,13 @@ class ProgressService:
             ExcludedSubmission(submission_id=key, status=value.status, reasons=value.reasons)
             for key, value in comparisons.items() if key not in included_ids
         ]
+        excluded.extend(
+            ExcludedSubmission(
+                submission_id=self._id(record), status="partially_comparable",
+                reasons=[record["revision_exclusion_reason"]],
+            )
+            for record in revision_excluded
+        )
         confidences = [item.confidence for item in trends.values() if item.confidence != "insufficient"]
         summary = (
             "Prototype longitudinal evidence is available at medium confidence for some metrics."
@@ -91,9 +100,11 @@ class ProgressService:
                 "All directions are prototype metric trends, not language-ability growth or decline.",
                 "Confidence is a heuristic evidence-strength label, not statistical significance, reliability, or validity.",
                 "Only comparable submissions enter the primary baseline and trend calculations.",
+                "Each revision group contributes only its final draft, or otherwise its latest draft, to default long-term trends.",
             ],
             analysis_version=self.rules.analysis_version,
             configuration_version=self.rules.configuration_version,
+            revision_representative_submission_ids=[self._id(record) for record in records if record.get("revision_group_id")],
         )
         return self.repository.save_learner_profile_snapshot(snapshot) if persist else snapshot
 

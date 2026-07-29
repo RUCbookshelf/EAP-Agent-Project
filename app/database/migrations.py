@@ -4,7 +4,7 @@ import sqlite3
 from collections.abc import Callable
 
 
-LATEST_MIGRATION_VERSION = 4
+LATEST_MIGRATION_VERSION = 5
 
 
 def _add_column_if_missing(
@@ -131,11 +131,61 @@ def _migration_4(connection: sqlite3.Connection) -> None:
     )
 
 
+def _migration_5(connection: sqlite3.Connection) -> None:
+    additions = {
+        "revision_of_submission_id": "INTEGER REFERENCES essays(essay_id)",
+        "revision_group_id": "TEXT",
+        "revision_sequence": "INTEGER",
+        "revision_stage": "TEXT NOT NULL DEFAULT 'independent_submission'",
+        "original_draft_stage": "TEXT",
+    }
+    for column, definition in additions.items():
+        _add_column_if_missing(connection, "essays", column, definition)
+    connection.executescript(
+        """
+        CREATE TABLE IF NOT EXISTS revision_groups (
+            revision_group_row_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            revision_group_id TEXT UNIQUE,
+            student_id TEXT NOT NULL REFERENCES students(student_id),
+            writing_prompt TEXT NOT NULL,
+            genre TEXT NOT NULL,
+            root_submission_id INTEGER NOT NULL REFERENCES essays(essay_id),
+            created_at TEXT NOT NULL,
+            updated_at TEXT NOT NULL,
+            metadata_consistency_json TEXT NOT NULL,
+            limitations_json TEXT NOT NULL
+        );
+        CREATE INDEX IF NOT EXISTS idx_revision_groups_student
+            ON revision_groups(student_id, revision_group_row_id);
+        CREATE INDEX IF NOT EXISTS idx_essays_revision_group
+            ON essays(revision_group_id, revision_sequence);
+        CREATE TABLE IF NOT EXISTS revision_snapshots (
+            revision_snapshot_row_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            revision_snapshot_id TEXT UNIQUE,
+            revision_group_id TEXT NOT NULL,
+            source_submission_id INTEGER NOT NULL REFERENCES essays(essay_id),
+            target_submission_id INTEGER NOT NULL REFERENCES essays(essay_id),
+            snapshot_json TEXT NOT NULL,
+            alignment_version TEXT NOT NULL,
+            uptake_version TEXT NOT NULL,
+            configuration_version TEXT NOT NULL,
+            created_at TEXT NOT NULL
+        );
+        CREATE INDEX IF NOT EXISTS idx_revision_snapshots_group
+            ON revision_snapshots(revision_group_id, revision_snapshot_row_id);
+        """
+    )
+    connection.execute(
+        "UPDATE essays SET original_draft_stage=draft_stage WHERE original_draft_stage IS NULL"
+    )
+
+
 MIGRATIONS: dict[int, tuple[str, Callable[[sqlite3.Connection], None]]] = {
     1: ("preserve_v0_1_1_schema", _migration_1),
     2: ("cloud_ready_repository_indexes", _migration_2),
     3: ("longitudinal_profile_snapshots", _migration_3),
     4: ("versioned_nlp_analysis_runs", _migration_4),
+    5: ("revision_relationships_and_snapshots", _migration_5),
 }
 
 

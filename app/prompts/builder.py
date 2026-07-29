@@ -19,6 +19,7 @@ from .versioning import (
     validate_prompt_versioning,
 )
 from . import versioning_v04
+from . import versioning_v05
 
 
 @dataclass(frozen=True)
@@ -36,8 +37,11 @@ class PromptBuilder:
     """Build versioned messages; providers never splice student text into control instructions."""
 
     def build(self, context: "FeedbackContext") -> PromptBundle:
-        is_v04 = context.analysis.analyzer_id == "spacy" or context.analysis.analysis_version.startswith("spacy-analyzer-v0.4")
-        if is_v04:
+        is_v05 = context.revision_snapshot is not None
+        is_v04 = not is_v05 and (context.analysis.analyzer_id == "spacy" or context.analysis.analysis_version.startswith("spacy-analyzer-v0.4"))
+        if is_v05:
+            versioning_v05.validate_prompt_versioning()
+        elif is_v04:
             versioning_v04.validate_prompt_versioning()
         else:
             validate_prompt_versioning()
@@ -75,11 +79,14 @@ class PromptBuilder:
         }
         if is_v04:
             payload["analysis_evidence"] = self._analysis_evidence(context.analysis)
+        elif is_v05:
+            payload["analysis_evidence"] = self._analysis_evidence(context.analysis)
+            payload["revision_snapshot"] = context.revision_snapshot.model_dump(mode="json")
         messages = [
-            {"role": "system", "content": versioning_v04.system_template() if is_v04 else system_template()},
+            {"role": "system", "content": versioning_v05.system_template() if is_v05 else versioning_v04.system_template() if is_v04 else system_template()},
             {"role": "user", "content": json.dumps(payload, ensure_ascii=False)},
         ]
-        return self._bundle(messages, payload, is_v04=is_v04)
+        return self._bundle(messages, payload, is_v04=is_v04, is_v05=is_v05)
 
     @staticmethod
     def _analysis_evidence(analysis):
@@ -137,10 +144,23 @@ class PromptBuilder:
             f"Validation failure: {validation_error[:800]}"
         )
         messages = [*bundle.messages, {"role": "user", "content": correction}]
-        return self._bundle(messages, bundle.user_payload, is_v04=bundle.prompt_version == versioning_v04.PROMPT_VERSION)
+        return self._bundle(
+            messages, bundle.user_payload,
+            is_v04=bundle.prompt_version == versioning_v04.PROMPT_VERSION,
+            is_v05=bundle.prompt_version == versioning_v05.PROMPT_VERSION,
+        )
 
     @staticmethod
-    def _bundle(messages: list[dict[str, str]], payload: dict[str, Any], *, is_v04: bool = False) -> PromptBundle:
+    def _bundle(messages: list[dict[str, str]], payload: dict[str, Any], *, is_v04: bool = False, is_v05: bool = False) -> PromptBundle:
+        if is_v05:
+            return PromptBundle(
+                messages=messages, user_payload=payload,
+                prompt_version=versioning_v05.PROMPT_VERSION,
+                schema_version=versioning_v05.SCHEMA_VERSION,
+                system_template_hash=versioning_v05.system_template_hash(),
+                user_template_hash=versioning_v05.user_template_hash(),
+                rendered_prompt_hash=versioning_v05.rendered_prompt_hash(messages),
+            )
         if is_v04:
             return PromptBundle(
                 messages=messages, user_payload=payload,

@@ -7,6 +7,7 @@ from pydantic import BaseModel, Field
 
 from app.core import IssueTrajectory, LearnerProfileSnapshot, PriorityCandidate
 from app.models import AnalysisResult, DiagnosisResult, EssaySubmission, HistoryResult, ProviderResult
+from app.revision import RevisionGroup, RevisionSnapshot
 
 
 class ErrorBody(BaseModel):
@@ -29,6 +30,18 @@ class SubmissionResponse(BaseModel):
     diagnosis: DiagnosisResult
     feedback_result: ProviderResult
     history: HistoryResult
+    revision_snapshot: RevisionSnapshot | None = None
+
+
+class RevisionCreateRequest(BaseModel):
+    source_submission_id: int = Field(ge=1)
+    target_submission_id: int = Field(ge=1)
+
+
+class RevisionGroupResponse(BaseModel):
+    group: RevisionGroup
+    latest_snapshot: RevisionSnapshot | None = None
+    snapshot_history_count: int
 
 
 class SubmissionRecordResponse(BaseModel):

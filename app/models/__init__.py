@@ -11,6 +11,7 @@ from .schemas import (
     LongitudinalFeedback,
     PipelineResult,
     PositiveFinding,
+    RevisionFeedback,
     ProviderResult,
     StructuredFeedback,
 )
@@ -18,5 +19,5 @@ from .schemas import (
 __all__ = [
     "AnalysisResult", "DiagnosisResult", "DiagnosisSignal", "EssaySubmission",
     "ExerciseItem", "FeedbackItem", "HistoryEvidence", "HistoryResult", "LLMCallAudit",
-    "LongitudinalFeedback", "PipelineResult", "PositiveFinding", "ProviderResult", "StructuredFeedback",
+    "LongitudinalFeedback", "PipelineResult", "PositiveFinding", "ProviderResult", "RevisionFeedback", "StructuredFeedback",
 ]

@@ -1,4 +1,9 @@
-# v0.2 system architecture
+# v0.5 system architecture
+
+`SubmissionService` coordinates repositories and replaceable analyzer, diagnosis, revision and provider services.
+For an explicit revision, `RevisionService` creates or extends a Revision Group, runs local alignment and saves an
+append-only Revision Snapshot before Prompt v0.5 is built. The LLM receives only screened local evidence and must
+cite allowed `R...` IDs. Longitudinal analysis independently selects one representative draft per group.
 
 ## Runtime
 

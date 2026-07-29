@@ -28,6 +28,10 @@ class FeedbackValidator:
         history_ids = {
             evidence.history_evidence_id for evidence in context.history.history_evidence
         }
+        revision_ids = {
+            item["revision_evidence_id"]
+            for item in (context.revision_snapshot.revision_evidence if context.revision_snapshot else [])
+        }
 
         self._validate_quote(feedback.positive_finding.evidence_quote, essay, "positive_finding", failures)
         for index, item in enumerate(feedback.priority_feedback):
@@ -56,6 +60,20 @@ class FeedbackValidator:
                 failures.append("no-history longitudinal comment must explicitly state that judgment is unavailable")
         elif not used_history:
             failures.append("longitudinal comment must bind at least one available history_evidence_id")
+
+        if revision_ids:
+            if feedback.revision is None:
+                failures.append("revision feedback is required when revision evidence is supplied")
+            else:
+                unknown_revision = sorted(set(feedback.revision.revision_evidence_ids) - revision_ids)
+                if unknown_revision:
+                    failures.append("unknown revision_evidence_id: " + ", ".join(unknown_revision))
+                if not feedback.revision.revision_evidence_ids:
+                    failures.append("revision feedback must bind at least one available revision_evidence_id")
+                if self._contains_deterministic_development_claim(feedback.revision.comment):
+                    failures.append("deterministic development claim is forbidden in revision feedback")
+        elif feedback.revision is not None and feedback.revision.revision_evidence_ids:
+            failures.append("revision_evidence_ids must be empty when no revision evidence exists")
 
         for index, exercise in enumerate(feedback.exercises):
             signal = improvement.get(exercise.diagnosis_id)

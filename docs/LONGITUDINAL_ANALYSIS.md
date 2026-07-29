@@ -1,5 +1,12 @@
 # v0.3 longitudinal analysis
 
+## v0.5 revision-group policy
+
+Within-task drafts are not treated as independent long-term observations. Each Revision Group contributes its
+`final_draft`, or otherwise the latest sequence member, to default learner-profile trends. Excluded drafts retain an
+explicit reason in the Snapshot. Draft-to-draft changes remain available through revision analysis. This selection
+does not establish learning, proficiency growth or causal impact.
+
 ## Personal baseline
 
 The newest submission is the comparison anchor. Only the anchor and earlier records classified `comparable` enter the primary cohort. A baseline requires 3 records. Available baselines report mean, median, minimum and maximum for each metric plus structured diagnosis frequencies; insufficient baselines report no metric summaries. This is a descriptive personal reference, not true language ability.

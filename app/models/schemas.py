@@ -27,6 +27,7 @@ class EssaySubmission(BaseModel):
     tool_use: str = Field(default="none", max_length=300)
     essay_text: str = Field(min_length=1)
     submitted_at: datetime = Field(default_factory=utc_now)
+    revision_of_submission_id: int | None = Field(default=None, ge=1)
 
     @field_validator("student_id", "writing_prompt", "genre", "draft_stage", "essay_text")
     @classmethod
@@ -134,6 +135,9 @@ class ExerciseItem(BaseModel):
     exercise_content: str = Field(min_length=1)
     expected_response: str | None = None
     reference_guidance: str | None = None
+    source_type: Literal["student_source_sentence", "synthetic_practice_sentence"] = "synthetic_practice_sentence"
+    source_submission_id: int | None = None
+    generation_version: str = "exercise-generator-v0.5.0"
 
     @model_validator(mode="after")
     def require_response_support(self) -> "ExerciseItem":
@@ -149,11 +153,19 @@ class LongitudinalFeedback(BaseModel):
     limitation: str = Field(min_length=1)
 
 
+class RevisionFeedback(BaseModel):
+    comment: str = Field(min_length=1)
+    revision_evidence_ids: list[str]
+    confidence: Confidence
+    limitation: str = Field(min_length=1)
+
+
 class StructuredFeedback(BaseModel):
     positive_finding: PositiveFinding
     priority_feedback: list[FeedbackItem] = Field(min_length=1, max_length=2)
     exercises: list[ExerciseItem] = Field(min_length=1)
     longitudinal: LongitudinalFeedback
+    revision: RevisionFeedback | None = None
     uncertainty_note: str = Field(min_length=1)
 
 
@@ -203,3 +215,4 @@ class PipelineResult(BaseModel):
     history: HistoryResult
     history_summary: str
     comparable_history_count: int
+    revision_snapshot: Any | None = None

@@ -5,8 +5,9 @@ from .comparability import ComparabilityService
 from .learner_profile import LearnerProfileService
 from .progress import ProgressService
 from .reanalysis import ReanalysisService
+from .revision import RevisionService
 
 __all__ = [
     "SubmissionService", "build_submission_service", "BaselineService",
-    "ComparabilityService", "LearnerProfileService", "ProgressService", "ReanalysisService",
+    "ComparabilityService", "LearnerProfileService", "ProgressService", "ReanalysisService", "RevisionService",
 ]

@@ -108,3 +108,5 @@ class LearnerProfileSnapshot(BaseModel):
     limitations: list[str]
     analysis_version: str
     configuration_version: str
+    revision_representative_policy: str = "final_draft_else_latest_v0.5"
+    revision_representative_submission_ids: list[str] = Field(default_factory=list)

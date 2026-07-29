@@ -41,3 +41,27 @@ def test_api_failure_is_not_replaced_with_fake_feedback():
     )
     with pytest.raises(ApiClientError, match="failed"):
         client.submit({"essay_text": "Text"})
+
+
+@pytest.mark.parametrize(
+    ("call", "expected_suffix"),
+    [
+        (lambda client: client.get_revision_candidates(7), "/api/v1/submissions/7/revision-candidates"),
+        (lambda client: client.get_revision_analysis(7), "/api/v1/submissions/7/revision-analysis"),
+        (lambda client: client.get_revision_group("RG000001"), "/api/v1/revisions/RG000001"),
+        (lambda client: client.get_revision_comparison("RG000001"), "/api/v1/revisions/RG000001/comparison"),
+    ],
+)
+def test_streamlit_api_client_revision_reads(call, expected_suffix):
+    session = Session(Response(200, {"ok": True}))
+    client = WritingFeedbackApiClient("http://127.0.0.1:8000", session=session)
+    assert call(client) == {"ok": True}
+    assert session.calls[0][1].endswith(expected_suffix)
+
+
+def test_streamlit_api_client_creates_explicit_revision():
+    session = Session(Response(201, {"group": {"revision_group_id": "RG000001"}}))
+    client = WritingFeedbackApiClient("http://127.0.0.1:8000", session=session)
+    result = client.create_revision(1, 2)
+    assert result["group"]["revision_group_id"] == "RG000001"
+    assert session.calls[0][2]["json"] == {"source_submission_id": 1, "target_submission_id": 2}

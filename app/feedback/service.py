@@ -9,6 +9,7 @@ from app.llm import DeepSeekProvider, FeedbackContext, LocalDemoProvider, Provid
 from app.models import EssaySubmission, PipelineResult
 from app.services.submission import SubmissionService
 from app.services.learner_profile import LearnerProfileService
+from app.services.revision import RevisionService
 
 
 class FeedbackPipeline:
@@ -39,6 +40,7 @@ class FeedbackPipeline:
             diagnoser=self.diagnoser,
             router=self.router,
             learner_profile_service=LearnerProfileService(self.database),
+            revision_service=RevisionService(self.database),
         )
 
     def submit(self, submission: EssaySubmission, *, synthetic: bool = False) -> PipelineResult:

@@ -47,3 +47,23 @@ class WritingFeedbackApiClient:
 
     def reanalyze(self, submission_id: int) -> dict[str, Any]:
         return self._request("POST", f"/api/v1/submissions/{submission_id}/analyses")
+
+    def get_student_revision_candidates(self, student_id: str) -> dict[str, Any]:
+        return self._request("GET", f"/api/v1/students/{student_id}/revision-candidates")
+
+    def create_revision(self, source_submission_id: int, target_submission_id: int) -> dict[str, Any]:
+        return self._request("POST", "/api/v1/revisions", json={
+            "source_submission_id": source_submission_id, "target_submission_id": target_submission_id,
+        })
+
+    def get_revision_group(self, revision_group_id: str) -> dict[str, Any]:
+        return self._request("GET", f"/api/v1/revisions/{revision_group_id}")
+
+    def get_revision_comparison(self, revision_group_id: str) -> dict[str, Any]:
+        return self._request("GET", f"/api/v1/revisions/{revision_group_id}/comparison")
+
+    def get_revision_candidates(self, submission_id: int) -> dict[str, Any]:
+        return self._request("GET", f"/api/v1/submissions/{submission_id}/revision-candidates")
+
+    def get_revision_analysis(self, submission_id: int) -> dict[str, Any]:
+        return self._request("GET", f"/api/v1/submissions/{submission_id}/revision-analysis")

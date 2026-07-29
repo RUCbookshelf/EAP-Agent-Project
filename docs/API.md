@@ -10,6 +10,14 @@ Base URL defaults to `http://127.0.0.1:8000`. Interactive OpenAPI documentation 
 | GET | `/api/v1/submissions/{submission_id}` | stored submission and structured results |
 | GET | `/api/v1/students/{student_id}` | pseudonymous student metadata and submission count |
 | GET | `/api/v1/students/{student_id}/history` | submissions and saved history records |
+| GET | `/api/v1/submissions/{submission_id}/revision-candidates` | same-student candidates; never auto-links |
+| POST | `/api/v1/revisions` | explicitly link an existing source and target draft |
+| GET | `/api/v1/revisions/{revision_group_id}` | group and latest append-only Snapshot |
+| GET | `/api/v1/revisions/{revision_group_id}/comparison` | latest structured revision comparison |
+| GET | `/api/v1/submissions/{submission_id}/revision-analysis` | Snapshot history relevant to one submission |
+
+`POST /api/v1/submissions` also accepts optional `revision_of_submission_id`. Cross-student, self, cyclic and
+duplicate links return the standard structured error envelope.
 | GET | `/api/v1/students/{student_id}/profile` | student counts, latest Snapshot, sufficiency, issues, priorities and limits |
 | GET | `/api/v1/students/{student_id}/progress` | recalculates and saves a versioned longitudinal Snapshot |
 | GET | `/api/v1/submissions/{submission_id}/analyses` | list append-only AnalysisRuns |

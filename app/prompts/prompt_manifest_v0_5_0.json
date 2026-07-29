@@ -1,0 +1,7 @@
+{
+  "prompt_version": "feedback-prompt-v0.5.0",
+  "schema_version": "structured-feedback-v0.5.0",
+  "system_template_file": "system_prompt_v0_5_0.txt",
+  "system_template_hash": "2f3e22d9c564fd5ca195b624a1e9bfaa62e0651e1dce570d06117ca9a1115db6",
+  "user_template_hash": "1bb398dbc49339375a621ec99abf7906ebc59432a28826984f38063ef09fb94b"
+}
