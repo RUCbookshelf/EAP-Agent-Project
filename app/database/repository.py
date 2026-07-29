@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import sqlite3
+from contextlib import contextmanager
 from pathlib import Path
 from typing import Any
 
@@ -111,21 +112,39 @@ CREATE TABLE IF NOT EXISTS system_versions (
 """
 
 
+class ClosingConnection(sqlite3.Connection):
+    """SQLite connection that closes after the outermost context manager exits."""
+
+    _context_depth = 0
+
+    def __enter__(self):
+        self._context_depth += 1
+        return super().__enter__()
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        try:
+            return super().__exit__(exc_type, exc_value, traceback)
+        finally:
+            self._context_depth -= 1
+            if self._context_depth == 0:
+                self.close()
+
+
 class Database:
     def __init__(self, path: str | Path):
         self.path = Path(path)
 
     def connect(self) -> sqlite3.Connection:
         self.path.parent.mkdir(parents=True, exist_ok=True)
-        connection = sqlite3.connect(self.path)
+        connection = sqlite3.connect(self.path, factory=ClosingConnection)
         connection.row_factory = sqlite3.Row
         connection.execute("PRAGMA foreign_keys = ON")
         return connection
 
     def initialize(self) -> None:
         with self.connect() as connection:
-            connection.executescript(SCHEMA)
-            self._migrate_v0_1_to_v0_1_1(connection)
+            from app.database.migrations import upgrade
+            upgrade(connection)
 
     @staticmethod
     def _add_column_if_missing(connection: sqlite3.Connection, table: str,
@@ -307,3 +326,105 @@ class Database:
                 "SELECT * FROM learner_history WHERE essay_id = ?", (essay_id,)
             ).fetchone()
         return dict(row) if row else None
+
+    def ping(self) -> bool:
+        try:
+            with self.connect() as connection:
+                return connection.execute("SELECT 1").fetchone()[0] == 1
+        except sqlite3.Error:
+            return False
+
+    def migration_version(self) -> int:
+        with self.connect() as connection:
+            return int(connection.execute("PRAGMA user_version").fetchone()[0])
+
+    @contextmanager
+    def transaction(self):
+        connection = self.connect()
+        try:
+            connection.execute("BEGIN")
+            yield connection
+            connection.commit()
+        except Exception:
+            connection.rollback()
+            raise
+        finally:
+            connection.close()
+
+    def get_student(self, student_id: str) -> dict[str, Any] | None:
+        with self.connect() as connection:
+            row = connection.execute(
+                """SELECT s.student_id, s.created_at, s.is_synthetic,
+                COUNT(e.essay_id) AS submission_count
+                FROM students s LEFT JOIN essays e ON e.student_id=s.student_id
+                WHERE s.student_id=? GROUP BY s.student_id""",
+                (student_id,),
+            ).fetchone()
+        return dict(row) if row else None
+
+    def get_submission_bundle(self, essay_id: int) -> dict[str, Any] | None:
+        with self.connect() as connection:
+            row = connection.execute(
+                """SELECT e.*, m.metrics_json, m.analysis_version, m.limitations AS analysis_limitations,
+                d.diagnosis_json, f.feedback_json, f.provider_name, f.model_name,
+                f.success_status, f.fallback_reason, f.prompt_version, f.schema_version,
+                f.validation_status, f.retry_count, h.history_summary, h.comparable_count,
+                h.comparability_status, h.history_evidence_json, h.limitations_json,
+                h.comparability_reasons_json
+                FROM essays e
+                LEFT JOIN metrics m ON m.essay_id=e.essay_id
+                LEFT JOIN diagnoses d ON d.essay_id=e.essay_id
+                LEFT JOIN feedback_records f ON f.essay_id=e.essay_id
+                LEFT JOIN learner_history h ON h.essay_id=e.essay_id
+                WHERE e.essay_id=?""",
+                (essay_id,),
+            ).fetchone()
+        if not row:
+            return None
+        result = dict(row)
+        for key in ("metrics_json", "diagnosis_json", "feedback_json", "history_evidence_json", "limitations_json", "comparability_reasons_json"):
+            raw = result.pop(key, None)
+            result[key.removesuffix("_json")] = json.loads(raw) if raw else None
+        result["timed"] = bool(result["timed"])
+        return result
+
+    def list_student_submissions(self, student_id: str) -> list[dict[str, Any]]:
+        with self.connect() as connection:
+            rows = connection.execute(
+                "SELECT essay_id, student_id, writing_prompt, genre, draft_stage, timed, time_limit_minutes, tool_use, submitted_at FROM essays WHERE student_id=? ORDER BY submitted_at, essay_id",
+                (student_id,),
+            ).fetchall()
+        return [{**dict(row), "timed": bool(row["timed"])} for row in rows]
+
+    def list_student_history(self, student_id: str) -> list[dict[str, Any]]:
+        with self.connect() as connection:
+            rows = connection.execute(
+                "SELECT * FROM learner_history WHERE student_id=? ORDER BY created_at, history_id",
+                (student_id,),
+            ).fetchall()
+        results = []
+        for row in rows:
+            item = dict(row)
+            item["history_evidence"] = json.loads(item.pop("history_evidence_json"))
+            item["limitations"] = json.loads(item.pop("limitations_json"))
+            item["comparability_reasons"] = json.loads(item.pop("comparability_reasons_json"))
+            results.append(item)
+        return results
+
+    def get_exercises(self, essay_id: int) -> list[dict[str, Any]]:
+        with self.connect() as connection:
+            rows = connection.execute(
+                "SELECT exercise_json FROM exercises WHERE essay_id=? ORDER BY exercise_id", (essay_id,)
+            ).fetchall()
+        return [json.loads(row[0]) for row in rows]
+
+    def get_latest_learner_profile(self, student_id: str) -> dict[str, Any] | None:
+        return None
+
+    def get_system_versions(self) -> dict[str, str]:
+        with self.connect() as connection:
+            rows = connection.execute("SELECT component, version FROM system_versions").fetchall()
+        return {row["component"]: row["version"] for row in rows}
+
+
+SQLiteRepository = Database

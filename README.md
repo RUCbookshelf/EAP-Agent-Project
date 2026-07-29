@@ -1,6 +1,6 @@
-# 1 智能英语写作反馈系统原型 v0.1
+# 智能英语写作反馈系统原型 v0.2
 
-这是一个可真实运行、模块可替换的最小可行原型。它保存学生作文与任务信息，计算基础表层指标，生成谨慎的教学诊断信号，通过可替换 LLM Provider 生成结构化反馈与练习，并在同一学生再次提交时读取可比历史。
+这是一个本地可运行、API-first、模块可替换的研究原型。Streamlit 只收集和展示数据；所有提交、分析、诊断、历史、Prompt、LLM 验证和保存都由本机 FastAPI 统一后端完成。当前仍是本地 SQLite，不代表已经部署到云端。
 
 本项目不是自动评分系统，不是完整 CALF 分析系统，也不能替代教师判断。所有规则均为 `prototype / heuristic / working assumption`，尚未经过教育实验验证。
 
@@ -27,13 +27,15 @@ py -V:Astral/CPython3.11.15 -m venv .venv
 
 一键启动：双击 `run.bat`。
 
-或使用命令行：
+或分别启动后端和界面（两个终端）：
 
 ```powershell
-& ".\.venv\Scripts\python.exe" -m streamlit run streamlit_app.py --server.headless true
+& ".\.venv\Scripts\python.exe" -m scripts.migrate_database
+& ".\.venv\Scripts\python.exe" -m uvicorn app.api.main:app --host 127.0.0.1 --port 8000
+& ".\.venv\Scripts\python.exe" -m streamlit run streamlit_app.py --server.port 8501
 ```
 
-运行后，屏幕上会出现一行类似 `Local URL: http://localhost:8501` 的字样，**把这个地址复制到浏览器打开**，你就看到本地界面了。在页面中填写匿名化 `student_id`、写作任务信息和作文，然后提交。默认体裁为 `argumentative essay`。默认数据库为 `data/writing_feedback.db`。数据库保存作文、指标、诊断、反馈、练习、历史摘要、Provider/模型及版本元数据；API Key需另行配置（见下）。
+默认地址为：FastAPI `http://127.0.0.1:8000`、交互式 API 文档 `http://127.0.0.1:8000/docs`、Streamlit `http://127.0.0.1:8501`。在页面中填写匿名化 `student_id`、任务信息和作文后提交。数据库保存作文、指标、诊断、反馈、练习、历史、Provider/模型及版本元数据；API Key 需另行配置（见下）。
 
 ## 1.3 DeepSeek 配置
 Step 1. 在[DSeek 开放平台](https://platform.deepseek.com/api_keys)创建账号后充值并创建一个专属API Key，获得API Key后页面保持不动，进行第二步；
@@ -50,6 +52,7 @@ Step 2. 在智能体安装文件夹下，复制 `.env.example` 为 `.env`，随�
 & ".\.venv\Scripts\python.exe" -m scripts.seed_demo_data
 & ".\.venv\Scripts\python.exe" -m scripts.verify_closed_loop
 & ".\.venv\Scripts\python.exe" -m scripts.smoke_streamlit
+& ".\.venv\Scripts\python.exe" -m scripts.smoke_stack
 ```
 
 `data/demo_students.json` 包含 3 个虚拟学生、每人 3 篇作文，覆盖持续性信号、描述性指标变化、历史不足和任务不可比较情形。`seed_demo_data` 生成 `data/demo_writing_feedback.db`；全部数据均为虚构。
@@ -61,14 +64,17 @@ Step 2. 在智能体安装文件夹下，复制 `.env.example` 为 `.env`，随�
 - `app/analyzer`：可替换的 Analyzer 接口与基础分析器。
 - `app/diagnosis`：可替换的 Diagnoser 接口与启发式规则。
 - `app/llm`：Provider 接口、DeepSeek、LocalDemo 和自动回退路由。
-- `app/feedback`：闭环编排与诊断关联练习。
+- `app/services`：框架无关的提交应用服务。
+- `app/repositories`：Student、Essay、Metric、Diagnosis、Feedback、Exercise、History、Profile、Configuration 和 SystemVersion 协议。
+- `app/api`：FastAPI v1 路由和 API Schema。
+- `app/feedback`：v0.1.1 兼容外壳、验证与诊断关联练习。
 - `app/learner`：历史可比性判断和纵向摘要。
-- `app/database`：SQLite Schema 与持久化。
+- `app/database`：SQLite Repository、事务与版本化迁移。
 - `app/models`：Pydantic 输入、分析、诊断、反馈与结果模型。
-- `app/ui`：Streamlit 页面，不包含数据库或 Provider 实现。
+- `app/ui`：Streamlit 页面和 HTTP API 客户端，不导入数据库、Analyzer、Diagnoser 或 Provider。
 
 更多说明见 [架构](docs/ARCHITECTURE.md)、[数据模型](docs/DATA_MODEL.md)、[升级路径](docs/UPGRADE_PATH.md)和[已知限制](docs/KNOWN_LIMITATIONS.md)。
 
 ## 1.6 当前限制
 
-v0.1 只做英语表层词形、句界、段落和连接词的简单计数；阈值未经验证，TTR 受文本长度影响，历史可比性也只依据少量任务字段。纵向变化只是文本间描述，不能证明真实能力提升。使用外部 LLM 时，作文内容会发送给所配置的服务商，部署前需完成知情同意、伦理审查、数据最小化和机构合规审查等。
+v0.2 仍只做基础表层指标和有限历史描述；正式原型纵向分析在 v0.3 实现。SQLite 适合本地研究原型；PostgreSQL、微信小程序和云部署均未实现。任何趋势都不能被解释为真实能力变化。

@@ -33,3 +33,13 @@
 验证结果已保存到 `data/live_deepseek_verification.json` 和 `data/live_deepseek_verification.db`，并由 `scripts.audit_live_verification` 独立复核为 `PASS`。报告、审计表结构和正式反馈记录均不包含 API Key；先前的 `data/live_deepseek_verification_blocker.json` 仅作为配置完成前的历史记录保留，已被本次成功验证取代。
 
 逐项证据状态见 `docs/V0_1_1_COMPLETION_AUDIT.md`。
+
+## v0.2 current state
+
+- FastAPI v1 is the unified local backend; Streamlit is an HTTP-only client.
+- Framework-neutral `SubmissionService` retains the v0.1.1 protected feedback path.
+- Named Repository protocols isolate the SQLite adapter.
+- Database migration version is 2 and preserves existing records.
+- Health, `/docs`, submission, retrieval, student, history, placeholder profile and placeholder progress APIs are implemented.
+- LocalDemo, no-environment-file, actual dual-service startup and Streamlit-through-API submission have passed.
+- Cloud deployment, PostgreSQL and WeChat are not implemented or claimed.

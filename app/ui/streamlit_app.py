@@ -1,21 +1,19 @@
 from __future__ import annotations
 
 import streamlit as st
-from pydantic import ValidationError
 
 from app.config import load_settings
-from app.feedback.service import FeedbackPipeline
-from app.models import EssaySubmission
+from app.ui.api_client import ApiClientError, WritingFeedbackApiClient
 
 
 @st.cache_resource
-def get_pipeline() -> FeedbackPipeline:
-    return FeedbackPipeline(load_settings())
+def get_api_client() -> WritingFeedbackApiClient:
+    return WritingFeedbackApiClient(load_settings().api_base_url)
 
 
 def run() -> None:
     st.set_page_config(page_title="English Writing Feedback Prototype", page_icon="✍️", layout="wide")
-    st.title("Intelligent English Writing Feedback Prototype v0.1.1")
+    st.title("Intelligent English Writing Feedback Prototype v0.2")
     st.caption("Formative feedback from prototype heuristics and optional LLM support — not automatic scoring.")
     st.warning(
         "This prototype is not educationally validated, does not measure proficiency, and does not replace teacher judgment."
@@ -43,55 +41,59 @@ def run() -> None:
         return
 
     try:
-        submission = EssaySubmission(
-            student_id=student_id, writing_prompt=writing_prompt, genre=genre,
-            draft_stage=draft_stage, timed=timed,
-            time_limit_minutes=int(time_limit_minutes) if timed else None,
-            tool_use=tool_use, essay_text=essay_text,
-        )
+        submission = {
+            "student_id": student_id,
+            "writing_prompt": writing_prompt,
+            "genre": genre,
+            "draft_stage": draft_stage,
+            "timed": timed,
+            "time_limit_minutes": int(time_limit_minutes) if timed else None,
+            "tool_use": tool_use,
+            "essay_text": essay_text,
+        }
         with st.spinner("Saving, analyzing, and generating feedback…"):
-            result = get_pipeline().submit(submission)
-    except ValidationError as exc:
-        st.error("Please complete all required fields with non-blank text.")
-        st.code(str(exc))
+            result = get_api_client().submit(submission)
+    except ApiClientError as exc:
+        st.error(str(exc))
         return
-    except Exception as exc:
-        st.error(f"The submission could not be completed: {type(exc).__name__}. No API key is displayed or stored.")
+    except Exception:
+        st.error("The submission could not be completed. No API key or internal stack is displayed.")
         return
 
-    st.success(f"Submission saved as essay #{result.essay_id}.")
-    if result.provider.success_status == "fallback_success":
+    st.success(f"Submission saved as essay #{result['submission_id']}.")
+    provider = result["feedback_result"]
+    if provider["success_status"] == "fallback_success":
         st.warning("The configured external provider was unavailable or invalid; LocalDemoProvider generated this feedback.")
     st.caption(
-        f"Provider: {result.provider.provider_name} · Model: {result.provider.model_name} · "
-        f"Status: {result.provider.success_status}"
+        f"Provider: {provider['provider_name']} · Model: {provider['model_name']} · "
+        f"Status: {provider['success_status']}"
     )
 
-    feedback = result.provider.feedback
+    feedback = provider["feedback"]
     st.subheader("Positive finding")
-    st.write(f'“{feedback.positive_finding.evidence_quote}”')
-    st.write(feedback.positive_finding.explanation)
+    st.write(f'“{feedback["positive_finding"]["evidence_quote"]}”')
+    st.write(feedback["positive_finding"]["explanation"])
     st.subheader("Revision priorities")
-    for item in feedback.priority_feedback:
+    for item in feedback["priority_feedback"]:
         with st.container(border=True):
-            st.markdown(f"**{item.category.replace('_', ' ').title()}**")
-            st.write(f"Diagnosis: {item.diagnosis_id}")
-            st.write(f'Evidence quote: “{item.evidence_quote}”')
-            st.write(item.explanation)
-            st.write(f"Revision guidance: {item.revision_guidance}")
+            st.markdown(f"**{item['category'].replace('_', ' ').title()}**")
+            st.write(f"Diagnosis: {item['diagnosis_id']}")
+            st.write('Evidence quote: “{}”'.format(item["evidence_quote"]))
+            st.write(item["explanation"])
+            st.write(f"Revision guidance: {item['revision_guidance']}")
     st.subheader("Targeted practice")
-    for exercise in feedback.exercises:
+    for exercise in feedback["exercises"]:
         st.markdown(
-            f"- **{exercise.exercise_type.replace('_', ' ').title()}** "
-            f"({exercise.diagnosis_id} · {exercise.diagnosis_category}): "
-            f"{exercise.instructions} {exercise.exercise_content}"
+            f"- **{exercise['exercise_type'].replace('_', ' ').title()}** "
+            f"({exercise['diagnosis_id']} · {exercise['diagnosis_category']}): "
+            f"{exercise['instructions']} {exercise['exercise_content']}"
         )
     st.subheader("Longitudinal comment")
-    st.write(feedback.longitudinal.comment)
-    st.caption("History evidence IDs: " + (", ".join(feedback.longitudinal.history_evidence_ids) or "none"))
-    st.caption(feedback.uncertainty_note)
+    st.write(feedback["longitudinal"]["comment"])
+    st.caption("History evidence IDs: " + (", ".join(feedback["longitudinal"]["history_evidence_ids"]) or "none"))
+    st.caption(feedback["uncertainty_note"])
 
     with st.expander("Prototype language metrics"):
-        st.json(result.analysis.model_dump(mode="json"))
+        st.json(result["analysis"])
     with st.expander("Structured diagnosis signals"):
-        st.json(result.diagnosis.model_dump(mode="json"))
+        st.json(result["diagnosis"])

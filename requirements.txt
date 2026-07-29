@@ -1,5 +1,8 @@
-# v0.1.1 runtime and test dependencies (Python 3.11)
+# v0.2 runtime and test dependencies (Python 3.11)
 streamlit==1.60.0
+fastapi==0.135.2
+uvicorn==0.41.0
+httpx==0.28.1
 pydantic==2.13.4
 python-dotenv==1.2.2
 pytest==9.1.1

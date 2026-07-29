@@ -20,3 +20,12 @@
 - 增加 DeepSeek 一次纠错重试、LocalDemo 自动回退和逐次调用审计；无效主模型输出不会保存为正式反馈。
 - 完成同一虚拟学生两次真实 DeepSeek 提交：第二次请求包含 2 条历史证据并返回有效 `H001`、`H002`，无重试、无回退。
 - 普通测试最终结果为 42 passed、1 个默认跳过的可选 live test；`run.bat --verify` 返回 Streamlit HTTP 200。
+
+## 0.2.0 — 2026-07-29
+
+- 增加 FastAPI v1 统一后端，提供健康、版本、提交、学生、历史、profile 和 progress 接口。
+- 将 Streamlit 改为纯 HTTP API 客户端，不再构造业务服务或访问 SQLite、Analyzer、Diagnoser、Prompt、Provider。
+- 增加框架无关的 `SubmissionService`、命名 Repository 协议和 SQLite 实现扩展点。
+- 引入 `PRAGMA user_version` + `schema_migrations` 的可重复非破坏迁移；支持空库、v0.1.1 旧库和重复升级。
+- `run.bat` 现会迁移数据库、启动 FastAPI、轮询 health，再启动 Streamlit；`--verify` 同时探测 health、`/docs` 与 Streamlit。
+- 保留 v0.1.1 Prompt、证据 ID、引文校验、Pydantic、重试和回退链路。

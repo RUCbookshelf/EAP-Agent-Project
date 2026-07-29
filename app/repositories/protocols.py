@@ -1,0 +1,58 @@
+from __future__ import annotations
+
+from typing import Any, Protocol
+
+from app.models import AnalysisResult, DiagnosisResult, EssaySubmission, HistoryResult, ProviderResult
+
+
+class StudentRepository(Protocol):
+    def get_student(self, student_id: str) -> dict[str, Any] | None: ...
+
+
+class EssayRepository(Protocol):
+    def save_essay(self, submission: EssaySubmission, *, synthetic: bool = False) -> int: ...
+    def get_submission_bundle(self, essay_id: int) -> dict[str, Any] | None: ...
+    def list_student_submissions(self, student_id: str) -> list[dict[str, Any]]: ...
+
+
+class MetricRepository(Protocol):
+    def save_analysis(self, essay_id: int, analysis: AnalysisResult) -> None: ...
+
+
+class DiagnosisRepository(Protocol):
+    def save_diagnosis(self, essay_id: int, diagnosis: DiagnosisResult) -> None: ...
+
+
+class FeedbackRepository(Protocol):
+    def save_feedback(self, essay_id: int, result: ProviderResult, analysis_version: str) -> None: ...
+
+
+class ExerciseRepository(Protocol):
+    def get_exercises(self, essay_id: int) -> list[dict[str, Any]]: ...
+
+
+class LearnerHistoryRepository(Protocol):
+    def prior_records(self, submission: EssaySubmission) -> list[dict[str, Any]]: ...
+    def save_history(self, student_id: str, essay_id: int, history: HistoryResult) -> None: ...
+    def list_student_history(self, student_id: str) -> list[dict[str, Any]]: ...
+
+
+class LearnerProfileRepository(Protocol):
+    def get_latest_learner_profile(self, student_id: str) -> dict[str, Any] | None: ...
+
+
+class ConfigurationRepository(Protocol):
+    def ping(self) -> bool: ...
+    def migration_version(self) -> int: ...
+
+
+class SystemVersionRepository(Protocol):
+    def record_versions(self, versions: dict[str, str]) -> None: ...
+    def get_system_versions(self) -> dict[str, str]: ...
+
+
+SubmissionRepositories = (
+    StudentRepository | EssayRepository | MetricRepository | DiagnosisRepository
+    | FeedbackRepository | ExerciseRepository | LearnerHistoryRepository
+    | LearnerProfileRepository | ConfigurationRepository | SystemVersionRepository
+)

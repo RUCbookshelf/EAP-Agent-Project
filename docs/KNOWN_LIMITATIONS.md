@@ -1,4 +1,4 @@
-# v0.1 已知限制
+# v0.2 已知限制
 
 ## 分析
 
@@ -28,3 +28,6 @@
 - 尚无认证、授权、加密、备份、数据保留/删除、审计面板或数据库迁移框架。
 - 外部 Provider 会接收作文文本、指标、诊断和历史摘要。真实部署必须完成知情同意、脱敏、服务条款和跨境数据合规评估。
 - Streamlit 是原型界面，不是商业级微信小程序。
+- FastAPI、Streamlit 和 SQLite 目前都运行在同一台本地电脑；“云就绪”不等于已经部署云端。
+- PostgreSQL Repository、认证授权、TLS、速率限制、任务队列、微信小程序和云运维均未实现。
+- v0.2 的 profile/progress 只返回 `insufficient_history` 或 `planned_for_v0.3`，不提供伪造的趋势数据。

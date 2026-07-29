@@ -38,9 +38,11 @@
 3. 在项目内创建 `.venv`；
 4. 使用 `.venv\Scripts\python.exe` 安装或核对 `requirements.txt`；
 5. 检查环境确实是 Python 3.11；
-6. 启动 Streamlit。
+6. 执行版本化数据库迁移；
+7. 启动 FastAPI，等待 health endpoint 正常；
+8. 启动 Streamlit API 客户端。
 
-浏览器通常会自动打开。如果没有，请复制窗口中显示的 `Local URL`（一般是 `http://localhost:8501`）到浏览器。使用期间不要关闭启动窗口；按 `Ctrl+C` 可停止服务。
+默认 FastAPI 为 `http://127.0.0.1:8000`，API 文档为 `http://127.0.0.1:8000/docs`，Streamlit 为 `http://127.0.0.1:8501`。使用期间不要关闭启动窗口；按 `Ctrl+C` 可停止两项服务。
 
 后续再次双击时会复用 `.venv`，并再次核对依赖，不会向系统 Python 安装项目包。
 
@@ -64,7 +66,8 @@
 ```powershell
 py -V:Astral/CPython3.11.15 -m venv .venv
 & ".\.venv\Scripts\python.exe" -m pip install -r requirements.txt
-& ".\.venv\Scripts\python.exe" -m streamlit run streamlit_app.py --server.headless true
+& ".\.venv\Scripts\python.exe" -m scripts.migrate_database
+& ".\.venv\Scripts\python.exe" -m scripts.run_local
 ```
 
 标准 Python 3.11 安装没有 Astral 标识时，将第一行替换为：
@@ -87,6 +90,6 @@ py -3.11 -m venv .venv
 
 - 提示找不到 Python：重新安装 Python 3.11 并勾选/安装 `py launcher`，然后确认 `py -3.11 --version` 可用。
 - 依赖下载失败：检查网络、代理和防火墙后再次运行 `run.bat`。已成功安装的包会被复用。
-- 端口 8501 被占用：在命令行用其他端口启动，例如追加 `--server.port 8502`。
+- 端口 8000 或 8501 被占用：先关闭占用程序，或在 `.env` 中一致设置 `API_PORT`、`STREAMLIT_PORT` 和 `API_BASE_URL`；系统不会静默改用其他端口。
 - DeepSeek 不可用：系统应自动回退到 LocalDemo，并显示 `fallback_success`；不要把 API Key 发给维护人员排查。
 - 数据库需要重新开始：先自行备份 `data` 中需要保留的数据库，再由项目负责人决定数据清理方式。

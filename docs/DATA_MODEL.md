@@ -1,6 +1,6 @@
 # 数据模型
 
-SQLite 默认文件为 `data/writing_feedback.db`，外键约束在每个连接上启用。结构化对象按 Pydantic 验证后以 JSON 保存，便于 v0.1 快速迭代；版本字段用于解释历史记录。
+SQLite 默认文件为 `data/writing_feedback.db`，外键约束在每个连接上启用。v0.2 通过 Repository 协议访问数据；API 不返回原始 SQL 行或连接对象。
 
 ## 表
 
@@ -14,6 +14,7 @@ SQLite 默认文件为 `data/writing_feedback.db`，外键约束在每个连接�
 | `exercises` | `essay_id`, diagnosis_category, exercise_type, exercise_json | 与诊断类别关联的练习 |
 | `learner_history` | `student_id`, `essay_id`, history_summary, comparable_count | 每次提交所用的纵向摘要 |
 | `system_versions` | `component`, `version`, `recorded_at` | 当前应用、分析、诊断和 prompt 版本 |
+| `schema_migrations` | `version`, `name`, `applied_at` | 已应用的版本化数据库迁移 |
 
 ## 关系
 
@@ -34,3 +35,6 @@ SQLite 默认文件为 `data/writing_feedback.db`，外键约束在每个连接�
 
 数据库没有 API Key 字段。`student_id` 应使用假名标识。当前原型未提供加密、权限分级、删除/导出工作流或保留期限策略，因此不能直接用于真实学生部署。
 
+## Repository boundary
+
+协议分别覆盖 Student、Essay/Submission、Metric、Diagnosis、Feedback、Exercise、LearnerHistory、LearnerProfile、Configuration 和 SystemVersion。当前 SQLite 类实现这些结构契约。PostgreSQL 只是未来扩展点，尚无可用实现。

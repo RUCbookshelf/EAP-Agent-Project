@@ -3,7 +3,7 @@ from __future__ import annotations
 from collections import Counter
 from typing import Any
 
-from app.database import Database
+from app.repositories import LearnerHistoryRepository
 from app.models import (
     AnalysisResult,
     DiagnosisResult,
@@ -22,7 +22,7 @@ HISTORY_LIMITATION = (
 class LearnerHistoryService:
     """Build human-readable and ID-addressable longitudinal evidence."""
 
-    def __init__(self, database: Database):
+    def __init__(self, database: LearnerHistoryRepository):
         self.database = database
 
     def summarize(self, essay_id: int, submission: EssaySubmission, current_analysis: AnalysisResult,
@@ -187,4 +187,3 @@ class LearnerHistoryService:
     @staticmethod
     def _normalize(value: str) -> str:
         return " ".join(value.casefold().split())
-
