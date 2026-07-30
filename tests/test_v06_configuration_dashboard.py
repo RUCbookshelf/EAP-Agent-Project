@@ -69,9 +69,9 @@ def _configuration_service(repository):
 
 def test_migration_6_creates_active_configuration_and_audit(tmp_path):
     repository = Database(tmp_path / "migration.db"); repository.initialize()
-    assert repository.migration_version() == 10
+    assert repository.migration_version() == 11
     active = repository.get_active_configuration()
-    assert active.version == "config-v0.8.0" and active.status == "active"
+    assert active.version == "config-v0.8.2" and active.status == "active"
     assert len(repository.list_configuration_audit()) == 5
 
 
@@ -99,7 +99,7 @@ def test_configuration_validation_activation_single_active_and_rollback(tmp_path
     assert active.status == "active"
     assert sum(item.status == "active" for item in service.list()) == 1
     rolled = service.rollback(active.configuration_id, reason="Restore reviewed baseline.")
-    assert rolled.version == "config-v0.8.0"
+    assert rolled.version == "config-v0.8.2"
     preserved = service.repository.get_configuration(created.configuration_id)
     assert preserved.status == "inactive"
     actions = [item["action"] for item in service.audit()]
@@ -272,12 +272,12 @@ def test_admin_api_configuration_dashboard_registries_and_reanalysis(tmp_path):
             f"/api/v1/admin/configurations/{config_id}/rollback",
             json={"reason": "Return to the prior reviewed configuration."},
         )
-        assert rolled.status_code == 200 and rolled.json()["version"] == "config-v0.8.0"
+        assert rolled.status_code == 200 and rolled.json()["version"] == "config-v0.8.2"
         rollback_submission = client.post("/api/v1/submissions", json=_essay(
             "API-V06-ROLLBACK", "A later submission should record the restored configuration version.",
             now + timedelta(days=2),
         ).model_dump(mode="json"))
-        assert rollback_submission.json()["analysis"]["configuration_version"] == "config-v0.8.0"
+        assert rollback_submission.json()["analysis"]["configuration_version"] == "config-v0.8.2"
         assert client.get("/api/v1/admin/algorithms").status_code == 200
         assert client.get("/api/v1/admin/metrics").status_code == 200
         preview = client.post("/api/v1/admin/reanalysis/preview", json={

@@ -296,7 +296,7 @@ def test_feedback_validator_cannot_restore_monitored_diagnosis(tmp_path):
 def test_migration_7_and_append_only_calibration_repository(tmp_path):
     repository, service = local_stack(tmp_path)
     result = service.submit(EssaySubmission.model_validate(payload()))
-    assert repository.migration_version() == 10
+    assert repository.migration_version() == 11
     with repository.connect() as connection:
         columns = {row[1] for row in connection.execute("PRAGMA table_info(metric_results)")}
         count = connection.execute("SELECT COUNT(*) FROM diagnostic_calibrations WHERE essay_id=?", (result.essay_id,)).fetchone()[0]

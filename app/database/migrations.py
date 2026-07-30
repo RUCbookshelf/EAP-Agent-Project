@@ -6,7 +6,7 @@ import json
 from collections.abc import Callable
 
 
-LATEST_MIGRATION_VERSION = 10
+LATEST_MIGRATION_VERSION = 11
 
 
 def _add_column_if_missing(
@@ -624,6 +624,54 @@ def _migration_10(connection: sqlite3.Connection) -> None:
     )
 
 
+def _migration_11(connection: sqlite3.Connection) -> None:
+    connection.execute("CREATE TABLE IF NOT EXISTS human_reviews (review_id TEXT PRIMARY KEY, target_type TEXT NOT NULL, target_id TEXT NOT NULL, reviewer_id TEXT NOT NULL, decision TEXT NOT NULL, confidence TEXT NOT NULL DEFAULT 'medium', reason_code TEXT, comment TEXT NOT NULL DEFAULT '', guideline_version TEXT NOT NULL DEFAULT 'human-review-v0.1', review_status TEXT NOT NULL DEFAULT 'completed', created_at TEXT NOT NULL, updated_at TEXT, superseded_by TEXT, source_system_result_snapshot TEXT)")
+    connection.execute("CREATE INDEX IF NOT EXISTS idx_hr_target ON human_reviews(target_type, target_id)")
+    connection.execute("CREATE TABLE IF NOT EXISTS pii_candidates (pii_candidate_id TEXT PRIMARY KEY, submission_id INTEGER NOT NULL, category TEXT NOT NULL, start_offset INTEGER NOT NULL, end_offset INTEGER NOT NULL, matched_text TEXT NOT NULL, confidence TEXT NOT NULL DEFAULT 'medium', rule_id TEXT NOT NULL, review_status TEXT NOT NULL DEFAULT 'candidate', action TEXT, reviewer_id TEXT, reviewed_at TEXT, replacement_marker TEXT)")
+    connection.execute("CREATE INDEX IF NOT EXISTS idx_pii_sub ON pii_candidates(submission_id)")
+    connection.execute("CREATE TABLE IF NOT EXISTS export_jobs (export_id TEXT PRIMARY KEY, filter_json TEXT NOT NULL, privacy_mode TEXT NOT NULL, formats_json TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'preview', created_at TEXT NOT NULL, completed_at TEXT, export_directory TEXT, file_count INTEGER NOT NULL DEFAULT 0, record_counts_json TEXT, excluded_counts_json TEXT, manifest_path TEXT)")
+    active = connection.execute(
+        "SELECT * FROM configuration_versions WHERE status='active' ORDER BY configuration_row_id DESC LIMIT 1"
+    ).fetchone()
+    if active is not None:
+        existing = connection.execute(
+            "SELECT * FROM configuration_versions WHERE version='config-v0.8.2' LIMIT 1"
+        ).fetchone()
+        from app.configuration import ConfigurationPayload
+        now = "2026-07-30T20:00:00+00:00"
+        if existing is None:
+            parent = dict(active)
+            payload = ConfigurationPayload.model_validate(json.loads(parent["payload_json"])).model_dump(mode="json")
+            canonical = json.dumps(payload, sort_keys=True, separators=(",", ":"))
+            content_hash = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+            connection.execute(
+                "UPDATE configuration_versions SET status='inactive', deactivated_at=? WHERE configuration_id=?",
+                (now, parent["configuration_id"]),
+            )
+            cursor = connection.execute(
+                """INSERT INTO configuration_versions(
+                    version,status,created_at,created_by,parent_version,payload_json,schema_version,
+                    change_note,validation_status,validation_errors_json,activated_at,content_hash
+                ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)""",
+                ("config-v0.8.2", "active", now, "system", parent["version"], canonical,
+                 "configuration-schema-v0.8.2", "Activate research data export, PII, and human review infrastructure.",
+                 "passed", "[]", now, content_hash),
+            )
+            cfg_id = f"CFG{int(cursor.lastrowid):06d}"
+            connection.execute("UPDATE configuration_versions SET configuration_id=? WHERE configuration_row_id=?", (cfg_id, int(cursor.lastrowid)))
+        else:
+            cfg_id = dict(existing)["configuration_id"]
+            connection.execute("UPDATE configuration_versions SET status='inactive', deactivated_at=? WHERE status='active'", (now,))
+            connection.execute("UPDATE configuration_versions SET status='active', activated_at=?, deactivated_at=NULL WHERE configuration_id=?", (now, cfg_id))
+        cursor = connection.execute(
+            """INSERT INTO configuration_audit(configuration_id,action,actor,reason,details_json,created_at) VALUES (?,?,?,?,?,?)""",
+            (cfg_id, "activate", "system", "v0.8.2 research data infrastructure migration activation.",
+             json.dumps({"parent_version": "config-v0.8.0", "prototype_defaults_unvalidated": True}), now),
+        )
+        connection.execute("UPDATE configuration_audit SET audit_id=? WHERE audit_row_id=?", (f"CA{int(cursor.lastrowid):06d}", int(cursor.lastrowid)))
+    connection.execute("PRAGMA user_version = 11")
+
+
 MIGRATIONS: dict[int, tuple[str, Callable[[sqlite3.Connection], None]]] = {
     1: ("preserve_v0_1_1_schema", _migration_1),
     2: ("cloud_ready_repository_indexes", _migration_2),
@@ -635,6 +683,7 @@ MIGRATIONS: dict[int, tuple[str, Callable[[sqlite3.Connection], None]]] = {
     8: ("learner_model_v2_and_history_evidence", _migration_8),
     9: ("longitudinal_reliability_and_provider_status", _migration_9),
     10: ("calf_measurement_foundation", _migration_10),
+    11: ("research_data_infrastructure", _migration_11),
 }
 
 
@@ -663,10 +712,10 @@ def rollback(connection: sqlite3.Connection, target_version: int) -> int:
     current = int(connection.execute("PRAGMA user_version").fetchone()[0])
     if current == target_version:
         return current
-    if (current, target_version) not in {(10, 9), (9, 8)}:
-        raise ValueError("Only non-destructive one-step migration 10 -> 9 or 9 -> 8 rollback is supported.")
+    if (current, target_version) not in {(11, 10), (10, 9), (9, 8)}:
+        raise ValueError("Only non-destructive one-step rollback is supported.")
     with connection:
-        expected = "config-v0.8.0" if current == 10 else "config-v0.7.1"
+        expected = "config-v0.8.2" if current == 11 else ("config-v0.8.0" if current == 10 else "config-v0.7.1")
         active = connection.execute(
             "SELECT * FROM configuration_versions WHERE status='active' AND version=?", (expected,)
         ).fetchone()

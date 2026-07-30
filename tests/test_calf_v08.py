@@ -174,7 +174,7 @@ def test_configuration_enforces_v08_isolation_and_parameter_validation():
 def test_migration_10_is_additive_and_logical_rollback_preserves_rows(tmp_path):
     path = tmp_path / "migration.db"
     db = Database(path); db.initialize()
-    assert db.migration_version() == 10 and db.get_active_configuration().version == "config-v0.8.0"
+    assert db.migration_version() == 11 and db.get_active_configuration().version == "config-v0.8.0"
     with db.connect() as connection:
         assert {"analysis_units", "error_annotations"} <= {
             row[0] for row in connection.execute("SELECT name FROM sqlite_master WHERE type='table'")

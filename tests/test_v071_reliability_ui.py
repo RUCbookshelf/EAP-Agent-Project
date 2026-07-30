@@ -259,7 +259,7 @@ def test_migration_9_is_additive_persists_provider_status_and_rolls_back_logical
         "V071-MIG", "Parks support public health and community activities."
     ), synthetic=True)
     with repository.connect() as connection:
-        assert connection.execute("PRAGMA user_version").fetchone()[0] == 10
+        assert connection.execute("PRAGMA user_version").fetchone()[0] == 11
         columns = {row[1] for row in connection.execute("PRAGMA table_info(feedback_records)")}
         stored = connection.execute(
             "SELECT provider_status_json FROM feedback_records WHERE essay_id=?", (result.essay_id,)
@@ -270,8 +270,8 @@ def test_migration_9_is_additive_persists_provider_status_and_rolls_back_logical
         assert connection.execute(
             "SELECT version FROM configuration_versions WHERE status='active'"
         ).fetchone()[0] == "config-v0.7.1"
-        assert upgrade(connection) == 10
-    assert repository.get_active_configuration().version == "config-v0.8.0"
+        assert upgrade(connection) == 11
+        assert repository.get_active_configuration().version == "config-v0.8.2"
     assert settings.application_version == "0.8.0"
 
 
