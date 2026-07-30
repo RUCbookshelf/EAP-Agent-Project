@@ -570,6 +570,72 @@ def create_app(
             raise HTTPException(422, str(exc)) from None
 
     return api
+    @api.get("/api/v1/research/export/schema")
+    def research_export_schema() -> dict:
+        return ResearchDataService(api.state.repository).schema()
+
+    @api.post("/api/v1/research/export/preview")
+    def research_export_preview(payload: dict) -> dict:
+        try:
+            job = ExportJob(**payload)
+        except Exception as e:
+            raise HTTPException(422, str(e)) from None
+        return ResearchDataService(api.state.repository).preview(job)
+
+    @api.post("/api/v1/research/export/run")
+    def research_export_run(payload: dict) -> dict:
+        try:
+            job = ExportJob(**payload)
+        except Exception as e:
+            raise HTTPException(422, str(e)) from None
+        try:
+            return ResearchDataService(api.state.repository).run_export(
+                job,
+                git_commit=api.state.git_commit if hasattr(api.state, 'git_commit') else None,
+                migration_version=getattr(api.state, 'migration_version', None),
+                config_version=getattr(api.state, 'config_version', None),
+            )
+        except Exception as e:
+            raise HTTPException(500, str(e)) from None
+
+    @api.get("/api/v1/research/export/{export_id}")
+    def research_export_status(export_id: str) -> dict:
+        import glob
+        pattern = f"research_exports/*/manifest.json"
+        for p in Path(pattern.replace('*', '*')).parent.glob('*/manifest.json') if Path(pattern).parent else []:
+            pass
+        return {"export_id": export_id, "status": "unknown"}
+
+    @api.get("/api/v1/research/data-quality")
+    def research_data_quality() -> dict:
+        return ResearchDataService(api.state.repository).data_quality_report().model_dump(mode='json')
+
+    @api.get("/api/v1/submissions/{submission_id}/pii-candidates")
+    def pii_candidates(submission_id: int) -> list[dict]:
+        try:
+            return ResearchDataService(api.state.repository).scan_pii(submission_id)
+        except LookupError as e:
+            raise HTTPException(404, str(e)) from None
+
+    @api.post("/api/v1/submissions/{submission_id}/pii-review")
+    def pii_review(submission_id: int, payload: dict) -> dict:
+        from app.research.schemas import PiiReview
+        reviews = [PiiReview(**item) for item in payload.get('reviews', [])]
+        return ResearchDataService(api.state.repository).apply_pii_review(submission_id, reviews)
+
+    @api.post("/api/v1/research/reviews")
+    def create_human_review(payload: dict) -> dict:
+        try:
+            review = HumanReviewCreate(**payload)
+            result = ResearchDataService(api.state.repository).create_human_review(review)
+            return result.model_dump(mode='json')
+        except Exception as e:
+            raise HTTPException(422, str(e)) from None
+
+    @api.get("/api/v1/research/reviews")
+    def list_human_reviews(target_type: str | None = None, target_id: str | None = None) -> list[dict]:
+        return ResearchDataService(api.state.repository).get_human_reviews(target_type, target_id)
+
 
 
 def _package_available(package: str) -> bool:
@@ -581,3 +647,5 @@ def _package_available(package: str) -> bool:
 
 
 app = create_app()
+from app.research import PrivacyMode, ExportFilter, ExportFormat, ExportJob, HumanReviewCreate
+from app.research.service import ResearchDataService

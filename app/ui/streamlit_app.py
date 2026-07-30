@@ -538,7 +538,7 @@ def run() -> None:
 
     page = st.sidebar.radio(
         "Research prototype page",
-        ["Essay submission", "Student progress", "Learner Model audit", "Revision comparison", "Diagnostic audit", "Local administration"],
+        ["Essay submission", "Student progress", "Learner Model audit", "Revision comparison", "Diagnostic audit", "Research Data", "Local administration"],
     )
     if page == "Student progress":
         render_progress(api_client); return
@@ -548,6 +548,8 @@ def run() -> None:
         render_learner_model_audit(api_client); return
     if page == "Diagnostic audit":
         render_diagnostic_audit(api_client); return
+    if page == "Research Data":
+        render_research_data(api_client, lang); return
     if page == "Local administration":
         render_admin(api_client); return
 
@@ -657,3 +659,49 @@ def run() -> None:
     st.session_state["submission_result"] = result
     st.success(f"Submission saved as essay #{result['submission_id']}.")
     render_submission_result(result, research_view=research_view, lang=lang)
+
+
+def render_research_data(api_client: WritingFeedbackApiClient, lang: str) -> None:
+    st.header(t("nav_research_data", lang))
+    tab1, tab2, tab3 = st.tabs([t("export_preview", lang), t("human_review", lang), t("data_quality", lang)])
+    with tab1:
+        st.subheader(t("export_preview", lang))
+        privacy = st.selectbox(t("export_privacy_mode", lang), ["pseudonymized", "internal_research", "minimal_anonymous"])
+        fmt = st.multiselect(t("export_formats", lang), ["jsonl", "csv"], default=["jsonl"])
+        if st.button(t("export_preview", lang)):
+            try:
+                from app.research.schemas import ExportJob, ExportFilter, PrivacyMode, ExportFormat
+                job = ExportJob(filter_spec=ExportFilter(), privacy_mode=PrivacyMode(privacy), formats=[ExportFormat(f) for f in fmt])
+                result = api_client.research_export_preview(job.model_dump(mode='json'))
+                st.json(result)
+            except Exception as exc:
+                st.error(str(exc))
+        if st.button(t("export_run", lang), type="primary"):
+            try:
+                from app.research.schemas import ExportJob, ExportFilter, PrivacyMode, ExportFormat
+                job = ExportJob(filter_spec=ExportFilter(), privacy_mode=PrivacyMode(privacy), formats=[ExportFormat(f) for f in fmt])
+                result = api_client.research_export_run(job.model_dump(mode='json'))
+                st.success(f"Export: {result.get('export_id', 'unknown')}")
+                st.json(result.get('manifest', {}))
+            except Exception as exc:
+                st.error(str(exc))
+    with tab2:
+        st.subheader(t("human_review", lang))
+        target_type = st.selectbox(t("human_review_target", lang), ["diagnosis", "evidence", "feedback", "revision"])
+        target_id = st.text_input("Target ID")
+        decision = st.selectbox(t("human_review_decision", lang), ["correct", "partially_correct", "incorrect", "uncertain"])
+        comment = st.text_area(t("human_review_comment", lang))
+        if st.button(t("human_review_create", lang)):
+            try:
+                result = api_client.create_human_review({"target_type": target_type, "target_id": target_id, "reviewer_id": "R001", "decision": decision, "confidence": "medium", "comment": comment, "guideline_version": "human-review-v0.1"})
+                st.json(result)
+            except Exception as exc:
+                st.error(str(exc))
+    with tab3:
+        st.subheader(t("data_quality_report", lang))
+        if st.button(t("data_quality_report", lang)):
+            try:
+                result = api_client.research_data_quality()
+                st.json(result)
+            except Exception as exc:
+                st.error(str(exc))

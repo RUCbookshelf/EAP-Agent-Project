@@ -129,3 +129,25 @@ class WritingFeedbackApiClient:
 
     def run_reanalysis(self, payload: dict[str, Any]) -> dict[str, Any]:
         return self._request("POST", "/api/v1/admin/reanalysis/run", json=payload)
+
+    def research_export_preview(self, payload: dict[str, Any]) -> dict[str, Any]:
+        return self._request("POST", "/api/v1/research/export/preview", json=payload)
+
+    def research_export_run(self, payload: dict[str, Any]) -> dict[str, Any]:
+        return self._request("POST", "/api/v1/research/export/run", json=payload)
+
+    def research_export_schema(self) -> dict[str, Any]:
+        return self._request("GET", "/api/v1/research/export/schema")
+
+    def research_data_quality(self) -> dict[str, Any]:
+        return self._request("GET", "/api/v1/research/data-quality")
+
+    def get_pii_candidates(self, submission_id: int) -> list[dict[str, Any]]:
+        return self._request("GET", f"/api/v1/submissions/{submission_id}/pii-candidates")
+
+    def create_human_review(self, payload: dict[str, Any]) -> dict[str, Any]:
+        return self._request("POST", "/api/v1/research/reviews", json=payload)
+
+    def list_human_reviews(self, target_type: str | None = None, target_id: str | None = None) -> list[dict[str, Any]]:
+        params = "?" + "&".join(f"{k}={v}" for k, v in [("target_type", target_type), ("target_id", target_id)] if v)
+        return self._request("GET", f"/api/v1/research/reviews{params}" if params else "/api/v1/research/reviews")
