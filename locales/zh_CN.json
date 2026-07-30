@@ -194,5 +194,19 @@
   "candidate_not_detected": "未检测到目标动作",
   "tab_practice": "练习",
   "tab_learning_journey": "学习旅程",
-  "tab_practice_audit": "练习审计"
+  "tab_practice_audit": "练习审计",
+  "exercise_constraints": "练习约束",
+  "load_records": "加载",
+  "load_journey": "加载学习旅程",
+  "empty_events": "暂无观察事件记录。请先提交作文并获取反馈。",
+  "empty_audit": "暂无练习目标。",
+  "empty_audit_traces": "暂无参与轨迹。",
+  "enter_student_id": "输入学生 ID 以查看观察事件。",
+  "journey_caption": "观察事件时间线。一次尝试不代表学习。一次回应候选不代表掌握。",
+  "audit_caption": "研究视图：完整练习审计追迹。",
+  "all_descriptive": "所有观察均为描述性候选。不构成学习、掌握或稳定迁移的证据。",
+  "empty_practice": "暂无活跃练习目标。请先提交作文以获取反馈。",
+  "generate_exercise": "生成练习",
+  "load_practice": "加载练习目标",
+  "load_audit": "加载审计记录"
 }

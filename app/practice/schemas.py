@@ -73,7 +73,7 @@ class TransferObservedStatus(StrEnum):
 
 class PracticeTarget(BaseModel):
     model_config = ConfigDict(extra="forbid")
-    practice_target_id: str | None = Field(default=None, pattern=r"^PT\d{6}$")
+    practice_target_id: str = Field(default="")
     student_id: str
     source_submission_id: int
     source_analysis_run_id: str | None = None

@@ -492,6 +492,179 @@ def render_admin(api_client: WritingFeedbackApiClient) -> None:
         st.error(str(exc))
 
 
+def render_practice_page(api_client: WritingFeedbackApiClient, lang: str) -> None:
+    st.header(t("practice", lang))
+    st.caption(t("practice_boundary", lang))
+    student_id = st.text_input(t("student_id", lang), key="practice_student", placeholder=t("student_id_placeholder", lang))
+    if not student_id.strip():
+        st.info(t("no_active_target", lang))
+        return
+
+    if st.button(t("practice_target", lang) + " - Load"):
+        try:
+            targets = api_client.get_practice_targets(student_id.strip())
+        except ApiClientError as exc:
+            st.error(str(exc)); return
+        st.session_state["practice_targets"] = targets
+
+    targets = st.session_state.get("practice_targets", [])
+    if not targets:
+        st.info(t("no_active_target", lang))
+        return
+
+    active_targets = [t for t in targets if t.get("status") == "active"]
+    if not active_targets:
+        st.info(t("practice_not_available", lang))
+        return
+
+    selected = active_targets[0]
+    st.subheader(t("practice_target", lang))
+    st.write(f"**{t('exercise_instructions', lang)}**: {selected.get('target_label', '')}")
+    st.caption(f"Source: {selected.get('target_code', '')} / {selected.get('source_diagnosis_id', '')}")
+
+    source_text = st.text_area(t("exercise_instructions", lang), key="practice_source", height=100,
+                               placeholder="Paste the source sentence or text from the essay.")
+    if st.button(t("exercise_instructions", lang) + " - Generate"):
+        payload = {"practice_target": selected, "source_text": source_text}
+        try:
+            exercise = api_client.create_exercise(selected.get("practice_target_id", ""), payload)
+            st.session_state["current_exercise"] = exercise
+            st.session_state["exercise_attempts"] = []
+        except ApiClientError as exc:
+            st.error(str(exc)); return
+
+    exercise = st.session_state.get("current_exercise")
+    if exercise and exercise.get("status") != "practice_not_available":
+        with st.container(border=True):
+            st.markdown(f"**{exercise.get('exercise_type', '')}**")
+            st.write(exercise.get("instructions", ""))
+            st.caption("Constraints: " + ", ".join(exercise.get("constraints", [])))
+            response_text = st.text_area(t("response_field", lang), key="practice_response", height=100)
+            if st.button(t("submit_attempt", lang)):
+                aid = exercise.get("exercise_id", "")
+                payload = {"student_id": student_id, "response_text": response_text, "attempt_number": len(st.session_state.get("exercise_attempts", [])) + 1}
+                try:
+                    attempt = api_client.submit_exercise_attempt(aid, payload)
+                    attempts = st.session_state.get("exercise_attempts", [])
+                    attempts.append(attempt)
+                    st.session_state["exercise_attempts"] = attempts
+                except ApiClientError as exc:
+                    st.error(str(exc))
+
+    attempts = st.session_state.get("exercise_attempts", [])
+    if attempts:
+        st.subheader(t("attempt_history", lang))
+        for a in reversed(attempts):
+            st.write(f"Attempt #{a.get('attempt_number', '?')}: {a.get('response_text', '')[:100]}")
+            st.caption(f"Status: {a.get('status', 'unknown')}")
+
+    st.caption(t("practice_boundary", lang))
+
+
+def render_learning_journey_page(api_client: WritingFeedbackApiClient, lang: str) -> None:
+    st.header(t("learning_journey", lang))
+    st.caption("Observable events timeline. An attempt is not learning. A response candidate is not mastery.")
+    student_id = st.text_input(t("student_id", lang), key="journey_student", placeholder=t("student_id_placeholder", lang))
+    if not student_id.strip():
+        st.info("Enter a student ID to view observable events.")
+        return
+
+    if not st.button("Load learning journey"):
+        return
+
+    try:
+        traces = api_client.get_engagement_traces(student_id.strip())
+        transfer = api_client.get_transfer_evidence(student_id.strip())
+    except ApiClientError as exc:
+        st.error(str(exc)); return
+
+    events = []
+
+    for t in traces:
+        ts = t.get("status", "")
+        label_map = {
+            "target_identified": "Feedback target identified",
+            "practice_available": "Practice available",
+            "practice_attempted": "Practice attempted",
+            "practice_response_candidate": "Practice response candidate observed",
+            "within_task_response_candidate": "Within-task response candidate",
+            "later_task_recurrence": "Later task recurrence signal",
+            "later_task_nonrecurrence": "Later task nonrecurrence signal",
+            "later_task_mixed_evidence": "Later task mixed evidence",
+            "insufficient_evidence": "Insufficient evidence",
+        }
+        events.append({
+            "event": label_map.get(ts, ts),
+            "time": t.get("created_at", ""),
+            "target": t.get("target_code", ""),
+            "detail": "",
+            "boundary": "",
+        })
+
+    for te in transfer:
+        events.append({
+            "event": t("transfer_evidence", lang),
+            "time": te.get("created_at", ""),
+            "target": te.get("target_code", ""),
+            "detail": te.get("observed_status", ""),
+            "boundary": t("transfer_boundary", lang),
+        })
+
+    events.sort(key=lambda e: e.get("time", ""))
+
+    if not events:
+        st.info("No observable events recorded yet. Submit an essay with feedback first.")
+        return
+
+    st.subheader("Observable event timeline")
+    for ev in events:
+        with st.container(border=True):
+            st.write(f"**{ev['event']}**")
+            st.caption(f"Target: {ev.get('target', '')} · {ev.get('time', '')}")
+            if ev.get("detail"):
+                st.caption(ev["detail"])
+            if ev.get("boundary"):
+                st.warning(ev["boundary"])
+
+    st.caption("All observations are descriptive candidates. None establishes learning, mastery, or stable transfer.")
+
+
+def render_practice_audit_page(api_client: WritingFeedbackApiClient, lang: str) -> None:
+    st.header(t("practice_audit", lang))
+    st.caption("Research view: complete practice audit trail.")
+    student_id = st.text_input(t("student_id", lang), key="audit_student", placeholder=t("student_id_placeholder", lang))
+    if not student_id.strip():
+        st.info("Enter a student ID or pseudonym to load audit records.")
+        return
+
+    if not st.button("Load audit records"):
+        return
+
+    try:
+        targets = api_client.get_practice_targets(student_id.strip())
+        traces = api_client.get_engagement_traces(student_id.strip())
+    except ApiClientError as exc:
+        st.error(str(exc)); return
+
+    st.subheader(t("practice_target", lang) + "s")
+    if targets:
+        for t in targets:
+            with st.expander(f"{t.get('practice_target_id', '')} - {t.get('target_code', '')}"):
+                st.json(t)
+    else:
+        st.info("No practice targets.")
+
+    st.subheader(t("feedback_engagement_trace", lang))
+    if traces:
+        for tr in traces:
+            with st.expander(f"{tr.get('trace_id', '')} - {tr.get('status', '')}"):
+                st.json(tr)
+    else:
+        st.info("No engagement traces.")
+
+    st.caption("All records are descriptive-only. No mastery, proficiency, or causal claims are stored.")
+
+
 def run() -> None:
     api_client = get_api_client(load_settings().api_base_url)
     lang = st.session_state.get("ui_language", "en")
@@ -538,8 +711,12 @@ def run() -> None:
 
     page = st.sidebar.radio(
         "Research prototype page",
-        ["Essay submission", "Student progress", "Learner Model audit", "Revision comparison", "Diagnostic audit", "Research Data", "Local administration"],
+        ["Essay submission", "Practice", "Learning Journey", "Student progress", "Learner Model audit", "Revision comparison", "Diagnostic audit", "Practice Audit", "Research Data", "Local administration"],
     )
+    if page == "Practice":
+        render_practice_page(api_client, lang); return
+    if page == "Learning Journey":
+        render_learning_journey_page(api_client, lang); return
     if page == "Student progress":
         render_progress(api_client); return
     if page == "Revision comparison":
@@ -548,6 +725,8 @@ def run() -> None:
         render_learner_model_audit(api_client); return
     if page == "Diagnostic audit":
         render_diagnostic_audit(api_client); return
+    if page == "Practice Audit":
+        render_practice_audit_page(api_client, lang); return
     if page == "Research Data":
         render_research_data(api_client, lang); return
     if page == "Local administration":

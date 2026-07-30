@@ -31,6 +31,7 @@ from app.services.configuration import settings_from_configuration
 from app.calibration import DiagnosticCalibrationService
 from app.feedback import FeedbackReliabilityService
 from app.calf import ErrorAnnotation
+from app.practice.service import PracticeService
 
 
 def _error(status: int, code: str, message: str, details=None) -> JSONResponse:
@@ -569,39 +570,54 @@ def create_app(
         except ValueError as exc:
             raise HTTPException(422, str(exc)) from None
 
-    return api
     @api.get("/api/v1/students/{student_id}/practice-targets")
     def get_practice_targets(student_id: str) -> list[dict]:
-        return []
+        require_student(student_id)
+        return api.state.repository.list_practice_targets(student_id)
     @api.post("/api/v1/practice-targets")
     def create_practice_target(payload: dict) -> dict:
-        from app.practice.service import PracticeService
         svc = PracticeService(api.state.repository)
-        return svc.create_practice_target(
+        target = svc.create_practice_target(
             student_id=payload.get("student_id", ""),
             source_submission_id=payload.get("source_submission_id", 0),
             source_diagnosis_id=payload.get("source_diagnosis_id", ""),
             target_code=payload.get("target_code", ""),
             target_label=payload.get("target_label", ""),
+            gate_status=payload.get("gate_status", "selected"),
         )
+        if target.get("status") != "practice_not_available":
+            target = api.state.repository.save_practice_target(target)
+        return target
     @api.post("/api/v1/practice-targets/{practice_target_id}/exercises")
     def create_exercise(practice_target_id: str, payload: dict) -> dict:
-        from app.practice.service import PracticeService
+        existing_target = api.state.repository.get_practice_target(practice_target_id)
+        if existing_target is None:
+            raise HTTPException(404, "Practice target not found.")
         svc = PracticeService(api.state.repository)
-        return svc.generate_exercise(payload.get("practice_target", {}), payload.get("source_text", ""))
+        exercise = svc.generate_exercise(existing_target, payload.get("source_text", ""))
+        if exercise.get("status") != "practice_not_available":
+            exercise = api.state.repository.save_exercise_instance(exercise)
+        return exercise
     @api.post("/api/v1/exercises/{exercise_id}/attempts")
     def submit_exercise_attempt(exercise_id: str, payload: dict) -> dict:
-        from app.practice.service import PracticeService
+        existing = api.state.repository.get_exercise_instance(exercise_id)
+        if existing is None:
+            raise HTTPException(404, "Exercise instance not found.")
+        attempts = api.state.repository.list_exercise_attempts(exercise_id)
+        next_num = len(attempts) + 1
         svc = PracticeService(api.state.repository)
-        return svc.submit_attempt(
-            exercise_id, payload.get("student_id", ""),
-            payload.get("response_text", ""), payload.get("attempt_number", 1))
+        attempt = svc.submit_attempt(exercise_id, payload.get("student_id", ""), payload.get("response_text", ""), next_num)
+        if attempt.get("status") != "invalid_input":
+            attempt = api.state.repository.save_exercise_attempt(attempt)
+        return attempt
     @api.get("/api/v1/students/{student_id}/engagement-traces")
     def get_engagement_traces(student_id: str) -> list[dict]:
-        return []
+        require_student(student_id)
+        return api.state.repository.list_feedback_engagement_traces(student_id)
     @api.get("/api/v1/students/{student_id}/transfer-evidence")
     def get_transfer_evidence(student_id: str) -> list[dict]:
-        return []
+        require_student(student_id)
+        return api.state.repository.list_transfer_evidence_candidates(student_id)
     @api.get("/api/v1/research/export/schema")
     def research_export_schema() -> dict:
         return ResearchDataService(api.state.repository).schema()
@@ -667,9 +683,7 @@ def create_app(
     @api.get("/api/v1/research/reviews")
     def list_human_reviews(target_type: str | None = None, target_id: str | None = None) -> list[dict]:
         return ResearchDataService(api.state.repository).get_human_reviews(target_type, target_id)
-
-
-
+    return api
 def _package_available(package: str) -> bool:
     try:
         import importlib.util
@@ -679,5 +693,3 @@ def _package_available(package: str) -> bool:
 
 
 app = create_app()
-from app.research import PrivacyMode, ExportFilter, ExportFormat, ExportJob, HumanReviewCreate
-from app.research.service import ResearchDataService

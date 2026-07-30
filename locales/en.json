@@ -194,5 +194,19 @@
   "candidate_not_detected": "Target action not detected",
   "tab_practice": "Practice",
   "tab_learning_journey": "Learning Journey",
-  "tab_practice_audit": "Practice Audit"
+  "tab_practice_audit": "Practice Audit",
+  "exercise_constraints": "Constraints",
+  "load_records": "Load",
+  "load_journey": "Load learning journey",
+  "empty_events": "No observable events recorded yet. Submit an essay with feedback first.",
+  "empty_audit": "No practice targets.",
+  "empty_audit_traces": "No engagement traces.",
+  "enter_student_id": "Enter a student ID to view observable events.",
+  "journey_caption": "Observable events timeline. An attempt is not learning. A response candidate is not mastery.",
+  "audit_caption": "Research view: complete practice audit trail.",
+  "all_descriptive": "All observations are descriptive candidates. None establishes learning, mastery, or stable transfer.",
+  "empty_practice": "No active practice target. Submit an essay to receive feedback first.",
+  "generate_exercise": "Generate exercise",
+  "load_practice": "Load practice targets",
+  "load_audit": "Load audit records"
 }

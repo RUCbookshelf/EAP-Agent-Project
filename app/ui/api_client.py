@@ -160,3 +160,16 @@ class WritingFeedbackApiClient:
 
     def create_dataset_split(self, payload: dict[str, Any]) -> dict[str, Any]:
         return self._request("POST", "/api/v1/research/dataset-split", json=payload)
+    # --- v0.9 Practice endpoints ---
+    def get_practice_targets(self, student_id: str) -> list[dict[str, Any]]:
+        return self._request("GET", f"/api/v1/students/{student_id}/practice-targets")
+    def create_practice_target(self, payload: dict[str, Any]) -> dict[str, Any]:
+        return self._request("POST", "/api/v1/practice-targets", json=payload)
+    def create_exercise(self, practice_target_id: str, payload: dict[str, Any]) -> dict[str, Any]:
+        return self._request("POST", f"/api/v1/practice-targets/{practice_target_id}/exercises", json=payload)
+    def submit_exercise_attempt(self, exercise_id: str, payload: dict[str, Any]) -> dict[str, Any]:
+        return self._request("POST", f"/api/v1/exercises/{exercise_id}/attempts", json=payload)
+    def get_engagement_traces(self, student_id: str) -> list[dict[str, Any]]:
+        return self._request("GET", f"/api/v1/students/{student_id}/engagement-traces")
+    def get_transfer_evidence(self, student_id: str) -> list[dict[str, Any]]:
+        return self._request("GET", f"/api/v1/students/{student_id}/transfer-evidence")

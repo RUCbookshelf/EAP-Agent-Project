@@ -32,9 +32,12 @@ class PracticeService:
             student_id=student_id, source_submission_id=source_submission_id,
             source_diagnosis_id=source_diagnosis_id, source_priority_id=source_priority_id,
             target_code=target_code, target_label=target_label,
-            evidence_ids=evidence_ids or [], diagnostic_gate_status=gate_status,
-        )
-        return target.model_dump(mode="json")
+                   evidence_ids=evidence_ids or [], diagnostic_gate_status=gate_status,
+           )
+        result = target.model_dump(mode="json")
+        if result.get("practice_target_id") is None:
+            result["practice_target_id"] = ""
+        return result
 
     def generate_exercise(self, practice_target: dict[str, Any],
                           source_text: str, lang: str = "en") -> dict[str, Any]:
@@ -50,8 +53,8 @@ class PracticeService:
         spec = self.specs[exercise_type.value]
         instructions = spec.learner_instructions.get(lang, spec.learner_instructions.get("en", ""))
         instance = ExerciseInstance(
-            practice_target_id=practice_target.get("practice_target_id", ""),
-            student_id=practice_target.get("student_id", ""),
+               practice_target_id=practice_target.get("practice_target_id", ""),
+               student_id=practice_target.get("student_id", ""),
             source_submission_id=practice_target.get("source_submission_id", 0),
             exercise_type=exercise_type,
             instructions=instructions,

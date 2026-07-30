@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.0 — 2026-07-30
+- Added Practice Target, Exercise Instance, Exercise Attempt, Practice Evaluation, Feedback Engagement Trace, Within-task Response Candidate, and Transfer Evidence Candidate infrastructure with migration 12 and config-v0.9.0.
+- Implemented deterministic exercise generation with three exercise types and conservative rule-based evaluation without mastery/scoring language.
+- Added Streamlit Practice, Learning Journey, and Practice Audit pages with sidebar navigation.
+- Added 20-case Live A-G controlled validation suite and desktop/mobile Playwright verification (1280×900 and 390×844).
+- Added 210 locale keys in en and zh_CN for all practice UI text.
+- All practice records are append-only with generated IDs; DeepSeek practice generation disabled by default.
+- No mastery, proficiency, CEFR, scoring, or causal claims introduced.
+
+
 ## 0.8.1 — 2026-07-30
 - Added English/Simplified Chinese multilingual UI with locale files in `locales/`; all user-facing labels, status descriptions, and metric explanations are internationalized.
 - Refactored CALF display with classified metric cards showing construct grouping, unified status labels (Research metric/Descriptive proxy/Automatic candidate/Unavailable), confidence, analysis unit, and version per measure.
