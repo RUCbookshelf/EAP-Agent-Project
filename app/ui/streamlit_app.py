@@ -4,6 +4,7 @@ import streamlit as st
 
 from app.config import load_settings
 from app.ui.api_client import ApiClientError, WritingFeedbackApiClient
+from app.ui.locale import t
 
 
 EMPTY_STATE_COPY = {
@@ -82,7 +83,51 @@ def render_provider_summary(result: dict, *, research_view: bool) -> None:
             st.json(status)
 
 
-def render_submission_result(result: dict, *, research_view: bool) -> None:
+def render_calf_classified(result: dict, lang: str) -> None:
+    st.subheader(t("calf_research_measures", lang))
+    metric_results = result["analysis"].get("metric_results", [])
+    classification = {
+        "lexical_complexity": t("construct_lexical", lang),
+        "syntactic_complexity": t("construct_syntactic", lang),
+        "product_fluency": t("construct_fluency", lang),
+    }
+    for construct_id, label in classification.items():
+        st.markdown(f"### {label}")
+        items = [item for item in metric_results if item.get("construct_id") == construct_id]
+        if not items:
+            st.info(t("calf_no_measures", lang))
+        for item in items:
+            with st.container(border=True):
+                value = item.get("value")
+                metric_id = item.get("metric_id", "")
+                status_key = item.get("measurement_status") or item.get("status") or "unavailable"
+                st_map = {"research_metric": "status_research_metric", "descriptive_proxy": "status_descriptive_proxy", "automatic_candidate": "status_automatic_candidate", "manual_annotation_required": "status_manual_annotation_required", "unavailable": "status_unavailable"}
+                status_text = t(st_map.get(status_key, "status_unavailable"), lang)
+                if isinstance(value, float):
+                    display_value = f"{value:.4f}"
+                elif value is not None:
+                    display_value = str(value)
+                else:
+                    display_value = t("metric_unavailable", lang)
+                st.write(f"**{metric_id}**: {display_value}")
+                st.caption(
+                    f'{t("metric_status", lang)}: {status_text}  \u00b7  '
+                    f'{t("metric_confidence", lang)}: {item.get("confidence", "insufficient")}  \u00b7  '
+                    f'{t("metric_unit", lang)}: {item.get("analysis_unit_version", "legacy")}  \u00b7  '
+                    f'{t("metric_version_tag", lang)}: {item.get("metric_version", "legacy")}'
+                )
+                limitations = item.get("limitations") or item.get("known_limitations", [])
+                if limitations:
+                    lim_text = " ".join(limitations) if isinstance(limitations, list) else str(limitations)
+                    st.caption(f'{t("metric_limitations", lang)}: {lim_text}')
+    st.markdown(f'### {t("accuracy_section", lang)}')
+    st.info(t("calf_accuracy_unavailable", lang))
+    st.markdown(f'### {t("sophistication_section", lang)}')
+    st.info(t("calf_sophistication_unavailable", lang))
+    st.caption(t("calf_candidate_note", lang))
+
+
+def render_submission_result(result: dict, *, research_view: bool, lang: str = "en") -> None:
     provider = result["feedback_result"]
     feedback = provider["feedback"]
     assessment = result.get("longitudinal_assessment") or feedback.get("longitudinal_assessment") or {}
@@ -98,7 +143,8 @@ def render_submission_result(result: dict, *, research_view: bool) -> None:
         st.write(f"Feedback status: {provider.get('validation_status', 'unknown')}")
 
     feedback_tab, revision_tab, progress_tab, evidence_tab, calf_tab, audit_tab = st.tabs(
-        ["Feedback", "Revision", "Progress", "Evidence", "CALF Research", "Research Audit"]
+        [t("tab_feedback", lang), t("tab_revision", lang), t("tab_progress", lang),
+         t("tab_evidence", lang), t("tab_calf", lang), t("tab_research_audit", lang)]
     )
     with feedback_tab:
         st.subheader("Positive finding")
@@ -202,49 +248,17 @@ def render_submission_result(result: dict, *, research_view: bool) -> None:
         st.caption("Lexical density is sensitive to task, length and automatic part-of-speech analysis.")
 
     with calf_tab:
-        if not research_view:
-            st.info("Research measures are available for audit but are not writing scores.")
-        else:
-            st.subheader("CALF research measures")
-            metric_results = result["analysis"].get("metric_results", [])
-            groups = {
-                "Lexical Complexity": "lexical_complexity",
-                "Syntactic Complexity": "syntactic_complexity",
-                "Product Fluency": "product_fluency",
-            }
-            for label, construct_id in groups.items():
-                st.markdown(f"### {label}")
-                items = [item for item in metric_results if item.get("construct_id") == construct_id]
-                if not items:
-                    st.info("No stored measure is available for this construct in the current AnalysisRun.")
-                for item in items:
-                    with st.container(border=True):
-                        value = item.get("value")
-                        st.write(f"{item['metric_id']}: {value if value is not None else 'unavailable'}")
-                        st.caption(
-                            f"Status: {item.get('measurement_status')} · Confidence: {item.get('confidence')} · "
-                            f"Unit: {item.get('analysis_unit_version')} · Metric: {item.get('metric_version')}"
-                        )
-                        if item.get("limitations"):
-                            st.caption("Limitations: " + " ".join(item["limitations"]))
-            st.markdown("### Accuracy")
-            st.info("Accuracy measures are unavailable unless eligible confirmed human or imported-corpus error annotations exist. No missing annotation is reported as zero errors.")
-            st.markdown("### Lexical Sophistication")
-            st.info("Unavailable: no authorized versioned frequency resource and complete operating definition are configured.")
-            st.caption("T-unit and clause outputs remain automatic candidates and are not formal syntactic-complexity measures.")
+        render_calf_classified(result, lang)
 
     with audit_tab:
-        if not research_view:
-            st.info("Switch to Research audit view to inspect raw signals, gates, versions and provider validation details.")
-        else:
-            st.subheader("Research audit")
-            st.json({
-                "analysis": result["analysis"],
-                "diagnosis": result["diagnosis"],
-                "diagnostic_calibration": result.get("diagnostic_calibration"),
-                "provider_status": result.get("feedback_provider_status"),
-                "longitudinal_assessment": assessment,
-            })
+        st.subheader(t("research_audit", lang))
+        st.json({
+            "analysis": result["analysis"],
+            "diagnosis": result["diagnosis"],
+            "diagnostic_calibration": result.get("diagnostic_calibration"),
+            "provider_status": result.get("feedback_provider_status"),
+            "longitudinal_assessment": assessment,
+        })
 
 
 @st.cache_resource
@@ -480,12 +494,11 @@ def render_admin(api_client: WritingFeedbackApiClient) -> None:
 
 def run() -> None:
     api_client = get_api_client(load_settings().api_base_url)
+    lang = st.session_state.get("ui_language", "en")
     st.set_page_config(page_title="English Writing Feedback Prototype", page_icon="✍️", layout="wide")
-    st.title("Intelligent English Writing Feedback Prototype v0.8")
-    st.caption("Formative feedback from prototype heuristics and optional LLM support — not automatic scoring.")
-    st.warning(
-        "This prototype is not educationally validated, does not measure proficiency, and does not replace teacher judgment."
-    )
+    st.title(t("app_title", lang))
+    st.caption(t("app_subtitle", lang))
+    st.warning(t("app_prototype_warning", lang))
     try:
         health = api_client.health()
         st.caption(
@@ -510,6 +523,18 @@ def run() -> None:
             st.warning("The requested NLP analyzer is unavailable; the API will record and use BasicAnalyzer fallback.")
     except ApiClientError:
         st.info("Analyzer status will appear after the local API is available.")
+
+    st.sidebar.markdown(f"### {t('language', lang)}")
+    lang_choice = st.sidebar.radio(
+        t("language", lang),
+        [t("lang_en", lang), t("lang_zh_CN", lang)],
+        index=0 if lang == "en" else 1,
+        horizontal=True,
+    )
+    new_lang = "en" if t("lang_en", lang) in lang_choice else "zh_CN"
+    if new_lang != lang:
+        st.session_state["ui_language"] = new_lang
+        st.rerun()
 
     page = st.sidebar.radio(
         "Research prototype page",
@@ -568,27 +593,27 @@ def run() -> None:
 
     with st.form("essay_submission"):
         writing_prompt = st.text_area("Writing prompt", height=100)
-        genre = st.selectbox("Genre", ["argumentative essay", "expository essay", "narrative essay"])
-        timed = st.checkbox("Timed writing")
+        genre = st.selectbox(t("genre", lang), [t("genre_argumentative", lang), t("genre_expository", lang), t("genre_narrative", lang)])
+        timed = st.checkbox(t("timed_writing", lang))
         time_limit_minutes = st.number_input(
-            "Time limit (minutes)", min_value=1, max_value=1440, value=30,
-            help="Editable at all times; saved only when Timed writing is selected.",
+            t("time_limit_minutes", lang), min_value=1, max_value=1440, value=30,
+            help=t("time_limit_help", lang),
         )
         active_duration_seconds = st.number_input(
-            "Actual active writing duration (seconds; 0 = unavailable)", min_value=0, max_value=86400,
-            value=0, help="This is separate from the task time limit. Output rate is unavailable when actual duration is not recorded.",
+            t("active_duration_seconds", lang), min_value=0, max_value=86400,
+            value=0, help=t("active_duration_help", lang),
         )
-        timing_source = st.selectbox("Timing source", ["unknown", "client_timer", "server_timestamp", "manual_report", "imported"])
-        timing_quality = st.selectbox("Timing quality", ["unavailable", "verified", "estimated", "self_reported", "incomplete"])
-        unexplained_interruption = st.checkbox("Unexplained interruption occurred")
-        tool_use = st.text_input("Tool use", value="none", help="For example: none, dictionary, spellchecker")
-        essay_text = st.text_area("Essay text", height=300)
-        submitted = st.form_submit_button("Submit and generate feedback", type="primary")
+        timing_source = st.selectbox(t("timing_source", lang), ["unknown", "client_timer", "server_timestamp", "manual_report", "imported"])
+        timing_quality = st.selectbox(t("timing_quality", lang), ["unavailable", "verified", "estimated", "self_reported", "incomplete"])
+        unexplained_interruption = st.checkbox(t("unexplained_interruption", lang))
+        tool_use = st.text_input(t("tool_use", lang), value="none", help=t("tool_use_placeholder", lang))
+        essay_text = st.text_area(t("essay_text", lang), height=300)
+        submitted = st.form_submit_button(t("submit_button", lang), type="primary")
 
     if not submitted:
         saved_result = st.session_state.get("submission_result")
         if saved_result:
-            render_submission_result(saved_result, research_view=research_view)
+            render_submission_result(saved_result, research_view=research_view, lang=lang)
         else:
             st.info("Enter a pseudonymous student ID, task information, and an English draft to begin.")
         return
@@ -631,4 +656,4 @@ def run() -> None:
     result["ui_submission"] = {"draft_stage": draft_stage, "task_relationship": task_relationship}
     st.session_state["submission_result"] = result
     st.success(f"Submission saved as essay #{result['submission_id']}.")
-    render_submission_result(result, research_view=research_view)
+    render_submission_result(result, research_view=research_view, lang=lang)

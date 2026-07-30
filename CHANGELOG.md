@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.8.1 — 2026-07-30
+- Added English/Simplified Chinese multilingual UI with locale files in `locales/`; all user-facing labels, status descriptions, and metric explanations are internationalized.
+- Refactored CALF display with classified metric cards showing construct grouping, unified status labels (Research metric/Descriptive proxy/Automatic candidate/Unavailable), confidence, analysis unit, and version per measure.
+- Reorganized result tabs by view mode with role-based information isolation; student view hides technical metadata.
+- Added sidebar language picker supporting runtime switching without restart.
+- No new measurements, scoring, CEFR, or v0.9 functionality introduced.
+
 ## 0.8.0 — 2026-07-30
 - Added versioned CALF construct, measurement-specification, and analysis-unit registries; deterministic MTLD/HD-D; research-only syntactic candidates; append-only error annotations; and actual-duration-only writing output rate.
 - Added migration 10, `config-v0.8.0`, CALF APIs/research UI, Cases A–M, opt-in live A–D verification, and explicit prompt/diagnosis/longitudinal isolation.

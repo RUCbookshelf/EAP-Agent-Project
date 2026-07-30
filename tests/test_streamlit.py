@@ -2,6 +2,10 @@ from pathlib import Path
 
 import pytest
 from streamlit.testing.v1 import AppTest
+from app.ui.locale import t
+
+
+_L = lambda k: t(k, "en")
 
 
 def test_streamlit_app_starts_without_exception(monkeypatch, tmp_path):
@@ -10,7 +14,7 @@ def test_streamlit_app_starts_without_exception(monkeypatch, tmp_path):
     app_path = Path(__file__).resolve().parents[1] / "streamlit_app.py"
     test_app = AppTest.from_file(str(app_path), default_timeout=15).run()
     assert not test_app.exception
-    assert test_app.title[0].value == "Intelligent English Writing Feedback Prototype v0.8"
+    assert "Intelligent English Writing Feedback Prototype" in test_app.title[0].value
 
 
 def test_time_limit_is_editable_before_timed_submission(monkeypatch, tmp_path):
@@ -28,10 +32,10 @@ def test_time_limit_is_editable_before_timed_submission(monkeypatch, tmp_path):
 @pytest.mark.parametrize(
     ("page", "header"),
     [
-        ("Student progress", "Student progress evidence"),
-        ("Revision comparison", "Revision comparison"),
-        ("Diagnostic audit", "Diagnostic calibration audit"),
-        ("Local administration", "Local researcher administration"),
+        (_L("nav_student_progress"), "Student progress evidence"),
+        (_L("nav_revision_comparison"), "Revision comparison"),
+        (_L("nav_diagnostic_audit"), "Diagnostic calibration audit"),
+        (_L("nav_local_administration"), "Local researcher administration"),
     ],
 )
 def test_v06_streamlit_research_pages_start(monkeypatch, tmp_path, page, header):

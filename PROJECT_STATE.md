@@ -1,5 +1,10 @@
 # 项目状态
 
+## 当前 v0.8.1 状态
+- 状态：`completed`；应用 0.8.1；数据库迁移 10；active configuration `config-v0.8.0`，父版本 `config-v0.7.1` 保留。
+- 新增多语言界面（en/zh_CN）、CALF 指标分类卡片、角色视图隔离、侧栏语言切换器。
+- 无新增测量能力、评分、CEFR 或 v0.9 功能。
+
 ## 当前 v0.8 状态
 - 状态：`completed`；应用 0.8.0；数据库迁移 10；active configuration `config-v0.8.0`，父版本 `config-v0.7.1` 保留。
 - 4 个 CALF 构念、22 个测量规范、14 个分析单位已注册；MTLD/HD-D 与真实时长 WPM 已实现，句法仅候选，Accuracy/lexical sophistication 不可用。

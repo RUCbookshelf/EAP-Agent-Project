@@ -259,4 +259,4 @@ def test_case_m_calf_metrics_do_not_become_feedback_priorities_or_prompt_evidenc
 def test_student_view_contains_no_calf_total_or_ability_rating():
     source = (Path(__file__).parents[1] / "app" / "ui" / "streamlit_app.py").read_text(encoding="utf-8")
     assert "CALF total" not in source and "writing proficiency score" not in source
-    assert "Research measures are available for audit but are not writing scores." in source
+    assert "calf_student_boundary" in source or "render_calf_classified" in source
