@@ -151,3 +151,12 @@ class WritingFeedbackApiClient:
     def list_human_reviews(self, target_type: str | None = None, target_id: str | None = None) -> list[dict[str, Any]]:
         params = "?" + "&".join(f"{k}={v}" for k, v in [("target_type", target_type), ("target_id", target_id)] if v)
         return self._request("GET", f"/api/v1/research/reviews{params}" if params else "/api/v1/research/reviews")
+
+    def research_export_history(self) -> list[dict[str, Any]]:
+        return self._request("GET", "/api/v1/research/export/history")
+
+    def research_export_manifest(self, export_id: str) -> dict[str, Any]:
+        return self._request("GET", f"/api/v1/research/export/{export_id}/manifest")
+
+    def create_dataset_split(self, payload: dict[str, Any]) -> dict[str, Any]:
+        return self._request("POST", "/api/v1/research/dataset-split", json=payload)
