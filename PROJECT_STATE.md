@@ -1,5 +1,32 @@
 # 项目状态
 
+## Current v0.9 State
+
+- Status: \completed\; database migration 12; active configuration \config-v0.9.0\, parent \config-v0.8.2\ preserved.
+- 8 practice tables: targets, instances, attempts, evaluations, engagement traces, within-task responses, transfer evidence candidates, state snapshots.
+- Deterministic exercise generation (3 types), conservative rule-based evaluation, no mastery/scoring/CEFR/causal language.
+- Streamlit Practice, Learning Journey, and Practice Audit pages.
+- 210 locale keys (en + zh_CN), identical sets.
+- Live A-G validation: 20 tests pass. Playwright: desktop + 390x844 mobile pass with no console errors.
+- Smoke stack: FastAPI/docs/Streamlit HTTP 200. Full regression: 269 passed, 5 skipped.
+- DeepSeek practice generation disabled by default; deterministic fallback verified.
+- All practice records append-only. No model training. No cloud deployment.
+
+v1.0 remains ot_started\.
+
+## 当前 v0.9 状态
+
+- 状态：\completed\；数据库迁移 12；active configuration \config-v0.9.0\，父版本 \config-v0.8.2\ 保留。
+- 8 个练习数据表。确定性练习生成（3 种类型），保守的规则评估，无掌握/评分/CEFR/因果语言。
+- Streamlit 练习、学习旅程、练习审计页面。
+- 210 个本地化键值（en + zh_CN），完全匹配。
+- Live A-G 验证：20 项测试通过。Playwright：桌面和 390x844 移动端通过，无控制台错误。
+- Smoke stack：FastAPI/docs/Streamlit HTTP 200。全量回归：269 通过，5 跳过。
+- DeepSeek 练习生成默认关闭；确定性回退已验证。
+- 所有练习记录仅追加。无模型训练。无云部署。
+
+v1.0 保持 ot_started\。
+
 ## 当前 v0.8.1 状态
 - 状态：`completed`；应用 0.8.1；数据库迁移 10；active configuration `config-v0.8.0`，父版本 `config-v0.7.1` 保留。
 - 新增多语言界面（en/zh_CN）、CALF 指标分类卡片、角色视图隔离、侧栏语言切换器。
