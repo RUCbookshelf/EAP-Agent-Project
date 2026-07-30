@@ -1,5 +1,34 @@
 # Decision log
 
+## D020 — Backend-owned longitudinal facts
+
+- Date: 2026-07-30
+- Status: accepted for v0.7.1 verification
+- Decision: derive status/counts/evidence IDs before provider execution; allow the provider to word the comment only within those facts; repair a conflicting comment locally and revalidate.
+- Boundary: no new ability, proficiency, learning-growth or CALF construct.
+
+## D021 — Keep within-task and cross-task evidence separate
+
+- Date: 2026-07-30
+- Status: accepted for v0.7.1 verification
+- Decision: expose Draft Chain, adjacent and first-to-latest comparisons as a read-only trajectory while one Revision Group still counts as one independent task.
+- Boundary: no causal feedback attribution or revision-quality score; major rewrites explicitly lower attribution confidence.
+
+## D022 — Provider status is an execution record
+
+- Date: 2026-07-30
+- Status: accepted for v0.7.1 verification
+- Decision: persist request, parse/validation/correction, server-repair and fallback state separately from the formal feedback and show technical detail only in Research audit view.
+- Boundary: status does not rate pedagogical quality. Streamlit remains the frontend and session-state rerenders reuse the API result.
+
+## D023 — Accept v0.7.1 and stop before v0.8
+
+- Date: 2026-07-30
+- Status: accepted for final human review
+- Decision: release the bounded reliability/UI repair after 209 passing normal tests, DeepSeek Live A–C, migration/config rollback coverage, Playwright desktop/mobile QA, HTTP 200 startup probes, security scans, synchronized documentation and one independent commit.
+- Evidence: Live A passed directly; Live B passed after one correction; Live C passed with a local longitudinal-comment repair; all three used fallback false. `run.bat --verify` passed.
+- Boundary: thresholds, task equivalence, ability-language detection, revision attribution and UI interpretation still require human and educational-measurement review. v0.8 is not authorized.
+
 ## D014 — Upgrade the existing profile path
 
 Migration 8 extends `learner_profile_snapshots` and adds append-only `history_evidence_registry`. `ProgressService` remains the single snapshot builder and preserves v0.3 compatibility fields. Historical JSON is never rewritten. New snapshots use `LPS######` and `learner-profile-v0.7.0`.

@@ -16,6 +16,16 @@ ComparabilityStatus = Literal[
     "comparable", "partially_comparable", "not_comparable", "insufficient_history"
 ]
 ExerciseType = Literal["error_identification", "sentence_rewrite", "short_writing_transfer"]
+LongitudinalAssessmentStatus = Literal[
+    "unavailable", "pairwise_only", "provisional_pattern",
+    "descriptive_trend_available", "not_comparable",
+]
+LongitudinalScope = Literal["cross_task", "within_task_revision"]
+ProviderExecutionStatus = Literal[
+    "external_success", "external_success_with_server_repair", "request_failed",
+    "response_parse_failed", "response_validation_failed", "correction_failed",
+    "fallback_success", "fallback_failed",
+]
 
 
 def utc_now() -> datetime:
@@ -184,6 +194,34 @@ class LongitudinalFeedback(BaseModel):
     limitation: str = Field(min_length=1)
 
 
+class LongitudinalAssessment(BaseModel):
+    status: LongitudinalAssessmentStatus
+    scope: LongitudinalScope = "cross_task"
+    comparable_task_count: int = Field(ge=0)
+    minimum_required: int = Field(default=2, ge=2)
+    revision_group_count: int = Field(default=0, ge=0)
+    draft_count: int = Field(default=1, ge=1)
+    comment: str = ""
+    history_evidence_ids: list[str] = Field(default_factory=list)
+    limitations: list[str] = Field(default_factory=list)
+
+
+class FeedbackProviderStatus(BaseModel):
+    status: ProviderExecutionStatus
+    provider: str
+    model: str
+    request_status: Literal["not_attempted", "succeeded", "failed"]
+    initial_validation_status: Literal["not_run", "passed", "failed", "core_passed"]
+    correction_attempted: bool = False
+    correction_validation_status: Literal["not_run", "passed", "failed"] = "not_run"
+    server_repair_used: bool = False
+    server_repair_fields: list[str] = Field(default_factory=list)
+    fallback_used: bool = False
+    fallback_reason_code: str | None = None
+    sanitized_reason: str | None = None
+    retry_count: int = Field(default=0, ge=0, le=1)
+
+
 class RevisionFeedback(BaseModel):
     comment: str = Field(min_length=1)
     revision_evidence_ids: list[str]
@@ -196,6 +234,7 @@ class StructuredFeedback(BaseModel):
     priority_feedback: list[FeedbackItem] = Field(max_length=2)
     exercises: list[ExerciseItem] = Field(default_factory=list)
     longitudinal: LongitudinalFeedback
+    longitudinal_assessment: LongitudinalAssessment | None = None
     revision: RevisionFeedback | None = None
     uncertainty_note: str = Field(min_length=1)
 
@@ -222,7 +261,7 @@ class ProviderResult(BaseModel):
     provider_name: str
     model_name: str
     success_status: Literal["success", "fallback_success"]
-    validation_status: Literal["passed"] = "passed"
+    validation_status: Literal["passed", "passed_with_server_repair"] = "passed"
     retry_count: int = Field(ge=0, le=1)
     fallback_reason: str | None = None
     prompt_version: str
@@ -234,6 +273,7 @@ class ProviderResult(BaseModel):
     request_time: datetime
     response_time: datetime
     call_audits: list[LLMCallAudit]
+    feedback_provider_status: FeedbackProviderStatus | None = None
 
 
 class PipelineResult(BaseModel):
@@ -248,3 +288,7 @@ class PipelineResult(BaseModel):
     comparable_history_count: int
     revision_snapshot: Any | None = None
     diagnostic_calibration: Any | None = None
+    longitudinal_assessment: LongitudinalAssessment | None = None
+    revision_group_summary: Any | None = None
+    within_task_revision_trajectory: Any | None = None
+    ui_empty_states: list[str] = Field(default_factory=list)

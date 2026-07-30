@@ -22,6 +22,7 @@ from . import versioning_v04
 from . import versioning_v05
 from . import versioning_v061
 from . import versioning_v07
+from . import versioning_v071
 
 
 @dataclass(frozen=True)
@@ -39,15 +40,18 @@ class PromptBuilder:
     """Build versioned messages; providers never splice student text into control instructions."""
 
     def build(self, context: "FeedbackContext") -> PromptBundle:
-        is_v07 = bool(
+        is_v071 = context.longitudinal_assessment is not None
+        is_v07 = not is_v071 and bool(
             context.diagnostic_calibration is not None
             and context.learner_profile_snapshot is not None
             and context.learner_profile_snapshot.profile_version == "learner-profile-v0.7.0"
         )
-        is_v061 = context.diagnostic_calibration is not None and not is_v07
+        is_v061 = context.diagnostic_calibration is not None and not is_v07 and not is_v071
         is_v05 = not is_v061 and context.revision_snapshot is not None
         is_v04 = not is_v061 and not is_v05 and (context.analysis.analyzer_id == "spacy" or context.analysis.analysis_version.startswith("spacy-analyzer-v0.4"))
-        if is_v07:
+        if is_v071:
+            versioning_v071.validate_prompt_versioning()
+        elif is_v07:
             versioning_v07.validate_prompt_versioning()
         elif is_v061:
             versioning_v061.validate_prompt_versioning()
@@ -90,14 +94,18 @@ class PromptBuilder:
             "learner_profile_snapshot": self._screened_snapshot(context.learner_profile_snapshot),
             "required_schema": StructuredFeedback.model_json_schema(),
         }
-        if is_v07:
+        if is_v071 or is_v07:
             payload["diagnostic_calibration"] = context.diagnostic_calibration
             payload["analysis_evidence"] = self._calibrated_analysis_evidence(context)
             payload["learner_model_context"] = self._screened_learner_model(context.learner_profile_snapshot)
-            allowed_history_ids = {
-                evidence_id for target in context.learner_profile_snapshot.current_learning_targets
-                for evidence_id in target.history_evidence_ids
-            }
+            allowed_history_ids = (
+                {
+                    evidence_id for target in context.learner_profile_snapshot.current_learning_targets
+                    for evidence_id in target.history_evidence_ids
+                }
+                if context.learner_profile_snapshot is not None
+                else set(context.longitudinal_assessment.history_evidence_ids if context.longitudinal_assessment else [])
+            )
             screened_history = [
                 item.model_dump(mode="json") for item in context.history.history_evidence
                 if item.history_evidence_id in allowed_history_ids
@@ -114,6 +122,8 @@ class PromptBuilder:
                 "comparability_reasons": context.history.comparability_reasons,
             }
             payload.pop("learner_profile_snapshot", None)
+            if is_v071:
+                payload["longitudinal_facts"] = context.longitudinal_assessment.model_dump(mode="json")
             if context.revision_snapshot is not None:
                 payload["revision_snapshot"] = context.revision_snapshot.model_dump(mode="json")
         elif is_v061:
@@ -127,10 +137,10 @@ class PromptBuilder:
             payload["analysis_evidence"] = self._analysis_evidence(context.analysis)
             payload["revision_snapshot"] = context.revision_snapshot.model_dump(mode="json")
         messages = [
-            {"role": "system", "content": versioning_v07.system_template() if is_v07 else versioning_v061.system_template() if is_v061 else versioning_v05.system_template() if is_v05 else versioning_v04.system_template() if is_v04 else system_template()},
+            {"role": "system", "content": versioning_v071.system_template() if is_v071 else versioning_v07.system_template() if is_v07 else versioning_v061.system_template() if is_v061 else versioning_v05.system_template() if is_v05 else versioning_v04.system_template() if is_v04 else system_template()},
             {"role": "user", "content": json.dumps(payload, ensure_ascii=False)},
         ]
-        return self._bundle(messages, payload, is_v04=is_v04, is_v05=is_v05, is_v061=is_v061, is_v07=is_v07)
+        return self._bundle(messages, payload, is_v04=is_v04, is_v05=is_v05, is_v061=is_v061, is_v07=is_v07, is_v071=is_v071)
 
     @staticmethod
     def _selected_metric_ids(context: "FeedbackContext") -> set[str]:
@@ -235,8 +245,26 @@ class PromptBuilder:
         }
 
     def correction(self, bundle: PromptBundle, validation_error: str) -> PromptBundle:
+        longitudinal_failure = "longitudinal" in validation_error.casefold()
+        facts = bundle.user_payload.get("longitudinal_facts") or {}
+        comparable = int(facts.get("comparable_task_count") or 0)
+        task_label = "task" if comparable == 1 else "tasks"
+        longitudinal_contract = (
+            "Failed field: longitudinal_assessment.comment. Preserve all valid quotations, positive findings, "
+            "priorities, practices and revision content. Copy longitudinal_facts exactly and state only the "
+            "cross-task meaning allowed by its status.\n"
+            f"Required state:\nstatus = {facts.get('status', 'unavailable')}\n"
+            f"Required factual basis:\nOnly {self._count_word(comparable)} comparable independent {task_label} "
+            f"{'is' if comparable == 1 else 'are'} available.\n"
+            "Required meaning:\nState clearly that a cross-task longitudinal judgment cannot currently be made.\n"
+        ) if longitudinal_failure and facts else (
+            "Failed field: longitudinal_assessment.comment. Preserve all valid quotations, positive findings, "
+            "priorities, practices and revision content. Copy longitudinal_facts exactly and state only the "
+            "cross-task meaning allowed by its status. "
+        ) if longitudinal_failure else ""
         correction = (
             "The previous response failed validation. Return a corrected JSON object only. "
+            + longitudinal_contract +
             "Use only diagnosis IDs, diagnosis categories, history evidence IDs, and revision "
             "evidence IDs supplied in the original payload; do not invent any. Every evidence_quote "
             "must be copied character-for-character as one contiguous substring of submission.essay_text. "
@@ -250,11 +278,25 @@ class PromptBuilder:
             is_v05=bundle.prompt_version == versioning_v05.PROMPT_VERSION,
             is_v061=bundle.prompt_version == versioning_v061.PROMPT_VERSION,
             is_v07=bundle.prompt_version == versioning_v07.PROMPT_VERSION,
+            is_v071=bundle.prompt_version == versioning_v071.PROMPT_VERSION,
         )
 
     @staticmethod
+    def _count_word(value: int) -> str:
+        return {0: "zero", 1: "one", 2: "two", 3: "three", 4: "four"}.get(value, str(value))
+
+    @staticmethod
     def _bundle(messages: list[dict[str, str]], payload: dict[str, Any], *, is_v04: bool = False, is_v05: bool = False,
-                is_v061: bool = False, is_v07: bool = False) -> PromptBundle:
+                is_v061: bool = False, is_v07: bool = False, is_v071: bool = False) -> PromptBundle:
+        if is_v071:
+            return PromptBundle(
+                messages=messages, user_payload=payload,
+                prompt_version=versioning_v071.PROMPT_VERSION,
+                schema_version=versioning_v071.SCHEMA_VERSION,
+                system_template_hash=versioning_v071.system_template_hash(),
+                user_template_hash=versioning_v071.user_template_hash(),
+                rendered_prompt_hash=versioning_v071.rendered_prompt_hash(messages),
+            )
         if is_v07:
             return PromptBundle(
                 messages=messages, user_payload=payload,

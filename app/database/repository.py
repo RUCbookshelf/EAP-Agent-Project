@@ -380,8 +380,8 @@ class Database:
                     essay_id, feedback_json, provider_name, model_name, success_status,
                     fallback_reason, prompt_version, analysis_version, system_template_hash,
                     user_template_hash, rendered_prompt_hash, schema_version, temperature,
-                    request_time, response_time, validation_status, retry_count
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                    request_time, response_time, validation_status, retry_count, provider_status_json
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
                 (
                     essay_id, result.feedback.model_dump_json(), result.provider_name,
                     result.model_name, result.success_status, result.fallback_reason,
@@ -389,6 +389,7 @@ class Database:
                     result.user_template_hash, result.rendered_prompt_hash, result.schema_version,
                     result.temperature, result.request_time.isoformat(), result.response_time.isoformat(),
                     result.validation_status, result.retry_count,
+                    result.feedback_provider_status.model_dump_json() if result.feedback_provider_status else "{}",
                 ),
             )
             connection.executemany(
@@ -521,7 +522,8 @@ class Database:
                 d.diagnosis_json, d.diagnosis_version, f.feedback_json, f.provider_name, f.model_name,
                 f.feedback_id,
                 f.success_status, f.fallback_reason, f.prompt_version, f.schema_version,
-                f.validation_status, f.retry_count, h.history_summary, h.comparable_count,
+                f.validation_status, f.retry_count, f.provider_status_json,
+                h.history_summary, h.comparable_count,
                 h.comparability_status, h.history_evidence_json, h.limitations_json,
                 h.comparability_reasons_json
                 FROM essays e
@@ -537,7 +539,7 @@ class Database:
         if not row:
             return None
         result = dict(row)
-        for key in ("metrics_json", "diagnosis_json", "feedback_json", "history_evidence_json", "limitations_json", "comparability_reasons_json"):
+        for key in ("metrics_json", "diagnosis_json", "feedback_json", "provider_status_json", "history_evidence_json", "limitations_json", "comparability_reasons_json"):
             raw = result.pop(key, None)
             result[key.removesuffix("_json")] = json.loads(raw) if raw else None
         result["timed"] = bool(result["timed"])
@@ -912,7 +914,7 @@ class Database:
                     change_note,validation_status,validation_errors_json,content_hash
                 ) VALUES (?,?,?,?,?,?,?,?,?,?,?)""",
                 (version, "draft", now, request.created_by, parent_version,
-                request.payload.model_dump_json(), "configuration-schema-v0.7.0", request.change_note,
+                request.payload.model_dump_json(), "configuration-schema-v0.7.1", request.change_note,
                  "not_validated", "[]", configuration_hash(request.payload)),
             )
             configuration_id = f"CFG{int(cursor.lastrowid):06d}"

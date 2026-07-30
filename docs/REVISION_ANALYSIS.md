@@ -1,5 +1,9 @@
 # Revision analysis v0.5
 
+## v0.7.1 within-task trajectory
+
+The new trajectory is a read-only composition of existing explicit relationships and append-only Revision Snapshots. It reports the ordered Draft Chain, adjacent pairwise comparisons, first-to-latest comparison, diagnosis/metric changes, prior selected priorities, feedback-uptake candidates, major-rewrite status and attribution confidence. It never adds a cross-task observation, claims revision quality, or attributes change to feedback. See [WITHIN_TASK_REVISION_TRAJECTORY.md](WITHIN_TASK_REVISION_TRAJECTORY.md).
+
 ## v0.7 integration
 
 Revision Snapshot v0.5 remains unchanged and continues to compare all explicitly linked drafts. Learner Model v0.7 separately selects one representative per Revision Group for default long-term description (`final_or_latest`). Excluding earlier drafts from a long-term trajectory does not delete or suppress revision alignment evidence. Alternative representative strategies are versioned configuration choices.

@@ -6,6 +6,215 @@ from app.config import load_settings
 from app.ui.api_client import ApiClientError, WritingFeedbackApiClient
 
 
+EMPTY_STATE_COPY = {
+    "NO_SELECTED_PRIORITY": (
+        "No evidence-supported revision priority was selected for this draft.",
+        "This does not mean that the draft needs no revision. The prototype did not identify a sufficiently reliable language-level priority.",
+    ),
+    "NO_TARGETED_PRACTICE": (
+        "No targeted practice was generated.",
+        "No diagnosis passed the current selection rules, so the system did not invent an exercise.",
+    ),
+    "NO_PREVIOUS_PRIORITY": (
+        "The previous draft did not contain a selected priority that can be tracked.",
+        "Review the draft chain and current priorities instead.",
+    ),
+    "NO_FEEDBACK_UPTAKE_CANDIDATE": (
+        "No feedback-uptake candidate was generated.",
+        "No previous priority was available, evidence was insufficient, or the draft was substantially rewritten.",
+    ),
+    "MAJOR_REWRITE_LIMITS_ATTRIBUTION": (
+        "Major rewrite limits attribution.",
+        "Extensive rewriting is observable, but it is not evidence of improvement or that feedback caused the changes.",
+    ),
+    "INSUFFICIENT_CROSS_TASK_HISTORY": (
+        "Cross-task history is insufficient.",
+        "Use the Revision tab for within-task changes; additional comparable independent tasks are required for cross-task analysis.",
+    ),
+}
+
+
+PROVIDER_STATUS_LABELS = {
+    "external_success": "Success",
+    "external_success_with_server_repair": "Success with local longitudinal repair",
+    "request_failed": "Request failed",
+    "response_parse_failed": "Response parsing failed",
+    "response_validation_failed": "Response validation failed",
+    "correction_failed": "Correction attempt failed",
+    "fallback_success": "Local provider success",
+    "fallback_failed": "Fallback failed",
+}
+
+
+def grouped_connectives(analysis: dict) -> dict[str, list[dict]]:
+    detected = analysis.get("artifacts", {}).get("connective_features", {}).get("detected_connectives", [])
+    grouped: dict[str, dict[str, dict]] = {}
+    for item in detected:
+        class_name = item.get("expression_class", "discourse_connective")
+        expression = item.get("normalized_form") or item.get("text")
+        bucket = grouped.setdefault(class_name, {})
+        if expression not in bucket:
+            bucket[expression] = {
+                "expression": item.get("text") or expression,
+                "count": int(item.get("same_form_count") or 1),
+                "function": item.get("function_category", "unspecified"),
+            }
+    return {name: list(items.values()) for name, items in grouped.items()}
+
+
+def render_empty_state(code: str) -> None:
+    title, explanation = EMPTY_STATE_COPY[code]
+    st.info(f"{title}\n\n{explanation}")
+
+
+def render_provider_summary(result: dict, *, research_view: bool) -> None:
+    provider = result["feedback_result"]
+    status = result.get("feedback_provider_status") or provider.get("feedback_provider_status") or {}
+    label = PROVIDER_STATUS_LABELS.get(status.get("status"), provider.get("success_status", "Unknown"))
+    st.write(f"Provider: {status.get('provider') or provider['provider_name']}")
+    st.write(f"Status: {label}")
+    st.write(f"Validation: {provider.get('validation_status', 'not reported')}")
+    st.write(f"Fallback: {'LocalDemo' if status.get('fallback_used') else 'No'}")
+    if status.get("server_repair_used"):
+        st.caption("The server repaired only the listed local field while retaining valid feedback sections.")
+    if research_view:
+        with st.expander("Provider validation details", expanded=False):
+            st.json(status)
+
+
+def render_submission_result(result: dict, *, research_view: bool) -> None:
+    provider = result["feedback_result"]
+    feedback = provider["feedback"]
+    assessment = result.get("longitudinal_assessment") or feedback.get("longitudinal_assessment") or {}
+    group_summary = result.get("revision_group_summary")
+    trajectory = result.get("within_task_revision_trajectory")
+    empty_states = set(result.get("ui_empty_states") or [])
+
+    with st.container(border=True):
+        st.markdown(f"**Saved:** Essay #{result['submission_id']}")
+        st.write(f"Draft: {result.get('ui_submission', {}).get('draft_stage', 'current submission')}")
+        st.write(f"Revision group: {(group_summary or {}).get('revision_group_id', 'new independent task')}")
+        st.write(f"Provider: {provider['provider_name']}")
+        st.write(f"Feedback status: {provider.get('validation_status', 'unknown')}")
+
+    feedback_tab, revision_tab, progress_tab, evidence_tab, audit_tab = st.tabs(
+        ["Feedback", "Revision", "Progress", "Evidence", "Research Audit"]
+    )
+    with feedback_tab:
+        st.subheader("Positive finding")
+        st.write(f'“{feedback["positive_finding"]["evidence_quote"]}”')
+        st.write(feedback["positive_finding"]["explanation"])
+        st.subheader("Revision priorities")
+        if "NO_SELECTED_PRIORITY" in empty_states:
+            render_empty_state("NO_SELECTED_PRIORITY")
+        for item in feedback["priority_feedback"]:
+            with st.container(border=True):
+                st.markdown(f"**{item['category'].replace('_', ' ').title()}**")
+                st.write(f'Evidence: “{item["evidence_quote"]}”')
+                st.write(item["explanation"])
+                st.write(f"Revision guidance: {item['revision_guidance']}")
+        st.subheader("Targeted practice")
+        if "NO_TARGETED_PRACTICE" in empty_states:
+            render_empty_state("NO_TARGETED_PRACTICE")
+        for exercise in feedback["exercises"]:
+            source_label = "student-source sentence" if exercise.get("source_type") == "student_source_sentence" else "synthetic practice sentence"
+            st.markdown(
+                f"- **{exercise['exercise_type'].replace('_', ' ').title()}**: "
+                f"{exercise['instructions']} {exercise['exercise_content']}  \n"
+                f"  Source: {source_label}"
+            )
+        st.subheader("Provider status")
+        render_provider_summary(result, research_view=research_view)
+        st.caption(feedback["uncertainty_note"])
+
+    with revision_tab:
+        if not trajectory:
+            st.info("No linked revision history is available. Submit a revision and explicitly choose its earlier draft to build a within-task trajectory.")
+        else:
+            st.subheader("One task, multiple drafts")
+            st.write(f"Draft submissions: {group_summary['draft_submission_count']}")
+            st.write(f"Revision groups: {group_summary['revision_group_count']}")
+            st.write(f"Independent writing tasks: {group_summary['independent_task_count']}")
+            st.write(f"Longitudinal representative drafts: {group_summary['longitudinal_representative_count']}")
+            st.caption("These drafts belong to one writing task. They support within-task revision analysis but count as one independent task for cross-task analysis.")
+            st.subheader("Draft chain")
+            for item in trajectory["draft_chain"]:
+                st.write(f"{item['revision_sequence']}. Essay #{item['submission_id']} — {item['draft_stage']} — {item['submitted_at']}")
+            first_latest = trajectory.get("first_to_latest_comparison")
+            if first_latest:
+                st.subheader("First draft to current draft")
+                changes = first_latest["token_changes"]
+                st.write(f"Inserted text: {float(changes.get('inserted_ratio', 0)):.1%}")
+                st.write(f"Deleted text: {float(changes.get('deleted_ratio', 0)):.1%}")
+                st.write(f"Modified text: {float(changes.get('modified_ratio', 0)):.1%}")
+                st.caption("High edit ratios indicate extensive rewriting, not necessarily improvement.")
+            with st.expander("Pairwise draft comparisons", expanded=False):
+                for item in trajectory["pairwise_comparisons"]:
+                    st.write(f"Essay #{item['source_submission_id']} → Essay #{item['target_submission_id']}")
+                    st.json(item["token_changes"])
+            st.subheader("Previous priority status")
+            if "MAJOR_REWRITE_LIMITS_ATTRIBUTION" in empty_states:
+                render_empty_state("MAJOR_REWRITE_LIMITS_ATTRIBUTION")
+            elif "NO_PREVIOUS_PRIORITY" in empty_states:
+                render_empty_state("NO_PREVIOUS_PRIORITY")
+            else:
+                for item in trajectory["previous_selected_priorities"]:
+                    st.write(f"- {item.get('category', 'Priority')}: {item.get('revision_guidance', 'tracked')}")
+            st.subheader("Feedback uptake candidates")
+            if "NO_FEEDBACK_UPTAKE_CANDIDATE" in empty_states:
+                render_empty_state("NO_FEEDBACK_UPTAKE_CANDIDATE")
+            for item in trajectory["feedback_uptake_candidates"]:
+                st.write(f"- {item['previous_diagnosis_id']}: {item['status']} — {item['observed_change']}")
+            st.caption(f"Attribution confidence: {trajectory['attribution_confidence']}. Changes do not prove learning or feedback causation.")
+
+    with progress_tab:
+        st.subheader("Cross-task longitudinal status")
+        if assessment:
+            st.write(f"Status: {assessment['status'].replace('_', ' ').title()}")
+            st.write(f"Comparable independent tasks: {assessment['comparable_task_count']}")
+            st.write(f"Minimum required: {assessment['minimum_required']}")
+            st.write(f"Revision groups: {assessment['revision_group_count']}")
+            st.write(f"Draft submissions: {assessment['draft_count']}")
+            st.write(assessment["comment"])
+            st.caption("History evidence IDs: " + (", ".join(assessment["history_evidence_ids"]) or "none"))
+        else:
+            render_empty_state("INSUFFICIENT_CROSS_TASK_HISTORY")
+
+    with evidence_tab:
+        analysis = result["analysis"]
+        lexical = analysis.get("artifacts", {}).get("lexical_features", {})
+        st.subheader("Language evidence")
+        st.write("Prompt keywords: " + (", ".join(lexical.get("prompt_keywords", [])) or "none detected"))
+        groups = grouped_connectives(analysis)
+        discourse = groups.get("discourse_connective", [])
+        st.write("Discourse-organizing expressions")
+        if discourse:
+            for item in discourse:
+                st.write(f"- {item['expression']} — {item['count']} — {item['function']}")
+        else:
+            st.info("No discourse-organizing expression was detected by the current dictionary. This is not evidence that the draft lacks cohesion.")
+        if research_view:
+            with st.expander("Complete connective classes and counts", expanded=False):
+                st.json(groups)
+        st.write(f"Prototype MATTR: {analysis['metrics'].get('mattr') or 'insufficient'}")
+        st.caption("MATTR describes sampled lexical variation under the current token rules; it is not a proficiency score.")
+        st.write(f"Prototype lexical density: {analysis['metrics'].get('lexical_density', 'insufficient')}")
+        st.caption("Lexical density is sensitive to task, length and automatic part-of-speech analysis.")
+
+    with audit_tab:
+        if not research_view:
+            st.info("Switch to Research audit view to inspect raw signals, gates, versions and provider validation details.")
+        else:
+            st.subheader("Research audit")
+            st.json({
+                "analysis": result["analysis"],
+                "diagnosis": result["diagnosis"],
+                "diagnostic_calibration": result.get("diagnostic_calibration"),
+                "provider_status": result.get("feedback_provider_status"),
+                "longitudinal_assessment": assessment,
+            })
+
+
 @st.cache_resource
 def get_api_client(base_url: str) -> WritingFeedbackApiClient:
     return WritingFeedbackApiClient(base_url)
@@ -118,9 +327,17 @@ def render_revision_page(api_client: WritingFeedbackApiClient) -> None:
     try:
         group = api_client.get_revision_group(group_id.strip())
         comparison = api_client.get_revision_comparison(group_id.strip())
+        trajectory = api_client.get_revision_trajectory(group_id.strip())
     except ApiClientError as exc:
         st.error(str(exc)); return
-    st.json(group["group"])
+    st.write(f"Draft submissions: {len(group['group']['member_submission_ids'])}")
+    st.write("Revision groups: 1")
+    st.write("Independent writing tasks: 1")
+    st.write("Longitudinal representative drafts: 1")
+    st.caption("These drafts support within-task revision analysis and count as one independent task for cross-task analysis.")
+    st.subheader("Draft chain")
+    for item in trajectory["draft_chain"]:
+        st.write(f"- Essay #{item['submission_id']} · {item['draft_stage']} · {item['submitted_at']}")
     if comparison.get("major_rewrite"):
         st.warning("Major rewrite candidate: feedback attribution is especially limited.")
     st.subheader("Observed token changes")
@@ -232,7 +449,7 @@ def render_admin(api_client: WritingFeedbackApiClient) -> None:
 def run() -> None:
     api_client = get_api_client(load_settings().api_base_url)
     st.set_page_config(page_title="English Writing Feedback Prototype", page_icon="✍️", layout="wide")
-    st.title("Intelligent English Writing Feedback Prototype v0.7")
+    st.title("Intelligent English Writing Feedback Prototype v0.7.1")
     st.caption("Formative feedback from prototype heuristics and optional LLM support — not automatic scoring.")
     st.warning(
         "This prototype is not educationally validated, does not measure proficiency, and does not replace teacher judgment."
@@ -277,50 +494,75 @@ def run() -> None:
     if page == "Local administration":
         render_admin(api_client); return
 
+    view_mode = st.radio(
+        "View mode", ["Student view", "Research audit view"], horizontal=True,
+        help="Student view hides internal gates and raw provider diagnostics.",
+    )
+    research_view = view_mode == "Research audit view"
     student_id = st.text_input("Student ID", placeholder="Use a pseudonymous ID")
+    task_relationship = st.radio(
+        "Task relationship",
+        ["Start a new independent task", "Submit a revision within an existing task"],
+        help="A revision remains part of one writing task and does not add a cross-task observation.",
+    )
+    is_revision = task_relationship == "Submit a revision within an existing task"
     draft_stage = st.selectbox(
-        "Draft stage", ["first draft", "revised draft", "final draft", "independent submission"]
+        "Draft stage", ["revised draft", "final draft"] if is_revision else ["first draft", "independent submission"]
     )
     revision_of_submission_id = None
-    if draft_stage in {"revised draft", "final draft"}:
-        candidates = []
-        if student_id.strip():
-            try:
-                candidates = api_client.get_student_revision_candidates(student_id.strip()).get("candidates", [])
-            except ApiClientError:
-                st.info("Save an earlier draft for this student ID before linking a revision.")
+    candidates = []
+    if student_id.strip():
+        try:
+            candidates = api_client.get_student_revision_candidates(student_id.strip()).get("candidates", [])
+        except ApiClientError:
+            candidates = []
+    if is_revision:
         labels = {
-            f"Essay #{item['essay_id']} · {item['submitted_at']} · {item['draft_stage']} · {item['writing_prompt'][:80]}": item["essay_id"]
+            f"Essay #{item['essay_id']} · {item['submitted_at']} · {item['draft_stage']} · "
+            f"{item.get('revision_group_id') or 'unlinked task'} · {item['writing_prompt'][:80]}": item["essay_id"]
             for item in candidates
         }
         if labels:
             selected = st.selectbox("Explicitly choose the draft being revised", list(labels))
             revision_of_submission_id = labels[selected]
+            selected_item = next(item for item in candidates if item["essay_id"] == revision_of_submission_id)
+            st.caption(
+                f"Selected Essay #{selected_item['essay_id']} · {selected_item['submitted_at']} · "
+                f"{selected_item['draft_stage']} · Revision Group: {selected_item.get('revision_group_id') or 'will be created'}"
+            )
+            st.info("This draft will be treated as a revision within the selected task, not as a new independent writing task.")
         else:
             st.warning("A revised/final draft requires an explicitly selected earlier submission; matching prompts are never linked automatically.")
 
     with st.form("essay_submission"):
-        left, right = st.columns(2)
-        with left:
-            writing_prompt = st.text_area("Writing prompt", height=100)
-            genre = st.selectbox("Genre", ["argumentative essay", "expository essay", "narrative essay"])
-        with right:
-            timed = st.checkbox("Timed writing")
-            time_limit_minutes = st.number_input(
-                "Time limit (minutes)", min_value=1, max_value=1440, value=30,
-                help="Editable at all times; saved only when Timed writing is selected.",
-            )
-            tool_use = st.text_input("Tool use", value="none", help="For example: none, dictionary, spellchecker")
+        writing_prompt = st.text_area("Writing prompt", height=100)
+        genre = st.selectbox("Genre", ["argumentative essay", "expository essay", "narrative essay"])
+        timed = st.checkbox("Timed writing")
+        time_limit_minutes = st.number_input(
+            "Time limit (minutes)", min_value=1, max_value=1440, value=30,
+            help="Editable at all times; saved only when Timed writing is selected.",
+        )
+        tool_use = st.text_input("Tool use", value="none", help="For example: none, dictionary, spellchecker")
         essay_text = st.text_area("Essay text", height=300)
         submitted = st.form_submit_button("Submit and generate feedback", type="primary")
 
     if not submitted:
-        st.info("Enter a pseudonymous student ID, task information, and an English draft to begin.")
+        saved_result = st.session_state.get("submission_result")
+        if saved_result:
+            render_submission_result(saved_result, research_view=research_view)
+        else:
+            st.info("Enter a pseudonymous student ID, task information, and an English draft to begin.")
         return
 
-    if draft_stage in {"revised draft", "final draft"} and revision_of_submission_id is None:
+    if is_revision and revision_of_submission_id is None:
         st.error("Choose the earlier draft explicitly before submitting this revision.")
         return
+
+    if not is_revision and any(
+        item.get("writing_prompt", "").strip().casefold() == writing_prompt.strip().casefold()
+        for item in candidates
+    ):
+        st.warning("A similar prompt already exists. Confirm whether this is a new independent task or another revision. The current selection starts a new task and no relationship will be created automatically.")
 
     try:
         submission = {
@@ -343,91 +585,7 @@ def run() -> None:
         st.error("The submission could not be completed. No API key or internal stack is displayed.")
         return
 
+    result["ui_submission"] = {"draft_stage": draft_stage, "task_relationship": task_relationship}
+    st.session_state["submission_result"] = result
     st.success(f"Submission saved as essay #{result['submission_id']}.")
-    provider = result["feedback_result"]
-    if provider["success_status"] == "fallback_success":
-        st.warning("The configured external provider was unavailable or invalid; LocalDemoProvider generated this feedback.")
-        if provider.get("fallback_reason"):
-            st.caption(f"Fallback reason: {provider['fallback_reason']}")
-    st.caption(
-        f"Provider: {provider['provider_name']} · Model: {provider['model_name']} · "
-        f"Status: {provider['success_status']}"
-    )
-
-    feedback = provider["feedback"]
-    st.subheader("Positive finding")
-    st.write(f'“{feedback["positive_finding"]["evidence_quote"]}”')
-    st.write(feedback["positive_finding"]["explanation"])
-    st.subheader("Revision priorities")
-    for item in feedback["priority_feedback"]:
-        with st.container(border=True):
-            st.markdown(f"**{item['category'].replace('_', ' ').title()}**")
-            st.write(f"Diagnosis: {item['diagnosis_id']}")
-            st.write('Evidence quote: “{}”'.format(item["evidence_quote"]))
-            st.write(item["explanation"])
-            st.write(f"Revision guidance: {item['revision_guidance']}")
-    st.subheader("Targeted practice")
-    for exercise in feedback["exercises"]:
-        source_label = (
-            "student-source sentence"
-            if exercise.get("source_type") == "student_source_sentence"
-            else "synthetic practice sentence"
-        )
-        st.markdown(
-            f"- **{exercise['exercise_type'].replace('_', ' ').title()}** "
-            f"({exercise['diagnosis_id']} · {exercise['diagnosis_category']}): "
-            f"{exercise['instructions']} {exercise['exercise_content']}  \n"
-            f"  Source: {source_label}; generation: {exercise.get('generation_version', 'unknown')}"
-        )
-    st.subheader("Longitudinal comment")
-    st.write(feedback["longitudinal"]["comment"])
-    st.caption("History evidence IDs: " + (", ".join(feedback["longitudinal"]["history_evidence_ids"]) or "none"))
-    st.caption(feedback["uncertainty_note"])
-
-    revision_snapshot = result.get("revision_snapshot")
-    if revision_snapshot:
-        st.subheader("Revision comparison")
-        st.write(
-            f"Essay #{revision_snapshot['target_submission_id']} is explicitly linked as a revision of "
-            f"Essay #{revision_snapshot['source_submission_id']} in {revision_snapshot['revision_group_id']}."
-        )
-        if revision_snapshot["major_rewrite"]:
-            st.warning("Major rewrite candidate: attribution to previous feedback is especially limited.")
-        token_changes = revision_snapshot["token_changes"]
-        cols = st.columns(3)
-        cols[0].metric("Inserted ratio", token_changes["inserted_ratio"])
-        cols[1].metric("Deleted ratio", token_changes["deleted_ratio"])
-        cols[2].metric("Modified ratio", token_changes["modified_ratio"])
-        st.markdown("**Previous priority status**")
-        for item in revision_snapshot["diagnosis_trajectories"]:
-            st.write(f"- {item['diagnosis_category']}: {item['status']}")
-        st.markdown("**Feedback uptake candidates**")
-        for item in revision_snapshot["uptake_candidates"]:
-            st.write(f"- {item['previous_diagnosis_id']}: {item['status']} — {item['observed_change']}")
-        st.caption("These are observed text changes and prototype candidates, not proof of proficiency growth or feedback causation.")
-
-    analysis = result["analysis"]
-    quality_flags = analysis.get("input_quality", {}).get("quality_flags", [])
-    if quality_flags:
-        st.subheader("Input quality reminders")
-        st.warning("These flags request confirmation; they do not prove AI use or misconduct, and no text was removed.")
-        for flag in quality_flags:
-            st.write(f"- {flag['category']}: `{flag['text_span']}` — {flag['recommended_action']}")
-    artifacts = analysis.get("artifacts", {})
-    lexical = artifacts.get("lexical_features", {})
-    connective = artifacts.get("connective_features", {})
-    syntactic = artifacts.get("syntactic_features", {})
-    if lexical or connective or syntactic:
-        st.subheader("Prototype NLP evidence")
-        st.write("Prompt keywords:", ", ".join(lexical.get("prompt_keywords", [])) or "none detected")
-        st.write("Detected connective expressions:", ", ".join(item["text"] for item in connective.get("detected_connectives", [])) or "none in the current dictionary")
-        cols = st.columns(3)
-        cols[0].metric("Prototype lexical density", analysis["metrics"].get("lexical_density", "insufficient"))
-        cols[1].metric("Prototype MATTR", analysis["metrics"].get("mattr") or "insufficient")
-        cols[2].metric("Long-sentence candidates", len(syntactic.get("long_sentence_candidates", [])))
-        st.caption("Automatic parser and dictionary signals can be wrong; they are feedback inputs, not ability measures.")
-
-    with st.expander("Prototype language metrics"):
-        st.json(analysis)
-    with st.expander("Structured diagnosis signals"):
-        st.json(result["diagnosis"])
+    render_submission_result(result, research_view=research_view)

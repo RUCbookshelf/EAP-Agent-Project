@@ -11,15 +11,20 @@ from .revision import RevisionService
 from .configuration import settings_from_configuration
 from app.calibration import DiagnosticCalibrationService
 from app.configuration import ConfigurationPayload
+from app.feedback import FeedbackReliabilityService
 
 
-def build_router(settings: Settings) -> ProviderRouter:
+def build_router(
+    settings: Settings, configuration: ConfigurationPayload | None = None,
+) -> ProviderRouter:
     local = LocalDemoProvider()
     primary = local if settings.llm_provider == "local" else DeepSeekProvider(
         settings.deepseek_api_key, settings.deepseek_base_url, settings.deepseek_model,
         max_tokens=settings.llm_max_tokens,
     )
-    router = ProviderRouter(primary, local)
+    router = ProviderRouter(
+        primary, local, reliability=FeedbackReliabilityService(configuration)
+    )
     router.temperature = settings.llm_temperature
     return router
 
@@ -63,7 +68,7 @@ def build_submission_service(
         repository=repository,
         analyzer=build_analyzer(settings),
         diagnoser=NlpHeuristicDiagnoser(),
-        router=build_router(settings),
+        router=build_router(settings, active_configuration.payload if active_configuration else None),
         learner_profile_service=profile_service,
         revision_service=RevisionService(repository),
         calibrator=DiagnosticCalibrationService(

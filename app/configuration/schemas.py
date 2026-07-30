@@ -50,8 +50,8 @@ class ConfigurationPayload(BaseModel):
     llm_max_tokens: int = Field(default=1800, ge=128, le=8192)
     active_prompt_version: Literal[
         "feedback-prompt-v0.3.0", "feedback-prompt-v0.4.0", "feedback-prompt-v0.5.0",
-        "feedback-prompt-v0.6.1", "feedback-prompt-v0.7.0",
-    ] = "feedback-prompt-v0.7.0"
+        "feedback-prompt-v0.6.1", "feedback-prompt-v0.7.0", "feedback-prompt-v0.7.1",
+    ] = "feedback-prompt-v0.7.1"
     revision_alignment_version: Literal["local-sequence-alignment-v0.5.0"] = "local-sequence-alignment-v0.5.0"
     uptake_rule_version: Literal["feedback-uptake-v0.5.0"] = "feedback-uptake-v0.5.0"
     representative_draft_strategy: Literal[
@@ -67,6 +67,23 @@ class ConfigurationPayload(BaseModel):
     diagnostic_persistent_selected_threshold: int = Field(default=2, ge=2, le=20)
     diagnostic_reduction_window: int = Field(default=2, ge=1, le=10)
     learner_model_max_feedback_evidence: int = Field(default=5, ge=1, le=10)
+    feedback_validation_allow_server_longitudinal_repair: bool = True
+    feedback_validation_fail_whole_feedback_on_longitudinal_wording_only: bool = False
+    positive_finding_prohibit_ability_inference: bool = True
+    positive_finding_risky_ability_phrases: list[str] = Field(default_factory=lambda: [
+        "strong linguistic control", "advanced proficiency", "mastery", "native-like",
+        "superior writing ability", "high rhetorical awareness", "excellent command of English",
+        "sophisticated writer", "high-level writer", "superior ability",
+    ], min_length=1, max_length=30)
+    ui_default_view: Literal["student", "research_audit"] = "student"
+    ui_show_research_audit: bool = True
+    ui_collapse_technical_evidence: bool = True
+    ui_group_connectives_by_function: bool = True
+    ui_hide_empty_sections: bool = False
+    ui_show_explained_empty_states: bool = True
+    revision_ui_show_draft_chain: bool = True
+    revision_ui_show_first_to_latest_comparison: bool = True
+    revision_ui_show_pairwise_comparisons: bool = True
 
     @model_validator(mode="after")
     def ordered_variability_thresholds(self) -> "ConfigurationPayload":
@@ -90,7 +107,7 @@ class ConfigurationVersion(BaseModel):
     created_by: str
     parent_version: str | None = None
     payload: ConfigurationPayload
-    schema_version: str = "configuration-schema-v0.7.0"
+    schema_version: str = "configuration-schema-v0.7.1"
     change_note: str
     validation_status: Literal["not_validated", "passed", "failed"] = "not_validated"
     validation_errors: list[str] = Field(default_factory=list)

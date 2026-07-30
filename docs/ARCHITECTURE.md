@@ -1,5 +1,9 @@
 # v0.7 system architecture
 
+## v0.7.1 reliability overlay
+
+`SubmissionService` now derives `LongitudinalAssessment` from the task-aware Snapshot before provider execution. `PromptBuilder` sends those facts under `longitudinal_facts`; `FeedbackReliabilityService` may repair only an incompatible longitudinal comment or prohibited positive-finding ability phrase, after which `FeedbackValidator` rechecks exact quotations, IDs and facts. `ProviderRouter` records a structured execution state separately from formal feedback. RevisionService also exposes a read-only trajectory composed from existing append-only snapshots. Streamlit remains API-only and caches the returned submission result in session state across tab/view rerenders.
+
 The existing submission pipeline is preserved. After calibrated diagnosis persistence, `ProgressService` delegates task-aware calculations to `LearnerModelEngine` and saves an immutable Snapshot v2 through the same repository abstraction. The path is:
 
 `Essay/AnalysisRun/Calibration → representative draft selection → Task Cluster → Data Sufficiency → version-separated Metric/Diagnostic Trajectory → current targets/strength patterns → History Evidence registry → screened FeedbackContext → DeepSeek/LocalDemo`.

@@ -1,5 +1,11 @@
 # FastAPI v1
 
+## v0.7.1 response additions
+
+`POST /api/v1/submissions` retains `feedback_result`, `history`, and `revision_snapshot` and adds `feedback_provider_status`, `longitudinal_assessment`, `revision_group_summary`, `within_task_revision_trajectory`, and `ui_empty_states`. Empty states are localizable codes rather than fixed UI prose. `GET /api/v1/revisions/{revision_group_id}/trajectory` returns the draft chain, pairwise comparisons, first-to-latest comparison, diagnosis/metric changes, prior priorities, uptake candidates, major-rewrite flag, attribution confidence, and limitations. `GET /api/v1/system/version` reports application 0.7.1 and `structured-feedback-v0.7.1`.
+
+Provider and longitudinal status contracts are documented in [PROVIDER_STATUS.md](PROVIDER_STATUS.md); older top-level fields remain readable.
+
 ## v0.7 Learner Model endpoints
 
 - `GET /api/v1/students/{student_id}/learner-model`

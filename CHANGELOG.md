@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.7.1 — 2026-07-30
+
+- Added backend-owned `longitudinal_assessment`, conservative field-level repair, positive-finding ability-inference guardrails, and auditable provider execution status.
+- Added migration 9 and `config-v0.7.1` without deleting historical data; logical rollback reactivates `config-v0.7.0`.
+- Added within-task revision trajectory, first-to-latest and pairwise comparisons, explained empty-state codes, and backward-compatible API fields.
+- Refined Streamlit into Feedback, Revision, Progress, Evidence, and Research Audit tabs with Student/Research audit modes and explicit independent-task/revision entry.
+- Added Cases 1–10 regression coverage, live DeepSeek A–C verification, and desktop/mobile Playwright QA. No v0.8, scoring, CEFR, model training, cloud deployment, or frontend rewrite was introduced.
+
 ## 0.7.0 — 2026-07-30
 
 - Added immutable Learner Profile Snapshot v2, task clustering, four revision representative strategies, explicit Data Sufficiency, version-separated Metric/Diagnostic Trajectory v2, current learning targets, strength patterns, and append-only History Evidence.

@@ -1,27 +1,25 @@
 # Current Task State
 
-## Active task
+## Completed task
 
-v0.7 Learner Model 2.0 — task-aware, version-aware, explainable longitudinal profiling.
+v0.7.1 Longitudinal Reliability & UI Polish — `completed`.
 
 ## Verified baseline — 2026-07-30
 
-- Branch `master`; baseline commits `e34303f` and `b4be443`.
-- A sync-created Markdown conflict-marker incident was repaired before development; the worktree returned exactly to committed content.
-- Recovery tag: `pre-v0.7-baseline-20260730`.
-- Tests: `183 passed, 2 skipped`.
-- Database migration 7; 19 non-system tables; active `config-v0.6.2`.
-- Five essays, five AnalysisRuns, three Revision Snapshots and five Learner Profile Snapshots readable in the current local database.
-- Analyzer/Diagnosis v0.6.1; Comparability/Trend v0.3.0.
+- Branch `master`; baseline commit `6e7835d`; clean worktree before v0.7.1 edits.
+- Recovery tag `pre-v0.7.1-baseline-20260730`.
+- Normal tests: `195 passed, 3 skipped`; two known deprecation warnings.
+- Database migration 8; active `config-v0.7.0`; application 0.7.0; DeepSeek `deepseek-v4-flash` configured locally.
 - FastAPI health 200; API docs 200; Streamlit 200; `run.bat --verify` PASS.
-- `.env` ignored, no tracked database/cache files, and no tracked exact API-key match.
+- Isolated live no-history call reproduced the exact first-response longitudinal wording failure. The broad correction succeeded with retry 1 and no fallback on this run, confirming an intermittent fallback risk rather than an API connection failure.
+- Isolated four-draft task confirmed 4 drafts, 1 Revision Group, 1 independent task and 1 representative. It also reproduced zero priority/practice/previous-priority/uptake content that currently leaves empty UI headings.
 
-## Completed implementation — 2026-07-30
+## Completion gate — 2026-07-30
 
-- Existing Snapshot/Progress path upgraded in place; migration 8 and `config-v0.7.0` active.
-- Learner Model 2.0, Task Clusters, four representative strategies, Data Sufficiency, version-separated trajectories, zero-to-two current targets, strength patterns and append-only HE evidence verified.
-- `feedback-prompt-v0.7.0` sends only history bound to current Gate-selected targets.
-- Case A–I passed; normal suite `195 passed, 3 skipped`; explicit live suite `1 passed`.
-- Live DeepSeek: `deepseek-v4-flash`, validation passed, retry 0, fallback false.
-- FastAPI health/docs/Streamlit HTTP 200; `run.bat --verify` PASS; migration/security/readability checks PASS.
-- v0.8 and CALF remain `not_started`; stop after the isolated v0.7 commit.
+- Backend-owned longitudinal facts, conservative field repair, provider execution status, Positive Finding guardrails, Within-task Revision Trajectory, API fields, `config-v0.7.1`, and the five-tab Streamlit UI are implemented.
+- Normal suite: `209 passed, 4 skipped`; skipped tests are explicit live-provider tests. Focused reliability/router gate: `28 passed`.
+- DeepSeek Live A–C passed with `deepseek-v4-flash`; every scenario used fallback false. Live A passed directly, Live B passed after one correction, and Live C passed with server repair of only `longitudinal_assessment.comment`.
+- Playwright desktop/mobile QA passed with zero browser-console/page errors. View rerender testing preserved feedback and Learner Profile Snapshot row counts.
+- Migration 9 and active `config-v0.7.1` verified. Working database retained 5 essays, 5 analysis runs, 5 feedback rows, 3 revision snapshots and 5 learner-profile snapshots.
+- `run.bat --verify` PASS; FastAPI health 200; API docs 200; Streamlit 200. Tracked-file, Git-history, log and database scans found no credential pattern.
+- Required documentation is synchronized. The independent commit is the final action; v0.8, CALF and every other out-of-scope feature remain `not_started`.

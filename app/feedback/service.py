@@ -32,7 +32,7 @@ class FeedbackPipeline:
         self.database.record_versions({
             "application": settings.application_version, "analysis": settings.analysis_version,
             "diagnosis": settings.diagnosis_version, "prompt": settings.prompt_version,
-            "feedback_schema": "structured-feedback-v0.1.1",
+            "feedback_schema": "structured-feedback-v0.7.1",
         })
         self._service = SubmissionService(
             repository=self.database,

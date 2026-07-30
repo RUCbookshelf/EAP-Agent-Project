@@ -65,6 +65,9 @@ class WritingFeedbackApiClient:
     def get_revision_comparison(self, revision_group_id: str) -> dict[str, Any]:
         return self._request("GET", f"/api/v1/revisions/{revision_group_id}/comparison")
 
+    def get_revision_trajectory(self, revision_group_id: str) -> dict[str, Any]:
+        return self._request("GET", f"/api/v1/revisions/{revision_group_id}/trajectory")
+
     def get_revision_candidates(self, submission_id: int) -> dict[str, Any]:
         return self._request("GET", f"/api/v1/submissions/{submission_id}/revision-candidates")
 

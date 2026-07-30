@@ -8,6 +8,8 @@ from .schemas import (
     HistoryEvidence,
     HistoryResult,
     LLMCallAudit,
+    FeedbackProviderStatus,
+    LongitudinalAssessment,
     LongitudinalFeedback,
     PipelineResult,
     PositiveFinding,
@@ -18,6 +20,6 @@ from .schemas import (
 
 __all__ = [
     "AnalysisResult", "DiagnosisResult", "DiagnosisSignal", "EssaySubmission",
-    "ExerciseItem", "FeedbackItem", "HistoryEvidence", "HistoryResult", "LLMCallAudit",
-    "LongitudinalFeedback", "PipelineResult", "PositiveFinding", "ProviderResult", "RevisionFeedback", "StructuredFeedback",
+    "ExerciseItem", "FeedbackItem", "FeedbackProviderStatus", "HistoryEvidence", "HistoryResult", "LLMCallAudit",
+    "LongitudinalAssessment", "LongitudinalFeedback", "PipelineResult", "PositiveFinding", "ProviderResult", "RevisionFeedback", "StructuredFeedback",
 ]

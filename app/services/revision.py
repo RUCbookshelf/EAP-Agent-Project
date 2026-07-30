@@ -5,7 +5,8 @@ from typing import Any
 from app.repositories import RevisionRepository
 from app.revision import (
     DiagnosisTrajectory, FeedbackUptakeCandidate, LocalRevisionAligner, MetricChange,
-    RevisionComparabilityService, RevisionGroup, RevisionSnapshot,
+    RevisionComparabilityService, RevisionDraftChainItem, RevisionGroup, RevisionGroupSummary,
+    RevisionSnapshot, RevisionTrajectoryComparison, WithinTaskRevisionTrajectory,
 )
 
 
@@ -55,6 +56,11 @@ class RevisionService:
         return self.recalculate(group.revision_group_id, source_submission_id, target_submission_id)
 
     def recalculate(self, revision_group_id: str, source_submission_id: int, target_submission_id: int) -> RevisionSnapshot:
+        return self.repository.save_revision_snapshot(
+            self._calculate(revision_group_id, source_submission_id, target_submission_id)
+        )
+
+    def _calculate(self, revision_group_id: str, source_submission_id: int, target_submission_id: int) -> RevisionSnapshot:
         source = self.repository.get_submission_bundle(source_submission_id)
         target = self.repository.get_submission_bundle(target_submission_id)
         if source is None or target is None:
@@ -98,7 +104,7 @@ class RevisionService:
                                 "uptake": self.uptake_version, "diagnosis_trajectory": "revision-diagnosis-trajectory-v0.5.0"},
             resource_versions={}, limitations=limitations,
         )
-        return self.repository.save_revision_snapshot(snapshot)
+        return snapshot
 
     def candidates(self, submission_id: int) -> list[dict[str, Any]]:
         return self.repository.list_revision_candidates(submission_id)
@@ -117,6 +123,98 @@ class RevisionService:
 
     def history(self, revision_group_id: str) -> list[RevisionSnapshot]:
         return [RevisionSnapshot.model_validate(item) for item in self.repository.list_revision_snapshots(revision_group_id)]
+
+    def group_summary(self, revision_group_id: str) -> RevisionGroupSummary:
+        group = self.group(revision_group_id)
+        return RevisionGroupSummary(
+            revision_group_id=revision_group_id,
+            draft_submission_count=len(group.member_submission_ids),
+        )
+
+    def trajectory(self, revision_group_id: str) -> WithinTaskRevisionTrajectory:
+        group = self.group(revision_group_id)
+        members = [
+            self.repository.get_submission_bundle(submission_id)
+            for submission_id in group.member_submission_ids
+        ]
+        if any(item is None for item in members):
+            raise LookupError("A Revision Group member is unavailable.")
+        records = [item for item in members if item is not None]
+        draft_chain = [
+            RevisionDraftChainItem(
+                submission_id=int(item["essay_id"]), draft_stage=str(item.get("draft_stage") or "unknown"),
+                revision_sequence=int(item.get("revision_sequence") or index),
+                submitted_at=item["submitted_at"], writing_prompt=str(item.get("writing_prompt") or ""),
+                revision_group_id=revision_group_id,
+            )
+            for index, item in enumerate(records, 1)
+        ]
+        latest_by_pair: dict[tuple[int, int], RevisionSnapshot] = {}
+        for snapshot in self.history(revision_group_id):
+            latest_by_pair[(snapshot.source_submission_id, snapshot.target_submission_id)] = snapshot
+        pairwise_snapshots: list[RevisionSnapshot] = []
+        for source, target in zip(records, records[1:]):
+            key = (int(source["essay_id"]), int(target["essay_id"]))
+            snapshot = latest_by_pair.get(key)
+            if snapshot is not None:
+                pairwise_snapshots.append(snapshot)
+        first_to_latest_snapshot = None
+        if len(records) >= 2:
+            key = (int(records[0]["essay_id"]), int(records[-1]["essay_id"]))
+            first_to_latest_snapshot = latest_by_pair.get(key) or self._calculate(
+                revision_group_id, key[0], key[1]
+            )
+        pairwise = [self._trajectory_comparison(item) for item in pairwise_snapshots]
+        first_to_latest = (
+            self._trajectory_comparison(first_to_latest_snapshot)
+            if first_to_latest_snapshot is not None else None
+        )
+        previous = records[-2] if len(records) >= 2 else None
+        current = records[-1]
+        previous_priorities = list((previous.get("feedback") or {}).get("priority_feedback", [])) if previous else []
+        current_priorities = [
+            {
+                "diagnosis_id": item.get("diagnosis_id"), "category": item.get("category"),
+                "selection_status": item.get("selection_status", "selected_priority"),
+            }
+            for item in (current.get("diagnosis") or {}).get("improvement_priorities", [])
+        ]
+        major = any(item.major_rewrite for item in pairwise_snapshots) or bool(
+            first_to_latest_snapshot and first_to_latest_snapshot.major_rewrite
+        )
+        latest_snapshot = pairwise_snapshots[-1] if pairwise_snapshots else first_to_latest_snapshot
+        attribution = "insufficient" if major else "low"
+        limitations = [
+            "Within-task changes are observable text differences, not cross-task development or ability growth.",
+            "Feedback-uptake candidates do not establish that feedback caused a revision.",
+        ]
+        if major:
+            limitations.append("Major rewriting prevents reliable attribution of changes to prior feedback.")
+        if not previous_priorities:
+            limitations.append("No previous selected priority is available for uptake tracking.")
+        return WithinTaskRevisionTrajectory(
+            revision_group_id=revision_group_id, draft_chain=draft_chain,
+            pairwise_comparisons=pairwise, first_to_latest_comparison=first_to_latest,
+            diagnosis_changes=first_to_latest.diagnosis_changes if first_to_latest else [],
+            metric_changes=first_to_latest.metric_changes if first_to_latest else [],
+            previous_selected_priorities=previous_priorities,
+            current_priority_status=current_priorities,
+            feedback_uptake_candidates=(latest_snapshot.uptake_candidates if latest_snapshot else []),
+            attribution_confidence=attribution, major_rewrite_detected=major,
+            limitations=limitations,
+        )
+
+    @staticmethod
+    def _trajectory_comparison(snapshot: RevisionSnapshot) -> RevisionTrajectoryComparison:
+        return RevisionTrajectoryComparison(
+            source_submission_id=snapshot.source_submission_id,
+            target_submission_id=snapshot.target_submission_id,
+            token_changes=snapshot.token_changes, metric_changes=snapshot.metric_changes,
+            diagnosis_changes=snapshot.diagnosis_trajectories,
+            major_rewrite=snapshot.major_rewrite,
+            attribution_confidence="insufficient" if snapshot.major_rewrite else "low",
+            limitations=snapshot.limitations,
+        )
 
     @staticmethod
     def _metric_changes(source: dict, target: dict, versions: dict[str, str]) -> list[MetricChange]:

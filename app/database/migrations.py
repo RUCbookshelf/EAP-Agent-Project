@@ -6,7 +6,7 @@ import json
 from collections.abc import Callable
 
 
-LATEST_MIGRATION_VERSION = 8
+LATEST_MIGRATION_VERSION = 9
 
 
 def _add_column_if_missing(
@@ -462,6 +462,69 @@ def _migration_8(connection: sqlite3.Connection) -> None:
     )
 
 
+def _migration_9(connection: sqlite3.Connection) -> None:
+    """Add safe provider metadata and activate the preserved v0.7.1 configuration child."""
+    _add_column_if_missing(
+        connection, "feedback_records", "provider_status_json", "TEXT NOT NULL DEFAULT '{}'"
+    )
+    active = connection.execute(
+        "SELECT * FROM configuration_versions WHERE status='active' ORDER BY configuration_row_id DESC LIMIT 1"
+    ).fetchone()
+    if active is None:
+        return
+    existing = connection.execute(
+        "SELECT * FROM configuration_versions WHERE version='config-v0.7.1' LIMIT 1"
+    ).fetchone()
+    from app.configuration import ConfigurationPayload
+    old = dict(active)
+    now = "2026-07-30T16:00:00+00:00"
+    if existing is None:
+        payload = ConfigurationPayload.model_validate(json.loads(old["payload_json"])).model_dump(mode="json")
+        payload["active_prompt_version"] = "feedback-prompt-v0.7.1"
+        canonical = json.dumps(payload, sort_keys=True, separators=(",", ":"))
+        content_hash = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+        connection.execute(
+            "UPDATE configuration_versions SET status='inactive', deactivated_at=? WHERE configuration_id=?",
+            (now, old["configuration_id"]),
+        )
+        cursor = connection.execute(
+            """INSERT INTO configuration_versions(
+                version,status,created_at,created_by,parent_version,payload_json,schema_version,
+                change_note,validation_status,validation_errors_json,activated_at,content_hash
+            ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)""",
+            ("config-v0.7.1", "active", now, "system", old["version"], canonical,
+             "configuration-schema-v0.7.1", "Activate v0.7.1 reliability and UI defaults.",
+             "passed", "[]", now, content_hash),
+        )
+        configuration_id = f"CFG{int(cursor.lastrowid):06d}"
+        connection.execute(
+            "UPDATE configuration_versions SET configuration_id=? WHERE configuration_row_id=?",
+            (configuration_id, int(cursor.lastrowid)),
+        )
+    else:
+        item = dict(existing)
+        configuration_id = item["configuration_id"]
+        connection.execute(
+            "UPDATE configuration_versions SET status='inactive', deactivated_at=? WHERE status='active'",
+            (now,),
+        )
+        connection.execute(
+            "UPDATE configuration_versions SET status='active', activated_at=?, deactivated_at=NULL WHERE configuration_id=?",
+            (now, configuration_id),
+        )
+    audit = connection.execute(
+        """INSERT INTO configuration_audit(
+            configuration_id,action,actor,reason,details_json,created_at
+        ) VALUES (?,?,?,?,?,?)""",
+        (configuration_id, "activate", "system", "v0.7.1 reliability migration activation.",
+         json.dumps({"parent_version": "config-v0.7.0", "prototype_defaults_unvalidated": True}), now),
+    )
+    connection.execute(
+        "UPDATE configuration_audit SET audit_id=? WHERE audit_row_id=?",
+        (f"CA{int(audit.lastrowid):06d}", int(audit.lastrowid)),
+    )
+
+
 MIGRATIONS: dict[int, tuple[str, Callable[[sqlite3.Connection], None]]] = {
     1: ("preserve_v0_1_1_schema", _migration_1),
     2: ("cloud_ready_repository_indexes", _migration_2),
@@ -471,6 +534,7 @@ MIGRATIONS: dict[int, tuple[str, Callable[[sqlite3.Connection], None]]] = {
     6: ("versioned_non_sensitive_configuration", _migration_6),
     7: ("diagnostic_calibration_and_metric_confidence", _migration_7),
     8: ("learner_model_v2_and_history_evidence", _migration_8),
+    9: ("longitudinal_reliability_and_provider_status", _migration_9),
 }
 
 
@@ -492,3 +556,35 @@ def upgrade(connection: sqlite3.Connection) -> int:
         with connection:
             _ensure_feedback_append_only(connection)
     return int(connection.execute("PRAGMA user_version").fetchone()[0])
+
+
+def rollback(connection: sqlite3.Connection, target_version: int) -> int:
+    """Logically roll migration 9 back without deleting its additive data or column."""
+    current = int(connection.execute("PRAGMA user_version").fetchone()[0])
+    if current == target_version:
+        return current
+    if current != 9 or target_version != 8:
+        raise ValueError("Only the non-destructive v0.7.1 migration 9 -> 8 rollback is supported.")
+    with connection:
+        active = connection.execute(
+            "SELECT * FROM configuration_versions WHERE status='active' AND version='config-v0.7.1'"
+        ).fetchone()
+        if active:
+            item = dict(active)
+            parent = connection.execute(
+                "SELECT * FROM configuration_versions WHERE version=?", (item["parent_version"],)
+            ).fetchone()
+            if parent is None:
+                raise RuntimeError("config-v0.7.1 parent is unavailable; rollback was not applied.")
+            now = "2026-07-30T16:00:01+00:00"
+            connection.execute(
+                "UPDATE configuration_versions SET status='inactive', deactivated_at=? WHERE configuration_id=?",
+                (now, item["configuration_id"]),
+            )
+            connection.execute(
+                "UPDATE configuration_versions SET status='active', activated_at=?, deactivated_at=NULL WHERE configuration_id=?",
+                (now, dict(parent)["configuration_id"]),
+            )
+        connection.execute("DELETE FROM schema_migrations WHERE version=9")
+        connection.execute("PRAGMA user_version = 8")
+    return 8

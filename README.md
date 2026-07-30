@@ -1,4 +1,8 @@
-# 智能英语写作反馈系统原型 v0.7
+# 智能英语写作反馈系统原型 v0.7.1
+
+v0.7.1 是 v0.7 的可靠性与界面修复版。后端现在确定性生成结构化纵向状态，区分跨任务历史与同一任务多稿；Provider 状态明确区分外部成功、服务端局部修复、请求/解析/验证/纠错失败及 LocalDemo 回退。Streamlit 提供 Feedback、Revision、Progress、Evidence、Research Audit 五个 Tab，以及学生/研究者视图切换和有解释的空状态。详见 [UI design](docs/UI_DESIGN.md)、[Provider status](docs/PROVIDER_STATUS.md) 与 [Within-task trajectory](docs/WITHIN_TASK_REVISION_TRAJECTORY.md)。
+
+仍不得把任何状态、轨迹或 Positive Finding 解释为能力、熟练度、学习增长、CEFR 或整体评分。运行与验收记录见 [RUN_VERIFICATION_V0.7.1.md](RUN_VERIFICATION_V0.7.1.md)。
 
 v0.7 将原有纵向模块升级为任务感知、版本隔离、证据可追溯的 Learner Model 2.0。系统先选择每个修订任务的代表稿，再按写作条件建立 Task Cluster；Metric 与 Diagnostic Trajectory 只在兼容集内计算。当前学习目标只能来自当前作文已通过 Diagnostic Gate 且证据相关性已验证的诊断，允许零目标。
 

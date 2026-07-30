@@ -69,7 +69,10 @@ class DeepSeekProvider(LLMProvider):
         try:
             content = response_data["choices"][0]["message"]["content"].strip()
         except (KeyError, IndexError, TypeError, AttributeError) as exc:
-            raise ProviderOutputError("DeepSeek response did not contain message content") from exc
+            raise ProviderOutputError(
+                "DeepSeek response did not contain message content",
+                reason_code="response_parse_failed",
+            ) from exc
         if content.startswith("```"):
             content = content.split("\n", 1)[1].rsplit("```", 1)[0]
         try:
@@ -80,7 +83,9 @@ class DeepSeekProvider(LLMProvider):
                 f"DeepSeek output failed StructuredFeedback validation: {details}"
             ) from exc
         except ValueError as exc:
-            raise ProviderOutputError("DeepSeek output was not valid JSON") from exc
+            raise ProviderOutputError(
+                "DeepSeek output was not valid JSON", reason_code="response_parse_failed"
+            ) from exc
 
     @staticmethod
     def _validation_summary(exc: ValidationError) -> str:

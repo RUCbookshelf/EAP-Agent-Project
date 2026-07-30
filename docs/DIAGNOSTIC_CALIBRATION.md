@@ -1,5 +1,9 @@
 # Diagnostic Calibration v0.6.1
 
+## v0.7.1 reliability use
+
+Calibration and gates are unchanged. Zero selected priorities and zero targeted practices are valid and now produce explicit UI empty-state codes. Positive findings remain independently validated: explanations may describe the quoted observable feature but prohibited ability/proficiency inferences are locally replaced without reactivating a diagnosis or discarding other valid feedback.
+
 ## v0.7 longitudinal use
 
 Calibration v0.6.1 remains authoritative for the current essay. Learner Model v0.7 may summarize prior selected diagnoses within a compatible Task Cluster, but it cannot re-enable a current monitored or suppressed signal. Current learning targets require current `selected_priority` plus `evidence_relevance_status=verified`; zero targets is valid. The calibration version is recorded on every trajectory.

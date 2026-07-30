@@ -107,3 +107,45 @@ class RevisionSnapshot(BaseModel):
     generated_at: datetime = Field(default_factory=utc_now)
     limitations: list[str]
 
+
+class RevisionDraftChainItem(BaseModel):
+    submission_id: int
+    draft_stage: str
+    revision_sequence: int
+    submitted_at: datetime
+    writing_prompt: str
+    revision_group_id: str
+
+
+class RevisionGroupSummary(BaseModel):
+    revision_group_id: str
+    draft_submission_count: int = Field(ge=1)
+    revision_group_count: Literal[1] = 1
+    independent_task_count: Literal[1] = 1
+    longitudinal_representative_count: Literal[1] = 1
+
+
+class RevisionTrajectoryComparison(BaseModel):
+    source_submission_id: int
+    target_submission_id: int
+    token_changes: dict[str, Any]
+    metric_changes: list[MetricChange]
+    diagnosis_changes: list[DiagnosisTrajectory]
+    major_rewrite: bool
+    attribution_confidence: Literal["low", "insufficient"]
+    limitations: list[str] = Field(default_factory=list)
+
+
+class WithinTaskRevisionTrajectory(BaseModel):
+    revision_group_id: str
+    draft_chain: list[RevisionDraftChainItem]
+    pairwise_comparisons: list[RevisionTrajectoryComparison]
+    first_to_latest_comparison: RevisionTrajectoryComparison | None = None
+    diagnosis_changes: list[DiagnosisTrajectory] = Field(default_factory=list)
+    metric_changes: list[MetricChange] = Field(default_factory=list)
+    previous_selected_priorities: list[dict[str, Any]] = Field(default_factory=list)
+    current_priority_status: list[dict[str, Any]] = Field(default_factory=list)
+    feedback_uptake_candidates: list[FeedbackUptakeCandidate] = Field(default_factory=list)
+    attribution_confidence: Literal["low", "insufficient"]
+    major_rewrite_detected: bool
+    limitations: list[str] = Field(default_factory=list)

@@ -59,7 +59,10 @@ class LocalDemoProvider(LLMProvider):
             )
         else:
             longitudinal = LongitudinalFeedback(
-                comment="数据不足，无法进行纵向判断。",
+                comment=(
+                    "Cross-task longitudinal judgment is currently unavailable because evidence is insufficient "
+                    "（数据不足，无法判断）for a comparable independent-task history judgment."
+                ),
                 history_evidence_ids=[], confidence="low",
                 limitation=history["limitations"][0],
             )
@@ -97,7 +100,7 @@ class LocalDemoProvider(LLMProvider):
                 for index, item in enumerate(priorities)
             ],
             exercises=self.exercise_generator.generate(
-                priorities, payload.get("diagnostic_calibration", {}).get("exercise_generation")
+                priorities, (payload.get("diagnostic_calibration") or {}).get("exercise_generation")
             ),
             longitudinal=longitudinal,
             revision=revision,

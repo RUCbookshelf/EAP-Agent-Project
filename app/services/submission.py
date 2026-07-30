@@ -54,15 +54,15 @@ class SubmissionService:
         self.revision_service = revision_service
         self.calibrator = calibrator
         self.repository.record_versions({
-            "application": "0.7.0",
+            "application": "0.7.1",
             "analysis": getattr(analyzer, "version", "unknown"),
             "diagnosis": getattr(diagnoser, "version", "unknown"),
             "diagnostic_calibration": "diagnostic-calibration-v0.6.1",
-            "feedback_schema": "structured-feedback-v0.7.0",
+            "feedback_schema": "structured-feedback-v0.7.1",
             "api": "v1",
             "metric_registry": "metric-registry-v0.6.1",
             "revision": "revision-analysis-v0.5.0",
-            "configuration": "configuration-schema-v0.7.0",
+            "configuration": "configuration-schema-v0.7.1",
             "learner_model": "learner-profile-v0.7.0",
             "visualization": "progress-visualization-data-v0.6.0",
         })
@@ -117,7 +117,40 @@ class SubmissionService:
             submission, analysis, diagnosis, history, snapshot, revision_snapshot,
             calibration.prompt_payload() if calibration else None,
         )
+        longitudinal_assessment = (
+            self.router.reliability.assessment(context)
+            if snapshot is not None and snapshot.profile_version == "learner-profile-v0.7.0"
+            else None
+        )
+        context = FeedbackContext(
+            submission, analysis, diagnosis, history, snapshot, revision_snapshot,
+            calibration.prompt_payload() if calibration else None,
+            longitudinal_assessment,
+        )
         provider_result = self.router.generate(context)
+        revision_group_summary = None
+        within_task_revision_trajectory = None
+        if revision_snapshot is not None and self.revision_service is not None:
+            revision_group_summary = self.revision_service.group_summary(
+                revision_snapshot.revision_group_id
+            )
+            within_task_revision_trajectory = self.revision_service.trajectory(
+                revision_snapshot.revision_group_id
+            )
+        ui_empty_states: list[str] = []
+        if not provider_result.feedback.priority_feedback:
+            ui_empty_states.append("NO_SELECTED_PRIORITY")
+        if not provider_result.feedback.exercises:
+            ui_empty_states.append("NO_TARGETED_PRACTICE")
+        if longitudinal_assessment is not None and longitudinal_assessment.status in {"unavailable", "not_comparable"}:
+            ui_empty_states.append("INSUFFICIENT_CROSS_TASK_HISTORY")
+        if within_task_revision_trajectory is not None:
+            if within_task_revision_trajectory.major_rewrite_detected:
+                ui_empty_states.append("MAJOR_REWRITE_LIMITS_ATTRIBUTION")
+            if not within_task_revision_trajectory.previous_selected_priorities:
+                ui_empty_states.append("NO_PREVIOUS_PRIORITY")
+            if not within_task_revision_trajectory.feedback_uptake_candidates:
+                ui_empty_states.append("NO_FEEDBACK_UPTAKE_CANDIDATE")
         self.repository.save_feedback(essay_id, provider_result, analysis.analysis_version)
         self.repository.save_history(submission.student_id, essay_id, history)
         return PipelineResult(
@@ -130,6 +163,10 @@ class SubmissionService:
             comparable_history_count=history.comparable_submission_count,
             revision_snapshot=revision_snapshot,
             diagnostic_calibration=calibration,
+            longitudinal_assessment=provider_result.feedback.longitudinal_assessment,
+            revision_group_summary=revision_group_summary,
+            within_task_revision_trajectory=within_task_revision_trajectory,
+            ui_empty_states=ui_empty_states,
         )
 
     def regenerate_feedback(self, essay_id: int, analysis: AnalysisResult):
@@ -163,6 +200,16 @@ class SubmissionService:
         context = FeedbackContext(
             submission, analysis, DiagnosisResult.model_validate(row["diagnosis"]), history,
             profile, revision_snapshot, calibration.prompt_payload() if calibration else None,
+        )
+        assessment = (
+            self.router.reliability.assessment(context)
+            if profile is not None and profile.profile_version == "learner-profile-v0.7.0"
+            else None
+        )
+        context = FeedbackContext(
+            submission, analysis, DiagnosisResult.model_validate(row["diagnosis"]), history,
+            profile, revision_snapshot, calibration.prompt_payload() if calibration else None,
+            assessment,
         )
         result = self.router.generate(context)
         self.repository.save_feedback(essay_id, result, analysis.analysis_version)

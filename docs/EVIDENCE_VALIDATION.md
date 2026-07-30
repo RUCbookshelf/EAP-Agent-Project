@@ -1,5 +1,9 @@
 # Evidence Validation v0.6.1
 
+## v0.7.1 structured reliability checks
+
+The validator compares every structured longitudinal fact with the backend assessment, rejects unknown History Evidence IDs, and prevents trend wording above the available evidence level. It no longer treats one fixed phrase as the authoritative no-history contract. The reliability service can conservatively replace only incompatible longitudinal wording and configured risky positive-finding phrases; exact quotation, diagnosis relevance, revision evidence and ID checks remain mandatory.
+
 Feedback evidence passes two independent checks:
 
 1. exact presence: the quotation is a continuous verbatim span of the essay after whitespace normalization;

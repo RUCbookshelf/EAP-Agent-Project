@@ -9,6 +9,7 @@ from app.models import (
     DiagnosisResult,
     EssaySubmission,
     HistoryResult,
+    LongitudinalAssessment,
     StructuredFeedback,
 )
 from app.core import LearnerProfileSnapshot
@@ -24,10 +25,15 @@ class FeedbackContext:
     learner_profile_snapshot: LearnerProfileSnapshot | None = None
     revision_snapshot: RevisionSnapshot | None = None
     diagnostic_calibration: dict[str, Any] | None = None
+    longitudinal_assessment: LongitudinalAssessment | None = None
 
 
 class ProviderOutputError(RuntimeError):
     """A provider returned a response that could not satisfy the Pydantic schema."""
+
+    def __init__(self, message: str, *, reason_code: str = "response_validation_failed") -> None:
+        super().__init__(message)
+        self.reason_code = reason_code
 
 
 class LLMProvider(ABC):

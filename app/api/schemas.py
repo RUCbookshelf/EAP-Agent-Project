@@ -6,8 +6,13 @@ from typing import Any, Literal
 from pydantic import BaseModel, Field
 
 from app.core import IssueTrajectory, LearnerProfileSnapshot, PriorityCandidate
-from app.models import AnalysisResult, DiagnosisResult, EssaySubmission, HistoryResult, ProviderResult
-from app.revision import RevisionGroup, RevisionSnapshot
+from app.models import (
+    AnalysisResult, DiagnosisResult, EssaySubmission, FeedbackProviderStatus,
+    HistoryResult, LongitudinalAssessment, ProviderResult,
+)
+from app.revision import (
+    RevisionGroup, RevisionGroupSummary, RevisionSnapshot, WithinTaskRevisionTrajectory,
+)
 from app.configuration import ConfigurationCreate, ConfigurationVersion
 from app.services.admin_reanalysis import ReanalysisRequest
 from app.calibration import DiagnosticCalibrationResult
@@ -35,6 +40,11 @@ class SubmissionResponse(BaseModel):
     history: HistoryResult
     revision_snapshot: RevisionSnapshot | None = None
     diagnostic_calibration: DiagnosticCalibrationResult | None = None
+    feedback_provider_status: FeedbackProviderStatus | None = None
+    longitudinal_assessment: LongitudinalAssessment | None = None
+    revision_group_summary: RevisionGroupSummary | None = None
+    within_task_revision_trajectory: WithinTaskRevisionTrajectory | None = None
+    ui_empty_states: list[str] = Field(default_factory=list)
 
 
 class RevisionCreateRequest(BaseModel):
@@ -68,6 +78,7 @@ class SubmissionRecordResponse(BaseModel):
     prompt_version: str | None
     schema_version: str | None
     history_summary: str | None
+    provider_status: dict[str, Any] | None = None
 
 
 class HealthResponse(BaseModel):

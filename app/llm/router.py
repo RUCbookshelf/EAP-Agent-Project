@@ -3,8 +3,9 @@ from __future__ import annotations
 from datetime import datetime, timezone
 import re
 
+from app.feedback import FeedbackReliabilityService
 from app.feedback.validation import FeedbackValidationError, FeedbackValidator
-from app.models import LLMCallAudit, ProviderResult
+from app.models import FeedbackProviderStatus, LLMCallAudit, ProviderResult
 from app.prompts import PromptBuilder, PromptBundle
 
 from .base import FeedbackContext, LLMProvider, ProviderOutputError
@@ -20,11 +21,13 @@ class ProviderRouter:
 
     def __init__(self, primary: LLMProvider, fallback: LocalDemoProvider | None = None,
                  prompt_builder: PromptBuilder | None = None,
-                 validator: FeedbackValidator | None = None):
+                 validator: FeedbackValidator | None = None,
+                 reliability: FeedbackReliabilityService | None = None):
         self.primary = primary
         self.fallback = fallback or LocalDemoProvider()
         self.prompt_builder = prompt_builder or PromptBuilder()
         self.validator = validator or FeedbackValidator()
+        self.reliability = reliability or FeedbackReliabilityService()
 
     def generate(self, context: FeedbackContext) -> ProviderResult:
         original = self.prompt_builder.build(context)
@@ -34,31 +37,51 @@ class ProviderRouter:
         audits: list[LLMCallAudit] = []
         bundle = original
         failures: list[str] = []
+        failure_codes: list[str] = []
         max_attempts = 1 if not getattr(self.primary, "configured", True) else 2
         for attempt in range(max_attempts):
             request_time = utc_now()
             try:
                 feedback = self.primary.generate(bundle.messages, temperature=self.temperature)
+                feedback, repair_fields = self.reliability.repair(feedback, context)
                 self.validator.validate(feedback, context)
                 response_time = utc_now()
                 audits.append(self._audit(
                     bundle, self.primary, request_time, response_time, "success", "passed", attempt,
                 ))
+                repaired = bool(repair_fields)
+                provider_status = FeedbackProviderStatus(
+                    status="external_success_with_server_repair" if repaired else "external_success",
+                    provider=self.primary.provider_name, model=self.primary.model_name,
+                    request_status="succeeded",
+                    initial_validation_status=(
+                        "failed" if attempt > 0 else "core_passed" if repaired else "passed"
+                    ),
+                    correction_attempted=attempt > 0,
+                    correction_validation_status="passed" if attempt > 0 else "not_run",
+                    server_repair_used=repaired, server_repair_fields=repair_fields,
+                    fallback_used=False, retry_count=attempt,
+                )
                 return ProviderResult(
                     feedback=feedback, provider_name=self.primary.provider_name,
                     model_name=self.primary.model_name, success_status="success",
-                    validation_status="passed", retry_count=attempt,
+                    validation_status="passed_with_server_repair" if repaired else "passed", retry_count=attempt,
                     prompt_version=bundle.prompt_version,
                     system_template_hash=bundle.system_template_hash,
                     user_template_hash=bundle.user_template_hash,
                     rendered_prompt_hash=bundle.rendered_prompt_hash,
                     schema_version=bundle.schema_version, temperature=self.temperature,
                     request_time=request_time, response_time=response_time, call_audits=audits,
+                    feedback_provider_status=provider_status,
                 )
             except (FeedbackValidationError, ProviderOutputError) as exc:
                 response_time = utc_now()
                 failure = self._safe_failure(exc)
                 failures.append(failure)
+                failure_codes.append(
+                    getattr(exc, "reason_code", "response_validation_failed")
+                    if isinstance(exc, ProviderOutputError) else "response_validation_failed"
+                )
                 audits.append(self._audit(
                     bundle, self.primary, request_time, response_time, "failed", "failed", attempt,
                     failure,
@@ -71,23 +94,34 @@ class ProviderRouter:
                 response_time = utc_now()
                 failure = self._safe_failure(exc)
                 failures.append(failure)
+                failure_codes.append("request_failed")
                 audits.append(self._audit(
                     bundle, self.primary, request_time, response_time, "failed", "not_run", attempt,
                     failure,
                 ))
                 break
 
+        failures = list(dict.fromkeys(failures))
         fallback_reason = " | ".join(failures)[-1200:]
+        reason_code = (
+            "correction_failed" if len(failure_codes) > 1 else
+            failure_codes[-1] if failure_codes else "request_failed"
+        )
         return self._local_result(
             context, original, success_status="fallback_success", call_audits=audits,
             fallback_reason=fallback_reason, retry_count=max(0, len(audits) - 1),
+            fallback_reason_code=reason_code,
+            provider_status_code=failure_codes[0] if failure_codes else "request_failed",
         )
 
     def _local_result(self, context: FeedbackContext, bundle: PromptBundle, *,
                       success_status: str, call_audits: list[LLMCallAudit],
-                      fallback_reason: str | None = None, retry_count: int = 0) -> ProviderResult:
+                      fallback_reason: str | None = None, retry_count: int = 0,
+                      fallback_reason_code: str | None = None,
+                      provider_status_code: str | None = None) -> ProviderResult:
         request_time = utc_now()
         feedback = self.fallback.generate(bundle.messages, temperature=self.temperature)
+        feedback, repair_fields = self.reliability.repair(feedback, context)
         self.validator.validate(feedback, context)
         response_time = utc_now()
         local_status = "fallback_success" if success_status == "fallback_success" else "success"
@@ -95,6 +129,22 @@ class ProviderRouter:
             bundle, self.fallback, request_time, response_time,
             local_status, "passed", retry_count, fallback_reason,
         ))
+        fallback_used = success_status == "fallback_success"
+        provider_status = FeedbackProviderStatus(
+            status=(provider_status_code or "fallback_success") if fallback_used else "fallback_success",
+            provider=self.primary.provider_name if fallback_used else self.fallback.provider_name,
+            model=self.primary.model_name if fallback_used else self.fallback.model_name,
+            request_status="failed" if fallback_used else "not_attempted",
+            initial_validation_status=(
+                "not_run" if fallback_used and provider_status_code == "request_failed"
+                else "failed" if fallback_used else "passed"
+            ),
+            correction_attempted=retry_count > 0,
+            correction_validation_status="failed" if retry_count > 0 and fallback_used else "not_run",
+            server_repair_used=bool(repair_fields), server_repair_fields=repair_fields,
+            fallback_used=fallback_used, fallback_reason_code=fallback_reason_code,
+            sanitized_reason=fallback_reason, retry_count=retry_count,
+        )
         return ProviderResult(
             feedback=feedback, provider_name=self.fallback.provider_name,
             model_name=self.fallback.model_name, success_status=success_status,
@@ -105,6 +155,7 @@ class ProviderRouter:
             rendered_prompt_hash=bundle.rendered_prompt_hash,
             schema_version=bundle.schema_version, temperature=self.temperature,
             request_time=request_time, response_time=response_time, call_audits=call_audits,
+            feedback_provider_status=provider_status,
         )
 
     def _audit(self, bundle: PromptBundle, provider: LLMProvider,

@@ -1,6 +1,15 @@
 # 项目状态
 
-## 当前 v0.7 状态
+## 当前 v0.7.1 状态
+
+- 状态：`completed`；应用 0.7.1；数据库迁移 9；active configuration `config-v0.7.1`，父版本 `config-v0.7.0` 保留。
+- Prompt/Schema 为 `feedback-prompt-v0.7.1` / `structured-feedback-v0.7.1`。纵向事实由后端生成；DeepSeek只能在结构化边界内表述，局部不可靠文字可被服务端修复。
+- 同一 Revision Group 的多稿只贡献一个跨任务代表项，同时通过 Within-task Revision Trajectory 显示 Draft Chain、逐稿比较及第一稿到当前稿。
+- Streamlit 使用五个结果 Tab 和学生/研究者视图；UI重渲染读取 session/API 结果，不再次调用分析器、LLM 或创建 Snapshot。
+- 验收：209 passed、4 个显式 live 测试默认 skipped；DeepSeek Live A–C 通过且全部 fallback false；`run.bat --verify` 与 FastAPI/docs/Streamlit HTTP 200 通过。
+- v0.8 与所有能力评分、CEFR、CALF 总分、云部署和前端框架替换仍为 `not_started`。
+
+## v0.7 retained baseline
 
 - 状态：`completed`；应用 0.7.0；数据库迁移 8；active configuration `config-v0.7.0`，父版本 `config-v0.6.2` 保留。
 - Snapshot v2 为 `learner-profile-v0.7.0`；Task Cluster、Data Sufficiency、Metric/Diagnostic Trajectory、Learning Target、Strength Pattern 与 History Evidence 独立版本化。
@@ -17,7 +26,7 @@
 - First Draft 与绑定 Revised Draft 回归通过；分散出现 3 次且无局部聚集的 `bias` 保持 monitored，不进入学生优先反馈。
 - 真实 DeepSeek First Draft：provider `deepseek`，model `deepseek-v4-flash`，validation `passed`，retry 0，fallback false。
 - 完整测试：183 passed，2 skipped；FastAPI、API docs、Streamlit 均 HTTP 200；`run.bat --verify` PASS。
-- v0.7 与 CALF 开发保持 `not_started`；所有阈值仍是未经教育或测量学验证的原型参数。
+- At the earlier v0.6.1 checkpoint, v0.7 and CALF were `not_started`; v0.7 is now completed and CALF remains outside scope. All thresholds remain educationally and psychometrically unvalidated prototype parameters.
 
 ## 当前 v0.6 状态
 
@@ -25,7 +34,7 @@
 - 进展、修订和管理视图均只通过 FastAPI 获取结构化结果，Streamlit 不重算研究指标。
 - 配置 payload 只允许 Pydantic 白名单中的非敏感字段；Key、密码和完整敏感环境变量不进入数据库/API/UI。
 - 重分析默认仅运行本地 Analyzer；LLM 再生成必须单独勾选并确认可能费用。
-- v0.7/CALF measurement 保持 not_started；v0.6 完成后等待最终人工评审。
+- Historical v0.6 checkpoint: v0.7/CALF measurement was then not started; v0.7 is now completed while CALF remains not started.
 
 ## 当前 v0.5 状态
 
@@ -88,9 +97,9 @@
 - progress/profile APIs are active; no CEFR, overall score, ranking or validated ability-change output exists.
 - v0.4 remains not_started and is outside the current authorization.
 
-## v0.4 current state
+## v0.4 historical state
 
-- Owner authorization received for the bounded v0.4 → v0.5 → v0.6 sequence; v0.7 remains unauthorized.
+- Historical note: authorization at that checkpoint covered v0.4 → v0.5 → v0.6 only; later v0.7/v0.7.1 authorization is recorded above.
 - Application 0.4.0; migration 4; `spacy-analyzer-v0.4.0`; `prototype-diagnosis-v0.4.0`; `feedback-prompt-v0.4.0`.
 - spaCy 3.8.7 and en_core_web_sm 3.8.0 are pinned; model failure is visible and falls back to BasicAnalyzer.
 - AnalysisRun, MetricResult and analysis artifacts are append-only. Reanalysis does not overwrite v0.1 compatibility metrics or call DeepSeek by default.

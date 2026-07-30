@@ -1,5 +1,9 @@
 # v0.7 task-aware longitudinal analysis
 
+## v0.7.1 deterministic status and wording
+
+The backend owns the status, scope, comparable independent-task count, minimum, revision-group count, draft count, evidence IDs and limitations. No-history and non-comparable states clear evidence IDs and use an explicit unavailable explanation. Two comparable tasks permit only a pairwise descriptive comparison; three/four permit a provisional pattern; five or more permit a descriptive trend. A model comment that does not match the structured status is replaced locally while valid current-feedback sections are retained.
+
 v0.7 supersedes the default v0.3 calculation with Task Cluster scoped Snapshot v2 while retaining v0.3 fields for readers. Revision groups contribute one representative draft by default. Metric values are segmented by metric and analyzer version; two observations are only pairwise, three or four are provisional, and five or more may be labelled an adequate descriptive trend.
 
 Diagnostic trajectories use selected priorities as primary evidence, eligible diagnoses as auxiliary evidence, and monitored/suppressed signals as research-only evidence. A current target always requires a current verified selected priority. “Recently reduced” cannot be used as a current target by itself. See `LEARNER_MODEL.md`, `METRIC_TRAJECTORIES.md`, and `DIAGNOSTIC_TRAJECTORIES.md`.

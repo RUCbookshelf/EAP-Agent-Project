@@ -1,4 +1,10 @@
-# v0.7 已知限制
+# v0.7.1 已知限制
+
+- Structured status and local repair improve consistency but do not validate longitudinal measurement or educational usefulness.
+- Risky positive-finding phrases are an auditable allowlist-style heuristic; semantically equivalent overclaims may still require human review.
+- Provider status describes execution and validation, not feedback quality.
+- Within-task trajectory uses deterministic text/metric/diagnosis comparisons and cannot establish revision quality, learning, or feedback causation; major rewrites reduce attribution confidence.
+- Student/Research views are presentation modes, not authentication or authorization boundaries.
 
 - Task clustering uses transparent metadata classes, not validated semantic task equivalence.
 - Representative-draft rules are workflow assumptions; different strategies can change the displayed evidence set.

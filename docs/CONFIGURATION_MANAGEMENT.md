@@ -1,4 +1,6 @@
-# Versioned configuration management v0.7
+# Versioned configuration management v0.7.1
+
+Migration 9 activates `config-v0.7.1`. New non-sensitive allowlisted values cover pairwise/provisional/adequate thresholds, maximum feedback evidence, positive-finding ability-inference protection and risky phrases, default UI view/research-audit availability, and revision trajectory display choices. Secrets remain environment-only. Rollback reactivates `config-v0.7.0` without deleting the v0.7.1 version or historical records.
 
 Migration 8 activates `config-v0.7.0` as a child of preserved `config-v0.6.2`. New non-sensitive fields configure representative draft strategy, target maximum (2), sufficiency thresholds (2/3/5), diagnostic occurrence thresholds, reduction window, and maximum screened history evidence (5). Draft creation now uses the `config-v0.7.x` sequence. Rollback activates the preserved parent without deleting newer versions.
 

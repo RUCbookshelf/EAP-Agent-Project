@@ -1,5 +1,17 @@
 # Master roadmap
 
+## v0.7.1 bounded repair — 2026-07-30
+
+| Item | State |
+|---|---|
+| Longitudinal reliability and field-level repair | completed |
+| Provider execution status | completed |
+| Within-task trajectory and Streamlit UI polish | completed |
+| Migration 9 / config-v0.7.1 | completed |
+| v0.8 and new measurement constructs | not started |
+
+This authorization ends after the v0.7.1 verification, documentation, and independent commit. It does not authorize v0.8.
+
 ## v0.7 authorized release state — 2026-07-30
 
 | Item | State |
@@ -43,6 +55,8 @@ Last updated: 2026-07-29.
 - v0.5 — Revision-aware Feedback: `completed` (`75117ac`)
 - v0.6 — Progress Visualization and Versioned Configuration: `completed`
 - v0.6.1 — Diagnostic Calibration: `completed`
-- v0.7 / full CALF measurement: `not_started`
+- v0.7 — Learner Model 2.0: `completed`
+- v0.7.1 — Longitudinal Reliability & UI Polish: `completed`
+- full CALF measurement: `not_started`
 
-“Cloud-ready” means separable interfaces and configuration; it does not mean cloud deployment. The current authorization ends after v0.6.1; v0.7 and full CALF work remain `not_started`.
+“Cloud-ready” means separable interfaces and configuration; it does not mean cloud deployment. The current authorization ends after v0.7.1; v0.8 and full CALF work remain `not_started`.

@@ -144,6 +144,13 @@ class ProgressService:
             comparability_summary={
                 "task_cluster_count": len(clusters), "representative_task_count": len(records),
                 "excluded_revision_draft_count": len(revision_excluded),
+                "draft_submission_count": len(raw_records),
+                "revision_group_count": len({
+                    str(record["revision_group_id"]) for record in raw_records
+                    if record.get("revision_group_id")
+                }),
+                "independent_task_count": len(records),
+                "longitudinal_representative_count": len(records),
             },
             analysis_versions={
                 "analysis": sorted({str(record.get("analysis_version", "unknown")) for record in records}),

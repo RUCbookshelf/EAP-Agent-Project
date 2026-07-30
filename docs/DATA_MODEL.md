@@ -1,4 +1,8 @@
-# 数据模型（迁移 8）
+# 数据模型（迁移 9）
+
+Migration 9 additively adds nullable `feedback_records.provider_status_json` and activates `config-v0.7.1` as a child of preserved `config-v0.7.0`. Existing feedback rows remain valid with no provider-status object. Logical rollback sets schema version 8 and reactivates the parent configuration while preserving the additive column, stored status JSON, essays, analyses, feedback, revisions and snapshots; re-upgrade is idempotent.
+
+`StructuredFeedback` adds optional `longitudinal_assessment`. Submission responses additionally expose `RevisionGroupSummary`, `WithinTaskRevisionTrajectory`, and UI empty-state codes. These are derived records; they do not replace append-only Revision or Learner Profile snapshots.
 
 Migration 8 is additive. It adds `profile_version`, `source_submission_ids_json`, and `representative_submission_ids_json` to `learner_profile_snapshots`, plus `history_evidence_registry`. The registry is append-only and stores `history_evidence_id`, student, snapshot, Task Cluster, evidence type, complete evidence JSON, registry version, and creation time.
 

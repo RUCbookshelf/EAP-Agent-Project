@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from app.analysis import AlgorithmRegistry, AlgorithmVersion, AnalyzerRegistry, MetricRegistry, default_metric_registry
-from app.prompts import versioning, versioning_v04, versioning_v05, versioning_v061, versioning_v07
+from app.prompts import versioning, versioning_v04, versioning_v05, versioning_v061, versioning_v07, versioning_v071
 
 
 class PromptRegistry:
@@ -39,7 +39,7 @@ class ConfigurationRegistry:
 
 def default_prompt_registry() -> PromptRegistry:
     registry = PromptRegistry()
-    for item in (versioning, versioning_v04, versioning_v05, versioning_v061, versioning_v07):
+    for item in (versioning, versioning_v04, versioning_v05, versioning_v061, versioning_v07, versioning_v071):
         registry.register(
             prompt_version=item.PROMPT_VERSION,
             schema_version=item.SCHEMA_VERSION,
@@ -78,7 +78,10 @@ def default_algorithm_registry() -> AlgorithmRegistry:
             algorithm_id="feedback-uptake", version="0.5.0",
             implementation="app.services.revision.RevisionService",
             parameter_schema={"trajectory_status": "categorical"},
-            compatible_input_versions=["structured-feedback-v0.1.1", "structured-feedback-v0.5.0", "structured-feedback-v0.6.1"],
+            compatible_input_versions=[
+                "structured-feedback-v0.1.1", "structured-feedback-v0.5.0",
+                "structured-feedback-v0.6.1", "structured-feedback-v0.7.1",
+            ],
             output_schema_version="revision-snapshot-v0.5.0",
             limitations=["Observable consistency is not causal evidence."],
         ),

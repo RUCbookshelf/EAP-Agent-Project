@@ -29,6 +29,7 @@ from app.analysis import default_metric_registry
 from app.configuration import ConfigurationCreate, ConfigurationVersion
 from app.services.configuration import settings_from_configuration
 from app.calibration import DiagnosticCalibrationService
+from app.feedback import FeedbackReliabilityService
 
 
 def _error(status: int, code: str, message: str, details=None) -> JSONResponse:
@@ -74,6 +75,7 @@ def create_app(
         configurations.registry.analyzers = analyzer.registry
         submission_service.router.temperature = configuration.payload.llm_temperature
         submission_service.calibrator = DiagnosticCalibrationService(configuration.payload)
+        submission_service.router.reliability = FeedbackReliabilityService(configuration.payload)
         if hasattr(submission_service.router.primary, "max_tokens"):
             submission_service.router.primary.max_tokens = configuration.payload.llm_max_tokens
 
@@ -108,7 +110,7 @@ def create_app(
             database_status="connected" if connected else "unavailable",
             database_migration_version=repository.migration_version() if connected else 0,
             prompt_version=settings.prompt_version,
-            schema_version="structured-feedback-v0.7.0",
+            schema_version="structured-feedback-v0.7.1",
             llm_provider=settings.llm_provider,
             llm_api_configured=bool(settings.deepseek_api_key) if settings.llm_provider == "deepseek" else False,
             active_analyzer=analyzer_health["active_analyzer"],
@@ -129,7 +131,7 @@ def create_app(
         active_configuration = configurations.active()
         return VersionResponse(
             application_version=settings.application_version, api_version=settings.api_version,
-            prompt_version=active_configuration.payload.active_prompt_version, schema_version="structured-feedback-v0.7.0",
+            prompt_version=active_configuration.payload.active_prompt_version, schema_version="structured-feedback-v0.7.1",
             analysis_version=settings.analysis_version, diagnosis_version=settings.diagnosis_version,
             database_migration_version=repository.migration_version(),
             active_analyzer=getattr(analyzer, "active_analyzer", getattr(analyzer, "analyzer_id", "unknown")),
@@ -155,6 +157,11 @@ def create_app(
             feedback_result=result.provider, history=result.history,
             revision_snapshot=result.revision_snapshot,
             diagnostic_calibration=result.diagnostic_calibration,
+            feedback_provider_status=result.provider.feedback_provider_status,
+            longitudinal_assessment=result.longitudinal_assessment,
+            revision_group_summary=result.revision_group_summary,
+            within_task_revision_trajectory=result.within_task_revision_trajectory,
+            ui_empty_states=result.ui_empty_states,
         )
 
     @api.get("/api/v1/submissions/{submission_id}/diagnostic-audit")
@@ -231,6 +238,13 @@ def create_app(
     def get_revision_comparison(revision_group_id: str):
         try:
             return revisions.latest(revision_group_id)
+        except LookupError as exc:
+            raise HTTPException(404, str(exc)) from None
+
+    @api.get("/api/v1/revisions/{revision_group_id}/trajectory")
+    def get_revision_trajectory(revision_group_id: str):
+        try:
+            return revisions.trajectory(revision_group_id)
         except LookupError as exc:
             raise HTTPException(404, str(exc)) from None
 

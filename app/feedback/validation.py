@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 
 from app.models import StructuredFeedback
 from app.calibration import EvidenceRelevanceValidator
+from app.feedback.reliability import DEFAULT_RISKY_ABILITY_PHRASES
 
 if TYPE_CHECKING:
     from app.llm.base import FeedbackContext
@@ -46,6 +47,9 @@ class FeedbackValidator:
         }
 
         self._validate_quote(feedback.positive_finding.evidence_quote, essay, "positive_finding", failures)
+        positive_explanation = feedback.positive_finding.explanation.casefold()
+        if any(phrase.casefold() in positive_explanation for phrase in DEFAULT_RISKY_ABILITY_PHRASES):
+            failures.append("positive_finding.explanation contains a prohibited ability inference")
         if context.diagnosis.strengths and relevance_validator.validate_feedback_quote(
             context.diagnosis.strengths[0], feedback.positive_finding.evidence_quote, context.analysis
         ) != "verified":
@@ -62,17 +66,49 @@ class FeedbackValidator:
                 failures.append(f"priority_feedback[{index}] evidence_quote is not relevant to {item.diagnosis_id}")
             self._validate_quote(item.evidence_quote, essay, f"priority_feedback[{index}]", failures)
 
-        used_history = feedback.longitudinal.history_evidence_ids
+        structured = feedback.longitudinal_assessment
+        authoritative = context.longitudinal_assessment
+        if authoritative is not None:
+            if structured is None:
+                failures.append("longitudinal_assessment is required for v0.7.1 feedback")
+            else:
+                for field in (
+                    "status", "scope", "comparable_task_count", "minimum_required",
+                    "revision_group_count", "draft_count", "history_evidence_ids",
+                ):
+                    if getattr(structured, field) != getattr(authoritative, field):
+                        failures.append(f"longitudinal_assessment.{field} conflicts with backend facts")
+                if structured.status in {"unavailable", "not_comparable"}:
+                    if self._contains_deterministic_development_claim(structured.comment):
+                        failures.append("longitudinal_assessment.comment conflicts with unavailable status")
+                    if re.search(r"\b(clear|stable|long[- ]term|developmental)\s+(trend|pattern)\b", structured.comment, re.I):
+                        failures.append("longitudinal_assessment.comment claims a trend without sufficient history")
+                if structured.status == "pairwise_only" and re.search(
+                    r"\b(clear|stable|long[- ]term)\s+trend\b", structured.comment, re.I
+                ):
+                    failures.append("pairwise longitudinal comment must not claim a trend")
+                if feedback.longitudinal.comment != structured.comment:
+                    failures.append("legacy longitudinal comment must match longitudinal_assessment.comment")
+                if feedback.longitudinal.history_evidence_ids != structured.history_evidence_ids:
+                    failures.append("legacy longitudinal evidence IDs must match longitudinal_assessment")
+
+        used_history = (
+            structured.history_evidence_ids if structured is not None
+            else feedback.longitudinal.history_evidence_ids
+        )
         unknown_history = sorted(set(used_history) - history_ids)
         if unknown_history:
             failures.append("unknown history_evidence_id: " + ", ".join(unknown_history))
-        if not history_ids:
+        if authoritative is not None:
+            if unknown_history:
+                pass
+        elif not history_ids:
             if used_history:
                 failures.append("history_evidence_ids must be empty when no history evidence exists")
             if self._contains_deterministic_development_claim(feedback.longitudinal.comment):
                 failures.append("deterministic development claim is forbidden without history evidence")
             if not re.search(
-                r"cannot|not possible|insufficient|unable|无法|不足",
+                r"cannot|not possible|not enough|insufficient|unavailable|unable|无法|不足",
                 feedback.longitudinal.comment, flags=re.IGNORECASE,
             ):
                 failures.append("no-history longitudinal comment must explicitly state that judgment is unavailable")
