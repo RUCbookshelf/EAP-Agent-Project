@@ -6,7 +6,7 @@ import json
 from collections.abc import Callable
 
 
-LATEST_MIGRATION_VERSION = 11
+LATEST_MIGRATION_VERSION = 12
 
 
 def _add_column_if_missing(
@@ -672,6 +672,41 @@ def _migration_11(connection: sqlite3.Connection) -> None:
     connection.execute("PRAGMA user_version = 11")
 
 
+def _migration_12(connection: sqlite3.Connection) -> None:
+        for stmt in [
+            "CREATE TABLE IF NOT EXISTS practice_targets (practice_target_id TEXT PRIMARY KEY, student_id TEXT NOT NULL, source_submission_id INTEGER NOT NULL, source_diagnosis_id TEXT NOT NULL, target_code TEXT NOT NULL, target_label TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'active', created_at TEXT NOT NULL, target_json TEXT NOT NULL)",
+            "CREATE TABLE IF NOT EXISTS exercise_instances (exercise_id TEXT PRIMARY KEY, practice_target_id TEXT NOT NULL, student_id TEXT NOT NULL, exercise_type TEXT NOT NULL, created_at TEXT NOT NULL, instance_json TEXT NOT NULL)",
+            "CREATE TABLE IF NOT EXISTS exercise_attempts (attempt_id TEXT PRIMARY KEY, exercise_id TEXT NOT NULL, student_id TEXT NOT NULL, attempt_number INTEGER NOT NULL, status TEXT NOT NULL DEFAULT 'submitted', created_at TEXT NOT NULL, attempt_json TEXT NOT NULL)",
+            "CREATE TABLE IF NOT EXISTS practice_evaluations (evaluation_id TEXT PRIMARY KEY, attempt_id TEXT NOT NULL, practice_target_id TEXT NOT NULL, created_at TEXT NOT NULL, evaluation_json TEXT NOT NULL)",
+            "CREATE TABLE IF NOT EXISTS feedback_engagement_traces (trace_id TEXT PRIMARY KEY, student_id TEXT NOT NULL, target_code TEXT NOT NULL, created_at TEXT NOT NULL, trace_json TEXT NOT NULL)",
+            "CREATE TABLE IF NOT EXISTS within_task_response_candidates (response_id TEXT PRIMARY KEY, student_id TEXT NOT NULL, practice_target_id TEXT NOT NULL, created_at TEXT NOT NULL, response_json TEXT NOT NULL)",
+            "CREATE TABLE IF NOT EXISTS transfer_evidence_candidates (transfer_evidence_id TEXT PRIMARY KEY, student_id TEXT NOT NULL, practice_target_id TEXT NOT NULL, created_at TEXT NOT NULL, transfer_json TEXT NOT NULL)",
+            "CREATE TABLE IF NOT EXISTS practice_state_snapshots (practice_state_snapshot_id TEXT PRIMARY KEY, student_id TEXT NOT NULL, created_at TEXT NOT NULL, snapshot_json TEXT NOT NULL)",
+        ]:
+            connection.execute(stmt)
+        active = connection.execute("SELECT * FROM configuration_versions WHERE status='active' ORDER BY configuration_row_id DESC LIMIT 1").fetchone()
+        if active is not None:
+            existing = connection.execute("SELECT * FROM configuration_versions WHERE version='config-v0.9.0' LIMIT 1").fetchone()
+            from app.configuration import ConfigurationPayload
+            now = "2026-07-30T22:00:00+00:00"
+            if existing is None:
+                parent = dict(active)
+                payload = ConfigurationPayload.model_validate(json.loads(parent["payload_json"])).model_dump(mode="json")
+                canonical = json.dumps(payload, sort_keys=True, separators=(",", ":"))
+                content_hash = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+                connection.execute("UPDATE configuration_versions SET status='inactive', deactivated_at=? WHERE configuration_id=?", (now, parent["configuration_id"]))
+                cursor = connection.execute("INSERT INTO configuration_versions(version,status,created_at,created_by,parent_version,payload_json,schema_version,change_note,validation_status,validation_errors_json,activated_at,content_hash) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)", ("config-v0.9.0", "active", now, "system", parent["version"], canonical, "configuration-schema-v0.9.0", "Activate feedback practice and transfer evidence foundation.", "passed", "[]", now, content_hash))
+                cfg_id = f"CFG{int(cursor.lastrowid):06d}"
+                connection.execute("UPDATE configuration_versions SET configuration_id=? WHERE configuration_row_id=?", (cfg_id, int(cursor.lastrowid)))
+            else:
+                cfg_id = dict(existing)["configuration_id"]
+                connection.execute("UPDATE configuration_versions SET status='inactive', deactivated_at=? WHERE status='active'", (now,))
+                connection.execute("UPDATE configuration_versions SET status='active', activated_at=?, deactivated_at=NULL WHERE configuration_id=?", (now, cfg_id))
+            cursor = connection.execute("INSERT INTO configuration_audit(configuration_id,action,actor,reason,details_json,created_at) VALUES (?,?,?,?,?,?)", (cfg_id, "activate", "system", "v0.9 practice infrastructure migration activation.", json.dumps({"parent_version": "config-v0.8.2"}), now))
+            connection.execute("UPDATE configuration_audit SET audit_id=? WHERE audit_row_id=?", (f"CA{int(cursor.lastrowid):06d}", int(cursor.lastrowid)))
+        connection.execute("PRAGMA user_version = 12")
+
+
 MIGRATIONS: dict[int, tuple[str, Callable[[sqlite3.Connection], None]]] = {
     1: ("preserve_v0_1_1_schema", _migration_1),
     2: ("cloud_ready_repository_indexes", _migration_2),
@@ -684,6 +719,7 @@ MIGRATIONS: dict[int, tuple[str, Callable[[sqlite3.Connection], None]]] = {
     9: ("longitudinal_reliability_and_provider_status", _migration_9),
     10: ("calf_measurement_foundation", _migration_10),
     11: ("research_data_infrastructure", _migration_11),
+    12: ("practice_and_transfer_foundation", _migration_12),
 }
 
 
@@ -712,10 +748,10 @@ def rollback(connection: sqlite3.Connection, target_version: int) -> int:
     current = int(connection.execute("PRAGMA user_version").fetchone()[0])
     if current == target_version:
         return current
-    if (current, target_version) not in {(11, 10), (10, 9), (9, 8)}:
+    if (current, target_version) not in {(12, 11), (11, 10), (10, 9), (9, 8)}:
         raise ValueError("Only non-destructive one-step rollback is supported.")
     with connection:
-        expected = "config-v0.8.2" if current == 11 else ("config-v0.8.0" if current == 10 else "config-v0.7.1")
+        expected = "config-v0.9.0" if current == 12 else ("config-v0.8.2" if current == 11 else ("config-v0.8.0" if current == 10 else "config-v0.7.1"))
         active = connection.execute(
             "SELECT * FROM configuration_versions WHERE status='active' AND version=?", (expected,)
         ).fetchone()

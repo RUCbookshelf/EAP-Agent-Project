@@ -127,7 +127,7 @@ class ConfigurationCreate(BaseModel):
 
 class ConfigurationVersion(BaseModel):
     configuration_id: str = Field(pattern=r"^CFG\d{6}$")
-    version: str = Field(pattern=r"^config-v0\.(6|7|8)\.\d+$")
+    version: str = Field(pattern=r"^config-v0\.(6|7|8|9)\.\d+$")
     status: ConfigurationStatus
     created_at: datetime = Field(default_factory=utc_now)
     created_by: str

@@ -570,6 +570,38 @@ def create_app(
             raise HTTPException(422, str(exc)) from None
 
     return api
+    @api.get("/api/v1/students/{student_id}/practice-targets")
+    def get_practice_targets(student_id: str) -> list[dict]:
+        return []
+    @api.post("/api/v1/practice-targets")
+    def create_practice_target(payload: dict) -> dict:
+        from app.practice.service import PracticeService
+        svc = PracticeService(api.state.repository)
+        return svc.create_practice_target(
+            student_id=payload.get("student_id", ""),
+            source_submission_id=payload.get("source_submission_id", 0),
+            source_diagnosis_id=payload.get("source_diagnosis_id", ""),
+            target_code=payload.get("target_code", ""),
+            target_label=payload.get("target_label", ""),
+        )
+    @api.post("/api/v1/practice-targets/{practice_target_id}/exercises")
+    def create_exercise(practice_target_id: str, payload: dict) -> dict:
+        from app.practice.service import PracticeService
+        svc = PracticeService(api.state.repository)
+        return svc.generate_exercise(payload.get("practice_target", {}), payload.get("source_text", ""))
+    @api.post("/api/v1/exercises/{exercise_id}/attempts")
+    def submit_exercise_attempt(exercise_id: str, payload: dict) -> dict:
+        from app.practice.service import PracticeService
+        svc = PracticeService(api.state.repository)
+        return svc.submit_attempt(
+            exercise_id, payload.get("student_id", ""),
+            payload.get("response_text", ""), payload.get("attempt_number", 1))
+    @api.get("/api/v1/students/{student_id}/engagement-traces")
+    def get_engagement_traces(student_id: str) -> list[dict]:
+        return []
+    @api.get("/api/v1/students/{student_id}/transfer-evidence")
+    def get_transfer_evidence(student_id: str) -> list[dict]:
+        return []
     @api.get("/api/v1/research/export/schema")
     def research_export_schema() -> dict:
         return ResearchDataService(api.state.repository).schema()

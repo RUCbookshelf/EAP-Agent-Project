@@ -137,14 +137,14 @@ def test_three_points_create_provisional_direction_with_traceable_points():
 
 def test_migration_8_is_additive_and_activates_v07_configuration(tmp_path):
     database = Database(tmp_path / "v07.db"); database.initialize()
-    assert database.migration_version() == LATEST_MIGRATION_VERSION == 11
+    assert database.migration_version() == LATEST_MIGRATION_VERSION == 12
     with database.connect() as connection:
         tables = {row[0] for row in connection.execute("SELECT name FROM sqlite_master WHERE type='table'")}
         columns = {row[1] for row in connection.execute("PRAGMA table_info(learner_profile_snapshots)")}
     assert "history_evidence_registry" in tables
     assert {"profile_version", "source_submission_ids_json", "representative_submission_ids_json"} <= columns
     active = database.get_active_configuration()
-    assert active.version == "config-v0.8.2"
+    assert active.version == "config-v0.9.0"
     assert active.parent_version and active.payload.representative_draft_strategy == "final_or_latest"
 
 

@@ -296,7 +296,7 @@ def test_feedback_validator_cannot_restore_monitored_diagnosis(tmp_path):
 def test_migration_7_and_append_only_calibration_repository(tmp_path):
     repository, service = local_stack(tmp_path)
     result = service.submit(EssaySubmission.model_validate(payload()))
-    assert repository.migration_version() == 11
+    assert repository.migration_version() == 12
     with repository.connect() as connection:
         columns = {row[1] for row in connection.execute("PRAGMA table_info(metric_results)")}
         count = connection.execute("SELECT COUNT(*) FROM diagnostic_calibrations WHERE essay_id=?", (result.essay_id,)).fetchone()[0]
@@ -317,16 +317,16 @@ def test_v06_database_upgrades_without_losing_historical_essay(tmp_path):
         ("LEGACY", "Legacy prompt", "argumentative essay", "first draft", 0, "none", "Preserved historical essay.", "2026-07-29T00:01:00+00:00"),
     )
     connection.commit()
-    assert upgrade(connection) == 11
+    assert upgrade(connection) == 12
     assert connection.execute("SELECT essay_text FROM essays WHERE student_id='LEGACY'").fetchone()[0] == "Preserved historical essay."
-    assert connection.execute("SELECT version FROM configuration_versions WHERE status='active'").fetchone()[0] == "config-v0.8.2"
+    assert connection.execute("SELECT version FROM configuration_versions WHERE status='active'").fetchone()[0] == "config-v0.9.0"
     connection.close()
 
 
 def test_configuration_v061_is_new_active_child_and_old_preserved(tmp_path):
     repository, _ = local_stack(tmp_path)
     active = repository.get_active_configuration()
-    assert active.version == "config-v0.8.2" and active.parent_version == "config-v0.8.0"
+    assert active.version == "config-v0.9.0"
     assert repository.get_configuration("config-v0.6.1") is not None
     assert active.payload.lexical_repetition_minimum_count == 4
     assert active.payload.active_prompt_version == "feedback-prompt-v0.7.1"
@@ -336,9 +336,9 @@ def test_direct_rollback_to_preserved_v06_configuration(tmp_path):
     repository, service = local_stack(tmp_path)
     configurations = ConfigurationService(repository, service.analyzer.registry, default_metric_registry())
     rolled = configurations.rollback(repository.get_active_configuration().configuration_id, reason="Human review rollback test.")
-    assert rolled.version == "config-v0.8.0"
-    assert repository.get_configuration("config-v0.8.0").status == "active"
-    assert repository.get_configuration("config-v0.8.2").status == "inactive"
+    assert rolled.version == "config-v0.8.2"
+    assert repository.get_configuration("config-v0.8.2").status == "active"
+    assert repository.get_configuration("config-v0.9.0").status == "inactive"
 
 
 def test_api_exposes_research_audit_but_student_feedback_is_filtered(tmp_path):

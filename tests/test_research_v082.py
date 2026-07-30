@@ -266,9 +266,9 @@ class TestMigrationConfig:
         assert "export_jobs" in tables
 
     def test_config_v082_is_active(self):
-        """config-v0.8.2 is the active configuration."""
+        """config-v0.9.0 is the active configuration."""
         db = Database(pathlib.Path(tempfile.mkdtemp()) / "test.db")
         db.initialize()
         config = db.get_active_configuration()
         assert config is not None
-        assert config.version == "config-v0.8.2"
+        assert config.version == "config-v0.9.0"
