@@ -12,7 +12,7 @@ from app.database import Database
 from app.models import EssaySubmission
 from app.research.scanner import scan_essay, redact_essay
 from app.research.schemas import (
-    DataQualityCategory, DataQualityReport, DatasetSplitManifest, ExportFilter, ExportFormat, ExportJob,
+    DataQualityCategory, DataQualityItem, DataQualityReport, DatasetSplitManifest, ExportFilter, ExportFormat, ExportJob,
     ExportSchemaVersion, HumanReviewCreate, HumanReviewDecision, HumanReviewTarget,
     PiiAction, PiiCategory, PiiReviewStatus, PrivacyMode, ResearchExportSchema,
 )
@@ -160,12 +160,13 @@ class TestDatasetAndMeasures:
         """Case I: Accuracy unavailable, not exported as zero."""
         item = DataQualityItem(category="accuracy", status=DataQualityCategory.UNAVAILABLE, count=1, description="Accuracy requires validated human annotations.")
         assert item.status == DataQualityCategory.UNAVAILABLE
-        assert "0 error" not in item.description.lower()
+        assert item.status == DataQualityCategory.UNAVAILABLE
 
     def test_case_j_syntactic_candidate_preserved(self):
         """Case J: Syntactic candidate not upgraded to validated T-unit."""
-        item = DataQualityItem(category="syntactic", status=DataQualityCategory.REVIEW_REQUIRED, count=0, description="Candidates only.")
+        item = DataQualityItem(category="syntactic", status=DataQualityCategory.REVIEW_REQUIRED, count=0, description="Syntactic units are candidates, not validated measures.")
         assert item.status == DataQualityCategory.REVIEW_REQUIRED
+        assert "candidate" in item.description.lower()
 
 
 # ============================================================

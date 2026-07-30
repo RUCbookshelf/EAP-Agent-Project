@@ -547,6 +547,16 @@ class Database:
             ).fetchone()
         return dict(row) if row else None
 
+    def list_all_students(self):
+        with self.connect() as connection:
+            rows = connection.execute("SELECT DISTINCT student_id FROM essays ORDER BY student_id").fetchall()
+            return [{"student_id": r[0]} for r in rows]
+
+    def list_all_submissions(self):
+        with self.connect() as connection:
+            rows = connection.execute("SELECT essay_id, student_id, writing_prompt, genre, draft_stage, timed, time_limit_minutes, tool_use, submitted_at, revision_of_submission_id, revision_group_id, essay_text FROM essays ORDER BY essay_id").fetchall()
+            return [dict(r) for r in rows]
+
     def get_submission_bundle(self, essay_id: int) -> dict[str, Any] | None:
         with self.connect() as connection:
             row = connection.execute(

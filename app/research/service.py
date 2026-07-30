@@ -51,7 +51,7 @@ class ResearchDataService:
         return ResearchExportSchema().model_dump(mode='json')
 
     def preview(self, job: ExportJob) -> dict[str, Any]:
-        records = self._collect(job.filter_spec)
+        records = self._collect(job.filter_spec, job.privacy_mode)
         students = set(r.get('student_pseudonym', '') for r in records)
         return {
             'student_count': len(students),
@@ -63,25 +63,38 @@ class ResearchDataService:
             'formats': [f.value for f in job.formats],
         }
 
-    def _collect(self, filter_spec: ExportFilter) -> list[dict[str, Any]]:
+    def _collect(self, filter_spec: ExportFilter, privacy_mode: PrivacyMode | None = None) -> list[dict[str, Any]]:
+        mode = privacy_mode or PrivacyMode.INTERNAL_RESEARCH
         records = []
-        students = self.repo.list_students_with_submissions()
+        all_subs = self.repo.list_all_submissions() if hasattr(self.repo, 'list_all_submissions') else []
+        students_seen = {}
+        for sub in all_subs:
+            sid = sub.get('student_id', '')
+            if sid and sid not in students_seen:
+                students_seen[sid] = {'student_id': sid}
+        students_list = list(students_seen.values())
         pseudonym_map = {}
-        for idx, student in enumerate(students):
-            pseudonym_map[student['student_id']] = _pseudonym(idx + 1)
+        for idx, student in enumerate(students_list):
+            if mode == PrivacyMode.PSEUDONYMIZED:
+                pseudonym_map[student['student_id']] = _pseudonym(idx + 1)
             submissions = self.repo.list_student_submissions(student['student_id'])
             for sub in submissions:
                 pid = sub['essay_id']
-                pseudonym = pseudonym_map.get(sub['student_id'], 'UNKNOWN')
+                if mode == PrivacyMode.INTERNAL_RESEARCH:
+                    pseudonym = sub['student_id']
+                elif mode == PrivacyMode.PSEUDONYMIZED:
+                    pseudonym = pseudonym_map.get(sub['student_id'], 'UNKNOWN')
+                else:
+                    pseudonym = None
                 records.append({
                     'export_schema_version': ExportSchemaVersion.V0_1.value,
                     'record_type': 'submission',
                     'record_id': f'SUB-{pid}',
                     'source_database_id': pid,
-                    'student_pseudonym': pseudonym,
+                    'student_pseudonym': pseudonym if mode != PrivacyMode.MINIMAL_ANONYMOUS else None,
                     'submission_id': pid,
                     'revision_group_id': sub.get('revision_group_id'),
-                    'source_timestamp': sub.get('submitted_at'),
+                    'source_timestamp': (sub.get('submitted_at', '') or '')[:10] if mode == PrivacyMode.MINIMAL_ANONYMOUS else sub.get('submitted_at'),
                     'export_timestamp': datetime.now(timezone.utc).isoformat(),
                     'data_origin': 'system_generated',
                     'inclusion_status': 'included',
@@ -101,7 +114,7 @@ class ResearchDataService:
         ts = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S')
         export_dir = Path(_EXPORT_BASE) / f'export_{ts}'
         export_dir.mkdir(parents=True, exist_ok=True)
-        records = self._collect(job.filter_spec)
+        records = self._collect(job.filter_spec, job.privacy_mode)
         record_counts = {}
         files = []
 
