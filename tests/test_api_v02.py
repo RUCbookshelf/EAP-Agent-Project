@@ -33,7 +33,7 @@ def test_health_version_and_docs(tmp_path):
         assert health.json()["database_status"] == "connected"
         assert health.json()["llm_api_configured"] is False
         assert "deepseek_api_key" not in health.text.casefold()
-        assert client.get("/api/v1/system/version").json()["application_version"] == "0.7.1"
+        assert client.get("/api/v1/system/version").json()["application_version"] == "0.8.0"
         assert client.get("/docs").status_code == 200
 
 

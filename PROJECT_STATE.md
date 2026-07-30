@@ -1,5 +1,10 @@
 # 项目状态
 
+## 当前 v0.8 状态
+- 状态：`completed`；应用 0.8.0；数据库迁移 10；active configuration `config-v0.8.0`，父版本 `config-v0.7.1` 保留。
+- 4 个 CALF 构念、22 个测量规范、14 个分析单位已注册；MTLD/HD-D 与真实时长 WPM 已实现，句法仅候选，Accuracy/lexical sophistication 不可用。
+- 无 CALF 总分、作文评分、能力/熟练度/CEFR 推断；v0.9 保持 `not_started`。
+
 ## 当前 v0.7.1 状态
 
 - 状态：`completed`；应用 0.7.1；数据库迁移 9；active configuration `config-v0.7.1`，父版本 `config-v0.7.0` 保留。

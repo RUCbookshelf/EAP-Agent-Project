@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.8.0 — 2026-07-30
+- Added versioned CALF construct, measurement-specification, and analysis-unit registries; deterministic MTLD/HD-D; research-only syntactic candidates; append-only error annotations; and actual-duration-only writing output rate.
+- Added migration 10, `config-v0.8.0`, CALF APIs/research UI, Cases A–M, opt-in live A–D verification, and explicit prompt/diagnosis/longitudinal isolation.
+- Accuracy, lexical sophistication, validated clause/T-unit measures, CALF totals, writing scores, ability/proficiency/CEFR claims, and v0.9 remain unavailable or out of scope.
+
 ## 0.7.1 — 2026-07-30
 
 - Added backend-owned `longitudinal_assessment`, conservative field-level repair, positive-finding ability-inference guardrails, and auditable provider execution status.

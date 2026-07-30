@@ -6,7 +6,7 @@ import json
 from collections.abc import Callable
 
 
-LATEST_MIGRATION_VERSION = 9
+LATEST_MIGRATION_VERSION = 10
 
 
 def _add_column_if_missing(
@@ -525,6 +525,105 @@ def _migration_9(connection: sqlite3.Connection) -> None:
     )
 
 
+def _migration_10(connection: sqlite3.Connection) -> None:
+    """Add auditable CALF foundations and activate a preserved v0.8 configuration child."""
+    for column, definition in {
+        "writing_started_at": "TEXT", "writing_submitted_at": "TEXT",
+        "active_writing_duration_seconds": "REAL", "timing_source": "TEXT NOT NULL DEFAULT 'unknown'",
+        "timing_quality": "TEXT NOT NULL DEFAULT 'unavailable'",
+        "unexplained_interruption": "INTEGER NOT NULL DEFAULT 0",
+    }.items():
+        _add_column_if_missing(connection, "essays", column, definition)
+    for column, definition in {
+        "construct_id": "TEXT", "subconstruct_id": "TEXT", "automation_level": "TEXT",
+        "analysis_unit_version": "TEXT", "numerator_json": "TEXT NOT NULL DEFAULT 'null'",
+        "denominator_json": "TEXT NOT NULL DEFAULT 'null'",
+        "intermediate_values_json": "TEXT NOT NULL DEFAULT '{}'",
+        "eligible_for_revision_priority": "INTEGER NOT NULL DEFAULT 0",
+        "eligible_for_targeted_practice": "INTEGER NOT NULL DEFAULT 0",
+    }.items():
+        _add_column_if_missing(connection, "metric_results", column, definition)
+    connection.executescript("""
+        CREATE TABLE IF NOT EXISTS analysis_units (
+            analysis_unit_row_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            analysis_unit_id TEXT UNIQUE,
+            submission_id INTEGER NOT NULL REFERENCES essays(essay_id),
+            analysis_run_id TEXT NOT NULL REFERENCES analysis_runs(analysis_run_id),
+            unit_id TEXT NOT NULL,
+            unit_version TEXT NOT NULL,
+            validation_status TEXT NOT NULL,
+            unit_json TEXT NOT NULL,
+            created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+        );
+        CREATE INDEX IF NOT EXISTS idx_analysis_units_submission_run
+            ON analysis_units(submission_id, analysis_run_id, unit_id);
+        CREATE TABLE IF NOT EXISTS error_annotations (
+            error_annotation_row_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            error_annotation_id TEXT UNIQUE,
+            submission_id INTEGER NOT NULL REFERENCES essays(essay_id),
+            start_offset INTEGER NOT NULL,
+            end_offset INTEGER NOT NULL,
+            annotation_source TEXT NOT NULL,
+            annotation_status TEXT NOT NULL,
+            eligible_for_formal_accuracy INTEGER NOT NULL DEFAULT 0,
+            annotation_json TEXT NOT NULL,
+            created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+        );
+        CREATE INDEX IF NOT EXISTS idx_error_annotations_submission
+            ON error_annotations(submission_id, annotation_status, annotation_source);
+    """)
+    active = connection.execute(
+        "SELECT * FROM configuration_versions WHERE status='active' ORDER BY configuration_row_id DESC LIMIT 1"
+    ).fetchone()
+    if active is None:
+        return
+    existing = connection.execute(
+        "SELECT * FROM configuration_versions WHERE version='config-v0.8.0' LIMIT 1"
+    ).fetchone()
+    from app.configuration import ConfigurationPayload
+    now = "2026-07-30T18:00:00+00:00"
+    if existing is None:
+        parent = dict(active)
+        payload = ConfigurationPayload.model_validate(json.loads(parent["payload_json"])).model_dump(mode="json")
+        canonical = json.dumps(payload, sort_keys=True, separators=(",", ":"))
+        content_hash = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+        connection.execute(
+            "UPDATE configuration_versions SET status='inactive', deactivated_at=? WHERE configuration_id=?",
+            (now, parent["configuration_id"]),
+        )
+        cursor = connection.execute(
+            """INSERT INTO configuration_versions(
+                version,status,created_at,created_by,parent_version,payload_json,schema_version,
+                change_note,validation_status,validation_errors_json,activated_at,content_hash
+            ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)""",
+            ("config-v0.8.0", "active", now, "system", parent["version"], canonical,
+             "configuration-schema-v0.8.0", "Activate auditable CALF measurement foundations.",
+             "passed", "[]", now, content_hash),
+        )
+        configuration_id = f"CFG{int(cursor.lastrowid):06d}"
+        connection.execute(
+            "UPDATE configuration_versions SET configuration_id=? WHERE configuration_row_id=?",
+            (configuration_id, int(cursor.lastrowid)),
+        )
+    else:
+        configuration_id = dict(existing)["configuration_id"]
+        connection.execute("UPDATE configuration_versions SET status='inactive', deactivated_at=? WHERE status='active'", (now,))
+        connection.execute(
+            "UPDATE configuration_versions SET status='active', activated_at=?, deactivated_at=NULL WHERE configuration_id=?",
+            (now, configuration_id),
+        )
+    cursor = connection.execute(
+        """INSERT INTO configuration_audit(configuration_id,action,actor,reason,details_json,created_at)
+           VALUES (?,?,?,?,?,?)""",
+        (configuration_id, "activate", "system", "v0.8 CALF foundation migration activation.",
+         json.dumps({"parent_version": "config-v0.7.1", "prototype_defaults_unvalidated": True}), now),
+    )
+    connection.execute(
+        "UPDATE configuration_audit SET audit_id=? WHERE audit_row_id=?",
+        (f"CA{int(cursor.lastrowid):06d}", int(cursor.lastrowid)),
+    )
+
+
 MIGRATIONS: dict[int, tuple[str, Callable[[sqlite3.Connection], None]]] = {
     1: ("preserve_v0_1_1_schema", _migration_1),
     2: ("cloud_ready_repository_indexes", _migration_2),
@@ -535,6 +634,7 @@ MIGRATIONS: dict[int, tuple[str, Callable[[sqlite3.Connection], None]]] = {
     7: ("diagnostic_calibration_and_metric_confidence", _migration_7),
     8: ("learner_model_v2_and_history_evidence", _migration_8),
     9: ("longitudinal_reliability_and_provider_status", _migration_9),
+    10: ("calf_measurement_foundation", _migration_10),
 }
 
 
@@ -559,15 +659,16 @@ def upgrade(connection: sqlite3.Connection) -> int:
 
 
 def rollback(connection: sqlite3.Connection, target_version: int) -> int:
-    """Logically roll migration 9 back without deleting its additive data or column."""
+    """Logically roll the latest additive version back one step without deleting data."""
     current = int(connection.execute("PRAGMA user_version").fetchone()[0])
     if current == target_version:
         return current
-    if current != 9 or target_version != 8:
-        raise ValueError("Only the non-destructive v0.7.1 migration 9 -> 8 rollback is supported.")
+    if (current, target_version) not in {(10, 9), (9, 8)}:
+        raise ValueError("Only non-destructive one-step migration 10 -> 9 or 9 -> 8 rollback is supported.")
     with connection:
+        expected = "config-v0.8.0" if current == 10 else "config-v0.7.1"
         active = connection.execute(
-            "SELECT * FROM configuration_versions WHERE status='active' AND version='config-v0.7.1'"
+            "SELECT * FROM configuration_versions WHERE status='active' AND version=?", (expected,)
         ).fetchone()
         if active:
             item = dict(active)
@@ -576,7 +677,7 @@ def rollback(connection: sqlite3.Connection, target_version: int) -> int:
             ).fetchone()
             if parent is None:
                 raise RuntimeError("config-v0.7.1 parent is unavailable; rollback was not applied.")
-            now = "2026-07-30T16:00:01+00:00"
+            now = "2026-07-30T18:00:01+00:00" if current == 10 else "2026-07-30T16:00:01+00:00"
             connection.execute(
                 "UPDATE configuration_versions SET status='inactive', deactivated_at=? WHERE configuration_id=?",
                 (now, item["configuration_id"]),
@@ -585,6 +686,6 @@ def rollback(connection: sqlite3.Connection, target_version: int) -> int:
                 "UPDATE configuration_versions SET status='active', activated_at=?, deactivated_at=NULL WHERE configuration_id=?",
                 (now, dict(parent)["configuration_id"]),
             )
-        connection.execute("DELETE FROM schema_migrations WHERE version=9")
-        connection.execute("PRAGMA user_version = 8")
-    return 8
+        connection.execute("DELETE FROM schema_migrations WHERE version=?", (current,))
+        connection.execute(f"PRAGMA user_version = {target_version}")
+    return target_version

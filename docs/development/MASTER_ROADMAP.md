@@ -1,5 +1,17 @@
 # Master roadmap
 
+## v0.8 CALF Measurement Foundation — 2026-07-30
+
+| Item | Status |
+|---|---|
+| Registries, MTLD/HD-D, syntax/error/timing foundations | completed |
+| Migration 10 / config-v0.8.0 / APIs / research UI | completed |
+| Automated and live A–D verification | completed |
+| Accuracy automation, validated syntax measures, CALF total, CEFR | not started / excluded |
+| v0.9 feedback–exercise–transfer loop | not started |
+
+This authorization ends after v0.8 verification, documentation, and one isolated commit.
+
 ## v0.7.1 bounded repair — 2026-07-30
 
 | Item | State |

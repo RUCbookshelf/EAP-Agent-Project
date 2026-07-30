@@ -1,4 +1,6 @@
-# Metric Registry v0.6.1
+# Metric Registry v0.8
+
+The CALF registry supplements the compatibility registry with 4 constructs, 22 measurement specifications, and 14 analysis units. New current lexical definitions are MTLD 0.8.0 and HD-D 0.8.0; output rate 0.8.0 is a descriptive proxy. Semantic measurement status and automation level are independent of observed availability/confidence. Activation is rejected without formula, unit, minimum data, fixtures, references, and limitations.
 
 The registry retains old definitions while `latest_list()` selects current versions for new AnalysisRuns. Lexical versions are word count 2.0.0, unique word count 2.0.0, TTR 2.0.0, MATTR 0.6.1, lexical density 0.6.1, repetition density 0.6.1, repeated-content evidence 3.0.0, and connective count 2.1.0. Old/new versions are separate longitudinal series and are never bridged silently.
 

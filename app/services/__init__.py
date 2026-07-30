@@ -9,10 +9,11 @@ from .revision import RevisionService
 from .configuration import ConfigurationService, settings_from_configuration
 from .admin_reanalysis import AdminReanalysisService, ReanalysisRequest
 from .dashboard import DashboardService
+from .calf import CalfService
 
 __all__ = [
     "SubmissionService", "build_submission_service", "BaselineService",
-    "AdminReanalysisService", "ComparabilityService", "ConfigurationService", "DashboardService",
+    "AdminReanalysisService", "CalfService", "ComparabilityService", "ConfigurationService", "DashboardService",
     "LearnerProfileService", "ProgressService", "ReanalysisRequest", "ReanalysisService",
     "RevisionService", "settings_from_configuration",
 ]

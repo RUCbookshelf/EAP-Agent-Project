@@ -14,7 +14,10 @@ def moving_average_ttr(lemmas: list[str], window: int) -> tuple[float | None, st
     return round(sum(values) / len(values), 4), "available"
 
 
-def extract_lexical_features(doc, prompt_doc, *, mattr_window: int = 50, local_window: int = 30) -> dict:
+def extract_lexical_features(doc, prompt_doc, *, mattr_window: int = 50, local_window: int = 30,
+                             mtld_threshold: float = 0.72, mtld_calculate_reverse: bool = True,
+                             mtld_minimum_tokens: int = 10, hdd_sample_size: int = 42) -> dict:
+    from app.calf.lexical_diversity import calculate_hdd, calculate_mtld
     lexical = [token for token in doc if token.is_alpha]
     surface_tokens = [token.text.lower() for token in lexical]
     lemmas = [(token.lemma_ or token.text).lower() for token in lexical]
@@ -65,6 +68,11 @@ def extract_lexical_features(doc, prompt_doc, *, mattr_window: int = 50, local_w
         "lemma_used": False, "punctuation_excluded": True, "numbers_excluded": True,
         "token_count_used": len(surface_tokens), "type_count_used": len(set(surface_tokens)),
     }
+    mtld = calculate_mtld(
+        surface_tokens, threshold=mtld_threshold, calculate_reverse=mtld_calculate_reverse,
+        minimum_tokens=mtld_minimum_tokens,
+    )
+    hdd = calculate_hdd(surface_tokens, sample_size=hdd_sample_size)
     return {
         "lemma_frequencies": dict(Counter(lemmas).most_common()),
         "lemma_frequency_protocol": {**token_protocol, "normalization": "lowercase_lemma", "lemma_used": True},
@@ -86,6 +94,8 @@ def extract_lexical_features(doc, prompt_doc, *, mattr_window: int = 50, local_w
         "mattr_protocol": {**token_protocol, "window_size": mattr_window,
                            "effective_windows": max(0, len(surface_tokens) - mattr_window + 1),
                            "minimum_text_length": mattr_window},
+        "mtld": mtld,
+        "hdd": hdd,
         "type_token_ratio": round(len(set(surface_tokens)) / len(surface_tokens), 4) if surface_tokens else 0.0,
         "type_token_ratio_protocol": token_protocol,
     }

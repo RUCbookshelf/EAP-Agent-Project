@@ -1,4 +1,6 @@
-# UI design v0.7.1
+# UI design v0.8
+
+The sixth `CALF Research` tab is visible only in research view. It groups values by construct and shows status, automation, exact version/unit, formula inputs, confidence, and limitations. It explicitly explains unavailable Accuracy/sophistication and candidate syntax. Student view shows a boundary notice and no CALF total, ranking, ability, proficiency, or CEFR interpretation.
 
 ## Information hierarchy
 

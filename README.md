@@ -1,4 +1,6 @@
-# 智能英语写作反馈系统原型 v0.7.1
+# 智能英语写作反馈系统原型 v0.8
+
+v0.8 新增 CALF Measurement Foundation：4 个构念、22 个测量规范、14 个分析单位，以及 MTLD、HD-D、句法候选单位、错误标注基础和基于真实时长的写作输出率。它们是可审计的研究测量/候选基础，不是 CALF 总分、作文评分、能力/熟练度/CEFR 判断。Accuracy 与词汇复杂度中的 sophistication 保持不可用；句法候选不进入诊断、优先级或纵向比较。详见 [CALF Measurement](docs/CALF_MEASUREMENT.md) 与 [v0.8 verification](RUN_VERIFICATION_V0.8.md)。
 
 v0.7.1 是 v0.7 的可靠性与界面修复版。后端现在确定性生成结构化纵向状态，区分跨任务历史与同一任务多稿；Provider 状态明确区分外部成功、服务端局部修复、请求/解析/验证/纠错失败及 LocalDemo 回退。Streamlit 提供 Feedback、Revision、Progress、Evidence、Research Audit 五个 Tab，以及学生/研究者视图切换和有解释的空状态。详见 [UI design](docs/UI_DESIGN.md)、[Provider status](docs/PROVIDER_STATUS.md) 与 [Within-task trajectory](docs/WITHIN_TASK_REVISION_TRAJECTORY.md)。
 

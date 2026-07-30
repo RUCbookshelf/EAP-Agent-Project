@@ -71,12 +71,28 @@ class MetricResult(BaseModel):
     resource_versions: dict[str, str] = Field(default_factory=dict)
     verification_status: HumanVerificationStatus = "automatic_unverified"
     status: Literal["available", "insufficient_data", "not_applicable"] = "available"
-    measurement_status: Literal["available", "insufficient_data", "not_applicable"] = "available"
+    measurement_status: Literal[
+        "available", "insufficient_data", "not_applicable", "research_metric",
+        "descriptive_proxy", "automatic_candidate", "manual_annotation_required",
+        "unavailable", "deprecated",
+    ] = "available"
+    automation_level: Literal[
+        "deterministic", "rule_based", "parser_dependent",
+        "external_resource_dependent", "manual", "hybrid",
+    ] | None = None
+    construct_id: str | None = None
+    subconstruct_id: str | None = None
+    analysis_unit_version: str | None = None
+    numerator: Any = None
+    denominator: Any = None
+    intermediate_values: dict[str, Any] = Field(default_factory=dict)
     confidence: MetricConfidence = "insufficient"
     confidence_reasons: list[str] = Field(default_factory=list)
     risk_factors: list[str] = Field(default_factory=list)
     eligible_for_diagnosis: bool = False
     eligible_for_longitudinal_comparison: bool = False
+    eligible_for_revision_priority: bool = False
+    eligible_for_targeted_practice: bool = False
     measurement_metadata: dict[str, Any] = Field(default_factory=dict)
     evidence: list[dict[str, Any]] = Field(default_factory=list)
     limitations: list[str] = Field(default_factory=list)

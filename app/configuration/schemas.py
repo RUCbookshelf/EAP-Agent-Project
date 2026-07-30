@@ -84,11 +84,37 @@ class ConfigurationPayload(BaseModel):
     revision_ui_show_draft_chain: bool = True
     revision_ui_show_first_to_latest_comparison: bool = True
     revision_ui_show_pairwise_comparisons: bool = True
+    calf_enabled: bool = True
+    calf_expose_to_student_feedback: bool = False
+    calf_expose_to_deepseek: bool = False
+    calf_mtld_factor_threshold: float = Field(default=0.72, gt=0, lt=1)
+    calf_mtld_calculate_reverse: bool = True
+    calf_mtld_minimum_tokens: int = Field(default=10, ge=2, le=500)
+    calf_hdd_sample_size: int = Field(default=42, ge=2, le=500)
+    calf_lexical_density_content_pos: list[str] = Field(
+        default_factory=lambda: ["NOUN", "PROPN", "VERB", "ADJ", "ADV"], min_length=1, max_length=12,
+    )
+    calf_syntactic_formal_metrics_enabled: bool = False
+    calf_syntactic_candidate_units_enabled: bool = True
+    calf_expose_syntactic_candidates_in_student_view: bool = False
+    calf_accuracy_automatic_metrics_enabled: bool = False
+    calf_accuracy_require_validated_annotations: bool = True
+    calf_output_rate_enabled: bool = True
+    calf_output_rate_require_actual_duration: bool = True
+    calf_accepted_timing_quality: list[Literal["verified", "estimated", "self_reported"]] = Field(
+        default_factory=lambda: ["verified", "estimated"], min_length=1, max_length=3,
+    )
+    calf_longitudinal_require_exact_metric_version: bool = True
+    calf_longitudinal_require_compatible_analysis_unit_version: bool = True
 
     @model_validator(mode="after")
     def ordered_variability_thresholds(self) -> "ConfigurationPayload":
         if self.low_variability_cv >= self.high_variability_cv:
             raise ValueError("low_variability_cv must be below high_variability_cv")
+        if self.calf_expose_to_deepseek or self.calf_expose_to_student_feedback:
+            raise ValueError("v0.8 keeps CALF hidden from DeepSeek and student feedback")
+        if self.calf_syntactic_formal_metrics_enabled or self.calf_accuracy_automatic_metrics_enabled:
+            raise ValueError("v0.8 cannot enable formal automatic syntax or Accuracy measures")
         return self
 
 
@@ -101,13 +127,13 @@ class ConfigurationCreate(BaseModel):
 
 class ConfigurationVersion(BaseModel):
     configuration_id: str = Field(pattern=r"^CFG\d{6}$")
-    version: str = Field(pattern=r"^config-v0\.(6|7)\.\d+$")
+    version: str = Field(pattern=r"^config-v0\.(6|7|8)\.\d+$")
     status: ConfigurationStatus
     created_at: datetime = Field(default_factory=utc_now)
     created_by: str
     parent_version: str | None = None
     payload: ConfigurationPayload
-    schema_version: str = "configuration-schema-v0.7.1"
+    schema_version: str = "configuration-schema-v0.8.0"
     change_note: str
     validation_status: Literal["not_validated", "passed", "failed"] = "not_validated"
     validation_errors: list[str] = Field(default_factory=list)

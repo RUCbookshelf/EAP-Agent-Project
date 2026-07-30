@@ -1,4 +1,10 @@
-# v0.7.1 已知限制
+# v0.8 已知限制
+
+- CALF measures are prototype research evidence and are not validated for the target population.
+- MTLD/HD-D remain sensitive to normalization, text length, task, and parameter choices.
+- spaCy clause/T-unit and other syntax outputs are candidates, not validated units or formal measures.
+- Accuracy and lexical sophistication are unavailable; no fake zero or inferred replacement is allowed.
+- WPM requires actual duration and remains a descriptive proxy. No CALF total, writing score, ability/proficiency/CEFR claim, or v0.9 loop is implemented.
 
 - Structured status and local repair improve consistency but do not validate longitudinal measurement or educational usefulness.
 - Risky positive-finding phrases are an auditable allowlist-style heuristic; semantically equivalent overclaims may still require human review.

@@ -1,4 +1,6 @@
-# Versioned configuration management v0.7.1
+# Versioned configuration management v0.8
+
+Migration 10 activates immutable child `config-v0.8.0`. It adds MTLD threshold/minimum/reverse policy, HD-D sample/minimum/short-text policy, accepted timing qualities, CALF eligibility switches, unit/guideline versions, and hard isolation flags. Validators reject enabling syntax/Accuracy candidates for diagnosis, revision priorities, targeted practice, or longitudinal use. Secrets remain environment-only.
 
 Migration 9 activates `config-v0.7.1`. New non-sensitive allowlisted values cover pairwise/provisional/adequate thresholds, maximum feedback evidence, positive-finding ability-inference protection and risky phrases, default UI view/research-audit availability, and revision trajectory display choices. Secrets remain environment-only. Rollback reactivates `config-v0.7.0` without deleting the v0.7.1 version or historical records.
 

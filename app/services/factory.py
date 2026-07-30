@@ -38,10 +38,14 @@ def build_analyzer(settings: Settings) -> AnalyzerCoordinator:
             local_repetition_window=settings.local_repetition_window,
             long_sentence_threshold=settings.long_sentence_threshold,
             configuration_version=settings.analysis_configuration_version,
+            mtld_threshold=settings.calf_mtld_factor_threshold,
+            mtld_calculate_reverse=settings.calf_mtld_calculate_reverse,
+            mtld_minimum_tokens=settings.calf_mtld_minimum_tokens,
+            hdd_sample_size=settings.calf_hdd_sample_size,
         )
     except Exception as exc:
         spacy_analyzer = UnavailableAnalyzer(
-            "spacy", "spacy-analyzer-v0.6.1",
+            "spacy", "spacy-analyzer-v0.8.0",
             f"spaCy resource unavailable ({type(exc).__name__}): {str(exc)[:180]}",
         )
     registry.register(spacy_analyzer)
@@ -74,4 +78,5 @@ def build_submission_service(
         calibrator=DiagnosticCalibrationService(
             active_configuration.payload if active_configuration else ConfigurationPayload()
         ),
+        calf_configuration=active_configuration.payload if active_configuration else ConfigurationPayload(),
     )

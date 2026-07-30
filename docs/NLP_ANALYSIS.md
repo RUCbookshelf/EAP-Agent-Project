@@ -1,4 +1,6 @@
-# NLP analysis v0.6.1
+# NLP analysis v0.8
+
+spaCy Analyzer v0.8.0 adds deterministic MTLD/HD-D and persisted versioned sentence/clause/T-unit candidates. BasicAnalyzer fallback retains separate unit provenance and lower confidence. Candidate syntax is research-audit-only; formal clause/T-unit measures require human validation. Lexical normalization and short-text policies are documented in `LEXICAL_DIVERSITY.md`.
 
 ## v0.6.1 measurement protocols
 

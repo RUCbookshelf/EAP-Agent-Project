@@ -90,6 +90,8 @@ def default_metric_registry() -> MetricRegistry:
         ("lexical_density", "0.6.1", "ratio", "number", "NOUN/PROPN/VERB/ADJ/ADV share of alphabetic tokens."),
         ("mattr", "0.4.0", "ratio", "number", "Legacy prototype moving-average TTR."),
         ("mattr", "0.6.1", "ratio", "number", "Lowercase-surface moving-average TTR."),
+        ("mtld", "0.8.0", "index", "number", "Bidirectional original-factor MTLD with explicit partial factors."),
+        ("hdd", "0.8.0", "expected_sample_ttr", "number", "Hypergeometric distribution diversity at a configured sample size."),
         ("finite_verb_candidates", "0.4.0", "candidates", "integer", "Legacy parser-derived candidate count."),
         ("finite_verb_candidates", "0.6.1", "candidates", "integer", "Morphology/tag-derived finite verb candidates."),
         ("subordinate_clause_candidates", "0.4.0", "candidates", "integer", "Legacy aggregate dependency candidates."),
@@ -100,6 +102,9 @@ def default_metric_registry() -> MetricRegistry:
         ("coordinated_structure_candidates", "0.6.1", "candidates", "integer", "Distinct heads with one or more conjunct dependencies."),
         ("mean_dependency_tree_depth", "0.4.0", "levels", "number", "Mean parser-derived dependency depth."),
         ("mean_noun_phrase_length", "0.4.0", "tokens", "number", "Mean detected noun-phrase length."),
+        ("long_sentence_candidates", "0.8.0", "candidates", "integer", "Sentence-length candidates for research audit only."),
+        ("clause_candidate_count", "0.8.0", "candidates", "integer", "Conservative clause candidate count."),
+        ("t_unit_candidate_count", "0.8.0", "candidates", "integer", "Conservative T-unit candidate count."),
     ]
     for metric_id, version, unit, value_type, description in definitions:
         limitations = ["Automatic prototype metric; teacher/researcher interpretation is required."]

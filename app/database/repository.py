@@ -12,6 +12,7 @@ from app.models import AnalysisResult, DiagnosisResult, EssaySubmission, History
 from app.revision import RevisionGroup, RevisionSnapshot
 from app.configuration import ConfigurationCreate, ConfigurationPayload, ConfigurationVersion, configuration_hash
 from app.calibration import DiagnosticCalibrationResult
+from app.calf import ErrorAnnotation
 
 
 SCHEMA = """
@@ -201,14 +202,20 @@ class Database:
             cursor = connection.execute(
                 """INSERT INTO essays(
                     student_id, writing_prompt, genre, draft_stage, timed, time_limit_minutes,
-                    tool_use, essay_text, submitted_at, original_draft_stage, revision_stage
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                    tool_use, essay_text, submitted_at, original_draft_stage, revision_stage,
+                    writing_started_at, writing_submitted_at, active_writing_duration_seconds,
+                    timing_source, timing_quality, unexplained_interruption
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
                 (
                     submission.student_id, submission.writing_prompt, submission.genre,
                     submission.draft_stage, int(submission.timed), submission.time_limit_minutes,
                     submission.tool_use,
                     submission.essay_text, submission.submitted_at.isoformat(),
                     submission.draft_stage, self.normalize_revision_stage(submission.draft_stage),
+                    submission.writing_started_at.isoformat() if submission.writing_started_at else None,
+                    submission.writing_submitted_at.isoformat() if submission.writing_submitted_at else None,
+                    submission.active_writing_duration_seconds, submission.timing_source,
+                    submission.timing_quality, int(submission.unexplained_interruption),
                 ),
             )
             return int(cursor.lastrowid)
@@ -251,8 +258,11 @@ class Database:
                         verification_status, status, measurement_status, confidence,
                         confidence_reasons_json, risk_factors_json, eligible_for_diagnosis,
                         eligible_for_longitudinal_comparison, measurement_metadata_json,
-                        evidence_json, limitations_json
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                        evidence_json, limitations_json, construct_id, subconstruct_id,
+                        automation_level, analysis_unit_version, numerator_json, denominator_json,
+                        intermediate_values_json, eligible_for_revision_priority,
+                        eligible_for_targeted_practice
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
                     (
                         run_id, item["metric_id"], item["metric_version"], json.dumps(item.get("value")),
                         item["unit"], json.dumps(item.get("parameters", {})), item["analyzer_version"],
@@ -263,6 +273,11 @@ class Database:
                         int(item.get("eligible_for_longitudinal_comparison", False)),
                         json.dumps(item.get("measurement_metadata", {})), json.dumps(item.get("evidence", [])),
                         json.dumps(item.get("limitations", [])),
+                        item.get("construct_id"), item.get("subconstruct_id"), item.get("automation_level"),
+                        item.get("analysis_unit_version"), json.dumps(item.get("numerator")),
+                        json.dumps(item.get("denominator")), json.dumps(item.get("intermediate_values", {})),
+                        int(item.get("eligible_for_revision_priority", False)),
+                        int(item.get("eligible_for_targeted_practice", False)),
                     ),
                 )
             artifact_payload = {
@@ -273,6 +288,20 @@ class Database:
                 "INSERT INTO analysis_artifacts(analysis_run_id, artifact_type, schema_version, artifact_json) VALUES (?, ?, ?, ?)",
                 (run_id, "nlp_analysis", "nlp-analysis-artifact-v0.4.0", json.dumps(artifact_payload)),
             )
+            for unit in analysis.artifacts.get("analysis_units", []):
+                cursor = connection.execute(
+                    """INSERT INTO analysis_units(
+                        submission_id,analysis_run_id,unit_id,unit_version,validation_status,unit_json
+                    ) VALUES (?,?,?,?,?,?)""",
+                    (essay_id, run_id, unit["unit_id"], unit["unit_version"],
+                     unit["validation_status"], json.dumps(unit)),
+                )
+                unit_id = f"AU{int(cursor.lastrowid):06d}"
+                stored = {**unit, "unit_record_id": unit_id, "submission_id": essay_id, "analysis_run_id": run_id}
+                connection.execute(
+                    "UPDATE analysis_units SET analysis_unit_id=?, unit_json=? WHERE analysis_unit_row_id=?",
+                    (unit_id, json.dumps(stored), int(cursor.lastrowid)),
+                )
         return analysis.model_copy(update={"analysis_run_id": run_id})
 
     def list_analysis_runs(self, essay_id: int) -> list[dict[str, Any]]:
@@ -320,10 +349,13 @@ class Database:
         for row in rows:
             item = dict(row)
             for name in ("value_json", "parameters_json", "resource_versions_json", "confidence_reasons_json",
-                         "risk_factors_json", "measurement_metadata_json", "evidence_json", "limitations_json"):
+                         "risk_factors_json", "measurement_metadata_json", "evidence_json", "limitations_json",
+                         "numerator_json", "denominator_json", "intermediate_values_json"):
                 item[name.removesuffix("_json")] = json.loads(item.pop(name))
             item["eligible_for_diagnosis"] = bool(item.get("eligible_for_diagnosis"))
             item["eligible_for_longitudinal_comparison"] = bool(item.get("eligible_for_longitudinal_comparison"))
+            item["eligible_for_revision_priority"] = bool(item.get("eligible_for_revision_priority"))
+            item["eligible_for_targeted_practice"] = bool(item.get("eligible_for_targeted_practice"))
             results.append(item)
         return results
 
@@ -543,15 +575,77 @@ class Database:
             raw = result.pop(key, None)
             result[key.removesuffix("_json")] = json.loads(raw) if raw else None
         result["timed"] = bool(result["timed"])
+        result["unexplained_interruption"] = bool(result.get("unexplained_interruption"))
         return result
 
     def list_student_submissions(self, student_id: str) -> list[dict[str, Any]]:
         with self.connect() as connection:
             rows = connection.execute(
-                "SELECT essay_id, student_id, writing_prompt, genre, draft_stage, timed, time_limit_minutes, tool_use, submitted_at, revision_of_submission_id, revision_group_id, revision_sequence, revision_stage, original_draft_stage FROM essays WHERE student_id=? ORDER BY submitted_at, essay_id",
+                """SELECT essay_id, student_id, writing_prompt, genre, draft_stage, timed,
+                   time_limit_minutes, tool_use, submitted_at, revision_of_submission_id,
+                   revision_group_id, revision_sequence, revision_stage, original_draft_stage,
+                   writing_started_at, writing_submitted_at, active_writing_duration_seconds,
+                   timing_source, timing_quality, unexplained_interruption
+                   FROM essays WHERE student_id=? ORDER BY submitted_at, essay_id""",
                 (student_id,),
             ).fetchall()
-        return [{**dict(row), "timed": bool(row["timed"])} for row in rows]
+        return [{**dict(row), "timed": bool(row["timed"]),
+                 "unexplained_interruption": bool(row["unexplained_interruption"])} for row in rows]
+
+    def list_analysis_units(self, submission_id: int, analysis_run_id: str | None = None) -> list[dict[str, Any]]:
+        with self.connect() as connection:
+            if analysis_run_id:
+                rows = connection.execute(
+                    "SELECT unit_json FROM analysis_units WHERE submission_id=? AND analysis_run_id=? ORDER BY analysis_unit_row_id",
+                    (submission_id, analysis_run_id),
+                ).fetchall()
+            else:
+                latest = connection.execute(
+                    "SELECT analysis_run_id FROM analysis_runs WHERE essay_id=? ORDER BY analysis_run_row_id DESC LIMIT 1",
+                    (submission_id,),
+                ).fetchone()
+                if latest is None:
+                    return []
+                rows = connection.execute(
+                    "SELECT unit_json FROM analysis_units WHERE submission_id=? AND analysis_run_id=? ORDER BY analysis_unit_row_id",
+                    (submission_id, latest[0]),
+                ).fetchall()
+        return [json.loads(row[0]) for row in rows]
+
+    def save_error_annotations(self, submission_id: int, annotations: list[ErrorAnnotation]) -> list[ErrorAnnotation]:
+        stored: list[ErrorAnnotation] = []
+        with self.connect() as connection:
+            if connection.execute("SELECT 1 FROM essays WHERE essay_id=?", (submission_id,)).fetchone() is None:
+                raise LookupError("Submission not found.")
+            for annotation in annotations:
+                if annotation.submission_id != submission_id:
+                    raise ValueError("Error annotation submission_id does not match the route submission.")
+                cursor = connection.execute(
+                    """INSERT INTO error_annotations(
+                        submission_id,start_offset,end_offset,annotation_source,annotation_status,
+                        eligible_for_formal_accuracy,annotation_json
+                    ) VALUES (?,?,?,?,?,?,?)""",
+                    (submission_id, annotation.start_offset, annotation.end_offset,
+                     annotation.annotation_source, annotation.annotation_status,
+                     int(annotation.eligible_for_formal_accuracy),
+                     annotation.model_dump_json(exclude={"eligible_for_formal_accuracy"})),
+                )
+                annotation_id = f"EA{int(cursor.lastrowid):06d}"
+                item = annotation.model_copy(update={"error_annotation_id": annotation_id})
+                connection.execute(
+                    "UPDATE error_annotations SET error_annotation_id=?, annotation_json=? WHERE error_annotation_row_id=?",
+                    (annotation_id, item.model_dump_json(exclude={"eligible_for_formal_accuracy"}), int(cursor.lastrowid)),
+                )
+                stored.append(item)
+        return stored
+
+    def list_error_annotations(self, submission_id: int) -> list[ErrorAnnotation]:
+        with self.connect() as connection:
+            rows = connection.execute(
+                "SELECT annotation_json FROM error_annotations WHERE submission_id=? ORDER BY error_annotation_row_id",
+                (submission_id,),
+            ).fetchall()
+        return [ErrorAnnotation.model_validate_json(row[0]) for row in rows]
 
     def list_student_history(self, student_id: str) -> list[dict[str, Any]]:
         with self.connect() as connection:
@@ -903,18 +997,20 @@ class Database:
                 "SELECT COALESCE(MAX(configuration_row_id),0)+1 FROM configuration_versions"
             ).fetchone()[0])
             existing = {str(row[0]) for row in connection.execute("SELECT version FROM configuration_versions")}
+            active = self.get_active_configuration()
+            family = "config-v0.8." if active.version.startswith("config-v0.8.") else "config-v0.7."
             suffix = max(
-                [int(value.rsplit(".", 1)[1]) for value in existing if value.startswith("config-v0.7.")],
+                [int(value.rsplit(".", 1)[1]) for value in existing if value.startswith(family)],
                 default=-1,
             ) + 1
-            version = f"config-v0.7.{suffix}"
+            version = f"{family}{suffix}"
             cursor = connection.execute(
                 """INSERT INTO configuration_versions(
                     version,status,created_at,created_by,parent_version,payload_json,schema_version,
                     change_note,validation_status,validation_errors_json,content_hash
                 ) VALUES (?,?,?,?,?,?,?,?,?,?,?)""",
                 (version, "draft", now, request.created_by, parent_version,
-                request.payload.model_dump_json(), "configuration-schema-v0.7.1", request.change_note,
+                request.payload.model_dump_json(), "configuration-schema-v0.8.0", request.change_note,
                  "not_validated", "[]", configuration_hash(request.payload)),
             )
             configuration_id = f"CFG{int(cursor.lastrowid):06d}"

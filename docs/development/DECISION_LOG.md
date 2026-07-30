@@ -1,5 +1,21 @@
 # Decision log
 
+## D024 — Separate semantic measurement status from availability
+- Status: accepted for v0.8
+- Decision: persist research/proxy/candidate/manual/unavailable lifecycle independently from whether one observation has a value.
+
+## D025 — Candidate syntax and errors never become formal measures automatically
+- Status: accepted for v0.8
+- Decision: require new validated-unit identities or eligible confirmed annotations; keep all candidates out of diagnosis, priorities, practice, and trajectories.
+
+## D026 — Actual duration only for output rate
+- Status: accepted for v0.8
+- Decision: a task time limit is never a duration proxy; missing actual duration returns unavailable rather than zero.
+
+## D027 — CALF is research evidence, not a score
+- Status: accepted for v0.8
+- Decision: no aggregation, quality/ability/proficiency/CEFR interpretation, or default prompt priority. v0.9 remains unauthorized.
+
 ## D020 — Backend-owned longitudinal facts
 
 - Date: 2026-07-30

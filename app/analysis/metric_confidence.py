@@ -14,7 +14,7 @@ PARSER_METRICS = {
 DICTIONARY_METRICS = {"connective_count"}
 LEXICAL_METRICS = {
     "word_count", "unique_word_count", "type_token_ratio", "mattr",
-    "lexical_density", "repeated_content_words", "repetition_density",
+    "mtld", "hdd", "lexical_density", "repeated_content_words", "repetition_density",
 }
 
 
@@ -66,6 +66,9 @@ def assess_metric_confidence(
         if metric_id == "mattr":
             reasons.append(f"Configured MATTR window is {parameters.get('window_size', parameters.get('mattr_window'))}.")
             risks.append("MATTR depends on token definition, normalization and window size.")
+        if metric_id in {"mtld", "hdd"}:
+            reasons.append("The configured lexical-diversity algorithm retained its parameters and intermediate values.")
+            risks.append("The metric has not been validated for the target student population.")
         if metric_id in {"repeated_content_words", "repetition_density"}:
             risks.append("Repetition candidates depend on lemma, POS and necessary-term heuristics.")
         confidence = "high" if token_count >= 150 and metric_id in {"word_count", "unique_word_count", "type_token_ratio"} else "medium"

@@ -43,6 +43,12 @@ class EssaySubmission(BaseModel):
     essay_text: str = Field(min_length=1)
     submitted_at: datetime = Field(default_factory=utc_now)
     revision_of_submission_id: int | None = Field(default=None, ge=1)
+    writing_started_at: datetime | None = None
+    writing_submitted_at: datetime | None = None
+    active_writing_duration_seconds: float | None = Field(default=None, gt=0)
+    timing_source: Literal["client_timer", "server_timestamp", "manual_report", "imported", "unknown"] = "unknown"
+    timing_quality: Literal["verified", "estimated", "self_reported", "incomplete", "unavailable"] = "unavailable"
+    unexplained_interruption: bool = False
 
     @field_validator("student_id", "writing_prompt", "genre", "draft_stage", "essay_text")
     @classmethod
@@ -56,6 +62,10 @@ class EssaySubmission(BaseModel):
     def validate_time_limit(self) -> "EssaySubmission":
         if not self.timed and self.time_limit_minutes is not None:
             raise ValueError("time_limit_minutes must be empty when timed is false")
+        if not self.timed and self.active_writing_duration_seconds is not None:
+            raise ValueError("active_writing_duration_seconds requires timed writing")
+        if self.writing_started_at and self.writing_submitted_at and self.writing_submitted_at < self.writing_started_at:
+            raise ValueError("writing_submitted_at must not precede writing_started_at")
         return self
 
 

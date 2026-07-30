@@ -97,8 +97,8 @@ def render_submission_result(result: dict, *, research_view: bool) -> None:
         st.write(f"Provider: {provider['provider_name']}")
         st.write(f"Feedback status: {provider.get('validation_status', 'unknown')}")
 
-    feedback_tab, revision_tab, progress_tab, evidence_tab, audit_tab = st.tabs(
-        ["Feedback", "Revision", "Progress", "Evidence", "Research Audit"]
+    feedback_tab, revision_tab, progress_tab, evidence_tab, calf_tab, audit_tab = st.tabs(
+        ["Feedback", "Revision", "Progress", "Evidence", "CALF Research", "Research Audit"]
     )
     with feedback_tab:
         st.subheader("Positive finding")
@@ -200,6 +200,38 @@ def render_submission_result(result: dict, *, research_view: bool) -> None:
         st.caption("MATTR describes sampled lexical variation under the current token rules; it is not a proficiency score.")
         st.write(f"Prototype lexical density: {analysis['metrics'].get('lexical_density', 'insufficient')}")
         st.caption("Lexical density is sensitive to task, length and automatic part-of-speech analysis.")
+
+    with calf_tab:
+        if not research_view:
+            st.info("Research measures are available for audit but are not writing scores.")
+        else:
+            st.subheader("CALF research measures")
+            metric_results = result["analysis"].get("metric_results", [])
+            groups = {
+                "Lexical Complexity": "lexical_complexity",
+                "Syntactic Complexity": "syntactic_complexity",
+                "Product Fluency": "product_fluency",
+            }
+            for label, construct_id in groups.items():
+                st.markdown(f"### {label}")
+                items = [item for item in metric_results if item.get("construct_id") == construct_id]
+                if not items:
+                    st.info("No stored measure is available for this construct in the current AnalysisRun.")
+                for item in items:
+                    with st.container(border=True):
+                        value = item.get("value")
+                        st.write(f"{item['metric_id']}: {value if value is not None else 'unavailable'}")
+                        st.caption(
+                            f"Status: {item.get('measurement_status')} · Confidence: {item.get('confidence')} · "
+                            f"Unit: {item.get('analysis_unit_version')} · Metric: {item.get('metric_version')}"
+                        )
+                        if item.get("limitations"):
+                            st.caption("Limitations: " + " ".join(item["limitations"]))
+            st.markdown("### Accuracy")
+            st.info("Accuracy measures are unavailable unless eligible confirmed human or imported-corpus error annotations exist. No missing annotation is reported as zero errors.")
+            st.markdown("### Lexical Sophistication")
+            st.info("Unavailable: no authorized versioned frequency resource and complete operating definition are configured.")
+            st.caption("T-unit and clause outputs remain automatic candidates and are not formal syntactic-complexity measures.")
 
     with audit_tab:
         if not research_view:
@@ -449,7 +481,7 @@ def render_admin(api_client: WritingFeedbackApiClient) -> None:
 def run() -> None:
     api_client = get_api_client(load_settings().api_base_url)
     st.set_page_config(page_title="English Writing Feedback Prototype", page_icon="✍️", layout="wide")
-    st.title("Intelligent English Writing Feedback Prototype v0.7.1")
+    st.title("Intelligent English Writing Feedback Prototype v0.8")
     st.caption("Formative feedback from prototype heuristics and optional LLM support — not automatic scoring.")
     st.warning(
         "This prototype is not educationally validated, does not measure proficiency, and does not replace teacher judgment."
@@ -542,6 +574,13 @@ def run() -> None:
             "Time limit (minutes)", min_value=1, max_value=1440, value=30,
             help="Editable at all times; saved only when Timed writing is selected.",
         )
+        active_duration_seconds = st.number_input(
+            "Actual active writing duration (seconds; 0 = unavailable)", min_value=0, max_value=86400,
+            value=0, help="This is separate from the task time limit. Output rate is unavailable when actual duration is not recorded.",
+        )
+        timing_source = st.selectbox("Timing source", ["unknown", "client_timer", "server_timestamp", "manual_report", "imported"])
+        timing_quality = st.selectbox("Timing quality", ["unavailable", "verified", "estimated", "self_reported", "incomplete"])
+        unexplained_interruption = st.checkbox("Unexplained interruption occurred")
         tool_use = st.text_input("Tool use", value="none", help="For example: none, dictionary, spellchecker")
         essay_text = st.text_area("Essay text", height=300)
         submitted = st.form_submit_button("Submit and generate feedback", type="primary")
@@ -572,6 +611,10 @@ def run() -> None:
             "draft_stage": draft_stage,
             "timed": timed,
             "time_limit_minutes": int(time_limit_minutes) if timed else None,
+            "active_writing_duration_seconds": float(active_duration_seconds) if timed and active_duration_seconds > 0 else None,
+            "timing_source": timing_source if timed else "unknown",
+            "timing_quality": timing_quality if timed else "unavailable",
+            "unexplained_interruption": bool(unexplained_interruption) if timed else False,
             "tool_use": tool_use,
             "essay_text": essay_text,
             "revision_of_submission_id": revision_of_submission_id,

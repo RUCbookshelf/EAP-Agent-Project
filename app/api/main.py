@@ -19,7 +19,7 @@ from app.api.schemas import (
 from app.config import Settings, load_settings
 from app.database import Database
 from app.services import (
-    AdminReanalysisService, ConfigurationService, DashboardService, ReanalysisRequest,
+    AdminReanalysisService, CalfService, ConfigurationService, DashboardService, ReanalysisRequest,
     SubmissionService, build_submission_service, ReanalysisService, RevisionService,
 )
 from app.services.factory import build_analyzer
@@ -30,6 +30,7 @@ from app.configuration import ConfigurationCreate, ConfigurationVersion
 from app.services.configuration import settings_from_configuration
 from app.calibration import DiagnosticCalibrationService
 from app.feedback import FeedbackReliabilityService
+from app.calf import ErrorAnnotation
 
 
 def _error(status: int, code: str, message: str, details=None) -> JSONResponse:
@@ -58,10 +59,12 @@ def create_app(
     dashboards = DashboardService(repository, metrics)
     reanalysis = ReanalysisService(repository, analyzer)
     revisions = RevisionService(repository)
+    calf = CalfService(repository)
     api.state.reanalysis = reanalysis
     api.state.revisions = revisions
     api.state.configurations = configurations
     api.state.dashboards = dashboards
+    api.state.calf = calf
     api.state.admin_reanalysis = AdminReanalysisService(
         repository, settings, configurations, submission_service,
     )
@@ -76,6 +79,7 @@ def create_app(
         submission_service.router.temperature = configuration.payload.llm_temperature
         submission_service.calibrator = DiagnosticCalibrationService(configuration.payload)
         submission_service.router.reliability = FeedbackReliabilityService(configuration.payload)
+        submission_service.calf_configuration = configuration.payload
         if hasattr(submission_service.router.primary, "max_tokens"):
             submission_service.router.primary.max_tokens = configuration.payload.llm_max_tokens
 
@@ -198,6 +202,96 @@ def create_app(
         except LookupError as exc:
             raise HTTPException(404, str(exc)) from None
         return ReanalysisResponse(submission_id=submission_id, analysis=result, llm_called=False)
+
+    @api.get("/api/v1/calf/constructs")
+    def calf_constructs() -> dict:
+        return {"constructs": [item.model_dump(mode="json") for item in calf.registry.list_constructs()]}
+
+    @api.get("/api/v1/calf/metrics")
+    def calf_metrics(
+        construct_id: str | None = None, subconstruct_id: str | None = None,
+        measurement_status: str | None = None, automation_level: str | None = None,
+        diagnosis_eligible: bool | None = None, longitudinal_eligible: bool | None = None,
+        manual_annotation_required: bool | None = None,
+    ) -> dict:
+        return {"metrics": [item.model_dump(mode="json") for item in calf.registry.list_specifications(
+            construct_id=construct_id, subconstruct_id=subconstruct_id,
+            measurement_status=measurement_status, automation_level=automation_level,
+            diagnosis_eligible=diagnosis_eligible, longitudinal_eligible=longitudinal_eligible,
+            manual_annotation_required=manual_annotation_required,
+        )]}
+
+    @api.get("/api/v1/calf/metrics/{metric_id}")
+    def calf_metric(metric_id: str, metric_version: str | None = None) -> dict:
+        try:
+            return calf.registry.get_specification(metric_id, metric_version).model_dump(mode="json")
+        except ValueError as exc:
+            raise HTTPException(404, str(exc)) from None
+
+    @api.get("/api/v1/calf/analysis-units")
+    def calf_analysis_unit_registry() -> dict:
+        return {"analysis_units": [item.model_dump(mode="json") for item in calf.registry.list_units()]}
+
+    @api.get("/api/v1/submissions/{submission_id}/calf")
+    def submission_calf(submission_id: int) -> dict:
+        try:
+            return calf.submission_report(submission_id)
+        except LookupError as exc:
+            raise HTTPException(404, str(exc)) from None
+
+    @api.get("/api/v1/submissions/{submission_id}/analysis-units")
+    def submission_analysis_units(submission_id: int, analysis_run_id: str | None = None) -> dict:
+        if repository.get_submission_bundle(submission_id) is None:
+            raise HTTPException(404, "Submission not found.")
+        return {"submission_id": submission_id,
+                "analysis_units": repository.list_analysis_units(submission_id, analysis_run_id)}
+
+    @api.get("/api/v1/submissions/{submission_id}/syntactic-units")
+    def submission_syntactic_units(submission_id: int) -> dict:
+        if repository.get_submission_bundle(submission_id) is None:
+            raise HTTPException(404, "Submission not found.")
+        items = repository.list_analysis_units(submission_id)
+        return {"submission_id": submission_id, "syntactic_units": [
+            item for item in items if item["unit_id"] in {
+                "sentence", "clause_candidate", "t_unit_candidate", "validated_clause", "validated_t_unit"
+            }
+        ]}
+
+    @api.get("/api/v1/submissions/{submission_id}/error-annotations")
+    def get_error_annotations(submission_id: int) -> dict:
+        if repository.get_submission_bundle(submission_id) is None:
+            raise HTTPException(404, "Submission not found.")
+        items = repository.list_error_annotations(submission_id)
+        return {"submission_id": submission_id,
+                "error_annotations": [item.model_dump(mode="json") for item in items]}
+
+    @api.post("/api/v1/submissions/{submission_id}/error-annotations/import", status_code=201)
+    def import_error_annotations(submission_id: int, annotations: list[ErrorAnnotation]) -> dict:
+        try:
+            items = calf.import_error_annotations(submission_id, annotations)
+        except LookupError as exc:
+            raise HTTPException(404, str(exc)) from None
+        except ValueError as exc:
+            raise HTTPException(422, str(exc)) from None
+        return {"submission_id": submission_id,
+                "error_annotations": [item.model_dump(mode="json") for item in items]}
+
+    @api.get("/api/v1/students/{student_id}/calf-trajectories")
+    def calf_trajectories(student_id: str) -> dict:
+        try:
+            return calf.trajectories(student_id)
+        except LookupError as exc:
+            raise HTTPException(404, str(exc)) from None
+
+    @api.post("/api/v1/submissions/{submission_id}/calf/reanalyze", status_code=201)
+    def calf_reanalyze(submission_id: int) -> dict:
+        try:
+            result = reanalysis.run(submission_id)
+            return {"submission_id": submission_id, "analysis": result,
+                    "calf": calf.submission_report(submission_id), "llm_called": False,
+                    "history_overwritten": False}
+        except LookupError as exc:
+            raise HTTPException(404, str(exc)) from None
 
     @api.get("/api/v1/submissions/{submission_id}/revision-candidates")
     def revision_candidates(submission_id: int) -> dict:

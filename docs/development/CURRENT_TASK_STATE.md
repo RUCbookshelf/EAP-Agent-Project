@@ -1,25 +1,34 @@
 # Current Task State
 
-## Completed task
+## Active task
 
-v0.7.1 Longitudinal Reliability & UI Polish — `completed`.
+v0.8 CALF Measurement Foundation — `completed` on 2026-07-30. v0.9 is `not_started`.
 
-## Verified baseline — 2026-07-30
+The authorized scope is frozen in `docs/development/v0.8_SPEC.md`. Every excluded scoring, CEFR, model-training, full teacher-platform, paid-service, cloud, WeChat, and v0.9 item remains `not_started`.
 
-- Branch `master`; baseline commit `6e7835d`; clean worktree before v0.7.1 edits.
-- Recovery tag `pre-v0.7.1-baseline-20260730`.
-- Normal tests: `195 passed, 3 skipped`; two known deprecation warnings.
-- Database migration 8; active `config-v0.7.0`; application 0.7.0; DeepSeek `deepseek-v4-flash` configured locally.
-- FastAPI health 200; API docs 200; Streamlit 200; `run.bat --verify` PASS.
-- Isolated live no-history call reproduced the exact first-response longitudinal wording failure. The broad correction succeeded with retry 1 and no fallback on this run, confirming an intermittent fallback risk rather than an API connection failure.
-- Isolated four-draft task confirmed 4 drafts, 1 Revision Group, 1 independent task and 1 representative. It also reproduced zero priority/practice/previous-priority/uptake content that currently leaves empty UI headings.
+## Verified pre-coding baseline
 
-## Completion gate — 2026-07-30
+- Branch `master`; clean starting commit `168d723`; annotated recovery tag `pre-v0.8-baseline-20260730`.
+- Baseline suite: 209 passed, 4 skipped. Baseline `run.bat --verify` passed FastAPI, docs, and Streamlit.
+- Working database began at migration 9 / `config-v0.7.1`; historical essays, AnalysisRuns, MetricResults, snapshots, revisions, and feedback parsed successfully.
+- `.env` and the database were ignored; Git history contained no `.env`; no credential was printed or recorded.
+- Existing timed-writing data provided a limit but no actual duration, so the limit was explicitly barred from WPM.
 
-- Backend-owned longitudinal facts, conservative field repair, provider execution status, Positive Finding guardrails, Within-task Revision Trajectory, API fields, `config-v0.7.1`, and the five-tab Streamlit UI are implemented.
-- Normal suite: `209 passed, 4 skipped`; skipped tests are explicit live-provider tests. Focused reliability/router gate: `28 passed`.
-- DeepSeek Live A–C passed with `deepseek-v4-flash`; every scenario used fallback false. Live A passed directly, Live B passed after one correction, and Live C passed with server repair of only `longitudinal_assessment.comment`.
-- Playwright desktop/mobile QA passed with zero browser-console/page errors. View rerender testing preserved feedback and Learner Profile Snapshot row counts.
-- Migration 9 and active `config-v0.7.1` verified. Working database retained 5 essays, 5 analysis runs, 5 feedback rows, 3 revision snapshots and 5 learner-profile snapshots.
-- `run.bat --verify` PASS; FastAPI health 200; API docs 200; Streamlit 200. Tracked-file, Git-history, log and database scans found no credential pattern.
-- Required documentation is synchronized. The independent commit is the final action; v0.8, CALF and every other out-of-scope feature remain `not_started`.
+## Completed v0.8 implementation
+
+- Registered 4 constructs, 22 measurement specifications, and 14 analysis units.
+- Implemented deterministic MTLD/HD-D with inspectable intermediates and short-text policies; preserved TTR/MATTR/density protocols.
+- Added research-only syntactic candidates, explicit human promotion, append-only error annotations, and unavailable Accuracy/sophistication states without fake zeros.
+- Added actual-duration-only writing output rate, timing provenance, and a descriptive-proxy boundary.
+- Added migration 10, immutable child `config-v0.8.0`, new provenance columns/tables, logical rollback/re-upgrade, CALF APIs, local reanalysis, exact-version/task-condition trajectories, and a research-only Streamlit tab.
+- Kept CALF-only data outside Diagnostic Gate priorities, exercises, student totals, and default feedback prompts.
+
+## Verification gates
+
+- Full automated suite passed: 225 passed, 5 skipped; Cases A–M cover the CALF contracts and isolation rules.
+- Live A–D passed: real DeepSeek A/B had first-pass structured validation, no correction, no server repair, and no fallback; controlled C/D proved missing-duration null behavior and reproducible 13.8 WPM.
+- `run.bat --verify` passed migration 10, initialization, FastAPI health 200, docs 200, and Streamlit 200.
+- Browser plugin was unavailable. Playwright 1.62 with installed Microsoft Edge passed the submission → research view → CALF tab flow on desktop and 390×844 mobile with no console errors. This check found and corrected the stale v0.7.1 page title. On mobile, long tab labels truncate at the right edge but remain operable after closing the sidebar.
+- Documentation, references, human-review guidance, security boundaries, and the v0.8 verification report were completed.
+
+The v0.8 release is finalized by the isolated Git commit containing this state record. Work stops there; v0.9 is not authorized.

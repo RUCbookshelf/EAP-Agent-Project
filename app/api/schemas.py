@@ -69,6 +69,12 @@ class SubmissionRecordResponse(BaseModel):
     tool_use: str
     essay_text: str
     submitted_at: datetime
+    writing_started_at: datetime | None = None
+    writing_submitted_at: datetime | None = None
+    active_writing_duration_seconds: float | None = None
+    timing_source: str = "unknown"
+    timing_quality: str = "unavailable"
+    unexplained_interruption: bool = False
     analysis: dict[str, Any] | None
     diagnosis: dict[str, Any] | None
     feedback: dict[str, Any] | None

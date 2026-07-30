@@ -1,0 +1,21 @@
+{
+  "case_a_short": "Ideas matter.",
+  "case_b_repetition": "evidence evidence evidence evidence claim claim claim claim reason reason reason reason readers need evidence and readers evaluate evidence",
+  "case_c_variation": "alpha beta gamma delta epsilon zeta eta theta iota kappa lambda mu nu xi omicron pi rho sigma tau upsilon phi chi psi omega amber birch cedar dahlia elm fir garden harbor island jasmine kettle linen meadow nectar orchard pebble quartz river silver timber unity valley willow xenia yarrow zenith alpha beta gamma delta epsilon zeta eta theta iota kappa lambda mu nu xi omicron pi rho sigma tau upsilon phi chi psi omega",
+  "case_d_normalization": "Evidence, EVIDENCE! evidence? Claim; CLAIM: claim. 123 456.",
+  "case_i_syntax": "Writers revise claims because readers need evidence, and they explain examples that support the central argument.",
+  "case_g_limit_only": {
+    "timed": true,
+    "time_limit_minutes": 30,
+    "active_writing_duration_seconds": null,
+    "timing_source": "unknown",
+    "timing_quality": "unavailable"
+  },
+  "case_h_actual_duration": {
+    "timed": true,
+    "time_limit_minutes": 30,
+    "active_writing_duration_seconds": 120,
+    "timing_source": "imported",
+    "timing_quality": "verified"
+  }
+}

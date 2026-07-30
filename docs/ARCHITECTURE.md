@@ -1,4 +1,6 @@
-# v0.7 system architecture
+# v0.8 system architecture
+
+`Essay → Analyzer v0.8 → versioned MetricResult + AnalysisUnitRecord → CALF Registry/Service → research API/UI`. This additive branch shares persistence and configuration infrastructure but is isolated from the existing Diagnostic Gate, prompt priorities, exercises, and student totals. Error annotations are append-only imports. Trajectories group by exact metric/unit/Analyzer compatibility and task conditions.
 
 ## v0.7.1 reliability overlay
 

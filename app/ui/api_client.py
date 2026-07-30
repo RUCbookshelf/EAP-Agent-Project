@@ -51,6 +51,15 @@ class WritingFeedbackApiClient:
     def reanalyze(self, submission_id: int) -> dict[str, Any]:
         return self._request("POST", f"/api/v1/submissions/{submission_id}/analyses")
 
+    def get_calf(self, submission_id: int) -> dict[str, Any]:
+        return self._request("GET", f"/api/v1/submissions/{submission_id}/calf")
+
+    def get_calf_constructs(self) -> dict[str, Any]:
+        return self._request("GET", "/api/v1/calf/constructs")
+
+    def get_calf_metrics(self) -> dict[str, Any]:
+        return self._request("GET", "/api/v1/calf/metrics")
+
     def get_student_revision_candidates(self, student_id: str) -> dict[str, Any]:
         return self._request("GET", f"/api/v1/students/{student_id}/revision-candidates")
 

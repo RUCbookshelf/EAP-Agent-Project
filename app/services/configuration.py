@@ -8,6 +8,7 @@ from app.configuration import (
     ConfigurationCreate, ConfigurationRegistry, ConfigurationVersion,
     default_algorithm_registry, default_prompt_registry,
 )
+from app.calf import default_calf_registry
 
 
 class ConfigurationRepository:
@@ -27,6 +28,7 @@ class ConfigurationService:
         self.registry = ConfigurationRegistry(
             default_prompt_registry(), metrics, default_algorithm_registry(), analyzers,
         )
+        self.calf_registry = default_calf_registry()
 
     def list(self) -> list[ConfigurationVersion]:
         return self.repository.list_configurations()
@@ -57,8 +59,11 @@ class ConfigurationService:
         except ValueError as exc:
             errors.append(str(exc))
         metric_ids = {metric.metric_id for metric in self.registry.metrics.list()}
-        if not {"word_count", "mattr", "lexical_density"} <= metric_ids:
+        if not {"word_count", "mattr", "mtld", "hdd", "lexical_density"} <= metric_ids:
             errors.append("Required metric registry entries are missing.")
+        calf_metric_ids = {item.metric_id for item in self.calf_registry.list_specifications()}
+        if not {"type_token_ratio", "mattr", "mtld", "hdd", "lexical_density", "writing_output_rate_wpm"} <= calf_metric_ids:
+            errors.append("Required CALF measurement specifications are missing.")
         algorithm_ids = {algorithm.algorithm_id for algorithm in self.registry.algorithms.list()}
         if not {"longitudinal-trend", "revision-alignment", "feedback-uptake", "diagnostic-gate"} <= algorithm_ids:
             errors.append("Required algorithms are not registered.")
@@ -97,6 +102,9 @@ class ConfigurationService:
             "metrics": [item.model_dump(mode="json") for item in self.registry.metrics.list()],
             "algorithms": [item.model_dump(mode="json") for item in self.registry.algorithms.list()],
             "prompts": self.registry.prompts.list(),
+            "calf_constructs": [item.model_dump(mode="json") for item in self.calf_registry.list_constructs()],
+            "calf_measurement_specifications": [item.model_dump(mode="json") for item in self.calf_registry.list_specifications()],
+            "analysis_units": [item.model_dump(mode="json") for item in self.calf_registry.list_units()],
         }
 
 
@@ -113,4 +121,8 @@ def settings_from_configuration(settings: Settings, configuration: Configuration
         prompt_version=payload.active_prompt_version,
         llm_temperature=payload.llm_temperature,
         llm_max_tokens=payload.llm_max_tokens,
+        calf_mtld_factor_threshold=payload.calf_mtld_factor_threshold,
+        calf_mtld_calculate_reverse=payload.calf_mtld_calculate_reverse,
+        calf_mtld_minimum_tokens=payload.calf_mtld_minimum_tokens,
+        calf_hdd_sample_size=payload.calf_hdd_sample_size,
     )

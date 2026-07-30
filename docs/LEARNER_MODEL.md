@@ -1,5 +1,9 @@
 # Learner Model 2.0 v0.7
 
+## v0.8 CALF isolation
+
+Learner Model 2.0 remains version 0.7.0. CALF trajectories are a separate research endpoint and require exact metric/unit versions and task conditions. CALF-only measures cannot create current learning targets, strength patterns, diagnoses, or student totals in v0.8.
+
 ## v0.7.1 presentation contract
 
 The learner model calculation remains v0.7.0. v0.7.1 maps its task-aware counts into `unavailable`, `not_comparable`, `pairwise_only`, `provisional_pattern`, or `descriptive_trend_available`. Revision drafts never increase the independent-task count. When status is unavailable/not comparable, feedback evidence IDs are empty; stronger statuses may cite only registered, supplied History Evidence IDs. These labels are display/reliability states, not new measurement constructs.

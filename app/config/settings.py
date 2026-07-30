@@ -22,11 +22,11 @@ class Settings:
     api_port: int = 8000
     streamlit_port: int = 8501
     api_base_url: str = "http://127.0.0.1:8000"
-    application_version: str = "0.7.1"
+    application_version: str = "0.8.0"
     api_version: str = "v1"
-    database_migration_version: int = 9
+    database_migration_version: int = 10
     prompt_version: str = "feedback-prompt-v0.7.1"
-    analysis_version: str = "spacy-analyzer-v0.6.1"
+    analysis_version: str = "spacy-analyzer-v0.8.0"
     diagnosis_version: str = "prototype-diagnosis-v0.6.1"
     active_analyzer: str = "spacy"
     fallback_analyzer: str = "basic"
@@ -37,6 +37,10 @@ class Settings:
     analysis_configuration_version: str = "nlp-config-v0.4.0"
     llm_temperature: float = 0.2
     llm_max_tokens: int = 1800
+    calf_mtld_factor_threshold: float = 0.72
+    calf_mtld_calculate_reverse: bool = True
+    calf_mtld_minimum_tokens: int = 10
+    calf_hdd_sample_size: int = 42
 
 
 def load_settings(env_file: Path | None = None) -> Settings:
@@ -69,4 +73,8 @@ def load_settings(env_file: Path | None = None) -> Settings:
         local_repetition_window=int(os.getenv("LOCAL_REPETITION_WINDOW", "30")),
         long_sentence_threshold=int(os.getenv("LONG_SENTENCE_THRESHOLD", "30")),
         analysis_configuration_version=os.getenv("ANALYSIS_CONFIGURATION_VERSION", "nlp-config-v0.4.0"),
+        calf_mtld_factor_threshold=float(os.getenv("CALF_MTLD_FACTOR_THRESHOLD", "0.72")),
+        calf_mtld_calculate_reverse=os.getenv("CALF_MTLD_CALCULATE_REVERSE", "true").lower() == "true",
+        calf_mtld_minimum_tokens=int(os.getenv("CALF_MTLD_MINIMUM_TOKENS", "10")),
+        calf_hdd_sample_size=int(os.getenv("CALF_HDD_SAMPLE_SIZE", "42")),
     )

@@ -15,6 +15,8 @@ from app.repositories import (
 )
 from typing import TYPE_CHECKING
 from app.calibration import DiagnosticCalibrationService
+from app.calf import append_product_fluency_metric
+from app.configuration import ConfigurationPayload
 
 if TYPE_CHECKING:
     from app.services.learner_profile import LearnerProfileService
@@ -44,6 +46,7 @@ class SubmissionService:
         learner_profile_service: "LearnerProfileService | None" = None,
         revision_service: "RevisionService | None" = None,
         calibrator: DiagnosticCalibrationService | None = None,
+        calf_configuration: ConfigurationPayload | None = None,
     ) -> None:
         self.repository = repository
         self.analyzer = analyzer
@@ -53,16 +56,20 @@ class SubmissionService:
         self.learner_profile_service = learner_profile_service
         self.revision_service = revision_service
         self.calibrator = calibrator
+        self.calf_configuration = calf_configuration or ConfigurationPayload()
         self.repository.record_versions({
-            "application": "0.7.1",
+            "application": "0.8.0",
             "analysis": getattr(analyzer, "version", "unknown"),
             "diagnosis": getattr(diagnoser, "version", "unknown"),
             "diagnostic_calibration": "diagnostic-calibration-v0.6.1",
             "feedback_schema": "structured-feedback-v0.7.1",
             "api": "v1",
-            "metric_registry": "metric-registry-v0.6.1",
+            "metric_registry": "metric-registry-v0.8.0",
+            "calf_construct_registry": "calf-construct-registry-v0.8.0",
+            "calf_measurement_specification": "calf-measurement-specification-v0.8.0",
+            "analysis_unit_registry": "analysis-unit-registry-v0.8.0",
             "revision": "revision-analysis-v0.5.0",
-            "configuration": "configuration-schema-v0.7.1",
+            "configuration": "configuration-schema-v0.8.0",
             "learner_model": "learner-profile-v0.7.0",
             "visualization": "progress-visualization-data-v0.6.0",
         })
@@ -78,6 +85,10 @@ class SubmissionService:
         analysis = self.analyzer.analyze(
             submission.essay_text, writing_prompt=submission.writing_prompt,
             draft_stage=submission.draft_stage, tool_use=submission.tool_use,
+        )
+        analysis = append_product_fluency_metric(
+            analysis, submission,
+            accepted_timing_quality=self.calf_configuration.calf_accepted_timing_quality,
         )
         analysis = self.repository.save_analysis_run(essay_id, analysis)
         self.repository.save_analysis(essay_id, analysis)

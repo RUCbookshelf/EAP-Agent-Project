@@ -1,5 +1,9 @@
 # FastAPI v1
 
+## v0.8 CALF endpoints
+
+`GET /api/v1/calf/constructs`, `/calf/metrics`, `/calf/metrics/{metric_id}`, and `/calf/analysis-units` expose registry contracts. Submission endpoints expose CALF report, persisted analysis units/syntactic candidates, error annotations/import, and local-only CALF reanalysis. `GET /api/v1/students/{student_id}/calf/trajectories` returns exact-version/unit/task-condition series and excluded observations. These endpoints expose research evidence only; no total or ability field exists.
+
 ## v0.7.1 response additions
 
 `POST /api/v1/submissions` retains `feedback_result`, `history`, and `revision_snapshot` and adds `feedback_provider_status`, `longitudinal_assessment`, `revision_group_summary`, `within_task_revision_trajectory`, and `ui_empty_states`. Empty states are localizable codes rather than fixed UI prose. `GET /api/v1/revisions/{revision_group_id}/trajectory` returns the draft chain, pairwise comparisons, first-to-latest comparison, diagnosis/metric changes, prior priorities, uptake candidates, major-rewrite flag, attribution confidence, and limitations. `GET /api/v1/system/version` reports application 0.7.1 and `structured-feedback-v0.7.1`.

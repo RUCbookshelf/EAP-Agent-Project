@@ -1,5 +1,9 @@
 # v0.7 task-aware longitudinal analysis
 
+## v0.8 CALF research series
+
+CALF series do not alter v0.7 learner snapshots. Eligible observations are grouped by metric version, analysis-unit version, Analyzer compatibility, genre, timed/untimed condition, time limit, and tool use. Incompatible, candidate, unavailable, or insufficient observations are listed with exclusion reasons; no bridging, improvement, ability, or causal claim is made.
+
 ## v0.7.1 deterministic status and wording
 
 The backend owns the status, scope, comparable independent-task count, minimum, revision-group count, draft count, evidence IDs and limitations. No-history and non-comparable states clear evidence IDs and use an explicit unavailable explanation. Two comparable tasks permit only a pairwise descriptive comparison; three/four permit a provisional pattern; five or more permit a descriptive trend. A model comment that does not match the structured status is replaced locally while valid current-feedback sections are retained.

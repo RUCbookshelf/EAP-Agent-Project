@@ -1,4 +1,6 @@
-# 数据模型（迁移 9）
+# 数据模型（迁移 10）
+
+Migration 10 additively adds nullable actual-timing fields to essays, semantic/provenance fields to metric results, append-only `analysis_units` and `error_annotations`, and active `config-v0.8.0` as a child of preserved `config-v0.7.1`. Logical rollback reactivates migration 9/config v0.7.1 without deleting additive data; re-upgrade is idempotent.
 
 Migration 9 additively adds nullable `feedback_records.provider_status_json` and activates `config-v0.7.1` as a child of preserved `config-v0.7.0`. Existing feedback rows remain valid with no provider-status object. Logical rollback sets schema version 8 and reactivates the parent configuration while preserving the additive column, stored status JSON, essays, analyses, feedback, revisions and snapshots; re-upgrade is idempotent.
 
