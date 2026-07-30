@@ -265,11 +265,11 @@ def test_migration_9_is_additive_persists_provider_status_and_rolls_back_logical
             "SELECT provider_status_json FROM feedback_records WHERE essay_id=?", (result.essay_id,)
         ).fetchone()[0]
         assert "fallback_used" in stored
-        assert rollback(connection, 9) == 9
+        assert rollback(connection, 10) == 10
         assert connection.execute("SELECT essay_text FROM essays WHERE essay_id=?", (result.essay_id,)).fetchone()
         assert connection.execute(
             "SELECT version FROM configuration_versions WHERE status='active'"
-        ).fetchone()[0] == "config-v0.7.1"
+        ).fetchone()[0] == "config-v0.8.0"
         assert upgrade(connection) == 11
         assert repository.get_active_configuration().version == "config-v0.8.2"
     assert settings.application_version == "0.8.0"
