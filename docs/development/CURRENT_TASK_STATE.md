@@ -2,7 +2,7 @@
 
 **Date:** 2026-07-30
 **Current version:** v0.9
-**Status:** Implementation and automated tests complete; final acceptance closure in progress.
+**Status:** completed
 
 ## Completed
 - Practice-domain schemas and service
@@ -13,15 +13,13 @@
 - Streamlit Practice, Learning Journey, Practice Audit pages
 - 210 locale keys (en + zh_CN)
 - Live A-G validation (20 tests)
-- Playwright desktop + mobile verification
+- Playwright desktop + 390x844 mobile verification (4 tests)
 - smoke_stack (FastAPI, docs, Streamlit HTTP 200)
 - Full pytest: 269 passed, 5 skipped
-
-## In Progress
-- Documentation suite (5 core v0.9 docs created; v0.8.2 backlog pending)
-- Worktree cleanup (research_exports, gitignore updates)
+- All v0.9 documentation (10 docs created/updated)
+- All v0.8.2 documentation (8 docs created)
+- Git worktree clean
 
 ## Next
-- Complete v0.8.2 documentation backlog
-- Create V0.9_HUMAN_REVIEW_GUIDE.md
-- Final worktree cleanup and commit
+- v1.0 is `not_started`
+- Future: teacher annotation platform, LanguageTool/ERRANT integration, cloud deployment
