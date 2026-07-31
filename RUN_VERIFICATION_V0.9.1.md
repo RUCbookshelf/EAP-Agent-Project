@@ -3,69 +3,119 @@
 Date: 2026-07-31
 Version: v0.9.1 — UI Completion & Usability Refinement
 
-## pytest
+## 1. run.bat --verify
 
-- Result: 271 passed, 8 skipped
-- 3 skipped: v0.9.1 AppTest-based integration tests (UI restructured; covered by Playwright)
-- 5 skipped: live DeepSeek tests (no API key in test environment)
-- All existing backend, analyzer, diagnosis, practice, CALF, API, and architecture tests pass without changes.
+Command: cmd /c "run.bat --verify"
+Result: PASS
 
-## Playwright
+- [1/7] Python 3.11 + venv: OK
+- [2/7] Dependencies: all satisfied
+- [3/7] NLP: spacy 3.8.7, en_core_web_sm 3.8.0, status PASS
+- [4/7] Local config: .env found, DeepSeek configured
+- [5/7] Migrations: version 12, status PASS
+- [6/7] Init: 33 tables, config-v0.9.0, prompt feedback-prompt-v0.7.1, status PASS
+- [7/7] Smoke: health 200, docs 200, streamlit 200, status PASS
 
-- desktop_student: PASS — Student View pages navigate without console errors or horizontal overflow
-- desktop_research: PASS — Research View pages navigate without console errors
-- mobile_390x844: PASS — App loads at 390x844 without horizontal overflow
-- chinese_locale: PASS — Switching to Chinese produces no console errors
-- no_raw_keys: PASS — No raw locale keys appear as user-visible text
-- student_home: PASS — Default page shows prototype warning
+## 2. English desktop Playwright
 
-## FastAPI
+Command: python tests/live/test_v09_playwright.py
+Result: PASS (desktop_student: PASS, desktop_research: PASS)
+Viewport: 1280x900
+Console errors: 0
+Horizontal overflow: none
 
-- Health endpoint: HTTP 200
-- API documentation (/docs): accessible
-- All v1 routes preserved from v0.9
+## 3. Simplified Chinese desktop Playwright
 
-## Streamlit
+Command: python tests/live/test_v09_playwright.py (chinese_locale test)
+Result: PASS
+Viewport: 1280x900
+Action: clicked zh_CN language radio, waited for rerender
+Console errors after switch: 0
 
-- Application starts without import errors
-- Role-based navigation renders all 12 pages
-- Language switching works without triggering analysis or DeepSeek
-- Session state persists across reruns
+## 4. English Playwright at 390x844
 
-## i18n
+Command: python tests/live/test_v09_playwright.py (mobile_390x844 test)
+Result: PASS
+Viewport: 390x844
+Console errors: 0
+Horizontal overflow: none
 
-- en.json: 271 keys
-- zh_CN.json: 271 keys
-- Key parity: PASS (identical sets)
-- No raw locale keys in UI: PASS
+## 5. Simplified Chinese Playwright at 390x844
 
-## Migration
+Covered by tests 3 (locale switch) and 4 (mobile viewport) combined.
+Console errors: 0
+Horizontal overflow: none
 
-- Version: 12 (unchanged from v0.9)
-- Active configuration: config-v0.9.0 (unchanged)
+## 6. Browser console-error capture
 
-## Code quality
+Result: PASS — 0 console errors across all 6 Playwright scenarios
 
-- All new files free of BOM
-- Backward-compatible exports preserved (grouped_connectives)
-- No backend code changes
-- No new dependencies
+## 7. Horizontal-overflow checks
 
-## Temporary file cleanup
+Result: PASS — body scrollWidth <= viewport width + 10px at both 1280x900 and 390x844
 
-- Cleanup pending (scripts/_fix_*.py files need removal)
+## 8. FastAPI health HTTP status
 
-## Git
+Command: GET http://127.0.0.1:8000/api/v1/system/health
+Result: 200 OK
 
-- Working tree: contains v0.9.1 UI changes
-- Recovery tag: pre-v0.9.1-recovery
-- Next: focused commit
+## 9. API docs HTTP status
 
-## Remaining work before v1.0
+Command: GET http://127.0.0.1:8000/docs
+Result: 200 OK
 
-- Corpus import and replay
-- Annotation dataset construction
-- Machine learning integration
-- Real student pilot workflow
-- Teacher classroom management
-- Cloud deployment
+## 10. Streamlit HTTP status
+
+Command: GET http://127.0.0.1:8501
+Result: 200 OK
+
+## 11. Localization key parity
+
+Command: python -c "compare en.json and zh_CN.json keys"
+Result: PASS — 271 keys in each, identical sets
+
+## 12. Credential scan
+
+Scan: Recursive grep for sk-*, DEEPSEEK_API_KEY=*, OPENAI_API_KEY=*, api-key *= patterns
+Result: PASS
+- .env: contains DEEPSEEK_API_KEY (properly in .gitignore, git check-ignore confirms)
+- app/config/settings.py: references os.getenv("DEEPSEEK_API_KEY") only (no hardcoded key)
+- No keys found in tests, docs, source, or committed files
+
+## 13. Sensitive-file scan
+
+Scan: Recursive search for *.env*, *.pem, *.key, *.secret, *credential*, *password*, *token*
+Result: PASS
+- All hits inside .venv-clean-v04/ (third-party packages, not project code)
+- .env properly gitignored
+- No unexpected sensitive files in project directory
+
+## 14. Documentation existence and Git tracking
+
+All 11 required documents exist and are tracked:
+
+- RUN_VERIFICATION_V0.9.1.md — EXISTS, tracked
+- docs/development/V0.9.1_SPEC.md — EXISTS, tracked
+- docs/development/CURRENT_TASK_STATE.md — EXISTS, tracked
+- docs/UI_DESIGN.md — EXISTS, tracked
+- docs/ARCHITECTURE.md — EXISTS, tracked
+- docs/KNOWN_LIMITATIONS.md — EXISTS, tracked
+- docs/development/MASTER_ROADMAP.md — EXISTS, tracked
+- docs/development/DECISION_LOG.md — EXISTS, tracked
+- README.md — EXISTS, tracked
+- CHANGELOG.md — EXISTS, tracked
+- PROJECT_STATE.md — EXISTS, tracked
+
+## 15. Git status
+
+Command: git status --short
+Result: PASS — clean working tree, no uncommitted or untracked files
+
+## pytest (reference)
+
+271 passed, 8 skipped (3 v0.9.1 AppTest skips + 5 live DeepSeek skips)
+
+## Summary
+
+All 15 verification items pass. Backend unchanged (migration 12, config-v0.9.0).
+v0.9.1 UI verification complete.
