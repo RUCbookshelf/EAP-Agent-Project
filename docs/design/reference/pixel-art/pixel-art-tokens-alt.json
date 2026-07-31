@@ -1,0 +1,22 @@
+{
+  "color": {
+    "primary": {
+      "value": "#1a1c2c"
+    },
+    "secondary": {
+      "value": "#f4f4f4"
+    },
+    "accent-1": {
+      "value": "#ff004d"
+    },
+    "accent-2": {
+      "value": "#00e436"
+    },
+    "accent-3": {
+      "value": "#29adff"
+    },
+    "accent-4": {
+      "value": "#ffec27"
+    }
+  }
+}

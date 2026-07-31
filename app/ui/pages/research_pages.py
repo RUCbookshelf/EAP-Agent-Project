@@ -1,8 +1,10 @@
-"""Research View pages for the writing-feedback-mvp Streamlit interface.
+"""Research View pages for the writing-feedback-mvp Pixel Art interface.
 
 Research view exposes internal IDs, metric details, provider diagnostics,
-and audit records. It uses neutral research language and avoids simplistic
+and audit records. Uses neutral research language and avoids simplistic
 quality labels.
+
+Pixel Art v0.9.2: square corners, hard shadows, solid colors, monospace.
 """
 
 from __future__ import annotations
@@ -14,6 +16,7 @@ from app.ui.components import (
     audit_record,
     card_group_header,
     empty_state,
+    error_box,
     info_box,
     limitation_notice,
     metric_card,
@@ -38,31 +41,48 @@ def render_research_overview(api_client: WritingFeedbackApiClient, lang: str) ->
         st.error(t("api_unavailable", lang))
         return
 
-    st.subheader(t("research_overview_counts", lang))
+    section_header("research_overview_counts", lang)
 
     col1, col2, col3 = st.columns(3)
     with col1:
-        with st.container(border=True):
-            st.metric(t("research_overview_analyzer", lang), health.get("active_analyzer", "?"))
+        st.markdown(
+            f'<div class="px-card" style="text-align:center;">'
+            f'<div style="font-weight:900;font-size:1.3rem;">{health.get("active_analyzer", "?")}</div>'
+            f'<div style="font-size:0.85rem;color:var(--px-muted);">{t("research_overview_analyzer", lang)}</div>'
+            f'</div>',
+            unsafe_allow_html=True,
+        )
     with col2:
-        with st.container(border=True):
-            st.metric(t("research_overview_analyzer_version", lang), health.get("active_analyzer_version", "?"))
+        st.markdown(
+            f'<div class="px-card" style="text-align:center;">'
+            f'<div style="font-weight:900;font-size:1.3rem;">{health.get("active_analyzer_version", "?")}</div>'
+            f'<div style="font-size:0.85rem;color:var(--px-muted);">{t("research_overview_analyzer_version", lang)}</div>'
+            f'</div>',
+            unsafe_allow_html=True,
+        )
     with col3:
-        with st.container(border=True):
-            st.metric(t("research_overview_nlp_model", lang), health.get("nlp_model_name", "?"))
+        st.markdown(
+            f'<div class="px-card" style="text-align:center;">'
+            f'<div style="font-weight:900;font-size:1.3rem;">{health.get("nlp_model_name", "?")}</div>'
+            f'<div style="font-size:0.85rem;color:var(--px-muted);">{t("research_overview_nlp_model", lang)}</div>'
+            f'</div>',
+            unsafe_allow_html=True,
+        )
 
-    # Provider status
-    st.subheader(t("research_overview_provider", lang))
+    section_header("research_overview_provider", lang)
     requested = health.get("llm_provider", "")
     configured = health.get("llm_api_configured", False)
-    with st.container(border=True):
-        st.write(f"{t('provider_label', lang)}: {requested}")
-        st.write(f"{t('research_overview_api_configured', lang)}: {'Yes' if configured else 'No'}")
-        if health.get("analyzer_fallback_active"):
-            warning_box("research_overview_fallback", lang)
+    st.markdown(
+        f'<div class="px-card">'
+        f'<strong>{t("provider_label", lang)}:</strong> {requested}<br>'
+        f'{t("research_overview_api_configured", lang)}: {"Yes" if configured else "No"}'
+        f'</div>',
+        unsafe_allow_html=True,
+    )
+    if health.get("analyzer_fallback_active"):
+        warning_box("research_overview_fallback", lang)
 
-    # Data quality
-    st.subheader(t("data_quality", lang))
+    section_header("data_quality", lang)
     try:
         dq = api_client.research_data_quality()
     except ApiClientError:
@@ -73,7 +93,6 @@ def render_research_overview(api_client: WritingFeedbackApiClient, lang: str) ->
     else:
         info_box("research_overview_no_dq", lang)
 
-    # Research prototype warning
     warning_box("app_prototype_warning", lang)
 
 
@@ -101,13 +120,11 @@ def render_research_evidence(api_client: WritingFeedbackApiClient, lang: str) ->
         st.error(str(exc))
         return
 
-    # Submission info
     section_header("research_evidence_submission", lang)
     with st.expander(t("research_evidence_submission_details", lang), expanded=True):
         safe = {k: v for k, v in submission.items() if k not in ("essay_text",)}
         st.json(safe)
 
-    # Analysis
     section_header("research_evidence_analysis", lang)
     with st.expander(t("research_evidence_analysis_details", lang)):
         safe = {}
@@ -118,7 +135,6 @@ def render_research_evidence(api_client: WritingFeedbackApiClient, lang: str) ->
                 safe[k] = v
         st.json(safe)
 
-    # Diagnosis + calibration
     section_header("research_evidence_diagnosis", lang)
     with st.expander(t("research_evidence_diagnosis_details", lang)):
         st.json(audit)
@@ -152,11 +168,12 @@ def render_research_calf(api_client: WritingFeedbackApiClient, lang: str) -> Non
         if not items:
             info_box("calf_no_measures", lang)
             continue
+        st.markdown('<div class="px-metric-grid">', unsafe_allow_html=True)
         for item in items:
             value = item.get("value")
-            status_key = item.get("measurement_status") or item.get("status") or "unavailable"
             display_value = f"{value:.4f}" if isinstance(value, float) else (str(value) if value is not None else None)
             limitations = item.get("limitations") or item.get("known_limitations", [])
+            status_key = item.get("measurement_status") or item.get("status") or "unavailable"
             metric_card(
                 metric_id=item.get("metric_id", ""),
                 value=display_value,
@@ -167,12 +184,11 @@ def render_research_calf(api_client: WritingFeedbackApiClient, lang: str) -> Non
                 limitations=limitations,
                 lang=lang,
             )
+        st.markdown('</div>', unsafe_allow_html=True)
 
-    # Accuracy
     card_group_header("accuracy_section", lang)
     info_box("calf_accuracy_unavailable", lang)
 
-    # Sophistication
     card_group_header("sophistication_section", lang)
     info_box("calf_sophistication_unavailable", lang)
 
@@ -199,7 +215,6 @@ def render_research_learning_process(api_client: WritingFeedbackApiClient, lang:
     if not st.button(t("load_records", lang), key="learning_load"):
         return
 
-    # Load all evidence
     try:
         targets = api_client.get_practice_targets(student_id.strip())
         traces = api_client.get_engagement_traces(student_id.strip())
@@ -208,7 +223,6 @@ def render_research_learning_process(api_client: WritingFeedbackApiClient, lang:
         st.error(str(exc))
         return
 
-    # Practice Targets
     section_header("practice_target", lang)
     if targets:
         for t_item in targets:
@@ -222,7 +236,6 @@ def render_research_learning_process(api_client: WritingFeedbackApiClient, lang:
     else:
         info_box("empty_audit", lang)
 
-    # Engagement Traces
     section_header("feedback_engagement_trace", lang)
     if traces:
         for tr in traces:
@@ -235,7 +248,6 @@ def render_research_learning_process(api_client: WritingFeedbackApiClient, lang:
     else:
         info_box("empty_audit_traces", lang)
 
-    # Transfer Evidence
     section_header("transfer_evidence", lang)
     if transfer:
         for te in transfer:
@@ -270,7 +282,6 @@ def render_research_data(api_client: WritingFeedbackApiClient, lang: str) -> Non
         t("export_history", lang),
     ])
 
-    # Export Preview
     with sub_tab1:
         section_header("export_preview", lang)
         privacy = st.selectbox(
@@ -304,20 +315,22 @@ def render_research_data(api_client: WritingFeedbackApiClient, lang: str) -> Non
             except Exception as exc:
                 st.error(str(exc))
 
-    # Privacy
     with sub_tab2:
         section_header("research_data_privacy", lang)
-        st.write(t("privacy_internal", lang))
-        st.write(t("privacy_pseudonymized", lang))
-        st.write(t("privacy_minimal", lang))
+        st.markdown(
+            f'<div class="px-card">'
+            f'<strong>{t("privacy_internal", lang)}</strong><br>'
+            f'{t("privacy_pseudonymized", lang)}<br>'
+            f'{t("privacy_minimal", lang)}'
+            f'</div>',
+            unsafe_allow_html=True,
+        )
         warning_box("privacy_warning", lang)
 
-    # Filters
     with sub_tab3:
         section_header("research_data_filters", lang)
         info_box("research_data_filters_placeholder", lang)
 
-    # PII
     with sub_tab4:
         section_header("pii_scan", lang)
         sub_id = st.number_input(t("research_evidence_submission_id", lang), min_value=1, value=1, step=1, key="pii_sub")
@@ -328,7 +341,6 @@ def render_research_data(api_client: WritingFeedbackApiClient, lang: str) -> Non
             except ApiClientError as exc:
                 st.error(str(exc))
 
-    # Human Review
     with sub_tab5:
         section_header("human_review", lang)
         target_type = st.selectbox(
@@ -356,7 +368,6 @@ def render_research_data(api_client: WritingFeedbackApiClient, lang: str) -> Non
             except Exception as exc:
                 st.error(str(exc))
 
-    # Dataset Split
     with sub_tab6:
         section_header("dataset_split", lang)
         if st.button(t("dataset_split", lang), key="ds_split_btn"):
@@ -374,7 +385,6 @@ def render_research_data(api_client: WritingFeedbackApiClient, lang: str) -> Non
                 st.error(str(exc))
         warning_box("split_boundary", lang)
 
-    # Data Quality
     with sub_tab7:
         section_header("data_quality_report", lang)
         if st.button(t("data_quality_report", lang), key="dq_report_btn"):
@@ -384,7 +394,6 @@ def render_research_data(api_client: WritingFeedbackApiClient, lang: str) -> Non
             except Exception as exc:
                 st.error(str(exc))
 
-    # Export History
     with sub_tab8:
         section_header("export_history", lang)
         if st.button(t("export_history", lang), key="export_hist_btn"):
@@ -410,7 +419,6 @@ def render_research_system_audit(api_client: WritingFeedbackApiClient, lang: str
         t("nav_local_administration", lang),
     ])
 
-    # Diagnostic Audit
     with audit_tab1:
         section_header("nav_diagnostic_audit", lang)
         sub_id = st.number_input(
@@ -424,7 +432,6 @@ def render_research_system_audit(api_client: WritingFeedbackApiClient, lang: str
             except ApiClientError as exc:
                 st.error(str(exc))
 
-    # Learner Model Audit
     with audit_tab2:
         section_header("nav_learner_model_audit", lang)
         student_id = st.text_input(
@@ -452,12 +459,10 @@ def render_research_system_audit(api_client: WritingFeedbackApiClient, lang: str
         if profile:
             st.json(profile)
 
-    # Reanalysis
     with audit_tab3:
         section_header("research_audit_reanalysis", lang)
         info_box("research_audit_reanalysis_note", lang)
 
-    # Admin
     with audit_tab4:
         section_header("nav_local_administration", lang)
         try:

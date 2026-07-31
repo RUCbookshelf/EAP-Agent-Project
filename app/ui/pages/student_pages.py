@@ -1,8 +1,10 @@
-"""Student View pages for the writing-feedback-mvp Streamlit interface.
+"""Student View pages for the writing-feedback-mvp Pixel Art interface.
 
 All pages use progressive disclosure: students see only what they need
 to understand feedback and take action. Internal IDs, analyzer versions,
 and raw metrics are hidden.
+
+Pixel Art v0.9.2: square corners, hard shadows, solid colors, monospace.
 """
 
 from __future__ import annotations
@@ -13,12 +15,14 @@ from app.ui.api_client import ApiClientError, WritingFeedbackApiClient
 from app.ui.components import (
     card_group_header,
     empty_state,
+    error_box,
     evidence_quote,
     feedback_priority_card,
     info_box,
     limitation_notice,
     page_header,
     section_header,
+    success_box,
     timeline_event,
     warning_box,
 )
@@ -38,76 +42,68 @@ def render_student_home(api_client: WritingFeedbackApiClient, lang: str) -> None
         info_box("student_home_enter_id", lang)
         return
 
-    # Load latest submission
     try:
         targets = api_client.get_practice_targets(student_id.strip())
         traces = api_client.get_engagement_traces(student_id.strip())
         transfer = api_client.get_transfer_evidence(student_id.strip())
     except ApiClientError:
-        st.error(t("api_unavailable", lang))
+        error_box(t("api_unavailable", lang), lang)
         return
 
-    st.markdown("---")
-
-    # Current writing task
     section_header("student_home_current_task", lang)
-    with st.container(border=True):
-        if not targets:
-            st.write(t("student_home_no_submissions", lang))
-        else:
-            active = [t for t in targets if t.get("status") == "active"]
-            completed = [t for t in targets if t.get("status") == "completed"]
-            st.write(f"{t('student_home_active_targets', lang)}: {len(active)}")
-            st.write(f"{t('student_home_completed_targets', lang)}: {len(completed)}")
-            if active:
-                first = active[0]
-                st.caption(f"{t('practice_target', lang)}: {first.get('target_code', '')} — {first.get('target_label', '')}")
+    if not targets:
+        st.write(t("student_home_no_submissions", lang))
+    else:
+        active = [t for t in targets if t.get("status") == "active"]
+        completed = [t for t in targets if t.get("status") == "completed"]
+        st.markdown(
+            f'<div class="px-card">'
+            f'<strong>{t("student_home_active_targets", lang)}: {len(active)}</strong><br>'
+            f'{t("student_home_completed_targets", lang)}: {len(completed)}'
+            f'</div>',
+            unsafe_allow_html=True,
+        )
 
-    # Latest submission status
     section_header("student_home_latest_status", lang)
-    with st.container(border=True):
-        if traces:
-            latest = traces[-1]
-            status = latest.get("status", "")
-            label_map = {
-                "target_identified": "student_home_target_identified",
-                "practice_available": "student_home_practice_available",
-                "practice_attempted": "student_home_practice_attempted",
-                "practice_response_candidate": "student_home_response_observed",
-                "within_task_response_candidate": "student_home_revision_observed",
-                "later_task_recurrence": "student_home_recurrence",
-                "later_task_nonrecurrence": "student_home_nonrecurrence",
-                "insufficient_evidence": "student_home_insufficient",
-            }
-            st.write(t(label_map.get(status, status), lang))
-            st.caption(latest.get("created_at", ""))
-        else:
-            st.write(t("student_home_no_events", lang))
+    if traces:
+        latest = traces[-1]
+        status = latest.get("status", "")
+        label_map = {
+            "target_identified": "student_home_target_identified",
+            "practice_available": "student_home_practice_available",
+            "practice_attempted": "student_home_practice_attempted",
+            "practice_response_candidate": "student_home_response_observed",
+            "within_task_response_candidate": "student_home_revision_observed",
+            "later_task_recurrence": "student_home_recurrence",
+            "later_task_nonrecurrence": "student_home_nonrecurrence",
+            "insufficient_evidence": "student_home_insufficient",
+        }
+        st.markdown(
+            f'<div class="px-card">'
+            f'<strong>{t(label_map.get(status, status), lang)}</strong>'
+            f'</div>',
+            unsafe_allow_html=True,
+        )
+    else:
+        st.write(t("student_home_no_events", lang))
 
-    # Next recommended action
     section_header("student_home_next_action", lang)
-    with st.container(border=True):
-        if not targets:
-            st.info(t("student_home_action_submit", lang))
-        elif not traces:
-            st.info(t("student_home_action_submit", lang))
+    if not targets:
+        info_box("student_home_action_submit", lang)
+    elif not traces:
+        info_box("student_home_action_submit", lang)
+    else:
+        last_status = traces[-1].get("status", "")
+        if last_status in ("target_identified", "practice_available"):
+            info_box("student_home_action_practice", lang)
+        elif last_status == "practice_attempted":
+            info_box("student_home_action_revise", lang)
+        elif last_status == "within_task_response_candidate":
+            info_box("student_home_action_new_task", lang)
         else:
-            last_status = traces[-1].get("status", "")
-            if last_status in ("target_identified", "practice_available"):
-                st.info(t("student_home_action_practice", lang))
-            elif last_status == "practice_attempted":
-                st.info(t("student_home_action_revise", lang))
-            elif last_status == "within_task_response_candidate":
-                st.info(t("student_home_action_new_task", lang))
-            else:
-                st.info(t("student_home_action_continue", lang))
+            info_box("student_home_action_continue", lang)
 
-    # Action sequence
-    st.markdown("---")
-    st.caption(t("student_home_sequence", lang))
-
-    # Limitations
-    warning_box("student_home_boundary", lang)
+    limitation_notice("student_home_boundary", lang)
 
 
 # ---------------------------------------------------------------------------
@@ -123,7 +119,6 @@ def render_writing_page(api_client: WritingFeedbackApiClient, lang: str) -> None
         placeholder=t("student_id_placeholder", lang),
     )
 
-    # Task relationship
     st.radio(
         t("task_relationship", lang),
         [t("task_new_independent", lang), t("task_revision_within", lang)],
@@ -132,13 +127,11 @@ def render_writing_page(api_client: WritingFeedbackApiClient, lang: str) -> None
     )
     is_revision = st.session_state.get("writing_task_relationship") == t("task_revision_within", lang)
 
-    # Draft stage
     if is_revision:
         draft_stage = st.selectbox(t("draft_stage", lang), [t("draft_revised", lang), t("draft_final", lang)])
     else:
         draft_stage = st.selectbox(t("draft_stage", lang), [t("draft_first", lang), t("draft_independent", lang)])
 
-    # Revision candidate selection
     revision_of_submission_id = None
     candidates = []
     if student_id.strip():
@@ -149,18 +142,17 @@ def render_writing_page(api_client: WritingFeedbackApiClient, lang: str) -> None
 
     if is_revision:
         labels = {
-            f"Essay #{item['essay_id']} · {item['submitted_at']} · {item['draft_stage']} · {item['writing_prompt'][:80]}": item["essay_id"]
+            f"Essay #{item['essay_id']} | {item['submitted_at']} | {item['draft_stage']} | {item['writing_prompt'][:80]}": item["essay_id"]
             for item in candidates
         }
         if labels:
             selected = st.selectbox(t("student_writing_select_revision", lang), list(labels))
             revision_of_submission_id = labels[selected]
-            st.info(t("student_writing_revision_note", lang))
+            info_box("student_writing_revision_note", lang)
         else:
-            st.warning(t("student_writing_no_candidates", lang))
+            warning_box("student_writing_no_candidates", lang)
             return
 
-    # Writing task info
     with st.expander(t("student_writing_task_info", lang), expanded=True):
         writing_prompt = st.text_area(t("writing_prompt", lang), height=80, key="writing_prompt_input")
         genre = st.selectbox(
@@ -168,7 +160,6 @@ def render_writing_page(api_client: WritingFeedbackApiClient, lang: str) -> None
             [t("genre_argumentative", lang), t("genre_expository", lang), t("genre_narrative", lang)],
         )
 
-    # Timing info
     with st.expander(t("student_writing_timing", lang), expanded=False):
         timed = st.checkbox(t("timed_writing", lang))
         time_limit_minutes = None
@@ -194,31 +185,26 @@ def render_writing_page(api_client: WritingFeedbackApiClient, lang: str) -> None
         )
         unexplained_interruption = st.checkbox(t("unexplained_interruption", lang), disabled=not timed)
 
-    # Tool use
     with st.expander(t("student_writing_tools", lang), expanded=False):
         tool_use = st.text_input(
             t("tool_use", lang), value="none",
             help=t("tool_use_placeholder", lang),
         )
 
-    # Essay text
     st.subheader(t("essay_text", lang))
     essay_text = st.text_area(
         t("essay_text", lang), height=300, key="writing_essay",
         label_visibility="collapsed",
     )
 
-    # Submit
     if not st.button(t("submit_button", lang), type="primary", use_container_width=True):
-        # Show previous submission if available
         saved = st.session_state.get("submission_result")
         if saved:
-            st.success(t("submission_saved", lang, id=saved.get("submission_id", "?")))
+            success_box(t("submission_saved", lang, id=saved.get("submission_id", "?")), lang)
             with st.expander(t("student_writing_previous", lang)):
                 render_feedback_content(saved, api_client, lang)
         return
 
-    # Validation
     if not student_id.strip():
         st.error(t("student_writing_need_id", lang))
         return
@@ -256,7 +242,7 @@ def render_writing_page(api_client: WritingFeedbackApiClient, lang: str) -> None
 
     result["ui_submission"] = {"draft_stage": draft_stage}
     st.session_state["submission_result"] = result
-    st.success(t("submission_saved", lang, id=result.get("submission_id", "?")))
+    success_box(t("submission_saved", lang, id=result.get("submission_id", "?")), lang)
     render_feedback_content(result, api_client, lang)
 
 
@@ -270,22 +256,19 @@ def render_feedback_content(result: dict, api_client: WritingFeedbackApiClient, 
     feedback = provider.get("feedback", {})
     empty_states = set(result.get("ui_empty_states") or [])
 
-    # Summary
     with st.container(border=True):
-        st.caption(f"Essay #{result.get('submission_id', '?')} · {result.get('ui_submission', {}).get('draft_stage', '')}")
+        st.caption(f"Essay #{result.get('submission_id', '?')} | {result.get('ui_submission', {}).get('draft_stage', '')}")
         st.caption(f"{t('provider_label', lang)}: {provider.get('provider_name', '')}")
 
-    # Strengths
     section_header("student_feedback_strengths", lang)
     pf = feedback.get("positive_finding", {})
     if pf:
         st.write(pf.get("explanation", ""))
         if pf.get("evidence_quote"):
-            st.caption(f"\"{pf['evidence_quote']}\"")
+            st.caption(f'"{pf["evidence_quote"]}"')
     else:
         info_box("student_feedback_no_strengths", lang)
 
-    # Revision priorities
     section_header("student_feedback_priorities", lang)
     priorities = feedback.get("priority_feedback", [])
     if "NO_SELECTED_PRIORITY" in empty_states or not priorities:
@@ -304,25 +287,26 @@ def render_feedback_content(result: dict, api_client: WritingFeedbackApiClient, 
         if shown == 0:
             empty_state("student_feedback_no_priority_title", "student_feedback_no_priority_desc", lang)
 
-    # Evidence from writing
     section_header("student_feedback_evidence", lang)
     exercises = feedback.get("exercises", [])
     if exercises:
-        with st.container(border=True):
-            for ex in exercises:
-                st.markdown(f"**{ex.get('exercise_type', '').replace('_', ' ').title()}**")
-                st.write(ex.get("instructions", ""))
+        for ex in exercises:
+            st.markdown(
+                f'<div class="px-card">'
+                f'<strong>{ex.get("exercise_type", "").replace("_", " ").title()}</strong><br>'
+                f'{ex.get("instructions", "")}'
+                f'</div>',
+                unsafe_allow_html=True,
+            )
     else:
         info_box("student_feedback_no_exercise", lang)
 
-    # Next step
     section_header("student_feedback_next", lang)
     if priorities:
-        st.info(t("student_feedback_next_revise", lang))
+        info_box("student_feedback_next_revise", lang)
     else:
-        st.info(t("student_feedback_next_continue", lang))
+        info_box("student_feedback_next_continue", lang)
 
-    # Limitations
     uncertainty = feedback.get("uncertainty_note", "")
     if uncertainty:
         limitation_notice(uncertainty, lang)
@@ -364,23 +348,34 @@ def render_revision_page(api_client: WritingFeedbackApiClient, lang: str) -> Non
         info_box("student_revision_no_history", lang)
         return
 
-    # Draft chain
     section_header("student_revision_chain", lang)
+    chain_html = ""
     for item in trajectory.get("draft_chain", []):
-        st.write(f"{item.get('revision_sequence', '?')}. Essay #{item.get('submission_id', '?')} — {item.get('draft_stage', '')} — {item.get('submitted_at', '')}")
+        chain_html += (
+            f'<div class="px-timeline-node">'
+            f'<div class="px-timeline-marker"></div>'
+            f'<div class="px-timeline-content">'
+            f'<strong>Essay #{item.get("submission_id", "?")}</strong>'
+            f'<div style="font-size:0.85rem;color:var(--px-muted);">'
+            f'{item.get("draft_stage", "")} &middot; {item.get("submitted_at", "")}'
+            f'</div></div></div>'
+        )
+    st.markdown(chain_html, unsafe_allow_html=True)
 
-    # First to latest
     first_latest = trajectory.get("first_to_latest_comparison", {})
     if first_latest:
         section_header("student_revision_changes", lang)
         changes = first_latest.get("token_changes", {})
-        with st.container(border=True):
-            st.write(f"{t('student_revision_inserted', lang)}: {float(changes.get('inserted_ratio', 0)):.1%}")
-            st.write(f"{t('student_revision_deleted', lang)}: {float(changes.get('deleted_ratio', 0)):.1%}")
-            st.write(f"{t('student_revision_modified', lang)}: {float(changes.get('modified_ratio', 0)):.1%}")
+        st.markdown(
+            f'<div class="px-card">'
+            f'{t("student_revision_inserted", lang)}: {float(changes.get("inserted_ratio", 0)):.1%}<br>'
+            f'{t("student_revision_deleted", lang)}: {float(changes.get("deleted_ratio", 0)):.1%}<br>'
+            f'{t("student_revision_modified", lang)}: {float(changes.get("modified_ratio", 0)):.1%}'
+            f'</div>',
+            unsafe_allow_html=True,
+        )
         st.caption(t("student_revision_edit_note", lang))
 
-    # Previous priorities
     section_header("student_revision_priorities", lang)
     empty_states = set(result.get("ui_empty_states") or [])
     if "MAJOR_REWRITE_LIMITS_ATTRIBUTION" in empty_states:
@@ -391,15 +386,18 @@ def render_revision_page(api_client: WritingFeedbackApiClient, lang: str) -> Non
         for item in trajectory.get("previous_selected_priorities", []):
             st.write(f"- {item.get('category', '').replace('_', ' ').title()}: {item.get('revision_guidance', '')}")
 
-    # Uptake candidates
     section_header("student_revision_uptake", lang)
     if "NO_FEEDBACK_UPTAKE_CANDIDATE" in empty_states:
         info_box("student_revision_no_uptake", lang)
     for item in trajectory.get("feedback_uptake_candidates", []):
-        with st.container(border=True):
-            st.write(f"**{item.get('status', '')}**")
-            st.caption(item.get("observed_change", ""))
-            st.caption(f"{t('student_revision_attribution', lang)}: {trajectory.get('attribution_confidence', '')}")
+        st.markdown(
+            f'<div class="px-card">'
+            f'<strong>{item.get("status", "")}</strong><br>'
+            f'<span style="font-size:0.85rem;color:var(--px-muted);">{item.get("observed_change", "")}</span><br>'
+            f'<span style="font-size:0.85rem;">{t("student_revision_attribution", lang)}: {trajectory.get("attribution_confidence", "")}</span>'
+            f'</div>',
+            unsafe_allow_html=True,
+        )
 
     limitation_notice("student_revision_boundary", lang)
 
@@ -421,7 +419,6 @@ def render_practice_page(api_client: WritingFeedbackApiClient, lang: str) -> Non
         info_box("no_active_target", lang)
         return
 
-    # Load targets
     if st.button(t("load_practice", lang), key="practice_load"):
         try:
             targets = api_client.get_practice_targets(student_id.strip())
@@ -442,14 +439,17 @@ def render_practice_page(api_client: WritingFeedbackApiClient, lang: str) -> Non
 
     selected = active_targets[0]
 
-    # Target info
     section_header("practice_target", lang)
-    with st.container(border=True):
-        st.write(selected.get("target_label", ""))
-        st.caption(f"{t('student_practice_source', lang)}: {selected.get('target_code', '')}")
-        st.caption(f"{t('student_practice_why', lang)}: {selected.get('source_diagnosis_id', '')}")
+    st.markdown(
+        f'<div class="px-card">'
+        f'<strong>{selected.get("target_label", "")}</strong><br>'
+        f'<span style="font-size:0.85rem;color:var(--px-muted);">'
+        f'{t("student_practice_source", lang)}: {selected.get("target_code", "")} &middot; '
+        f'{t("student_practice_why", lang)}: {selected.get("source_diagnosis_id", "")}'
+        f'</span></div>',
+        unsafe_allow_html=True,
+    )
 
-    # Generate exercise
     source_text = st.text_area(
         t("student_practice_source_text", lang), key="practice_source_v2", height=80,
         placeholder=t("student_practice_source_placeholder", lang),
@@ -466,45 +466,55 @@ def render_practice_page(api_client: WritingFeedbackApiClient, lang: str) -> Non
 
     exercise = st.session_state.get("current_exercise_v2")
     if exercise and exercise.get("status") != "practice_not_available":
-        with st.container(border=True):
-            st.markdown(f"**{exercise.get('exercise_type', '')}**")
-            st.write(exercise.get("instructions", ""))
-            constraints = exercise.get("constraints", [])
-            if constraints:
-                st.caption(f"{t('exercise_constraints', lang)}: {', '.join(constraints)}")
+        constraints_html = ""
+        constraints = exercise.get("constraints", [])
+        if constraints:
+            constraints_html = f'<br><span style="font-size:0.85rem;">{t("exercise_constraints", lang)}: {", ".join(constraints)}</span>'
 
-            response_text = st.text_area(
-                t("response_field", lang), key="practice_response_v2", height=100,
-                placeholder=t("student_practice_response_placeholder", lang),
-            )
-            if st.button(t("submit_attempt", lang), key="practice_submit", type="primary"):
-                if not response_text.strip():
-                    st.warning(t("student_practice_empty_response", lang))
-                else:
-                    aid = exercise.get("exercise_id", "")
-                    payload = {
-                        "student_id": student_id,
-                        "response_text": response_text,
-                        "attempt_number": len(st.session_state.get("exercise_attempts_v2", [])) + 1,
-                    }
-                    try:
-                        attempt = api_client.submit_exercise_attempt(aid, payload)
-                        attempts = st.session_state.get("exercise_attempts_v2", [])
-                        attempts.append(attempt)
-                        st.session_state["exercise_attempts_v2"] = attempts
-                        st.success(t("student_practice_attempt_saved", lang))
-                    except ApiClientError as exc:
-                        st.error(str(exc))
+        st.markdown(
+            f'<div class="px-card">'
+            f'<strong>{exercise.get("exercise_type", "")}</strong><br>'
+            f'{exercise.get("instructions", "")}'
+            f'{constraints_html}'
+            f'</div>',
+            unsafe_allow_html=True,
+        )
 
-    # Attempt history
+        response_text = st.text_area(
+            t("response_field", lang), key="practice_response_v2", height=100,
+            placeholder=t("student_practice_response_placeholder", lang),
+        )
+        if st.button(t("submit_attempt", lang), key="practice_submit", type="primary"):
+            if not response_text.strip():
+                st.warning(t("student_practice_empty_response", lang))
+            else:
+                aid = exercise.get("exercise_id", "")
+                payload = {
+                    "student_id": student_id,
+                    "response_text": response_text,
+                    "attempt_number": len(st.session_state.get("exercise_attempts_v2", [])) + 1,
+                }
+                try:
+                    attempt = api_client.submit_exercise_attempt(aid, payload)
+                    attempts = st.session_state.get("exercise_attempts_v2", [])
+                    attempts.append(attempt)
+                    st.session_state["exercise_attempts_v2"] = attempts
+                    success_box(t("student_practice_attempt_saved", lang), lang)
+                except ApiClientError as exc:
+                    st.error(str(exc))
+
     attempts = st.session_state.get("exercise_attempts_v2", [])
     if attempts:
         section_header("attempt_history", lang)
         for a in reversed(attempts):
-            with st.container(border=True):
-                st.write(f"{t('exercise_attempt', lang)} #{a.get('attempt_number', '?')}")
-                st.caption(a.get("response_text", "")[:200])
-                st.caption(f"{t('metric_status', lang)}: {a.get('status', 'unknown')}")
+            st.markdown(
+                f'<div class="px-card">'
+                f'<strong>{t("exercise_attempt", lang)} #{a.get("attempt_number", "?")}</strong><br>'
+                f'<span style="font-size:0.85rem;color:var(--px-muted);">{str(a.get("response_text", ""))[:200]}</span><br>'
+                f'<span style="font-size:0.85rem;">{t("metric_status", lang)}: {a.get("status", "unknown")}</span>'
+                f'</div>',
+                unsafe_allow_html=True,
+            )
 
     limitation_notice("practice_boundary", lang)
 

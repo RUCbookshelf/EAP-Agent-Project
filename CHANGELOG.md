@@ -1,3 +1,27 @@
+﻿## v0.9.2 (2026-07-31)
+
+### Changed
+- Complete Pixel Art UI redesign with centralized CSS token system
+- Square corners, hard offset shadows (2px/4px/8px), solid colors, no gradients
+- Canonical 7-color palette: #1a1c2c, #ffffff, #f4f4f4, #ff004d, #00e436, #29adff, #ffec27
+- Monospace typography stack (ui-monospace, Cascadia, Consolas, SFMono, Menlo, etc.)
+- All transitions set to none; immediate hard state changes for hover/active/focus
+- Reusable component library redesigned: page_header, section_header, metric_card,
+  feedback_priority_card, timeline_event, status_badge, notices (warning/error/
+  success/info/limitation), empty_state, audit_record, table_container, divider
+- Global application shell with pixel-art sidebar, borders, and typography
+- All 12 pages (6 Student + 6 Research) redesigned with pixel-art cards and layouts
+- Streamlit form controls restyled: square corners, thick borders, blue focus outlines
+- Responsive: smaller borders and shadow offsets on mobile (<=640px)
+- prefers-reduced-motion: explicit animation/transition disable
+- Nested cards eliminated; replaced with flat sections, separators, and rows
+
+### Backend
+- No changes to migration 12, config-v0.9.0, or any backend code
+- 271 pytest passed, 8 skipped (unchanged from v0.9.1 baseline)
+
+### Design references
+- Token files archived at docs/design/reference/pixel-art/
 ## v0.9.1 (2026-07-31)
 
 ### Added
@@ -155,3 +179,4 @@
 - progress/profile API 返回真实 v0.3 结构，并支持 metric、日期、comparable_only 和 analysis_version 查询。
 - Prompt 升级至 `feedback-prompt-v0.3.0`；只发送筛选后的 Snapshot，纵向评论仍必须绑定经验证的 H 证据 ID。
 - 增加四类纯虚拟纵向场景和完整回归/纵向/API/持久化测试。
+

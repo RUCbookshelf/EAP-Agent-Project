@@ -1,4 +1,4 @@
-"""Streamlit application entry point for v0.9.1 role-based UI.
+"""Streamlit application entry point for v0.9.2 Pixel Art UI.
 
 Two primary modes:
 1. Student View - progressive disclosure for feedback and action
@@ -13,6 +13,7 @@ from app.config import load_settings
 from app.ui.api_client import ApiClientError, WritingFeedbackApiClient
 from app.ui.components import page_header, warning_box
 from app.ui.locale import t
+from app.ui.pixel_art import inject_pixel_art
 from app.ui.pages.student_pages import (
     render_feedback_page,
     render_learning_journey_page,
@@ -80,26 +81,18 @@ def _render_header(api_client: WritingFeedbackApiClient, lang: str) -> None:
     )
     st.title(t("app_title", lang))
     st.caption(t("app_subtitle", lang))
-    st.warning(t("app_prototype_warning", lang))
     try:
         health = api_client.health()
-        st.caption(
-            f"{t('app_analyzer_label', lang)}: {health.get('active_analyzer')} "
-            f"| {health.get('active_analyzer_version')} "
-            f"| NLP: {health.get('nlp_model_name') or 'N/A'} "
-            f"{health.get('nlp_model_version') or ''}"
-        )
+        analyzer_info = f"{health.get('active_analyzer','?')} {health.get('active_analyzer_version','')}"
+        st.caption(f"[System] {t('app_analyzer_label', lang)}: {analyzer_info} | NLP: {health.get('nlp_model_name','N/A')}")
         requested = health.get("llm_provider")
         if requested == "deepseek" and health.get("llm_api_configured"):
             st.caption(t("app_deepseek_configured", lang))
-        elif requested == "deepseek":
-            st.warning(t("app_deepseek_no_key", lang))
         elif requested:
             st.caption(t("app_provider_local_demo", lang))
-        if health.get("analyzer_fallback_active"):
-            st.warning(t("app_analyzer_fallback", lang))
     except ApiClientError:
         st.info(t("app_api_unavailable", lang))
+    st.warning(t("app_prototype_warning", lang))
 
 
 def _render_sidebar(lang: str) -> tuple[str, str]:
@@ -111,23 +104,26 @@ def _render_sidebar(lang: str) -> tuple[str, str]:
             index=0 if lang == "en" else 1,
             horizontal=True,
             key="sidebar_lang",
+            label_visibility="collapsed",
         )
+        st.caption(f"[{lang_choice}]")
         new_lang = "en" if t("lang_en", lang) in lang_choice else "zh_CN"
         if new_lang != lang:
             st.session_state["ui_language"] = new_lang
             st.rerun()
 
-        st.markdown("---")
+        st.markdown('<hr class="px-divider">', unsafe_allow_html=True)
         st.markdown(f"### {t('view_mode', lang)}")
         role = st.radio(
             t("view_mode", lang),
             [t("view_student", lang), t("view_research", lang)],
             horizontal=False,
             key="sidebar_role",
+            label_visibility="collapsed",
         )
         current_role = "student" if t("view_student", lang) in role else "research"
 
-        st.markdown("---")
+        st.markdown('<hr class="px-divider">', unsafe_allow_html=True)
         st.markdown(f"### {t('nav_pages', lang)}")
         if current_role == "student":
             page_map = STUDENT_PAGES
@@ -138,6 +134,7 @@ def _render_sidebar(lang: str) -> tuple[str, str]:
             t("nav_pages", lang),
             list(page_map.values()),
             key="sidebar_page",
+            label_visibility="collapsed",
         )
         page_key = page_labels[selected_label]
 
@@ -148,32 +145,13 @@ def run() -> None:
     api_client = get_api_client(load_settings().api_base_url)
     lang = st.session_state.get("ui_language", "en")
 
-    st.markdown("""
-    <style>
-        .stApp { max-width: 100%; }
-        @media (max-width: 640px) {
-            .stApp h1 { font-size: 1.5rem; }
-            .stApp h2 { font-size: 1.2rem; }
-            .stApp h3 { font-size: 1rem; }
-            .stTextArea textarea { font-size: 0.9rem; }
-        }
-        .stAlert { word-wrap: break-word; overflow-wrap: break-word; }
-        .stMarkdown blockquote {
-            border-left: 3px solid #4a90d9;
-            padding-left: 1rem;
-            color: #555;
-            font-style: italic;
-        }
-        [data-testid="stSidebar"] [data-testid="stVerticalBlock"] {
-            gap: 0.5rem;
-        }
-    </style>
-    """, unsafe_allow_html=True)
+    # Inject Pixel Art CSS system
+    inject_pixel_art()
 
     _render_header(api_client, lang)
     role, page_key = _render_sidebar(lang)
 
-    st.markdown("---")
+    st.markdown('<hr class="px-divider">', unsafe_allow_html=True)
 
     if role == "student":
         if page_key == "student_home":
