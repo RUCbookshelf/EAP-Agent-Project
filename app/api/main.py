@@ -692,9 +692,13 @@ def _register_business_routes(api: FastAPI) -> None:
     return api
 
 
-@asynccontextmanager
-async def _lifespan(api: FastAPI):
-    """Lifespan: initializes services on startup, cleans up on shutdown."""
+def _run_startup(api: FastAPI) -> None:
+    """Run initialization stages in a background thread.
+
+    Runs inside a daemon thread spawned by the lifespan so the ASGI server
+    can serve lifecycle endpoints (/live, /ready, /health) while heavy
+    initialization (spaCy, database, services) is still in progress.
+    """
     import logging
     logger = logging.getLogger("writing_feedback.startup")
 
@@ -712,7 +716,6 @@ async def _lifespan(api: FastAPI):
         lifecycle.failed_stage = "load_settings"
         lifecycle.failure_category = type(exc).__name__
         logger.error("Stage load_settings: FAILED (%s)", type(exc).__name__)
-        yield
         return
 
     # Stage 2: Database
@@ -732,7 +735,6 @@ async def _lifespan(api: FastAPI):
         lifecycle.failed_stage = "database_init"
         lifecycle.failure_category = type(exc).__name__
         logger.error("Stage database_init: FAILED (%s)", type(exc).__name__)
-        yield
         return
 
     # Stage 3: Analyzer (spaCy)
@@ -744,7 +746,7 @@ async def _lifespan(api: FastAPI):
         lifecycle.nlp_model_name = settings.spacy_model
         spacy_reg = getattr(analyzer, "registry", {})
         spacy_impl = spacy_reg.get("spacy") if isinstance(spacy_reg, dict) else None
-        lifecycle.nlp_model_installed = bool(getattr(spacy_impl, "nlp", None)) if spacy_impl else False  # v0.9.3-a: use getattr(spacy_impl, "nlp") if spacy_impl else False
+        lifecycle.nlp_model_installed = bool(getattr(spacy_impl, "nlp", None)) if spacy_impl else False
         lifecycle.nlp_model_version = getattr(spacy_impl, "model_version", None) if spacy_impl else None
         lifecycle.analyzer_fallback_active = getattr(analyzer, "fallback_active", False)
         lifecycle.complete_stage(stage, success=True)
@@ -755,7 +757,6 @@ async def _lifespan(api: FastAPI):
         lifecycle.failed_stage = "build_analyzer"
         lifecycle.failure_category = type(exc).__name__
         logger.error("Stage build_analyzer: FAILED (%s)", type(exc).__name__)
-        yield
         return
 
     # Stage 4: Business services
@@ -787,8 +788,13 @@ async def _lifespan(api: FastAPI):
         lifecycle.failed_stage = "build_services"
         lifecycle.failure_category = type(exc).__name__
         logger.error("Stage build_services: FAILED (%s)", type(exc).__name__)
-        yield
         return
+
+    # Optional-component check: DeepSeek configured but key missing -> degraded
+    # (existing validated behavior falls back to LocalDemo; DeepSeek stays disabled)
+    if settings.llm_provider == "deepseek" and not settings.deepseek_api_key:
+        lifecycle.degraded_components.append("provider_unavailable")
+        logger.warning("Optional provider unavailable: DeepSeek key missing; LocalDemo fallback active")
 
     # Store on app state
     api.state.settings = settings
@@ -809,14 +815,30 @@ async def _lifespan(api: FastAPI):
     # Register business routes
     _register_business_routes(api)
 
-    lifecycle.transition(ServiceState.READY)
-    logger.info("Startup complete: ready total=%.0fms stages=%d",
-                 lifecycle.startup_elapsed_ms, len(lifecycle.stages))
+    if lifecycle.degraded_components:
+        lifecycle.transition(ServiceState.DEGRADED)
+        logger.info("Startup complete: state=degraded total=%.0fms components=%s",
+                     lifecycle.startup_elapsed_ms, lifecycle.degraded_components)
+    else:
+        lifecycle.transition(ServiceState.READY)
+        logger.info("Startup complete: ready total=%.0fms stages=%d",
+                     lifecycle.startup_elapsed_ms, len(lifecycle.stages))
 
+
+@asynccontextmanager
+async def _lifespan(api: FastAPI):
+    """Lifespan: yields immediately; initialization runs in a background thread.
+
+    This keeps the lightweight HTTP service observable (liveness responds with
+    lifecycle_state=starting) while heavy initialization is still in progress.
+    """
+    import threading
+    lifecycle.transition(ServiceState.STARTING)
+    threading.Thread(
+        target=_run_startup, args=(api,), daemon=True, name="startup-init",
+    ).start()
     yield
-
     lifecycle.transition(ServiceState.STOPPING)
-    logger.info("Shutdown: stopping")
 
 
 def _build_full_app(
@@ -894,13 +916,18 @@ def _register_lifecycle_routes(api: FastAPI) -> None:
     @api.get("/api/v1/system/health", response_model=HealthResponse)
     def health():
         h = lifecycle.health_dict()
+        # Backward-compatible status mapping: ready -> ok, everything else -> degraded.
+        # Full state detail is available via /live and /ready.
+        status = "ok" if h["lifecycle_state"] == "ready" else "degraded"
+        db_status = h["database_status"] if h["database_status"] in ("connected", "unavailable") else "unavailable"
         return HealthResponse(
-            status=h["status"],
+            status=status,
+            database_status=db_status,
             application_version=h["application_version"],
             api_version=h["api_version"],
-            database_status=h["database_status"],
+
             database_migration_version=h["database_migration_version"] or 0,
-            prompt_version=h["prompt_version"],
+            prompt_version=h["prompt_version"] or "unknown",
             schema_version=h["schema_version"],
             llm_provider=h["llm_provider"] or "unknown",
             llm_api_configured=h["llm_api_configured"],
@@ -934,6 +961,26 @@ def create_app(
         version="0.8.0",
         lifespan=_lifespan,
     )
+
+    @api.middleware("http")
+    async def readiness_gate(request: Request, call_next):
+        """Return 503 for business routes while initialization is incomplete."""
+        path = request.url.path
+        lifecycle_paths = (
+            "/api/v1/system/live",
+            "/api/v1/system/ready",
+            "/api/v1/system/health",
+            "/docs", "/docs/", "/redoc", "/openapi.json",
+        )
+        if not path.startswith(lifecycle_paths) and lifecycle.state not in (
+            ServiceState.READY, ServiceState.DEGRADED,
+        ):
+            return JSONResponse(
+                status_code=503,
+                content={"error": {"code": "not_ready", "message": "API is starting; please retry.", "details": None}},
+            )
+        return await call_next(request)
+
     _register_lifecycle_routes(api)
     return api
 
@@ -956,13 +1003,18 @@ def create_app(
     @api.get("/api/v1/system/health", response_model=HealthResponse)
     def health():
         h = lifecycle.health_dict()
+        # Backward-compatible status mapping: ready -> ok, everything else -> degraded.
+        # Full state detail is available via /live and /ready.
+        status = "ok" if h["lifecycle_state"] == "ready" else "degraded"
+        db_status = h["database_status"] if h["database_status"] in ("connected", "unavailable") else "unavailable"
         return HealthResponse(
-            status=h["status"],
+            status=status,
+            database_status=db_status,
             application_version=h["application_version"],
             api_version=h["api_version"],
-            database_status=h["database_status"],
+
             database_migration_version=h["database_migration_version"] or 0,
-            prompt_version=h["prompt_version"],
+            prompt_version=h["prompt_version"] or "unknown",
             schema_version=h["schema_version"],
             llm_provider=h["llm_provider"] or "unknown",
             llm_api_configured=h["llm_api_configured"],

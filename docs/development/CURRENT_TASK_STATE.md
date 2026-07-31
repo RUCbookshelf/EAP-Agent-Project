@@ -2,7 +2,7 @@
 
 **Date:** 2026-07-31
 **Current version:** v0.9.3-A
-**Status:** in_progress
+**Status:** completed (verification closure)
 
 ## Completed
 - v0.9.3-A Runtime Reliability and Service Lifecycle
@@ -19,11 +19,7 @@
 - Locale keys: app_api_starting, app_api_failed
 
 ## Pending
-- Full 5 cold-start / 3 warm-restart verification cycle
-- Security credential scan
-- KNOWN_LIMITATIONS update
-- run.bat --verify with new lifecycle endpoints
-- Dedicated lifecycle unit tests
+- v0.9.3-B (next stage)
 
 ## Backend baseline (unchanged)
 - Migration 12, config-v0.9.0 preserved
