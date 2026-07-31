@@ -55,14 +55,17 @@ def test_submission_get_history_and_v02_placeholders(tmp_path):
 def test_api_errors_are_consistent_and_safe(tmp_path):
     with make_client(tmp_path) as client:
         missing = client.get("/api/v1/submissions/999")
-        assert missing.status_code == 404 and missing.json()["error"]["code"] == "not_found"
+        assert missing.status_code == 404
+        assert missing.json()["error"]["category"] == "resource_not_found"
+        assert "message_key" in missing.json()["error"]
         student = client.get("/api/v1/students/UNKNOWN")
-        assert student.status_code == 404 and student.json()["error"]["code"] == "not_found"
+        assert student.status_code == 404
+        assert student.json()["error"]["category"] == "resource_not_found"
         invalid = payload()
         invalid["essay_text"] = "   "
         response = client.post("/api/v1/submissions", json=invalid)
         assert response.status_code == 422
-        assert response.json()["error"]["code"] == "validation_error"
+        assert response.json()["error"]["category"] in ("invalid_request", "validation_error")
         assert "traceback" not in response.text.casefold() and "api key" not in response.text.casefold()
 
 

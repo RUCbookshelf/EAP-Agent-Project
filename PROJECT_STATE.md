@@ -1,5 +1,23 @@
 # Project State
 
+## Current v0.9.3-B State
+
+- Status: completed; database migration 12; active configuration config-v0.9.0 preserved.
+- All eight broken Research endpoints repaired (ERR-001).
+- Canonical request-error taxonomy (app/errors.py) with 14 categories.
+- Client-side error classification; centralized timeout profiles; bounded GET-only retries.
+- Request IDs in responses, error bodies, and sanitized logs.
+- Role-appropriate Student/Research error presentation; 295 locale keys en/zh parity.
+- pytest: 314 passed, 8 skipped; Cases A-R: 110 passed.
+- run.bat --verify: PASS. Legacy live harnesses: PASS when run as designed.
+
+v1.0 remains not_started.
+
+
+---
+
+# Project State
+
 ## Current v0.9.3-A State
 
 - Status: in_progress; database migration 12; active configuration config-v0.9.0 preserved.

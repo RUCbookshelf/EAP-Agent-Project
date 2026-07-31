@@ -190,6 +190,40 @@ class ResearchDataService:
             return self.repo.list_human_reviews(target_type, target_id)
         return []
 
+    def apply_pii_review(self, submission_id: int, reviews: list) -> list[dict]:
+        """Apply PII review decisions to candidate rows for a submission."""
+        sub = self.repo.get_submission_bundle(submission_id)
+        if not sub:
+            raise LookupError("Submission not found")
+        if hasattr(self.repo, "apply_pii_review"):
+            return self.repo.apply_pii_review(submission_id, reviews)
+        return []
+
+    def export_history(self) -> list[dict]:
+        if hasattr(self.repo, "list_export_jobs"):
+            return self.repo.list_export_jobs()
+        return []
+
+    def export_status(self, export_id: str) -> dict:
+        """Return export job status; unknown when no persisted job exists."""
+        if hasattr(self.repo, "get_export_job"):
+            job = self.repo.get_export_job(export_id)
+            if job:
+                return job
+        return {"export_id": export_id, "status": "unknown"}
+
+    def create_dataset_split(self, payload: dict) -> dict:
+        """Deterministic student-level split computation (no persistence; no schema change)."""
+        students = payload.get("students") or payload.get("student_ids") or []
+        seed = int(payload.get("seed", 20260730))
+        train = float(payload.get("train_ratio", 0.7))
+        val = float(payload.get("val_ratio", 0.15))
+        test = float(payload.get("test_ratio", 0.15))
+        if train <= 0 or val <= 0 or test <= 0 or abs(train + val + test - 1.0) > 1e-6:
+            raise ValueError("train/val/test ratios must be positive and sum to 1")
+        manifest = self.build_dataset_split(students, seed=seed, train=train, val=val, test=test)
+        return manifest.model_dump(mode="json")
+
     def build_dataset_split(self, students: list[str], seed: int = 20260730,
                             train: float = 0.70, val: float = 0.15, test: float = 0.15) -> DatasetSplitManifest:
         rng = random.Random(seed)

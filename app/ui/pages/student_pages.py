@@ -13,6 +13,7 @@ import streamlit as st
 
 from app.ui.api_client import ApiClientError, WritingFeedbackApiClient
 from app.ui.components import (
+    render_api_error,
     card_group_header,
     empty_state,
     error_box,
@@ -46,8 +47,8 @@ def render_student_home(api_client: WritingFeedbackApiClient, lang: str) -> None
         targets = api_client.get_practice_targets(student_id.strip())
         traces = api_client.get_engagement_traces(student_id.strip())
         transfer = api_client.get_transfer_evidence(student_id.strip())
-    except ApiClientError:
-        error_box(t("api_unavailable", lang), lang)
+    except ApiClientError as exc:
+        render_api_error(exc, lang)
         return
 
     section_header("student_home_current_task", lang)
@@ -234,7 +235,7 @@ def render_writing_page(api_client: WritingFeedbackApiClient, lang: str) -> None
         with st.spinner(t("student_writing_submitting", lang)):
             result = api_client.submit(submission)
     except ApiClientError as exc:
-        st.error(str(exc))
+        render_api_error(exc, lang)
         return
     except Exception:
         st.error(t("submission_error", lang))
@@ -424,7 +425,7 @@ def render_practice_page(api_client: WritingFeedbackApiClient, lang: str) -> Non
             targets = api_client.get_practice_targets(student_id.strip())
             st.session_state["practice_targets_v2"] = targets
         except ApiClientError as exc:
-            st.error(str(exc))
+            render_api_error(exc, lang)
             return
 
     targets = st.session_state.get("practice_targets_v2", [])
@@ -461,7 +462,7 @@ def render_practice_page(api_client: WritingFeedbackApiClient, lang: str) -> Non
             st.session_state["current_exercise_v2"] = exercise
             st.session_state["exercise_attempts_v2"] = []
         except ApiClientError as exc:
-            st.error(str(exc))
+            render_api_error(exc, lang)
             return
 
     exercise = st.session_state.get("current_exercise_v2")
@@ -501,7 +502,7 @@ def render_practice_page(api_client: WritingFeedbackApiClient, lang: str) -> Non
                     st.session_state["exercise_attempts_v2"] = attempts
                     success_box(t("student_practice_attempt_saved", lang), lang)
                 except ApiClientError as exc:
-                    st.error(str(exc))
+                    render_api_error(exc, lang)
 
     attempts = st.session_state.get("exercise_attempts_v2", [])
     if attempts:
@@ -543,7 +544,7 @@ def render_learning_journey_page(api_client: WritingFeedbackApiClient, lang: str
         traces = api_client.get_engagement_traces(student_id.strip())
         transfer = api_client.get_transfer_evidence(student_id.strip())
     except ApiClientError as exc:
-        st.error(str(exc))
+        render_api_error(exc, lang)
         return
 
     events = []

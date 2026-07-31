@@ -174,21 +174,31 @@ class TestLiveF_EnglishAndChineseLocales:
 
 
 class TestLiveG_MobileViewport:
-    """Live G: Mobile UI layout assertions (code-level checks)."""
+    """Live G: Student/Research page routing assertions (v0.9.3-B: updated to
+    the v0.9.1+ role-based navigation; the pre-v0.9.1 string patterns no
+    longer exist and were obsolete after the navigation rewrite)."""
 
     def test_sidebar_page_count(self):
-        """Verify that Practice and Learning Journey pages exist in sidebar."""
+        """Verify that all six Student pages and six Research pages exist."""
         import ast
         content = pathlib.Path("app/ui/streamlit_app.py").read_text(encoding="utf-8")
-        tree = ast.parse(content)
+        ast.parse(content)  # must be valid Python
         assert "render_practice_page" in content
         assert "render_learning_journey_page" in content
-        assert "render_practice_audit_page" in content
-        assert "Practice" in content
-        assert "Learning Journey" in content
+        assert "render_student_home" in content
+        assert "render_writing_page" in content
+        assert "render_feedback_page" in content
+        assert "render_revision_page" in content
+        # Six Student + six Research page keys
+        assert "student_practice" in content
+        assert "student_journey" in content
+        assert "research_overview" in content
+        assert "research_data" in content
+        assert "research_audit" in content
 
     def test_page_routing_exists(self):
         content = pathlib.Path("app/ui/streamlit_app.py").read_text(encoding="utf-8")
-        assert 'page == "Practice"' in content
-        assert 'page == "Learning Journey"' in content
-        assert 'page == "Practice Audit"' in content
+        assert 'page_key == "student_practice"' in content
+        assert 'page_key == "student_journey"' in content
+        assert 'page_key == "research_data"' in content
+        assert 'page_key == "research_audit"' in content

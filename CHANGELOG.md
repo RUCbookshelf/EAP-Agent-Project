@@ -1,4 +1,41 @@
 
+## v0.9.3-B (2026-07-31)
+
+### Fixed
+- ERR-001: all eight broken Research endpoints repaired. Missing service
+  methods (apply_pii_review), missing repository persistence (save_human_review,
+  list_human_reviews), route ordering (export/history shadowed by /{export_id}),
+  and missing routes (dataset-split, export manifest) restored.
+- ERR-002: generic API-unavailable mapping replaced by a canonical error
+  taxonomy (app/errors.py) with 14 stable categories, message keys, HTTP
+  statuses, and retryability flags.
+- PERF-001: centralized timeout profiles (connect 2s, read 10s, write 30s,
+  long-read 60s, lifecycle 5s); no unclassified long wait remains.
+- Request correlation: X-Request-ID generated/propagated, added to response
+  headers and canonical error bodies, and logged in sanitized request lines.
+
+### Added
+- Canonical error model app/errors.py (ApiError, ErrorCategory).
+- Server-side exception mapping (validation, not-found, conflict, privacy,
+  degraded, internal) with request IDs.
+- Client-side classification (connect/read timeout, refused, interrupted,
+  4xx/5xx, malformed response) in app/ui/api_client.py.
+- Bounded safe retry: GET-only, at most 1 retry, retryable categories only;
+  state-changing writes never auto-retried.
+- Role-appropriate error presentation (render_api_error): Student plain
+  language + Retry only when safe; Research shows category/operation/request
+  ID/status/retryable/detail.
+- 24 new locale keys (en + zh_CN; 295 keys each, parity preserved).
+- Research Data: export history, manifest, status, dataset split, PII review,
+  human review persistence all working through real HTTP.
+- 25 new tests in tests/test_request_reliability_v093b.py.
+- TestLiveG_MobileViewport updated to the v0.9.1+ role-based navigation.
+
+### Backend
+- Migration 12 preserved; config-v0.9.0 preserved.
+- No CALF/diagnosis/practice/learner-model/privacy/dataset-split semantics changed.
+- pytest: 314 passed, 8 skipped; Cases A-R: 110 passed.
+
 ## v0.9.3-A (2026-07-31)
 
 ### Fixed

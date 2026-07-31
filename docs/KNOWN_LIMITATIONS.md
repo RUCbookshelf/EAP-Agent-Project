@@ -102,3 +102,17 @@ v0.6 图表只是已有自动信号的透明展示，不增加测量效度。配
 - Computed-style audit for primary components confirmed zero border-radius, no
   gradients, no blur, no soft shadows, zero transition duration, and no animations
   across text inputs, textareas, expanders, and alert notices.
+
+## v0.9.3-B Error-Handling Limitations
+
+- Error-category operation identifiers in Student/Research suffixes are English
+  code identifiers (e.g., practice_targets), not localized descriptions.
+- Automatic retry is limited to GET requests; a genuinely interrupted write
+  requires a manual retry and the user is told the earlier request may have
+  already succeeded.
+- dataset-split is a deterministic computation without persistence (no table
+  exists; no schema change permitted in this stage).
+- On narrow mobile viewports the first Research Data tabs require horizontal
+  scrolling of the Streamlit tab bar.
+- Requests rejected with 429 (provider rate limiting) share the
+  backend_processing_error fallback when no canonical body is present.

@@ -304,3 +304,41 @@ def table_container(content_html: str) -> None:
 def divider() -> None:
     """Render a pixel-art divider."""
     st.markdown('<hr class="px-divider">', unsafe_allow_html=True)
+def render_api_error(exc, lang: str = "en", *, research: bool = False) -> None:
+    """Role-appropriate error presentation for classified API errors."""
+    from app.ui.api_client import ApiClientError
+
+    if not isinstance(exc, ApiClientError):
+        st.error(t("error_unknown", lang))
+        return
+
+    message = t(exc.message_key, lang)
+    if exc.operation:
+        message += " " + t("error_operation_suffix", lang, operation=exc.operation.replace("_", " "))
+
+    if research:
+        detail_lines = [
+            f"{t('error_category_label', lang)}: {exc.category.value}",
+            f"{t('error_operation_label', lang)}: {exc.operation or '-'}",
+            f"{t('error_request_id_label', lang)}: {exc.request_id or '-'}",
+            f"{t('error_http_status_label', lang)}: {exc.http_status or '-'}",
+            f"{t('error_retryable_label', lang)}: {'Yes' if exc.retryable else 'No'}",
+        ]
+        if exc.detail:
+            detail_lines.append(f"{t('error_detail_label', lang)}: {exc.detail}")
+        st.markdown(
+            f'<div class="px-notice px-notice-error">'
+            f'<strong>{message}</strong><br>'
+            f'<span style="font-size:0.85rem;color:var(--px-white);">{"<br>".join(detail_lines)}</span>'
+            f'</div>',
+            unsafe_allow_html=True,
+        )
+    else:
+        st.markdown(
+            f'<div class="px-notice px-notice-error"><strong>{message}</strong></div>',
+            unsafe_allow_html=True,
+        )
+
+    if exc.retryable:
+        if st.button(t("error_retry_action", lang), key=f"retry_{exc.operation or 'action'}_{lang}"):
+            st.rerun()

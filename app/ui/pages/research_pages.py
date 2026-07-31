@@ -13,6 +13,7 @@ import streamlit as st
 
 from app.ui.api_client import ApiClientError, WritingFeedbackApiClient
 from app.ui.components import (
+    render_api_error,
     audit_record,
     card_group_header,
     empty_state,
@@ -38,7 +39,7 @@ def render_research_overview(api_client: WritingFeedbackApiClient, lang: str) ->
     try:
         health = api_client.health()
     except ApiClientError:
-        st.error(t("api_unavailable", lang))
+        render_api_error(exc, lang, research=True)
         return
 
     section_header("research_overview_counts", lang)
@@ -117,7 +118,7 @@ def render_research_evidence(api_client: WritingFeedbackApiClient, lang: str) ->
         analysis = api_client.get_analyses(int(submission_id))
         audit = api_client.get_diagnostic_audit(int(submission_id))
     except ApiClientError as exc:
-        st.error(str(exc))
+        render_api_error(exc, lang, research=True)
         return
 
     section_header("research_evidence_submission", lang)
@@ -220,7 +221,7 @@ def render_research_learning_process(api_client: WritingFeedbackApiClient, lang:
         traces = api_client.get_engagement_traces(student_id.strip())
         transfer = api_client.get_transfer_evidence(student_id.strip())
     except ApiClientError as exc:
-        st.error(str(exc))
+        render_api_error(exc, lang, research=True)
         return
 
     section_header("practice_target", lang)
@@ -300,7 +301,7 @@ def render_research_data(api_client: WritingFeedbackApiClient, lang: str) -> Non
                 result = api_client.research_export_preview(job.model_dump(mode="json"))
                 st.json(result)
             except Exception as exc:
-                st.error(str(exc))
+                render_api_error(exc, lang, research=True)
         if st.button(t("export_run", lang), type="primary", key="export_run_btn"):
             try:
                 from app.research.schemas import ExportJob, ExportFilter, PrivacyMode, ExportFormat
@@ -313,7 +314,7 @@ def render_research_data(api_client: WritingFeedbackApiClient, lang: str) -> Non
                 st.success(f"Export: {result.get('export_id', 'unknown')}")
                 st.json(result.get("manifest", {}))
             except Exception as exc:
-                st.error(str(exc))
+                render_api_error(exc, lang, research=True)
 
     with sub_tab2:
         section_header("research_data_privacy", lang)
@@ -339,7 +340,7 @@ def render_research_data(api_client: WritingFeedbackApiClient, lang: str) -> Non
                 pii = api_client.get_pii_candidates(int(sub_id))
                 st.json(pii)
             except ApiClientError as exc:
-                st.error(str(exc))
+                render_api_error(exc, lang, research=True)
 
     with sub_tab5:
         section_header("human_review", lang)
@@ -366,7 +367,7 @@ def render_research_data(api_client: WritingFeedbackApiClient, lang: str) -> Non
                 })
                 st.json(result)
             except Exception as exc:
-                st.error(str(exc))
+                render_api_error(exc, lang, research=True)
 
     with sub_tab6:
         section_header("dataset_split", lang)
@@ -382,7 +383,7 @@ def render_research_data(api_client: WritingFeedbackApiClient, lang: str) -> Non
                 })
                 st.json(result)
             except Exception as exc:
-                st.error(str(exc))
+                render_api_error(exc, lang, research=True)
         warning_box("split_boundary", lang)
 
     with sub_tab7:
@@ -392,7 +393,7 @@ def render_research_data(api_client: WritingFeedbackApiClient, lang: str) -> Non
                 result = api_client.research_data_quality()
                 st.json(result)
             except Exception as exc:
-                st.error(str(exc))
+                render_api_error(exc, lang, research=True)
 
     with sub_tab8:
         section_header("export_history", lang)
@@ -401,7 +402,7 @@ def render_research_data(api_client: WritingFeedbackApiClient, lang: str) -> Non
                 history = api_client.research_export_history()
                 st.json(history)
             except Exception as exc:
-                st.error(str(exc))
+                render_api_error(exc, lang, research=True)
 
 
 # ---------------------------------------------------------------------------
@@ -430,7 +431,7 @@ def render_research_system_audit(api_client: WritingFeedbackApiClient, lang: str
                 audit = api_client.get_diagnostic_audit(int(sub_id))
                 st.json(audit)
             except ApiClientError as exc:
-                st.error(str(exc))
+                render_api_error(exc, lang, research=True)
 
     with audit_tab2:
         section_header("nav_learner_model_audit", lang)
@@ -453,7 +454,7 @@ def render_research_system_audit(api_client: WritingFeedbackApiClient, lang: str
                     student_id.strip(), strategy,
                 )
         except ApiClientError as exc:
-            st.error(str(exc))
+            render_api_error(exc, lang, research=True)
 
         profile = st.session_state.get("learner_model_audit_v2")
         if profile:
@@ -469,4 +470,4 @@ def render_research_system_audit(api_client: WritingFeedbackApiClient, lang: str
             configs = api_client.get_configurations()
             st.json(configs)
         except ApiClientError as exc:
-            st.error(str(exc))
+            render_api_error(exc, lang, research=True)

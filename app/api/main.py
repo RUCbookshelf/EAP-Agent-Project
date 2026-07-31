@@ -8,6 +8,7 @@ responsive during startup.
 
 from __future__ import annotations
 
+import time
 from contextlib import asynccontextmanager
 from datetime import date
 from pathlib import Path
@@ -90,20 +91,6 @@ def _register_business_routes(api: FastAPI) -> None:
 
     from app.research.service import ResearchDataService  # noqa: F811
     from app.research.schemas import ExportJob, HumanReviewCreate, PiiReview  # noqa: F811
-
-    @api.exception_handler(RequestValidationError)
-    async def validation_handler(_: Request, exc: RequestValidationError):
-        details = [{"location": list(item["loc"]), "message": item["msg"], "type": item["type"]} for item in exc.errors()]
-        return _error(422, "validation_error", "The request did not satisfy the API schema.", details)
-
-    @api.exception_handler(HTTPException)
-    async def http_handler(_: Request, exc: HTTPException):
-        detail = exc.detail if isinstance(exc.detail, str) else "The requested resource is unavailable."
-        return _error(exc.status_code, "not_found" if exc.status_code == 404 else "request_error", detail)
-
-    @api.exception_handler(Exception)
-    async def unexpected_handler(_: Request, __: Exception):
-        return _error(500, "internal_error", "The operation could not be completed. No secret or internal stack is exposed.")
 
     @api.get("/api/v1/system/health", response_model=HealthResponse)
     def health() -> HealthResponse:
@@ -625,70 +612,111 @@ def _register_business_routes(api: FastAPI) -> None:
     def get_transfer_evidence(student_id: str) -> list[dict]:
         require_student(student_id)
         return repository.list_transfer_evidence_candidates(student_id)
+    _research = ResearchDataService(repository)
+
     @api.get("/api/v1/research/export/schema")
     def research_export_schema() -> dict:
-        return ResearchDataService(repository).schema()
+        return _research.schema()
 
     @api.post("/api/v1/research/export/preview")
     def research_export_preview(payload: dict) -> dict:
         try:
             job = ExportJob(**payload)
-        except Exception as e:
-            raise HTTPException(422, str(e)) from None
-        return ResearchDataService(repository).preview(job)
+        except Exception as exc:
+            raise HTTPException(422, f"Invalid export job: {str(exc)[:200]}") from None
+        return _research.preview(job)
 
     @api.post("/api/v1/research/export/run")
     def research_export_run(payload: dict) -> dict:
         try:
             job = ExportJob(**payload)
-        except Exception as e:
-            raise HTTPException(422, str(e)) from None
-        try:
-            return ResearchDataService(repository).run_export(
-                job,
-                git_commit=api.state.git_commit if hasattr(api.state, 'git_commit') else None,
-                migration_version=getattr(api.state, 'migration_version', None),
-                config_version=getattr(api.state, 'config_version', None),
-            )
-        except Exception as e:
-            raise HTTPException(500, str(e)) from None
+        except Exception as exc:
+            raise HTTPException(422, f"Invalid export job: {str(exc)[:200]}") from None
+        result = _research.run_export(
+            job,
+            git_commit=api.state.git_commit if hasattr(api.state, "git_commit") else None,
+            migration_version=getattr(api.state, "migration_version", None),
+            config_version=getattr(api.state, "config_version", None),
+        )
+        # Persist export-job metadata for history/status lookups (append-only; no schema change).
+        if hasattr(repository, "save_export_job"):
+            try:
+                repository.save_export_job({
+                    "export_id": result.get("export_id"),
+                    "filter_spec": job.filter_spec.model_dump(mode="json"),
+                    "privacy_mode": job.privacy_mode.value,
+                    "formats": [f.value for f in job.formats],
+                    "status": result.get("status"),
+                    "created_at": (result.get("manifest") or {}).get("created_at"),
+                    "completed_at": (result.get("manifest") or {}).get("created_at"),
+                    "export_directory": result.get("export_directory"),
+                    "file_count": result.get("file_count", 0),
+                    "record_counts": result.get("record_counts", {}),
+                    "excluded_counts": {},
+                    "manifest_path": result.get("manifest_path"),
+                })
+            except Exception:
+                pass  # History persistence is best-effort; export itself already succeeded.
+        return result
+
+    # NOTE: /history must be registered BEFORE /{export_id} so it is not shadowed.
+    @api.get("/api/v1/research/export/history")
+    def research_export_history() -> list[dict]:
+        return _research.export_history()
+
+    @api.get("/api/v1/research/export/{export_id}/manifest")
+    def research_export_manifest(export_id: str) -> dict:
+        status = _research.export_status(export_id)
+        if status.get("status") == "unknown":
+            raise HTTPException(404, "Export job not found.")
+        manifest_path = status.get("manifest_path")
+        if manifest_path and Path(manifest_path).exists():
+            import json as _json
+            return _json.loads(Path(manifest_path).read_text(encoding="utf-8"))
+        raise HTTPException(404, "Export manifest not found.")
 
     @api.get("/api/v1/research/export/{export_id}")
     def research_export_status(export_id: str) -> dict:
-        import glob
-        pattern = f"research_exports/*/manifest.json"
-        for p in Path(pattern.replace('*', '*')).parent.glob('*/manifest.json') if Path(pattern).parent else []:
-            pass
-        return {"export_id": export_id, "status": "unknown"}
+        return _research.export_status(export_id)
 
     @api.get("/api/v1/research/data-quality")
     def research_data_quality() -> dict:
-        return ResearchDataService(repository).data_quality_report().model_dump(mode='json')
+        return _research.data_quality_report().model_dump(mode="json")
 
     @api.get("/api/v1/submissions/{submission_id}/pii-candidates")
     def pii_candidates(submission_id: int) -> list[dict]:
         try:
-            return ResearchDataService(repository).scan_pii(submission_id)
-        except LookupError as e:
-            raise HTTPException(404, str(e)) from None
+            return _research.scan_pii(submission_id)
+        except LookupError as exc:
+            raise HTTPException(404, str(exc)) from None
 
     @api.post("/api/v1/submissions/{submission_id}/pii-review")
     def pii_review(submission_id: int, payload: dict) -> dict:
-        reviews = [PiiReview(**item) for item in payload.get('reviews', [])]
-        return ResearchDataService(repository).apply_pii_review(submission_id, reviews)
+        try:
+            reviews = [PiiReview(**item) for item in payload.get("reviews", [])]
+        except Exception as exc:
+            raise HTTPException(422, f"Invalid PII review: {str(exc)[:200]}") from None
+        return {"submission_id": submission_id, "updated_candidates": _research.apply_pii_review(submission_id, reviews)}
 
     @api.post("/api/v1/research/reviews")
     def create_human_review(payload: dict) -> dict:
         try:
             review = HumanReviewCreate(**payload)
-            result = ResearchDataService(repository).create_human_review(review)
-            return result.model_dump(mode='json')
-        except Exception as e:
-            raise HTTPException(422, str(e)) from None
+        except Exception as exc:
+            raise HTTPException(422, f"Invalid human review: {str(exc)[:200]}") from None
+        result = _research.create_human_review(review)
+        return result.model_dump(mode="json")
 
     @api.get("/api/v1/research/reviews")
     def list_human_reviews(target_type: str | None = None, target_id: str | None = None) -> list[dict]:
-        return ResearchDataService(repository).get_human_reviews(target_type, target_id)
+        return _research.get_human_reviews(target_type, target_id)
+
+    @api.post("/api/v1/research/dataset-split")
+    def create_dataset_split(payload: dict) -> dict:
+        try:
+            return _research.create_dataset_split(payload)
+        except ValueError as exc:
+            raise HTTPException(422, str(exc)) from None
     return api
 
 
@@ -841,6 +869,78 @@ async def _lifespan(api: FastAPI):
     lifecycle.transition(ServiceState.STOPPING)
 
 
+
+
+
+
+def _register_request_middleware(api: FastAPI) -> None:
+    """Request-ID middleware: generate/accept a request ID, set response header,
+    and emit a sanitized structured request log line."""
+    import logging
+
+    @api.middleware("http")
+    async def request_id_middleware(request: Request, call_next):
+        import uuid
+        request_id = request.headers.get("X-Request-ID") or uuid.uuid4().hex[:16]
+        request.state.request_id = request_id
+        start = time.monotonic()
+        response = await call_next(request)
+        response.headers["X-Request-ID"] = request_id
+        elapsed_ms = round((time.monotonic() - start) * 1000, 1)
+        logging.getLogger("writing_feedback.request").info(
+            "request_id=%s method=%s path=%s status=%s elapsed_ms=%s lifecycle=%s",
+            request_id, request.method, request.url.path, response.status_code,
+            elapsed_ms, lifecycle.state.value,
+        )
+        return response
+
+def _register_error_handlers(api: FastAPI) -> None:
+    """Register canonical error handlers at app creation so the middleware
+    stack (built on the first request) includes them."""
+    from app.errors import ApiError, ErrorCategory
+
+    def _req_id(request: Request) -> str | None:
+        return getattr(request.state, "request_id", None)
+
+    @api.exception_handler(RequestValidationError)
+    async def validation_handler(request: Request, exc: RequestValidationError):
+        field_errors = [{"location": list(item["loc"]), "message": item["msg"], "type": item["type"]} for item in exc.errors()]
+        err = ApiError.from_category(
+            ErrorCategory.INVALID_REQUEST, "request_validation",
+            request_id=_req_id(request), http_status=422, field_errors=field_errors,
+        )
+        return JSONResponse(status_code=422, content=err.to_public_dict(include_detail=True))
+
+    @api.exception_handler(HTTPException)
+    async def http_handler(request: Request, exc: HTTPException):
+        detail = exc.detail if isinstance(exc.detail, str) else "The requested resource is unavailable."
+        if exc.status_code == 404:
+            err = ApiError.from_category(ErrorCategory.RESOURCE_NOT_FOUND, "request", request_id=_req_id(request), http_status=404, detail=detail)
+        elif exc.status_code == 422:
+            err = ApiError.from_category(ErrorCategory.INVALID_REQUEST, "request", request_id=_req_id(request), http_status=422, detail=detail)
+        elif exc.status_code == 409:
+            err = ApiError.from_category(ErrorCategory.CONFLICT_OR_DUPLICATE_REQUEST, "request", request_id=_req_id(request), http_status=409, detail=detail)
+        elif exc.status_code == 403:
+            err = ApiError.from_category(ErrorCategory.PERMISSION_OR_PRIVACY_REJECTION, "request", request_id=_req_id(request), http_status=403, detail=detail)
+        elif exc.status_code == 503:
+            err = ApiError.from_category(ErrorCategory.SERVICE_DEGRADED, "request", request_id=_req_id(request), http_status=503, detail=detail)
+        else:
+            err = ApiError.from_category(ErrorCategory.BACKEND_PROCESSING_ERROR, "request", request_id=_req_id(request), http_status=exc.status_code, detail=detail)
+        return JSONResponse(status_code=exc.status_code, content=err.to_public_dict(include_detail=True))
+
+    @api.exception_handler(Exception)
+    async def unexpected_handler(request: Request, exc: Exception):
+        import logging
+        logging.getLogger("writing_feedback.request").exception(
+            "Unhandled error request_id=%s", _req_id(request)
+        )
+        err = ApiError.from_category(
+            ErrorCategory.BACKEND_PROCESSING_ERROR, "request",
+            request_id=_req_id(request), http_status=500,
+            detail="The operation could not be completed. No secret or internal stack is exposed.",
+        )
+        return JSONResponse(status_code=500, content=err.to_public_dict(include_detail=True))
+
 def _build_full_app(
     settings: Settings,
     *,
@@ -876,6 +976,8 @@ def _build_full_app(
     lifecycle.transition(ServiceState.READY)
 
     api = FastAPI(title="Writing Feedback API", version="0.8.0")
+    _register_request_middleware(api)
+    _register_error_handlers(api)
     api.state.settings = settings
     api.state.repository = repository
     api.state.submission_service = submission_service
@@ -961,6 +1063,9 @@ def create_app(
         version="0.8.0",
         lifespan=_lifespan,
     )
+    _register_error_handlers(api)
+
+    _register_request_middleware(api)
 
     @api.middleware("http")
     async def readiness_gate(request: Request, call_next):

@@ -31,16 +31,18 @@ def test_unavailable_api_has_friendly_error():
     client = WritingFeedbackApiClient(
         "http://127.0.0.1:8000", session=Session(error=requests.ConnectionError("offline"))
     )
-    with pytest.raises(ApiClientError, match="local feedback API is unavailable"):
+    with pytest.raises(ApiClientError) as exc_info:
         client.submit({"essay_text": "Text"})
+    assert exc_info.value.category.value == "service_not_running"
 
 
 def test_api_failure_is_not_replaced_with_fake_feedback():
     client = WritingFeedbackApiClient(
         "http://127.0.0.1:8000", session=Session(Response(500, {"error": {"message": "failed"}}))
     )
-    with pytest.raises(ApiClientError, match="failed"):
+    with pytest.raises(ApiClientError) as exc_info:
         client.submit({"essay_text": "Text"})
+    assert exc_info.value.http_status == 500
 
 
 @pytest.mark.parametrize(

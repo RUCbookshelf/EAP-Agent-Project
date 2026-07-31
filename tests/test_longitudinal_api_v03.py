@@ -85,9 +85,9 @@ def test_progress_query_validation_and_error_shape(tmp_path):
     with client:
         invalid_metric = client.get("/api/v1/students/QUERY001/progress?metric=overall_score")
         assert invalid_metric.status_code == 422
-        assert invalid_metric.json()["error"]["code"] == "validation_error"
+        assert invalid_metric.json()["error"]["category"] in ("invalid_request", "validation_error")
         invalid_range = client.get("/api/v1/students/QUERY001/progress?start_date=2026-03-01&end_date=2026-01-01")
-        assert invalid_range.status_code == 422 and invalid_range.json()["error"]["code"] == "request_error"
+        assert invalid_range.status_code == 422 and invalid_range.json()["error"]["category"] in ("invalid_request", "request_error")
         no_version = client.get("/api/v1/students/QUERY001/progress?analysis_version=missing")
         assert no_version.status_code == 422
 

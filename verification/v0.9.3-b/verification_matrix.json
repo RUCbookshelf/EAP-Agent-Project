@@ -1,0 +1,202 @@
+[
+  {
+    "endpoint": "export_schema",
+    "method": "GET",
+    "path": "/api/v1/research/export/schema",
+    "scenario": "success",
+    "status": 200,
+    "category": "-",
+    "request_id": "-",
+    "duration_ms": 0
+  },
+  {
+    "endpoint": "export_schema_bad_method",
+    "method": "POST",
+    "path": "/api/v1/research/export/schema",
+    "scenario": "invalid",
+    "status": 405,
+    "category": "-",
+    "request_id": "-",
+    "duration_ms": 0
+  },
+  {
+    "endpoint": "export_preview",
+    "method": "POST",
+    "path": "/api/v1/research/export/preview",
+    "scenario": "success",
+    "status": 200,
+    "category": "-",
+    "request_id": "-",
+    "duration_ms": 16
+  },
+  {
+    "endpoint": "export_preview_invalid",
+    "method": "POST",
+    "path": "/api/v1/research/export/preview",
+    "scenario": "invalid",
+    "status": 422,
+    "category": "invalid_request",
+    "request_id": "f61ba528d87b4413",
+    "duration_ms": 15
+  },
+  {
+    "endpoint": "export_run",
+    "method": "POST",
+    "path": "/api/v1/research/export/run",
+    "scenario": "success",
+    "status": 200,
+    "category": "-",
+    "request_id": "-",
+    "duration_ms": 31
+  },
+  {
+    "endpoint": "data_quality",
+    "method": "GET",
+    "path": "/api/v1/research/data-quality",
+    "scenario": "success",
+    "status": 200,
+    "category": "-",
+    "request_id": "-",
+    "duration_ms": 0
+  },
+  {
+    "endpoint": "pii_candidates",
+    "method": "GET",
+    "path": "/api/v1/submissions/1/pii-candidates",
+    "scenario": "success",
+    "status": 200,
+    "category": "-",
+    "request_id": "-",
+    "duration_ms": 0
+  },
+  {
+    "endpoint": "pii_candidates_missing",
+    "method": "GET",
+    "path": "/api/v1/submissions/999999/pii-candidates",
+    "scenario": "not_found",
+    "status": 404,
+    "category": "resource_not_found",
+    "request_id": "98383710da9c4ceb",
+    "duration_ms": 16
+  },
+  {
+    "endpoint": "pii_review",
+    "method": "POST",
+    "path": "/api/v1/submissions/1/pii-review",
+    "scenario": "success",
+    "status": 200,
+    "category": "-",
+    "request_id": "-",
+    "duration_ms": 0
+  },
+  {
+    "endpoint": "human_review_create",
+    "method": "POST",
+    "path": "/api/v1/research/reviews",
+    "scenario": "success",
+    "status": 200,
+    "category": "-",
+    "request_id": "-",
+    "duration_ms": 16
+  },
+  {
+    "endpoint": "human_review_list",
+    "method": "GET",
+    "path": "/api/v1/research/reviews",
+    "scenario": "success",
+    "status": 200,
+    "category": "-",
+    "request_id": "-",
+    "duration_ms": 15
+  },
+  {
+    "endpoint": "human_review_invalid",
+    "method": "POST",
+    "path": "/api/v1/research/reviews",
+    "scenario": "invalid",
+    "status": 422,
+    "category": "invalid_request",
+    "request_id": "3cb7edafb66b4080",
+    "duration_ms": 0
+  },
+  {
+    "endpoint": "export_history",
+    "method": "GET",
+    "path": "/api/v1/research/export/history",
+    "scenario": "success",
+    "status": 200,
+    "category": "-",
+    "request_id": "-",
+    "duration_ms": 0
+  },
+  {
+    "endpoint": "dataset_split",
+    "method": "POST",
+    "path": "/api/v1/research/dataset-split",
+    "scenario": "success",
+    "status": 200,
+    "category": "-",
+    "request_id": "-",
+    "duration_ms": 0
+  },
+  {
+    "endpoint": "dataset_split_invalid",
+    "method": "POST",
+    "path": "/api/v1/research/dataset-split",
+    "scenario": "invalid",
+    "status": 422,
+    "category": "invalid_request",
+    "request_id": "46cbee9cb53b4bf1",
+    "duration_ms": 0
+  },
+  {
+    "endpoint": "export_manifest",
+    "method": "GET",
+    "path": "/api/v1/research/export/EXP000001/manifest",
+    "scenario": "success",
+    "status": 200,
+    "category": "-",
+    "request_id": "-",
+    "duration_ms": 32
+  },
+  {
+    "endpoint": "export_manifest_missing",
+    "method": "GET",
+    "path": "/api/v1/research/export/EXP999999/manifest",
+    "scenario": "not_found",
+    "status": 404,
+    "category": "resource_not_found",
+    "request_id": "00b794eb28284f69",
+    "duration_ms": 31
+  },
+  {
+    "endpoint": "export_status",
+    "method": "GET",
+    "path": "/api/v1/research/export/EXP000001",
+    "scenario": "success",
+    "status": 200,
+    "category": "-",
+    "request_id": "-",
+    "duration_ms": 0
+  },
+  {
+    "endpoint": "nonexistent_learner",
+    "method": "GET",
+    "path": "/api/v1/students/S999/engagement-traces",
+    "scenario": "not_found",
+    "status": 404,
+    "category": "resource_not_found",
+    "request_id": "43da6b46f5f84e45",
+    "duration_ms": 15
+  },
+  {
+    "endpoint": "invalid_input_422",
+    "method": "GET",
+    "path": "/api/v1/students/S02/learner-model/preview",
+    "scenario": "invalid",
+    "status": 405,
+    "category": "-",
+    "request_id": "-",
+    "duration_ms": 0
+  }
+]

@@ -1,0 +1,98 @@
+[
+  {
+    "endpoint": "export_schema",
+    "method": "GET",
+    "path": "/api/v1/research/export/schema",
+    "status": 200,
+    "ms": 16,
+    "body": "{\"schema_version\":\"research-export-v0.1\",\"record_types\":[\"submission\",\"analysis_run\",\"metric_result\",\"calf_metric_result\",\"diagnostic_signal\",\"selected_revision_priority\",\"feedback\",\"targeted_practice\",\"revision_comparison\",\"learner_profile_snapshot\",\"history_evidence\",\"provider_execution_metadata\","
+  },
+  {
+    "endpoint": "export_preview",
+    "method": "POST",
+    "path": "/api/v1/research/export/preview",
+    "status": 200,
+    "ms": 0,
+    "body": "{\"student_count\":3,\"essay_count\":9,\"included_count\":9,\"excluded_count\":0,\"exclusion_reasons\":[],\"privacy_mode\":\"pseudonymized\",\"formats\":[\"jsonl\"]}"
+  },
+  {
+    "endpoint": "export_run",
+    "method": "POST",
+    "path": "/api/v1/research/export/run",
+    "status": 200,
+    "ms": 31,
+    "body": "{\"export_id\":\"EXP000001\",\"status\":\"completed\",\"export_directory\":\"research_exports\\\\export_20260731T132814\",\"file_count\":2,\"record_counts\":{\"jsonl\":9},\"manifest_path\":\"research_exports\\\\export_20260731T132814\\\\manifest.json\",\"manifest\":{\"export_id\":\"EXP000001\",\"export_schema_version\":\"research-expor"
+  },
+  {
+    "endpoint": "data_quality",
+    "method": "GET",
+    "path": "/api/v1/research/data-quality",
+    "status": 200,
+    "ms": 16,
+    "body": "{\"report_id\":null,\"export_id\":null,\"generated_at\":\"2026-07-31T13:28:14.690689+00:00\",\"items\":[{\"category\":\"accuracy_measure\",\"status\":\"unavailable\",\"count\":1,\"record_ids\":[],\"description\":\"Accuracy requires validated human annotations.\"},{\"category\":\"syntactic_candidates\",\"status\":\"review_required\","
+  },
+  {
+    "endpoint": "pii_candidates",
+    "method": "GET",
+    "path": "/api/v1/submissions/1/pii-candidates",
+    "status": 200,
+    "ms": 15,
+    "body": "[]"
+  },
+  {
+    "endpoint": "pii_review",
+    "method": "POST",
+    "path": "/api/v1/submissions/1/pii-review",
+    "status": 200,
+    "ms": 47,
+    "body": "{\"submission_id\":1,\"updated_candidates\":[]}"
+  },
+  {
+    "endpoint": "human_review_create",
+    "method": "POST",
+    "path": "/api/v1/research/reviews",
+    "status": 200,
+    "ms": 16,
+    "body": "{\"review_id\":\"HR000001\",\"target_type\":\"diagnosis\",\"target_id\":\"D001\",\"reviewer_id\":\"R001\",\"decision\":\"correct\",\"confidence\":\"medium\",\"reason_code\":null,\"comment\":\"test\",\"guideline_version\":\"human-review-v0.1\",\"review_status\":\"completed\",\"created_at\":\"2026-07-31T13:28:14.746950+00:00\",\"updated_at\":nu"
+  },
+  {
+    "endpoint": "human_review_list",
+    "method": "GET",
+    "path": "/api/v1/research/reviews?target_type=diagnosis",
+    "status": 200,
+    "ms": 16,
+    "body": "[{\"review_id\":\"HR000001\",\"target_type\":\"diagnosis\",\"target_id\":\"D001\",\"reviewer_id\":\"R001\",\"decision\":\"correct\",\"confidence\":\"medium\",\"reason_code\":null,\"comment\":\"test\",\"guideline_version\":\"human-review-v0.1\",\"review_status\":\"completed\",\"created_at\":\"2026-07-31T13:28:14.746950+00:00\",\"updated_at\":n"
+  },
+  {
+    "endpoint": "export_history",
+    "method": "GET",
+    "path": "/api/v1/research/export/history",
+    "status": 200,
+    "ms": 15,
+    "body": "[{\"export_id\":\"EXP000001\",\"privacy_mode\":\"pseudonymized\",\"status\":\"completed\",\"created_at\":\"2026-07-31T13:28:14.654684+00:00\",\"completed_at\":\"2026-07-31T13:28:14.654684+00:00\",\"export_directory\":\"research_exports\\\\export_20260731T132814\",\"file_count\":2,\"manifest_path\":\"research_exports\\\\export_20260"
+  },
+  {
+    "endpoint": "dataset_split",
+    "method": "POST",
+    "path": "/api/v1/research/dataset-split",
+    "status": 200,
+    "ms": 16,
+    "body": "{\"split_id\":null,\"created_at\":\"2026-07-31T13:28:14.815140+00:00\",\"random_seed\":42,\"train_ratio\":0.7,\"validation_ratio\":0.15,\"test_ratio\":0.15,\"student_count\":0,\"train_count\":1,\"validation_count\":1,\"test_count\":-2,\"rounding_behavior\":\"floor_with_remainder_to_train\",\"records\":[],\"interpretation_bounda"
+  },
+  {
+    "endpoint": "export_manifest",
+    "method": "GET",
+    "path": "/api/v1/research/export/EXP000001/manifest",
+    "status": 200,
+    "ms": 15,
+    "body": "{\"export_id\":\"EXP000001\",\"export_schema_version\":\"research-export-v0.1\",\"created_at\":\"2026-07-31T13:28:14.654684+00:00\",\"application_version\":\"0.8.2\",\"git_commit\":null,\"database_migration_version\":null,\"active_configuration_version\":null,\"analyzer_version\":null,\"metric_registry_version\":null,\"calf_r"
+  },
+  {
+    "endpoint": "export_status",
+    "method": "GET",
+    "path": "/api/v1/research/export/EXP000001",
+    "status": 200,
+    "ms": 16,
+    "body": "{\"export_id\":\"EXP000001\",\"privacy_mode\":\"pseudonymized\",\"status\":\"completed\",\"created_at\":\"2026-07-31T13:28:14.654684+00:00\",\"completed_at\":\"2026-07-31T13:28:14.654684+00:00\",\"export_directory\":\"research_exports\\\\export_20260731T132814\",\"file_count\":2,\"manifest_path\":\"research_exports\\\\export_202607"
+  }
+]

@@ -86,3 +86,16 @@ The v0.9.1 UI layer maintains the same HTTP-client-only architecture boundary as
 - `app/ui/locale.py` — i18n helper (unchanged from v0.8.1)
 
 The UI layer imports only `app.config` (for API base URL) and `app.ui.*`. It does not import database, repositories, analyzers, diagnosers, or LLM providers. All data flows through the FastAPI HTTP client.
+
+
+## v0.9.3-B error-handling overlay
+
+`Request -> request-ID middleware -> readiness gate -> route -> service`
+with a canonical `ApiError` model (app/errors.py) shared by the server
+exception handlers and the Streamlit client classifier. Server handlers map
+validation/not-found/conflict/privacy/degraded/internal failures to stable
+categories with request IDs; the client distinguishes connection refusal,
+timeouts, interrupted connections, lifecycle states, and HTTP errors without
+relying on one generic message. Timeout profiles (connect/read/write/long-read/
+lifecycle) are centralized; automatic retry is bounded, GET-only, and restricted
+to retryable categories.
