@@ -48,23 +48,24 @@ def grouped_connectives(analysis):
             }
     return {name: list(items.values()) for name, items in grouped.items()}
 
-# Role-based page definitions
+# Role-based page definitions (values are locale keys; labels are translated
+# at render time so navigation is fully localized in English and Chinese)
 STUDENT_PAGES = {
-    "student_home": "Home",
-    "student_writing": "Writing",
-    "student_feedback": "Feedback",
-    "student_revision": "Revision",
-    "student_practice": "Practice",
-    "student_journey": "Learning Journey",
+    "student_home": "student_home_title",
+    "student_writing": "student_writing_title",
+    "student_feedback": "student_feedback_title",
+    "student_revision": "student_revision_title",
+    "student_practice": "practice",
+    "student_journey": "learning_journey",
 }
 
 RESEARCH_PAGES = {
-    "research_overview": "Overview",
-    "research_evidence": "Evidence",
-    "research_calf": "CALF Measures",
-    "research_learning": "Learning Process",
-    "research_data": "Research Data",
-    "research_audit": "System Audit",
+    "research_overview": "research_overview_title",
+    "research_evidence": "research_evidence_title",
+    "research_calf": "tab_calf",
+    "research_learning": "research_learning_title",
+    "research_data": "nav_research_data",
+    "research_audit": "research_audit_title",
 }
 
 
@@ -81,6 +82,15 @@ def _render_header(api_client: WritingFeedbackApiClient, lang: str) -> None:
     )
     st.title(t("app_title", lang))
     st.caption(t("app_subtitle", lang))
+    st.warning(t("app_prototype_warning", lang))
+
+
+def _render_system_status(api_client: WritingFeedbackApiClient, lang: str) -> None:
+    """Show analyzer/provider status for Research View only.
+
+    Student View must not expose analyzer versions, provider details, or
+    configuration versions (v0.9.2 role-separation requirement).
+    """
     try:
         health = api_client.health()
         analyzer_info = f"{health.get('active_analyzer','?')} {health.get('active_analyzer_version','')}"
@@ -92,7 +102,6 @@ def _render_header(api_client: WritingFeedbackApiClient, lang: str) -> None:
             st.caption(t("app_provider_local_demo", lang))
     except ApiClientError:
         st.info(t("app_api_unavailable", lang))
-    st.warning(t("app_prototype_warning", lang))
 
 
 def _render_sidebar(lang: str) -> tuple[str, str]:
@@ -129,10 +138,12 @@ def _render_sidebar(lang: str) -> tuple[str, str]:
             page_map = STUDENT_PAGES
         else:
             page_map = RESEARCH_PAGES
-        page_labels = {v: k for k, v in page_map.items()}
+        # Translate page labels through the locale system so navigation is
+        # fully localized (no English leakage in Chinese mode).
+        page_labels = {t(v, lang): k for k, v in page_map.items()}
         selected_label = st.radio(
             t("nav_pages", lang),
-            list(page_map.values()),
+            list(page_labels.keys()),
             key="sidebar_page",
             label_visibility="collapsed",
         )
@@ -150,6 +161,8 @@ def run() -> None:
 
     _render_header(api_client, lang)
     role, page_key = _render_sidebar(lang)
+    if role == "research":
+        _render_system_status(api_client, lang)
 
     st.markdown('<hr class="px-divider">', unsafe_allow_html=True)
 

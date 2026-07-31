@@ -1,4 +1,4 @@
-# English Writing Feedback Prototype v0.9.1
+# English Writing Feedback Prototype v0.9.2.1
 
 v0.9.1 新增基于角色的双视图界面（学生视图/研究视图）、渐进式信息披露和响应式布局。（英文/简体中文）、CALF 指标分类展示与统一卡片布局、以及角色分离视图。所有用户可见文本已迁移至 `locales/` 下的语言文件。详见 [v0.8.1 规格](docs/development/V0.8.1_SPEC.md)。
 

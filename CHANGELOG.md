@@ -1,4 +1,41 @@
-﻿## v0.9.2 (2026-07-31)
+﻿
+## v0.9.2.1 (2026-07-31)
+
+### Added
+- Playwright 1.61.0 + Chromium 149 browser testing dependency
+- Comprehensive v0.9.2.1 Playwright verification suite (4 locale/viewport
+  combos, 12 pages, console/overflow/focus/styles/role-separation/screenshots)
+- Static Pixel Art style audit script (scripts/pixel_art_style_audit.py)
+- Pixel Art design system reference (docs/design/PIXEL_ART_DESIGN_SYSTEM.md)
+- v0.9.2.1 specification (docs/development/V0.9.2.1_SPEC.md)
+- 13 deterministic screenshots at verification/screenshots/v0.9.2.1/
+
+### Fixed
+- Role-separation: global header no longer exposes analyzer version and
+  provider details to Student View
+- Navigation: sidebar page labels fully localized (en + zh_CN) via locale
+  system; no English leakage in Chinese mode
+- Decorative single-side accent borders (.px-notice-limitation, .px-quote)
+  changed to full 4px borders per design rules
+
+### Verification
+- Playwright: 4 locale/viewport combos (EN desktop, ZH desktop,
+  EN mobile 390x844, ZH mobile 390x844), all 12 pages PASS
+- Console errors: 0; page exceptions: 0; horizontal overflow: none
+- Focus: visible blue outline (rgb(41,173,255) solid 3px, offset 2px)
+- Role separation: PASS (no prohibited content in Student View)
+- Static style audit: 0 violations
+- Computed-style audit: all zero radius, no gradients/blur/soft shadows,
+  zero transitions, no animations
+- Rerun idempotency: no duplicate exercise instances
+- pytest: 271 passed, 8 skipped; Cases A-R: 110 passed
+- run.bat --verify: PASS (migration 12, config-v0.9.0, all HTTP 200)
+- Security: no tracked credentials; .env gitignored; clean screenshots
+- Backend: no changes (migration 12, config-v0.9.0 preserved)
+
+### Backend
+- No changes to migration 12, config-v0.9.0, or any backend code
+## v0.9.2 (2026-07-31)
 
 ### Changed
 - Complete Pixel Art UI redesign with centralized CSS token system
@@ -179,4 +216,5 @@
 - progress/profile API 返回真实 v0.3 结构，并支持 metric、日期、comparable_only 和 analysis_version 查询。
 - Prompt 升级至 `feedback-prompt-v0.3.0`；只发送筛选后的 Snapshot，纵向评论仍必须绑定经验证的 H 证据 ID。
 - 增加四类纯虚拟纵向场景和完整回归/纵向/API/持久化测试。
+
 

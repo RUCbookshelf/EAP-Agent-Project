@@ -382,7 +382,6 @@ PIXEL_COMPONENT_CSS = """
     background: var(--px-surface);
     color: var(--px-text);
     border-color: var(--px-dark);
-    border-left: 4px solid var(--px-dark);
 }
 
 .px-empty {
@@ -415,7 +414,8 @@ PIXEL_COMPONENT_CSS = """
 }
 
 .px-quote {
-    border-left: var(--px-border-thick);
+    border: var(--px-border-thick);
+    background: var(--px-surface);
     padding-left: var(--px-space-4);
     color: var(--px-muted);
     font-style: italic;

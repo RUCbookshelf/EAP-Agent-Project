@@ -79,3 +79,26 @@ v0.6 图表只是已有自动信号的透明展示，不增加测量效度。配
 - The sidebar navigation uses Streamlit radio groups which reload on every interaction; session state persists results but rerenders the page.
 - Mobile layout is verified at 390x844 but some Streamlit components may not fully adapt to very narrow viewports.
 - The CSS is Streamlit-compatible only; no custom JavaScript or large frontend framework is used.
+
+## v0.9.2.1 Pixel Art UI Limitations
+
+- Streamlit primary buttons (st.button) retain a framework-controlled 1px border
+  that cannot be fully overridden by application CSS without breaking the button.
+- Streamlit radio options on mobile render inside a collapsed sidebar overlay;
+  the sidebar must be opened via the hamburger control before labels become
+  reachable. This is standard Streamlit mobile behavior, not an application defect.
+- Streamlit tab headers partially respect application CSS overrides; bottom-border
+  thickness (4px) and active-tab indicator (red 4px) are applied, but internal
+  padding and border-radius may differ from the canonical Pixel Art design.
+- The `border-collapse: collapse` on table cells uses 1px internal grid lines
+  inside `.px-table-wrap` containers; these are documented structural data-grid
+  elements, not primary Pixel Art components.
+- On narrow viewports (390x844), the sidebar content height can exceed the viewport
+  when all 8-10 radio options are visible. Scrollable overlay behavior is inherent
+  to Streamlit mobile rendering.
+- Focus outline color on text inputs correctly applies `#29adff` (3px solid) when
+  inputs are directly focused; browser-managed focus rings on other interactive
+  elements (links) use default Streamlit styling.
+- Computed-style audit for primary components confirmed zero border-radius, no
+  gradients, no blur, no soft shadows, zero transition duration, and no animations
+  across text inputs, textareas, expanders, and alert notices.
