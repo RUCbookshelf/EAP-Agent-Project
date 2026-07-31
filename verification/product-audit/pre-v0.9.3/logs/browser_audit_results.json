@@ -1,0 +1,86 @@
+[
+  {
+    "action": "pageload",
+    "viewport": "desktop",
+    "duration_s": 0.5,
+    "status": "loaded"
+  },
+  {
+    "action": "student_home",
+    "viewport": "desktop",
+    "duration_s": 3.03,
+    "status": "loaded"
+  },
+  {
+    "action": "student_writing",
+    "viewport": "desktop",
+    "duration_s": 3.03,
+    "status": "loaded"
+  },
+  {
+    "action": "student_feedback",
+    "viewport": "desktop",
+    "duration_s": 3.04,
+    "status": "loaded"
+  },
+  {
+    "action": "student_revision",
+    "viewport": "desktop",
+    "duration_s": 3.03,
+    "status": "loaded"
+  },
+  {
+    "action": "student_practice",
+    "viewport": "desktop",
+    "duration_s": 3.03,
+    "status": "loaded"
+  },
+  {
+    "action": "student_learning_journey",
+    "viewport": "desktop",
+    "duration_s": 3.03,
+    "status": "loaded"
+  },
+  {
+    "action": "research_overview",
+    "viewport": "desktop",
+    "duration_s": 3.03,
+    "status": "loaded"
+  },
+  {
+    "action": "research_evidence",
+    "viewport": "desktop",
+    "duration_s": 3.03,
+    "status": "loaded"
+  },
+  {
+    "action": "research_calf_measures",
+    "viewport": "desktop",
+    "duration_s": 3.03,
+    "status": "loaded"
+  },
+  {
+    "action": "research_learning_process",
+    "viewport": "desktop",
+    "duration_s": 3.03,
+    "status": "loaded"
+  },
+  {
+    "action": "research_research_data",
+    "viewport": "desktop",
+    "duration_s": 3.03,
+    "status": "loaded"
+  },
+  {
+    "action": "research_system_audit",
+    "viewport": "desktop",
+    "duration_s": 3.03,
+    "status": "loaded"
+  },
+  {
+    "action": "pageload",
+    "viewport": "mobile",
+    "duration_s": 0.14,
+    "status": "loaded"
+  }
+]

@@ -1,0 +1,266 @@
+{
+  "audit_date": "2026-07-31",
+  "git_commit": "2c4eb48",
+  "total_issues": 18,
+  "p0": 2,
+  "p1": 5,
+  "p2": 7,
+  "p3": 4,
+  "issues": [
+    {
+      "id": "REL-001",
+      "severity": "P0",
+      "title": "FastAPI intermittent startup hang",
+      "affected": "All",
+      "page": "All",
+      "description": "uvicorn accepts TCP but never responds to HTTP. create_app() synchronous initialization can deadlock.",
+      "root_cause": "Synchronous startup path (spaCy+DB+services) can block before first request. No startup logging. No stale-process cleanup.",
+      "fix_options": [
+        "Kill stale processes on run.bat startup",
+        "Add startup health gate with timeout",
+        "Add uvicorn --timeout-keep-alive",
+        "Add startup logging"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "ERR-001",
+      "severity": "P0",
+      "title": "8 research endpoints broken — missing imports",
+      "affected": "Research",
+      "page": "Research Data, Research Evidence, Research Overview",
+      "description": "ResearchDataService, ExportJob, HumanReviewCreate used in main.py but never imported. All return HTTP 500.",
+      "root_cause": "Missing import statements at top of app/api/main.py",
+      "fix_options": [
+        "Add missing imports: from app.research.service import ResearchDataService; from app.research.schemas import ExportJob, HumanReviewCreate"
+      ],
+      "confidence": "confirmed"
+    },
+    {
+      "id": "ERR-002",
+      "severity": "P1",
+      "title": "Generic API-unavailable error for all request failures",
+      "affected": "All",
+      "page": "All",
+      "description": "Single error message for connection refused, timeout, DNS failure. 90s timeout before message appears. Does not suggest checking running processes.",
+      "root_cause": "ApiClient._request() catches all RequestException with one message",
+      "fix_options": [
+        "Classify errors: ConnectionError vs Timeout vs HTTPError",
+        "Reduce timeout to 15s",
+        "Add health-check before showing run.bat message"
+      ],
+      "confidence": "confirmed"
+    },
+    {
+      "id": "PERF-001",
+      "severity": "P1",
+      "title": "90-second API client timeout with no intermediate feedback",
+      "affected": "All",
+      "page": "All",
+      "description": "ApiClient default timeout is 90s. No progress indicator or early failure detection.",
+      "root_cause": "timeout=90.0 in ApiClient.__init__",
+      "fix_options": [
+        "Reduce to 15s",
+        "Add health polling at 5s intervals",
+        "Add spinner during API calls"
+      ],
+      "confidence": "confirmed"
+    },
+    {
+      "id": "UX-001",
+      "severity": "P1",
+      "title": "Learning Journey always empty — no practice data",
+      "affected": "Student",
+      "page": "Learning Journey",
+      "description": "Zero engagement traces for all students. Empty message says Submit an essay but S02 has 6 essays.",
+      "root_cause": "No practice targets/engagement traces seeded in demo database",
+      "fix_options": [
+        "Seed demo data with engagement traces",
+        "Fix empty-state message to reflect existing essays",
+        "Generate practice targets on essay submission"
+      ],
+      "confidence": "confirmed"
+    },
+    {
+      "id": "OBS-001",
+      "severity": "P1",
+      "title": "Generic 500 handler hides all internal errors",
+      "affected": "Research",
+      "page": "All",
+      "description": "Exception handler returns identical message for NameError, DB errors, logic bugs. No logs.",
+      "root_cause": "@api.exception_handler(Exception) returns generic message with no logging",
+      "fix_options": [
+        "Add logging of exception type and traceback",
+        "Differentiate known error types",
+        "Show error code to researchers"
+      ],
+      "confidence": "confirmed"
+    },
+    {
+      "id": "REL-002",
+      "severity": "P1",
+      "title": "No automatic recovery after API restart",
+      "affected": "Student",
+      "page": "All",
+      "description": "Streamlit does not detect API recovery. Manual navigation or refresh required.",
+      "root_cause": "Streamlit API client has no health-polling or retry-on-recovery logic",
+      "fix_options": [
+        "Health polling in session state",
+        "Auto-retry on next interaction",
+        "Show recovery notification"
+      ],
+      "confidence": "confirmed"
+    },
+    {
+      "id": "UX-002",
+      "severity": "P2",
+      "title": "Two-step interaction pattern not communicated",
+      "affected": "Student",
+      "page": "Learning Journey, Practice",
+      "description": "Enter ID triggers rerun to show Load button. No indication button will appear.",
+      "root_cause": "st.button inside conditional (if not student_id.strip(): return) prevents button rendering until after rerun",
+      "fix_options": [
+        "Always show button but disable until ID entered",
+        "Show hint text after ID entry",
+        "Auto-trigger load on Enter"
+      ],
+      "confidence": "confirmed"
+    },
+    {
+      "id": "UX-003",
+      "severity": "P2",
+      "title": "Student ID not shared across Student View pages",
+      "affected": "Student",
+      "page": "All Student pages",
+      "description": "S02 must be re-entered on every page navigation. Each page has own input key.",
+      "root_cause": "Each page uses unique st.text_input key",
+      "fix_options": [
+        "Share student_id in st.session_state",
+        "Add global student selector in sidebar",
+        "Auto-fill from previous page"
+      ],
+      "confidence": "confirmed"
+    },
+    {
+      "id": "DATA-001",
+      "severity": "P2",
+      "title": "Empty Journey message contradicts existing essay data",
+      "affected": "Student",
+      "page": "Learning Journey",
+      "description": "S02 has 6 essays but Journey says Submit an essay with feedback first",
+      "root_cause": "Empty state message does not check essay count",
+      "fix_options": [
+        "Customize message when essays exist but no traces",
+        "Differentiate no-essays from no-traces"
+      ],
+      "confidence": "confirmed"
+    },
+    {
+      "id": "RESP-001",
+      "severity": "P2",
+      "title": "Mobile sidebar requires hamburger toggle",
+      "affected": "All",
+      "page": "All (mobile)",
+      "description": "Radio labels unreachable without expanding sidebar. Streamlit framework limitation.",
+      "root_cause": "Streamlit mobile rendering",
+      "fix_options": [
+        "Document as known limitation",
+        "Consider alternative navigation for mobile"
+      ],
+      "confidence": "confirmed"
+    },
+    {
+      "id": "ERR-003",
+      "severity": "P2",
+      "title": "No loading progress during API calls",
+      "affected": "All",
+      "page": "All data-fetching pages",
+      "description": "st.spinner used on Writing submission only. Data-fetching pages show blank during API calls.",
+      "root_cause": "No spinner on get_engagement_traces, get_practice_targets, etc.",
+      "fix_options": [
+        "Wrap API calls in st.spinner",
+        "Show skeleton loading state"
+      ],
+      "confidence": "confirmed"
+    },
+    {
+      "id": "UX-004",
+      "severity": "P2",
+      "title": "Research Overview shows analyzer version as aggregate count",
+      "affected": "Research",
+      "page": "Overview",
+      "description": "spacy shown as a count metric alongside spacy-analyzer-v0.8.0 — confusing",
+      "root_cause": "Card layout uses health values as counts",
+      "fix_options": [
+        "Redesign Overview cards for system status not counts"
+      ],
+      "confidence": "confirmed"
+    },
+    {
+      "id": "I18N-001",
+      "severity": "P2",
+      "title": "Error details may not be fully localized",
+      "affected": "All",
+      "page": "All",
+      "description": "api_unavailable key exists but exception details are English-only",
+      "root_cause": "ApiClientError carries English message strings",
+      "fix_options": [
+        "Map error types to locale keys",
+        "Pass error codes for translation"
+      ],
+      "confidence": "medium"
+    },
+    {
+      "id": "UX-005",
+      "severity": "P3",
+      "title": "Deploy button visible in sidebar",
+      "affected": "All",
+      "page": "All",
+      "description": "Streamlit default Deploy button appears. Not relevant for local prototype.",
+      "root_cause": "Streamlit default UI",
+      "fix_options": [
+        "Hide via streamlit config"
+      ],
+      "confidence": "confirmed"
+    },
+    {
+      "id": "UX-006",
+      "severity": "P3",
+      "title": "Monospace font may reduce readability",
+      "affected": "All",
+      "page": "All",
+      "description": "Full monospace stack for body text. Some users may find fatiguing.",
+      "root_cause": "Design system choice",
+      "fix_options": [
+        "Consider proportional font for body text"
+      ],
+      "confidence": "medium"
+    },
+    {
+      "id": "RESP-002",
+      "severity": "P3",
+      "title": "Button 1px border limitation",
+      "affected": "All",
+      "page": "All",
+      "description": "Streamlit primary button retains 1px border. Documented in KNOWN_LIMITATIONS.md.",
+      "root_cause": "Streamlit framework limitation",
+      "fix_options": [
+        "Already documented"
+      ],
+      "confidence": "confirmed"
+    },
+    {
+      "id": "UX-007",
+      "severity": "P3",
+      "title": "Radio page nav triggers full rerun",
+      "affected": "All",
+      "page": "All",
+      "description": "Clicking page radio triggers full page rerun. Standard Streamlit behavior.",
+      "root_cause": "Streamlit radio on_change behavior",
+      "fix_options": [
+        "Consider st.navigation in newer Streamlit versions"
+      ],
+      "confidence": "confirmed"
+    }
+  ]
+}
