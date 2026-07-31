@@ -1,33 +1,61 @@
-# UI design v0.8
+# UI Design v0.9.1
 
-The sixth `CALF Research` tab is visible only in research view. It groups values by construct and shows status, automation, exact version/unit, formula inputs, confidence, and limitations. It explicitly explains unavailable Accuracy/sophistication and candidate syntax. Student view shows a boundary notice and no CALF total, ranking, ability, proficiency, or CEFR interpretation.
+## Information architecture
 
-## Information hierarchy
+The v0.9.1 interface uses role-based navigation with two primary modes selected from the sidebar.
 
-The Streamlit submission page keeps task entry above a compact saved-result summary. Results are divided into five tabs:
+### Student View (6 pages)
 
-1. **Feedback** — positive finding, selected revision priorities, targeted practice, provider status and uncertainty.
-2. **Revision** — one-task/multiple-drafts explanation, Draft Chain, first-to-current and pairwise comparisons, prior priorities and uptake candidates.
-3. **Progress** — cross-task longitudinal status, independent-task and draft/revision-group counts, History Evidence IDs and limitations.
-4. **Evidence** — prompt keywords, grouped connective expressions and descriptive metrics.
-5. **Research Audit** — raw analysis, diagnosis, calibration, provider status and versions.
+1. **Home** — Current writing task summary, latest submission status, feedback availability, revision priority, available practice, next recommended action.
+2. **Writing** — Submission form with grouped sections: Task Information, Timing (optional), Tools Used, Essay Text. Supports new independent tasks and revisions.
+3. **Feedback** — Strengths (verified positive findings only), up to 2 revision priorities with plain-language titles, evidence quotes, and actionable suggestions. No raw metric values in main feedback.
+4. **Revision** — Source draft selection, previous feedback review, draft chain, first-to-latest changes, previous priorities, uptake candidates with conservative attribution.
+5. **Practice** — Current Practice Target, exercise instructions, constraints, response input, attempt submission, attempt history. Empty responses rejected.
+6. **Learning Journey** — Chronological observable events timeline: submission, feedback, practice availability, attempts, revision responses, later-task evidence.
 
-The top summary separates saved essay ID, draft stage, Revision Group, provider and validation state. Semantic labels use plain states such as unavailable, pairwise only, provisional pattern, passed with server repair, and fallback.
+### Research View (6 pages)
 
-## Student and research views
+1. **Overview** — System status, provider configuration, data-quality warnings.
+2. **Evidence** — Submission details, analysis runs, diagnosis, calibration audit.
+3. **CALF Measures** — Grouped metric cards by construct (Lexical, Syntactic, Fluency) with status, confidence, limitations. Accuracy and Sophistication shown as Unavailable.
+4. **Learning Process** — Complete evidence chain: Practice Targets, Engagement Traces, Transfer Evidence.
+5. **Research Data** — 8 subsections: Export Preview, Privacy Mode, Dataset Filters, PII Scan, Human Review, Dataset Split, Data Quality, Export History.
+6. **System Audit** — Diagnostic audit, Learner Model audit, Reanalysis, Local Administration.
 
-**Student view** is the default. It hides raw signals, internal gates, full provider diagnostics, complete connective-class JSON and version metadata. It still shows limitations and evidence IDs where needed for transparency.
+## Progressive disclosure
 
-**Research audit view** exposes those technical records for local prototype review. This switch is not authorization or access control; the application remains local-only.
+- Student View hides: analyzer versions, metric IDs, Evidence IDs, confidence calculations, Diagnostic Gate internals, database identifiers, configuration versions, provider error details.
+- Research View exposes all technical records.
+- Role switching is local-only (no authorization layer).
 
-Changing a tab or view reads `st.session_state.submission_result`. It does not resubmit the essay, rerun the analyzer, call the provider, or create a Learner Profile Snapshot. An integration test verifies feedback and snapshot row counts do not change across a view rerender.
+## Reusable components
 
-## Submission relationship controls
+- `page_header(title, subtitle)` — consistent page headers
+- `status_badge(status)` — colored status indicators
+- `metric_card(metric_id, value, status, ...)` — CALF metric display
+- `evidence_quote(text)` — quoted evidence spans
+- `limitation_notice(text)` — consistent warning boxes
+- `empty_state(title, explanation)` — informative empty states
+- `timeline_event(label, timestamp, ...)` — Learning Journey events
+- `audit_record(id, label, data)` — expandable research records
+- `feedback_priority_card(...)` — student-facing priority cards
 
-The user must choose either **Start a new independent task** or **Submit a revision within an existing task**. A revision requires an explicitly selected earlier draft from the same student. Candidate labels include essay ID, time, stage, Revision Group and prompt. A matching prompt is a non-blocking warning only and never creates a relationship automatically.
+## Visual design
 
-## Empty states and accessibility
+- Restrained academic palette with accessible contrast
+- Responsive CSS: font scaling at <640px, word-wrap on alerts, blockquote styling
+- Desktop (1280+), tablet (768+), and mobile (390x844) verified
+- No large frontend framework; Streamlit-compatible CSS only
 
-Primary regions render explanatory copy for `NO_SELECTED_PRIORITY`, `NO_TARGETED_PRACTICE`, `INSUFFICIENT_CROSS_TASK_HISTORY`, `NO_PREVIOUS_PRIORITY`, `NO_FEEDBACK_UPTAKE_CANDIDATE`, and `MAJOR_REWRITE_LIMITS_ATTRIBUTION`. Empty content is not described as proof that no revision is needed.
+## Internationalization
 
-Connectives are deduplicated and grouped by expression class. Student view presents readable expression/count/function rows; research view can inspect the complete structured classes. Labels are explicit, controls are keyboard-addressable through Streamlit, contrast uses native semantic status components, and desktop/mobile Playwright captures are part of release QA.
+- 271 keys in en.json and zh_CN.json (identical sets)
+- Language switcher in sidebar; does not trigger analysis, exercise creation, or DeepSeek
+- Student essays, exercise responses, quoted evidence, and historical feedback NOT auto-translated
+
+## Accessibility
+
+- Meaningful page headings, descriptive button labels, clear form labels
+- Sufficient text contrast, no status conveyed by color alone
+- Readable warning and error messages
+

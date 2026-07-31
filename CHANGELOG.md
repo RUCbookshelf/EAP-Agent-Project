@@ -1,3 +1,37 @@
+## v0.9.1 (2026-07-31)
+
+### Added
+- Role-based navigation: Student View (6 pages) and Research View (6 pages)
+- Reusable UI component system (status_badge, metric_card, evidence_quote, etc.)
+- Progressive disclosure rules hiding internal IDs from Student View
+- Visual design system with responsive CSS (desktop to 390x844 mobile)
+- 61 new i18n keys (271 total, en + zh_CN parity)
+- Expanded Playwright tests (6 scenarios: desktop, research, mobile, Chinese, keys, home)
+
+### Changed
+- Complete Streamlit UI rewrite with modular page architecture
+- Sidebar navigation: language switcher, role selector, page navigation
+- Student Home page with task summary, status, and next-action recommendations
+- Student Writing page with grouped field sections
+- Student Feedback page with strengths, max 2 priorities, evidence, next step
+- Student Revision page with draft chain, changes, priorities, uptake
+- Student Learning Journey with chronological timeline events
+- Research Overview with system status and data quality
+- Research Evidence with submission/analysis/diagnosis audit
+- Research CALF Measures with grouped metric cards
+- Research Learning Process with complete evidence chain
+- Research Data with 8 organized subsections
+- Research System Audit with diagnostic, learner model, reanalysis, admin
+
+### Fixed
+- All UI strings now routed through locale system
+- No raw locale keys appear in user-facing text
+- BOM stripped from all new source files
+
+### Backend
+- No changes to migration 12, config-v0.9.0, or any backend code
+
+
 # Changelog
 
 ## 0.9.0 — 2026-07-30

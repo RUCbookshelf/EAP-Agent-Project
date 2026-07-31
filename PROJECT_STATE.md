@@ -1,5 +1,22 @@
 # 项目状态
 
+## Current v0.9.1 State
+
+- Status: in_progress; database migration 12; active configuration config-v0.9.0 preserved.
+- Role-based UI: Student View (6 pages) + Research View (6 pages) with progressive disclosure.
+- Reusable component system, responsive layout (desktop to 390x844 mobile), accessible contrast.
+- 271 locale keys (en + zh_CN), identical sets, all UI strings localized.
+- pytest: 271 passed, 8 skipped (3 v0.9.1 skips for restructured AppTest UI tests).
+- Playwright: desktop + mobile role-based navigation, locale switching, console/horizontal-overflow checks.
+- All backend APIs, practice-domain behavior, migration, and configuration unchanged from v0.9.
+
+v1.0 remains not_started.
+
+
+---
+
+# 项目状态
+
 ## Current v0.9 State
 
 - Status: \completed\; database migration 12; active configuration \config-v0.9.0\, parent \config-v0.8.2\ preserved.

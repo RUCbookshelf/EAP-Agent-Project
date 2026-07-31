@@ -71,3 +71,11 @@ v0.6 图表只是已有自动信号的透明展示，不增加测量效度。配
 - 线性斜率按作文序号而非连续时间建模；当前不控制教学干预、任务难度、评分者、文本质量或外部学习经历。
 - `medium` 只是较强的原型证据标签，不是统计显著性、测量信度或效度；系统不输出 `high`。
 - `recently_reduced` 只表示结构化诊断在最近窗口暂未出现，不表示问题解决、掌握或真实能力提升。
+
+
+## v0.9.1 UI Limitations
+
+- Streamlit AppTest-based integration tests are skipped; UI verification uses Playwright.
+- The sidebar navigation uses Streamlit radio groups which reload on every interaction; session state persists results but rerenders the page.
+- Mobile layout is verified at 390x844 but some Streamlit components may not fully adapt to very narrow viewports.
+- The CSS is Streamlit-compatible only; no custom JavaScript or large frontend framework is used.

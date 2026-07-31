@@ -72,3 +72,17 @@ All services currently run on one local Windows computer. “Cloud-ready” desc
 ## v0.4 NLP boundary
 
 `SubmissionService → AnalyzerCoordinator → AnalyzerRegistry → SpacyAnalyzer | BasicAnalyzer` keeps spaCy outside routes and UI. `SpacyAnalyzer` composes input-quality, lexical, connective and syntactic extractors plus `MetricRegistry`. The SQLite adapter appends AnalysisRun, MetricResult and JSON artifacts; the old `metrics` row remains a compatibility view. `POST /submissions/{id}/analyses` appends local analysis only and never calls a Provider.
+
+
+## v0.9.1 UI Layer
+
+The v0.9.1 UI layer maintains the same HTTP-client-only architecture boundary as previous versions:
+
+- `app/ui/components.py` — Reusable UI components (page headers, metric cards, status badges, etc.)
+- `app/ui/pages/student_pages.py` — All 6 Student View page renderers
+- `app/ui/pages/research_pages.py` — All 6 Research View page renderers
+- `app/ui/streamlit_app.py` — Main orchestrator with role-based sidebar navigation
+- `app/ui/api_client.py` — HTTP API client (unchanged from v0.9)
+- `app/ui/locale.py` — i18n helper (unchanged from v0.8.1)
+
+The UI layer imports only `app.config` (for API base URL) and `app.ui.*`. It does not import database, repositories, analyzers, diagnosers, or LLM providers. All data flows through the FastAPI HTTP client.

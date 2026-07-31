@@ -1,5 +1,19 @@
 # Master roadmap
 
+
+## v0.9.1 UI Completion & Usability Refinement — 2026-07-31
+
+| Item | Status |
+|---|---|
+| Role-based navigation (Student + Research Views) | completed |
+| Progressive disclosure and reusable components | completed |
+| Responsive layout (desktop to 390x844) | completed |
+| 271 i18n keys (en + zh_CN parity) | completed |
+| Playwright verification (6 scenarios) | completed |
+| pytest: 271 passed, 8 skipped | completed |
+| Backend (migration 12, config-v0.9.0) | unchanged |
+| v1.0 | not_started |
+
 ## v0.8 CALF Measurement Foundation — 2026-07-30
 
 | Item | Status |

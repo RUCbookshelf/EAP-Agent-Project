@@ -34,6 +34,12 @@ def test_streamlit_is_api_client_only():
     imports = imports_under(ROOT / "app" / "ui")
     forbidden = ("app.database", "app.repositories", "app.llm", "app.analyzer", "app.diagnosis", "app.feedback")
     assert not any(name.startswith(forbidden) for name in imports)
-    source = (ROOT / "app" / "ui" / "streamlit_app.py").read_text(encoding="utf-8")
-    assert "api_client.submit" in source
-    assert "FeedbackPipeline" not in source and "sqlite3" not in source
+    # v0.9.1: submission logic lives in page modules; search all UI source
+    found_submit = False
+    for f in (ROOT / "app" / "ui").rglob("*.py"):
+        src = f.read_text(encoding="utf-8")
+        if "api_client.submit" in src:
+            found_submit = True
+        assert "FeedbackPipeline" not in src
+        assert "sqlite3" not in src
+    assert found_submit, "api_client.submit must appear in at least one UI module"

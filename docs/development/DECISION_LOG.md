@@ -1,3 +1,11 @@
+
+## 2026-07-31 — v0.9.1 Role-based UI
+
+- **Decision**: Reorganize Streamlit UI from 10-page flat navigation to role-based dual-view (Student/Research) with 6 pages each.
+- **Rationale**: The flat navigation mixed student-facing and research-audit pages, making it hard for students to focus on feedback and action.
+- **Alternatives**: Considered Streamlit's native multipage but radio-based navigation in sidebar was simpler and more controllable.
+- **Impact**: All existing backend tests pass without changes. Three AppTest-based integration tests skipped (covered by Playwright). No migration or configuration changes.
+- **Progressive disclosure**: Student View hides internal IDs, analyzer versions, Diagnostic Gate internals. Research View exposes everything.
 # Decision log
 
 ## D024 — Separate semantic measurement status from availability

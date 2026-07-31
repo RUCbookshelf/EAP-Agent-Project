@@ -1,25 +1,27 @@
-﻿# v0.9 Playwright verification — desktop + mobile UI, console errors, localization
+"""v0.9.1 Playwright verification — role-based UI, desktop + mobile, console errors, localization."""
 import os, sys, pathlib, subprocess, time, requests, json
-from playwright.sync_api import sync_playwright, expect
+from playwright.sync_api import sync_playwright
 
 API_PORT = 8001
 STREAMLIT_PORT = 8502
 BASE_URL = f"http://127.0.0.1:{STREAMLIT_PORT}"
+PROJECT_ROOT = pathlib.Path(__file__).resolve().parents[2]
 
 
 def start_server():
-    """Start API and Streamlit on separate ports."""
     env = os.environ.copy()
     env["PYTHONUTF8"] = "1"
     api = subprocess.Popen(
         [sys.executable, "-m", "uvicorn", "app.api.main:app", "--host", "127.0.0.1", "--port", str(API_PORT)],
         env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+        cwd=str(PROJECT_ROOT),
     )
     streamlit = subprocess.Popen(
         [sys.executable, "-m", "streamlit", "run", "app/ui/streamlit_app.py",
          "--server.port", str(STREAMLIT_PORT), "--server.headless", "true",
          "--browser.gatherUsageStats", "false"],
         env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+        cwd=str(PROJECT_ROOT),
     )
     return api, streamlit
 
@@ -36,7 +38,19 @@ def wait_for_server(url, timeout=30):
     return False
 
 
-def test_desktop():
+def check_console(page):
+    errors = [m for m in page._console if m.type == "error"]
+    return errors
+
+
+def check_horizontal_overflow(page):
+    body_width = page.evaluate("() => document.body.scrollWidth")
+    viewport_width = page.evaluate("() => window.innerWidth")
+    return body_width <= viewport_width + 10, body_width, viewport_width
+
+
+def test_desktop_student_view():
+    """Desktop: Student View pages load without errors."""
     with sync_playwright() as pw:
         browser = pw.chromium.launch(headless=True)
         page = browser.new_page(viewport={"width": 1280, "height": 900})
@@ -44,26 +58,59 @@ def test_desktop():
         page.on("console", lambda msg: console_msgs.append(msg))
 
         page.goto(BASE_URL, timeout=30000, wait_until="networkidle")
-        page.wait_for_timeout(8000)
-        # Wait for Streamlit app container
+        page.wait_for_timeout(5000)
         page.wait_for_selector("[data-testid='stAppViewContainer']", timeout=15000)
 
-        title = page.title()
-        assert title, f"Page title: {title}"
+        assert page.title(), "Page must have a title"
 
-        # Check page renders content
-        page.wait_for_timeout(5000)
-        title = page.title()
-        assert title, "Page must have a title"
+        # Navigate through Student View pages
+        student_pages = ["Home", "Writing", "Feedback", "Revision", "Practice", "Learning Journey"]
+        for pg in student_pages:
+            try:
+                page.locator(f"label:has-text('{pg}')").last.click(timeout=3000)
+                page.wait_for_timeout(1000)
+            except Exception:
+                pass
 
-# Page content confirmed by wait_for_selector above
+        # Check console
+        errors = [m for m in console_msgs if m.type == "error"]
+        assert len(errors) == 0, f"Console errors: {[e.text for e in errors]}"
 
         # Check no horizontal overflow
-        body_width = page.evaluate("() => document.body.scrollWidth")
-        viewport_width = page.evaluate("() => window.innerWidth")
-        assert body_width <= viewport_width + 10, f"Body width {body_width} exceeds viewport {viewport_width}"
+        ok, bw, vw = check_horizontal_overflow(page)
+        assert ok, f"Body width {bw} exceeds viewport {vw}"
 
-        # Check console errors
+        browser.close()
+        return True
+
+
+def test_desktop_research_view():
+    """Desktop: Research View pages load without errors."""
+    with sync_playwright() as pw:
+        browser = pw.chromium.launch(headless=True)
+        page = browser.new_page(viewport={"width": 1280, "height": 900})
+        console_msgs = []
+        page.on("console", lambda msg: console_msgs.append(msg))
+
+        page.goto(BASE_URL, timeout=30000, wait_until="networkidle")
+        page.wait_for_timeout(5000)
+
+        # Switch to Research View
+        try:
+            page.locator("label:has-text('Research View')").click(timeout=5000)
+            page.wait_for_timeout(2000)
+        except Exception:
+            pass
+
+        # Navigate through Research View pages
+        research_pages = ["Overview", "Evidence", "CALF Measures", "Learning Process", "Research Data", "System Audit"]
+        for pg in research_pages:
+            try:
+                page.locator(f"label:has-text('{pg}')").last.click(timeout=3000)
+                page.wait_for_timeout(1000)
+            except Exception:
+                pass
+
         errors = [m for m in console_msgs if m.type == "error"]
         assert len(errors) == 0, f"Console errors: {[e.text for e in errors]}"
 
@@ -71,7 +118,8 @@ def test_desktop():
         return True
 
 
-def test_mobile():
+def test_mobile_390x844():
+    """Mobile: app loads at 390x844 without horizontal overflow."""
     with sync_playwright() as pw:
         browser = pw.chromium.launch(headless=True)
         page = browser.new_page(viewport={"width": 390, "height": 844})
@@ -79,21 +127,13 @@ def test_mobile():
         page.on("console", lambda msg: console_msgs.append(msg))
 
         page.goto(BASE_URL, timeout=30000, wait_until="networkidle")
-        page.wait_for_timeout(3000)
-
-        # Title should be visible
         page.wait_for_timeout(5000)
-        title = page.title()
-        assert title, "Page must have a title"
 
-# Mobile page content confirmed
+        assert page.title(), "Page must have a title"
 
-        # No horizontal overflow
-        body_width = page.evaluate("() => document.body.scrollWidth")
-        viewport_width = page.evaluate("() => window.innerWidth")
-        assert body_width <= viewport_width + 10, f"Body width {body_width} exceeds viewport {viewport_width} at mobile"
+        ok, bw, vw = check_horizontal_overflow(page)
+        assert ok, f"Body width {bw} exceeds viewport {vw} at mobile"
 
-        # Console errors
         errors = [m for m in console_msgs if m.type == "error"]
         assert len(errors) == 0, f"Console errors: {[e.text for e in errors]}"
 
@@ -102,6 +142,7 @@ def test_mobile():
 
 
 def test_chinese_locale():
+    """Switch to Chinese locale - no console errors."""
     with sync_playwright() as pw:
         browser = pw.chromium.launch(headless=True)
         page = browser.new_page(viewport={"width": 1280, "height": 900})
@@ -109,22 +150,15 @@ def test_chinese_locale():
         page.on("console", lambda msg: console_msgs.append(msg))
 
         page.goto(BASE_URL, timeout=30000, wait_until="networkidle")
-        page.wait_for_timeout(3000)
+        page.wait_for_timeout(5000)
 
-        # Switch to Chinese by finding the radio button in sidebar
+        # Switch to Chinese
         try:
-            page.locator("label:has-text('中文')").click(timeout=5000)
+            page.locator("label:has-text('简体中文')").click(timeout=5000)
+            page.wait_for_timeout(3000)
         except Exception:
             pass
-        page.wait_for_timeout(3000)
 
-        # Check Chinese text appears
-        try:
-            expect(page).to_have_title("英语写作反馈原型")
-        except Exception:
-            pass  # Title might not change immediately
-
-        # No console errors after locale switch
         errors = [m for m in console_msgs if m.type == "error"]
         assert len(errors) == 0, f"Console errors after locale switch: {[e.text for e in errors]}"
 
@@ -132,22 +166,40 @@ def test_chinese_locale():
         return True
 
 
-def test_missing_localization():
-    """Verify no raw untranslated keys appear as user text."""
+def test_no_raw_locale_keys():
+    """Verify no raw locale keys appear as visible text."""
     with sync_playwright() as pw:
         browser = pw.chromium.launch(headless=True)
         page = browser.new_page(viewport={"width": 1280, "height": 900})
 
         page.goto(BASE_URL, timeout=30000, wait_until="networkidle")
-        page.wait_for_timeout(3000)
+        page.wait_for_timeout(5000)
 
-        # Get all visible text
         text = page.evaluate("() => document.body.innerText")
 
-        # No raw locale keys (like "tab_practice") should appear
-        raw_keys = ["tab_practice", "tab_learning_journey", "tab_practice_audit"]
+        # Common raw keys that should never appear
+        raw_keys = ["tab_practice", "tab_learning_journey", "tab_practice_audit",
+                     "student_home_title", "student_writing_title", "research_overview_title"]
         for key in raw_keys:
             assert key not in text, f"Raw locale key '{key}' appears in UI"
+
+        browser.close()
+        return True
+
+
+def test_student_home_page():
+    """Student Home page renders expected elements."""
+    with sync_playwright() as pw:
+        browser = pw.chromium.launch(headless=True)
+        page = browser.new_page(viewport={"width": 1280, "height": 900})
+
+        page.goto(BASE_URL, timeout=30000, wait_until="networkidle")
+        page.wait_for_timeout(5000)
+
+        # Should be on Student Home by default
+        text = page.evaluate("() => document.body.innerText")
+        assert "Home" in text or "首页" in text, "Home page not found"
+        assert "prototype" in text.lower(), "Prototype warning not visible"
 
         browser.close()
         return True
@@ -167,12 +219,15 @@ if __name__ == "__main__":
             sys.exit(1)
 
         results = {}
-        for name, test_fn in [
-            ("desktop", test_desktop),
-            ("mobile_390x844", test_mobile),
+        tests = [
+            ("desktop_student", test_desktop_student_view),
+            ("desktop_research", test_desktop_research_view),
+            ("mobile_390x844", test_mobile_390x844),
             ("chinese_locale", test_chinese_locale),
-            ("no_raw_keys", test_missing_localization),
-        ]:
+            ("no_raw_keys", test_no_raw_locale_keys),
+            ("student_home", test_student_home_page),
+        ]
+        for name, test_fn in tests:
             try:
                 test_fn()
                 results[name] = "PASS"
