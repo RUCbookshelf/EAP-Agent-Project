@@ -1,0 +1,107 @@
+Started server process [20160]
+Waiting for application startup.
+Application startup complete.
+Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+Stage load_settings: OK (0ms)
+Stage database_init: OK migration=12 (0ms)
+request_id=6f5e222699c346a5 method=GET path=/api/v1/system/health status=200 elapsed_ms=0.0 lifecycle=starting
+127.0.0.1:59109 - "GET /api/v1/system/health HTTP/1.1" 200
+Stage build_analyzer: OK analyzer=spacy (812ms)
+Stage build_services: OK (219ms)
+Startup complete: ready total=1125ms stages=4
+request_id=181ad103d7004a75 method=GET path=/api/v1/research/export/history status=200 elapsed_ms=0.0 lifecycle=ready
+127.0.0.1:59122 - "GET /api/v1/research/export/history HTTP/1.1" 200
+request_id=adae97cccc9a4def method=GET path=/api/v1/research/reviews status=200 elapsed_ms=15.0 lifecycle=ready
+127.0.0.1:59123 - "GET /api/v1/research/reviews HTTP/1.1" 200
+request_id=2ee844438c8f4e8b method=GET path=/api/v1/system/health status=200 elapsed_ms=0.0 lifecycle=ready
+127.0.0.1:64803 - "GET /api/v1/system/health HTTP/1.1" 200
+request_id=ae60984f72694150 method=GET path=/api/v1/system/health status=200 elapsed_ms=0.0 lifecycle=ready
+127.0.0.1:64803 - "GET /api/v1/system/health HTTP/1.1" 200
+request_id=d8fabed552a74e01 method=GET path=/api/v1/research/data-quality status=200 elapsed_ms=15.0 lifecycle=ready
+127.0.0.1:64803 - "GET /api/v1/research/data-quality HTTP/1.1" 200
+request_id=e48432cd7a6b4a8e method=GET path=/api/v1/system/health status=200 elapsed_ms=0.0 lifecycle=ready
+127.0.0.1:64803 - "GET /api/v1/system/health HTTP/1.1" 200
+request_id=5803f60274be4116 method=GET path=/api/v1/system/health status=200 elapsed_ms=0.0 lifecycle=ready
+127.0.0.1:65326 - "GET /api/v1/system/health HTTP/1.1" 200
+request_id=d31fcfab2ebc41a6 method=POST path=/api/v1/research/export/preview status=200 elapsed_ms=15.0 lifecycle=ready
+127.0.0.1:65326 - "POST /api/v1/research/export/preview HTTP/1.1" 200
+request_id=25f7b648c2d443e6 method=GET path=/api/v1/system/health status=200 elapsed_ms=0.0 lifecycle=ready
+127.0.0.1:65326 - "GET /api/v1/system/health HTTP/1.1" 200
+request_id=e4e750f845094f11 method=POST path=/api/v1/research/export/run status=200 elapsed_ms=32.0 lifecycle=ready
+127.0.0.1:65326 - "POST /api/v1/research/export/run HTTP/1.1" 200
+request_id=a537eb3d22064b03 method=GET path=/api/v1/research/export/history status=200 elapsed_ms=0.0 lifecycle=ready
+127.0.0.1:65328 - "GET /api/v1/research/export/history HTTP/1.1" 200
+request_id=06c382f3c2004391 method=GET path=/api/v1/system/health status=200 elapsed_ms=0.0 lifecycle=ready
+127.0.0.1:52894 - "GET /api/v1/system/health HTTP/1.1" 200
+request_id=b4af180b188c406d method=GET path=/api/v1/submissions/1/pii-candidates status=200 elapsed_ms=16.0 lifecycle=ready
+127.0.0.1:52894 - "GET /api/v1/submissions/1/pii-candidates HTTP/1.1" 200
+request_id=343cff13e2204bc8 method=GET path=/api/v1/system/health status=200 elapsed_ms=0.0 lifecycle=ready
+127.0.0.1:52896 - "GET /api/v1/system/health HTTP/1.1" 200
+request_id=76d4ce5ef0c24755 method=POST path=/api/v1/research/reviews status=200 elapsed_ms=15.0 lifecycle=ready
+127.0.0.1:52896 - "POST /api/v1/research/reviews HTTP/1.1" 200
+request_id=ef225f05a3c64123 method=GET path=/api/v1/research/reviews status=200 elapsed_ms=0.0 lifecycle=ready
+127.0.0.1:56578 - "GET /api/v1/research/reviews HTTP/1.1" 200
+request_id=e14521edb5924ba5 method=GET path=/api/v1/system/health status=200 elapsed_ms=0.0 lifecycle=ready
+127.0.0.1:56579 - "GET /api/v1/system/health HTTP/1.1" 200
+request_id=6bf1f358ce084109 method=POST path=/api/v1/research/dataset-split status=200 elapsed_ms=0.0 lifecycle=ready
+127.0.0.1:56579 - "POST /api/v1/research/dataset-split HTTP/1.1" 200
+request_id=84efe2df38f84a14 method=GET path=/api/v1/system/health status=200 elapsed_ms=0.0 lifecycle=ready
+127.0.0.1:50385 - "GET /api/v1/system/health HTTP/1.1" 200
+request_id=fc5a992e10664c35 method=GET path=/api/v1/research/data-quality status=200 elapsed_ms=0.0 lifecycle=ready
+127.0.0.1:50385 - "GET /api/v1/research/data-quality HTTP/1.1" 200
+request_id=9f41fabb38dd4077 method=GET path=/api/v1/system/health status=200 elapsed_ms=0.0 lifecycle=ready
+127.0.0.1:54045 - "GET /api/v1/system/health HTTP/1.1" 200
+request_id=e6fa90df16ce4c20 method=GET path=/api/v1/research/export/history status=200 elapsed_ms=0.0 lifecycle=ready
+127.0.0.1:54045 - "GET /api/v1/research/export/history HTTP/1.1" 200
+request_id=35de1f37f7c84a74 method=GET path=/api/v1/research/export/history status=200 elapsed_ms=0.0 lifecycle=ready
+127.0.0.1:54047 - "GET /api/v1/research/export/history HTTP/1.1" 200
+request_id=acab4e3dc0b74010 method=GET path=/api/v1/research/reviews status=200 elapsed_ms=0.0 lifecycle=ready
+127.0.0.1:54048 - "GET /api/v1/research/reviews HTTP/1.1" 200
+request_id=c971bcd9b34f4a8a method=GET path=/api/v1/research/export/history status=200 elapsed_ms=0.0 lifecycle=ready
+127.0.0.1:54049 - "GET /api/v1/research/export/history HTTP/1.1" 200
+request_id=9ac930cc617e48d0 method=GET path=/api/v1/research/reviews status=200 elapsed_ms=0.0 lifecycle=ready
+127.0.0.1:54050 - "GET /api/v1/research/reviews HTTP/1.1" 200
+request_id=beac49eff4a54edd method=GET path=/api/v1/system/health status=200 elapsed_ms=0.0 lifecycle=ready
+127.0.0.1:50079 - "GET /api/v1/system/health HTTP/1.1" 200
+request_id=86131f69d773481e method=GET path=/api/v1/system/health status=200 elapsed_ms=0.0 lifecycle=ready
+127.0.0.1:50079 - "GET /api/v1/system/health HTTP/1.1" 200
+request_id=34bc8d82c8064838 method=GET path=/api/v1/research/data-quality status=200 elapsed_ms=0.0 lifecycle=ready
+127.0.0.1:50079 - "GET /api/v1/research/data-quality HTTP/1.1" 200
+request_id=6da1f1df520244e6 method=GET path=/api/v1/system/health status=200 elapsed_ms=16.0 lifecycle=ready
+127.0.0.1:50079 - "GET /api/v1/system/health HTTP/1.1" 200
+request_id=c5e1eb7604214e51 method=GET path=/api/v1/system/health status=200 elapsed_ms=0.0 lifecycle=ready
+127.0.0.1:65112 - "GET /api/v1/system/health HTTP/1.1" 200
+request_id=d8cdbfd63e5b49ae method=POST path=/api/v1/research/export/preview status=200 elapsed_ms=15.0 lifecycle=ready
+127.0.0.1:65112 - "POST /api/v1/research/export/preview HTTP/1.1" 200
+request_id=97fdafcf5ebf4bd8 method=GET path=/api/v1/system/health status=200 elapsed_ms=0.0 lifecycle=ready
+127.0.0.1:65112 - "GET /api/v1/system/health HTTP/1.1" 200
+request_id=0712f0380137473f method=POST path=/api/v1/research/export/run status=200 elapsed_ms=15.0 lifecycle=ready
+127.0.0.1:65112 - "POST /api/v1/research/export/run HTTP/1.1" 200
+request_id=912f544c14924e6c method=GET path=/api/v1/research/export/history status=200 elapsed_ms=0.0 lifecycle=ready
+127.0.0.1:57513 - "GET /api/v1/research/export/history HTTP/1.1" 200
+request_id=133380c2787540ff method=GET path=/api/v1/system/health status=200 elapsed_ms=0.0 lifecycle=ready
+127.0.0.1:51701 - "GET /api/v1/system/health HTTP/1.1" 200
+request_id=2877662d1fc84266 method=GET path=/api/v1/submissions/1/pii-candidates status=200 elapsed_ms=0.0 lifecycle=ready
+127.0.0.1:51701 - "GET /api/v1/submissions/1/pii-candidates HTTP/1.1" 200
+request_id=711e85c1d9354964 method=GET path=/api/v1/system/health status=200 elapsed_ms=0.0 lifecycle=ready
+127.0.0.1:58686 - "GET /api/v1/system/health HTTP/1.1" 200
+request_id=efd61a7b931e47f2 method=POST path=/api/v1/research/reviews status=200 elapsed_ms=16.0 lifecycle=ready
+127.0.0.1:58686 - "POST /api/v1/research/reviews HTTP/1.1" 200
+request_id=ca6f017440844f4d method=GET path=/api/v1/research/reviews status=200 elapsed_ms=0.0 lifecycle=ready
+127.0.0.1:58689 - "GET /api/v1/research/reviews HTTP/1.1" 200
+request_id=3981bcc80d404926 method=GET path=/api/v1/system/health status=200 elapsed_ms=0.0 lifecycle=ready
+127.0.0.1:58694 - "GET /api/v1/system/health HTTP/1.1" 200
+request_id=0248a79992a54817 method=POST path=/api/v1/research/dataset-split status=200 elapsed_ms=0.0 lifecycle=ready
+127.0.0.1:58694 - "POST /api/v1/research/dataset-split HTTP/1.1" 200
+request_id=5b90a712899642d7 method=GET path=/api/v1/system/health status=200 elapsed_ms=0.0 lifecycle=ready
+127.0.0.1:64763 - "GET /api/v1/system/health HTTP/1.1" 200
+request_id=9d55b573a5c7478a method=GET path=/api/v1/research/data-quality status=200 elapsed_ms=0.0 lifecycle=ready
+127.0.0.1:64763 - "GET /api/v1/research/data-quality HTTP/1.1" 200
+request_id=a4c3445f4e904326 method=GET path=/api/v1/system/health status=200 elapsed_ms=0.0 lifecycle=ready
+127.0.0.1:55310 - "GET /api/v1/system/health HTTP/1.1" 200
+request_id=fd99fee2f0c34286 method=GET path=/api/v1/research/export/history status=200 elapsed_ms=16.0 lifecycle=ready
+127.0.0.1:55310 - "GET /api/v1/research/export/history HTTP/1.1" 200
+request_id=22007db504fd4a2e method=GET path=/api/v1/research/export/history status=200 elapsed_ms=0.0 lifecycle=ready
+127.0.0.1:55311 - "GET /api/v1/research/export/history HTTP/1.1" 200
+request_id=a010f41cce5d46e6 method=GET path=/api/v1/research/reviews status=200 elapsed_ms=0.0 lifecycle=ready
+127.0.0.1:55312 - "GET /api/v1/research/reviews HTTP/1.1" 200

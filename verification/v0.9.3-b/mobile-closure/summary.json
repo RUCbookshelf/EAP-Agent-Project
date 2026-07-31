@@ -1,0 +1,17 @@
+{
+  "generated_at": "2026-08-01T07:13:39",
+  "viewport": "390x844",
+  "locales": {
+    "en": {
+      "passed": 8,
+      "failed": 0,
+      "total": 8
+    },
+    "zh_CN": {
+      "passed": 8,
+      "failed": 0,
+      "total": 8
+    }
+  },
+  "overall": "PASS"
+}

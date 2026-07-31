@@ -1,0 +1,533 @@
+{
+  "locale": "en",
+  "viewport": "390x844",
+  "run_token": "9aecd460",
+  "started_at": "2026-08-01T07:11:43",
+  "console": [],
+  "pageerrors": [],
+  "requests": [
+    {
+      "request_id": "6f5e222699c346a5",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "starting"
+    },
+    {
+      "request_id": "181ad103d7004a75",
+      "method": "GET",
+      "path": "/api/v1/research/export/history",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "adae97cccc9a4def",
+      "method": "GET",
+      "path": "/api/v1/research/reviews",
+      "status": "200",
+      "elapsed_ms": 15.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "2ee844438c8f4e8b",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "ae60984f72694150",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "d8fabed552a74e01",
+      "method": "GET",
+      "path": "/api/v1/research/data-quality",
+      "status": "200",
+      "elapsed_ms": 15.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "e48432cd7a6b4a8e",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "5803f60274be4116",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "d31fcfab2ebc41a6",
+      "method": "POST",
+      "path": "/api/v1/research/export/preview",
+      "status": "200",
+      "elapsed_ms": 15.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "25f7b648c2d443e6",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "e4e750f845094f11",
+      "method": "POST",
+      "path": "/api/v1/research/export/run",
+      "status": "200",
+      "elapsed_ms": 32.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "a537eb3d22064b03",
+      "method": "GET",
+      "path": "/api/v1/research/export/history",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "06c382f3c2004391",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "b4af180b188c406d",
+      "method": "GET",
+      "path": "/api/v1/submissions/1/pii-candidates",
+      "status": "200",
+      "elapsed_ms": 16.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "343cff13e2204bc8",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "76d4ce5ef0c24755",
+      "method": "POST",
+      "path": "/api/v1/research/reviews",
+      "status": "200",
+      "elapsed_ms": 15.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "ef225f05a3c64123",
+      "method": "GET",
+      "path": "/api/v1/research/reviews",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "e14521edb5924ba5",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "6bf1f358ce084109",
+      "method": "POST",
+      "path": "/api/v1/research/dataset-split",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "84efe2df38f84a14",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "fc5a992e10664c35",
+      "method": "GET",
+      "path": "/api/v1/research/data-quality",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "9f41fabb38dd4077",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "e6fa90df16ce4c20",
+      "method": "GET",
+      "path": "/api/v1/research/export/history",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "35de1f37f7c84a74",
+      "method": "GET",
+      "path": "/api/v1/research/export/history",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "acab4e3dc0b74010",
+      "method": "GET",
+      "path": "/api/v1/research/reviews",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    }
+  ],
+  "subsections": [
+    {
+      "subsection": "export_preview",
+      "locale": "en",
+      "viewport": "390x844",
+      "tab_label": "Export Preview",
+      "rendered": true,
+      "tab_reachable": true,
+      "controls_reachable": true,
+      "localized_labels": true,
+      "localization_notes": [],
+      "raw_keys_found": [],
+      "traceback_found": [],
+      "console_errors": [],
+      "page_exceptions": [],
+      "overflow_ok": true,
+      "body_width": 390,
+      "viewport_width": 390,
+      "actions": [
+        {
+          "label_key": "export_preview",
+          "method": "POST",
+          "path": "/api/v1/research/export/preview",
+          "request_count": 1,
+          "statuses": [
+            "200"
+          ],
+          "request_ids": [
+            "d31fcfab2ebc41a6"
+          ],
+          "ok": true
+        },
+        {
+          "label_key": "export_run",
+          "method": "POST",
+          "path": "/api/v1/research/export/run",
+          "request_count": 1,
+          "statuses": [
+            "200"
+          ],
+          "request_ids": [
+            "e4e750f845094f11"
+          ],
+          "ok": true,
+          "created_export_id": "EXP000001",
+          "export_jobs_total": 1,
+          "export_id_counts": {
+            "EXP000001": 1
+          }
+        }
+      ],
+      "screenshot": "verification\\v0.9.3-b\\mobile-closure\\screenshots\\en_export_preview.png",
+      "result": "PASS",
+      "doc_width": 390
+    },
+    {
+      "subsection": "privacy_mode",
+      "locale": "en",
+      "viewport": "390x844",
+      "tab_label": "Privacy Mode",
+      "rendered": true,
+      "tab_reachable": true,
+      "controls_reachable": true,
+      "localized_labels": true,
+      "localization_notes": [],
+      "raw_keys_found": [],
+      "traceback_found": [],
+      "console_errors": [],
+      "page_exceptions": [],
+      "overflow_ok": true,
+      "body_width": 390,
+      "viewport_width": 390,
+      "actions": [],
+      "screenshot": "verification\\v0.9.3-b\\mobile-closure\\screenshots\\en_privacy_mode.png",
+      "result": "PASS",
+      "doc_width": 390
+    },
+    {
+      "subsection": "dataset_filters",
+      "locale": "en",
+      "viewport": "390x844",
+      "tab_label": "Dataset Filters",
+      "rendered": true,
+      "tab_reachable": true,
+      "controls_reachable": true,
+      "localized_labels": true,
+      "localization_notes": [],
+      "raw_keys_found": [],
+      "traceback_found": [],
+      "console_errors": [],
+      "page_exceptions": [],
+      "overflow_ok": true,
+      "body_width": 390,
+      "viewport_width": 390,
+      "actions": [],
+      "screenshot": "verification\\v0.9.3-b\\mobile-closure\\screenshots\\en_dataset_filters.png",
+      "result": "PASS",
+      "doc_width": 390
+    },
+    {
+      "subsection": "pii_review",
+      "locale": "en",
+      "viewport": "390x844",
+      "tab_label": "PII Scan",
+      "rendered": true,
+      "tab_reachable": true,
+      "controls_reachable": true,
+      "localized_labels": true,
+      "localization_notes": [],
+      "raw_keys_found": [],
+      "traceback_found": [],
+      "console_errors": [],
+      "page_exceptions": [],
+      "overflow_ok": true,
+      "body_width": 390,
+      "viewport_width": 390,
+      "actions": [
+        {
+          "label_key": "pii_scan",
+          "method": "GET",
+          "path": "/api/v1/submissions/1/pii-candidates",
+          "request_count": 1,
+          "statuses": [
+            "200"
+          ],
+          "request_ids": [
+            "b4af180b188c406d"
+          ],
+          "ok": true
+        }
+      ],
+      "screenshot": "verification\\v0.9.3-b\\mobile-closure\\screenshots\\en_pii_review.png",
+      "result": "PASS",
+      "doc_width": 390
+    },
+    {
+      "subsection": "human_review",
+      "locale": "en",
+      "viewport": "390x844",
+      "tab_label": "Human Review",
+      "rendered": true,
+      "tab_reachable": true,
+      "controls_reachable": true,
+      "localized_labels": true,
+      "localization_notes": [],
+      "raw_keys_found": [],
+      "traceback_found": [],
+      "console_errors": [],
+      "page_exceptions": [],
+      "overflow_ok": true,
+      "body_width": 390,
+      "viewport_width": 390,
+      "actions": [
+        {
+          "label_key": "human_review_create",
+          "method": "POST",
+          "path": "/api/v1/research/reviews",
+          "request_count": 1,
+          "statuses": [
+            "200"
+          ],
+          "request_ids": [
+            "76d4ce5ef0c24755"
+          ],
+          "ok": true,
+          "created_hr_ids": [
+            "HR000005"
+          ],
+          "matching_records": 1
+        }
+      ],
+      "screenshot": "verification\\v0.9.3-b\\mobile-closure\\screenshots\\en_human_review.png",
+      "result": "PASS",
+      "doc_width": 390
+    },
+    {
+      "subsection": "dataset_split",
+      "locale": "en",
+      "viewport": "390x844",
+      "tab_label": "Dataset Split",
+      "rendered": true,
+      "tab_reachable": true,
+      "controls_reachable": true,
+      "localized_labels": true,
+      "localization_notes": [],
+      "raw_keys_found": [],
+      "traceback_found": [],
+      "console_errors": [],
+      "page_exceptions": [],
+      "overflow_ok": true,
+      "body_width": 390,
+      "viewport_width": 390,
+      "actions": [
+        {
+          "label_key": "dataset_split",
+          "method": "POST",
+          "path": "/api/v1/research/dataset-split",
+          "request_count": 1,
+          "statuses": [
+            "200"
+          ],
+          "request_ids": [
+            "6bf1f358ce084109"
+          ],
+          "ok": true
+        }
+      ],
+      "screenshot": "verification\\v0.9.3-b\\mobile-closure\\screenshots\\en_dataset_split.png",
+      "result": "PASS",
+      "doc_width": 390
+    },
+    {
+      "subsection": "data_quality",
+      "locale": "en",
+      "viewport": "390x844",
+      "tab_label": "Data Quality",
+      "rendered": true,
+      "tab_reachable": true,
+      "controls_reachable": true,
+      "localized_labels": true,
+      "localization_notes": [],
+      "raw_keys_found": [],
+      "traceback_found": [],
+      "console_errors": [],
+      "page_exceptions": [],
+      "overflow_ok": true,
+      "body_width": 390,
+      "viewport_width": 390,
+      "actions": [
+        {
+          "label_key": "data_quality_report",
+          "method": "GET",
+          "path": "/api/v1/research/data-quality",
+          "request_count": 1,
+          "statuses": [
+            "200"
+          ],
+          "request_ids": [
+            "fc5a992e10664c35"
+          ],
+          "ok": true
+        }
+      ],
+      "screenshot": "verification\\v0.9.3-b\\mobile-closure\\screenshots\\en_data_quality.png",
+      "result": "PASS",
+      "doc_width": 390
+    },
+    {
+      "subsection": "export_history",
+      "locale": "en",
+      "viewport": "390x844",
+      "tab_label": "Export History",
+      "rendered": true,
+      "tab_reachable": true,
+      "controls_reachable": true,
+      "localized_labels": true,
+      "localization_notes": [],
+      "raw_keys_found": [],
+      "traceback_found": [],
+      "console_errors": [],
+      "page_exceptions": [],
+      "overflow_ok": true,
+      "body_width": 390,
+      "viewport_width": 390,
+      "actions": [
+        {
+          "label_key": "export_history",
+          "method": "GET",
+          "path": "/api/v1/research/export/history",
+          "request_count": 1,
+          "statuses": [
+            "200"
+          ],
+          "request_ids": [
+            "e6fa90df16ce4c20"
+          ],
+          "ok": true
+        }
+      ],
+      "screenshot": "verification\\v0.9.3-b\\mobile-closure\\screenshots\\en_export_history.png",
+      "result": "PASS",
+      "doc_width": 390
+    }
+  ],
+  "duplicate_writes": {
+    "export_jobs_before": 1,
+    "export_jobs_after": 1,
+    "export_jobs_delta": 0,
+    "created_export_id": "EXP000001",
+    "export_id_present_once": true,
+    "human_reviews_before": 4,
+    "human_reviews_after": 5,
+    "human_reviews_delta": 1,
+    "unique_hr_target": "mbl-en-9aecd460",
+    "hr_matching_records": 1
+  },
+  "summary": {
+    "total": 8,
+    "passed": 8,
+    "failed": 0,
+    "console_errors_total": 0,
+    "page_exceptions_total": 0,
+    "all_overflow_ok": true,
+    "all_raw_keys_clean": true,
+    "all_traceback_clean": true,
+    "duplicate_writes": {
+      "export_jobs_before": 1,
+      "export_jobs_after": 1,
+      "export_jobs_delta": 0,
+      "created_export_id": "EXP000001",
+      "export_id_present_once": true,
+      "human_reviews_before": 4,
+      "human_reviews_after": 5,
+      "human_reviews_delta": 1,
+      "unique_hr_target": "mbl-en-9aecd460",
+      "hr_matching_records": 1
+    }
+  },
+  "tab_bar_scroll": {
+    "overflow": 574,
+    "scrollWidth": 932,
+    "clientWidth": 358
+  }
+}
