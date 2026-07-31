@@ -1,6 +1,16 @@
+"""Writing Feedback API -- v0.9.3-A lifecycle-aware entry point.
+
+Liveness, readiness, and health endpoints are available immediately after
+the ASGI server starts. Heavy initialization (spaCy, database, services)
+runs inside a FastAPI lifespan context manager so the server remains
+responsive during startup.
+"""
+
 from __future__ import annotations
 
+from contextlib import asynccontextmanager
 from datetime import date
+from pathlib import Path
 from typing import Literal
 
 from fastapi import FastAPI, HTTPException, Query, Request
@@ -18,6 +28,7 @@ from app.api.schemas import (
 )
 from app.config import Settings, load_settings
 from app.database import Database
+from app.lifecycle import ServiceState, lifecycle
 from app.services import (
     AdminReanalysisService, CalfService, ConfigurationService, DashboardService, ReanalysisRequest,
     SubmissionService, build_submission_service, ReanalysisService, RevisionService,
@@ -35,40 +46,33 @@ from app.practice.service import PracticeService
 
 
 def _error(status: int, code: str, message: str, details=None) -> JSONResponse:
-    return JSONResponse(status_code=status, content={"error": {"code": code, "message": message, "details": details}})
-
-
-def create_app(
-    settings: Settings | None = None,
-    *,
-    repository: Database | None = None,
-    submission_service: SubmissionService | None = None,
-) -> FastAPI:
-    settings = settings or load_settings()
-    repository = repository or Database(settings.database_path)
-    repository.initialize()
-    submission_service = submission_service or build_submission_service(settings, repository)
-    learner_profiles = LearnerProfileService(repository)
-    api = FastAPI(title="Writing Feedback API", version=settings.application_version)
-    api.state.settings = settings
-    api.state.repository = repository
-    api.state.submission_service = submission_service
-    api.state.learner_profiles = learner_profiles
-    analyzer = submission_service.analyzer if hasattr(submission_service, "analyzer") else build_analyzer(settings)
-    metrics = default_metric_registry()
-    configurations = ConfigurationService(repository, analyzer.registry, metrics)
-    dashboards = DashboardService(repository, metrics)
-    reanalysis = ReanalysisService(repository, analyzer)
-    revisions = RevisionService(repository)
-    calf = CalfService(repository)
-    api.state.reanalysis = reanalysis
-    api.state.revisions = revisions
-    api.state.configurations = configurations
-    api.state.dashboards = dashboards
-    api.state.calf = calf
-    api.state.admin_reanalysis = AdminReanalysisService(
-        repository, settings, configurations, submission_service,
+    return JSONResponse(
+        status_code=status,
+        content={"error": {"code": code, "message": message, "details": details}},
     )
+
+
+def _package_available(package: str) -> bool:
+    try:
+        import importlib.util
+        return importlib.util.find_spec(package) is not None
+    except (ImportError, ValueError):
+        return False
+
+
+def _register_business_routes(api: FastAPI) -> None:
+    """Register all business routes. Called inside lifespan after init succeeds."""
+    settings = api.state.settings
+    repository = api.state.repository
+    submission_service = api.state.submission_service
+    analyzer = api.state.analyzer
+    metrics = api.state.metrics
+    configurations = api.state.configurations
+    dashboards = api.state.dashboards
+    reanalysis = api.state.reanalysis
+    revisions = api.state.revisions
+    calf = api.state.calf
+    learner_profiles = api.state.learner_profiles
 
     def apply_runtime_configuration(configuration: ConfigurationVersion) -> None:
         nonlocal analyzer
@@ -83,6 +87,9 @@ def create_app(
         submission_service.calf_configuration = configuration.payload
         if hasattr(submission_service.router.primary, "max_tokens"):
             submission_service.router.primary.max_tokens = configuration.payload.llm_max_tokens
+
+    from app.research.service import ResearchDataService  # noqa: F811
+    from app.research.schemas import ExportJob, HumanReviewCreate, PiiReview  # noqa: F811
 
     @api.exception_handler(RequestValidationError)
     async def validation_handler(_: Request, exc: RequestValidationError):
@@ -573,10 +580,10 @@ def create_app(
     @api.get("/api/v1/students/{student_id}/practice-targets")
     def get_practice_targets(student_id: str) -> list[dict]:
         require_student(student_id)
-        return api.state.repository.list_practice_targets(student_id)
+        return repository.list_practice_targets(student_id)
     @api.post("/api/v1/practice-targets")
     def create_practice_target(payload: dict) -> dict:
-        svc = PracticeService(api.state.repository)
+        svc = PracticeService(repository)
         target = svc.create_practice_target(
             student_id=payload.get("student_id", ""),
             source_submission_id=payload.get("source_submission_id", 0),
@@ -586,41 +593,41 @@ def create_app(
             gate_status=payload.get("gate_status", "selected"),
         )
         if target.get("status") != "practice_not_available":
-            target = api.state.repository.save_practice_target(target)
+            target = repository.save_practice_target(target)
         return target
     @api.post("/api/v1/practice-targets/{practice_target_id}/exercises")
     def create_exercise(practice_target_id: str, payload: dict) -> dict:
-        existing_target = api.state.repository.get_practice_target(practice_target_id)
+        existing_target = repository.get_practice_target(practice_target_id)
         if existing_target is None:
             raise HTTPException(404, "Practice target not found.")
-        svc = PracticeService(api.state.repository)
+        svc = PracticeService(repository)
         exercise = svc.generate_exercise(existing_target, payload.get("source_text", ""))
         if exercise.get("status") != "practice_not_available":
-            exercise = api.state.repository.save_exercise_instance(exercise)
+            exercise = repository.save_exercise_instance(exercise)
         return exercise
     @api.post("/api/v1/exercises/{exercise_id}/attempts")
     def submit_exercise_attempt(exercise_id: str, payload: dict) -> dict:
-        existing = api.state.repository.get_exercise_instance(exercise_id)
+        existing = repository.get_exercise_instance(exercise_id)
         if existing is None:
             raise HTTPException(404, "Exercise instance not found.")
-        attempts = api.state.repository.list_exercise_attempts(exercise_id)
+        attempts = repository.list_exercise_attempts(exercise_id)
         next_num = len(attempts) + 1
-        svc = PracticeService(api.state.repository)
+        svc = PracticeService(repository)
         attempt = svc.submit_attempt(exercise_id, payload.get("student_id", ""), payload.get("response_text", ""), next_num)
         if attempt.get("status") != "invalid_input":
-            attempt = api.state.repository.save_exercise_attempt(attempt)
+            attempt = repository.save_exercise_attempt(attempt)
         return attempt
     @api.get("/api/v1/students/{student_id}/engagement-traces")
     def get_engagement_traces(student_id: str) -> list[dict]:
         require_student(student_id)
-        return api.state.repository.list_feedback_engagement_traces(student_id)
+        return repository.list_feedback_engagement_traces(student_id)
     @api.get("/api/v1/students/{student_id}/transfer-evidence")
     def get_transfer_evidence(student_id: str) -> list[dict]:
         require_student(student_id)
-        return api.state.repository.list_transfer_evidence_candidates(student_id)
+        return repository.list_transfer_evidence_candidates(student_id)
     @api.get("/api/v1/research/export/schema")
     def research_export_schema() -> dict:
-        return ResearchDataService(api.state.repository).schema()
+        return ResearchDataService(repository).schema()
 
     @api.post("/api/v1/research/export/preview")
     def research_export_preview(payload: dict) -> dict:
@@ -628,7 +635,7 @@ def create_app(
             job = ExportJob(**payload)
         except Exception as e:
             raise HTTPException(422, str(e)) from None
-        return ResearchDataService(api.state.repository).preview(job)
+        return ResearchDataService(repository).preview(job)
 
     @api.post("/api/v1/research/export/run")
     def research_export_run(payload: dict) -> dict:
@@ -637,7 +644,7 @@ def create_app(
         except Exception as e:
             raise HTTPException(422, str(e)) from None
         try:
-            return ResearchDataService(api.state.repository).run_export(
+            return ResearchDataService(repository).run_export(
                 job,
                 git_commit=api.state.git_commit if hasattr(api.state, 'git_commit') else None,
                 migration_version=getattr(api.state, 'migration_version', None),
@@ -656,40 +663,320 @@ def create_app(
 
     @api.get("/api/v1/research/data-quality")
     def research_data_quality() -> dict:
-        return ResearchDataService(api.state.repository).data_quality_report().model_dump(mode='json')
+        return ResearchDataService(repository).data_quality_report().model_dump(mode='json')
 
     @api.get("/api/v1/submissions/{submission_id}/pii-candidates")
     def pii_candidates(submission_id: int) -> list[dict]:
         try:
-            return ResearchDataService(api.state.repository).scan_pii(submission_id)
+            return ResearchDataService(repository).scan_pii(submission_id)
         except LookupError as e:
             raise HTTPException(404, str(e)) from None
 
     @api.post("/api/v1/submissions/{submission_id}/pii-review")
     def pii_review(submission_id: int, payload: dict) -> dict:
-        from app.research.schemas import PiiReview
         reviews = [PiiReview(**item) for item in payload.get('reviews', [])]
-        return ResearchDataService(api.state.repository).apply_pii_review(submission_id, reviews)
+        return ResearchDataService(repository).apply_pii_review(submission_id, reviews)
 
     @api.post("/api/v1/research/reviews")
     def create_human_review(payload: dict) -> dict:
         try:
             review = HumanReviewCreate(**payload)
-            result = ResearchDataService(api.state.repository).create_human_review(review)
+            result = ResearchDataService(repository).create_human_review(review)
             return result.model_dump(mode='json')
         except Exception as e:
             raise HTTPException(422, str(e)) from None
 
     @api.get("/api/v1/research/reviews")
     def list_human_reviews(target_type: str | None = None, target_id: str | None = None) -> list[dict]:
-        return ResearchDataService(api.state.repository).get_human_reviews(target_type, target_id)
+        return ResearchDataService(repository).get_human_reviews(target_type, target_id)
     return api
-def _package_available(package: str) -> bool:
+
+
+@asynccontextmanager
+async def _lifespan(api: FastAPI):
+    """Lifespan: initializes services on startup, cleans up on shutdown."""
+    import logging
+    logger = logging.getLogger("writing_feedback.startup")
+
+    # Stage 1: Settings
+    stage = lifecycle.start_stage("load_settings")
     try:
-        import importlib.util
-        return importlib.util.find_spec(package) is not None
-    except (ImportError, ValueError):
-        return False
+        settings = load_settings()
+        lifecycle.application_version = settings.application_version
+        lifecycle.prompt_version = settings.prompt_version
+        lifecycle.complete_stage(stage, success=True)
+        logger.info("Stage load_settings: OK (%.0fms)", stage.elapsed_ms)
+    except Exception as exc:
+        lifecycle.complete_stage(stage, success=False, error_category=type(exc).__name__)
+        lifecycle.transition(ServiceState.FAILED)
+        lifecycle.failed_stage = "load_settings"
+        lifecycle.failure_category = type(exc).__name__
+        logger.error("Stage load_settings: FAILED (%s)", type(exc).__name__)
+        yield
+        return
+
+    # Stage 2: Database
+    stage = lifecycle.start_stage("database_init")
+    try:
+        repository = Database(settings.database_path)
+        repository.initialize()
+        mv = repository.migration_version()
+        lifecycle.database_status = "connected"
+        lifecycle.migration_version = mv
+        lifecycle.complete_stage(stage, success=True)
+        logger.info("Stage database_init: OK migration=%d (%.0fms)", mv, stage.elapsed_ms)
+    except Exception as exc:
+        lifecycle.complete_stage(stage, success=False, error_category=type(exc).__name__)
+        lifecycle.database_status = "unavailable"
+        lifecycle.transition(ServiceState.FAILED)
+        lifecycle.failed_stage = "database_init"
+        lifecycle.failure_category = type(exc).__name__
+        logger.error("Stage database_init: FAILED (%s)", type(exc).__name__)
+        yield
+        return
+
+    # Stage 3: Analyzer (spaCy)
+    stage = lifecycle.start_stage("build_analyzer")
+    try:
+        analyzer = build_analyzer(settings)
+        lifecycle.active_analyzer = getattr(analyzer, "active_analyzer", "basic")
+        lifecycle.active_analyzer_version = getattr(analyzer, "version", "unknown")
+        lifecycle.nlp_model_name = settings.spacy_model
+        spacy_reg = getattr(analyzer, "registry", {})
+        spacy_impl = spacy_reg.get("spacy") if isinstance(spacy_reg, dict) else None
+        lifecycle.nlp_model_installed = bool(getattr(spacy_impl, "nlp", None)) if spacy_impl else False  # v0.9.3-a: use getattr(spacy_impl, "nlp") if spacy_impl else False
+        lifecycle.nlp_model_version = getattr(spacy_impl, "model_version", None) if spacy_impl else None
+        lifecycle.analyzer_fallback_active = getattr(analyzer, "fallback_active", False)
+        lifecycle.complete_stage(stage, success=True)
+        logger.info("Stage build_analyzer: OK analyzer=%s (%.0fms)", lifecycle.active_analyzer, stage.elapsed_ms)
+    except Exception as exc:
+        lifecycle.complete_stage(stage, success=False, error_category=type(exc).__name__)
+        lifecycle.transition(ServiceState.FAILED)
+        lifecycle.failed_stage = "build_analyzer"
+        lifecycle.failure_category = type(exc).__name__
+        logger.error("Stage build_analyzer: FAILED (%s)", type(exc).__name__)
+        yield
+        return
+
+    # Stage 4: Business services
+    stage = lifecycle.start_stage("build_services")
+    try:
+        sub_svc = build_submission_service(settings, repository)
+        lps = LearnerProfileService(repository)
+        m_registry = default_metric_registry()
+        cfgs = ConfigurationService(repository, analyzer.registry, m_registry)
+        dbs = DashboardService(repository, m_registry)
+        reanalysis_svc = ReanalysisService(repository, analyzer)
+        rvs = RevisionService(repository)
+        clf = CalfService(repository)
+
+        lifecycle.llm_provider = settings.llm_provider
+        lifecycle.llm_api_configured = bool(settings.deepseek_api_key) if settings.llm_provider == "deepseek" else False
+
+        try:
+            active_cfg = repository.get_active_configuration()
+            lifecycle.active_configuration = active_cfg.version
+        except RuntimeError:
+            lifecycle.active_configuration = None
+
+        lifecycle.complete_stage(stage, success=True)
+        logger.info("Stage build_services: OK (%.0fms)", stage.elapsed_ms)
+    except Exception as exc:
+        lifecycle.complete_stage(stage, success=False, error_category=type(exc).__name__)
+        lifecycle.transition(ServiceState.FAILED)
+        lifecycle.failed_stage = "build_services"
+        lifecycle.failure_category = type(exc).__name__
+        logger.error("Stage build_services: FAILED (%s)", type(exc).__name__)
+        yield
+        return
+
+    # Store on app state
+    api.state.settings = settings
+    api.state.repository = repository
+    api.state.submission_service = sub_svc
+    api.state.learner_profiles = lps
+    api.state.analyzer = analyzer
+    api.state.metrics = m_registry
+    api.state.configurations = cfgs
+    api.state.dashboards = dbs
+    api.state.reanalysis = reanalysis_svc
+    api.state.revisions = rvs
+    api.state.calf = clf
+    api.state.admin_reanalysis = AdminReanalysisService(
+        repository, settings, cfgs, sub_svc,
+    )
+
+    # Register business routes
+    _register_business_routes(api)
+
+    lifecycle.transition(ServiceState.READY)
+    logger.info("Startup complete: ready total=%.0fms stages=%d",
+                 lifecycle.startup_elapsed_ms, len(lifecycle.stages))
+
+    yield
+
+    lifecycle.transition(ServiceState.STOPPING)
+    logger.info("Shutdown: stopping")
+
+
+def _build_full_app(
+    settings: Settings,
+    *,
+    repository: Database | None = None,
+    submission_service: SubmissionService | None = None,
+) -> FastAPI:
+    """Build a fully-initialized app immediately (used by tests)."""
+    if settings is None:
+        settings = load_settings()
+    if repository is None:
+        repository = Database(settings.database_path)
+    repository.initialize()
+    if submission_service is None:
+        submission_service = build_submission_service(settings, repository)
+    learner_profiles = LearnerProfileService(repository)
+    analyzer = submission_service.analyzer if hasattr(submission_service, "analyzer") else build_analyzer(settings)
+    metrics = default_metric_registry()
+    configurations = ConfigurationService(repository, analyzer.registry, metrics)
+    dashboards = DashboardService(repository, metrics)
+    reanalysis = ReanalysisService(repository, analyzer)
+    revisions = RevisionService(repository)
+    calf = CalfService(repository)
+
+    lifecycle.application_version = settings.application_version
+    lifecycle.prompt_version = settings.prompt_version
+    lifecycle.database_status = "connected"
+    lifecycle.migration_version = repository.migration_version()
+    lifecycle.active_analyzer = getattr(analyzer, "active_analyzer", "basic")
+    lifecycle.active_analyzer_version = getattr(analyzer, "version", "unknown")
+    lifecycle.nlp_model_name = settings.spacy_model
+    lifecycle.llm_provider = settings.llm_provider
+    lifecycle.llm_api_configured = bool(settings.deepseek_api_key) if settings.llm_provider == "deepseek" else False
+    lifecycle.transition(ServiceState.READY)
+
+    api = FastAPI(title="Writing Feedback API", version="0.8.0")
+    api.state.settings = settings
+    api.state.repository = repository
+    api.state.submission_service = submission_service
+    api.state.learner_profiles = learner_profiles
+    api.state.analyzer = analyzer
+    api.state.metrics = metrics
+    api.state.configurations = configurations
+    api.state.dashboards = dashboards
+    api.state.reanalysis = reanalysis
+    api.state.revisions = revisions
+    api.state.calf = calf
+    api.state.admin_reanalysis = AdminReanalysisService(repository, settings, configurations, submission_service)
+
+    _register_business_routes(api)
+    _register_lifecycle_routes(api)
+    return api
+
+
+def _register_lifecycle_routes(api: FastAPI) -> None:
+    """Register liveness, readiness, and health endpoints."""
+
+    @api.get("/api/v1/system/live")
+    def liveness():
+        return {"status": "ok", "lifecycle_state": lifecycle.state.value}
+
+    @api.get("/api/v1/system/ready")
+    def readiness():
+        ready = lifecycle.state in (ServiceState.READY, ServiceState.DEGRADED)
+        resp = {"status": lifecycle.state.value, "ready": ready}
+        if lifecycle.state == ServiceState.DEGRADED:
+            resp["degraded_components"] = lifecycle.degraded_components
+        if not ready:
+            resp["failure_category"] = lifecycle.failure_category
+            resp["failed_stage"] = lifecycle.failed_stage
+            resp["startup_elapsed_ms"] = round(lifecycle.startup_elapsed_ms, 1)
+        return resp
+
+    @api.get("/api/v1/system/health", response_model=HealthResponse)
+    def health():
+        h = lifecycle.health_dict()
+        return HealthResponse(
+            status=h["status"],
+            application_version=h["application_version"],
+            api_version=h["api_version"],
+            database_status=h["database_status"],
+            database_migration_version=h["database_migration_version"] or 0,
+            prompt_version=h["prompt_version"],
+            schema_version=h["schema_version"],
+            llm_provider=h["llm_provider"] or "unknown",
+            llm_api_configured=h["llm_api_configured"],
+            active_analyzer=h["active_analyzer"] or "unknown",
+            active_analyzer_version=h["active_analyzer_version"] or "unknown",
+            spacy_installed=h["spacy_installed"],
+            nlp_model_name=h["nlp_model_name"] or "N/A",
+            nlp_model_installed=h["nlp_model_installed"],
+            nlp_model_version=h["nlp_model_version"],
+            analyzer_fallback_active=h["analyzer_fallback_active"],
+            analyzer_fallback_reason=h["analyzer_fallback_reason"],
+        )
+
+
+def create_app(
+    settings: Settings | None = None,
+    *,
+    repository: Database | None = None,
+    submission_service: SubmissionService | None = None,
+) -> FastAPI:
+    """Create the FastAPI application.
+
+    When settings is None (production mode): uses lifespan for lazy init. When settings is provided (test mode): builds fully immediately. Optional repository and submission_service allow dependency injection.
+    When settings is provided (test mode): builds fully immediately.
+    """
+    if settings is not None or repository is not None or submission_service is not None:
+        return _build_full_app(settings, repository=repository, submission_service=submission_service)
+
+    api = FastAPI(
+        title="Writing Feedback API",
+        version="0.8.0",
+        lifespan=_lifespan,
+    )
+    _register_lifecycle_routes(api)
+    return api
+
+    @api.get("/api/v1/system/live")
+    def liveness():
+        return {"status": "ok", "lifecycle_state": lifecycle.state.value}
+
+    @api.get("/api/v1/system/ready")
+    def readiness():
+        ready = lifecycle.state in (ServiceState.READY, ServiceState.DEGRADED)
+        resp = {"status": lifecycle.state.value, "ready": ready}
+        if lifecycle.state == ServiceState.DEGRADED:
+            resp["degraded_components"] = lifecycle.degraded_components
+        if not ready:
+            resp["failure_category"] = lifecycle.failure_category
+            resp["failed_stage"] = lifecycle.failed_stage
+            resp["startup_elapsed_ms"] = round(lifecycle.startup_elapsed_ms, 1)
+        return resp
+
+    @api.get("/api/v1/system/health", response_model=HealthResponse)
+    def health():
+        h = lifecycle.health_dict()
+        return HealthResponse(
+            status=h["status"],
+            application_version=h["application_version"],
+            api_version=h["api_version"],
+            database_status=h["database_status"],
+            database_migration_version=h["database_migration_version"] or 0,
+            prompt_version=h["prompt_version"],
+            schema_version=h["schema_version"],
+            llm_provider=h["llm_provider"] or "unknown",
+            llm_api_configured=h["llm_api_configured"],
+            active_analyzer=h["active_analyzer"] or "unknown",
+            active_analyzer_version=h["active_analyzer_version"] or "unknown",
+            spacy_installed=h["spacy_installed"],
+            nlp_model_name=h["nlp_model_name"] or "N/A",
+            nlp_model_installed=h["nlp_model_installed"],
+            nlp_model_version=h["nlp_model_version"],
+            analyzer_fallback_active=h["analyzer_fallback_active"],
+            analyzer_fallback_reason=h["analyzer_fallback_reason"],
+        )
+
+    return api
 
 
 app = create_app()

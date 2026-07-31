@@ -10,7 +10,7 @@ class ApiClientError(RuntimeError):
 
 
 class WritingFeedbackApiClient:
-    def __init__(self, base_url: str, *, timeout: float = 90.0, session=None) -> None:
+    def __init__(self, base_url: str, *, timeout: float = 15.0, session=None) -> None:
         self.base_url = base_url.rstrip("/")
         self.timeout = timeout
         self.session = session or requests.Session()

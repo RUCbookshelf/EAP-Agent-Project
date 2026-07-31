@@ -3,6 +3,9 @@ from __future__ import annotations
 import os
 
 from app.config import load_settings
+import json
+import time
+from urllib.request import urlopen
 from scripts.service_processes import require_free_port, start_api, start_streamlit, stop_process, wait_http
 
 
@@ -15,8 +18,34 @@ def main() -> None:
     api = ui = None
     try:
         api = start_api(os.sys.executable, settings.api_host, settings.api_port, env)
-        wait_http(f"{settings.api_base_url}/api/v1/system/health")
-        print(f"FastAPI:   {settings.api_base_url}")
+
+        # Wait for liveness first (confirms process is alive)
+        live_url = f"{settings.api_base_url}/api/v1/system/live"
+        wait_http(live_url, timeout=15.0)
+        print(f"FastAPI process alive: {settings.api_base_url}")
+
+        # Poll readiness with bounded retries
+        ready_url = f"{settings.api_base_url}/api/v1/system/ready"
+        deadline = time.monotonic() + 60.0
+        last_state = "unknown"
+        while time.monotonic() < deadline:
+            try:
+                with urlopen(ready_url, timeout=2) as resp:
+                    data = json.loads(resp.read())
+                    current_state = data.get("status", "unknown")
+                    if current_state != last_state:
+                        print(f"API state: {current_state}")
+                        last_state = current_state
+                    if data.get("ready"):
+                        print(f"FastAPI ready:   {settings.api_base_url}")
+                        break
+            except Exception:
+                pass
+            time.sleep(0.5)
+        else:
+            print(f"WARNING: API did not become ready within 60s (last state: {last_state})")
+            print("Starting Streamlit anyway — it will show the current state.")
+
         print(f"API docs:  {settings.api_base_url}/docs")
         print(f"Streamlit: http://127.0.0.1:{settings.streamlit_port}")
         ui = start_streamlit(os.sys.executable, settings.streamlit_port, env)
