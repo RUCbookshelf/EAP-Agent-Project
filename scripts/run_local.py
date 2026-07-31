@@ -6,11 +6,17 @@ from app.config import load_settings
 import json
 import time
 from urllib.request import urlopen
-from scripts.service_processes import require_free_port, start_api, start_streamlit, stop_process, wait_http
+from scripts.service_processes import kill_port_processes, require_free_port, start_api, start_streamlit, stop_process, wait_http
 
 
 def main() -> None:
     settings = load_settings()
+    # Kill any stale processes from a previous session
+    killed_api = kill_port_processes(settings.api_port)
+    killed_ui = kill_port_processes(settings.streamlit_port)
+    if killed_api or killed_ui:
+        print(f"Cleaned up stale processes: API={killed_api}, Streamlit={killed_ui}")
+
     require_free_port(settings.api_host, settings.api_port)
     require_free_port("127.0.0.1", settings.streamlit_port)
     env = os.environ.copy()

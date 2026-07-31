@@ -269,5 +269,7 @@
   "journey_recurrence": "在后续任务中观察到目标行为",
   "journey_nonrecurrence": "在后续任务中未观察到目标行为",
   "journey_mixed": "后续任务中证据混合",
-  "journey_timeline": "观察事件时间线"
+  "journey_timeline": "观察事件时间线",
+  "app_api_starting": "反馈API正在启动中，请稍候再试。",
+  "app_api_failed": "反馈API启动失败，请检查终端输出并重新运行run.bat。"
 }

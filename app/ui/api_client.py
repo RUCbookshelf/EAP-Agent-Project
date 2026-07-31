@@ -33,6 +33,25 @@ class WritingFeedbackApiClient:
             raise ApiClientError(message)
         return payload
 
+    def live(self) -> dict[str, Any]:
+        try:
+            return self._request("GET", "/api/v1/system/live")
+        except ApiClientError:
+            return {"status": "process_not_running", "lifecycle_state": "unknown"}
+
+    def ready(self) -> dict[str, Any]:
+        try:
+            return self._request("GET", "/api/v1/system/ready")
+        except ApiClientError as exc:
+            return {"status": "not_reachable", "ready": False, "error": str(exc)}
+
+    def lifecycle_state(self) -> str:
+        try:
+            data = self.live()
+            return data.get("lifecycle_state", "unknown")
+        except Exception:
+            return "unknown"
+
     def health(self) -> dict[str, Any]:
         return self._request("GET", "/api/v1/system/health")
 

@@ -12,6 +12,32 @@ from urllib.request import urlopen
 ROOT = Path(__file__).resolve().parents[1]
 
 
+
+
+def kill_port_processes(port: int) -> int:
+    import subprocess as _sp
+    killed = 0
+    try:
+        result = _sp.run(
+            ["netstat", "-ano"], capture_output=True, text=True, timeout=5,
+        )
+        pids_seen = set()
+        for line in result.stdout.splitlines():
+            if f":{port}" in line and "LISTENING" in line:
+                parts = line.strip().split()
+                pid = parts[-1]
+                if pid.isdigit() and pid not in pids_seen:
+                    pids_seen.add(pid)
+                    try:
+                        _sp.run(["taskkill", "/F", "/PID", pid],
+                                capture_output=True, timeout=5)
+                        killed += 1
+                    except Exception:
+                        pass
+    except Exception:
+        pass
+    return killed
+
 def require_free_port(host: str, port: int) -> None:
     with socket.socket() as sock:
         try:

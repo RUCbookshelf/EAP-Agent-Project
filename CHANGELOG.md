@@ -1,3 +1,33 @@
+
+## v0.9.3-A (2026-07-31)
+
+### Fixed
+- REL-001: Intermittent FastAPI startup hang eliminated. Heavy initialization
+  (spaCy, database, services) moved from module-level import to FastAPI lifespan
+  context manager. Server now responds to liveness checks immediately.
+- API client timeout reduced from 90s to 15s for faster failure detection.
+
+### Added
+- Service lifecycle model (app/lifecycle.py): ServiceState enum, ServiceLifecycle
+  thread-safe singleton with stage timing and sanitized health info.
+- Liveness endpoint: GET /api/v1/system/live -- confirms process is alive.
+- Readiness endpoint: GET /api/v1/system/ready -- confirms all required deps available.
+- Stale process cleanup in run_local.py (kill_port_processes).
+- Lifecycle-aware Streamlit UI: distinguishes API starting from unavailable.
+- New locale keys: app_api_starting, app_api_failed (en + zh_CN).
+
+### Changed
+- app/api/main.py: create_app() uses FastAPI lifespan for production mode.
+  Backward-compatible with tests via optional settings/repository parameters.
+- scripts/run_local.py: bounded readiness polling with 60s deadline.
+- scripts/service_processes.py: added kill_port_processes().
+- app/ui/api_client.py: timeout 90s -> 15s; added live(), ready(), lifecycle_state().
+- Health endpoint enhanced with lifecycle_state and startup_elapsed_ms.
+
+### Backend
+- Migration 12 preserved. Active configuration config-v0.9.0 preserved.
+- All existing backend behavior unchanged after readiness is reached.
+- pytest: 289 passed, 8 skipped (baseline: 271 passed, 8 skipped).
 ﻿
 ## v0.9.2.1 (2026-07-31)
 

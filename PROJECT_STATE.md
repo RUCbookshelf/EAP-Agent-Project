@@ -1,5 +1,24 @@
 # Project State
 
+## Current v0.9.3-A State
+
+- Status: in_progress; database migration 12; active configuration config-v0.9.0 preserved.
+- Lifecycle-aware startup: FastAPI lifespan replaces module-level create_app(). Heavy
+  initialization (spaCy, DB, services) runs after server is live.
+- New endpoints: /api/v1/system/live (liveness), /api/v1/system/ready (readiness).
+- Health endpoint enhanced with lifecycle_state and startup_elapsed_ms.
+- API client timeout: 90s -> 15s. Stale process cleanup on startup.
+- Streamlit shows lifecycle state (starting vs unavailable).
+- pytest: 289 passed, 8 skipped (v0.9.2.1 baseline: 271 passed, 8 skipped).
+- REL-001 (startup hang) fixed. Backend unchanged after readiness.
+
+v1.0 remains not_started.
+
+
+---
+
+# Project State
+
 ## Current v0.9.2 State
 
 - Status: in_progress; database migration 12; active configuration config-v0.9.0 preserved.

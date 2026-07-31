@@ -94,14 +94,26 @@ def _render_system_status(api_client: WritingFeedbackApiClient, lang: str) -> No
     try:
         health = api_client.health()
         analyzer_info = f"{health.get('active_analyzer','?')} {health.get('active_analyzer_version','')}"
-        st.caption(f"[System] {t('app_analyzer_label', lang)}: {analyzer_info} | NLP: {health.get('nlp_model_name','N/A')}")
+        lifecycle = health.get("lifecycle_state", "unknown")
+        st.caption(f"[System] {t('app_analyzer_label', lang)}: {analyzer_info} | NLP: {health.get('nlp_model_name','N/A')} | State: {lifecycle}")
         requested = health.get("llm_provider")
         if requested == "deepseek" and health.get("llm_api_configured"):
             st.caption(t("app_deepseek_configured", lang))
         elif requested:
             st.caption(t("app_provider_local_demo", lang))
     except ApiClientError:
-        st.info(t("app_api_unavailable", lang))
+        # Try to get lifecycle state for a better message
+        try:
+            live_data = api_client.live()
+            state = live_data.get("lifecycle_state", "unknown")
+            if state == "starting":
+                st.info(t("app_api_starting", lang))
+            elif state == "failed":
+                st.error(t("app_api_failed", lang))
+            else:
+                st.info(t("app_api_unavailable", lang))
+        except Exception:
+            st.info(t("app_api_unavailable", lang))
 
 
 def _render_sidebar(lang: str) -> tuple[str, str]:

@@ -269,5 +269,7 @@
   "journey_recurrence": "Target behavior observed in later task",
   "journey_nonrecurrence": "Target behavior not observed in later task",
   "journey_mixed": "Mixed evidence in later task",
-  "journey_timeline": "Observable Event Timeline"
+  "journey_timeline": "Observable Event Timeline",
+  "app_api_starting": "The feedback API is starting up. Please wait a moment and try again.",
+  "app_api_failed": "The feedback API failed to start. Check the terminal for details and restart run.bat."
 }
