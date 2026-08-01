@@ -1,0 +1,1387 @@
+{
+  "en_1280x900": {
+    "combo": "en_1280x900",
+    "locale": "en",
+    "viewport": "1280x900",
+    "pages": [
+      {
+        "page": "student_home",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 1280,
+        "viewport_width": 1280,
+        "body_font_size": "16px",
+        "h1_size": "44px",
+        "h2_size": "36px",
+        "component_styles": {
+          "button": null,
+          "input": {
+            "radius": "0px",
+            "border": "4px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "tab": null
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\en_1280x900_student_home.png"
+      },
+      {
+        "page": "student_writing",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 1280,
+        "viewport_width": 1280,
+        "body_font_size": "16px",
+        "h1_size": "44px",
+        "h2_size": "36px",
+        "component_styles": {
+          "button": {
+            "radius": "0px",
+            "border": "1px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "input": {
+            "radius": "0px",
+            "border": "4px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "tab": null
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\en_1280x900_student_writing.png"
+      },
+      {
+        "page": "student_feedback",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 1280,
+        "viewport_width": 1280,
+        "body_font_size": "16px",
+        "h1_size": "44px",
+        "h2_size": "36px",
+        "component_styles": {
+          "button": null,
+          "input": null,
+          "tab": null
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\en_1280x900_student_feedback.png"
+      },
+      {
+        "page": "student_revision",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 1280,
+        "viewport_width": 1280,
+        "body_font_size": "16px",
+        "h1_size": "44px",
+        "h2_size": "36px",
+        "component_styles": {
+          "button": null,
+          "input": null,
+          "tab": null
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\en_1280x900_student_revision.png"
+      },
+      {
+        "page": "student_practice",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 1280,
+        "viewport_width": 1280,
+        "body_font_size": "16px",
+        "h1_size": "44px",
+        "h2_size": "36px",
+        "component_styles": {
+          "button": null,
+          "input": {
+            "radius": "0px",
+            "border": "4px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "tab": null
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\en_1280x900_student_practice.png"
+      },
+      {
+        "page": "student_journey",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 1280,
+        "viewport_width": 1280,
+        "body_font_size": "16px",
+        "h1_size": "44px",
+        "h2_size": "36px",
+        "component_styles": {
+          "button": null,
+          "input": {
+            "radius": "0px",
+            "border": "4px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "tab": null
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\en_1280x900_student_journey.png"
+      },
+      {
+        "page": "research_overview",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 1280,
+        "viewport_width": 1280,
+        "body_font_size": "16px",
+        "h1_size": "44px",
+        "h2_size": "36px",
+        "component_styles": {
+          "button": null,
+          "input": null,
+          "tab": null
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\en_1280x900_research_overview.png"
+      },
+      {
+        "page": "research_evidence",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 1280,
+        "viewport_width": 1280,
+        "body_font_size": "16px",
+        "h1_size": "44px",
+        "h2_size": "36px",
+        "component_styles": {
+          "button": {
+            "radius": "0px",
+            "border": "1px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "input": null,
+          "tab": null
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\en_1280x900_research_evidence.png"
+      },
+      {
+        "page": "research_calf",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 1280,
+        "viewport_width": 1280,
+        "body_font_size": "16px",
+        "h1_size": "44px",
+        "h2_size": "36px",
+        "component_styles": {
+          "button": null,
+          "input": null,
+          "tab": null
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\en_1280x900_research_calf.png"
+      },
+      {
+        "page": "research_learning",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 1280,
+        "viewport_width": 1280,
+        "body_font_size": "16px",
+        "h1_size": "44px",
+        "h2_size": "36px",
+        "component_styles": {
+          "button": null,
+          "input": {
+            "radius": "0px",
+            "border": "4px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "tab": null
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\en_1280x900_research_learning.png"
+      },
+      {
+        "page": "research_data",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 1280,
+        "viewport_width": 1280,
+        "body_font_size": "16px",
+        "h1_size": "44px",
+        "h2_size": "36px",
+        "component_styles": {
+          "button": {
+            "radius": "0px",
+            "border": "1px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "input": {
+            "radius": "0px",
+            "border": "4px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "tab": {
+            "radius": "0px",
+            "border": "0px none",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          }
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\en_1280x900_research_data.png"
+      },
+      {
+        "page": "research_audit",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 1280,
+        "viewport_width": 1280,
+        "body_font_size": "16px",
+        "h1_size": "44px",
+        "h2_size": "36px",
+        "component_styles": {
+          "button": {
+            "radius": "0px",
+            "border": "1px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "input": {
+            "radius": "0px",
+            "border": "4px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "tab": {
+            "radius": "0px",
+            "border": "0px none",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          }
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\en_1280x900_research_audit.png"
+      }
+    ],
+    "interactions": [
+      {
+        "action": "submit_without_writing_prompt",
+        "generic_422_error_visible": true,
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\en_1280x900_writing_validation_error.png"
+      },
+      {
+        "action": "submit_demo_essay",
+        "success_text_visible": true,
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\en_1280x900_writing_after_submit.png"
+      },
+      {
+        "action": "feedback_page",
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\en_1280x900_feedback_after_submit.png"
+      },
+      {
+        "action": "revision_page",
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\en_1280x900_revision_after_submit.png"
+      },
+      {
+        "action": "load_practice_s02",
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\en_1280x900_practice_loaded.png"
+      },
+      {
+        "action": "load_journey_s02",
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\en_1280x900_journey_loaded.png"
+      },
+      {
+        "action": "load_evidence_submission_1",
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\en_1280x900_evidence_loaded.png"
+      },
+      {
+        "action": "research_data_8_tabs_clicked",
+        "result": "PASS"
+      },
+      {
+        "action": "system_audit_rendered",
+        "result": "PASS"
+      }
+    ],
+    "component_styles": {
+      "button": {
+        "radius": "0px",
+        "border": "1px solid",
+        "shadow": "none",
+        "transition": "0s",
+        "animation": "none"
+      },
+      "input": {
+        "radius": "0px",
+        "border": "4px solid",
+        "shadow": "none",
+        "transition": "0s",
+        "animation": "none"
+      },
+      "tab": {
+        "radius": "0px",
+        "border": "0px none",
+        "shadow": "none",
+        "transition": "0s",
+        "animation": "none"
+      }
+    },
+    "focus": {
+      "outline": "solid 3px rgb(41, 173, 255)",
+      "outlineOffset": "2px"
+    },
+    "console_all": [],
+    "pageerrors_all": []
+  },
+  "zh_CN_1280x900": {
+    "combo": "zh_CN_1280x900",
+    "locale": "zh_CN",
+    "viewport": "1280x900",
+    "pages": [
+      {
+        "page": "student_home",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 1280,
+        "viewport_width": 1280,
+        "body_font_size": "16px",
+        "h1_size": "44px",
+        "h2_size": "36px",
+        "component_styles": {
+          "button": null,
+          "input": {
+            "radius": "0px",
+            "border": "4px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "tab": null
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\zh_CN_1280x900_student_home.png"
+      },
+      {
+        "page": "student_writing",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 1280,
+        "viewport_width": 1280,
+        "body_font_size": "16px",
+        "h1_size": "44px",
+        "h2_size": "36px",
+        "component_styles": {
+          "button": {
+            "radius": "0px",
+            "border": "1px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "input": {
+            "radius": "0px",
+            "border": "4px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "tab": null
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\zh_CN_1280x900_student_writing.png"
+      },
+      {
+        "page": "student_feedback",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 1280,
+        "viewport_width": 1280,
+        "body_font_size": "16px",
+        "h1_size": "44px",
+        "h2_size": "36px",
+        "component_styles": {
+          "button": null,
+          "input": null,
+          "tab": null
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\zh_CN_1280x900_student_feedback.png"
+      },
+      {
+        "page": "student_revision",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 1280,
+        "viewport_width": 1280,
+        "body_font_size": "16px",
+        "h1_size": "44px",
+        "h2_size": "36px",
+        "component_styles": {
+          "button": null,
+          "input": null,
+          "tab": null
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\zh_CN_1280x900_student_revision.png"
+      },
+      {
+        "page": "student_practice",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 1280,
+        "viewport_width": 1280,
+        "body_font_size": "16px",
+        "h1_size": "44px",
+        "h2_size": "36px",
+        "component_styles": {
+          "button": null,
+          "input": {
+            "radius": "0px",
+            "border": "4px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "tab": null
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\zh_CN_1280x900_student_practice.png"
+      },
+      {
+        "page": "student_journey",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 1280,
+        "viewport_width": 1280,
+        "body_font_size": "16px",
+        "h1_size": "44px",
+        "h2_size": "36px",
+        "component_styles": {
+          "button": null,
+          "input": {
+            "radius": "0px",
+            "border": "4px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "tab": null
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\zh_CN_1280x900_student_journey.png"
+      },
+      {
+        "page": "research_overview",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 1280,
+        "viewport_width": 1280,
+        "body_font_size": "16px",
+        "h1_size": "44px",
+        "h2_size": "36px",
+        "component_styles": {
+          "button": null,
+          "input": null,
+          "tab": null
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\zh_CN_1280x900_research_overview.png"
+      },
+      {
+        "page": "research_evidence",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 1280,
+        "viewport_width": 1280,
+        "body_font_size": "16px",
+        "h1_size": "44px",
+        "h2_size": "36px",
+        "component_styles": {
+          "button": {
+            "radius": "0px",
+            "border": "1px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "input": null,
+          "tab": null
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\zh_CN_1280x900_research_evidence.png"
+      },
+      {
+        "page": "research_calf",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 1280,
+        "viewport_width": 1280,
+        "body_font_size": "16px",
+        "h1_size": "44px",
+        "h2_size": "36px",
+        "component_styles": {
+          "button": null,
+          "input": null,
+          "tab": null
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\zh_CN_1280x900_research_calf.png"
+      },
+      {
+        "page": "research_learning",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 1280,
+        "viewport_width": 1280,
+        "body_font_size": "16px",
+        "h1_size": "44px",
+        "h2_size": "36px",
+        "component_styles": {
+          "button": null,
+          "input": {
+            "radius": "0px",
+            "border": "4px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "tab": null
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\zh_CN_1280x900_research_learning.png"
+      },
+      {
+        "page": "research_data",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 1280,
+        "viewport_width": 1280,
+        "body_font_size": "16px",
+        "h1_size": "44px",
+        "h2_size": "36px",
+        "component_styles": {
+          "button": {
+            "radius": "0px",
+            "border": "1px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "input": {
+            "radius": "0px",
+            "border": "4px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "tab": {
+            "radius": "0px",
+            "border": "0px none",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          }
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\zh_CN_1280x900_research_data.png"
+      },
+      {
+        "page": "research_audit",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 1280,
+        "viewport_width": 1280,
+        "body_font_size": "16px",
+        "h1_size": "44px",
+        "h2_size": "36px",
+        "component_styles": {
+          "button": {
+            "radius": "0px",
+            "border": "1px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "input": {
+            "radius": "0px",
+            "border": "4px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "tab": {
+            "radius": "0px",
+            "border": "0px none",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          }
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\zh_CN_1280x900_research_audit.png"
+      }
+    ],
+    "interactions": [],
+    "component_styles": {
+      "button": {
+        "radius": "0px",
+        "border": "1px solid",
+        "shadow": "none",
+        "transition": "0s",
+        "animation": "none"
+      },
+      "input": {
+        "radius": "0px",
+        "border": "4px solid",
+        "shadow": "none",
+        "transition": "0s",
+        "animation": "none"
+      },
+      "tab": {
+        "radius": "0px",
+        "border": "0px none",
+        "shadow": "none",
+        "transition": "0s",
+        "animation": "none"
+      }
+    },
+    "focus": {
+      "outline": "solid 3px rgb(41, 173, 255)",
+      "outlineOffset": "2px"
+    },
+    "console_all": [],
+    "pageerrors_all": []
+  },
+  "en_390x844": {
+    "combo": "en_390x844",
+    "locale": "en",
+    "viewport": "390x844",
+    "pages": [
+      {
+        "page": "student_home",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 390,
+        "viewport_width": 390,
+        "body_font_size": "16px",
+        "h1_size": "22.4px",
+        "h2_size": "17.6px",
+        "component_styles": {
+          "button": null,
+          "input": {
+            "radius": "0px",
+            "border": "2px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "tab": null
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\en_390x844_student_home.png"
+      },
+      {
+        "page": "student_writing",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 390,
+        "viewport_width": 390,
+        "body_font_size": "16px",
+        "h1_size": "22.4px",
+        "h2_size": "17.6px",
+        "component_styles": {
+          "button": {
+            "radius": "0px",
+            "border": "1px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "input": {
+            "radius": "0px",
+            "border": "2px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "tab": null
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\en_390x844_student_writing.png"
+      },
+      {
+        "page": "student_feedback",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 390,
+        "viewport_width": 390,
+        "body_font_size": "16px",
+        "h1_size": "22.4px",
+        "h2_size": "17.6px",
+        "component_styles": {
+          "button": null,
+          "input": null,
+          "tab": null
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\en_390x844_student_feedback.png"
+      },
+      {
+        "page": "student_revision",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 390,
+        "viewport_width": 390,
+        "body_font_size": "16px",
+        "h1_size": "22.4px",
+        "h2_size": "17.6px",
+        "component_styles": {
+          "button": null,
+          "input": null,
+          "tab": null
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\en_390x844_student_revision.png"
+      },
+      {
+        "page": "student_practice",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 390,
+        "viewport_width": 390,
+        "body_font_size": "16px",
+        "h1_size": "22.4px",
+        "h2_size": "17.6px",
+        "component_styles": {
+          "button": null,
+          "input": {
+            "radius": "0px",
+            "border": "2px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "tab": null
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\en_390x844_student_practice.png"
+      },
+      {
+        "page": "student_journey",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 390,
+        "viewport_width": 390,
+        "body_font_size": "16px",
+        "h1_size": "22.4px",
+        "h2_size": "17.6px",
+        "component_styles": {
+          "button": null,
+          "input": {
+            "radius": "0px",
+            "border": "2px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "tab": null
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\en_390x844_student_journey.png"
+      },
+      {
+        "page": "research_overview",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 390,
+        "viewport_width": 390,
+        "body_font_size": "16px",
+        "h1_size": "22.4px",
+        "h2_size": "17.6px",
+        "component_styles": {
+          "button": null,
+          "input": null,
+          "tab": null
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\en_390x844_research_overview.png"
+      },
+      {
+        "page": "research_evidence",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 390,
+        "viewport_width": 390,
+        "body_font_size": "16px",
+        "h1_size": "22.4px",
+        "h2_size": "17.6px",
+        "component_styles": {
+          "button": {
+            "radius": "0px",
+            "border": "1px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "input": null,
+          "tab": null
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\en_390x844_research_evidence.png"
+      },
+      {
+        "page": "research_calf",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 390,
+        "viewport_width": 390,
+        "body_font_size": "16px",
+        "h1_size": "22.4px",
+        "h2_size": "17.6px",
+        "component_styles": {
+          "button": null,
+          "input": null,
+          "tab": null
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\en_390x844_research_calf.png"
+      },
+      {
+        "page": "research_learning",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 390,
+        "viewport_width": 390,
+        "body_font_size": "16px",
+        "h1_size": "22.4px",
+        "h2_size": "17.6px",
+        "component_styles": {
+          "button": null,
+          "input": {
+            "radius": "0px",
+            "border": "2px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "tab": null
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\en_390x844_research_learning.png"
+      },
+      {
+        "page": "research_data",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 390,
+        "viewport_width": 390,
+        "body_font_size": "16px",
+        "h1_size": "22.4px",
+        "h2_size": "17.6px",
+        "component_styles": {
+          "button": {
+            "radius": "0px",
+            "border": "1px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "input": {
+            "radius": "0px",
+            "border": "2px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "tab": {
+            "radius": "0px",
+            "border": "0px none",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          }
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\en_390x844_research_data.png"
+      },
+      {
+        "page": "research_audit",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 390,
+        "viewport_width": 390,
+        "body_font_size": "16px",
+        "h1_size": "22.4px",
+        "h2_size": "17.6px",
+        "component_styles": {
+          "button": {
+            "radius": "0px",
+            "border": "1px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "input": {
+            "radius": "0px",
+            "border": "2px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "tab": {
+            "radius": "0px",
+            "border": "0px none",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          }
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\en_390x844_research_audit.png"
+      }
+    ],
+    "interactions": [],
+    "component_styles": {
+      "button": {
+        "radius": "0px",
+        "border": "1px solid",
+        "shadow": "none",
+        "transition": "0s",
+        "animation": "none"
+      },
+      "input": {
+        "radius": "0px",
+        "border": "2px solid",
+        "shadow": "none",
+        "transition": "0s",
+        "animation": "none"
+      },
+      "tab": {
+        "radius": "0px",
+        "border": "0px none",
+        "shadow": "none",
+        "transition": "0s",
+        "animation": "none"
+      }
+    },
+    "focus": {
+      "outline": "solid 3px rgb(41, 173, 255)",
+      "outlineOffset": "2px"
+    },
+    "touch_targets": {
+      "radio_label": {
+        "w": 0,
+        "h": 0
+      },
+      "button": null,
+      "text_input": {
+        "w": 356,
+        "h": 40
+      }
+    },
+    "console_all": [],
+    "pageerrors_all": []
+  },
+  "zh_CN_390x844": {
+    "combo": "zh_CN_390x844",
+    "locale": "zh_CN",
+    "viewport": "390x844",
+    "pages": [
+      {
+        "page": "student_home",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 390,
+        "viewport_width": 390,
+        "body_font_size": "16px",
+        "h1_size": "22.4px",
+        "h2_size": "17.6px",
+        "component_styles": {
+          "button": null,
+          "input": {
+            "radius": "0px",
+            "border": "2px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "tab": null
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\zh_CN_390x844_student_home.png"
+      },
+      {
+        "page": "student_writing",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 390,
+        "viewport_width": 390,
+        "body_font_size": "16px",
+        "h1_size": "22.4px",
+        "h2_size": "17.6px",
+        "component_styles": {
+          "button": {
+            "radius": "0px",
+            "border": "1px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "input": {
+            "radius": "0px",
+            "border": "2px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "tab": null
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\zh_CN_390x844_student_writing.png"
+      },
+      {
+        "page": "student_feedback",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 390,
+        "viewport_width": 390,
+        "body_font_size": "16px",
+        "h1_size": "22.4px",
+        "h2_size": "17.6px",
+        "component_styles": {
+          "button": null,
+          "input": null,
+          "tab": null
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\zh_CN_390x844_student_feedback.png"
+      },
+      {
+        "page": "student_revision",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 390,
+        "viewport_width": 390,
+        "body_font_size": "16px",
+        "h1_size": "22.4px",
+        "h2_size": "17.6px",
+        "component_styles": {
+          "button": null,
+          "input": null,
+          "tab": null
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\zh_CN_390x844_student_revision.png"
+      },
+      {
+        "page": "student_practice",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 390,
+        "viewport_width": 390,
+        "body_font_size": "16px",
+        "h1_size": "22.4px",
+        "h2_size": "17.6px",
+        "component_styles": {
+          "button": null,
+          "input": {
+            "radius": "0px",
+            "border": "2px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "tab": null
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\zh_CN_390x844_student_practice.png"
+      },
+      {
+        "page": "student_journey",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 390,
+        "viewport_width": 390,
+        "body_font_size": "16px",
+        "h1_size": "22.4px",
+        "h2_size": "17.6px",
+        "component_styles": {
+          "button": null,
+          "input": {
+            "radius": "0px",
+            "border": "2px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "tab": null
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\zh_CN_390x844_student_journey.png"
+      },
+      {
+        "page": "research_overview",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 390,
+        "viewport_width": 390,
+        "body_font_size": "16px",
+        "h1_size": "22.4px",
+        "h2_size": "17.6px",
+        "component_styles": {
+          "button": null,
+          "input": null,
+          "tab": null
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\zh_CN_390x844_research_overview.png"
+      },
+      {
+        "page": "research_evidence",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 390,
+        "viewport_width": 390,
+        "body_font_size": "16px",
+        "h1_size": "22.4px",
+        "h2_size": "17.6px",
+        "component_styles": {
+          "button": {
+            "radius": "0px",
+            "border": "1px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "input": null,
+          "tab": null
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\zh_CN_390x844_research_evidence.png"
+      },
+      {
+        "page": "research_calf",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 390,
+        "viewport_width": 390,
+        "body_font_size": "16px",
+        "h1_size": "22.4px",
+        "h2_size": "17.6px",
+        "component_styles": {
+          "button": null,
+          "input": null,
+          "tab": null
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\zh_CN_390x844_research_calf.png"
+      },
+      {
+        "page": "research_learning",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 390,
+        "viewport_width": 390,
+        "body_font_size": "16px",
+        "h1_size": "22.4px",
+        "h2_size": "17.6px",
+        "component_styles": {
+          "button": null,
+          "input": {
+            "radius": "0px",
+            "border": "2px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "tab": null
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\zh_CN_390x844_research_learning.png"
+      },
+      {
+        "page": "research_data",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 390,
+        "viewport_width": 390,
+        "body_font_size": "16px",
+        "h1_size": "22.4px",
+        "h2_size": "17.6px",
+        "component_styles": {
+          "button": {
+            "radius": "0px",
+            "border": "1px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "input": {
+            "radius": "0px",
+            "border": "2px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "tab": {
+            "radius": "0px",
+            "border": "0px none",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          }
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\zh_CN_390x844_research_data.png"
+      },
+      {
+        "page": "research_audit",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "body_width": 390,
+        "viewport_width": 390,
+        "body_font_size": "16px",
+        "h1_size": "22.4px",
+        "h2_size": "17.6px",
+        "component_styles": {
+          "button": {
+            "radius": "0px",
+            "border": "1px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "input": {
+            "radius": "0px",
+            "border": "2px solid",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          },
+          "tab": {
+            "radius": "0px",
+            "border": "0px none",
+            "shadow": "none",
+            "transition": "0s",
+            "animation": "none"
+          }
+        },
+        "screenshot": "verification\\design\\pre-v0.9.4\\current-ui\\screenshots\\zh_CN_390x844_research_audit.png"
+      }
+    ],
+    "interactions": [],
+    "component_styles": {
+      "button": {
+        "radius": "0px",
+        "border": "1px solid",
+        "shadow": "none",
+        "transition": "0s",
+        "animation": "none"
+      },
+      "input": {
+        "radius": "0px",
+        "border": "2px solid",
+        "shadow": "none",
+        "transition": "0s",
+        "animation": "none"
+      },
+      "tab": {
+        "radius": "0px",
+        "border": "0px none",
+        "shadow": "none",
+        "transition": "0s",
+        "animation": "none"
+      }
+    },
+    "focus": {
+      "outline": "solid 3px rgb(41, 173, 255)",
+      "outlineOffset": "2px"
+    },
+    "touch_targets": {
+      "radio_label": {
+        "w": 0,
+        "h": 0
+      },
+      "button": null,
+      "text_input": {
+        "w": 356,
+        "h": 40
+      }
+    },
+    "console_all": [],
+    "pageerrors_all": []
+  }
+}
