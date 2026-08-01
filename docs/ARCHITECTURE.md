@@ -1,5 +1,27 @@
 # v0.8 system architecture
 
+## v0.9.4-A Hybrid Pixel System foundation
+
+The UI layer gained a centralized design-system foundation (no backend or
+service change):
+
+- `app/ui/pixel_art.py` is the single canonical token source (`DESIGN_TOKENS`)
+  and generates `PIXEL_CSS`/`PIXEL_COMPONENT_CSS`; `inject_pixel_art()`
+  remains the only CSS injection point (called once by
+  `app/ui/streamlit_app.py::run`).
+- `.streamlit/config.toml` supplies the Streamlit theme; a parity test keeps
+  it aligned with `DESIGN_TOKENS`.
+- `app/ui/components.py` provides the shared primitives (notices, badges,
+  empty states, tables, field errors, loading states, technical captions,
+  pure Writing-form validation) with stable `data-testid` attributes.
+- All components reference CSS custom properties; no page-local token
+  literals remain in `app/ui/pages/*`.
+- CSS selector policy: stable Streamlit `data-testid` selectors and
+  documented `.st*` classes only; no generated hashed classes.
+
+Full contract: `docs/design/HYBRID_PIXEL_SYSTEM_2_0.md` and
+`docs/development/V0.9.4_A_SPEC.md`.
+
 ## v0.9.3-C journey overlay
 
 `Learning Journey` events are derived at read time by `JourneyService`

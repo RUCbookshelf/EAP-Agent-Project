@@ -1,0 +1,17 @@
+# v0.9.4-A Streamlit theme — aligned with the canonical Hybrid Pixel System
+# token contract in app/ui/pixel_art.py (DESIGN_TOKENS).
+#
+# Intentional duplication: Streamlit cannot consume Python tokens at
+# runtime, so the theme repeats only the Streamlit-required keys below.
+# tests/test_design_tokens_v094a.py::TestThemeParity enforces parity
+# between this file and DESIGN_TOKENS. Supported keys only (Streamlit
+# 1.60): base, primaryColor, backgroundColor, secondaryBackgroundColor,
+# textColor, font.
+
+[theme]
+base = "light"
+primaryColor = "#e00047"
+backgroundColor = "#ffffff"
+secondaryBackgroundColor = "#f4f4f4"
+textColor = "#1a1c2c"
+font = "sans serif"

@@ -1,4 +1,40 @@
 
+## v0.9.4-A (2026-08-01)
+
+### Added
+- Hybrid Pixel System 2.0 foundation: canonical `DESIGN_TOKENS` in
+  `app/ui/pixel_art.py` with generated CSS; Streamlit theme
+  (`.streamlit/config.toml`) aligned via parity tests.
+- Readable local/system sans body stack; monospace constrained to
+  technical/brand roles; shared spacing, geometry, focus, semantic status,
+  density, and responsive tokens.
+- Local accessible SVG icon primitive (`app/ui/pixel_art.py::icon`).
+- Shared primitives in `app/ui/components.py`: `field_error`, `loading_box`,
+  `data_table`, `technical_caption`, `validate_writing_form`; stable
+  `data-testid` attributes on existing notices/badges/empty states.
+- 80 new tests (`tests/test_design_tokens_v094a.py`,
+  `tests/test_hybrid_components_v094a.py`) and
+  `scripts/design_system_audit_v094a.py`.
+
+### Changed
+- Primary action red `#ff004d` → `#e00047` (measured 4.93:1 white-on-red for
+  normal/hover/active); `#ff004d` retained as decorative non-text accent.
+- Writing page blocks empty Writing prompts with a localized field error
+  before the API call (server validation and payloads unchanged).
+- Research Data: "Target ID" and "Export:" success prefix routed through
+  locale keys; Run Export shows a loading state; Learning Process Journey
+  counts render as a compact table.
+- Repaired: `render_research_overview` undefined `exc`; CSS selectors
+  updated for the Streamlit 1.60 DOM (buttons carry `data-testid`, tabs are
+  `[role="tab"]`, radios use `stRadioGroup`).
+
+### Verified
+- 394 passed, 8 skipped (core, excluding live); live A–G 20 passed; legacy
+  Playwright suites PASS; lifecycle PASS; `run.bat --verify` PASS; focused
+  zh-navigation probe 3/3; representative suite 24/24; final acceptance
+  matrix 48/48 renders.
+- Migration 12 and config-v0.9.0 unchanged.
+
 ## v0.9.3-C (2026-08-01)
 
 ### Fixed

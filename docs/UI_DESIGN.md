@@ -1,4 +1,39 @@
-# UI Design v0.9.2 — Pixel Art
+# UI Design — Hybrid Pixel System 2.0 (v0.9.4-A foundation)
+
+## Design system
+
+The canonical design foundation is **Hybrid Pixel System 2.0**: one shared
+token system for Student and Research interfaces with role-tuned semantic
+aliases. The authoritative reference is
+`docs/design/HYBRID_PIXEL_SYSTEM_2_0.md`; the single token source is
+`app/ui/pixel_art.py` (`DESIGN_TOKENS`), which generates the injected CSS.
+
+Key v0.9.4-A changes:
+
+- Body prose, navigation, forms, feedback, evidence descriptions, and
+  Chinese text use a readable local/system sans stack; monospace is
+  constrained to technical/brand roles (IDs, versions, status codes,
+  metrics, code-like values, pixel headings).
+- Primary action red is `#e00047` (measured 4.93:1 on white for normal,
+  hover, and active states); `#ff004d` remains only as a decorative
+  non-text accent.
+- `.streamlit/config.toml` aligns the Streamlit theme with the tokens
+  (parity-tested).
+- Focus, spacing, geometry, semantic status, density, responsive, loading,
+  error, and empty-state tokens are centralized.
+- Local SVG icon primitive with accessibility policy; no remote fonts or
+  icons.
+
+The v0.9.2 Pixel Art identity rules that remain in force: square corners,
+hard offset shadows, solid colors, no gradients/blur/glassmorphism, no
+decorative motion, status never communicated by color alone.
+
+The remainder of this file documents the v0.9.2 Pixel Art baseline that the
+hybrid foundation builds on.
+
+---
+
+# v0.9.2 Pixel Art baseline
 
 ## Design system
 

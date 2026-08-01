@@ -11,7 +11,7 @@ import streamlit as st
 
 from app.config import load_settings
 from app.ui.api_client import ApiClientError, WritingFeedbackApiClient
-from app.ui.components import page_header, warning_box
+from app.ui.components import page_header, technical_caption, warning_box
 from app.ui.locale import t
 from app.ui.pixel_art import inject_pixel_art
 from app.ui.pages.student_pages import (
@@ -95,12 +95,15 @@ def _render_system_status(api_client: WritingFeedbackApiClient, lang: str) -> No
         health = api_client.health()
         analyzer_info = f"{health.get('active_analyzer','?')} {health.get('active_analyzer_version','')}"
         lifecycle = health.get("lifecycle_state", "unknown")
-        st.caption(f"[System] {t('app_analyzer_label', lang)}: {analyzer_info} | NLP: {health.get('nlp_model_name','N/A')} | State: {lifecycle}")
+        technical_caption(
+            f"[System] {t('app_analyzer_label', lang)}: {analyzer_info} | "
+            f"NLP: {health.get('nlp_model_name','N/A')} | State: {lifecycle}"
+        )
         requested = health.get("llm_provider")
         if requested == "deepseek" and health.get("llm_api_configured"):
-            st.caption(t("app_deepseek_configured", lang))
+            technical_caption(t("app_deepseek_configured", lang))
         elif requested:
-            st.caption(t("app_provider_local_demo", lang))
+            technical_caption(t("app_provider_local_demo", lang))
     except ApiClientError:
         # Try to get lifecycle state for a better message
         try:

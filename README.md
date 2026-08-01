@@ -1,5 +1,16 @@
 # English Writing Feedback Prototype v0.9.2.1
 
+v0.9.4-A 建立 Hybrid Pixel System 2.0 设计系统基础：单一规范 token 契约
+（`app/ui/pixel_art.py` 的 `DESIGN_TOKENS`，自动生成注入 CSS）、与 token
+对齐的 Streamlit 主题（`.streamlit/config.toml`）、可读的系统无衬线正文字体
+与受约束的等宽技术角色、经测量的 AA 主操作色（`#e00047`，4.93:1）、共享的
+间距/几何/焦点/语义状态/密度/响应式 token、本地可访问 SVG 图标原语、共享
+组件原语（校验、加载、空状态、错误、表格），以及两处中文模式硬编码字符串
+的本地化。未重设计任何页面；后端、API、数据库、旅程语义均未改变。详见
+[v0.9.4-A 规格](docs/development/V0.9.4_A_SPEC.md)、
+[Hybrid Pixel System 2.0](docs/design/HYBRID_PIXEL_SYSTEM_2_0.md) 与
+[v0.9.4-A 验收](RUN_VERIFICATION_V0.9.4_A.md)。
+
 v0.9.3-C 完成产品旅程加固：Learning Journey 不再永久为空。旅程事件由权威
 来源记录（作文、分析、反馈、练习、作答、评价、修订、任务内响应）在读取时
 推导，每个事件都可追溯至真实记录；空状态按缺失阶段准确分类；提供确定性

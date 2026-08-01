@@ -16,10 +16,12 @@ from app.ui.components import (
     render_api_error,
     audit_record,
     card_group_header,
+    data_table,
     empty_state,
     error_box,
     info_box,
     limitation_notice,
+    loading_box,
     metric_card,
     page_header,
     section_header,
@@ -38,7 +40,7 @@ def render_research_overview(api_client: WritingFeedbackApiClient, lang: str) ->
 
     try:
         health = api_client.health()
-    except ApiClientError:
+    except ApiClientError as exc:
         render_api_error(exc, lang, research=True)
         return
 
@@ -269,13 +271,16 @@ def render_research_learning_process(api_client: WritingFeedbackApiClient, lang:
         journey = None
     if journey:
         counts = journey.get("counts") or {}
-        st.caption(
-            f"{t('journey_known_submissions', lang)}: {counts.get('submissions', 0)} &middot; "
-            f"{t('journey_known_analyses', lang)}: {counts.get('analysis_runs', 0)} &middot; "
-            f"{t('journey_known_feedback', lang)}: {counts.get('feedback_records', 0)} &middot; "
-            f"{t('journey_known_priorities', lang)}: {counts.get('selected_priorities', 0)} &middot; "
-            f"{t('journey_known_targets', lang)}: {counts.get('practice_targets', 0)} &middot; "
-            f"{t('journey_known_attempts', lang)}: {counts.get('exercise_attempts', 0)}"
+        data_table(
+            headers=[t("journey_counts_label", lang), t("journey_counts_value", lang)],
+            rows=[
+                [t("journey_known_submissions", lang), counts.get("submissions", 0)],
+                [t("journey_known_analyses", lang), counts.get("analysis_runs", 0)],
+                [t("journey_known_feedback", lang), counts.get("feedback_records", 0)],
+                [t("journey_known_priorities", lang), counts.get("selected_priorities", 0)],
+                [t("journey_known_targets", lang), counts.get("practice_targets", 0)],
+                [t("journey_known_attempts", lang), counts.get("exercise_attempts", 0)],
+            ],
         )
         events = journey.get("events", [])
         if events:
@@ -344,8 +349,9 @@ def render_research_data(api_client: WritingFeedbackApiClient, lang: str) -> Non
                     privacy_mode=PrivacyMode(privacy),
                     formats=[ExportFormat(f) for f in fmt],
                 )
+                loading_box("loading_research_export", lang)
                 result = api_client.research_export_run(job.model_dump(mode="json"))
-                st.success(f"Export: {result.get('export_id', 'unknown')}")
+                st.success(t("export_run_success", lang, id=result.get("export_id", "unknown")))
                 st.json(result.get("manifest", {}))
             except Exception as exc:
                 render_api_error(exc, lang, research=True)
@@ -382,7 +388,7 @@ def render_research_data(api_client: WritingFeedbackApiClient, lang: str) -> Non
             t("human_review_target", lang),
             ["diagnosis", "evidence", "feedback", "revision"],
         )
-        target_id = st.text_input("Target ID", key="hr_target")
+        target_id = st.text_input(t("human_review_target_id", lang), key="hr_target")
         decision = st.selectbox(
             t("human_review_decision", lang),
             ["correct", "partially_correct", "incorrect", "uncertain"],

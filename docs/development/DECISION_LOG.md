@@ -8,6 +8,38 @@
 - **Progressive disclosure**: Student View hides internal IDs, analyzer versions, Diagnostic Gate internals. Research View exposes everything.
 # Decision log
 
+## D032 — One canonical token source in pixel_art.py
+- Status: accepted for v0.9.4-A
+- Decision: `app/ui/pixel_art.py` (`DESIGN_TOKENS`) remains the single
+  canonical design-token source; `PIXEL_CSS`/`PIXEL_COMPONENT_CSS` are
+  generated from it. No second token map and no Student/Research token files.
+
+## D033 — AA primary action red `#e00047`
+- Status: accepted for v0.9.4-A
+- Decision: primary action background changes from `#ff004d` to `#e00047`
+  (measured 4.93:1 white-on-red for normal/hover/active); `#ff004d` remains
+  only as a decorative non-text accent. Disabled text uses `#5a5a68`.
+
+## D034 — Intentional Streamlit theme duplication
+- Status: accepted for v0.9.4-A
+- Decision: `.streamlit/config.toml` repeats only Streamlit-required theme
+  keys because the runtime cannot consume Python tokens; a theme/token parity
+  test enforces alignment. `.streamlit/` is gitignored, so the config is
+  force-added and documented.
+
+## D035 — Sans body + constrained monospace typography roles
+- Status: accepted for v0.9.4-A
+- Decision: body prose, navigation, forms, feedback, evidence descriptions,
+  and Chinese text use a local/system sans stack; monospace is reserved for
+  technical/brand roles (IDs, versions, status codes, metrics, code-like
+  values, pixel headings). No remote fonts.
+
+## D036 — Local accessible icon policy
+- Status: accepted for v0.9.4-A
+- Decision: icons are local inline SVG (pixel-style, square caps); decorative
+  icons are `aria-hidden`, meaningful icons carry `role="img"` + `aria-label`;
+  no remote icon fonts or services; icons never carry meaning alone.
+
 ## D028 — Journey events are derived read-time from source records
 - Status: accepted for v0.9.3-C
 - Decision: Learning Journey events are computed from authoritative persisted

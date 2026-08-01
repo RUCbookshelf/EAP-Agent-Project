@@ -1,4 +1,21 @@
-# v0.8 已知限制
+# v0.9.4-A 已知限制
+
+- Focus 轮廓（3px `#29adff`）对白色背景的测量对比度为 2.47:1：作为可见的
+  非文本焦点指示器保留（品牌契约），但未达到 WCAG 1.4.11 非文本对比度
+  3:1；留待后续阶段处理。
+- 切换语言会把角色单选重置为学生视图（Streamlit 翻译选项行为）；已验证为
+  只读，无写入副作用。导航时先重新选择角色即可。
+- `en.json` 中四个既有英文文案含字面 `?`（对应中文为 `——`/`……`）：有效
+  UTF-8，非乱码；按“不进行无关翻译清理”边界保持原样。
+- `.streamlit/` 在 `.gitignore` 中；新增的 `config.toml` 已强制纳入提交
+  （intentional force-add，已记录）。
+- `run_export` 在 `research_exports/` 下写导出目录，不写 `export_jobs`
+  表行（既有行为）；重复写入验收以目录增量为准。
+- 内容宽度别名（Student 720px / Research 1200px）、角色密度页面级应用、
+  Research JSON→表格全面替换、侧栏分组与图标导航留待 v0.9.4-B/C。
+- /health 中 `nlp_model_installed=false` 仍是 v0.9.3-A 记录的既有外观限制。
+
+## v0.8 已知限制
 
 - Learning Journey events are derived from stored records and can only be as
   complete as the records themselves; practice targets, evaluations, and

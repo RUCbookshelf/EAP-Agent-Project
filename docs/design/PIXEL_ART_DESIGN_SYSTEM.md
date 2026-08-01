@@ -1,5 +1,13 @@
 # Pixel Art Design System v0.9.2
 
+> Status: superseded as the live implementation reference by
+> **Hybrid Pixel System 2.0** (v0.9.4-A, see
+> `docs/design/HYBRID_PIXEL_SYSTEM_2_0.md`). This document remains the
+> historical v0.9.2 contract; v0.9.4-A preserves its identity rules (square
+> corners, hard shadows, solid colors, no motion) while changing the body
+> typography role and the primary action color (`#ff004d` → `#e00047`,
+> measured 4.93:1).
+
 This document is the authoritative design-system reference for the v0.9.2
 Pixel Art UI. Implementation lives in `app/ui/pixel_art.py`; the centralized
 CSS custom-property token system is injected by `inject_pixel_art()`.

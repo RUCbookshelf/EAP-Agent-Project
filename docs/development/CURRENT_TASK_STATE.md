@@ -1,5 +1,21 @@
 # Current Task State
 
+**Date:** 2026-08-01
+**Current task:** v0.9.4-A Hybrid Design System Foundation
+**Status:** completed (see RUN_VERIFICATION_V0.9.4_A.md)
+
+- Hybrid Pixel System 2.0 foundation implemented (canonical tokens,
+  generated CSS, Streamlit theme, sans body + constrained mono, AA primary
+  action red `#e00047`, shared geometry/spacing/focus/status/density/
+  responsive tokens, local SVG icons, shared component primitives).
+- Minimal production adoption + the two hardcoded Chinese-mode Research Data
+  strings localized; locale parity 382/382.
+- Verified: core pytest 394+8; live A–G 20; legacy Playwright PASS; lifecycle
+  PASS; `run.bat --verify` PASS; zh probe 3/3; representative 24/24; final
+  48/48 browser renders; migration 12; config-v0.9.0.
+- Next: v0.9.4-B (Student Experience Redesign) under a separate goal;
+  v0.9.4-C not before B.
+
 **Date:** 2026-07-31
 **Current version:** v0.9.3 (A + B + C)
 **Status:** completed

@@ -1,5 +1,23 @@
 # Project State
 
+## Current v0.9.4-A State
+
+- Status: completed (foundation stage; page redesigns deferred to v0.9.4-B/C).
+- Hybrid Pixel System 2.0 foundation implemented: canonical `DESIGN_TOKENS`
+  (app/ui/pixel_art.py) with generated CSS; Streamlit theme aligned
+  (`.streamlit/config.toml`, parity-tested); readable system sans body with
+  constrained monospace; primary action red `#e00047` (measured 4.93:1);
+  shared spacing/geometry/focus/status/density/responsive tokens; local
+  accessible SVG icons; shared component primitives with stable testids.
+- Minimal production adoption: Writing required-prompt validation, Run
+  Export loading state, Journey-counts table, mono technical captions; two
+  hardcoded Chinese-mode Research Data strings localized (382/382 parity).
+- No backend/API/database/journey change; migration 12; config-v0.9.0.
+- Verified: core pytest 394 passed, 8 skipped; live A–G 20; legacy Playwright
+  PASS; lifecycle PASS; run.bat --verify PASS; zh probe 3/3; representative
+  24/24; final 48/48 browser renders.
+- Design direction recorded: Hybrid Pixel System 2.0 (Direction B).
+
 ## Current v0.9.3-C State
 
 - Status: completed; database migration 12; active configuration config-v0.9.0 preserved.

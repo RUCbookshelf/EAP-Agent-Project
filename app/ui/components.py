@@ -1,11 +1,17 @@
-"""Reusable Pixel Art UI components for the writing-feedback-mvp Streamlit interface.
+"""Reusable Hybrid Pixel System 2.0 UI components (v0.9.4-A).
 
-All components follow the v0.9.2 Pixel Art design system:
-- Solid colors, square corners, hard shadows, monospace typography
-- No rounded corners, no gradients, no soft shadows, no blur, no transitions
-- Immediate state changes; nested cards replaced with flat regions
+All components follow the canonical token contract in
+`app/ui/pixel_art.py` (`DESIGN_TOKENS`) and reference tokens only — no
+literal colors, font stacks, spacing values, border rules, or shadow rules
+are duplicated here.
 
-All components accept a `lang` parameter for i18n support.
+Rules:
+- Solid colors, square corners, hard shadows; no gradients, blur, soft
+  shadows, or motion.
+- Body prose is sans; technical values (IDs, versions, status codes,
+  metrics) use the shared monospace role class.
+- Components own stable `data-testid` attributes for browser verification.
+- All components accept a `lang` parameter for i18n support.
 """
 
 from __future__ import annotations
@@ -13,6 +19,7 @@ from __future__ import annotations
 import streamlit as st
 
 from app.ui.locale import t
+from app.ui.pixel_art import icon
 
 
 # ── Page & section headers ──────────────────────────────────────────────────
@@ -21,7 +28,7 @@ def page_header(title: str, subtitle: str = "", lang: str = "en") -> None:
     """Render a pixel-art page header with thick bottom border."""
     display_title = t(title, lang) if not title.startswith(" ") else title.strip()
     st.markdown(
-        f'<h2 style="font-family:var(--px-font-mono);font-weight:900;color:var(--px-dark);'
+        f'<h2 style="font-family:var(--px-font-heading);font-weight:900;color:var(--px-dark);'
         f'border-bottom:4px solid var(--px-dark);padding-bottom:8px;margin-bottom:4px;">'
         f'{display_title}</h2>',
         unsafe_allow_html=True,
@@ -35,7 +42,7 @@ def section_header(title: str, description: str = "", lang: str = "en") -> None:
     """Render a pixel-art section header."""
     display_title = t(title, lang) if not title.startswith(" ") else title
     st.markdown(
-        f'<h3 style="font-family:var(--px-font-mono);font-weight:700;color:var(--px-dark);'
+        f'<h3 style="font-family:var(--px-font-heading);font-weight:700;color:var(--px-dark);'
         f'border-bottom:2px solid var(--px-dark);padding-bottom:4px;margin-top:20px;margin-bottom:8px;">'
         f'{display_title}</h3>',
         unsafe_allow_html=True,
@@ -49,7 +56,7 @@ def card_group_header(title: str, lang: str = "en") -> None:
     """Render a card group header for metric/construct grouping."""
     display_title = t(title, lang) if not title.startswith(" ") else title
     st.markdown(
-        f'<h3 style="font-family:var(--px-font-mono);font-weight:700;color:var(--px-dark);'
+        f'<h3 style="font-family:var(--px-font-heading);font-weight:700;color:var(--px-dark);'
         f'margin-top:24px;margin-bottom:8px;">{display_title}</h3>',
         unsafe_allow_html=True,
     )
@@ -68,19 +75,20 @@ def status_badge(
     """Render a pixel-art status badge with hard border and solid background."""
     label = t(f"status_{status}", lang) if not status.startswith(" ") else status
     if status in success_states:
-        color = "var(--px-green)"
-        text_color = "var(--px-dark)"
+        color = "var(--px-status-success)"
+        text_color = "var(--px-status-on-success)"
     elif status in warning_states:
-        color = "var(--px-yellow)"
-        text_color = "var(--px-dark)"
+        color = "var(--px-status-warning)"
+        text_color = "var(--px-status-on-warning)"
     elif status in error_states:
-        color = "var(--px-red)"
-        text_color = "var(--px-white)"
+        color = "var(--px-status-error)"
+        text_color = "var(--px-status-on-error)"
     else:
-        color = "var(--px-blue)"
-        text_color = "var(--px-dark)"
+        color = "var(--px-status-info)"
+        text_color = "var(--px-status-on-info)"
     st.markdown(
-        f'<span class="px-badge" style="background:{color};color:{text_color};">{label}</span>',
+        f'<span class="px-badge" data-testid="px-status-badge" '
+        f'style="background:{color};color:{text_color};">{label}</span>',
         unsafe_allow_html=True,
     )
 
@@ -91,7 +99,8 @@ def limitation_notice(text: str, lang: str = "en") -> None:
     """Render a pixel-art limitation notice."""
     display = t(text, lang) if not text.startswith(" ") else text
     st.markdown(
-        f'<div class="px-notice px-notice-limitation">{display}</div>',
+        f'<div class="px-notice px-notice-limitation" data-testid="px-notice">'
+        f'{icon("info", size=18, label=t("notice_limitation_icon", lang))}{display}</div>',
         unsafe_allow_html=True,
     )
 
@@ -100,7 +109,8 @@ def warning_box(text: str, lang: str = "en") -> None:
     """Render a pixel-art warning box."""
     display = t(text, lang) if not text.startswith(" ") else text
     st.markdown(
-        f'<div class="px-notice px-notice-warning">{display}</div>',
+        f'<div class="px-notice px-notice-warning" data-testid="px-notice">'
+        f'{icon("warning", size=18, label=t("notice_warning_icon", lang))}{display}</div>',
         unsafe_allow_html=True,
     )
 
@@ -109,7 +119,8 @@ def info_box(text: str, lang: str = "en") -> None:
     """Render a pixel-art info box."""
     display = t(text, lang) if not text.startswith(" ") else text
     st.markdown(
-        f'<div class="px-notice px-notice-info">{display}</div>',
+        f'<div class="px-notice px-notice-info" data-testid="px-notice">'
+        f'{icon("info", size=18, label=t("notice_info_icon", lang))}{display}</div>',
         unsafe_allow_html=True,
     )
 
@@ -118,7 +129,8 @@ def success_box(text: str, lang: str = "en") -> None:
     """Render a pixel-art success notice."""
     display = t(text, lang) if not text.startswith(" ") else text
     st.markdown(
-        f'<div class="px-notice px-notice-success">{display}</div>',
+        f'<div class="px-notice px-notice-success" data-testid="px-notice">'
+        f'{icon("check", size=18, label=t("notice_success_icon", lang))}{display}</div>',
         unsafe_allow_html=True,
     )
 
@@ -127,7 +139,8 @@ def error_box(text: str, lang: str = "en") -> None:
     """Render a pixel-art error notice."""
     display = t(text, lang) if not text.startswith(" ") else text
     st.markdown(
-        f'<div class="px-notice px-notice-error">{display}</div>',
+        f'<div class="px-notice px-notice-error" data-testid="px-notice">'
+        f'{icon("error", size=18, label=t("notice_error_icon", lang))}{display}</div>',
         unsafe_allow_html=True,
     )
 
@@ -167,11 +180,11 @@ def metric_card(
 
     # Determine status color
     if status == "unavailable":
-        badge_style = f"background:var(--px-surface);color:var(--px-muted);"
+        badge_style = f"background:var(--px-status-unavailable);color:var(--px-status-on-unavailable);"
     elif status in ("research_metric", "descriptive_proxy"):
-        badge_style = f"background:var(--px-green);color:var(--px-dark);"
+        badge_style = f"background:var(--px-status-success);color:var(--px-status-on-success);"
     else:
-        badge_style = f"background:var(--px-yellow);color:var(--px-dark);"
+        badge_style = f"background:var(--px-status-candidate);color:var(--px-status-on-warning);"
 
     lim_html = ""
     if limitations:
@@ -181,9 +194,10 @@ def metric_card(
     st.markdown(
         f'<div class="px-card">'
         f'<div style="font-weight:700;margin-bottom:4px;">{metric_id}</div>'
-        f'<span class="px-badge" style="{badge_style}">{status_label}</span>'
-        f'<div style="margin-top:8px;">{t("metric_value", lang)}: <strong>{display}</strong></div>'
-        f'<div style="font-size:0.85rem;color:var(--px-muted);margin-top:4px;">'
+        f'<span class="px-badge" data-testid="px-status-badge" style="{badge_style}">{status_label}</span>'
+        f'<div style="margin-top:8px;">{t("metric_value", lang)}: '
+        f'<strong class="px-mono" data-testid="px-mono">{display}</strong></div>'
+        f'<div class="px-mono" data-testid="px-mono" style="font-size:0.85rem;color:var(--px-muted);margin-top:4px;">'
         f'{t("metric_confidence", lang)}: {confidence} &middot; '
         f'{t("metric_unit", lang)}: {unit} &middot; '
         f'{t("metric_version_tag", lang)}: {version}'
@@ -209,7 +223,7 @@ def feedback_priority_card(
 
     st.markdown(
         f'<div class="px-card">'
-        f'<div style="font-weight:900;font-size:1.1rem;margin-bottom:8px;color:var(--px-red);">'
+        f'<div style="font-weight:900;font-size:1.1rem;margin-bottom:8px;color:var(--px-action);">'
         f'{category.replace("_", " ").title()}</div>'
         f'<div class="px-quote">{evidence_quote_text}</div>'
         f'<div style="margin-top:8px;">{explanation}</div>'
@@ -239,7 +253,9 @@ def empty_state(title: str, explanation: str = "", lang: str = "en") -> None:
 
     expl_html = f"<br><br>{display_explanation}" if display_explanation else ""
     st.markdown(
-        f'<div class="px-empty"><strong>{display_title}</strong>{expl_html}</div>',
+        f'<div class="px-empty" data-testid="px-empty-state">'
+        f'{icon("empty", size=24, label=t("empty_state_icon", lang))}'
+        f'<strong>{display_title}</strong>{expl_html}</div>',
         unsafe_allow_html=True,
     )
 
@@ -273,7 +289,7 @@ def timeline_event(
         f'<div class="px-timeline-marker"></div>'
         f'<div class="px-timeline-content">'
         f'<div style="font-weight:700;">{event_label}</div>'
-        f'<div style="font-size:0.85rem;color:var(--px-muted);">{meta}</div>'
+        f'<div class="px-mono" data-testid="px-mono" style="font-size:0.85rem;color:var(--px-muted);">{meta}</div>'
         f'{detail_html}'
         f'{boundary_html}'
         f'</div></div>',
@@ -294,7 +310,7 @@ def audit_record(record_id: str, label: str, data: dict, lang: str = "en") -> No
 def table_container(content_html: str) -> None:
     """Wrap table content in a pixel-art scrollable container."""
     st.markdown(
-        f'<div class="px-table-wrap">{content_html}</div>',
+        f'<div class="px-table-wrap" data-testid="px-table-wrap">{content_html}</div>',
         unsafe_allow_html=True,
     )
 
@@ -327,18 +343,107 @@ def render_api_error(exc, lang: str = "en", *, research: bool = False) -> None:
         if exc.detail:
             detail_lines.append(f"{t('error_detail_label', lang)}: {exc.detail}")
         st.markdown(
-            f'<div class="px-notice px-notice-error">'
+            f'<div class="px-notice px-notice-error" data-testid="px-notice">'
             f'<strong>{message}</strong><br>'
-            f'<span style="font-size:0.85rem;color:var(--px-white);">{"<br>".join(detail_lines)}</span>'
+            f'<span class="px-mono" data-testid="px-mono" style="font-size:0.85rem;color:var(--px-white);">'
+            f'{"<br>".join(detail_lines)}</span>'
             f'</div>',
             unsafe_allow_html=True,
         )
     else:
         st.markdown(
-            f'<div class="px-notice px-notice-error"><strong>{message}</strong></div>',
+            f'<div class="px-notice px-notice-error" data-testid="px-notice"><strong>{message}</strong></div>',
             unsafe_allow_html=True,
         )
 
     if exc.retryable:
         if st.button(t("error_retry_action", lang), key=f"retry_{exc.operation or 'action'}_{lang}"):
             st.rerun()
+
+
+# ── v0.9.4-A shared primitives ─────────────────────────────────────────
+
+def field_error(message: str, lang: str = "en") -> None:
+    """Render a localized inline field-validation error."""
+    display = t(message, lang) if not message.startswith(" ") else message
+    st.markdown(
+        f'<div class="px-field-error" data-testid="px-field-error" role="alert">'
+        f'{icon("error", size=16, label=t("field_error_icon", lang))}{display}</div>',
+        unsafe_allow_html=True,
+    )
+
+
+def loading_box(text: str, lang: str = "en") -> None:
+    """Render a localized loading state (no animation; text + icon)."""
+    display = t(text, lang) if not text.startswith(" ") else text
+    st.markdown(
+        f'<div class="px-loading" data-testid="px-loading" role="status" '
+        f'aria-live="polite">{icon("clock", size=18, label=t("loading_icon", lang))}{display}</div>',
+        unsafe_allow_html=True,
+    )
+
+
+def data_table(
+    headers: list[str],
+    rows: list[list[object]],
+    *,
+    density: str = "research",
+) -> None:
+    """Render a compact pixel-art table with stable testids.
+
+    Headers and cell values are rendered as text; HTML is escaped so data
+    values can never inject markup. `density` is reserved for the role
+    density tokens (research = default; student variant deferred).
+    """
+    import html as _html
+
+    thead = "".join(f"<th>{_html.escape(str(h))}</th>" for h in headers)
+    body_rows = []
+    for row in rows:
+        cells = "".join(f"<td>{_html.escape(str(c))}</td>" for c in row)
+        body_rows.append(f"<tr>{cells}</tr>")
+    table_html = (
+        f'<table data-testid="px-table">'
+        f'<thead><tr>{thead}</tr></thead>'
+        f'<tbody>{"".join(body_rows)}</tbody>'
+        f'</table>'
+    )
+    st.markdown(
+        f'<div class="px-table-wrap" data-testid="px-table-wrap" '
+        f'data-density="{density}">{table_html}</div>',
+        unsafe_allow_html=True,
+    )
+
+
+def technical_caption(text: str) -> None:
+    """Render a technical caption (IDs, versions, status codes) in mono."""
+    st.markdown(
+        f'<div class="px-mono" data-testid="px-mono" '
+        f'style="font-size:var(--px-font-size-label);color:var(--px-muted);">{text}</div>',
+        unsafe_allow_html=True,
+    )
+
+
+def validate_writing_form(
+    student_id: str,
+    writing_prompt: str,
+    essay_text: str,
+    *,
+    is_revision: bool = False,
+    revision_of_submission_id: int | None = None,
+) -> list[str]:
+    """Pure Writing-form validation; returns locale message keys.
+
+    Keeps server-side validation and API schemas unchanged: this helper
+    only blocks clearly invalid UI submissions before the API call.
+    """
+    errors: list[str] = []
+    if not student_id.strip():
+        errors.append("student_writing_need_id")
+    if not writing_prompt.strip():
+        errors.append("student_writing_need_prompt")
+    if not essay_text.strip():
+        errors.append("student_writing_need_text")
+    if is_revision and revision_of_submission_id is None:
+        errors.append("submission_choose_revision")
+    return errors

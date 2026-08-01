@@ -366,5 +366,19 @@
   "practice_evaluation_action": "Target action",
   "student_home_submissions": "Submissions",
   "student_home_feedback_count": "Feedback",
-  "student_home_priority_count": "Priorities"
+  "student_home_priority_count": "Priorities",
+  "empty_state_icon": "Empty",
+  "export_run_success": "Export: {id}",
+  "field_error_icon": "Validation error",
+  "human_review_target_id": "Target ID",
+  "journey_counts_label": "Record",
+  "journey_counts_value": "Count",
+  "loading_icon": "Loading",
+  "loading_research_export": "Running export...",
+  "notice_error_icon": "Error",
+  "notice_info_icon": "Information",
+  "notice_limitation_icon": "Limitation",
+  "notice_success_icon": "Success",
+  "notice_warning_icon": "Warning",
+  "student_writing_need_prompt": "Please enter the writing prompt before submitting."
 }

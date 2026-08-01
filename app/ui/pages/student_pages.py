@@ -19,12 +19,15 @@ from app.ui.components import (
     error_box,
     evidence_quote,
     feedback_priority_card,
+    field_error,
     info_box,
     limitation_notice,
     page_header,
     section_header,
     success_box,
+    technical_caption,
     timeline_event,
+    validate_writing_form,
     warning_box,
 )
 from app.ui.locale import t
@@ -209,14 +212,16 @@ def render_writing_page(api_client: WritingFeedbackApiClient, lang: str) -> None
                 render_feedback_content(saved, api_client, lang)
         return
 
-    if not student_id.strip():
-        st.error(t("student_writing_need_id", lang))
-        return
-    if not essay_text.strip():
-        st.error(t("student_writing_need_text", lang))
-        return
-    if is_revision and revision_of_submission_id is None:
-        st.error(t("submission_choose_revision", lang))
+    validation_errors = validate_writing_form(
+        student_id,
+        writing_prompt,
+        essay_text,
+        is_revision=is_revision,
+        revision_of_submission_id=revision_of_submission_id,
+    )
+    if validation_errors:
+        for error_key in validation_errors:
+            field_error(error_key, lang)
         return
 
     try:
@@ -260,9 +265,11 @@ def render_feedback_content(result: dict, api_client: WritingFeedbackApiClient, 
     feedback = provider.get("feedback", {})
     empty_states = set(result.get("ui_empty_states") or [])
 
-    with st.container(border=True):
-        st.caption(f"Essay #{result.get('submission_id', '?')} | {result.get('ui_submission', {}).get('draft_stage', '')}")
-        st.caption(f"{t('provider_label', lang)}: {provider.get('provider_name', '')}")
+    technical_caption(
+        f"Essay #{result.get('submission_id', '?')} | "
+        f"{result.get('ui_submission', {}).get('draft_stage', '')}"
+    )
+    technical_caption(f"{t('provider_label', lang)}: {provider.get('provider_name', '')}")
 
     section_header("student_feedback_strengths", lang)
     pf = feedback.get("positive_finding", {})

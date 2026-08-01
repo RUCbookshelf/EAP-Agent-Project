@@ -366,5 +366,19 @@
   "practice_evaluation_action": "目标行为",
   "student_home_submissions": "提交",
   "student_home_feedback_count": "反馈",
-  "student_home_priority_count": "优先项"
+  "student_home_priority_count": "优先项",
+  "empty_state_icon": "空状态",
+  "export_run_success": "导出：{id}",
+  "field_error_icon": "校验错误",
+  "human_review_target_id": "目标 ID",
+  "journey_counts_label": "记录",
+  "journey_counts_value": "数量",
+  "loading_icon": "加载中",
+  "loading_research_export": "正在执行导出……",
+  "notice_error_icon": "错误",
+  "notice_info_icon": "信息",
+  "notice_limitation_icon": "限制说明",
+  "notice_success_icon": "成功",
+  "notice_warning_icon": "警告",
+  "student_writing_need_prompt": "请在提交前填写写作提示。"
 }

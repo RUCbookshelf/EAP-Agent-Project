@@ -10,7 +10,9 @@
 | Journey event contract + accurate empty states + demo journey | completed (v0.9.3-C) |
 | Integrated verification (pytest 320+8, Cases A-R 110, run.bat PASS x3, browser journeys) | completed |
 | Migration 12 / config-v0.9.0 | unchanged |
-| v0.9.4 UI (Hybrid Pixel System 2.0 exploration done; implementation) | not_started |
+| v0.9.4-A Hybrid Pixel System 2.0 foundation (tokens, theme, typography, components, localization) | completed |
+| v0.9.4-B Student Experience Redesign | not_started |
+| v0.9.4-C Research Experience Redesign | not_started |
 | v1.0 | not_started |
 
 
