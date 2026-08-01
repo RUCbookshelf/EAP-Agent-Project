@@ -122,10 +122,13 @@ def main() -> int:
             failures.append(f"contrast {label}: {ratio:.2f}:1 < {threshold}:1")
 
     focus_ratio = contrast(pa.DESIGN_TOKENS["colors"]["focus"], pa.DESIGN_TOKENS["colors"]["bg"])
+    focus_status = "PASS" if focus_ratio >= 3.0 else "FAIL"
     report.append(
-        f"  focus outline vs adjacent surface (recorded, non-text indicator): "
-        f"{focus_ratio:.2f}:1 (visible 3px outline; AA non-text gap documented)"
+        f"  focus outline vs adjacent surface: {focus_ratio:.2f}:1 "
+        f"({focus_status} >= 3.0:1; visible 3px outline)"
     )
+    if focus_ratio < 3.0:
+        failures.append(f"focus contrast: {focus_ratio:.2f}:1 < 3.0:1")
 
     # 5. Theme parity
     config_path = PROJECT_ROOT / ".streamlit" / "config.toml"

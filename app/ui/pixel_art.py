@@ -48,7 +48,7 @@ DESIGN_TOKENS = {
         "text-secondary": "#4a4a58",
         "muted": "#6b6b7b",
         "border": "#1a1c2c",
-        "focus": "#29adff",         # focus outline (non-text indicator)
+        "focus": "#0f6dbd",         # focus outline (>=3:1 on adjacent surfaces)
         "action": "#e00047",        # primary action red (AA measured)
         "action-hover": "#e00047",
         "action-active": "#e00047",
@@ -572,6 +572,112 @@ div[data-testid="stNotification"] {{
 def build_component_css() -> str:
     return f"""
 <style>
+div[data-testid="stMainBlockContainer"]:has([data-testid="px-student-page"]) {{
+    max-width: var(--px-content-width-student);
+    padding-bottom: var(--px-page-space);
+}}
+
+.px-student-purpose {{
+    border-left: var(--px-border-thick);
+    background: var(--px-surface);
+    padding: var(--px-space-3) var(--px-space-4);
+    margin-bottom: var(--px-density-student-section);
+    font-family: var(--px-font-body);
+}}
+
+.px-student-purpose p,
+.px-student-action p {{
+    margin: 0;
+    max-width: 65ch;
+}}
+
+.px-student-steps {{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: var(--px-control-gap);
+    margin: 0 0 var(--px-density-student-section);
+    padding: 0;
+    list-style: none;
+}}
+
+.px-student-steps li {{
+    display: flex;
+    gap: var(--px-inline-gap);
+    align-items: flex-start;
+    border: var(--px-border-thin);
+    background: var(--px-surface);
+    padding: var(--px-space-3);
+    font-family: var(--px-font-body);
+}}
+
+.px-student-steps li[data-state="current"] {{ background: var(--px-status-info); }}
+.px-student-steps li[data-state="complete"] {{ background: var(--px-status-success); }}
+
+.px-student-step-number {{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: var(--px-space-6);
+    min-height: var(--px-space-6);
+    border: var(--px-border-thin);
+    font-family: var(--px-font-mono);
+    font-weight: var(--px-font-weight-bold);
+}}
+
+.px-student-step-copy {{
+    display: flex;
+    flex-direction: column;
+    gap: var(--px-space-1);
+}}
+
+.px-student-step-copy > span {{
+    color: var(--px-text-secondary);
+    font-size: var(--px-font-size-label);
+}}
+
+.px-student-action {{
+    border: var(--px-border-thick);
+    box-shadow: var(--px-shadow-sm);
+    background: var(--px-surface-elevated);
+    padding: var(--px-card-pad);
+    margin: var(--px-space-4) 0;
+    font-family: var(--px-font-body);
+}}
+
+.px-student-action > strong {{
+    display: block;
+    margin-bottom: var(--px-space-2);
+    font-family: var(--px-font-heading);
+}}
+
+.px-student-context {{
+    display: grid;
+    gap: var(--px-space-2);
+    margin: 0 0 var(--px-density-student-section);
+    padding: var(--px-card-pad);
+    border: var(--px-border-thin);
+    background: var(--px-surface);
+}}
+
+.px-student-context > div {{
+    display: grid;
+    grid-template-columns: minmax(120px, 0.45fr) 1fr;
+    gap: var(--px-inline-gap);
+}}
+
+.px-student-context dt {{
+    color: var(--px-text-secondary);
+    font-size: var(--px-font-size-label);
+    font-weight: var(--px-font-weight-bold);
+}}
+
+.px-student-context dd {{ margin: 0; overflow-wrap: anywhere; }}
+
+@media (max-width: 640px) {{
+    .px-student-steps {{ grid-template-columns: 1fr; }}
+    .px-student-context > div {{ grid-template-columns: 1fr; }}
+}}
+
 .px-card {{
     background: var(--px-white);
     border: var(--px-border-thick);

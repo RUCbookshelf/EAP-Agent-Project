@@ -52,6 +52,10 @@ def set_selected_learner(value: str) -> str:
 
 def student_id_input(label_key: str, widget_key: str, lang: str, *, placeholder_key: str | None = None) -> str:
     """Render the shared Student ID input and keep the learner context in sync."""
+    if widget_key not in st.session_state:
+        current = selected_learner()
+        if current:
+            st.session_state[widget_key] = current
     placeholder = t(placeholder_key, lang) if placeholder_key else None
     value = st.text_input(
         t(label_key, lang), key=widget_key, placeholder=placeholder,

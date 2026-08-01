@@ -62,6 +62,81 @@ def card_group_header(title: str, lang: str = "en") -> None:
     )
 
 
+# ── Student page structure ───────────────────────────────────────────────
+
+def student_page_intro(title: str, purpose: str, lang: str = "en") -> None:
+    """Mark a Student page and place its single purpose directly below the title."""
+    import html as _html
+
+    page_header(title, lang=lang)
+    display = t(purpose, lang) if not purpose.startswith(" ") else purpose.strip()
+    st.markdown(
+        f'<div class="px-student-purpose" data-testid="px-student-page" '
+        f'data-role="student"><p>{_html.escape(display)}</p></div>',
+        unsafe_allow_html=True,
+    )
+
+
+def student_task_steps(steps: list[str], current: int, lang: str = "en") -> None:
+    """Render a compact, text-labelled Student task sequence."""
+    import html as _html
+
+    items = []
+    for index, step in enumerate(steps):
+        state = "complete" if index < current else "current" if index == current else "upcoming"
+        state_label = t(f"student_step_{state}", lang)
+        display = t(step, lang) if not step.startswith(" ") else step.strip()
+        items.append(
+            f'<li data-state="{state}"><span class="px-student-step-number">{index + 1}</span>'
+            f'<span class="px-student-step-copy"><strong>{_html.escape(display)}</strong>'
+            f'<span>{_html.escape(state_label)}</span></span></li>'
+        )
+    st.markdown(
+        f'<ol class="px-student-steps" data-testid="px-student-steps">{"".join(items)}</ol>',
+        unsafe_allow_html=True,
+    )
+
+
+def student_action_block(
+    title: str,
+    description: str,
+    lang: str = "en",
+    *,
+    state: str = "ready",
+) -> None:
+    """Introduce the page's one primary action or accurate no-action state."""
+    import html as _html
+
+    display_title = t(title, lang) if not title.startswith(" ") else title.strip()
+    display_description = (
+        t(description, lang) if not description.startswith(" ") else description.strip()
+    )
+    st.markdown(
+        f'<div class="px-student-action" data-testid="px-student-primary-action" '
+        f'data-state="{_html.escape(state)}"><strong>{_html.escape(display_title)}</strong>'
+        f'<p>{_html.escape(display_description)}</p></div>',
+        unsafe_allow_html=True,
+    )
+
+
+def student_context_block(items: list[tuple[str, object]], lang: str = "en") -> None:
+    """Render compact learner/task context with safe, readable values."""
+    import html as _html
+
+    rows = []
+    for label, value in items:
+        display_label = t(label, lang) if not label.startswith(" ") else label.strip()
+        rows.append(
+            f'<div><dt>{_html.escape(display_label)}</dt>'
+            f'<dd>{_html.escape(str(value))}</dd></div>'
+        )
+    st.markdown(
+        f'<dl class="px-student-context" data-testid="px-student-context">'
+        f'{"".join(rows)}</dl>',
+        unsafe_allow_html=True,
+    )
+
+
 # ── Status badges ──────────────────────────────────────────────────────────
 
 def status_badge(
@@ -220,12 +295,17 @@ def feedback_priority_card(
     practice_html = ""
     if practice_link:
         practice_html = f'<div style="font-size:0.85rem;margin-top:8px;">{t("related_practice", lang)}: {practice_link}</div>'
+    evidence_html = (
+        f'<div class="px-quote">{evidence_quote_text}</div>'
+        if evidence_quote_text
+        else ""
+    )
 
     st.markdown(
-        f'<div class="px-card">'
+        f'<div class="px-card" data-testid="px-feedback-priority">'
         f'<div style="font-weight:900;font-size:1.1rem;margin-bottom:8px;color:var(--px-action);">'
         f'{category.replace("_", " ").title()}</div>'
-        f'<div class="px-quote">{evidence_quote_text}</div>'
+        f'{evidence_html}'
         f'<div style="margin-top:8px;">{explanation}</div>'
         f'<div style="margin-top:8px;"><strong>{t("revision_guidance", lang)}:</strong> {revision_guidance}</div>'
         f'{practice_html}'
@@ -269,29 +349,39 @@ def timeline_event(
     detail: str = "",
     boundary: str = "",
     lang: str = "en",
+    source_label: str = "",
+    evidence_status: str = "",
 ) -> None:
-    """Render a single pixel-art timeline event."""
-    parts = []
-    if target_code:
-        parts.append(f"{t('practice_target', lang)}: {target_code}")
-    if timestamp:
-        parts.append(timestamp)
-    meta = " &middot; ".join(parts) if parts else ""
+    """Render one Journey event with distinct activity, evidence, source, and limit."""
+    import html as _html
 
-    boundary_html = ""
-    if boundary:
-        boundary_html = f'<div class="px-notice px-notice-warning" style="margin-top:4px;">{boundary}</div>'
-
-    detail_html = f'<div style="font-size:0.85rem;color:var(--px-muted);">{detail}</div>' if detail else ""
-
+    source = source_label or target_code
+    time_html = (
+        f'<div data-testid="px-journey-time"><strong>{_html.escape(t("student_journey_event_time", lang))}:</strong> '
+        f'{_html.escape(timestamp)}</div>' if timestamp else ""
+    )
+    evidence_html = (
+        f'<div data-testid="px-journey-evidence"><strong>{_html.escape(t("student_journey_event_evidence", lang))}:</strong> '
+        f'{_html.escape(evidence_status)}</div>' if evidence_status else ""
+    )
+    source_html = (
+        f'<div class="px-mono" data-testid="px-journey-source"><strong>{_html.escape(t("student_journey_event_source", lang))}:</strong> '
+        f'{_html.escape(source)}</div>' if source else ""
+    )
+    detail_html = (
+        f'<div data-testid="px-journey-detail" style="font-size:0.9rem;color:var(--px-muted);">'
+        f'{_html.escape(detail)}</div>' if detail else ""
+    )
+    boundary_html = (
+        f'<div class="px-notice px-notice-warning" data-testid="px-journey-limitation" '
+        f'style="margin-top:8px;">{_html.escape(boundary)}</div>' if boundary else ""
+    )
     st.markdown(
-        f'<div class="px-timeline-node">'
+        f'<div class="px-timeline-node" data-testid="px-timeline-event">'
         f'<div class="px-timeline-marker"></div>'
         f'<div class="px-timeline-content">'
-        f'<div style="font-weight:700;">{event_label}</div>'
-        f'<div class="px-mono" data-testid="px-mono" style="font-size:0.85rem;color:var(--px-muted);">{meta}</div>'
-        f'{detail_html}'
-        f'{boundary_html}'
+        f'<div data-testid="px-journey-label" style="font-weight:700;">{_html.escape(event_label)}</div>'
+        f'{time_html}{detail_html}{evidence_html}{source_html}{boundary_html}'
         f'</div></div>',
         unsafe_allow_html=True,
     )

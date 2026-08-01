@@ -269,10 +269,11 @@ class TestContrast:
         assert contrast(token("colors.action-text-disabled"), token("colors.action-disabled")) >= 4.5
 
     def test_focus_outline_measured(self):
-        """Focus indicator contrast is measured and recorded (non-text UI
-        indicator; 3px visible outline retained per the brand contract)."""
-        ratio = contrast(token("colors.focus"), token("colors.white"))
-        assert ratio > 1.0  # measurable, visible against the adjacent surface
+        """Focus indicator meets the non-text contrast threshold on adjacent surfaces."""
+        focus = token("colors.focus")
+        assert contrast(focus, token("colors.white")) >= 3.0
+        assert contrast(focus, token("colors.surface")) >= 3.0
+        assert contrast(focus, token("colors.text")) >= 3.0
         assert token("geometry.focus-width") == "3px"
 
     def test_decorative_red_is_not_a_text_background(self):
