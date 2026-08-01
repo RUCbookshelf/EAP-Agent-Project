@@ -1,0 +1,26 @@
+{
+  "cold_start_s": 4.0,
+  "ready": true,
+  "live": 200,
+  "ready_status": 200,
+  "health_status": 200,
+  "health_migration": 12,
+  "docs": 200,
+  "openapi": 200,
+  "streamlit": 200,
+  "warm_restart_ready": {
+    "status": "ready",
+    "ready": true
+  },
+  "api_down": {
+    "stException_count": 0,
+    "classified_error_present": true
+  },
+  "recovery_ready": {
+    "status": "ready",
+    "ready": true
+  },
+  "recovery": {
+    "stException_count": 0
+  }
+}

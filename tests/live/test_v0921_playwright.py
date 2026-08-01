@@ -273,7 +273,7 @@ def test_focus_and_computed_styles(browser):
             focus_info.get("outlineStyle") not in ("none", "")
             and focus_info.get("outlineWidth") not in ("0px", "0")
         )
-        has_blue_outline = "rgb(41, 173, 255)" in (focus_info.get("outlineColor") or "") or "29adff" in (focus_info.get("outlineColor") or "").lower()
+        has_blue_outline = "rgb(15, 109, 189)" in (focus_info.get("outlineColor") or "") or "0f6dbd" in (focus_info.get("outlineColor") or "").lower()
         results["focus_visible"] = "PASS" if has_visible_outline and has_blue_outline and focus_info.get("inViewport") else f"FAIL:{focus_info}"
 
     # Computed styles for representative elements
@@ -357,7 +357,9 @@ def test_role_separation(browser):
 def test_rerun_idempotency(browser):
     """Navigation, refresh, language switch must not create exercise instances."""
     import sqlite3
-    db_path = PROJECT_ROOT / "data" / "writing_feedback.db"
+    db_path = pathlib.Path(
+        os.environ.get("DATABASE_PATH", PROJECT_ROOT / "data" / "writing_feedback.db")
+    )
     page = browser.new_page(viewport={"width": 1280, "height": 900})
     page.goto(BASE_URL, timeout=30000, wait_until="networkidle")
     page.wait_for_timeout(5000)

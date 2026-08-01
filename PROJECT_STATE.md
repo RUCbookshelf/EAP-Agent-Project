@@ -1,5 +1,23 @@
 # Project State
 
+## Current v0.9.4-B State
+
+- Status: completed and verified; Student-only redesign scope closed.
+- Six Student pages now share a 720px learner-focused structure: purpose,
+  context, steps, evidence, one primary next action, and interpretation limits.
+- Writing, Practice, and Revision preserve field-local validation,
+  authoritative write paths, saved-state locks, and idempotency. Feedback and
+  Journey remain read-oriented; page rendering and navigation create no data.
+- English/Simplified Chinese locale parity is 520/520. Focus is 3px `#0f6dbd`;
+  desktop/mobile behavior and 44px touch targets are browser-verified.
+- Verification: affected 95+1, Student 130+2, core 421+8; controlled
+  cross-page flow PASS; Student renders 24/24; Research smoke 6/6; legacy
+  Playwright, lifecycle/recovery, and exact `run.bat --verify` PASS.
+- Backend/API/database/domain/Research IA unchanged: migration 12,
+  `config-v0.9.0`. v0.9.4-C/D and v1.0 remain not started.
+- Known out-of-scope backend defect: multi-row `WTR` identifier allocation can
+  collide; recorded in `docs/KNOWN_LIMITATIONS.md`.
+
 ## Current v0.9.4-A State
 
 - Status: completed (foundation stage; page redesigns deferred to v0.9.4-B/C).

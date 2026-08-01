@@ -1,0 +1,106 @@
+{
+  "run_id": "v0.9.4-b-20260801-r1",
+  "contexts": [
+    {
+      "combo": "en_1280x900",
+      "empty_prompt": {
+        "field_errors": 1,
+        "post_requests": 0,
+        "essays": 0
+      },
+      "empty_essay": {
+        "field_errors": 1,
+        "post_requests": 0,
+        "essays": 0
+      },
+      "post_request_count": 1,
+      "essay_count": 1,
+      "saved": {
+        "exceptions": 0,
+        "overflow": false,
+        "raw_keys": [],
+        "complete_state": 1,
+        "primary_buttons": 1,
+        "submit_label_present": false,
+        "technical_caption": 1,
+        "primary_size": {
+          "width": 560,
+          "height": 40
+        }
+      },
+      "refresh_and_locale_counts_stable": true,
+      "write_delta_after_valid_submit": {
+        "students": 1,
+        "essays": 1,
+        "metrics": 1,
+        "diagnoses": 1,
+        "learner_history": 1,
+        "llm_call_records": 1,
+        "learner_profile_snapshots": 1,
+        "analysis_runs": 1,
+        "metric_results": 24,
+        "analysis_artifacts": 1,
+        "feedback_records": 1,
+        "diagnostic_calibrations": 1,
+        "analysis_units": 13
+      },
+      "screenshot": "verification\\v0.9.4-b\\v0.9.4-b-20260801-r1\\screenshots\\writing_en_1280x900_saved.png"
+    },
+    {
+      "combo": "zh_CN_390x844",
+      "empty_prompt": {
+        "field_errors": 1,
+        "post_requests": 0,
+        "essays": 0
+      },
+      "empty_essay": {
+        "field_errors": 1,
+        "post_requests": 0,
+        "essays": 0
+      },
+      "post_request_count": 1,
+      "essay_count": 1,
+      "saved": {
+        "exceptions": 0,
+        "overflow": false,
+        "raw_keys": [],
+        "complete_state": 1,
+        "primary_buttons": 1,
+        "submit_label_present": false,
+        "technical_caption": 1,
+        "primary_size": {
+          "width": 358,
+          "height": 44
+        }
+      },
+      "refresh_and_locale_counts_stable": true,
+      "write_delta_after_valid_submit": {
+        "students": 1,
+        "essays": 1,
+        "metrics": 1,
+        "diagnoses": 1,
+        "learner_history": 1,
+        "llm_call_records": 1,
+        "learner_profile_snapshots": 1,
+        "analysis_runs": 1,
+        "metric_results": 24,
+        "analysis_artifacts": 1,
+        "feedback_records": 1,
+        "diagnostic_calibrations": 1,
+        "analysis_units": 13
+      },
+      "screenshot": "verification\\v0.9.4-b\\v0.9.4-b-20260801-r1\\screenshots\\writing_zh_CN_390x844_saved.png"
+    }
+  ],
+  "outage": {
+    "error_notice": 1,
+    "success_notice": 0,
+    "empty_state": 0,
+    "essay_count": 0,
+    "counts_unchanged": true,
+    "exceptions": 0
+  },
+  "console_errors": [],
+  "page_errors": [],
+  "ports_cleaned": true
+}

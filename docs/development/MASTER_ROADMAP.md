@@ -1,5 +1,20 @@
 # Master roadmap
 
+## v0.9.4 roadmap - 2026-08-01
+
+| Item | Status |
+|---|---|
+| v0.9.4-A Hybrid Pixel System 2.0 foundation | completed |
+| v0.9.4-B six-page Student Experience Redesign | completed and verified |
+| v0.9.4-B core/browser/lifecycle/launcher verification | completed |
+| v0.9.4-C Research Experience Redesign | not started |
+| v0.9.4-D | not started |
+| v1.0 | not started |
+
+v0.9.4-B closes after its verification/documentation commit. It does not
+authorize Research redesign, backend persistence repair, external-provider
+work, corpus/ML work, or a pilot.
+
 ## v0.9.3 (A + B + C) — 2026-08-01
 
 | Item | Status |
@@ -11,9 +26,10 @@
 | Integrated verification (pytest 320+8, Cases A-R 110, run.bat PASS x3, browser journeys) | completed |
 | Migration 12 / config-v0.9.0 | unchanged |
 | v0.9.4-A Hybrid Pixel System 2.0 foundation (tokens, theme, typography, components, localization) | completed |
-| v0.9.4-B Student Experience Redesign | not_started |
+| v0.9.4-B Student Experience Redesign | completed and verified (Student pages only) |
 | v0.9.4-C Research Experience Redesign | not_started |
 | v1.0 | not_started |
+
 
 
 ## v0.9.1 UI Completion & Usability Refinement — 2026-07-31
@@ -29,6 +45,7 @@
 | Backend (migration 12, config-v0.9.0) | unchanged |
 | v1.0 | not_started |
 
+
 ## v0.8 CALF Measurement Foundation — 2026-07-30
 
 | Item | Status |
@@ -41,6 +58,7 @@
 
 This authorization ends after v0.8 verification, documentation, and one isolated commit.
 
+
 ## v0.7.1 bounded repair — 2026-07-30
 
 | Item | State |
@@ -52,6 +70,7 @@ This authorization ends after v0.8 verification, documentation, and one isolated
 | v0.8 and new measurement constructs | not started |
 
 This authorization ends after the v0.7.1 verification, documentation, and independent commit. It does not authorize v0.8.
+
 
 ## v0.7 authorized release state — 2026-07-30
 
@@ -87,6 +106,7 @@ Last updated: 2026-07-29.
 | API version | v1 |
 | Current blocker | none |
 | Next step | Stop; conduct `V0.6.1_HUMAN_REVIEW_GUIDE.md`; v0.7 requires separate authorization |
+
 
 ## Version sequence
 

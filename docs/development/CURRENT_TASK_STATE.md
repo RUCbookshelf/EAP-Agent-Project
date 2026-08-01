@@ -1,6 +1,22 @@
 # Current Task State
 
 **Date:** 2026-08-01
+**Current task:** v0.9.4-B Student Experience Redesign
+**Status:** completed and verified (see `RUN_VERIFICATION_V0.9.4_B.md`)
+
+- Home, Writing, Feedback, Practice, Revision, and Learning Journey redesigned
+  on Hybrid Pixel System 2.0 with shared purpose/context/steps/action structure.
+- Locale parity 520/520; 720px Student width; responsive stacking; accessible
+  `#0f6dbd` focus; backend/API/database/domain/Research IA unchanged.
+- Verification: 95+1 affected, 130+2 Student, 421+8 core; isolated cross-page
+  flow PASS; 24/24 Student renders; 6/6 Research smoke; legacy Playwright,
+  lifecycle/recovery, and exact launcher PASS.
+- One pre-existing WTR ID-allocation collision is documented and remains an
+  out-of-scope backend task.
+- v0.9.4-C/D and v1.0 remain not started. This task stops after the second
+  bounded verification/documentation commit.
+
+**Date:** 2026-08-01
 **Current task:** v0.9.4-A Hybrid Design System Foundation
 **Status:** completed (see RUN_VERIFICATION_V0.9.4_A.md)
 

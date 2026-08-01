@@ -1,0 +1,82 @@
+{
+  "run_id": "v0.9.4-b-20260801-r1",
+  "contexts": [
+    {
+      "combo": "en_1280x900",
+      "missing": {
+        "exceptions": 0,
+        "overflow": false,
+        "raw_keys": [],
+        "student_width": "720px",
+        "steps": 3,
+        "action_state": "blocked",
+        "primary_buttons": 0
+      },
+      "valid": {
+        "exceptions": 0,
+        "overflow": false,
+        "raw_keys": [],
+        "student_width": "720px",
+        "learner_visible": true,
+        "steps": 3,
+        "primary_buttons": 1,
+        "primary_size": {
+          "width": 560,
+          "height": 40
+        },
+        "focus": {
+          "style": "solid",
+          "width": "3px",
+          "color": "rgb(15, 109, 189)"
+        }
+      },
+      "navigation_heading": [
+        "Revision"
+      ],
+      "screenshot": "verification\\v0.9.4-b\\v0.9.4-b-20260801-r1\\screenshots\\home_en_1280x900.png"
+    },
+    {
+      "combo": "zh_CN_390x844",
+      "missing": {
+        "exceptions": 0,
+        "overflow": false,
+        "raw_keys": [],
+        "student_width": "720px",
+        "steps": 3,
+        "action_state": "blocked",
+        "primary_buttons": 0
+      },
+      "valid": {
+        "exceptions": 0,
+        "overflow": false,
+        "raw_keys": [],
+        "student_width": "720px",
+        "learner_visible": true,
+        "steps": 3,
+        "primary_buttons": 1,
+        "primary_size": {
+          "width": 358,
+          "height": 44
+        },
+        "focus": {
+          "style": "solid",
+          "width": "3px",
+          "color": "rgb(15, 109, 189)"
+        }
+      },
+      "navigation_heading": [
+        "\u4fee\u8ba2"
+      ],
+      "screenshot": "verification\\v0.9.4-b\\v0.9.4-b-20260801-r1\\screenshots\\home_zh_CN_390x844.png"
+    }
+  ],
+  "outage": {
+    "error_notice": 1,
+    "empty_state": 0,
+    "exceptions": 0
+  },
+  "console_errors": [],
+  "page_errors": [],
+  "table_counts_unchanged": true,
+  "ports_cleaned": true
+}

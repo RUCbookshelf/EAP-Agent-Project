@@ -1,0 +1,31 @@
+{
+  "run_id": "v0.9.4-b-20260801-r1",
+  "source_database": {
+    "resolved_path": "A:\\\u575a\u679c\u4e91\u540c\u6b65\\TheBookshelf's Academia\\F-Project\\03-\u5b66\u672f\u8bba\u6587\u5199\u4f5c\u667a\u80fd\u4f53\\writing-feedback-mvp\\data\\writing_feedback.db",
+    "exists": true,
+    "migration": 12,
+    "active_configuration": "config-v0.9.0"
+  },
+  "isolated_database": {
+    "resolved_path": "A:\\\u575a\u679c\u4e91\u540c\u6b65\\TheBookshelf's Academia\\F-Project\\03-\u5b66\u672f\u8bba\u6587\u5199\u4f5c\u667a\u80fd\u4f53\\writing-feedback-mvp\\verification\\v0.9.4-b\\v0.9.4-b-20260801-r1\\isolated\\writing_feedback_v094b.db",
+    "exists": true,
+    "migration": 12,
+    "active_configuration": "config-v0.9.0"
+  },
+  "actual_connected_database": "A:\\\u575a\u679c\u4e91\u540c\u6b65\\TheBookshelf's Academia\\F-Project\\03-\u5b66\u672f\u8bba\u6587\u5199\u4f5c\u667a\u80fd\u4f53\\writing-feedback-mvp\\verification\\v0.9.4-b\\v0.9.4-b-20260801-r1\\isolated\\writing_feedback_v094b.db",
+  "database_is_isolated": true,
+  "llm_provider": "local",
+  "external_providers_disabled": true,
+  "ports_free": {
+    "8000": true,
+    "8501": true
+  },
+  "home_render": {
+    "exceptions": 0,
+    "heading_present": true
+  },
+  "journey_render": {
+    "exceptions": 0,
+    "heading_present": true
+  }
+}

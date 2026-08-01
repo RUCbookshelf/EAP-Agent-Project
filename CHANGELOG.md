@@ -1,3 +1,29 @@
+## v0.9.4-B (2026-08-01)
+
+### Added
+- Shared Student presentation primitives for page purpose, task steps, learner
+  context, and one clearly ranked action.
+- Focused verification for all six Student pages and one isolated cross-page
+  write flow; 520/520 English/Chinese locale parity.
+
+### Changed
+- Redesigned Home, Writing, Feedback, Practice, Revision, and Learning Journey
+  around learner context, current task, evidence, next action, and explicit
+  limits. Student content width is 720px with mobile control stacking and
+  44px touch targets.
+- Accessible focus token updated to 3px `#0f6dbd` (5.33:1 on white, 4.84:1
+  on the surface, 3.16:1 on the dark boundary).
+- Legacy v0.9.2.1 Playwright isolation now respects `DATABASE_PATH` and the
+  current focus-token contract.
+
+### Verified
+- 95 passed + 1 skipped affected tests; 130 passed + 2 skipped Student
+  regression; 421 passed + 8 skipped core tests.
+- Controlled cross-page flow PASS; 24/24 required Student renders; 6/6
+  required Research smoke renders; legacy Playwright PASS; lifecycle and
+  exact `cmd /c "run.bat --verify"` PASS.
+- Migration 12, `config-v0.9.0`, Research IA, API/schema/domain contracts, and
+  read-time Journey semantics unchanged.
 
 ## v0.9.4-A (2026-08-01)
 

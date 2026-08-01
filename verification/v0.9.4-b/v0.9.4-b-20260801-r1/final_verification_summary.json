@@ -1,0 +1,52 @@
+{
+    "run_id":  "v0.9.4-b-20260801-r1",
+    "result":  "PASS",
+    "implementation_commit":  "284378e",
+    "isolation":  {
+                      "provider":  "local",
+                      "migration":  12,
+                      "configuration":  "config-v0.9.0",
+                      "isolated_database_removed":  true
+                  },
+    "static":  {
+                   "ast_files":  14,
+                   "locale_en":  520,
+                   "locale_zh_CN":  520,
+                   "pixel_style_violations":  0,
+                   "focus":  "#0f6dbd",
+                   "contrast_white":  5.33,
+                   "contrast_surface":  4.84,
+                   "contrast_dark":  3.16
+               },
+    "tests":  {
+                  "affected":  "95 passed, 1 skipped",
+                  "student_regression":  "130 passed, 2 skipped",
+                  "core":  "421 passed, 8 skipped, 3 warnings"
+              },
+    "browser":  {
+                    "focused_page_slices":  "6/6 PASS",
+                    "controlled_cross_page":  "PASS",
+                    "student_renders":  "24/24 PASS",
+                    "research_smokes":  "6/6 PASS",
+                    "legacy_v09":  "6/6 PASS",
+                    "legacy_v0921":  "PASS",
+                    "screenshots_preserved":  true,
+                    "local_image_reader":  "BLOCKED: windows sandbox helper_unknown_error"
+                },
+    "lifecycle":  {
+                      "result":  "PASS",
+                      "live":  200,
+                      "ready":  200,
+                      "health":  200,
+                      "docs":  200,
+                      "streamlit":  200,
+                      "student_api_down_classified":  true,
+                      "recovery":  true,
+                      "cleanup":  true
+                  },
+    "launcher":  {
+                     "command":  "cmd /c \"run.bat --verify\"",
+                     "result":  "PASS"
+                 },
+    "known_limitation":  "Pre-existing WTR ID allocator can collide on a second within-task response; out of scope and not fixed."
+}

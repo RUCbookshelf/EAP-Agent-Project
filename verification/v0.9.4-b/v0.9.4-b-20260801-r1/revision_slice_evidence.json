@@ -1,0 +1,56 @@
+{
+  "run_id": "v0.9.4-b-20260801-r1",
+  "valid_workflow": {
+    "before_revision": {
+      "essays": 1,
+      "linked_revisions": 0,
+      "revision_groups": 0,
+      "revision_snapshots": 0
+    },
+    "after_revision": {
+      "essays": 2,
+      "linked_revisions": 1,
+      "revision_groups": 1,
+      "revision_snapshots": 1
+    },
+    "response_observations": 1,
+    "empty_input_writes_zero": true,
+    "locale_and_refresh_counts_stable": true,
+    "mobile_primary_size": {
+      "width": 358,
+      "height": 44
+    },
+    "mobile_health": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "main_max_width": "720px"
+    },
+    "desktop_screenshot": "verification\\v0.9.4-b\\v0.9.4-b-20260801-r1\\screenshots\\revision_en_1280x900_saved.png",
+    "mobile_screenshot": "verification\\v0.9.4-b\\v0.9.4-b-20260801-r1\\screenshots\\revision_zh_CN_390x844_saved.png"
+  },
+  "no_eligible": {
+    "empty_states": 1,
+    "primary_buttons": 1,
+    "primary_size": {
+      "width": 358,
+      "height": 44
+    },
+    "counts_stable": true,
+    "health": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "main_max_width": "720px"
+    }
+  },
+  "outage": {
+    "error_notices": 1,
+    "primary_buttons": 0,
+    "counts_stable": true,
+    "exceptions": 0
+  },
+  "console_errors": [],
+  "page_errors": [],
+  "ports_cleaned": true
+}

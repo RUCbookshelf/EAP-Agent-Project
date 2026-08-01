@@ -1,9 +1,18 @@
 # Hybrid Pixel System 2.0 — Canonical Design Foundation
 
-**Version:** hybrid-pixel-system-2.0-v0.9.4-a
-**Status:** implemented (v0.9.4-A foundation stage; page-level adoption
-continues in v0.9.4-B / v0.9.4-C)
+**Version:** hybrid-pixel-system-2.0-v0.9.4-b
+**Status:** implemented (v0.9.4-A foundation; v0.9.4-B Student adoption complete; Research adoption remains v0.9.4-C)
 **Canonical token source:** `app/ui/pixel_art.py` — `DESIGN_TOKENS`
+
+## v0.9.4-B Student adoption
+
+The Student role now applies the 720px content-width alias and shared
+presentation primitives across Home, Writing, Feedback, Practice, Revision,
+and Learning Journey. All six pages preserve the square geometry, hard
+shadows, sans-body/technical-mono split, semantic state patterns, responsive
+stacking, and local-only asset policy. Each page presents a localized purpose,
+learner/task context, evidence, a ranked next action, and an explicit limit.
+Research role page-level adoption remains outside this stage.
 
 ## 1. Direction
 
@@ -17,8 +26,9 @@ foundations, form-state semantics, loading semantics, error semantics, and
 empty-state semantics.
 
 Role-specific aliases exist for Student/Research density, content width,
-and emphasis. Their page-level application is deferred to v0.9.4-B/C; the
-aliases are defined now so later stages never create a second design system.
+and emphasis. Student aliases are applied across all six Student pages in
+v0.9.4-B; Research page-level adoption remains deferred to v0.9.4-C. The
+aliases remain in one design system.
 
 ## 2. Canonical token contract
 
@@ -39,7 +49,7 @@ parity.
 | `--px-text-secondary` | `#4a4a58` | secondary text |
 | `--px-muted` | `#6b6b7b` | muted text |
 | `--px-border` | `#1a1c2c` | border |
-| `--px-focus` | `#29adff` | focus outline (3px, 2px offset) |
+| `--px-focus` | `#0f6dbd` | focus outline (3px, 2px offset; >=3:1 against adjacent boundaries) |
 | `--px-action` | `#e00047` | primary action (measured 4.93:1 on white) |
 | `--px-action-hover` | `#e00047` | hover state (same bg; shadow/translate) |
 | `--px-action-active` | `#e00047` | active state (same bg; pressed) |
@@ -138,5 +148,6 @@ stable `data-testid` attributes. Every global selector is listed in
 v0.9.4-A implements the foundation and minimal production adoption only:
 Writing required-prompt validation, one loading state (Run Export), one
 compact research table (Journey counts), mono technical captions, and the
-two localized Research Data strings. Page-level redesigns are deferred to
-v0.9.4-B (Student) and v0.9.4-C (Research).
+two localized Research Data strings. v0.9.4-B then applies the shared
+foundation across all six Student pages; Research redesign remains deferred to
+v0.9.4-C.

@@ -1,20 +1,37 @@
-# v0.9.4-A 已知限制
+# v0.9.4-B known limitations
 
-- Focus 轮廓（3px `#29adff`）对白色背景的测量对比度为 2.47:1：作为可见的
-  非文本焦点指示器保留（品牌契约），但未达到 WCAG 1.4.11 非文本对比度
-  3:1；留待后续阶段处理。
-- 切换语言会把角色单选重置为学生视图（Streamlit 翻译选项行为）；已验证为
-  只读，无写入副作用。导航时先重新选择角色即可。
-- `en.json` 中四个既有英文文案含字面 `?`（对应中文为 `——`/`……`）：有效
-  UTF-8，非乱码；按“不进行无关翻译清理”边界保持原样。
-- `.streamlit/` 在 `.gitignore` 中；新增的 `config.toml` 已强制纳入提交
-  （intentional force-add，已记录）。
-- `run_export` 在 `research_exports/` 下写导出目录，不写 `export_jobs`
-  表行（既有行为）；重复写入验收以目录增量为准。
-- 内容宽度别名（Student 720px / Research 1200px）、角色密度页面级应用、
-  Research JSON→表格全面替换、侧栏分组与图标导航留待 v0.9.4-B/C。
-- /health 中 `nlp_model_installed=false` 仍是 v0.9.3-A 记录的既有外观限制。
+- The pre-existing `_next_practice_id` allocator uses
+  `SUBSTR(response_id, 3)` for three-character `WTR` prefixes. A second
+  within-task response can collide with the first ID. This backend defect is
+  outside the Student presentation scope and remains open for a dedicated
+  persistence fix and multi-response regression test.
+- Student feedback, practice evaluation, revision observations, and Journey
+  events remain formative prototype evidence. They do not establish writing
+  quality, learning, mastery, transfer, proficiency, CEFR level, or causation.
+- Student/Research views remain presentation modes, not authentication or
+  authorization boundaries.
+- A separate local-image-reader inspection of the generated PNG evidence was
+  blocked by the Windows sandbox helper (`helper_unknown_error`). Browser DOM,
+  computed-style, responsive, accessibility, console, and screenshot creation
+  checks passed; the tooling blocker is recorded in the verification report.
+- v0.9.4-B does not redesign Research pages, change backend/API/schema/domain
+  contracts, add external providers, or begin v0.9.4-C/D or v1.0.
 
+## Retained v0.9.4-A limitations
+
+- Switching language can reset the role radio to Student View because of
+  Streamlit translated-option behavior. This is read-only and creates no
+  records; select the role again when needed.
+- Four retained English locale strings contain a literal `?`; they are valid
+  UTF-8 source text and were not changed by this bounded redesign.
+- `.streamlit/config.toml` remains intentionally force-added because
+  `.streamlit/` is ignored by the repository.
+- Research export writes an export directory but does not insert an
+  `export_jobs` row; this retained behavior is outside Student scope.
+- Research-wide 1200px adoption, JSON-to-table conversion, grouped sidebar
+  navigation, and Research icon adoption remain deferred to v0.9.4-C.
+- The previously recorded environment-specific NLP health limitation remains
+  outside this Student presentation stage.
 ## v0.8 已知限制
 
 - Learning Journey events are derived from stored records and can only be as
@@ -50,6 +67,7 @@
 - History Evidence provides lineage but does not prove validity or causality.
 - No CALF, T-unit, grammar-error total, CEFR, proficiency score, overall score, cloud deployment, paid embedding service, or v0.8 functionality is included.
 
+
 ## Retained v0.6.1 limitations
 
 - Metric and diagnosis confidence are transparent engineering heuristics, not validated probabilities.
@@ -66,6 +84,7 @@ v0.6 图表只是已有自动信号的透明展示，不增加测量效度。配
 
 > v0.4 补充：默认 spaCy 分析改善了定位和可追溯性，但没有把自动解析变成已验证测量。学习者拼写、非标准语法、代码转换和异常标点都可能导致 lemma/POS/dependency/noun chunk 错误。连接词资源不完整；未检测不等于没有衔接。MATTR 窗口 50、局部重复窗口 30 和长句阈值 30 都是工作假设。题目关键词降权也可能遗漏必要术语或错误降权。
 
+
 ## 分析
 
 - 英文词与句子通过正则表达式识别，缩写、特殊标点、代码转换和非标准拼写可能被误分。
@@ -73,6 +92,7 @@ v0.6 图表只是已有自动信号的透明展示，不增加测量效度。配
 - `repeated_content_words` 只按表层词形和固定停用词表计算，不做词形还原或语境判断。
 - TTR 强烈受文本长度影响；平均句长也不能代表句法复杂度或句长变化。
 - 这 8 个指标不是完整 CALF，更不是学生能力测量。
+
 
 ## 诊断与反馈
 
@@ -82,11 +102,13 @@ v0.6 图表只是已有自动信号的透明展示，不增加测量效度。配
 - Pydantic 保证结构，不保证教学内容正确。教师仍需审核。
 - 本次真实 DeepSeek 两次提交验证只证明接口、结构约束、历史证据绑定和持久化链路可运行，不证明反馈具有教学效度、评分效度或跨任务稳定性。
 
+
 ## 历史
 
 - 可比性只匹配 `genre`、`timed` 和 `tool_use`，没有控制题目难度、时间长度、教学干预或写作目的。
 - 一条可比历史即可生成描述性对比，但绝不构成真实能力趋势证据。
 - 没有可比历史时明确显示“数据不足，无法判断趋势。”；不可比记录不会被强行合并。
+
 
 ## 工程与部署
 
@@ -102,12 +124,14 @@ v0.6 图表只是已有自动信号的透明展示，不增加测量效度。配
 - `recently_reduced` 只表示结构化诊断在最近窗口暂未出现，不表示问题解决、掌握或真实能力提升。
 
 
+
 ## v0.9.1 UI Limitations
 
 - Streamlit AppTest-based integration tests are skipped; UI verification uses Playwright.
 - The sidebar navigation uses Streamlit radio groups which reload on every interaction; session state persists results but rerenders the page.
 - Mobile layout is verified at 390x844 but some Streamlit components may not fully adapt to very narrow viewports.
 - The CSS is Streamlit-compatible only; no custom JavaScript or large frontend framework is used.
+
 
 ## v0.9.2.1 Pixel Art UI Limitations
 
@@ -131,6 +155,7 @@ v0.6 图表只是已有自动信号的透明展示，不增加测量效度。配
 - Computed-style audit for primary components confirmed zero border-radius, no
   gradients, no blur, no soft shadows, zero transition duration, and no animations
   across text inputs, textareas, expanders, and alert notices.
+
 
 ## v0.9.3-B Error-Handling Limitations
 

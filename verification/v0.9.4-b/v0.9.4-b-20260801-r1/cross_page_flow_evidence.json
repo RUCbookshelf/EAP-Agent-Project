@@ -1,0 +1,106 @@
+{
+  "run_id": "v0.9.4-b-20260801-r1",
+  "bilingual_pages": {
+    "home_initial": {
+      "health": {
+        "exceptions": 0,
+        "overflow": false,
+        "main_max_width": "720px"
+      },
+      "primary_size": {
+        "width": 358,
+        "height": 44
+      },
+      "screenshot": "verification\\v0.9.4-b\\v0.9.4-b-20260801-r1\\screenshots\\cross_page\\home_initial_zh_CN_390x844.png",
+      "counts_stable": true
+    },
+    "writing_saved": {
+      "health": {
+        "exceptions": 0,
+        "overflow": false,
+        "main_max_width": "720px"
+      },
+      "primary_size": {
+        "width": 358,
+        "height": 44
+      },
+      "screenshot": "verification\\v0.9.4-b\\v0.9.4-b-20260801-r1\\screenshots\\cross_page\\writing_saved_zh_CN_390x844.png",
+      "counts_stable": true
+    },
+    "feedback_priority": {
+      "health": {
+        "exceptions": 0,
+        "overflow": false,
+        "main_max_width": "720px"
+      },
+      "primary_size": {
+        "width": 358,
+        "height": 44
+      },
+      "screenshot": "verification\\v0.9.4-b\\v0.9.4-b-20260801-r1\\screenshots\\cross_page\\feedback_priority_zh_CN_390x844.png",
+      "counts_stable": true
+    },
+    "practice_completed": {
+      "health": {
+        "exceptions": 0,
+        "overflow": false,
+        "main_max_width": "720px"
+      },
+      "primary_size": {
+        "width": 358,
+        "height": 44
+      },
+      "screenshot": "verification\\v0.9.4-b\\v0.9.4-b-20260801-r1\\screenshots\\cross_page\\practice_completed_zh_CN_390x844.png",
+      "counts_stable": true
+    },
+    "revision_saved": {
+      "health": {
+        "exceptions": 0,
+        "overflow": false,
+        "main_max_width": "720px"
+      },
+      "primary_size": {
+        "width": 358,
+        "height": 44
+      },
+      "screenshot": "verification\\v0.9.4-b\\v0.9.4-b-20260801-r1\\screenshots\\cross_page\\revision_saved_zh_CN_390x844.png",
+      "counts_stable": true
+    },
+    "journey_complete": {
+      "health": {
+        "exceptions": 0,
+        "overflow": false,
+        "main_max_width": "720px"
+      },
+      "primary_size": {
+        "width": 358,
+        "height": 44
+      },
+      "screenshot": "verification\\v0.9.4-b\\v0.9.4-b-20260801-r1\\screenshots\\cross_page\\journey_complete_zh_CN_390x844.png",
+      "counts_stable": true
+    }
+  },
+  "home_final_oriented": true,
+  "learner_switch_cleared_stale_state": true,
+  "final_counts": {
+    "essays": 2,
+    "initial_submissions": 1,
+    "revisions": 1,
+    "selected_priorities": 1,
+    "targets": 1,
+    "exercises": 1,
+    "attempts": 1,
+    "evaluations": 1,
+    "revision_groups": 1,
+    "revision_snapshots": 1,
+    "response_observations": 1,
+    "engagement_traces": 0
+  },
+  "journey_event_count": 12,
+  "journey_dedup_keys_stable": true,
+  "no_duplicate_writes": true,
+  "unsupported_claims": [],
+  "console_errors": [],
+  "page_errors": [],
+  "ports_cleaned": true
+}

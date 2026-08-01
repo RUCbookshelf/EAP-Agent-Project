@@ -1,4 +1,5 @@
 
+
 ## 2026-07-31 — v0.9.1 Role-based UI
 
 - **Decision**: Reorganize Streamlit UI from 10-page flat navigation to role-based dual-view (Student/Research) with 6 pages each.
@@ -6,7 +7,31 @@
 - **Alternatives**: Considered Streamlit's native multipage but radio-based navigation in sidebar was simpler and more controllable.
 - **Impact**: All existing backend tests pass without changes. Three AppTest-based integration tests skipped (covered by Playwright). No migration or configuration changes.
 - **Progressive disclosure**: Student View hides internal IDs, analyzer versions, Diagnostic Gate internals. Research View exposes everything.
+
 # Decision log
+
+## D037 - One shared Student presentation structure
+- Status: accepted for v0.9.4-B.
+- Decision: all six Student pages use shared purpose, context, task-step, and
+  action primitives with a 720px content width. Page-specific evidence stays
+  page-specific; no second Student design system is introduced.
+
+## D038 - One ranked current action, with saved-state locks
+- Status: accepted for v0.9.4-B.
+- Decision: Writing, Practice, and Revision expose one authoritative write
+  action at a time and replace it with a locked saved state after success.
+  Validation failures and render/navigation/locale/refresh remain zero-write.
+
+## D039 - Journey evidence fields stay independent
+- Status: accepted for v0.9.4-B.
+- Decision: each Journey item separates time, source, evidence, and limit.
+  The read-time 12-event-type projection and conservative semantics are
+  unchanged; the page never writes engagement traces.
+
+## D040 - Accessible focus token
+- Status: accepted for v0.9.4-B.
+- Decision: focus changes to 3px `#0f6dbd`, measured at 5.33:1 on white,
+  4.84:1 on the primary surface, and 3.16:1 on the dark boundary.
 
 ## D032 — One canonical token source in pixel_art.py
 - Status: accepted for v0.9.4-A
@@ -69,21 +94,26 @@
   they never state mastery, learning, causation, or transfer. Accuracy
   unavailability is never replaced by zero.
 
+
 ## D024 — Separate semantic measurement status from availability
 - Status: accepted for v0.8
 - Decision: persist research/proxy/candidate/manual/unavailable lifecycle independently from whether one observation has a value.
+
 
 ## D025 — Candidate syntax and errors never become formal measures automatically
 - Status: accepted for v0.8
 - Decision: require new validated-unit identities or eligible confirmed annotations; keep all candidates out of diagnosis, priorities, practice, and trajectories.
 
+
 ## D026 — Actual duration only for output rate
 - Status: accepted for v0.8
 - Decision: a task time limit is never a duration proxy; missing actual duration returns unavailable rather than zero.
 
+
 ## D027 — CALF is research evidence, not a score
 - Status: accepted for v0.8
 - Decision: no aggregation, quality/ability/proficiency/CEFR interpretation, or default prompt priority. v0.9 remains unauthorized.
+
 
 ## D020 — Backend-owned longitudinal facts
 
@@ -92,6 +122,7 @@
 - Decision: derive status/counts/evidence IDs before provider execution; allow the provider to word the comment only within those facts; repair a conflicting comment locally and revalidate.
 - Boundary: no new ability, proficiency, learning-growth or CALF construct.
 
+
 ## D021 — Keep within-task and cross-task evidence separate
 
 - Date: 2026-07-30
@@ -99,12 +130,14 @@
 - Decision: expose Draft Chain, adjacent and first-to-latest comparisons as a read-only trajectory while one Revision Group still counts as one independent task.
 - Boundary: no causal feedback attribution or revision-quality score; major rewrites explicitly lower attribution confidence.
 
+
 ## D022 — Provider status is an execution record
 
 - Date: 2026-07-30
 - Status: accepted for v0.7.1 verification
 - Decision: persist request, parse/validation/correction, server-repair and fallback state separately from the formal feedback and show technical detail only in Research audit view.
 - Boundary: status does not rate pedagogical quality. Streamlit remains the frontend and session-state rerenders reuse the API result.
+
 
 ## D023 — Accept v0.7.1 and stop before v0.8
 
@@ -114,21 +147,26 @@
 - Evidence: Live A passed directly; Live B passed after one correction; Live C passed with a local longitudinal-comment repair; all three used fallback false. `run.bat --verify` passed.
 - Boundary: thresholds, task equivalence, ability-language detection, revision attribution and UI interpretation still require human and educational-measurement review. v0.8 is not authorized.
 
+
 ## D014 — Upgrade the existing profile path
 
 Migration 8 extends `learner_profile_snapshots` and adds append-only `history_evidence_registry`. `ProgressService` remains the single snapshot builder and preserves v0.3 compatibility fields. Historical JSON is never rewritten. New snapshots use `LPS######` and `learner-profile-v0.7.0`.
+
 
 ## D015 — Conservative task-aware sufficiency
 
 Default representative strategy is `final_or_latest`. Two representative tasks permit pairwise description, three permit a provisional direction, and five permit an adequate descriptive trend. Genre, timing band, tool class, revision mode, analyzer family and metric-version signature divide Task Clusters. These defaults are transparent working assumptions without educational or measurement validation.
 
+
 ## D016 — Current Gate remains authoritative
 
 Only a current `selected_priority` with verified evidence may become a current learning target. History cannot reactivate a monitored or suppressed current signal. Zero targets are valid. Strength patterns require verified textual evidence and never imply a stable learner trait.
 
+
 ## D017 — Screen and trace LLM history
 
 `feedback-prompt-v0.7.0` receives only current selected diagnoses plus relevant targets, compatible trajectories, bounded History Evidence IDs, Data Sufficiency and limitations. Raw histories, suppressed diagnoses and unrelated metrics remain outside the prompt. Evidence traces submissions, runs, diagnoses, metrics, cluster and snapshot.
+
 
 ## D018 — Preserve the release boundary
 
@@ -136,9 +174,11 @@ v0.7 adds no CALF, T-unit, grammar-error totals, CEFR, scores, paid embeddings, 
 
 ---
 
+
 ## D013 — Calibrate automatic signals before formative feedback
 
 v0.6.1 inserts deterministic Metric Confidence, Diagnostic Gate, Evidence Relevance, and transparent Priority Score layers. Metrics may remain research evidence without becoming diagnoses; diagnoses may remain monitored without entering student feedback. Zero priorities are valid. Distributed count-three repetition without a local cluster remains monitored, prompt/necessary terms are penalized, and connective priorities require a specific relevant location. Word count and parser measurements are descriptive signals, not strengths. Defaults (2 priorities, 0.52 score threshold, repetition 4/0.025, penalties 1.0/0.7, exercise maxima 3/2/1) are versioned prototype assumptions requiring future literature and human calibration. Since `config-v0.6.1` already existed, migration 7 preserves it and activates child `config-v0.6.2`. v0.7/CALF remain `not_started`.
+
 
 ## D001 — Preserve v0.1.1 as an incremental compatibility layer
 
@@ -147,6 +187,7 @@ v0.6.1 inserts deterministic Metric Confidence, Diagnostic Gate, Evidence Releva
 - Decision: retain Analyzer, Diagnoser, Prompt Builder, Provider Router, and feedback validator; wrap them with new services and Repository protocols rather than rewrite them.
 - Reason: protects proven evidence validation and fallback behavior.
 
+
 ## D002 — Use numbered native SQLite migrations for v0.2
 
 - Date: 2026-07-29
@@ -154,11 +195,13 @@ v0.6.1 inserts deterministic Metric Confidence, Diagnostic Gate, Evidence Releva
 - Decision: use small, versioned Python migration functions with `PRAGMA user_version` and a migration history table, not SQLAlchemy/Alembic.
 - Reason: the existing system is small and sqlite3-based; a native runner is the minimum reliable non-destructive mechanism and keeps dependencies limited. PostgreSQL remains an explicit future adapter seam, not a fake implementation.
 
+
 ## D003 — Keep API routes thin and application services framework-neutral
 
 - Date: 2026-07-29
 - Status: accepted
 - Decision: FastAPI dependency wiring may construct services, but routes only validate, invoke, and translate results. Services contain no FastAPI or Streamlit imports.
+
 
 ## D004 — Fixed local ports fail clearly
 
@@ -166,11 +209,13 @@ v0.6.1 inserts deterministic Metric Confidence, Diagnostic Gate, Evidence Releva
 - Status: accepted
 - Decision: local FastAPI and Streamlit ports are configured once; startup fails with a clear error when unavailable and never silently selects another port.
 
+
 ## D005 — v0.2 acceptance and transition
 
 - Date: 2026-07-29
 - Status: accepted
 - Decision: v0.2 passed all gates and was committed as `155df8a6a6a2800205b6dc821d1e51cf135b78a1`; the post-gate architecture backup is `docs/visualizations/V0.2_FUNCTION_ARCHITECTURE.md`. v0.3 may begin automatically.
+
 
 ## D006 — Transparent v0.3 longitudinal heuristics
 
@@ -179,11 +224,13 @@ v0.6.1 inserts deterministic Metric Confidence, Diagnostic Gate, Evidence Releva
 - Decision: anchor comparisons on the newest submission; admit only `comparable` records to primary baselines/trends; require 3 observations; use ordered-index OLS slope, ±10% first/last change, CV variability, and at most `medium` confidence. Track issue trajectories from structured diagnoses only.
 - Reason: this is the smallest explainable approach that preserves uncertainty and can be replaced after literature and empirical calibration. It is not claimed as a validated theoretical or measurement model.
 
+
 ## D007 — Screen Snapshot evidence before LLM use
 
 - Date: 2026-07-29
 - Status: accepted
 - Decision: FeedbackContext receives a screened Snapshot without excluded submissions or raw historical observations. Local code converts selected conclusions into H evidence IDs. The LLM may cite those IDs but may not recalculate trends or strengthen confidence.
+
 
 ## D008 — Accept v0.3 and stop for human review
 
@@ -191,6 +238,7 @@ v0.6.1 inserts deterministic Metric Confidence, Diagnostic Gate, Evidence Releva
 - Status: accepted
 - Decision: v0.3 passed the 27-item acceptance gate and real DeepSeek verification. The implementation commit is `0ce8f1a`; the post-gate architecture backup is `docs/visualizations/V0.3_FUNCTION_ARCHITECTURE.md`.
 - Stop condition: do not implement v0.4 or later work until a human reviews the architecture, comparability rules, longitudinal heuristics, learner profile, and research assumptions documented in `docs/development/V0.3_HUMAN_REVIEW_GUIDE.md`.
+
 
 ## D009 — Authorize the bounded v0.4 → v0.5 → v0.6 sequence
 
@@ -200,6 +248,7 @@ v0.6.1 inserts deterministic Metric Confidence, Diagnostic Gate, Evidence Releva
 - Boundary: complete each independent acceptance gate and Git commit; stop after v0.6. Do not begin v0.7, full CALF measurement, cloud deployment or a WeChat client.
 - Recovery point: annotated Git tag `pre-v0.4-baseline-20260729` points to the verified v0.3 documentation commit.
 
+
 ## D010 — Accept v0.4 Analyzer 2.0 and continue to v0.5
 
 - Date: 2026-07-29
@@ -208,6 +257,7 @@ v0.6.1 inserts deterministic Metric Confidence, Diagnostic Gate, Evidence Releva
 - Evidence: 97 passed, 1 opt-in live test skipped; migration 4; current and clean-environment `run.bat --verify` passed; FastAPI/docs/Streamlit returned 200; clean Python 3.11.15 environment passed `pip check`.
 - Research boundary: parser, dictionary, MATTR, lexical density and diagnostic thresholds remain automatic unverified prototype signals.
 
+
 ## D011 — Accept v0.5 revision-aware feedback and continue to v0.6
 
 - Date: 2026-07-29
@@ -215,6 +265,7 @@ v0.6.1 inserts deterministic Metric Confidence, Diagnostic Gate, Evidence Releva
 - Decision: revision relationships must be explicit; use deterministic local paragraph/sentence/token alignment and append-only Revision Snapshots; default longitudinal analysis uses final-draft-else-latest per Revision Group.
 - Evidence: 121 passed, 1 opt-in live test skipped; migration 5; real DeepSeek Prompt/Schema v0.5 revision call cited R001–R005 and passed after one correction retry without fallback; FastAPI/docs/Streamlit and `run.bat --verify` passed.
 - Research boundary: alignment and uptake are observed heuristic candidates, not revision-quality scores, proficiency growth or causal feedback effects.
+
 
 ## D012 — Accept v0.6 and stop before v0.7
 

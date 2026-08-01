@@ -1,0 +1,72 @@
+{
+  "run_id": "v0.9.4-b-20260801-r1",
+  "contexts": [
+    {
+      "combo": "en_1280x900_full",
+      "event_count": 12,
+      "dedup_key_count": 12,
+      "all_times": 12,
+      "all_sources": 12,
+      "all_evidence_statuses": 12,
+      "all_limitations": 12,
+      "primary_size": {
+        "width": 560,
+        "height": 40
+      },
+      "render_locale_refresh_counts_stable": true,
+      "health": {
+        "exceptions": 0,
+        "overflow": false,
+        "raw_keys": [],
+        "main_max_width": "720px"
+      },
+      "screenshot": "verification\\v0.9.4-b\\v0.9.4-b-20260801-r1\\screenshots\\journey_en_1280x900_full.png"
+    },
+    {
+      "combo": "zh_CN_390x844_zero_priority",
+      "event_count": 48,
+      "dedup_key_count": 48,
+      "all_times": 48,
+      "all_sources": 48,
+      "all_evidence_statuses": 48,
+      "all_limitations": 48,
+      "primary_size": {
+        "width": 358,
+        "height": 44
+      },
+      "render_locale_refresh_counts_stable": true,
+      "health": {
+        "exceptions": 0,
+        "overflow": false,
+        "raw_keys": [],
+        "main_max_width": "720px"
+      },
+      "screenshot": "verification\\v0.9.4-b\\v0.9.4-b-20260801-r1\\screenshots\\journey_zh_CN_390x844_zero_priority.png"
+    }
+  ],
+  "absent_states": {
+    "blank": {
+      "blocked_actions": 1,
+      "error_notices": 0,
+      "events": 0,
+      "counts_stable": true,
+      "exceptions": 0
+    },
+    "not_found": {
+      "blocked_actions": 0,
+      "error_notices": 1,
+      "events": 0,
+      "counts_stable": true,
+      "exceptions": 0
+    }
+  },
+  "outage": {
+    "error_notices": 1,
+    "events": 0,
+    "counts_stable": true,
+    "exceptions": 0
+  },
+  "console_errors": [],
+  "page_errors": [],
+  "ports_cleaned": true
+}

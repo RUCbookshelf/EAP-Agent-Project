@@ -1,4 +1,15 @@
-# English Writing Feedback Prototype v0.9.2.1
+# English Writing Feedback Prototype v0.9.4-B
+
+v0.9.4-B redesigns only the six Student pages around a consistent learner
+flow: page purpose, current context, a small number of steps, the most
+important evidence, one primary next action, and explicit interpretation
+limits. Shared Student presentation helpers now cover page introductions,
+task steps, action blocks, learner context, and Student ID continuity. Home,
+Writing, Feedback, Practice, Revision, and Learning Journey are responsive in
+English and Simplified Chinese without changing backend APIs, migration 12,
+`config-v0.9.0`, Research information architecture, or journey semantics.
+See [the v0.9.4-B specification](docs/development/V0.9.4_B_SPEC.md) and
+[verification report](RUN_VERIFICATION_V0.9.4_B.md).
 
 v0.9.4-A 建立 Hybrid Pixel System 2.0 设计系统基础：单一规范 token 契约
 （`app/ui/pixel_art.py` 的 `DESIGN_TOKENS`，自动生成注入 CSS）、与 token

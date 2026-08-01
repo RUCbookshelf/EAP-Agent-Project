@@ -1,4 +1,31 @@
-# UI Design — Hybrid Pixel System 2.0 (v0.9.4-A foundation)
+# UI Design - Hybrid Pixel System 2.0 (v0.9.4-B Student adoption)
+
+## v0.9.4-B Student experience contract
+
+All six Student pages use the same reading order: localized page purpose,
+current learner/task context, a short step sequence where useful, primary
+evidence, one ranked next action, and a conservative interpretation limit.
+The Student content column is capped at 720px; forms and actions stack on
+mobile, and interactive controls retain a 44px minimum touch height.
+
+Shared helpers in `app/ui/components.py` provide `student_page_intro`,
+`student_task_steps`, `student_action_block`, and `student_context_block`.
+`app/ui/student_context.py::student_id_input` keeps the selected learner
+consistent across pages without changing the existing setter semantics.
+These are presentation abstractions only: API payloads, service contracts,
+persistence, and Journey derivation are unchanged.
+
+Home is an orientation page rather than a count dashboard. Writing separates
+required prompt/essay fields from optional settings and locks a saved draft.
+Feedback leads with the selected priority and evidence. Practice exposes one
+current target/exercise/action and locks a saved attempt. Revision keeps the
+original context beside the matching target and locks a saved revision.
+Learning Journey renders time, source, evidence, and limit as separate fields.
+Research page structure is not part of v0.9.4-B.
+
+Focus uses a 3px `#0f6dbd` outline (5.33:1 on white, 4.84:1 on the surface,
+3.16:1 on the dark boundary). No remote fonts/assets, gradients, blur,
+decorative motion, or color-only status communication are allowed.
 
 ## Design system
 
@@ -52,7 +79,7 @@ Limited solid-color palette (no gradients, no semi-transparency):
 | `--px-surface` | `#f4f4f4` | Secondary surfaces, sidebar |
 | `--px-red` | `#ff004d` | Primary action, critical state |
 | `--px-green` | `#00e436` | Confirmed, available state |
-| `--px-blue` | `#29adff` | Information, focus, selected state |
+| `--px-blue` | `#29adff` | Information and selected state (not focus) |
 | `--px-yellow` | `#ffec27` | Warning, pending, attention state |
 | `--px-muted` | `#6b6b7b` | Secondary text |
 | `--px-disabled-bg` | `#e8e8ec` | Disabled backgrounds |

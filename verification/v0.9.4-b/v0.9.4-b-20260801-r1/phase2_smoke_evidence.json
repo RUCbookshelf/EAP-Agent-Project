@@ -1,0 +1,47 @@
+{
+  "run_id": "v0.9.4-b-20260801-r1",
+  "viewport": "1280x900",
+  "pages": {
+    "Home": {
+      "heading": [
+        "Home"
+      ],
+      "exceptions": 0,
+      "overflow": false,
+      "raw_key": false
+    },
+    "Writing": {
+      "heading": [
+        "Writing"
+      ],
+      "exceptions": 0,
+      "overflow": false,
+      "raw_key": false,
+      "focus": {
+        "style": "solid",
+        "width": "3px",
+        "color": "rgb(15, 109, 189)"
+      }
+    },
+    "Research Overview": {
+      "heading": [
+        "Research Overview"
+      ],
+      "exceptions": 0,
+      "overflow": false,
+      "raw_key": false
+    },
+    "Research Data": {
+      "heading": [
+        "Research Data"
+      ],
+      "exceptions": 0,
+      "overflow": false,
+      "raw_key": false
+    }
+  },
+  "console_errors": [],
+  "page_errors": [],
+  "table_counts_unchanged": true,
+  "ports_cleaned": true
+}

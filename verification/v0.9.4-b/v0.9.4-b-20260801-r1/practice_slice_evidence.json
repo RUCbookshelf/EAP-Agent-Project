@@ -1,0 +1,69 @@
+{
+  "run_id": "v0.9.4-b-20260801-r1",
+  "active_workflow": {
+    "initial": {
+      "targets": 1,
+      "exercises": 0,
+      "attempts": 0,
+      "evaluations": 0
+    },
+    "after_generate": {
+      "targets": 1,
+      "exercises": 1,
+      "attempts": 0,
+      "evaluations": 0
+    },
+    "after_valid": {
+      "targets": 1,
+      "exercises": 1,
+      "attempts": 1,
+      "evaluations": 1
+    },
+    "invalid_writes_zero": true,
+    "locale_and_refresh_counts_stable": true,
+    "primary_actions_per_state": 1,
+    "health": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "main_max_width": "720px"
+    },
+    "screenshot": "verification\\v0.9.4-b\\v0.9.4-b-20260801-r1\\screenshots\\practice_en_1280x900_completed.png"
+  },
+  "no_target_mobile": {
+    "blocked_actions": 1,
+    "primary_buttons": 1,
+    "primary_size": {
+      "width": 358,
+      "height": 44
+    },
+    "counts_stable": true,
+    "health": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "main_max_width": "720px"
+    },
+    "screenshot": "verification\\v0.9.4-b\\v0.9.4-b-20260801-r1\\screenshots\\practice_zh_CN_390x844_no_target.png"
+  },
+  "restart_locked": {
+    "response_input": 0,
+    "submit_label": false,
+    "primary_buttons": 1,
+    "primary_size": {
+      "width": 358,
+      "height": 44
+    },
+    "counts_stable": true,
+    "health": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "main_max_width": "720px"
+    },
+    "screenshot": "verification\\v0.9.4-b\\v0.9.4-b-20260801-r1\\screenshots\\practice_zh_CN_390x844_completed_restart.png"
+  },
+  "console_errors": [],
+  "page_errors": [],
+  "ports_cleaned": true
+}

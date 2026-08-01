@@ -1,0 +1,97 @@
+{
+  "run_id": "v0.9.4-b-20260801-r1",
+  "contexts": [
+    {
+      "combo": "en_1280x900_priority",
+      "priority_cards": 1,
+      "empty_states": 0,
+      "evidence_quotes": 2,
+      "limitation_notices": 1,
+      "primary_action": "Open Practice",
+      "primary_size": {
+        "width": 560,
+        "height": 40
+      },
+      "focus_color": "rgb(255, 255, 255)",
+      "section_positions": {
+        "student_feedback_priorities": 530.125,
+        "student_feedback_next": 810.640625,
+        "student_feedback_evidence": 1101.421875,
+        "student_feedback_strengths": 1280.203125
+      },
+      "health": {
+        "exceptions": 0,
+        "overflow": false,
+        "raw_keys": [],
+        "main_max_width": "720px"
+      },
+      "render_and_locale_counts_stable": true,
+      "feedback_engagement_trace_delta": 0,
+      "screenshot": "verification\\v0.9.4-b\\v0.9.4-b-20260801-r1\\screenshots\\feedback_en_1280x900_priority.png"
+    },
+    {
+      "combo": "zh_CN_390x844_zero_priority",
+      "priority_cards": 0,
+      "empty_states": 1,
+      "evidence_quotes": 1,
+      "limitation_notices": 1,
+      "primary_action": "打开写作",
+      "primary_size": {
+        "width": 358,
+        "height": 44
+      },
+      "focus_color": "rgb(255, 255, 255)",
+      "section_positions": {
+        "student_feedback_priorities": 448.9375,
+        "student_feedback_next": 700.625,
+        "student_feedback_evidence": 983.71875,
+        "student_feedback_strengths": 1149.21875
+      },
+      "health": {
+        "exceptions": 0,
+        "overflow": false,
+        "raw_keys": [],
+        "main_max_width": "720px"
+      },
+      "render_and_locale_counts_stable": true,
+      "feedback_engagement_trace_delta": 0,
+      "screenshot": "verification\\v0.9.4-b\\v0.9.4-b-20260801-r1\\screenshots\\feedback_zh_CN_390x844_zero_priority.png"
+    }
+  ],
+  "absent_states": {
+    "blank": {
+      "empty_states": 0,
+      "error_notices": 0,
+      "blocked_actions": 1,
+      "primary_buttons": 0,
+      "counts_stable": true,
+      "exceptions": 0
+    },
+    "known_no_result": {
+      "empty_states": 1,
+      "error_notices": 0,
+      "blocked_actions": 0,
+      "primary_buttons": 1,
+      "counts_stable": true,
+      "exceptions": 0
+    },
+    "not_found": {
+      "empty_states": 0,
+      "error_notices": 1,
+      "blocked_actions": 0,
+      "primary_buttons": 0,
+      "counts_stable": true,
+      "exceptions": 0
+    }
+  },
+  "outage": {
+    "error_notices": 1,
+    "empty_states": 0,
+    "primary_buttons": 0,
+    "counts_stable": true,
+    "exceptions": 0
+  },
+  "console_errors": [],
+  "page_errors": [],
+  "ports_cleaned": true
+}

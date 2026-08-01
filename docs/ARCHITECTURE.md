@@ -1,5 +1,28 @@
 # v0.8 system architecture
 
+## v0.9.4-B Student presentation layer
+
+v0.9.4-B adds a shared presentation abstraction without changing backend,
+service, repository, API, schema, or domain layers:
+
+- `app/ui/components.py` owns localized Student page introductions, short task
+  sequences, learner/task context blocks, and ranked action blocks.
+- `app/ui/student_context.py` owns the Student ID input and selected-learner
+  continuity while preserving the existing session-state setter contract.
+- `app/ui/pages/student_pages.py` remains the composition layer for the six
+  Student routes. Each route keeps its existing API calls and payloads; the
+  shared helpers change only information hierarchy and presentation.
+- `app/ui/pixel_art.py` applies the Student 720px width, mobile stacking,
+  44px touch targets, and accessible 3px `#0f6dbd` focus treatment from the
+  one canonical token/CSS system.
+- Learning Journey remains a read-time projection of authoritative records.
+  Rendering, navigation, locale changes, and refresh do not create domain or
+  engagement records.
+
+Research routes and navigation remain structurally unchanged in this stage.
+Full contract: `docs/development/V0.9.4_B_SPEC.md` and
+`RUN_VERIFICATION_V0.9.4_B.md`.
+
 ## v0.9.4-A Hybrid Pixel System foundation
 
 The UI layer gained a centralized design-system foundation (no backend or
@@ -45,6 +68,7 @@ Learning Process trace.`
 
 `Essay → Analyzer v0.8 → versioned MetricResult + AnalysisUnitRecord → CALF Registry/Service → research API/UI`. This additive branch shares persistence and configuration infrastructure but is isolated from the existing Diagnostic Gate, prompt priorities, exercises, and student totals. Error annotations are append-only imports. Trajectories group by exact metric/unit/Analyzer compatibility and task conditions.
 
+
 ## v0.7.1 reliability overlay
 
 `SubmissionService` now derives `LongitudinalAssessment` from the task-aware Snapshot before provider execution. `PromptBuilder` sends those facts under `longitudinal_facts`; `FeedbackReliabilityService` may repair only an incompatible longitudinal comment or prohibited positive-finding ability phrase, after which `FeedbackValidator` rechecks exact quotations, IDs and facts. `ProviderRouter` records a structured execution state separately from formal feedback. RevisionService also exposes a read-only trajectory composed from existing append-only snapshots. Streamlit remains API-only and caches the returned submission result in session state across tab/view rerenders.
@@ -55,13 +79,16 @@ The existing submission pipeline is preserved. After calibrated diagnosis persis
 
 Streamlit remains an API-only client. Migration 8 extends the existing snapshot store rather than creating a second profile system. The LLM never receives suppressed diagnostics or an unscreened history dump.
 
+
 ## Retained v0.6.1 architecture
+
 
 ## v0.6.1 diagnostic calibration flow
 
 `SpacyAnalyzer -> MetricResult/Metric Confidence -> NlpHeuristicDiagnoser raw candidates -> DiagnosticCalibrationService -> EvidenceRelevanceValidator -> selected DiagnosisResult -> FeedbackContext -> DeepSeek or LocalDemo -> FeedbackValidator -> Repository`
 
 The calibration layer is deterministic and provider-independent. Raw and suppressed candidates are saved in `diagnostic_calibrations`; only selected, evidence-verified priorities enter provider context and exercises. Streamlit remains an HTTP-only client. The researcher audit page calls FastAPI and never recalculates scores.
+
 
 ## v0.6 additions
 
@@ -74,6 +101,7 @@ explicit cost confirmation—feedback records. Registries isolate Analyzer, Metr
 For an explicit revision, `RevisionService` creates or extends a Revision Group, runs local alignment and saves an
 append-only Revision Snapshot before Prompt v0.5 is built. The LLM receives only screened local evidence and must
 cite allowed `R...` IDs. Longitudinal analysis independently selects one representative draft per group.
+
 
 ## Runtime
 
@@ -94,6 +122,7 @@ The API route owns validation and HTTP translation only. `SubmissionService` own
 
 v0.3 adds `ComparabilityService → BaselineService → ProgressService → LearnerProfileService` behind the same API/service boundary. ProgressService reads joined structured essay/metric/diagnosis records through Repository protocols and writes append-only Snapshots. SubmissionService recalculates a local Snapshot after saving the current structured diagnosis, converts selected evidence to H IDs, and then invokes the unchanged ProviderRouter/FeedbackValidator boundary.
 
+
 ## Protected submission sequence
 
 1. API Pydantic request validation.
@@ -104,6 +133,7 @@ v0.3 adds `ComparabilityService → BaselineService → ProgressService → Lear
 6. Existing post-validator enforces diagnosis IDs, exact quotations, history IDs, safe no-history language, and exercise links.
 7. Only validated feedback and audit records are saved.
 
+
 ## Replacement seams
 
 - A future frontend calls the same API; Streamlit contains no business shortcut.
@@ -112,9 +142,11 @@ v0.3 adds `ComparabilityService → BaselineService → ProgressService → Lear
 
 All services currently run on one local Windows computer. “Cloud-ready” describes boundaries and configuration, not deployment.
 
+
 ## v0.4 NLP boundary
 
 `SubmissionService → AnalyzerCoordinator → AnalyzerRegistry → SpacyAnalyzer | BasicAnalyzer` keeps spaCy outside routes and UI. `SpacyAnalyzer` composes input-quality, lexical, connective and syntactic extractors plus `MetricRegistry`. The SQLite adapter appends AnalysisRun, MetricResult and JSON artifacts; the old `metrics` row remains a compatibility view. `POST /submissions/{id}/analyses` appends local analysis only and never calls a Provider.
+
 
 
 ## v0.9.1 UI Layer
@@ -129,6 +161,7 @@ The v0.9.1 UI layer maintains the same HTTP-client-only architecture boundary as
 - `app/ui/locale.py` — i18n helper (unchanged from v0.8.1)
 
 The UI layer imports only `app.config` (for API base URL) and `app.ui.*`. It does not import database, repositories, analyzers, diagnosers, or LLM providers. All data flows through the FastAPI HTTP client.
+
 
 
 ## v0.9.3-B error-handling overlay
