@@ -1271,6 +1271,55 @@ class Database:
             else: return []
         return [json.loads(r[0]) for r in rows]
 
+    def list_practice_evaluations_by_student(self, student_id: str) -> list[dict]:
+        """All practice evaluations for a learner (joined through attempts)."""
+        with self.connect() as c:
+            rows = c.execute(
+                """SELECT pe.evaluation_json FROM practice_evaluations pe
+                JOIN exercise_attempts ea ON ea.attempt_id = pe.attempt_id
+                WHERE ea.student_id=? ORDER BY pe.created_at""",
+                (student_id,),
+            ).fetchall()
+        return [json.loads(r[0]) for r in rows]
+
+    def list_essays_by_student(self, student_id: str) -> list[dict]:
+        """All essays for a learner, oldest first."""
+        with self.connect() as c:
+            rows = c.execute(
+                "SELECT * FROM essays WHERE student_id=? ORDER BY submitted_at, essay_id", (student_id,)
+            ).fetchall()
+        return [dict(r) for r in rows]
+
+    def list_analysis_runs_for_student(self, student_id: str) -> list[dict]:
+        """All analysis runs for a learner (joined through essays)."""
+        with self.connect() as c:
+            rows = c.execute(
+                """SELECT ar.* FROM analysis_runs ar
+                JOIN essays e ON e.essay_id = ar.essay_id
+                WHERE e.student_id=? ORDER BY ar.created_at, ar.analysis_run_row_id""",
+                (student_id,),
+            ).fetchall()
+        return [dict(r) for r in rows]
+
+    def list_feedback_records_for_student(self, student_id: str) -> list[dict]:
+        """All feedback records for a learner (joined through essays)."""
+        with self.connect() as c:
+            rows = c.execute(
+                """SELECT fr.* FROM feedback_records fr
+                JOIN essays e ON e.essay_id = fr.essay_id
+                WHERE e.student_id=? ORDER BY fr.created_at, fr.feedback_id""",
+                (student_id,),
+            ).fetchall()
+        return [dict(r) for r in rows]
+
+    def list_exercise_attempts_by_student(self, student_id: str) -> list[dict]:
+        """All exercise attempts for a learner."""
+        with self.connect() as c:
+            rows = c.execute(
+                "SELECT * FROM exercise_attempts WHERE student_id=? ORDER BY created_at, attempt_number", (student_id,)
+            ).fetchall()
+        return [dict(r) for r in rows]
+
     def save_feedback_engagement_trace(self, trace: dict) -> dict:
         from app.practice.schemas import FeedbackEngagementTrace
         obj = FeedbackEngagementTrace(**trace) if not isinstance(trace, FeedbackEngagementTrace) else trace

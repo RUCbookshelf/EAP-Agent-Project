@@ -204,10 +204,10 @@ def render_research_learning_process(api_client: WritingFeedbackApiClient, lang:
     """Research Learning Process: complete evidence chain inspection."""
     page_header("research_learning_title", "research_learning_subtitle", lang)
 
-    student_id = st.text_input(
-        t("student_id", lang), key="learning_student",
-        placeholder=t("student_id_placeholder", lang),
-    )
+    from app.ui.student_context import set_selected_learner, student_id_input
+
+    student_id = student_id_input("student_id", "learning_student", lang, placeholder_key="student_id_placeholder")
+    set_selected_learner(student_id)
 
     if not student_id.strip():
         info_box("enter_student_id", lang)
@@ -260,6 +260,40 @@ def render_research_learning_process(api_client: WritingFeedbackApiClient, lang:
             )
     else:
         info_box("research_learning_no_transfer", lang)
+
+    section_header("journey_timeline", lang)
+    try:
+        journey = api_client.get_journey(student_id.strip())
+    except ApiClientError as exc:
+        render_api_error(exc, lang, research=True)
+        journey = None
+    if journey:
+        counts = journey.get("counts") or {}
+        st.caption(
+            f"{t('journey_known_submissions', lang)}: {counts.get('submissions', 0)} &middot; "
+            f"{t('journey_known_analyses', lang)}: {counts.get('analysis_runs', 0)} &middot; "
+            f"{t('journey_known_feedback', lang)}: {counts.get('feedback_records', 0)} &middot; "
+            f"{t('journey_known_priorities', lang)}: {counts.get('selected_priorities', 0)} &middot; "
+            f"{t('journey_known_targets', lang)}: {counts.get('practice_targets', 0)} &middot; "
+            f"{t('journey_known_attempts', lang)}: {counts.get('exercise_attempts', 0)}"
+        )
+        events = journey.get("events", [])
+        if events:
+            rows = "".join(
+                f'<div class="px-timeline-node">'
+                f'<div class="px-timeline-marker"></div>'
+                f'<div class="px-timeline-content">'
+                f'<strong>{ev.get("event_type", "")}</strong>'
+                f'<span style="font-size:0.85rem;color:var(--px-muted);"> {ev.get("occurred_at", "")}</span><br>'
+                f'<span style="font-size:0.85rem;color:var(--px-muted);">'
+                f'source: {ev.get("source_record_type", "")} {ev.get("source_record_id", "")} &middot; '
+                f'task: {ev.get("task_id") or "-"} &middot; version: {ev.get("event_version", "")}</span>'
+                f'</div></div>'
+                for ev in events
+            )
+            st.markdown(rows, unsafe_allow_html=True)
+        else:
+            info_box("empty_audit", lang)
 
     limitation_notice("all_descriptive", lang)
 

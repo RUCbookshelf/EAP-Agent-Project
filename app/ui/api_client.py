@@ -347,3 +347,12 @@ class WritingFeedbackApiClient:
 
     def get_transfer_evidence(self, student_id: str) -> list[dict[str, Any]]:
         return self._request("GET", f"/api/v1/students/{student_id}/transfer-evidence", operation="transfer_evidence", retry=True)
+
+    def get_journey(self, student_id: str) -> dict[str, Any]:
+        return self._request("GET", f"/api/v1/students/{student_id}/journey", operation="learning_journey", retry=True)
+
+    def get_exercise_instances(self, practice_target_id: str) -> list[dict[str, Any]]:
+        return self._request("GET", f"/api/v1/practice-targets/{practice_target_id}/exercises", operation="practice_exercises", retry=True)
+
+    def get_exercise_attempts(self, exercise_id: str) -> list[dict[str, Any]]:
+        return self._request("GET", f"/api/v1/exercises/{exercise_id}/attempts", operation="exercise_attempts", retry=True)

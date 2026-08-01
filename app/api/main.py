@@ -592,6 +592,11 @@ def _register_business_routes(api: FastAPI) -> None:
         if exercise.get("status") != "practice_not_available":
             exercise = repository.save_exercise_instance(exercise)
         return exercise
+    @api.get("/api/v1/practice-targets/{practice_target_id}/exercises")
+    def get_exercises(practice_target_id: str) -> list[dict]:
+        if repository.get_practice_target(practice_target_id) is None:
+            raise HTTPException(404, "Practice target not found.")
+        return repository.list_exercise_instances(practice_target_id=practice_target_id)
     @api.post("/api/v1/exercises/{exercise_id}/attempts")
     def submit_exercise_attempt(exercise_id: str, payload: dict) -> dict:
         existing = repository.get_exercise_instance(exercise_id)
@@ -603,7 +608,24 @@ def _register_business_routes(api: FastAPI) -> None:
         attempt = svc.submit_attempt(exercise_id, payload.get("student_id", ""), payload.get("response_text", ""), next_num)
         if attempt.get("status") != "invalid_input":
             attempt = repository.save_exercise_attempt(attempt)
+            # Conservative rule-based evaluation, persisted with the attempt.
+            # Best-effort: the attempt record remains authoritative.
+            try:
+                target = repository.get_practice_target(existing.get("practice_target_id", ""))
+                source_text = ""
+                if target and target.get("source_submission_id"):
+                    bundle = repository.get_submission_bundle(int(target["source_submission_id"]))
+                    source_text = (bundle or {}).get("essay_text") or ""
+                evaluation = svc.evaluate_attempt(attempt, target or {}, source_text)
+                attempt["evaluation"] = repository.save_practice_evaluation(evaluation)
+            except Exception:
+                attempt["evaluation"] = None
         return attempt
+    @api.get("/api/v1/exercises/{exercise_id}/attempts")
+    def get_exercise_attempts(exercise_id: str) -> list[dict]:
+        if repository.get_exercise_instance(exercise_id) is None:
+            raise HTTPException(404, "Exercise instance not found.")
+        return repository.list_exercise_attempts(exercise_id)
     @api.get("/api/v1/students/{student_id}/engagement-traces")
     def get_engagement_traces(student_id: str) -> list[dict]:
         require_student(student_id)
@@ -612,6 +634,11 @@ def _register_business_routes(api: FastAPI) -> None:
     def get_transfer_evidence(student_id: str) -> list[dict]:
         require_student(student_id)
         return repository.list_transfer_evidence_candidates(student_id)
+    @api.get("/api/v1/students/{student_id}/journey")
+    def get_student_journey(student_id: str) -> dict:
+        require_student(student_id)
+        from app.journey.service import JourneyService
+        return JourneyService(repository).get_journey(student_id)
     _research = ResearchDataService(repository)
 
     @api.get("/api/v1/research/export/schema")

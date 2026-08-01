@@ -34,75 +34,78 @@ def render_student_home(api_client: WritingFeedbackApiClient, lang: str) -> None
     """Student Home: task summary, latest status, next action."""
     page_header("student_home_title", "student_home_subtitle", lang)
 
-    student_id = st.text_input(
-        t("student_id", lang), key="home_student",
-        placeholder=t("student_id_placeholder", lang),
-    )
+    from app.ui.student_context import set_selected_learner, student_id_input
+
+    student_id = student_id_input("student_id", "home_student", lang, placeholder_key="student_id_placeholder")
+    set_selected_learner(student_id)
 
     if not student_id.strip():
         info_box("student_home_enter_id", lang)
         return
 
     try:
-        targets = api_client.get_practice_targets(student_id.strip())
-        traces = api_client.get_engagement_traces(student_id.strip())
-        transfer = api_client.get_transfer_evidence(student_id.strip())
+        with st.spinner(t("journey_loading", lang)):
+            journey = api_client.get_journey(student_id.strip())
+            targets = api_client.get_practice_targets(student_id.strip())
     except ApiClientError as exc:
         render_api_error(exc, lang)
         return
 
     section_header("student_home_current_task", lang)
-    if not targets:
+    counts = journey.get("counts") or {}
+    if int(counts.get("submissions") or 0) == 0:
         st.write(t("student_home_no_submissions", lang))
     else:
         active = [t for t in targets if t.get("status") == "active"]
         completed = [t for t in targets if t.get("status") == "completed"]
         st.markdown(
             f'<div class="px-card">'
-            f'<strong>{t("student_home_active_targets", lang)}: {len(active)}</strong><br>'
+            f'<strong>{t("student_home_submissions", lang)}: {counts.get("submissions")}</strong><br>'
+            f'{t("student_home_feedback_count", lang)}: {counts.get("feedback_records")} &middot; '
+            f'{t("student_home_priority_count", lang)}: {counts.get("selected_priorities")}<br>'
+            f'{t("student_home_active_targets", lang)}: {len(active)} &middot; '
             f'{t("student_home_completed_targets", lang)}: {len(completed)}'
             f'</div>',
             unsafe_allow_html=True,
         )
 
     section_header("student_home_latest_status", lang)
-    if traces:
-        latest = traces[-1]
-        status = latest.get("status", "")
-        label_map = {
-            "target_identified": "student_home_target_identified",
-            "practice_available": "student_home_practice_available",
-            "practice_attempted": "student_home_practice_attempted",
-            "practice_response_candidate": "student_home_response_observed",
-            "within_task_response_candidate": "student_home_revision_observed",
-            "later_task_recurrence": "student_home_recurrence",
-            "later_task_nonrecurrence": "student_home_nonrecurrence",
-            "insufficient_evidence": "student_home_insufficient",
-        }
+    events = journey.get("events", [])
+    if events:
+        latest = events[-1]
         st.markdown(
             f'<div class="px-card">'
-            f'<strong>{t(label_map.get(status, status), lang)}</strong>'
+            f'<strong>{t(latest.get("title_key", ""), lang)}</strong><br>'
+            f'<span style="font-size:0.85rem;color:var(--px-muted);">{_short_timestamp(latest.get("occurred_at", ""))}</span>'
             f'</div>',
             unsafe_allow_html=True,
         )
     else:
-        st.write(t("student_home_no_events", lang))
+        state = journey.get("state") or "no_submissions"
+        state_messages = {
+            "no_submissions": "journey_empty_no_submissions_title",
+            "submission_without_analysis": "journey_empty_no_analysis_title",
+            "analysis_without_priority": "journey_empty_no_priority_title",
+            "feedback_no_practice_target": "journey_empty_no_target_title",
+            "target_no_attempt": "journey_empty_no_attempt_title",
+            "attempt_no_evaluation": "journey_empty_no_evaluation_title",
+            "revision_no_response": "journey_empty_no_revision_title",
+        }
+        st.write(t(state_messages.get(state, "student_home_no_events"), lang))
 
     section_header("student_home_next_action", lang)
-    if not targets:
-        info_box("student_home_action_submit", lang)
-    elif not traces:
-        info_box("student_home_action_submit", lang)
-    else:
-        last_status = traces[-1].get("status", "")
-        if last_status in ("target_identified", "practice_available"):
-            info_box("student_home_action_practice", lang)
-        elif last_status == "practice_attempted":
-            info_box("student_home_action_revise", lang)
-        elif last_status == "within_task_response_candidate":
-            info_box("student_home_action_new_task", lang)
-        else:
-            info_box("student_home_action_continue", lang)
+    state = journey.get("state") or "no_submissions"
+    action_map = {
+        "no_submissions": "student_home_action_submit",
+        "submission_without_analysis": "student_home_action_continue",
+        "analysis_without_priority": "student_home_action_continue",
+        "feedback_no_practice_target": "student_home_action_continue",
+        "target_no_attempt": "student_home_action_practice",
+        "attempt_no_evaluation": "student_home_action_practice",
+        "revision_no_response": "student_home_action_revise",
+        "journey_events": "student_home_action_continue",
+    }
+    info_box(action_map.get(state, "student_home_action_continue"), lang)
 
     limitation_notice("student_home_boundary", lang)
 
@@ -115,10 +118,10 @@ def render_writing_page(api_client: WritingFeedbackApiClient, lang: str) -> None
     """Student Writing page: submission form with clear field grouping."""
     page_header("student_writing_title", "student_writing_subtitle", lang)
 
-    student_id = st.text_input(
-        t("student_id", lang), key="writing_student",
-        placeholder=t("student_id_placeholder", lang),
-    )
+    from app.ui.student_context import set_selected_learner, student_id_input
+
+    student_id = student_id_input("student_id", "writing_student", lang, placeholder_key="student_id_placeholder")
+    set_selected_learner(student_id)
 
     st.radio(
         t("task_relationship", lang),
@@ -411,10 +414,10 @@ def render_practice_page(api_client: WritingFeedbackApiClient, lang: str) -> Non
     """Student Practice page: target, exercise, attempt, evaluation."""
     page_header("practice", "practice_boundary", lang)
 
-    student_id = st.text_input(
-        t("student_id", lang), key="practice_student_v2",
-        placeholder=t("student_id_placeholder", lang),
-    )
+    from app.ui.student_context import set_selected_learner, student_id_input
+
+    student_id = student_id_input("student_id", "practice_student_v2", lang, placeholder_key="student_id_placeholder")
+    set_selected_learner(student_id)
 
     if not student_id.strip():
         info_box("no_active_target", lang)
@@ -422,8 +425,20 @@ def render_practice_page(api_client: WritingFeedbackApiClient, lang: str) -> Non
 
     if st.button(t("load_practice", lang), key="practice_load"):
         try:
-            targets = api_client.get_practice_targets(student_id.strip())
-            st.session_state["practice_targets_v2"] = targets
+            with st.spinner(t("practice_loading", lang)):
+                targets = api_client.get_practice_targets(student_id.strip())
+                st.session_state["practice_targets_v2"] = targets
+                active = [t for t in targets if t.get("status") == "active"]
+                if active:
+                    instances = api_client.get_exercise_instances(active[0].get("practice_target_id", ""))
+                    if instances:
+                        st.session_state["current_exercise_v2"] = instances[-1]
+                        st.session_state["exercise_attempts_v2"] = api_client.get_exercise_attempts(
+                            instances[-1].get("exercise_id", "")
+                        )
+                    else:
+                        st.session_state.pop("current_exercise_v2", None)
+                        st.session_state["exercise_attempts_v2"] = []
         except ApiClientError as exc:
             render_api_error(exc, lang)
             return
@@ -451,21 +466,23 @@ def render_practice_page(api_client: WritingFeedbackApiClient, lang: str) -> Non
         unsafe_allow_html=True,
     )
 
+    exercise = st.session_state.get("current_exercise_v2")
     source_text = st.text_area(
         t("student_practice_source_text", lang), key="practice_source_v2", height=80,
         placeholder=t("student_practice_source_placeholder", lang),
     )
-    if st.button(t("generate_exercise", lang), key="practice_gen"):
-        payload = {"practice_target": selected, "source_text": source_text}
-        try:
-            exercise = api_client.create_exercise(selected.get("practice_target_id", ""), payload)
-            st.session_state["current_exercise_v2"] = exercise
-            st.session_state["exercise_attempts_v2"] = []
-        except ApiClientError as exc:
-            render_api_error(exc, lang)
-            return
-
-    exercise = st.session_state.get("current_exercise_v2")
+    if not exercise:
+        if st.button(t("generate_exercise", lang), key="practice_gen"):
+            payload = {"practice_target": selected, "source_text": source_text}
+            try:
+                exercise = api_client.create_exercise(selected.get("practice_target_id", ""), payload)
+                st.session_state["current_exercise_v2"] = exercise
+                st.session_state["exercise_attempts_v2"] = []
+            except ApiClientError as exc:
+                render_api_error(exc, lang)
+                return
+    else:
+        st.caption(t("practice_exercise_loaded", lang))
     if exercise and exercise.get("status") != "practice_not_available":
         constraints_html = ""
         constraints = exercise.get("constraints", [])
@@ -501,6 +518,19 @@ def render_practice_page(api_client: WritingFeedbackApiClient, lang: str) -> Non
                     attempts.append(attempt)
                     st.session_state["exercise_attempts_v2"] = attempts
                     success_box(t("student_practice_attempt_saved", lang), lang)
+                    evaluation = attempt.get("evaluation")
+                    if evaluation:
+                        st.markdown(
+                            f'<div class="px-card">'
+                            f'<strong>{t("practice_evaluation_label", lang)}</strong><br>'
+                            f'{t("practice_evaluation_completion", lang)}: {evaluation.get("completion_status", "")}<br>'
+                            f'{t("practice_evaluation_action", lang)}: {evaluation.get("target_action_status", "")}'
+                            f'</div>',
+                            unsafe_allow_html=True,
+                        )
+                        limitations = evaluation.get("limitations") or []
+                        if limitations:
+                            st.caption(limitations[0])
                 except ApiClientError as exc:
                     render_api_error(exc, lang)
 
@@ -525,75 +555,108 @@ def render_practice_page(api_client: WritingFeedbackApiClient, lang: str) -> Non
 # ---------------------------------------------------------------------------
 
 def render_learning_journey_page(api_client: WritingFeedbackApiClient, lang: str) -> None:
-    """Student Learning Journey: chronological observable events timeline."""
+    """Student Learning Journey: chronological observable events timeline.
+
+    Events are derived server-side from authoritative source records; nothing
+    here creates events. Page rendering, navigation, locale switching, and
+    refresh never write journey data.
+    """
     page_header("learning_journey", "journey_caption", lang)
 
-    student_id = st.text_input(
-        t("student_id", lang), key="journey_student_v2",
-        placeholder=t("student_id_placeholder", lang),
-    )
+    from app.ui.student_context import set_selected_learner, student_id_input
+
+    student_id = student_id_input("student_id", "journey_student_v2", lang, placeholder_key="student_id_placeholder")
+    set_selected_learner(student_id)
 
     if not student_id.strip():
-        info_box("enter_student_id", lang)
+        info_box("journey_enter_student_id", lang)
         return
 
     if not st.button(t("load_journey", lang), key="journey_load_v2"):
         return
 
     try:
-        traces = api_client.get_engagement_traces(student_id.strip())
-        transfer = api_client.get_transfer_evidence(student_id.strip())
+        with st.spinner(t("journey_loading", lang)):
+            journey = api_client.get_journey(student_id.strip())
     except ApiClientError as exc:
         render_api_error(exc, lang)
         return
 
-    events = []
-
-    for t_item in traces:
-        ts = t_item.get("status", "")
-        label_map = {
-            "target_identified": "journey_target_identified",
-            "practice_available": "journey_practice_available",
-            "practice_attempted": "journey_practice_attempted",
-            "practice_response_candidate": "journey_response_candidate",
-            "within_task_response_candidate": "journey_within_task",
-            "later_task_recurrence": "journey_recurrence",
-            "later_task_nonrecurrence": "journey_nonrecurrence",
-            "later_task_mixed_evidence": "journey_mixed",
-            "insufficient_evidence": "insufficient_evidence",
-        }
-        events.append({
-            "event": t(label_map.get(ts, ts), lang),
-            "time": t_item.get("created_at", ""),
-            "target": t_item.get("target_code", ""),
-            "detail": "",
-            "boundary": "",
-        })
-
-    for te in transfer:
-        events.append({
-            "event": t("transfer_evidence", lang),
-            "time": te.get("created_at", ""),
-            "target": te.get("target_code", ""),
-            "detail": te.get("observed_status", ""),
-            "boundary": t("transfer_boundary", lang),
-        })
-
-    events.sort(key=lambda e: e.get("time", ""))
-
+    events = journey.get("events", [])
     if not events:
-        info_box("empty_events", lang)
+        _render_journey_empty_state(journey, lang)
         return
 
     section_header("journey_timeline", lang)
     for ev in events:
+        params = dict(ev.get("description_params") or {})
+        limitations = ev.get("limitations") or []
         timeline_event(
-            event_label=ev["event"],
-            timestamp=ev["time"],
-            target_code=ev["target"],
-            detail=ev["detail"],
-            boundary=ev["boundary"],
+            event_label=t(ev.get("title_key", ""), lang),
+            timestamp=_short_timestamp(ev.get("occurred_at", "")),
+            target_code=f"#{ev['submission_id']}" if ev.get("submission_id") else "",
+            detail=t(ev.get("description_key", ""), lang, **params),
+            boundary=limitations[0] if limitations else "",
             lang=lang,
         )
 
+    for state in journey.get("derived_states", []):
+        message_key = state.get("message_key") or ""
+        if message_key:
+            warning_box(message_key, lang)
+
     limitation_notice("all_descriptive", lang)
+
+
+def _short_timestamp(value: str) -> str:
+    """Compact UTC timestamp for display (e.g., 2026-08-01 12:34)."""
+    try:
+        dt = __import__("datetime").datetime.fromisoformat(value.replace("Z", "+00:00"))
+        return dt.astimezone(__import__("datetime").timezone.utc).strftime("%Y-%m-%d %H:%M")
+    except (ValueError, TypeError):
+        return str(value)[:16]
+
+
+def _render_journey_empty_state(journey: dict, lang: str) -> None:
+    """Render an accurate, classified Learning Journey empty state."""
+    state = journey.get("state") or "no_submissions"
+    counts = journey.get("counts") or {}
+    known = [
+        key for key, label in (
+            ("submissions", "journey_known_submissions"),
+            ("analysis_runs", "journey_known_analyses"),
+            ("feedback_records", "journey_known_feedback"),
+            ("selected_priorities", "journey_known_priorities"),
+            ("practice_targets", "journey_known_targets"),
+            ("exercise_attempts", "journey_known_attempts"),
+        )
+        if int(counts.get(key) or 0) > 0
+    ]
+    if known:
+        known_text = t("journey_known_label", lang) + " " + "; ".join(
+            f"{t(label, lang)}: {counts[key]}" for key, label in (
+                ("submissions", "journey_known_submissions"),
+                ("analysis_runs", "journey_known_analyses"),
+                ("feedback_records", "journey_known_feedback"),
+                ("selected_priorities", "journey_known_priorities"),
+                ("practice_targets", "journey_known_targets"),
+                ("exercise_attempts", "journey_known_attempts"),
+            ) if int(counts.get(key) or 0) > 0
+        )
+        st.caption(known_text)
+
+    mapping = {
+        "no_submissions": ("journey_empty_no_submissions_title", "journey_empty_no_submissions_desc", "journey_empty_no_submissions_next"),
+        "submission_without_analysis": ("journey_empty_no_analysis_title", "journey_empty_no_analysis_desc", "journey_empty_no_analysis_next"),
+        "analysis_without_priority": ("journey_empty_no_priority_title", "journey_empty_no_priority_desc", "journey_empty_no_priority_next"),
+        "feedback_no_practice_target": ("journey_empty_no_target_title", "journey_empty_no_target_desc", "journey_empty_no_target_next"),
+        "target_no_attempt": ("journey_empty_no_attempt_title", "journey_empty_no_attempt_desc", "journey_empty_no_attempt_next"),
+        "attempt_no_evaluation": ("journey_empty_no_evaluation_title", "journey_empty_no_evaluation_desc", "journey_empty_no_evaluation_next"),
+        "revision_no_response": ("journey_empty_no_revision_title", "journey_empty_no_revision_desc", "journey_empty_no_revision_next"),
+        "later_task_evidence_none": ("journey_empty_no_transfer_title", "journey_empty_no_transfer_desc", "journey_empty_no_transfer_next"),
+    }
+    title_key, desc_key, next_key = mapping.get(state, mapping["no_submissions"])
+    empty_state(title_key, desc_key, lang)
+    if next_key:
+        info_box(next_key, lang)
+    limitation_notice("journey_empty_boundary", lang)
