@@ -1,0 +1,24 @@
+{
+ "before_restart": {
+  "events": true
+ },
+ "api_down_confirmed": true,
+ "api_down": {
+  "classified_error": true,
+  "classified_markers": {
+   "request_timeout": true,
+   "service_not_running": false,
+   "api_unavailable": false,
+   "retry_action_available": true
+  },
+  "not_empty_state": true,
+  "no_hang": true
+ },
+ "after_restart": {
+  "events": true
+ },
+ "no_duplicate_writes": true,
+ "browser_reopen": {
+  "events": true
+ }
+}

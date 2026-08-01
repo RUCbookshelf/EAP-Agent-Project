@@ -1,5 +1,21 @@
 # Project State
 
+## Current v0.9.3-C State
+
+- Status: completed; database migration 12; active configuration config-v0.9.0 preserved.
+- Learning Journey hardened (UX-001): read-time derivation from authoritative
+  source records; no render/locale/refresh events; accurate empty-state
+  taxonomy; Student ID normalization + learner-state consistency; practice
+  and revision idempotency; conservative revision-response semantics.
+- Deterministic demo journey for synthetic learner DEMO-001
+  (scripts/demo_journey.py --setup|--status|--cleanup; idempotent; scoped
+  cleanup; local provider only; DB backups recorded).
+- pytest: 324 passed, 8 skipped; Cases A-R + live validation: 130 passed;
+  legacy Playwright harnesses PASS; run.bat --verify PASS (3 cold starts);
+  recovery check PASS; 4 locale/viewport combinations clean.
+- Journey output makes no mastery/learning-gain/causal/transfer/proficiency/
+  CEFR claim.
+
 ## Current v0.9.3-B State
 
 - Status: completed; database migration 12; active configuration config-v0.9.0 preserved.

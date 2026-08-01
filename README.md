@@ -1,5 +1,14 @@
 # English Writing Feedback Prototype v0.9.2.1
 
+v0.9.3-C 完成产品旅程加固：Learning Journey 不再永久为空。旅程事件由权威
+来源记录（作文、分析、反馈、练习、作答、评价、修订、任务内响应）在读取时
+推导，每个事件都可追溯至真实记录；空状态按缺失阶段准确分类；提供确定性
+合成演示学习者 `DEMO-001` 的可重复/幂等/可清理设置；Student ID 归一化与
+跨页学习者一致性；练习与修订幂等。任何旅程输出均不构成掌握、习得、学习
+增益、因果、迁移、熟练度或 CEFR 声明。详见 [v0.9.3-C 规格](docs/development/V0.9.3_C_SPEC.md)
+与 [v0.9.3-C 验收](RUN_VERIFICATION_V0.9.3_C.md)、
+[v0.9.3 集成验收](RUN_VERIFICATION_V0.9.3.md)。
+
 v0.9.1 新增基于角色的双视图界面（学生视图/研究视图）、渐进式信息披露和响应式布局。（英文/简体中文）、CALF 指标分类展示与统一卡片布局、以及角色分离视图。所有用户可见文本已迁移至 `locales/` 下的语言文件。详见 [v0.8.1 规格](docs/development/V0.8.1_SPEC.md)。
 
 v0.8 新增 CALF Measurement Foundation：4 个构念、22 个测量规范、14 个分析单位，以及 MTLD、HD-D、句法候选单位、错误标注基础和基于真实时长的写作输出率。它们是可审计的研究测量/候选基础，不是 CALF 总分、作文评分、能力/熟练度/CEFR 判断。Accuracy 与词汇复杂度中的 sophistication 保持不可用；句法候选不进入诊断、优先级或纵向比较。详见 [CALF Measurement](docs/CALF_MEASUREMENT.md) 与 [v0.8 verification](RUN_VERIFICATION_V0.8.md)。

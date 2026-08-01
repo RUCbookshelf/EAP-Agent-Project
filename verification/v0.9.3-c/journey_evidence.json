@@ -1,0 +1,1216 @@
+{
+  "generated_at": "2026-08-01T12:35:03",
+  "database": "C:\\Users\\16073\\AppData\\Local\\Temp\\v093c_journey_18b8etgc\\journey.db",
+  "run_token": "23353c6e",
+  "student_journey": [
+    {
+      "step": "home_demo",
+      "text": "keyboard_double_arrow_left\n\nstreamlit app\n\nresearch pages\n\nstudent pages\n\nLanguage\n\nEnglish\n\n简体中文\n\n[English]\n\nView\n\nStudent View\n\nResearch View\n\nNavigation\n\nHome\n\nWriting\n\nFeedback\n\nRevision\n\nPractice\n\nLearning Journey\n\nDeploy\nEnglish Writing Feedback Prototype v0.9.1\n\nFormative feedback from prototype heuristics and optional LLM support — not automatic scoring.\n\nThis prototype is not educationall"
+    },
+    {
+      "step": "writing_submit",
+      "success": true,
+      "visible_ms": 1047,
+      "screenshot": "verification\\v0.9.3-c\\screenshots\\en_desktop_writing_after_submit.png"
+    },
+    {
+      "step": "feedback",
+      "strengths_section": true,
+      "priorities_section": true,
+      "screenshot": "verification\\v0.9.3-c\\screenshots\\en_desktop_feedback.png"
+    },
+    {
+      "step": "practice_existing_exercise",
+      "instances_before": 1,
+      "instances_after": 1,
+      "no_duplicate": true,
+      "screenshot": "verification\\v0.9.3-c\\screenshots\\en_desktop_practice.png"
+    },
+    {
+      "step": "practice_attempt",
+      "evaluation_shown": true,
+      "screenshot": "verification\\v0.9.3-c\\screenshots\\en_desktop_practice_attempted.png"
+    },
+    {
+      "step": "revision_submit",
+      "settled": true,
+      "body_has_error": false
+    },
+    {
+      "step": "journey_events",
+      "visible_ms": 4032,
+      "has_timeline": true,
+      "has_writing_submitted": true,
+      "has_practice_available": true,
+      "screenshot": "verification\\v0.9.3-c\\screenshots\\en_desktop_journey_events.png"
+    },
+    {
+      "step": "journey_after_refresh",
+      "rendered": true
+    },
+    {
+      "step": "journey_zh",
+      "has_chinese": true,
+      "raw_keys": [],
+      "screenshot": "verification\\v0.9.3-c\\screenshots\\zh_desktop_journey_events.png"
+    },
+    {
+      "step": "locale_switch_side_effects",
+      "writes_before": [
+        [
+          "POST",
+          "/api/v1/exercises/EX000001/attempts"
+        ],
+        [
+          "POST",
+          "/api/v1/submissions"
+        ]
+      ],
+      "writes_after": [
+        [
+          "POST",
+          "/api/v1/exercises/EX000001/attempts"
+        ],
+        [
+          "POST",
+          "/api/v1/submissions"
+        ]
+      ],
+      "no_write_side_effect": true
+    }
+  ],
+  "s02_regression": {
+    "visible_ms": 5015,
+    "journey_requests": 1,
+    "statuses": [
+      "200"
+    ],
+    "request_ids": [
+      "fa679e6f118f44d1"
+    ],
+    "api_duration_ms": [
+      16.0
+    ],
+    "generic_api_unavailable_shown": false,
+    "rendered_events": true,
+    "rendered_gate_note": true,
+    "screenshot": "verification\\v0.9.3-c\\screenshots\\s02_journey_regression.png"
+  },
+  "learner_S01": {
+    "rendered_not_found": true,
+    "text_snippet": "streamlit app\n\nresearch pages\n\nstudent pages\n\nLanguage\n\nEnglish\n\n简体中文\n\n[English]\n\nView\n\nStudent View\n\nResearch View\n\nNavigation\n\nHome\n\nWriting\n\nFeedback\n\nRevision\n\nPractice\n\nLearning Journey\n\nDeploy\nE"
+  },
+  "learner_S999": {
+    "rendered_not_found": true,
+    "text_snippet": "streamlit app\n\nresearch pages\n\nstudent pages\n\nLanguage\n\nEnglish\n\n简体中文\n\n[English]\n\nView\n\nStudent View\n\nResearch View\n\nNavigation\n\nHome\n\nWriting\n\nFeedback\n\nRevision\n\nPractice\n\nLearning Journey\n\nDeploy\nE"
+  },
+  "empty_learner": {
+    "rendered_empty_state": true,
+    "screenshot": "verification\\v0.9.3-c\\screenshots\\journey_empty_state.png"
+  },
+  "researcher_journey": [
+    {
+      "step": "research_overview",
+      "screenshot": "verification\\v0.9.3-c\\screenshots\\en_desktop_research_overview.png"
+    },
+    {
+      "step": "research_evidence",
+      "screenshot": "verification\\v0.9.3-c\\screenshots\\en_desktop_research_evidence.png"
+    },
+    {
+      "step": "research_calf",
+      "screenshot": "verification\\v0.9.3-c\\screenshots\\en_desktop_research_calf.png"
+    },
+    {
+      "step": "research_learning_process",
+      "journey_trace_shown": true,
+      "source_ids_shown": true,
+      "screenshot": "verification\\v0.9.3-c\\screenshots\\en_desktop_research_learning_process.png"
+    },
+    {
+      "step": "research_data_8_tabs",
+      "result": "PASS"
+    },
+    {
+      "step": "research_system_audit",
+      "screenshot": "verification\\v0.9.3-c\\screenshots\\en_desktop_research_system_audit.png"
+    }
+  ],
+  "combos": {
+    "en_1280x900": [
+      {
+        "page": "home",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "raw_keys": [],
+        "screenshot": "verification\\v0.9.3-c\\screenshots\\en_1280x900_home.png"
+      },
+      {
+        "page": "writing",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "raw_keys": [],
+        "screenshot": "verification\\v0.9.3-c\\screenshots\\en_1280x900_writing.png"
+      },
+      {
+        "page": "feedback",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "raw_keys": [],
+        "screenshot": "verification\\v0.9.3-c\\screenshots\\en_1280x900_feedback.png"
+      },
+      {
+        "page": "practice",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "raw_keys": [],
+        "screenshot": "verification\\v0.9.3-c\\screenshots\\en_1280x900_practice.png"
+      },
+      {
+        "page": "revision",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "raw_keys": [],
+        "screenshot": "verification\\v0.9.3-c\\screenshots\\en_1280x900_revision.png"
+      },
+      {
+        "page": "journey",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "raw_keys": [],
+        "screenshot": "verification\\v0.9.3-c\\screenshots\\en_1280x900_journey.png"
+      },
+      {
+        "page": "overview",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "raw_keys": [],
+        "screenshot": "verification\\v0.9.3-c\\screenshots\\en_1280x900_overview.png"
+      },
+      {
+        "page": "evidence",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "raw_keys": [],
+        "screenshot": "verification\\v0.9.3-c\\screenshots\\en_1280x900_evidence.png"
+      },
+      {
+        "page": "learning",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "raw_keys": [],
+        "screenshot": "verification\\v0.9.3-c\\screenshots\\en_1280x900_learning.png"
+      },
+      {
+        "page": "audit",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "raw_keys": [],
+        "screenshot": "verification\\v0.9.3-c\\screenshots\\en_1280x900_audit.png"
+      }
+    ],
+    "zh_CN_1280x900": [
+      {
+        "page": "home",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "raw_keys": [],
+        "screenshot": "verification\\v0.9.3-c\\screenshots\\zh_CN_1280x900_home.png"
+      },
+      {
+        "page": "writing",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "raw_keys": [],
+        "screenshot": "verification\\v0.9.3-c\\screenshots\\zh_CN_1280x900_writing.png"
+      },
+      {
+        "page": "feedback",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "raw_keys": [],
+        "screenshot": "verification\\v0.9.3-c\\screenshots\\zh_CN_1280x900_feedback.png"
+      },
+      {
+        "page": "practice",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "raw_keys": [],
+        "screenshot": "verification\\v0.9.3-c\\screenshots\\zh_CN_1280x900_practice.png"
+      },
+      {
+        "page": "revision",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "raw_keys": [],
+        "screenshot": "verification\\v0.9.3-c\\screenshots\\zh_CN_1280x900_revision.png"
+      },
+      {
+        "page": "journey",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "raw_keys": [],
+        "screenshot": "verification\\v0.9.3-c\\screenshots\\zh_CN_1280x900_journey.png"
+      },
+      {
+        "page": "overview",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "raw_keys": [],
+        "screenshot": "verification\\v0.9.3-c\\screenshots\\zh_CN_1280x900_overview.png"
+      },
+      {
+        "page": "evidence",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "raw_keys": [],
+        "screenshot": "verification\\v0.9.3-c\\screenshots\\zh_CN_1280x900_evidence.png"
+      },
+      {
+        "page": "learning",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "raw_keys": [],
+        "screenshot": "verification\\v0.9.3-c\\screenshots\\zh_CN_1280x900_learning.png"
+      },
+      {
+        "page": "audit",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "raw_keys": [],
+        "screenshot": "verification\\v0.9.3-c\\screenshots\\zh_CN_1280x900_audit.png"
+      }
+    ],
+    "en_390x844": [
+      {
+        "page": "home",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "raw_keys": [],
+        "screenshot": "verification\\v0.9.3-c\\screenshots\\en_390x844_home.png"
+      },
+      {
+        "page": "writing",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "raw_keys": [],
+        "screenshot": "verification\\v0.9.3-c\\screenshots\\en_390x844_writing.png"
+      },
+      {
+        "page": "feedback",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "raw_keys": [],
+        "screenshot": "verification\\v0.9.3-c\\screenshots\\en_390x844_feedback.png"
+      },
+      {
+        "page": "practice",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "raw_keys": [],
+        "screenshot": "verification\\v0.9.3-c\\screenshots\\en_390x844_practice.png"
+      },
+      {
+        "page": "revision",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "raw_keys": [],
+        "screenshot": "verification\\v0.9.3-c\\screenshots\\en_390x844_revision.png"
+      },
+      {
+        "page": "journey",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "raw_keys": [],
+        "screenshot": "verification\\v0.9.3-c\\screenshots\\en_390x844_journey.png"
+      },
+      {
+        "page": "overview",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "raw_keys": [],
+        "screenshot": "verification\\v0.9.3-c\\screenshots\\en_390x844_overview.png"
+      },
+      {
+        "page": "evidence",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "raw_keys": [],
+        "screenshot": "verification\\v0.9.3-c\\screenshots\\en_390x844_evidence.png"
+      },
+      {
+        "page": "learning",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "raw_keys": [],
+        "screenshot": "verification\\v0.9.3-c\\screenshots\\en_390x844_learning.png"
+      },
+      {
+        "page": "audit",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "raw_keys": [],
+        "screenshot": "verification\\v0.9.3-c\\screenshots\\en_390x844_audit.png"
+      }
+    ],
+    "zh_CN_390x844": [
+      {
+        "page": "home",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "raw_keys": [],
+        "screenshot": "verification\\v0.9.3-c\\screenshots\\zh_CN_390x844_home.png"
+      },
+      {
+        "page": "writing",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "raw_keys": [],
+        "screenshot": "verification\\v0.9.3-c\\screenshots\\zh_CN_390x844_writing.png"
+      },
+      {
+        "page": "feedback",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "raw_keys": [],
+        "screenshot": "verification\\v0.9.3-c\\screenshots\\zh_CN_390x844_feedback.png"
+      },
+      {
+        "page": "practice",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "raw_keys": [],
+        "screenshot": "verification\\v0.9.3-c\\screenshots\\zh_CN_390x844_practice.png"
+      },
+      {
+        "page": "revision",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "raw_keys": [],
+        "screenshot": "verification\\v0.9.3-c\\screenshots\\zh_CN_390x844_revision.png"
+      },
+      {
+        "page": "journey",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "raw_keys": [],
+        "screenshot": "verification\\v0.9.3-c\\screenshots\\zh_CN_390x844_journey.png"
+      },
+      {
+        "page": "overview",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "raw_keys": [],
+        "screenshot": "verification\\v0.9.3-c\\screenshots\\zh_CN_390x844_overview.png"
+      },
+      {
+        "page": "evidence",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "raw_keys": [],
+        "screenshot": "verification\\v0.9.3-c\\screenshots\\zh_CN_390x844_evidence.png"
+      },
+      {
+        "page": "learning",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "raw_keys": [],
+        "screenshot": "verification\\v0.9.3-c\\screenshots\\zh_CN_390x844_learning.png"
+      },
+      {
+        "page": "audit",
+        "rendered": true,
+        "console_errors": [],
+        "page_exceptions": [],
+        "overflow_ok": true,
+        "raw_keys": [],
+        "screenshot": "verification\\v0.9.3-c\\screenshots\\zh_CN_390x844_audit.png"
+      }
+    ]
+  },
+  "request_log": [
+    {
+      "request_id": "2cc0b5d28dfc4d92",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "starting"
+    },
+    {
+      "request_id": "b6c6b541d14d44c3",
+      "method": "GET",
+      "path": "/api/v1/students/DEMO-001/journey",
+      "status": "200",
+      "elapsed_ms": 16.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "0a78bbae3a704850",
+      "method": "GET",
+      "path": "/api/v1/students/DEMO-001/practice-targets",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "a03012c82a754c05",
+      "method": "GET",
+      "path": "/api/v1/students/DEMO-001/revision-candidates",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "8961ebffb3fa4475",
+      "method": "GET",
+      "path": "/api/v1/students/DEMO-001/revision-candidates",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "7792399074874221",
+      "method": "GET",
+      "path": "/api/v1/students/DEMO-001/revision-candidates",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "5a46e6e1e5c04408",
+      "method": "POST",
+      "path": "/api/v1/submissions",
+      "status": "201",
+      "elapsed_ms": 141.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "67346f253bfe4f6c",
+      "method": "GET",
+      "path": "/api/v1/practice-targets/PT000001/exercises",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "4d1b9a3fa81d46dc",
+      "method": "GET",
+      "path": "/api/v1/students/DEMO-001/practice-targets",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "2c8658656bba4b77",
+      "method": "GET",
+      "path": "/api/v1/practice-targets/PT000001/exercises",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "b0a8724785664e30",
+      "method": "GET",
+      "path": "/api/v1/exercises/EX000001/attempts",
+      "status": "200",
+      "elapsed_ms": 16.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "c01773470f644772",
+      "method": "GET",
+      "path": "/api/v1/practice-targets/PT000001/exercises",
+      "status": "200",
+      "elapsed_ms": 16.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "5644ae32d67240b6",
+      "method": "POST",
+      "path": "/api/v1/exercises/EX000001/attempts",
+      "status": "200",
+      "elapsed_ms": 31.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "9b5dc828bf854cbb",
+      "method": "GET",
+      "path": "/api/v1/students/DEMO-001/revision-candidates",
+      "status": "200",
+      "elapsed_ms": 15.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "9b63aa8a21354390",
+      "method": "GET",
+      "path": "/api/v1/students/DEMO-001/revision-candidates",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "d9ee5b22dff240de",
+      "method": "GET",
+      "path": "/api/v1/students/DEMO-001/revision-candidates",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "8eaaf7a4ca1b4fbd",
+      "method": "GET",
+      "path": "/api/v1/students/DEMO-001/revision-candidates",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "752f90e0907444b9",
+      "method": "POST",
+      "path": "/api/v1/submissions",
+      "status": "201",
+      "elapsed_ms": 188.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "9813460505814bbf",
+      "method": "GET",
+      "path": "/api/v1/students/DEMO-001/journey",
+      "status": "200",
+      "elapsed_ms": 16.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "b9cd458e11af4aae",
+      "method": "GET",
+      "path": "/api/v1/students/DEMO-001/journey",
+      "status": "200",
+      "elapsed_ms": 15.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "f46eb9129092409d",
+      "method": "GET",
+      "path": "/api/v1/students/DEMO-001/journey",
+      "status": "200",
+      "elapsed_ms": 16.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "fa679e6f118f44d1",
+      "method": "GET",
+      "path": "/api/v1/students/S02/journey",
+      "status": "200",
+      "elapsed_ms": 16.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "eed3fcac135d482e",
+      "method": "GET",
+      "path": "/api/v1/students/S01/journey",
+      "status": "404",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "3c3744abb81f4412",
+      "method": "GET",
+      "path": "/api/v1/students/S999/journey",
+      "status": "404",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "b7d05162f12b4ddc",
+      "method": "GET",
+      "path": "/api/v1/students/EMPTY01/journey",
+      "status": "200",
+      "elapsed_ms": 16.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "d394800253834f5a",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "0cb6bd821425490a",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "dbcebf746b72485e",
+      "method": "GET",
+      "path": "/api/v1/research/data-quality",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "73a1610be7e241b8",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "e3ef01adb11f4fbd",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "46458c64103445e8",
+      "method": "GET",
+      "path": "/api/v1/submissions/1",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "0e09ae5dd1a44271",
+      "method": "GET",
+      "path": "/api/v1/submissions/1/analyses",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "b28ba6acb1234005",
+      "method": "GET",
+      "path": "/api/v1/submissions/1/diagnostic-audit",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "dceb507fee9046f8",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "675e616c75ac4534",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 16.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "379c67ecfe4f42b5",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "face56b5e90342b7",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "9a9d181e2a2543b1",
+      "method": "GET",
+      "path": "/api/v1/students/DEMO-001/practice-targets",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "de761e4b9a854130",
+      "method": "GET",
+      "path": "/api/v1/students/DEMO-001/engagement-traces",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "a51e5bd00b074504",
+      "method": "GET",
+      "path": "/api/v1/students/DEMO-001/transfer-evidence",
+      "status": "200",
+      "elapsed_ms": 15.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "d1b8a764f0294b33",
+      "method": "GET",
+      "path": "/api/v1/students/DEMO-001/journey",
+      "status": "200",
+      "elapsed_ms": 16.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "77658e3fea2745b9",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "d1f36076b53642ef",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "2795802cbf124287",
+      "method": "GET",
+      "path": "/api/v1/admin/configurations",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "0f75f0e3808d488f",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "20b77ec3c2d5415e",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "169826fe706d4906",
+      "method": "GET",
+      "path": "/api/v1/research/data-quality",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "401e57a72eef4806",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "dc6ab5f158d049cc",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 16.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "8d118285903c459a",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "44eee8b1f7314983",
+      "method": "GET",
+      "path": "/api/v1/admin/configurations",
+      "status": "200",
+      "elapsed_ms": 15.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "e6ba4d0353dd49f2",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "03deb0a2fe914532",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "e74904ba91e24f50",
+      "method": "GET",
+      "path": "/api/v1/research/data-quality",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "37f6cf4a76784f9b",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "cf89a30c3d584044",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "142098fb06144ff5",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "60354dc790b44d28",
+      "method": "GET",
+      "path": "/api/v1/admin/configurations",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "1e8c621cdad74c0d",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "eb8bf6507d6e4abb",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "9f3890a4d2d4484d",
+      "method": "GET",
+      "path": "/api/v1/research/data-quality",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "dcd6c351f18743fa",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "e827a95e3299466f",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "e0fcd4cc3dee4970",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "2bcae55ae9a84a88",
+      "method": "GET",
+      "path": "/api/v1/admin/configurations",
+      "status": "200",
+      "elapsed_ms": 16.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "60f6df39021847f8",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "671514ce354347af",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "6cebd3ea143f4af0",
+      "method": "GET",
+      "path": "/api/v1/research/data-quality",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "bac166cbcc324829",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "d8ce2fc155a746d1",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "10fe379c50934924",
+      "method": "GET",
+      "path": "/api/v1/system/health",
+      "status": "200",
+      "elapsed_ms": 0.0,
+      "lifecycle": "ready"
+    },
+    {
+      "request_id": "06490195a9c24fdb",
+      "method": "GET",
+      "path": "/api/v1/admin/configurations",
+      "status": "200",
+      "elapsed_ms": 16.0,
+      "lifecycle": "ready"
+    }
+  ],
+  "response_times": {
+    "slowest_api_ms": 188.0,
+    "by_path": {
+      "GET /api/v1/system/health": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        16.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        16.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "GET /api/v1/students/DEMO-001/journey": [
+        16.0,
+        16.0,
+        15.0,
+        16.0,
+        16.0
+      ],
+      "GET /api/v1/students/DEMO-001/practice-targets": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "GET /api/v1/students/DEMO-001/revision-candidates": [
+        0.0,
+        0.0,
+        0.0,
+        15.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "POST /api/v1/submissions": [
+        141.0,
+        188.0
+      ],
+      "GET /api/v1/practice-targets/PT000001/exercises": [
+        0.0,
+        0.0,
+        16.0
+      ],
+      "GET /api/v1/exercises/EX000001/attempts": [
+        16.0
+      ],
+      "POST /api/v1/exercises/EX000001/attempts": [
+        31.0
+      ],
+      "GET /api/v1/students/S02/journey": [
+        16.0
+      ],
+      "GET /api/v1/students/S01/journey": [
+        0.0
+      ],
+      "GET /api/v1/students/S999/journey": [
+        0.0
+      ],
+      "GET /api/v1/students/EMPTY01/journey": [
+        16.0
+      ],
+      "GET /api/v1/research/data-quality": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "GET /api/v1/submissions/1": [
+        0.0
+      ],
+      "GET /api/v1/submissions/1/analyses": [
+        0.0
+      ],
+      "GET /api/v1/submissions/1/diagnostic-audit": [
+        0.0
+      ],
+      "GET /api/v1/students/DEMO-001/engagement-traces": [
+        0.0
+      ],
+      "GET /api/v1/students/DEMO-001/transfer-evidence": [
+        15.0
+      ],
+      "GET /api/v1/admin/configurations": [
+        0.0,
+        15.0,
+        0.0,
+        16.0,
+        16.0
+      ]
+    }
+  },
+  "created_records": {
+    "students": 5,
+    "essays": 17,
+    "analysis_runs": 17,
+    "feedback_records": 17,
+    "practice_targets": 1,
+    "exercise_instances": 1,
+    "exercise_attempts": 2,
+    "practice_evaluations": 2,
+    "within_task_response_candidates": 1,
+    "transfer_evidence_candidates": 0,
+    "feedback_engagement_traces": 0,
+    "revision_groups": 4
+  }
+}

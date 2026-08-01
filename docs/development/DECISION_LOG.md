@@ -8,6 +8,35 @@
 - **Progressive disclosure**: Student View hides internal IDs, analyzer versions, Diagnostic Gate internals. Research View exposes everything.
 # Decision log
 
+## D028 — Journey events are derived read-time from source records
+- Status: accepted for v0.9.3-C
+- Decision: Learning Journey events are computed from authoritative persisted
+  records (essays, analysis runs, feedback records, practice targets,
+  attempts, evaluations, within-task responses, transfer evidence) at read
+  time. No write path, no page-view events, no locale/refresh events.
+- Rationale: guarantees every event maps to a real record, works for existing
+  learners without backfill, and cannot fabricate engagement.
+
+## D029 — FeedbackEngagementTrace stays explicit; page display is never engagement
+- Status: accepted for v0.9.3-C
+- Decision: the existing FeedbackEngagementTrace model is retained for explicit
+  engagement actions but is not written by the journey; the journey does not
+  depend on it.
+
+## D030 — Deterministic demo journey policy
+- Status: accepted for v0.9.3-C
+- Decision: synthetic learner DEMO-001 (is_synthetic=1) is created only through
+  scripts/demo_journey.py with the local deterministic provider; setup is
+  idempotent, cleanup is scoped to DEMO-001, the database is backed up before
+  setup, and no production record is modified.
+
+## D031 — Revision-response claims stay conservative
+- Status: accepted for v0.9.3-C
+- Decision: within-task response observations may only state that a targeted
+  feature changed/did not change, evidence is mixed/unavailable/insufficient;
+  they never state mastery, learning, causation, or transfer. Accuracy
+  unavailability is never replaced by zero.
+
 ## D024 — Separate semantic measurement status from availability
 - Status: accepted for v0.8
 - Decision: persist research/proxy/candidate/manual/unavailable lifecycle independently from whether one observation has a value.

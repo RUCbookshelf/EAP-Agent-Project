@@ -1,5 +1,17 @@
 # v0.8 已知限制
 
+- Learning Journey events are derived from stored records and can only be as
+  complete as the records themselves; practice targets, evaluations, and
+  within-task response candidates exist only where created through the API or
+  the deterministic demo path.
+- Journey events are observable records, not evidence of engagement quality,
+  learning, mastery, proficiency, or transfer; page display is never recorded
+  as engagement.
+- Within-task response observations are candidates, not proof that feedback
+  caused a change; later-task evidence (when present) is not proof of transfer.
+- The deterministic demo learner (DEMO-001) is synthetic and namespaced;
+  cleanup is scoped to that learner only.
+
 - CALF measures are prototype research evidence and are not validated for the target population.
 - MTLD/HD-D remain sensitive to normalization, text length, task, and parameter choices.
 - spaCy clause/T-unit and other syntax outputs are candidates, not validated units or formal measures.

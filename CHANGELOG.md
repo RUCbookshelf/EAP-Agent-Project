@@ -1,4 +1,44 @@
 
+## v0.9.3-C (2026-08-01)
+
+### Fixed
+- UX-001: Learning Journey no longer appears permanently empty. Journey
+  events are derived at read time from authoritative source records
+  (app/journey/service.py); every event maps to a real record and no event is
+  created by page rendering, navigation, locale switching, or refresh.
+- DATA-001: empty-state messages are now accurate per missing record type
+  (learner not found, no submissions, no analysis, gate-suppressed priority,
+  no practice target, no attempt, no evaluation, no revision, no response
+  observation); errors are never shown as empty states.
+- UX-003: Student ID is normalized and shared across Student pages; switching
+  learners clears learner-scoped state.
+- ERR-003: Journey/Practice fetches show a loading state.
+- Practice Evaluation flow was unwired (service/repository existed, no API/UI
+  caller); valid attempts are now evaluated with the existing conservative
+  rule-based evaluator and persisted.
+
+### Added
+- Journey event semantic contract with stable types, source traceability,
+  deduplication keys, event versioning, and conservative limitations.
+- GET /api/v1/students/{student_id}/journey; read-only practice endpoints
+  (exercises by target, attempts by exercise).
+- Deterministic demo journey: `python scripts/demo_journey.py
+  --setup|--status|--cleanup` for synthetic learner DEMO-001 (idempotent,
+  scoped cleanup, local provider only, DB backup before setup).
+- 28 journey tests (tests/test_journey_v093c.py).
+
+### Changed
+- Student Home derives latest status/next action from the journey endpoint
+  (replaces the empty engagement-trace dependency).
+- Research Learning Process shows the journey trace with source IDs.
+- Locale keys: 368 en/zh_CN parity (journey + practice states).
+
+### Notes
+- No schema change; migration stays 12; config-v0.9.0 unchanged.
+- FeedbackEngagementTrace retained but not written by the journey; page
+  display is never engagement.
+- No mastery/learning-gain/causal/transfer/proficiency/CEFR claim is created.
+
 ## v0.9.3-B (2026-07-31)
 
 ### Fixed

@@ -1,5 +1,26 @@
 # v0.8 system architecture
 
+## v0.9.3-C journey overlay
+
+`Learning Journey` events are derived at read time by `JourneyService`
+(app/journey/service.py) from authoritative persisted records only: essays
+(writing/revision submitted), analysis runs (analysis completed), feedback
+records (feedback available / priority available / gate-suppressed), practice
+targets (practice available), exercise attempts, practice evaluations,
+within-task response candidates, and transfer evidence candidates. Events are
+ordered chronologically with a stage-aware secondary sort, deduplicated by
+stable keys, versioned (`journey-event-v0.9.3-c`), and always carry
+conservative limitations. `GET /api/v1/students/{id}/journey` returns events,
+counts, and a classified state for accurate empty states. Practice evaluation
+is now persisted from the attempt route using the existing rule-based
+evaluator. `FeedbackEngagementTrace` remains an explicit-action model and is
+not written by the journey; page rendering never creates records.
+
+`Essay → AnalysisRun → Calibration/Gate → Feedback → Practice Target →
+Exercise Instance → Exercise Attempt → Practice Evaluation → revised
+submission → Within-task response candidate → Journey event → Research
+Learning Process trace.`
+
 `Essay → Analyzer v0.8 → versioned MetricResult + AnalysisUnitRecord → CALF Registry/Service → research API/UI`. This additive branch shares persistence and configuration infrastructure but is isolated from the existing Diagnostic Gate, prompt priorities, exercises, and student totals. Error annotations are append-only imports. Trajectories group by exact metric/unit/Analyzer compatibility and task conditions.
 
 ## v0.7.1 reliability overlay

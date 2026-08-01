@@ -91,7 +91,11 @@ Streamlit form controls are globally restyled:
 3. Feedback — strengths, max 2 priorities, evidence, next step
 4. Revision — draft chain, changes, priorities, uptake
 5. Practice — target, exercise, attempt, evaluation
-6. Learning Journey — chronological timeline events
+6. Learning Journey — chronological timeline events derived from authoritative
+   source records; accurate classified empty states (learner not found, no
+   submissions, analysis pending, gate-suppressed priority, no practice
+   target, no attempt, no evaluation, no revision, no response observation);
+   errors are never displayed as empty states
 
 ### Research View (6 pages)
 1. Overview — system status, provider config, data quality
