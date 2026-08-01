@@ -1,0 +1,110 @@
+[
+  {
+    "run": 1,
+    "locale_selected": true,
+    "radio_indices_after_locale": [
+      1,
+      -1,
+      -1
+    ],
+    "role_selected": true,
+    "radio_indices_after_role": [
+      1,
+      1,
+      0
+    ],
+    "page_selected": true,
+    "h2_after_page": [
+      "研究数据"
+    ],
+    "tab_activated": true,
+    "tab_selected_states": [
+      "false",
+      "false",
+      "false",
+      "false",
+      "true",
+      "false",
+      "false",
+      "false"
+    ],
+    "target_id_localized": true,
+    "english_target_id_absent": true,
+    "exception_count": 0,
+    "console_errors": [],
+    "page_errors": [],
+    "pass": true
+  },
+  {
+    "run": 2,
+    "locale_selected": true,
+    "radio_indices_after_locale": [
+      1,
+      -1,
+      -1
+    ],
+    "role_selected": true,
+    "radio_indices_after_role": [
+      1,
+      1,
+      0
+    ],
+    "page_selected": true,
+    "h2_after_page": [
+      "研究数据"
+    ],
+    "tab_activated": true,
+    "tab_selected_states": [
+      "false",
+      "false",
+      "false",
+      "false",
+      "true",
+      "false",
+      "false",
+      "false"
+    ],
+    "target_id_localized": true,
+    "english_target_id_absent": true,
+    "exception_count": 0,
+    "console_errors": [],
+    "page_errors": [],
+    "pass": true
+  },
+  {
+    "run": 3,
+    "locale_selected": true,
+    "radio_indices_after_locale": [
+      1,
+      -1,
+      -1
+    ],
+    "role_selected": true,
+    "radio_indices_after_role": [
+      1,
+      1,
+      0
+    ],
+    "page_selected": true,
+    "h2_after_page": [
+      "研究数据"
+    ],
+    "tab_activated": true,
+    "tab_selected_states": [
+      "false",
+      "false",
+      "false",
+      "false",
+      "true",
+      "false",
+      "false",
+      "false"
+    ],
+    "target_id_localized": true,
+    "english_target_id_absent": true,
+    "exception_count": 0,
+    "console_errors": [],
+    "page_errors": [],
+    "pass": true
+  }
+]

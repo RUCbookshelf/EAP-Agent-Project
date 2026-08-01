@@ -1,0 +1,159 @@
+{
+  "en": {
+    "pages": {
+      "Home": {
+        "page": "Home",
+        "ok": true,
+        "problems": [],
+        "body_font": "\"Source Sans\", sans-serif",
+        "h2_font": "ui-monospace, \"Cascadia Mono\", \"Cascadia Code\", Consolas, SFMono-Regular, Menlo, Monaco, \"Liberation Mono\", \"Courier New",
+        "overflow": {
+          "doc": 1280,
+          "vw": 1280
+        }
+      },
+      "Writing": {
+        "page": "Writing",
+        "ok": true,
+        "problems": [],
+        "body_font": "\"Source Sans\", sans-serif",
+        "h2_font": "ui-monospace, \"Cascadia Mono\", \"Cascadia Code\", Consolas, SFMono-Regular, Menlo, Monaco, \"Liberation Mono\", \"Courier New",
+        "overflow": {
+          "doc": 1280,
+          "vw": 1280
+        }
+      },
+      "Feedback": {
+        "page": "Feedback",
+        "ok": true,
+        "problems": [],
+        "body_font": "\"Source Sans\", sans-serif",
+        "h2_font": "ui-monospace, \"Cascadia Mono\", \"Cascadia Code\", Consolas, SFMono-Regular, Menlo, Monaco, \"Liberation Mono\", \"Courier New",
+        "overflow": {
+          "doc": 1280,
+          "vw": 1280
+        }
+      },
+      "Overview": {
+        "page": "Overview",
+        "ok": true,
+        "problems": [],
+        "body_font": "\"Source Sans\", sans-serif",
+        "h2_font": "ui-monospace, \"Cascadia Mono\", \"Cascadia Code\", Consolas, SFMono-Regular, Menlo, Monaco, \"Liberation Mono\", \"Courier New",
+        "overflow": {
+          "doc": 1280,
+          "vw": 1280
+        }
+      },
+      "Research Data": {
+        "page": "Research Data",
+        "ok": true,
+        "problems": [],
+        "body_font": "\"Source Sans\", sans-serif",
+        "h2_font": "ui-monospace, \"Cascadia Mono\", \"Cascadia Code\", Consolas, SFMono-Regular, Menlo, Monaco, \"Liberation Mono\", \"Courier New",
+        "overflow": {
+          "doc": 1280,
+          "vw": 1280
+        }
+      },
+      "System Audit": {
+        "page": "System Audit",
+        "ok": true,
+        "problems": [],
+        "body_font": "\"Source Sans\", sans-serif",
+        "h2_font": "ui-monospace, \"Cascadia Mono\", \"Cascadia Code\", Consolas, SFMono-Regular, Menlo, Monaco, \"Liberation Mono\", \"Courier New",
+        "overflow": {
+          "doc": 1280,
+          "vw": 1280
+        }
+      }
+    },
+    "console_errors": {
+      "ok": true,
+      "errors": []
+    },
+    "page_errors": {
+      "ok": true,
+      "errors": []
+    }
+  },
+  "zh_CN": {
+    "pages": {
+      "首页": {
+        "page": "首页",
+        "ok": true,
+        "problems": [],
+        "body_font": "\"Source Sans\", sans-serif",
+        "h2_font": "ui-monospace, \"Cascadia Mono\", \"Cascadia Code\", Consolas, SFMono-Regular, Menlo, Monaco, \"Liberation Mono\", \"Courier New",
+        "overflow": {
+          "doc": 1280,
+          "vw": 1280
+        }
+      },
+      "写作": {
+        "page": "写作",
+        "ok": true,
+        "problems": [],
+        "body_font": "\"Source Sans\", sans-serif",
+        "h2_font": "ui-monospace, \"Cascadia Mono\", \"Cascadia Code\", Consolas, SFMono-Regular, Menlo, Monaco, \"Liberation Mono\", \"Courier New",
+        "overflow": {
+          "doc": 1280,
+          "vw": 1280
+        }
+      },
+      "反馈": {
+        "page": "反馈",
+        "ok": true,
+        "problems": [],
+        "body_font": "\"Source Sans\", sans-serif",
+        "h2_font": "ui-monospace, \"Cascadia Mono\", \"Cascadia Code\", Consolas, SFMono-Regular, Menlo, Monaco, \"Liberation Mono\", \"Courier New",
+        "overflow": {
+          "doc": 1280,
+          "vw": 1280
+        }
+      },
+      "研究概览": {
+        "page": "研究概览",
+        "ok": true,
+        "problems": [],
+        "body_font": "\"Source Sans\", sans-serif",
+        "h2_font": "ui-monospace, \"Cascadia Mono\", \"Cascadia Code\", Consolas, SFMono-Regular, Menlo, Monaco, \"Liberation Mono\", \"Courier New",
+        "overflow": {
+          "doc": 1280,
+          "vw": 1280
+        }
+      },
+      "研究数据": {
+        "page": "研究数据",
+        "ok": true,
+        "problems": [],
+        "body_font": "\"Source Sans\", sans-serif",
+        "h2_font": "ui-monospace, \"Cascadia Mono\", \"Cascadia Code\", Consolas, SFMono-Regular, Menlo, Monaco, \"Liberation Mono\", \"Courier New",
+        "overflow": {
+          "doc": 1280,
+          "vw": 1280
+        }
+      },
+      "系统审计": {
+        "page": "系统审计",
+        "ok": true,
+        "problems": [],
+        "body_font": "\"Source Sans\", sans-serif",
+        "h2_font": "ui-monospace, \"Cascadia Mono\", \"Cascadia Code\", Consolas, SFMono-Regular, Menlo, Monaco, \"Liberation Mono\", \"Courier New",
+        "overflow": {
+          "doc": 1280,
+          "vw": 1280
+        }
+      }
+    },
+    "console_errors": {
+      "ok": true,
+      "errors": []
+    },
+    "page_errors": {
+      "ok": true,
+      "errors": []
+    }
+  },
+  "_overall": "PASS"
+}
