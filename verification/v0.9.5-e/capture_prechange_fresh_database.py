@@ -98,7 +98,14 @@ def representative_crud(database: Database, settings: Settings) -> dict:
         submitted_at=datetime(2026, 8, 2, tzinfo=timezone.utc),
     )
     result = build_submission_service(
-        settings, database, revision_repository=database._revision_repository,
+        settings,
+        system_repository=database._system_repository,
+        submission_repository=database._submission_repository,
+        analysis_repository=database._analysis_repository,
+        calibration_repository=database._calf_repository,
+        learner_repository=database._learner_repository,
+        configuration_repository=database._configuration_repository,
+        revision_repository=database._revision_repository,
     ).submit(submission, synthetic=True)
     essay_id = result.essay_id
 

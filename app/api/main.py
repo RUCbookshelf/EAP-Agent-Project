@@ -152,7 +152,10 @@ def _run_startup(api: FastAPI) -> None:
         configuration_repository = repository._configuration_repository
         sub_svc = build_submission_service(
             settings,
-            repository,
+            system_repository=repository._system_repository,
+            submission_repository=repository._submission_repository,
+            analysis_repository=repository._analysis_repository,
+            calibration_repository=repository._calf_repository,
             learner_repository=learner_repository,
             configuration_repository=configuration_repository,
             revision_repository=repository._revision_repository,
@@ -361,7 +364,10 @@ def _build_full_app(
     if submission_service is None:
         submission_service = build_submission_service(
             settings,
-            repository,
+            system_repository=repository._system_repository,
+            submission_repository=repository._submission_repository,
+            analysis_repository=repository._analysis_repository,
+            calibration_repository=repository._calf_repository,
             learner_repository=learner_repository,
             configuration_repository=configuration_repository,
             revision_repository=repository._revision_repository,

@@ -60,7 +60,14 @@ def run_live_verification() -> dict:
         repo_a = Database(settings_a.database_path); repo_a.initialize()
         start = perf_counter()
         live_a = build_submission_service(
-            settings_a, repo_a, revision_repository=repo_a._revision_repository,
+            settings_a,
+            system_repository=repo_a._system_repository,
+            submission_repository=repo_a._submission_repository,
+            analysis_repository=repo_a._analysis_repository,
+            calibration_repository=repo_a._calf_repository,
+            learner_repository=repo_a._learner_repository,
+            configuration_repository=repo_a._configuration_repository,
+            revision_repository=repo_a._revision_repository,
         ).submit(_submission(
             "LIVE-V071-A", "Should cities protect public parks?", 0,
         ), synthetic=True)
@@ -73,14 +80,28 @@ def run_live_verification() -> dict:
         settings_b_local = replace(base, database_path=root / "live-b.db", llm_provider="local", deepseek_api_key=None)
         repo_b = Database(settings_b_local.database_path); repo_b.initialize()
         first_b = build_submission_service(
-            settings_b_local, repo_b, revision_repository=repo_b._revision_repository,
+            settings_b_local,
+            system_repository=repo_b._system_repository,
+            submission_repository=repo_b._submission_repository,
+            analysis_repository=repo_b._analysis_repository,
+            calibration_repository=repo_b._calf_repository,
+            learner_repository=repo_b._learner_repository,
+            configuration_repository=repo_b._configuration_repository,
+            revision_repository=repo_b._revision_repository,
         ).submit(_submission(
             "LIVE-V071-B", "Should cities protect public parks?", 0, stage="first draft",
         ), synthetic=True)
         settings_b = replace(base, database_path=root / "live-b.db", llm_provider="deepseek")
         start = perf_counter()
         live_b = build_submission_service(
-            settings_b, repo_b, revision_repository=repo_b._revision_repository,
+            settings_b,
+            system_repository=repo_b._system_repository,
+            submission_repository=repo_b._submission_repository,
+            analysis_repository=repo_b._analysis_repository,
+            calibration_repository=repo_b._calf_repository,
+            learner_repository=repo_b._learner_repository,
+            configuration_repository=repo_b._configuration_repository,
+            revision_repository=repo_b._revision_repository,
         ).submit(_submission(
             "LIVE-V071-B", "Should cities protect public parks?", 1, stage="revised draft",
             source=first_b.essay_id,
@@ -100,7 +121,14 @@ def run_live_verification() -> dict:
         settings_c_local = replace(base, database_path=root / "live-c.db", llm_provider="local", deepseek_api_key=None)
         repo_c = Database(settings_c_local.database_path); repo_c.initialize()
         local_c = build_submission_service(
-            settings_c_local, repo_c, revision_repository=repo_c._revision_repository,
+            settings_c_local,
+            system_repository=repo_c._system_repository,
+            submission_repository=repo_c._submission_repository,
+            analysis_repository=repo_c._analysis_repository,
+            calibration_repository=repo_c._calf_repository,
+            learner_repository=repo_c._learner_repository,
+            configuration_repository=repo_c._configuration_repository,
+            revision_repository=repo_c._revision_repository,
         )
         for index, prompt in enumerate((
             "Should schools require community service?",
@@ -110,7 +138,14 @@ def run_live_verification() -> dict:
         settings_c = replace(base, database_path=root / "live-c.db", llm_provider="deepseek")
         start = perf_counter()
         live_c = build_submission_service(
-            settings_c, repo_c, revision_repository=repo_c._revision_repository,
+            settings_c,
+            system_repository=repo_c._system_repository,
+            submission_repository=repo_c._submission_repository,
+            analysis_repository=repo_c._analysis_repository,
+            calibration_repository=repo_c._calf_repository,
+            learner_repository=repo_c._learner_repository,
+            configuration_repository=repo_c._configuration_repository,
+            revision_repository=repo_c._revision_repository,
         ).submit(_submission(
             "LIVE-V071-C", "Should universities record lectures?", 28,
         ), synthetic=True)

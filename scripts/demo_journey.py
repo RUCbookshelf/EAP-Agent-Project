@@ -131,7 +131,14 @@ def setup() -> int:
 
         settings = load_settings()
         submission_service = build_submission_service(
-            settings, repository, revision_repository=repository._revision_repository,
+            settings,
+            system_repository=repository._system_repository,
+            submission_repository=repository._submission_repository,
+            analysis_repository=repository._analysis_repository,
+            calibration_repository=repository._calf_repository,
+            learner_repository=repository._learner_repository,
+            configuration_repository=repository._configuration_repository,
+            revision_repository=repository._revision_repository,
         )
         practice_service = PracticeService(repository)
 

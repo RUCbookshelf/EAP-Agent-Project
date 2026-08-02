@@ -1,10 +1,22 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING, Any, Protocol, runtime_checkable
+
 from app.analyzer import Analyzer
+from app.calibration import DiagnosticCalibrationResult, DiagnosticCalibrationService
+from app.calf import append_product_fluency_metric
+from app.configuration import ConfigurationPayload
 from app.diagnosis import Diagnoser
 from app.learner import LearnerHistoryService
 from app.llm import FeedbackContext, ProviderRouter
-from app.models import AnalysisResult, DiagnosisResult, EssaySubmission, HistoryResult, PipelineResult
+from app.models import (
+    AnalysisResult,
+    DiagnosisResult,
+    EssaySubmission,
+    HistoryResult,
+    PipelineResult,
+    ProviderResult,
+)
 from app.repositories import (
     DiagnosisRepository,
     EssayRepository,
@@ -13,14 +25,54 @@ from app.repositories import (
     MetricRepository,
     SystemVersionRepository,
 )
-from typing import TYPE_CHECKING
-from app.calibration import DiagnosticCalibrationService
-from app.calf import append_product_fluency_metric
-from app.configuration import ConfigurationPayload
 
 if TYPE_CHECKING:
     from app.services.learner_profile import LearnerProfileService
     from app.services.revision import RevisionService
+
+
+@runtime_checkable
+class SubmissionSystemPort(Protocol):
+    """System-owned version-record contract (SubmissionService)."""
+
+    def record_versions(self, versions: dict[str, str]) -> None: ...
+
+
+@runtime_checkable
+class SubmissionDataPort(Protocol):
+    """Submission-owned read/write contract (SubmissionService)."""
+
+    def save_essay(self, submission: EssaySubmission, *, synthetic: bool = False) -> int: ...
+
+    def prior_records(self, submission: EssaySubmission) -> list[dict[str, Any]]: ...
+
+    def get_submission_bundle(self, essay_id: int) -> dict[str, Any] | None: ...
+
+    def save_feedback(self, essay_id: int, result: ProviderResult, analysis_version: str) -> None: ...
+
+    def save_history(self, student_id: str, essay_id: int, history: HistoryResult) -> None: ...
+
+
+@runtime_checkable
+class SubmissionAnalysisPort(Protocol):
+    """Analysis-owned write contract (SubmissionService)."""
+
+    def save_analysis_run(self, essay_id: int, analysis: AnalysisResult) -> AnalysisResult: ...
+
+    def save_analysis(self, essay_id: int, analysis: AnalysisResult) -> None: ...
+
+    def save_diagnosis(self, essay_id: int, diagnosis: DiagnosisResult) -> None: ...
+
+
+@runtime_checkable
+class SubmissionCalibrationPort(Protocol):
+    """CALF-owned diagnostic-calibration contract (SubmissionService)."""
+
+    def save_diagnostic_calibration(
+        self, essay_id: int, calibration: DiagnosticCalibrationResult,
+    ) -> DiagnosticCalibrationResult: ...
+
+    def get_diagnostic_calibration(self, essay_id: int) -> DiagnosticCalibrationResult | None: ...
 
 
 class SubmissionRepository(
@@ -39,7 +91,10 @@ class SubmissionService:
 
     def __init__(
         self,
-        repository: SubmissionRepository,
+        system_repository: SubmissionSystemPort,
+        submission_repository: SubmissionDataPort,
+        analysis_repository: SubmissionAnalysisPort,
+        calibration_repository: SubmissionCalibrationPort,
         analyzer: Analyzer,
         diagnoser: Diagnoser,
         router: ProviderRouter,
@@ -48,16 +103,19 @@ class SubmissionService:
         calibrator: DiagnosticCalibrationService | None = None,
         calf_configuration: ConfigurationPayload | None = None,
     ) -> None:
-        self.repository = repository
+        self.system_repository = system_repository
+        self.submission_repository = submission_repository
+        self.analysis_repository = analysis_repository
+        self.calibration_repository = calibration_repository
         self.analyzer = analyzer
         self.diagnoser = diagnoser
         self.router = router
-        self.history = LearnerHistoryService(repository)
+        self.history = LearnerHistoryService(submission_repository)
         self.learner_profile_service = learner_profile_service
         self.revision_service = revision_service
         self.calibrator = calibrator
         self.calf_configuration = calf_configuration or ConfigurationPayload()
-        self.repository.record_versions({
+        self.system_repository.record_versions({
             "application": "0.8.0",
             "analysis": getattr(analyzer, "version", "unknown"),
             "diagnosis": getattr(diagnoser, "version", "unknown"),
@@ -81,7 +139,7 @@ class SubmissionService:
             self.revision_service.validate_relationship(
                 submission.revision_of_submission_id, None, target_student_id=submission.student_id,
             )
-        essay_id = self.repository.save_essay(submission, synthetic=synthetic)
+        essay_id = self.submission_repository.save_essay(submission, synthetic=synthetic)
         analysis = self.analyzer.analyze(
             submission.essay_text, writing_prompt=submission.writing_prompt,
             draft_stage=submission.draft_stage, tool_use=submission.tool_use,
@@ -90,12 +148,12 @@ class SubmissionService:
             analysis, submission,
             accepted_timing_quality=self.calf_configuration.calf_accepted_timing_quality,
         )
-        analysis = self.repository.save_analysis_run(essay_id, analysis)
-        self.repository.save_analysis(essay_id, analysis)
+        analysis = self.analysis_repository.save_analysis_run(essay_id, analysis)
+        self.analysis_repository.save_analysis(essay_id, analysis)
         raw_diagnosis = self.diagnoser.diagnose(analysis)
         prior_selected_categories: set[str] = set()
         if self.calibrator:
-            for prior in self.repository.prior_records(submission):
+            for prior in self.submission_repository.prior_records(submission):
                 if prior.get("genre") != submission.genre:
                     continue
                 diagnosis = prior.get("diagnosis") or {}
@@ -111,9 +169,9 @@ class SubmissionService:
             if self.calibrator else None
         )
         diagnosis = calibration.selected_diagnosis if calibration else raw_diagnosis
-        self.repository.save_diagnosis(essay_id, diagnosis)
-        if calibration is not None and hasattr(self.repository, "save_diagnostic_calibration"):
-            calibration = self.repository.save_diagnostic_calibration(essay_id, calibration)
+        self.analysis_repository.save_diagnosis(essay_id, diagnosis)
+        if calibration is not None:
+            calibration = self.calibration_repository.save_diagnostic_calibration(essay_id, calibration)
         revision_snapshot = None
         if submission.revision_of_submission_id is not None and self.revision_service is not None:
             revision_snapshot = self.revision_service.create_relationship(
@@ -162,8 +220,8 @@ class SubmissionService:
                 ui_empty_states.append("NO_PREVIOUS_PRIORITY")
             if not within_task_revision_trajectory.feedback_uptake_candidates:
                 ui_empty_states.append("NO_FEEDBACK_UPTAKE_CANDIDATE")
-        self.repository.save_feedback(essay_id, provider_result, analysis.analysis_version)
-        self.repository.save_history(submission.student_id, essay_id, history)
+        self.submission_repository.save_feedback(essay_id, provider_result, analysis.analysis_version)
+        self.submission_repository.save_history(submission.student_id, essay_id, history)
         return PipelineResult(
             essay_id=essay_id,
             analysis=analysis,
@@ -182,7 +240,7 @@ class SubmissionService:
 
     def regenerate_feedback(self, essay_id: int, analysis: AnalysisResult):
         """Explicit, auditable LLM path for an existing essay; never creates or overwrites the essay."""
-        row = self.repository.get_submission_bundle(essay_id)
+        row = self.submission_repository.get_submission_bundle(essay_id)
         if row is None:
             raise LookupError("Submission not found.")
         if not row.get("diagnosis"):
@@ -207,7 +265,7 @@ class SubmissionService:
             latest = self.revision_service.latest(row["revision_group_id"])
             if latest.target_submission_id == essay_id:
                 revision_snapshot = latest
-        calibration = self.repository.get_diagnostic_calibration(essay_id) if hasattr(self.repository, "get_diagnostic_calibration") else None
+        calibration = self.calibration_repository.get_diagnostic_calibration(essay_id)
         context = FeedbackContext(
             submission, analysis, DiagnosisResult.model_validate(row["diagnosis"]), history,
             profile, revision_snapshot, calibration.prompt_payload() if calibration else None,
@@ -223,5 +281,5 @@ class SubmissionService:
             assessment,
         )
         result = self.router.generate(context)
-        self.repository.save_feedback(essay_id, result, analysis.analysis_version)
+        self.submission_repository.save_feedback(essay_id, result, analysis.analysis_version)
         return result

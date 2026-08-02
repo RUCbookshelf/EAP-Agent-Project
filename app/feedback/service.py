@@ -44,7 +44,10 @@ class FeedbackPipeline:
             progress_service=progress_service,
         )
         self._service = SubmissionService(
-            repository=self.database,
+            system_repository=self.database._system_repository,
+            submission_repository=self.database._submission_repository,
+            analysis_repository=self.database._analysis_repository,
+            calibration_repository=self.database._calf_repository,
             analyzer=self.analyzer,
             diagnoser=self.diagnoser,
             router=self.router,

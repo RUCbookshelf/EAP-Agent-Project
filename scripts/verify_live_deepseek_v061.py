@@ -26,7 +26,14 @@ def verify(*, write_report: bool = True) -> dict:
         isolated = replace(settings, database_path=Path(temp_dir) / "live_v061.db")
         repository = Database(isolated.database_path); repository.initialize()
         result = build_submission_service(
-            isolated, repository, revision_repository=repository._revision_repository,
+            isolated,
+            system_repository=repository._system_repository,
+            submission_repository=repository._submission_repository,
+            analysis_repository=repository._analysis_repository,
+            calibration_repository=repository._calf_repository,
+            learner_repository=repository._learner_repository,
+            configuration_repository=repository._configuration_repository,
+            revision_repository=repository._revision_repository,
         ).submit(EssaySubmission.model_validate(fixture))
         provider = result.provider
         if provider.provider_name != "deepseek" or provider.success_status != "success":

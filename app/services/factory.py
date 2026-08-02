@@ -5,7 +5,13 @@ from app.analysis import AnalyzerCoordinator, AnalyzerRegistry, SpacyAnalyzer, U
 from app.config import Settings
 from app.diagnosis import NlpHeuristicDiagnoser
 from app.llm import DeepSeekProvider, LocalDemoProvider, ProviderRouter
-from .submission import SubmissionRepository, SubmissionService
+from .submission import (
+    SubmissionAnalysisPort,
+    SubmissionCalibrationPort,
+    SubmissionDataPort,
+    SubmissionService,
+    SubmissionSystemPort,
+)
 from .learner_profile import LearnerProfileReadPort, LearnerProfileService
 from .progress import ActiveConfigurationPort, LearnerProgressPort, ProgressService
 from .revision import RevisionService
@@ -61,16 +67,17 @@ def build_analyzer(settings: Settings) -> AnalyzerCoordinator:
 
 def build_submission_service(
     settings: Settings,
-    repository: SubmissionRepository,
     *,
-    learner_repository: LearnerProgressPort | LearnerProfileReadPort | None = None,
-    configuration_repository: ActiveConfigurationPort | None = None,
+    system_repository: SubmissionSystemPort,
+    submission_repository: SubmissionDataPort,
+    analysis_repository: SubmissionAnalysisPort,
+    calibration_repository: SubmissionCalibrationPort,
+    learner_repository: LearnerProgressPort | LearnerProfileReadPort,
+    configuration_repository: ActiveConfigurationPort,
     revision_repository: RevisionRepository,
 ) -> SubmissionService:
-    learner_dependency = learner_repository if learner_repository is not None else repository
-    configuration_dependency = (
-        configuration_repository if configuration_repository is not None else repository
-    )
+    learner_dependency = learner_repository
+    configuration_dependency = configuration_repository
     active_configuration = None
     try:
         active_configuration = configuration_dependency.get_active_configuration()
@@ -86,7 +93,10 @@ def build_submission_service(
         progress_service=progress_service,
     )
     return SubmissionService(
-        repository=repository,
+        system_repository=system_repository,
+        submission_repository=submission_repository,
+        analysis_repository=analysis_repository,
+        calibration_repository=calibration_repository,
         analyzer=build_analyzer(settings),
         diagnoser=NlpHeuristicDiagnoser(),
         router=build_router(settings, active_configuration.payload if active_configuration else None),

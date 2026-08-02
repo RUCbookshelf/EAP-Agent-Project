@@ -78,7 +78,14 @@ def run_live_verification() -> dict:
         deepseek_repo = Database(deepseek_settings.database_path)
         deepseek_repo.initialize()
         service = build_submission_service(
-            deepseek_settings, deepseek_repo, revision_repository=deepseek_repo._revision_repository,
+            deepseek_settings,
+            system_repository=deepseek_repo._system_repository,
+            submission_repository=deepseek_repo._submission_repository,
+            analysis_repository=deepseek_repo._analysis_repository,
+            calibration_repository=deepseek_repo._calf_repository,
+            learner_repository=deepseek_repo._learner_repository,
+            configuration_repository=deepseek_repo._configuration_repository,
+            revision_repository=deepseek_repo._revision_repository,
         )
 
         started = perf_counter()
@@ -110,7 +117,14 @@ def run_live_verification() -> dict:
         local_repo = Database(local_settings.database_path)
         local_repo.initialize()
         local_service = build_submission_service(
-            local_settings, local_repo, revision_repository=local_repo._revision_repository,
+            local_settings,
+            system_repository=local_repo._system_repository,
+            submission_repository=local_repo._submission_repository,
+            analysis_repository=local_repo._analysis_repository,
+            calibration_repository=local_repo._calf_repository,
+            learner_repository=local_repo._learner_repository,
+            configuration_repository=local_repo._configuration_repository,
+            revision_repository=local_repo._revision_repository,
         )
         live_c = local_service.submit(_submission("LIVE-V08-C", ORDINARY_TEXT), synthetic=True)
         c_wpm = _metric(live_c, "writing_output_rate_wpm")
