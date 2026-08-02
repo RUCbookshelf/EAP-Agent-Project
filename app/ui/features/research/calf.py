@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import streamlit as st
 
-from app.ui.api_client import WritingFeedbackApiClient
+from app.ui.ports.research import ResearchCalfApiPort
 from app.ui.components import (
     card_group_header,
     info_box,
@@ -22,7 +22,7 @@ CALF_CLASSIFICATION = {
 }
 
 
-def render_research_calf(api_client: WritingFeedbackApiClient, lang: str) -> None:
+def render_research_calf(api_client: ResearchCalfApiPort, lang: str) -> None:
     """Research CALF Measures: grouped metric cards."""
     page_header("tab_calf", "calf_student_boundary", lang)
 

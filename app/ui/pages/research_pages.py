@@ -1,8 +1,12 @@
-"""Research View pages — thin compatibility facade (v0.9.5-C).
+"""Research View pages — thin compatibility facade (v0.9.5-C, v0.9.5-D).
 
-Feature implementations moved to app/ui/features/research/* (one module per
+Feature implementations live in app/ui/features/research/* (one module per
 visible Research page). This module only re-exports the public renderers;
 no renderer, state, API-call, or business-display logic lives here.
+
+Compatibility note (v0.9.5-D): this module is compatibility-only for public
+renderer imports. New code should import renderers from their feature-owner
+modules under app.ui.features.research.*.
 """
 
 from __future__ import annotations

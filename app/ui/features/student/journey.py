@@ -4,7 +4,8 @@ from __future__ import annotations
 
 import streamlit as st
 
-from app.ui.api_client import ApiClientError, WritingFeedbackApiClient
+from app.ui.api_client import ApiClientError
+from app.ui.ports.student import StudentJourneyApiPort
 from app.ui.components import (
     empty_state,
     info_box,
@@ -113,7 +114,7 @@ def _render_journey_action(state: str, lang: str) -> None:
     )
 
 
-def render_learning_journey_page(api_client: WritingFeedbackApiClient, lang: str) -> None:
+def render_learning_journey_page(api_client: StudentJourneyApiPort, lang: str) -> None:
     """Render the authoritative read-time Journey projection without writes."""
     student_page_intro("learning_journey", "student_journey_purpose", lang)
 

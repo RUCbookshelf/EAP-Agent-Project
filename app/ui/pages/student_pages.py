@@ -1,9 +1,18 @@
-"""Student View pages — thin compatibility facade (v0.9.5-C).
+"""Student View pages — thin compatibility facade (v0.9.5-C, v0.9.5-D).
 
-Feature implementations moved to app/ui/features/student/* (one module per
+Feature implementations live in app/ui/features/student/* (one module per
 visible page plus small shared helper modules). This module only re-exports
 the public renderers and the helpers covered by existing tests/consumers;
 no renderer, state, API-call, or business-display logic lives here.
+
+Compatibility note (v0.9.5-D): the private-helper exports below are
+compatibility-only and DEPRECATED for new code. New code must import helpers
+from their true feature-owner modules, e.g.:
+
+    from app.ui.features.student.home import _home_action_contract
+    from app.ui.features.student.session import _writing_saved_for_learner
+
+Public renderer imports through this facade remain supported.
 """
 
 from __future__ import annotations

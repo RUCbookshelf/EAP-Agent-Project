@@ -4,7 +4,8 @@ from __future__ import annotations
 
 import streamlit as st
 
-from app.ui.api_client import ApiClientError, WritingFeedbackApiClient
+from app.ui.api_client import ApiClientError
+from app.ui.ports.research import ResearchSystemAuditApiPort
 from app.ui.components import (
     info_box,
     page_header,
@@ -14,7 +15,7 @@ from app.ui.components import (
 from app.ui.locale import t
 
 
-def render_research_system_audit(api_client: WritingFeedbackApiClient, lang: str) -> None:
+def render_research_system_audit(api_client: ResearchSystemAuditApiPort, lang: str) -> None:
     """Research System Audit: diagnostic audit, learner model, reanalysis, admin."""
     page_header("research_audit_title", "research_audit_subtitle", lang)
 

@@ -10,7 +10,8 @@ from __future__ import annotations
 
 import streamlit as st
 
-from app.ui.api_client import ApiClientError, WritingFeedbackApiClient
+from app.ui.api_client import ApiClientError
+from app.ui.ports.research import ResearchDataApiPort
 from app.ui.components import (
     info_box,
     loading_box,
@@ -23,7 +24,7 @@ from app.ui.contracts.research import build_export_job_payload
 from app.ui.locale import t
 
 
-def render_research_data(api_client: WritingFeedbackApiClient, lang: str) -> None:
+def render_research_data(api_client: ResearchDataApiPort, lang: str) -> None:
     """Research Data: export, privacy, filters, PII, human review, splits, quality."""
     page_header("nav_research_data", "", lang)
 

@@ -4,7 +4,8 @@ from __future__ import annotations
 
 import streamlit as st
 
-from app.ui.api_client import ApiClientError, WritingFeedbackApiClient
+from app.ui.api_client import ApiClientError
+from app.ui.ports.student import StudentPracticeApiPort
 from app.ui.components import (
     evidence_quote,
     field_error,
@@ -62,7 +63,7 @@ def _practice_attempt_with_cached_evaluation(loaded: list[dict]) -> list[dict]:
     return loaded
 
 
-def render_practice_page(api_client: WritingFeedbackApiClient, lang: str) -> None:
+def render_practice_page(api_client: StudentPracticeApiPort, lang: str) -> None:
     """Student Practice page: one explicit target-to-evaluation sequence."""
     student_page_intro("practice", "student_practice_purpose", lang)
 

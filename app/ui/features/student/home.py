@@ -4,7 +4,8 @@ from __future__ import annotations
 
 import streamlit as st
 
-from app.ui.api_client import ApiClientError, WritingFeedbackApiClient
+from app.ui.api_client import ApiClientError
+from app.ui.ports.student import StudentHomeApiPort
 from app.ui.components import (
     info_box,
     limitation_notice,
@@ -34,7 +35,7 @@ def _home_action_contract(state: str) -> tuple[int, str, str, str]:
     }.get(state, (0, "student_home_action_continue", "student_writing_title", "student_home_go_writing"))
 
 
-def render_student_home(api_client: WritingFeedbackApiClient, lang: str) -> None:
+def render_student_home(api_client: StudentHomeApiPort, lang: str) -> None:
     """Student Home: orient the learner and expose one relevant next action."""
     student_page_intro("student_home_title", "student_home_subtitle", lang)
 

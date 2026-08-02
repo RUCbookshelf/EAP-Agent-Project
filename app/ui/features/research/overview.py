@@ -4,7 +4,8 @@ from __future__ import annotations
 
 import streamlit as st
 
-from app.ui.api_client import ApiClientError, WritingFeedbackApiClient
+from app.ui.api_client import ApiClientError
+from app.ui.ports.research import ResearchOverviewApiPort
 from app.ui.components import (
     info_box,
     limitation_notice,
@@ -16,7 +17,7 @@ from app.ui.components import (
 from app.ui.locale import t
 
 
-def render_research_overview(api_client: WritingFeedbackApiClient, lang: str) -> None:
+def render_research_overview(api_client: ResearchOverviewApiPort, lang: str) -> None:
     """Research Overview: aggregate counts and data-quality warnings."""
     page_header("research_overview_title", "research_overview_subtitle", lang)
 

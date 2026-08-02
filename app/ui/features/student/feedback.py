@@ -4,7 +4,8 @@ from __future__ import annotations
 
 import streamlit as st
 
-from app.ui.api_client import ApiClientError, WritingFeedbackApiClient
+from app.ui.api_client import ApiClientError
+from app.ui.ports.student import StudentFeedbackApiPort
 from app.ui.components import (
     empty_state,
     evidence_quote,
@@ -25,7 +26,7 @@ from app.ui.locale import t
 from app.ui.student_context import set_selected_learner, student_id_input
 
 
-def render_feedback_content(result: dict, api_client: WritingFeedbackApiClient, lang: str) -> None:
+def render_feedback_content(result: dict, api_client: StudentFeedbackApiPort, lang: str) -> None:
     """Render gate-selected feedback in priority, action, evidence order."""
     del api_client  # Kept in the public renderer signature for caller compatibility.
     provider = result.get("feedback_result", {})
@@ -117,7 +118,7 @@ def render_feedback_content(result: dict, api_client: WritingFeedbackApiClient, 
     )
 
 
-def render_feedback_page(api_client: WritingFeedbackApiClient, lang: str) -> None:
+def render_feedback_page(api_client: StudentFeedbackApiPort, lang: str) -> None:
     """Student Feedback page: selected priority, action, evidence, limitation."""
     student_page_intro("student_feedback_title", "student_feedback_subtitle", lang)
 

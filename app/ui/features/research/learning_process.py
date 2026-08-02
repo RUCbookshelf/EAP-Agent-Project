@@ -4,7 +4,8 @@ from __future__ import annotations
 
 import streamlit as st
 
-from app.ui.api_client import ApiClientError, WritingFeedbackApiClient
+from app.ui.api_client import ApiClientError
+from app.ui.ports.research import ResearchLearningProcessApiPort
 from app.ui.components import (
     audit_record,
     data_table,
@@ -18,7 +19,7 @@ from app.ui.locale import t
 from app.ui.student_context import set_selected_learner, student_id_input
 
 
-def render_research_learning_process(api_client: WritingFeedbackApiClient, lang: str) -> None:
+def render_research_learning_process(api_client: ResearchLearningProcessApiPort, lang: str) -> None:
     """Research Learning Process: complete evidence chain inspection."""
     page_header("research_learning_title", "research_learning_subtitle", lang)
 

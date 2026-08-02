@@ -4,7 +4,8 @@ from __future__ import annotations
 
 import streamlit as st
 
-from app.ui.api_client import ApiClientError, WritingFeedbackApiClient
+from app.ui.api_client import ApiClientError
+from app.ui.ports.student import StudentRevisionApiPort
 from app.ui.components import (
     empty_state,
     error_box,
@@ -140,7 +141,7 @@ def _render_revision_observation(result: dict, lang: str) -> None:
     limitation_notice("student_revision_boundary", lang)
 
 
-def render_revision_page(api_client: WritingFeedbackApiClient, lang: str) -> None:
+def render_revision_page(api_client: StudentRevisionApiPort, lang: str) -> None:
     """Student Revision page: original context, revised-text task, observation."""
     student_page_intro("student_revision_title", "student_revision_purpose", lang)
 

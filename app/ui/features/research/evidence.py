@@ -4,7 +4,8 @@ from __future__ import annotations
 
 import streamlit as st
 
-from app.ui.api_client import ApiClientError, WritingFeedbackApiClient
+from app.ui.api_client import ApiClientError
+from app.ui.ports.research import ResearchEvidenceApiPort
 from app.ui.components import (
     info_box,
     page_header,
@@ -14,7 +15,7 @@ from app.ui.components import (
 from app.ui.locale import t
 
 
-def render_research_evidence(api_client: WritingFeedbackApiClient, lang: str) -> None:
+def render_research_evidence(api_client: ResearchEvidenceApiPort, lang: str) -> None:
     """Research Evidence: submission, analysis, diagnosis, priority, evidence audit."""
     page_header("research_evidence_title", "research_evidence_subtitle", lang)
 

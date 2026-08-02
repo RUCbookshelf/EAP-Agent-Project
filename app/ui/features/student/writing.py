@@ -4,7 +4,8 @@ from __future__ import annotations
 
 import streamlit as st
 
-from app.ui.api_client import ApiClientError, WritingFeedbackApiClient
+from app.ui.api_client import ApiClientError
+from app.ui.ports.student import StudentWritingApiPort
 from app.ui.components import (
     error_box,
     field_error,
@@ -27,7 +28,7 @@ from app.ui.locale import t
 from app.ui.student_context import set_selected_learner, student_id_input
 
 
-def render_writing_page(api_client: WritingFeedbackApiClient, lang: str) -> None:
+def render_writing_page(api_client: StudentWritingApiPort, lang: str) -> None:
     """Student Writing page: one required drafting task and one submit action."""
     student_page_intro("student_writing_title", "student_writing_subtitle", lang)
 
