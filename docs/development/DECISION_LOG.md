@@ -1,5 +1,30 @@
 
 
+## 2026-08-02 - v0.9.5-F6A0 Revision repository capability completion
+
+- **Decision**: Authorized via Option C of the F6A blocker report. Complete
+  the existing facade-owned `SQLiteRevisionRepository` capabilities so it
+  structurally satisfies the central `RevisionRepository` contract:
+  add `get_submission_bundle` and `get_latest_analysis_run` as direct
+  reader delegations and wire the existing facade-owned Submission and
+  Analysis repository instances into it from the `Database` facade.
+- **Rationale**: The F6A runtime swap is impossible while the narrowed
+  repository lacks two methods RevisionService directly calls; the F1 audit
+  narrative that the Analysis reader was already wired was incorrect at
+  HEAD. F6A0 closes that gap without any runtime narrowing.
+- **Parity boundary**: Central `RevisionRepository`, `RevisionService`, all
+  construction sites, Revision write methods, SQL, transactions, migration
+  12, 33 tables, `config-v0.9.0`, prompt `feedback-prompt-v0.7.1`, API 77
+  pairs, client 52 methods, locale 520/520, and facade 86 methods unchanged.
+- **Safety decision**: All write-capable verification used fresh guarded
+  temporary databases with python-dotenv disabled and `DATABASE_URL`
+  absent; development database remained at SHA-256 `340E0F...AFF4`
+  (unchanged).
+- **Evidence**: focused 53 PASS; accumulated contracts 161 PASS; full
+  non-live core 559 passed + 8 skipped; exact `run.bat --verify` PASS.
+- **Boundary**: v0.9.5-F6A runtime narrowing may be rebaselined and resumed
+  only under a separate authorization; F6A0 performs none.
+
 ## 2026-08-02 - v0.9.5-F5B ResearchDataService dependency narrowing
 
 - **Decision**: Narrow exactly one Service with consumer-owned Ports:

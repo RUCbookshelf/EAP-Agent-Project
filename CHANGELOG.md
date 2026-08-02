@@ -1,3 +1,28 @@
+## v0.9.5-F6A0 (2026-08-02)
+
+### Changed
+- Completed the facade-owned Revision repository capabilities: the
+  existing `SQLiteRevisionRepository` now exposes `get_submission_bundle`
+  and `get_latest_analysis_run` as direct delegations to its injected
+  readers and is wired by the `Database` facade with the existing
+  facade-owned Submission and Analysis repository instances (same
+  connection manager, one repository graph). The central
+  `RevisionRepository` Protocol, `RevisionService`, all construction
+  sites, Revision write methods, SQL, and transaction boundaries are
+  unchanged; this is the capability prerequisite for the still-blocked
+  v0.9.5-F6A runtime narrowing.
+- Added 13 focused F6A0 contract tests, the F6A0 isolated pytest runner,
+  and the F6A0 SPEC/verification documentation; the F6A blocker report
+  records the owner-authorized Option C resolution.
+
+### Verified
+- Focused F6A0 set 53 PASS; accumulated architecture contracts 161 PASS
+  (F2-F5B, E parity 86/33, API 77, client 52, locale 520/520); full
+  non-live core 559 passed + 8 skipped; exact `run.bat --verify` PASS
+  (migration 12, 33 tables, `config-v0.9.0`, prompt v0.7.1,
+  health/docs/Streamlit 200); development database unchanged
+  (SHA-256/size/mtime).
+
 ## v0.9.5-F5B (2026-08-02)
 
 ### Changed

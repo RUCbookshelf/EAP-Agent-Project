@@ -1,6 +1,23 @@
 # Current Task State
 
 **Date:** 2026-08-02
+**Current task:** v0.9.5-F6A0 Revision Repository Capability Completion
+**Status:** completed and verified (see `RUN_VERIFICATION_V0.9.5_F6A0.md`)
+
+- `SQLiteRevisionRepository` exposes `get_submission_bundle` and
+  `get_latest_analysis_run` as direct delegations; the facade wires the
+  existing Submission and Analysis repository instances into it (one
+  connection manager, one graph). Central `RevisionRepository`,
+  `RevisionService`, all construction sites, Revision writes, SQL, and
+  transactions unchanged; no F6A runtime narrowing performed.
+- Focused 53 PASS; accumulated contracts 161 PASS; full core 559 passed +
+  8 skipped; exact `run.bat --verify` PASS; migration 12, 33 tables,
+  `config-v0.9.0`, prompt `feedback-prompt-v0.7.1`, facade 86, API 77,
+  client 52, locale 520/520 unchanged; development database unchanged.
+- Next: v0.9.5-F6A runtime narrowing only after a separate rebaseline and
+  authorization.
+
+**Date:** 2026-08-02
 **Current task:** v0.9.5-F5B ResearchDataService Dependency Narrowing
 **Status:** completed and verified (see `RUN_VERIFICATION_V0.9.5_F5B.md`)
 

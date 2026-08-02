@@ -4,6 +4,27 @@
 
 # Project State
 
+# Project State
+
+## Current v0.9.5-F6A0 State
+
+- Status: completed and verified; Revision repository capability completion
+  scope closed (prerequisite for the still-blocked v0.9.5-F6A).
+- `SQLiteRevisionRepository` now exposes `get_submission_bundle` and
+  `get_latest_analysis_run` as direct reader delegations and receives the
+  existing facade-owned Submission and Analysis repository instances from
+  the `Database` facade (same connection manager, one repository graph).
+  The central `RevisionRepository` Protocol, `RevisionService`, all
+  construction sites, Revision write methods, SQL, and transaction
+  boundaries are unchanged; no F6A runtime narrowing was performed.
+- Verification: focused 53 PASS; accumulated contracts 161 PASS; full
+  non-live core 559 passed + 8 skipped; exact `run.bat --verify` PASS;
+  migration 12; 33 tables; `config-v0.9.0`; prompt `feedback-prompt-v0.7.1`;
+  facade 86; API 77; client 52; locale 520/520; development database
+  unchanged (SHA-256/size/mtime).
+- Next: v0.9.5-F6A runtime narrowing only after a separate rebaseline and
+  authorization; F6B and later stages remain unstarted.
+
 ## Current v0.9.5-F5B State
 
 - Status: completed and verified; ResearchDataService dependency narrowing
