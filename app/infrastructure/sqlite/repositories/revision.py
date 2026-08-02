@@ -11,11 +11,23 @@ class _SubmissionBundleReader(Protocol):
     def get_submission_bundle(self, essay_id: int) -> dict[str, Any] | None: ...
 
 
+class _AnalysisRunReader(Protocol):
+    def get_latest_analysis_run(self, essay_id: int) -> dict[str, Any] | None: ...
+
+
 class SQLiteRevisionRepository:
     def __init__(self, connection_manager: SQLiteConnectionManager,
-                 submission_reader: _SubmissionBundleReader):
+                 submission_reader: _SubmissionBundleReader,
+                 analysis_reader: _AnalysisRunReader):
         self._connection_manager = connection_manager
         self._submission_reader = submission_reader
+        self._analysis_reader = analysis_reader
+
+    def get_submission_bundle(self, essay_id: int) -> dict[str, Any] | None:
+        return self._submission_reader.get_submission_bundle(essay_id)
+
+    def get_latest_analysis_run(self, essay_id: int) -> dict[str, Any] | None:
+        return self._analysis_reader.get_latest_analysis_run(essay_id)
 
     @staticmethod
     def normalize_revision_stage(value: str) -> str:

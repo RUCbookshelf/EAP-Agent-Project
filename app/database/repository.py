@@ -142,7 +142,8 @@ class Database:
             self._connection_manager, SQLiteRevisionRepository.normalize_revision_stage
         )
         self._revision_repository = SQLiteRevisionRepository(
-            self._connection_manager, self._submission_repository
+            self._connection_manager, self._submission_repository,
+            self._analysis_repository,
         )
         self._learner_repository = SQLiteLearnerRepository(
             self._connection_manager, self._analysis_repository, self._calf_repository,
