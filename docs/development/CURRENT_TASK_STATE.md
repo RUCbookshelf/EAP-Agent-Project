@@ -1,6 +1,24 @@
 # Current Task State
 
 **Date:** 2026-08-02
+**Current task:** v0.9.5-F4 Reanalysis and Journey Dependency Narrowing
+**Status:** completed and verified (see `RUN_VERIFICATION_V0.9.5_F4.md`)
+
+- Two Services narrowed: `ReanalysisService` (`SubmissionBundleReadPort`
+  + `AnalysisRunWritePort`) and `JourneyService`
+  (`JourneyStudentReadPort` + eight-method `JourneyProjectionReadPort`).
+- Both app paths compose the Services from the existing facade-owned
+  Submission/Analysis/Learner/Practice repositories; JourneyService is
+  stored on app state and the Journey router consumes
+  `get_journey_service`; the two `scripts/demo_journey.py` construction
+  sites are the owner-authorized operational-script exception.
+- Focused 118 PASS; contract inventory 84 PASS; full core 508 passed + 8
+  skipped; exact `run.bat --verify` PASS; migration 12, 33 tables,
+  `config-v0.9.0`, facade 86, API 77, client 52, locale 520/520
+  unchanged; development database unchanged.
+- Next: v0.9.5-F5 only under a separate authorization.
+
+**Date:** 2026-08-02
 **Current task:** v0.9.5-F3 Learner Read-Model Dependency Narrowing
 **Status:** completed and verified (see `RUN_VERIFICATION_V0.9.5_F3.md`)
 

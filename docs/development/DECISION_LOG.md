@@ -1,5 +1,44 @@
 
 
+## 2026-08-02 - v0.9.5-F4 Reanalysis and Journey dependency narrowing
+
+- **Decision**: Narrow exactly two Services with consumer-owned Ports:
+  `ReanalysisService` -> `SubmissionBundleReadPort` +
+  `AnalysisRunWritePort`; `JourneyService` -> `JourneyStudentReadPort` +
+  eight-method `JourneyProjectionReadPort`. Compose both Services from
+  the existing facade-owned Submission/Analysis/Learner/Practice
+  repository instances in both app paths; store JourneyService on app
+  state and expose it through the narrow `get_journey_service`
+  dependency so the Journey router no longer constructs from the
+  facade.
+- **Authorized exception**: `scripts/demo_journey.py` constructed
+  `JourneyService(repository)` from the broad facade; the user
+  authorized exactly two lines (approximately 105 and 241) to use
+  `JourneyService(repository._learner_repository,
+  repository._practice_repository)`. Recorded in
+  `docs/development/BLOCKER_REPORT_V0.9.5_F4.md`.
+- **Rationale**: The F1 audit classified ReanalysisService as low risk
+  (one Submission-owned composite read + one Analysis-owned append-only
+  write, no shared transaction) and JourneyService as low-medium risk
+  (read-only, one Learner lookup + eight Practice projections). Both are
+  exact fits for extracted repositories.
+- **Alternatives**: internal fallback construction inside either Service
+  (rejected: forbidden by the stop conditions); modifying the demo
+  script more broadly (rejected: exception is two lines only); leaving
+  the Services on the facade (deferred work); Calf/Research narrowing
+  (out of scope, medium-risk).
+- **Parity boundary**: No facade or repository method deleted; repository
+  SQL, transactions, migration 12, 33 tables, `config-v0.9.0`, API 77
+  pairs, client 52 methods, and locale 520/520 unchanged. Reanalysis
+  performs one bundle read then one Analysis save on success and zero
+  writes on missing/error paths; Journey performs zero writes.
+- **Safety decision**: All write-capable verification used fresh guarded
+  temporary databases with python-dotenv disabled and `DATABASE_URL`
+  absent; development database remained at SHA-256 `340E0F...AFF4`
+  (unchanged).
+- **Evidence**: focused 118 PASS; contract inventory 84 PASS; full
+  non-live core 508 passed + 8 skipped; exact `run.bat --verify` PASS.
+
 ## 2026-08-02 - v0.9.5-F3 Learner read-model dependency narrowing
 
 - **Decision**: Narrow exactly three Services with consumer-owned Ports:

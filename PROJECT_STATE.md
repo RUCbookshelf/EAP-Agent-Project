@@ -1,5 +1,30 @@
 # Project State
 
+## Current v0.9.5-F4 State
+
+- Status: completed and verified; Reanalysis and Journey dependency
+  narrowing scope closed (two Services narrowed, one authorized
+  operational-script exception).
+- `ReanalysisService` -> `SubmissionBundleReadPort` +
+  `AnalysisRunWritePort`; `JourneyService` -> `JourneyStudentReadPort` +
+  eight-method `JourneyProjectionReadPort`. No broad repository field,
+  no `Any` persistence annotation, no internal construction, no
+  `Database`/SQLite imports in either Service module.
+- Both application paths reuse the facade-owned extracted Submission,
+  Analysis, Learner, and Practice repository instances; JourneyService
+  lives on `app.state.journey_service` and the Journey router consumes
+  the narrow `get_journey_service` dependency. The two demo-script
+  construction sites are the owner-authorized exception; no second
+  connection manager, repository graph, proxy, or singleton was
+  introduced.
+- Verification: focused 118 PASS; contract inventory 84 PASS; full
+  non-live core 508 passed + 8 skipped; exact `run.bat --verify` PASS;
+  migration 12; 33 tables; `config-v0.9.0`; facade 86; API 77; client
+  52; locale 520/520; development database unchanged (SHA-256/mtime).
+- Next: v0.9.5-F5 only under a separate authorization; Calf/Research
+  narrowing, write-orchestration narrowing, facade contraction, and
+  schema cleanup remain deferred.
+
 ## Current v0.9.5-F3 State
 
 - Status: completed and verified; Learner read-model dependency narrowing

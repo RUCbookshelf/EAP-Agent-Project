@@ -44,7 +44,7 @@ def services(repo):
     settings = load_settings()
     submission_service = build_submission_service(settings, repo)
     practice_service = PracticeService(repo)
-    journey = JourneyService(repo)
+    journey = JourneyService(repo._learner_repository, repo._practice_repository)
     return submission_service, practice_service, journey
 
 
@@ -393,7 +393,7 @@ class TestDemoWorkflow:
         assert "idempotent" in second.stdout
 
         db = Database(db_path)
-        journey = JourneyService(db).get_journey("DEMO-001")
+        journey = JourneyService(db._learner_repository, db._practice_repository).get_journey("DEMO-001")
         assert journey["state"] == "journey_events"
         assert journey["counts"]["practice_targets"] == 1
 
@@ -436,7 +436,7 @@ class TestS02Regression:
         submission_service = build_submission_service(load_settings(), repo)
         submission_service.submit(_essay("S02", REPETITION_ESSAY), synthetic=True)
         submission_service.submit(_essay("S02", "A second independent draft.", prompt="Another prompt"), synthetic=True)
-        journey = JourneyService(repo).get_journey("S02")
+        journey = JourneyService(repo._learner_repository, repo._practice_repository).get_journey("S02")
         assert journey["learner_found"] is True
         assert journey["events"]
         assert journey["state"] in ("analysis_without_priority", "feedback_no_practice_target")

@@ -1,3 +1,34 @@
+## v0.9.5-F4 (2026-08-02)
+
+### Changed
+- Narrowed two more Service dependencies with consumer-owned Ports:
+  `ReanalysisService` now depends on `SubmissionBundleReadPort`
+  (`get_submission_bundle`) plus `AnalysisRunWritePort`
+  (`save_analysis_run`); `JourneyService` now depends on
+  `JourneyStudentReadPort` (`get_student`) plus the eight-method
+  `JourneyProjectionReadPort`. Both Services no longer import or type
+  against `Database`, concrete SQLite repositories, or any broad
+  repository annotation.
+- Both application-construction paths compose the two Services from the
+  existing facade-owned `SQLiteSubmissionRepository`,
+  `SQLiteAnalysisRepository`, `SQLiteLearnerRepository`, and
+  `SQLitePracticeRepository` instances. JourneyService is stored on
+  `app.state.journey_service` and exposed through the narrow
+  `get_journey_service` API dependency; the Journey router no longer
+  constructs the Service from the facade. `scripts/demo_journey.py`
+  received the owner-authorized two-line operational-script exception.
+- Added 17 focused F4 contract tests, the F4 isolated pytest runner, and
+  the F4 SPEC/blocker-resolution/verification documentation.
+- Preserved public Service methods, API paths/schemas, repository SQL,
+  transactions, migration 12, 33 tables, `config-v0.9.0`, facade 86
+  methods, client 52 methods, and locale 520/520.
+
+### Verified
+- Focused F4 set 118 PASS; frozen-contract inventory 84 PASS; full
+  non-live core 508 passed + 8 skipped; exact `run.bat --verify` PASS
+  (migration 12, 33 tables, `config-v0.9.0`, health/docs/Streamlit 200);
+  development database unchanged (SHA-256/mtime).
+
 ## v0.9.5-F3 (2026-08-02)
 
 ### Changed
