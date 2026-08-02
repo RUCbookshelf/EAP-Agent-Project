@@ -514,7 +514,9 @@ class TestDemoScriptException:
     def test_both_construction_sites_use_explicit_repositories(self):
         source = (ROOT / "scripts/demo_journey.py").read_text(encoding="utf-8")
         assert source.count("JourneyService(") == 2
-        assert source.count("repository._learner_repository") == 2
+        # Three explicit learner-repository references: the two JourneyService
+        # constructions plus the F6C build_submission_service factory call.
+        assert source.count("repository._learner_repository") == 3
         assert source.count("repository._practice_repository") == 2
         assert "JourneyService(repository)" not in source
         assert "JourneyService(repository).get_journey" not in source

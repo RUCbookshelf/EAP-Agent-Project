@@ -8,6 +8,32 @@
 
 # Project State
 
+## Current v0.9.5-F6C State
+
+- Status: completed and verified; SubmissionService persistence dependency
+  narrowing scope closed.
+- `SubmissionService` depends on exactly `SubmissionSystemPort`,
+  `SubmissionDataPort`, `SubmissionAnalysisPort`, `SubmissionCalibrationPort`,
+  and the existing analyzer/diagnoser/router, learner-history, learner-profile,
+  Revision, and calibration collaborators; the broad inherited
+  `SubmissionRepository` is no longer used by active composition (legacy
+  declaration retained as Protocol-consolidation debt).
+- Both CALF `hasattr` guards removed; the eleven direct persistence calls
+  route to approved owners; `build_submission_service` takes seven required
+  keyword-only facade-owned repositories; both app paths, FeedbackPipeline,
+  and all active callers pass the existing facade-owned instances (one
+  connection manager, one graph); constructor `record_versions`, submit and
+  regenerate-feedback order, write counts, and partial-commit behavior are
+  preserved; F2-F6B boundaries unchanged.
+- Verification: focused 282 PASS; accumulated contracts 233 PASS; full
+  non-live core 618 passed + 8 skipped; exact `run.bat --verify` PASS;
+  migration 12; 33 tables; `config-v0.9.0`; prompt `feedback-prompt-v0.7.1`;
+  facade 86; API 77; client 52; locale 520/520; development database
+  unchanged (SHA-256/size/mtime).
+- Next: v0.9.5-F6D Practice write-boundary work only under separate
+  authorization; facade contraction and Protocol consolidation remain
+  deferred.
+
 ## Current v0.9.5-F6B State
 
 - Status: completed and verified; AdminReanalysisService persistence

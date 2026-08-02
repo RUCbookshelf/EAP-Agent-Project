@@ -262,19 +262,18 @@ def test_submission_factory_explicit_and_legacy_composition(tmp_path, monkeypatc
 
     explicit = build_submission_service(
         settings,
-        database,
+        system_repository=database._system_repository,
+        submission_repository=database._submission_repository,
+        analysis_repository=database._analysis_repository,
+        calibration_repository=database._calf_repository,
         learner_repository=database._learner_repository,
         configuration_repository=database._configuration_repository,
         revision_repository=database._revision_repository,
     )
     _assert_extracted_chain(explicit.learner_profile_service, database)
-
-    legacy = build_submission_service(
-        settings, database, revision_repository=database._revision_repository,
-    )
-    assert legacy.learner_profile_service.repository is database
-    assert legacy.learner_profile_service.progress.learner_repository is database
-    assert legacy.learner_profile_service.progress.configuration_repository is database
+    assert explicit.learner_profile_service.repository is database._learner_repository
+    assert explicit.learner_profile_service.progress.learner_repository is database._learner_repository
+    assert explicit.learner_profile_service.progress.configuration_repository is database._configuration_repository
 
 
 def test_build_full_app_uses_extracted_repositories_for_all_f3_chains(tmp_path):
@@ -341,4 +340,4 @@ def test_f2_dependency_contracts_remain_unchanged(tmp_path):
     database = api.state.repository
     assert api.state.configurations.repository is database._configuration_repository
     assert isinstance(api.state.configurations.repository, SQLiteConfigurationRepository)
-    assert api.state.submission_service.history.database is database
+    assert api.state.submission_service.history.database is database._submission_repository

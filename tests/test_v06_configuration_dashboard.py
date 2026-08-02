@@ -34,8 +34,14 @@ def _service(tmp_path):
     repository = Database(settings.database_path); repository.initialize()
     revisions = RevisionService(repository=repository._revision_repository)
     service = SubmissionService(
-        repository, BasicAnalyzer(), HeuristicDiagnoser(),
-        ProviderRouter(LocalDemoProvider(), LocalDemoProvider()), revision_service=revisions,
+        system_repository=repository._system_repository,
+        submission_repository=repository._submission_repository,
+        analysis_repository=repository._analysis_repository,
+        calibration_repository=repository._calf_repository,
+        analyzer=BasicAnalyzer(),
+        diagnoser=HeuristicDiagnoser(),
+        router=ProviderRouter(LocalDemoProvider(), LocalDemoProvider()),
+        revision_service=revisions,
     )
     return settings, repository, revisions, service
 

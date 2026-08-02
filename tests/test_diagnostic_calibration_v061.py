@@ -44,7 +44,14 @@ def local_stack(tmp_path):
     settings = replace(load_settings(), database_path=tmp_path / "calibration.db", llm_provider="local")
     repository = Database(settings.database_path); repository.initialize()
     return repository, build_submission_service(
-        settings, repository, revision_repository=repository._revision_repository,
+        settings,
+        system_repository=repository._system_repository,
+        submission_repository=repository._submission_repository,
+        analysis_repository=repository._analysis_repository,
+        calibration_repository=repository._calf_repository,
+        learner_repository=repository._learner_repository,
+        configuration_repository=repository._configuration_repository,
+        revision_repository=repository._revision_repository,
     )
 
 

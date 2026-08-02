@@ -25,7 +25,14 @@ def test_three_task_live_deepseek_uses_screened_v07_history(tmp_path):
     settings = replace(settings, database_path=tmp_path / "live-v07.db", llm_provider="deepseek")
     repository = Database(settings.database_path); repository.initialize()
     service = build_submission_service(
-        settings, repository, revision_repository=repository._revision_repository,
+        settings,
+        system_repository=repository._system_repository,
+        submission_repository=repository._submission_repository,
+        analysis_repository=repository._analysis_repository,
+        calibration_repository=repository._calf_repository,
+        learner_repository=repository._learner_repository,
+        configuration_repository=repository._configuration_repository,
+        revision_repository=repository._revision_repository,
     )
     base = datetime(2026, 6, 1, tzinfo=timezone.utc)
     results = []

@@ -1,6 +1,27 @@
 # Current Task State
 
 **Date:** 2026-08-02
+**Current task:** v0.9.5-F6C SubmissionService Persistence Dependency Narrowing
+**Status:** completed and verified (see `RUN_VERIFICATION_V0.9.5_F6C.md`)
+
+- `SubmissionService` now depends on `SubmissionSystemPort`,
+  `SubmissionDataPort`, `SubmissionAnalysisPort`, `SubmissionCalibrationPort`
+  and the existing non-persistence collaborators; no broad or untyped
+  persistence dependency remains; both CALF `hasattr` guards removed; legacy
+  `SubmissionRepository` retained only as Protocol-consolidation debt.
+- `build_submission_service` takes seven required keyword-only facade-owned
+  repositories; both app paths, FeedbackPipeline, and all active callers pass
+  the existing facade-owned instances (same connection manager, one graph);
+  constructor `record_versions`, submit and regenerate-feedback order, write
+  counts, and partial-commit behavior are preserved.
+- Focused 282 PASS; accumulated contracts 233 PASS; full core 618 passed +
+  8 skipped; exact `run.bat --verify` PASS; migration 12, 33 tables,
+  `config-v0.9.0`, prompt `feedback-prompt-v0.7.1`, facade 86, API 77,
+  client 52, locale 520/520 unchanged; development database unchanged.
+- Next: v0.9.5-F6D Practice write-boundary work only under separate
+  authorization.
+
+**Date:** 2026-08-02
 **Current task:** v0.9.5-F6B AdminReanalysisService Persistence Dependency Narrowing
 **Status:** completed and verified (see `RUN_VERIFICATION_V0.9.5_F6B.md`)
 

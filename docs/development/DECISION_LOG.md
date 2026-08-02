@@ -1,5 +1,37 @@
 
 
+## 2026-08-02 - v0.9.5-F6C SubmissionService persistence dependency narrowing
+
+- **Decision**: Remove the broad, inherited `SubmissionRepository` dependency
+  from the active `SubmissionService` constructor and runtime state and
+  replace it with four owner-aligned consumer-owned Ports
+  (`SubmissionSystemPort` 1 method, `SubmissionDataPort` 5 methods,
+  `SubmissionAnalysisPort` 3 methods, `SubmissionCalibrationPort` 2 methods);
+  remove both CALF persistence `hasattr` capability guards; make
+  `build_submission_service` require seven keyword-only facade-owned
+  repositories with no broad-facade fallback. Every active caller supplies
+  the existing facade-owned System/Submission/Analysis/CALF/Learner/
+  Configuration/Revision instances.
+- **Rationale**: The submission orchestrator should receive only the exact
+  repository capabilities it calls; production always supplies the
+  `SQLiteCalfRepository`, so capability discovery via `hasattr` is dead
+  conditional logic; the factory no longer needs the broad facade as a
+  fallback once every caller passes the explicit graph.
+- **Parity boundary**: Legacy `SubmissionRepository` declaration retained as
+  Protocol-consolidation debt (removal deferred); central Repository
+  Protocols, Repository implementations, SQL, transactions (per-method
+  commits and the three-sequential-commit Revision workflow unchanged),
+  migration 12, 33 tables, `config-v0.9.0`, prompt `feedback-prompt-v0.7.1`,
+  API 77 pairs, client 52 methods, locale 520/520, and facade 86 methods
+  unchanged. No adapter, proxy, Service Locator, Unit of Work, shared
+  transaction, compensation, or retry.
+- **Evidence**: focused 282 PASS; accumulated contracts 233 PASS; full
+  non-live core 618 passed + 8 skipped; exact `run.bat --verify` PASS;
+  development database unchanged (SHA-256/size/mtime).
+- **Boundary**: v0.9.5-F6D Practice write-boundary work may begin only under
+  a separate authorization; facade contraction and Protocol consolidation
+  remain deferred.
+
 ## 2026-08-02 - v0.9.5-F6B AdminReanalysisService persistence dependency narrowing
 
 - **Decision**: Remove the broad, untyped `repository` parameter from

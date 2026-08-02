@@ -1,3 +1,37 @@
+## v0.9.5-F6C (2026-08-02)
+
+### Changed
+- Narrowed `SubmissionService` persistence dependencies: removed the broad,
+  inherited `SubmissionRepository` constructor dependency and replaced it
+  with four owner-aligned consumer-owned Ports (`SubmissionSystemPort`,
+  `SubmissionDataPort`, `SubmissionAnalysisPort`,
+  `SubmissionCalibrationPort`); the legacy `SubmissionRepository`
+  declaration remains only as Protocol-consolidation debt and is not used by
+  active composition.
+- Removed both CALF persistence `hasattr` capability guards; the facade-owned
+  `SQLiteCalfRepository` always supplies the capabilities. The eleven direct
+  persistence calls route to approved owners (System 1, Submission 5,
+  Analysis 3, CALF 2); `build_submission_service` now takes seven required
+  keyword-only facade-owned repositories (no broad-facade fallback); both
+  application paths, FeedbackPipeline legacy composition, and all active
+  operational/test callers pass the existing facade-owned instances (same
+  connection manager, one repository graph).
+- Constructor `record_versions` timing/arguments, submit and
+  regenerate-feedback call order, write counts, Repository-owned multi-table
+  operations, learner/Revision/Admin collaborator boundaries, and
+  partial-commit behavior are unchanged; no Repository implementation, SQL,
+  transaction, API, schema, domain, prompt, provider, or UI change.
+- Added 29 focused F6C contract/behavior tests, the F6C isolated pytest
+  runner, and the F6C SPEC/verification documentation.
+
+### Verified
+- Focused F6C set 282 PASS; accumulated architecture contracts 233 PASS
+  (F2-F6B + F6C, E parity 86/33, API 77, client 52, locale 520/520); full
+  non-live core 618 passed + 8 skipped; exact `run.bat --verify` PASS
+  (migration 12, 33 tables, `config-v0.9.0`, prompt v0.7.1,
+  health/docs/Streamlit 200); development database unchanged
+  (SHA-256/size/mtime).
+
 ## v0.9.5-F6B (2026-08-02)
 
 ### Changed

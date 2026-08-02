@@ -58,7 +58,14 @@ def _submission(student_id: str, prompt: str = "P", *, stage: str = "first draft
 def _seed_first(tmp_path: Path, db: Database) -> int:
     """Submit one essay with no revision relationship; returns its essay_id."""
     submission_service = build_submission_service(
-        _settings(tmp_path), db, revision_repository=db._revision_repository,
+        _settings(tmp_path),
+        system_repository=db._system_repository,
+        submission_repository=db._submission_repository,
+        analysis_repository=db._analysis_repository,
+        calibration_repository=db._calf_repository,
+        learner_repository=db._learner_repository,
+        configuration_repository=db._configuration_repository,
+        revision_repository=db._revision_repository,
     )
     return submission_service.submit(_submission("F6A-S"), synthetic=True).essay_id
 
@@ -66,7 +73,14 @@ def _seed_first(tmp_path: Path, db: Database) -> int:
 def _submit_plain(tmp_path: Path, db: Database, *, stage: str = "first draft") -> int:
     """Submit an essay for the seeded student with no revision relationship."""
     submission_service = build_submission_service(
-        _settings(tmp_path), db, revision_repository=db._revision_repository,
+        _settings(tmp_path),
+        system_repository=db._system_repository,
+        submission_repository=db._submission_repository,
+        analysis_repository=db._analysis_repository,
+        calibration_repository=db._calf_repository,
+        learner_repository=db._learner_repository,
+        configuration_repository=db._configuration_repository,
+        revision_repository=db._revision_repository,
     )
     return submission_service.submit(
         _submission("F6A-S", "P", stage=stage), synthetic=True,
@@ -106,7 +120,13 @@ class TestRuntimeIdentity:
         database = Database(tmp_path / "factory.db")
         database.initialize()
         service = build_submission_service(
-            _settings(tmp_path), database,
+            _settings(tmp_path),
+            system_repository=database._system_repository,
+            submission_repository=database._submission_repository,
+            analysis_repository=database._analysis_repository,
+            calibration_repository=database._calf_repository,
+            learner_repository=database._learner_repository,
+            configuration_repository=database._configuration_repository,
             revision_repository=database._revision_repository,
         )
         assert service.revision_service.repository is database._revision_repository
@@ -117,7 +137,14 @@ class TestRuntimeIdentity:
         database.initialize()
         settings = _settings(tmp_path)
         submission_service = build_submission_service(
-            settings, database, revision_repository=database._revision_repository,
+            settings,
+            system_repository=database._system_repository,
+            submission_repository=database._submission_repository,
+            analysis_repository=database._analysis_repository,
+            calibration_repository=database._calf_repository,
+            learner_repository=database._learner_repository,
+            configuration_repository=database._configuration_repository,
+            revision_repository=database._revision_repository,
         )
         admin = AdminReanalysisService(
             settings=settings,

@@ -43,7 +43,14 @@ def services(repo):
 
     settings = load_settings()
     submission_service = build_submission_service(
-        settings, repo, revision_repository=repo._revision_repository,
+        settings,
+        system_repository=repo._system_repository,
+        submission_repository=repo._submission_repository,
+        analysis_repository=repo._analysis_repository,
+        calibration_repository=repo._calf_repository,
+        learner_repository=repo._learner_repository,
+        configuration_repository=repo._configuration_repository,
+        revision_repository=repo._revision_repository,
     )
     practice_service = PracticeService(repo)
     journey = JourneyService(repo._learner_repository, repo._practice_repository)
@@ -436,7 +443,14 @@ class TestS02Regression:
         exercised through the live browser integration layer.
         """
         submission_service = build_submission_service(
-        load_settings(), repo, revision_repository=repo._revision_repository,
+        load_settings(),
+        system_repository=repo._system_repository,
+        submission_repository=repo._submission_repository,
+        analysis_repository=repo._analysis_repository,
+        calibration_repository=repo._calf_repository,
+        learner_repository=repo._learner_repository,
+        configuration_repository=repo._configuration_repository,
+        revision_repository=repo._revision_repository,
     )
         submission_service.submit(_essay("S02", REPETITION_ESSAY), synthetic=True)
         submission_service.submit(_essay("S02", "A second independent draft.", prompt="Another prompt"), synthetic=True)

@@ -33,8 +33,13 @@ def _stack(tmp_path):
     repository.initialize()
     revisions = RevisionService(repository=repository._revision_repository)
     service = SubmissionService(
-        repository, BasicAnalyzer(), HeuristicDiagnoser(),
-        ProviderRouter(LocalDemoProvider(), LocalDemoProvider()),
+        system_repository=repository._system_repository,
+        submission_repository=repository._submission_repository,
+        analysis_repository=repository._analysis_repository,
+        calibration_repository=repository._calf_repository,
+        analyzer=BasicAnalyzer(),
+        diagnoser=HeuristicDiagnoser(),
+        router=ProviderRouter(LocalDemoProvider(), LocalDemoProvider()),
         revision_service=revisions,
     )
     return repository, revisions, service
