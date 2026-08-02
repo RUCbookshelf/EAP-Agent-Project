@@ -1,6 +1,25 @@
 # Current Task State
 
 **Date:** 2026-08-02
+**Current task:** v0.9.5-F3 Learner Read-Model Dependency Narrowing
+**Status:** completed and verified (see `RUN_VERIFICATION_V0.9.5_F3.md`)
+
+- Three Services narrowed: `ProgressService` (`LearnerProgressPort` +
+  `ActiveConfigurationPort`), `LearnerProfileService` (`LearnerProfileReadPort`
+  + injected `ProgressService`), and `DashboardService` (`DashboardReadPort` +
+  injected `ProgressService`). The inactive `list_longitudinal_records`
+  fallback and relevant `hasattr` branches were removed only from
+  `ProgressService`.
+- Both application paths and `build_submission_service` supply the
+  facade-owned extracted Learner/Configuration repositories; the legacy
+  `FeedbackPipeline` received the one authorized composition exception.
+- Focused 96 PASS; contract inventory 36 PASS; full core 492 passed + 8
+  skipped; exact `run.bat --verify` PASS; migration 12, 33 tables,
+  `config-v0.9.0`, facade 86, API 77, client 52, locale 520/520 unchanged;
+  development database unchanged.
+- Next: v0.9.5-F4 only under a separate authorization.
+
+**Date:** 2026-08-02
 **Current task:** v0.9.5-F2 Low-Risk Service Repository Dependency Narrowing
 **Status:** completed and verified (see `RUN_VERIFICATION_V0.9.5_F2.md`)
 

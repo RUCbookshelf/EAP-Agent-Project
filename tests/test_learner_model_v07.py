@@ -161,7 +161,8 @@ def test_learner_model_api_routes_are_documented(tmp_path):
 
 
 def test_feedback_context_screens_history_to_current_target_evidence_only():
-    snapshot = ProgressService(FakeRepository([legacy_record(1, 100)])).create_snapshot("S001", persist=False)
+    repository = FakeRepository([legacy_record(1, 100)])
+    snapshot = ProgressService(repository, repository).create_snapshot("S001", persist=False)
     evidence = [
         HistoryEvidenceRecord(
             history_evidence_id=f"HE00000{index}", student_id="S001",

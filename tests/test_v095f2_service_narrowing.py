@@ -190,8 +190,8 @@ def test_build_full_app_passes_extracted_configuration_repository(tmp_path):
     assert app.state.configurations.repository is repository._configuration_repository
     assert app.state.configurations.repository is not repository
     assert not isinstance(app.state.configurations.repository, Database)
-    assert app.state.dashboards.repository is repository
-    assert app.state.learner_profiles.repository is repository
+    assert app.state.dashboards.repository is repository._learner_repository
+    assert app.state.learner_profiles.repository is repository._learner_repository
 
 
 def test_run_startup_passes_extracted_configuration_repository(tmp_path, monkeypatch):
@@ -209,8 +209,8 @@ def test_run_startup_passes_extracted_configuration_repository(tmp_path, monkeyp
         assert api.state.configurations.repository is repository._configuration_repository
         assert api.state.configurations.repository is not repository
         assert not isinstance(api.state.configurations.repository, Database)
-        assert api.state.dashboards.repository is repository
-        assert api.state.learner_profiles.repository is repository
+        assert api.state.dashboards.repository is repository._learner_repository
+        assert api.state.learner_profiles.repository is repository._learner_repository
     finally:
         _restore_lifecycle(saved)
 

@@ -44,7 +44,7 @@ def record(
 
 class FakeRepository:
     def __init__(self, records): self.records, self.snapshots = records, []
-    def list_longitudinal_records(self, student_id): return [deepcopy(x) for x in self.records if x["student_id"] == student_id]
+    def list_visualization_records(self, student_id): return [deepcopy(x) for x in self.records if x["student_id"] == student_id]
     def save_learner_profile_snapshot(self, snapshot):
         stored = snapshot.model_copy(update={"snapshot_id": f"LP{len(self.snapshots)+1:06d}"})
         self.snapshots.append(stored.model_dump(mode="json")); return stored
@@ -52,6 +52,11 @@ class FakeRepository:
         matches = [x for x in self.snapshots if x["student_id"] == student_id]
         return matches[-1] if matches else None
     def list_learner_profile_snapshots(self, student_id): return [x for x in self.snapshots if x["student_id"] == student_id]
+    def get_active_configuration(self): raise RuntimeError("No active configuration in focused stub.")
+
+
+def progress_service(repository):
+    return ProgressService(repository, repository)
 
 
 def comparisons(records):
@@ -127,17 +132,17 @@ def test_baseline_requires_three_and_excludes_noncomparable():
     ([100, 190, 105, 180], "fluctuating"),
 ])
 def test_transparent_trend_directions(values, expected):
-    service = ProgressService(FakeRepository([record(i + 1, value) for i, value in enumerate(values)]))
+    service = progress_service(FakeRepository([record(i + 1, value) for i, value in enumerate(values)]))
     trend = service.create_snapshot("S001", persist=False).metric_trends["word_count"]
     assert trend.direction == expected
     if expected == "fluctuating": assert trend.variability == "high" and trend.confidence == "low"
 
 
 def test_trend_insufficient_exclusion_and_length_limit():
-    insufficient = ProgressService(FakeRepository([record(1, 100), record(2, 120)])).create_snapshot("S001", persist=False)
+    insufficient = progress_service(FakeRepository([record(1, 100), record(2, 120)])).create_snapshot("S001", persist=False)
     assert insufficient.metric_trends["word_count"].direction == "insufficient_data"
     mixed = [record(1, 50, genre="narrative essay"), record(2, 100), record(3, 120), record(4, 150)]
-    snapshot = ProgressService(FakeRepository(mixed)).create_snapshot("S001", persist=False)
+    snapshot = progress_service(FakeRepository(mixed)).create_snapshot("S001", persist=False)
     assert "E000001" not in snapshot.metric_trends["word_count"].included_submission_ids
     assert any("text length" in x.casefold() for x in snapshot.metric_trends["type_token_ratio"].limitations)
     rendered = snapshot.model_dump_json().casefold()
@@ -146,37 +151,37 @@ def test_trend_insufficient_exclusion_and_length_limit():
 
 def test_partially_comparable_records_only_enter_when_requested():
     records = [record(1, 100, tool_use="dictionary"), record(2, 120), record(3, 140)]
-    strict = ProgressService(FakeRepository(records)).create_snapshot("S001", persist=False)
-    inclusive = ProgressService(FakeRepository(records)).create_snapshot("S001", comparable_only=False, persist=False)
+    strict = progress_service(FakeRepository(records)).create_snapshot("S001", persist=False)
+    inclusive = progress_service(FakeRepository(records)).create_snapshot("S001", comparable_only=False, persist=False)
     assert "E000001" not in strict.metric_trends["word_count"].included_submission_ids
     assert "E000001" in inclusive.metric_trends["word_count"].included_submission_ids
 
 
 def test_issue_persistent_recurring_and_recently_reduced():
     persistent = [record(i, 100 + i, category="lexical_repetition") for i in range(1, 5)]
-    p = ProgressService(FakeRepository(persistent)).create_snapshot("S001", persist=False)
+    p = progress_service(FakeRepository(persistent)).create_snapshot("S001", persist=False)
     assert p.persistent_issues[0].status == "persistent"
     recurring = [record(1, 100, category="lexical_repetition"), record(2, 105), record(3, 110, category="lexical_repetition")]
-    r = ProgressService(FakeRepository(recurring)).create_snapshot("S001", persist=False)
+    r = progress_service(FakeRepository(recurring)).create_snapshot("S001", persist=False)
     assert r.unstable_issues[0].status == "recurring"
     reduced = [record(1, 100, category="lexical_repetition"), record(2, 105, category="lexical_repetition"), record(3, 110), record(4, 115)]
-    x = ProgressService(FakeRepository(reduced)).create_snapshot("S001", persist=False)
+    x = progress_service(FakeRepository(reduced)).create_snapshot("S001", persist=False)
     assert x.recently_reduced_issues[0].status == "recently_reduced"
     assert x.recently_reduced_issues[0].supporting_submission_ids == ["E000001", "E000002"]
 
 
 def test_one_absence_is_not_reduced_and_version_change_lowers_confidence():
     records = [record(1, 100, category="lexical_repetition"), record(2, 110, category="lexical_repetition"), record(3, 120)]
-    snapshot = ProgressService(FakeRepository(records)).create_snapshot("S001", persist=False)
+    snapshot = progress_service(FakeRepository(records)).create_snapshot("S001", persist=False)
     assert not snapshot.recently_reduced_issues
     changed = [record(i, 100 + i, category="lexical_repetition", diagnosis_version=("v1" if i < 4 else "v2")) for i in range(1, 5)]
-    issue = ProgressService(FakeRepository(changed)).create_snapshot("S001", persist=False).persistent_issues[0]
+    issue = progress_service(FakeRepository(changed)).create_snapshot("S001", persist=False).persistent_issues[0]
     assert issue.confidence == "low" and any("versions differ" in x for x in issue.limitations)
 
 
 def test_snapshot_versions_priorities_and_recalculation_append():
     repository = FakeRepository([record(i, 100 + i * 20, category="lexical_repetition") for i in range(1, 5)])
-    service = ProgressService(repository)
+    service = progress_service(repository)
     first = service.create_snapshot("S001")
     second = service.create_snapshot("S001")
     assert first.snapshot_id != second.snapshot_id and len(repository.snapshots) == 2

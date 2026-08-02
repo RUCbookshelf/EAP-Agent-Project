@@ -27,7 +27,8 @@ def context_with(history, snapshot=None):
 
 
 def test_snapshot_evidence_enters_prompt_by_validated_id_and_local_demo_works():
-    progress = ProgressService(FakeRepository([record(i, 100 + i * 20, category="lexical_repetition") for i in range(1, 5)]))
+    repository = FakeRepository([record(i, 100 + i * 20, category="lexical_repetition") for i in range(1, 5)])
+    progress = ProgressService(repository, repository)
     snapshot = progress.create_snapshot("S001", persist=False)
     history = HistoryResult(
         comparability_status="comparable", comparable_submission_count=3,
@@ -52,7 +53,8 @@ def test_snapshot_evidence_enters_prompt_by_validated_id_and_local_demo_works():
 
 
 def test_no_valid_trend_keeps_deterministic_comment_unavailable():
-    progress = ProgressService(FakeRepository([record(1, 100)]))
+    repository = FakeRepository([record(1, 100)])
+    progress = ProgressService(repository, repository)
     snapshot = progress.create_snapshot("S001", persist=False)
     history = HistoryResult(
         comparability_status="insufficient_history", comparable_submission_count=0,

@@ -1,5 +1,40 @@
 
 
+## 2026-08-02 - v0.9.5-F3 Learner read-model dependency narrowing
+
+- **Decision**: Narrow exactly three Services with consumer-owned Ports:
+  `ProgressService` -> `LearnerProgressPort` + `ActiveConfigurationPort`;
+  `LearnerProfileService` -> `LearnerProfileReadPort` + injected
+  `ProgressService`; `DashboardService` -> `DashboardReadPort` + injected
+  `ProgressService`. Remove the inactive `list_longitudinal_records` fallback
+  and the relevant `hasattr` capability discovery only from `ProgressService`.
+  Compose all three Services from the existing facade-owned
+  `SQLiteLearnerRepository` and `SQLiteConfigurationRepository` instances in
+  both app paths and `build_submission_service`.
+- **Authorized exception**: The legacy `FeedbackPipeline` construction
+  (`LearnerProfileService(self.database)`) cannot satisfy the explicit
+  constructor; the user authorized exactly one additional production file,
+  `app/feedback/service.py`, limited to explicit ProgressService/Profile
+  composition from the same facade-owned repositories. Recorded in
+  `docs/development/BLOCKER_REPORT_V0.9.5_F3.md`.
+- **Rationale**: F1/F2 showed Progress/Dashboard/LearnerProfile consumed a
+  broad runtime object and discovered capabilities with `hasattr`; the target
+  makes the read/write and configuration dependencies structural without
+  changing behavior, transactions, or repository ownership.
+- **Alternatives**: internal fallback construction inside
+  `LearnerProfileService` (rejected: recreates implicit discovery); leaving
+  the three Services unchanged (deferred work); modifying routers or other
+  Services (out of scope).
+- **Parity boundary**: No facade or repository method deleted; repository SQL,
+  transactions, migration 12, 33 tables, `config-v0.9.0`, API 77 pairs,
+  client 52 methods, and locale 520/520 unchanged; persist false stays
+  write-free and persist true performs exactly one snapshot save.
+- **Safety decision**: All write-capable verification used fresh guarded
+  temporary databases with python-dotenv disabled and `DATABASE_URL` absent;
+  development database remained at SHA-256 `340E0F...AFF4` (unchanged).
+- **Evidence**: focused 96 PASS; contract inventory 36 PASS; full non-live
+  core 492 passed + 8 skipped; exact `run.bat --verify` PASS.
+
 ## 2026-08-02 - v0.9.5-F2 Low-risk Service dependency narrowing
 
 - **Decision**: Narrow exactly two Service dependencies: pass the facade's

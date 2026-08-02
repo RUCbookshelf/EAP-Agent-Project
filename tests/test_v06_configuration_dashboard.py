@@ -18,7 +18,7 @@ from app.llm import LocalDemoProvider, ProviderRouter
 from app.models import EssaySubmission
 from app.services import (
     AdminReanalysisService, ConfigurationService, DashboardService, ReanalysisRequest,
-    RevisionService, SubmissionService,
+    ProgressService, RevisionService, SubmissionService,
 )
 
 
@@ -65,6 +65,14 @@ def _seed(tmp_path, count=3):
 def _configuration_service(repository):
     analyzers = AnalyzerRegistry([BasicAnalyzer()])
     return ConfigurationService(repository, analyzers, default_metric_registry())
+
+
+def _dashboard_service(repository):
+    return DashboardService(
+        repository._learner_repository,
+        default_metric_registry(),
+        ProgressService(repository._learner_repository, repository._configuration_repository),
+    )
 
 
 def test_migration_6_creates_active_configuration_and_audit(tmp_path):
@@ -145,7 +153,7 @@ def test_registry_interfaces_expose_analyzer_metric_algorithm_and_prompt(tmp_pat
 
 def test_dashboard_timeline_inclusion_exclusion_issues_and_limitations(tmp_path):
     _, repository, _, _, ids = _seed(tmp_path)
-    result = DashboardService(repository, default_metric_registry()).build("V06-STUDENT", "word_count")
+    result = _dashboard_service(repository).build("V06-STUDENT", "word_count")
     assert [item["submission_id"] for item in result["timeline"]] == ids
     assert all("included_in_longitudinal" in item and "analyzer_version" in item for item in result["timeline"])
     assert result["comparability_summary"]["included_count"] >= 1
@@ -171,7 +179,7 @@ def test_dashboard_never_connects_incompatible_analyzer_metric_or_config_version
             (second["analysis_run_id"], "word_count", "9.0.0", "17", "words", "{}",
              "alternate-analyzer-v9", "{}", "automatic_unverified", "available", "[]", "[]"),
         )
-    result = DashboardService(repository, default_metric_registry()).build("V06-STUDENT", "word_count")
+    result = _dashboard_service(repository).build("V06-STUDENT", "word_count")
     keys = {(item["analyzer_version"], item["metric_version"], item["configuration_version"]) for item in result["metric_segments"]}
     assert len(keys) >= 2
     assert all(len({(p["analyzer_version"], p["metric_version"], p["configuration_version"]) for p in item["points"]}) == 1 for item in result["metric_segments"])
@@ -185,7 +193,7 @@ def test_revision_group_uses_one_timeline_representative(tmp_path):
         "GROUP-V06", "Quiet rooms help students focus during demanding study tasks, especially when libraries are crowded.",
         now + timedelta(days=1), source=first.essay_id, stage="final draft",
     ))
-    result = DashboardService(repository, default_metric_registry()).build("GROUP-V06")
+    result = _dashboard_service(repository).build("GROUP-V06")
     flags = {item["submission_id"]: item["included_in_longitudinal"] for item in result["timeline"]}
     assert flags[first.essay_id] is False and flags[revised.essay_id] is True
 

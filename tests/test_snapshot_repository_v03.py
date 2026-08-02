@@ -9,7 +9,7 @@ def test_snapshot_save_latest_history_and_restart(tmp_path):
     path = tmp_path / "snapshots.db"
     repository = Database(path); repository.initialize()
     seed(repository, "SNAP001", [100, 120, 140])
-    service = ProgressService(repository)
+    service = ProgressService(repository._learner_repository, repository._configuration_repository)
     first = service.create_snapshot("SNAP001")
     second = service.create_snapshot("SNAP001")
     assert first.snapshot_id != second.snapshot_id

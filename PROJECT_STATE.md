@@ -1,5 +1,26 @@
 # Project State
 
+## Current v0.9.5-F3 State
+
+- Status: completed and verified; Learner read-model dependency narrowing
+  scope closed (three Services narrowed, one authorized composition exception).
+- `ProgressService` -> `LearnerProgressPort` + `ActiveConfigurationPort`;
+  `LearnerProfileService` -> `LearnerProfileReadPort` + injected
+  `ProgressService`; `DashboardService` -> `DashboardReadPort` + injected
+  `ProgressService`. No `hasattr` capability discovery remains in the chain;
+  the inactive `list_longitudinal_records` fallback was removed only from
+  `ProgressService`.
+- Both application paths, `build_submission_service`, and the legacy
+  `FeedbackPipeline` reuse the facade-owned extracted Learner and
+  Configuration repository instances; no second connection manager,
+  repository graph, proxy, or singleton was introduced.
+- Verification: focused 96 PASS; contract inventory 36 PASS; full non-live
+  core 492 passed + 8 skipped; exact `run.bat --verify` PASS; migration 12;
+  33 tables; `config-v0.9.0`; facade 86; API 77; client 52; locale 520/520;
+  development database unchanged (SHA-256/mtime).
+- Next: v0.9.5-F4 (write-orchestration narrowing) only under a separate
+  authorization.
+
 ## Current v0.9.5-F2 State
 
 - Status: completed and verified; low-risk Service dependency narrowing scope

@@ -1,3 +1,31 @@
+## v0.9.5-F3 (2026-08-02)
+
+### Changed
+- Narrowed the Learner read-model chain to consumer-owned Ports:
+  `ProgressService` now depends on `LearnerProgressPort` and
+  `ActiveConfigurationPort`; `LearnerProfileService` depends on
+  `LearnerProfileReadPort` plus an injected `ProgressService`;
+  `DashboardService` depends on `DashboardReadPort` plus an injected
+  `ProgressService`. The inactive `list_longitudinal_records` fallback and the
+  relevant `hasattr` capability discovery were removed only from
+  `ProgressService`; no facade or repository method was deleted.
+- Both application-construction paths, `build_submission_service`, and the
+  legacy `FeedbackPipeline` now compose the three Services explicitly from the
+  existing facade-owned `SQLiteLearnerRepository` and
+  `SQLiteConfigurationRepository` instances. `FeedbackPipeline` composition is
+  the single production-file exception explicitly authorized for this stage.
+- Added 12 focused F3 contract tests, the F3 isolated pytest runner, and the
+  F3 SPEC/blocker-resolution/verification documentation.
+- Preserved public Service methods, API paths/schemas, repository SQL,
+  transactions, migration 12, 33 tables, `config-v0.9.0`, facade 86 methods,
+  client 52 methods, and locale 520/520.
+
+### Verified
+- Focused F3 set 96 PASS; frozen-contract inventory 36 PASS; full non-live
+  core 492 passed + 8 skipped; exact `run.bat --verify` PASS (migration 12,
+  33 tables, `config-v0.9.0`, health/docs/Streamlit 200); development
+  database unchanged (SHA-256/mtime).
+
 ## v0.9.5-F2 (2026-08-02)
 
 ### Changed

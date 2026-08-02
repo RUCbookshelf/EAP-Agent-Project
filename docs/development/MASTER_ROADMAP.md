@@ -11,6 +11,7 @@
 | v0.9.5-E Database Repository Decomposition | completed and verified |
 | v0.9.5-F1 Service-Repository Dependency Audit (read-only) | completed |
 | v0.9.5-F2 Low-Risk Service Repository Dependency Narrowing | completed and verified |
+| v0.9.5-F3 Learner Read-Model Dependency Narrowing | completed and verified |
 ## v0.9.4 roadmap - 2026-08-01
 
 | Item | Status |
