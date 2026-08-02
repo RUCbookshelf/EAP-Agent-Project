@@ -97,7 +97,9 @@ def representative_crud(database: Database, settings: Settings) -> dict:
         ),
         submitted_at=datetime(2026, 8, 2, tzinfo=timezone.utc),
     )
-    result = build_submission_service(settings, database).submit(submission, synthetic=True)
+    result = build_submission_service(
+        settings, database, revision_repository=database._revision_repository,
+    ).submit(submission, synthetic=True)
     essay_id = result.essay_id
 
     analysis = database.get_latest_analysis_run(essay_id)

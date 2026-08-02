@@ -77,7 +77,9 @@ def run_live_verification() -> dict:
         deepseek_settings = replace(base, database_path=root / "deepseek.db", llm_provider="deepseek")
         deepseek_repo = Database(deepseek_settings.database_path)
         deepseek_repo.initialize()
-        service = build_submission_service(deepseek_settings, deepseek_repo)
+        service = build_submission_service(
+            deepseek_settings, deepseek_repo, revision_repository=deepseek_repo._revision_repository,
+        )
 
         started = perf_counter()
         live_a = service.submit(_submission("LIVE-V08-A", ORDINARY_TEXT), synthetic=True)
@@ -107,7 +109,9 @@ def run_live_verification() -> dict:
         local_settings = replace(base, database_path=root / "local.db", llm_provider="local", deepseek_api_key=None)
         local_repo = Database(local_settings.database_path)
         local_repo.initialize()
-        local_service = build_submission_service(local_settings, local_repo)
+        local_service = build_submission_service(
+            local_settings, local_repo, revision_repository=local_repo._revision_repository,
+        )
         live_c = local_service.submit(_submission("LIVE-V08-C", ORDINARY_TEXT), synthetic=True)
         c_wpm = _metric(live_c, "writing_output_rate_wpm")
         assert c_wpm["status"] == "insufficient_data" and c_wpm["value"] is None

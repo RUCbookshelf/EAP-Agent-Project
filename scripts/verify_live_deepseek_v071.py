@@ -59,7 +59,9 @@ def run_live_verification() -> dict:
         settings_a = replace(base, database_path=root / "live-a.db", llm_provider="deepseek")
         repo_a = Database(settings_a.database_path); repo_a.initialize()
         start = perf_counter()
-        live_a = build_submission_service(settings_a, repo_a).submit(_submission(
+        live_a = build_submission_service(
+            settings_a, repo_a, revision_repository=repo_a._revision_repository,
+        ).submit(_submission(
             "LIVE-V071-A", "Should cities protect public parks?", 0,
         ), synthetic=True)
         report_a = _status(live_a, perf_counter() - start)
@@ -70,12 +72,16 @@ def run_live_verification() -> dict:
 
         settings_b_local = replace(base, database_path=root / "live-b.db", llm_provider="local", deepseek_api_key=None)
         repo_b = Database(settings_b_local.database_path); repo_b.initialize()
-        first_b = build_submission_service(settings_b_local, repo_b).submit(_submission(
+        first_b = build_submission_service(
+            settings_b_local, repo_b, revision_repository=repo_b._revision_repository,
+        ).submit(_submission(
             "LIVE-V071-B", "Should cities protect public parks?", 0, stage="first draft",
         ), synthetic=True)
         settings_b = replace(base, database_path=root / "live-b.db", llm_provider="deepseek")
         start = perf_counter()
-        live_b = build_submission_service(settings_b, repo_b).submit(_submission(
+        live_b = build_submission_service(
+            settings_b, repo_b, revision_repository=repo_b._revision_repository,
+        ).submit(_submission(
             "LIVE-V071-B", "Should cities protect public parks?", 1, stage="revised draft",
             source=first_b.essay_id,
             text=BASE_TEXT + " Therefore, city leaders should protect accessible parks in every neighborhood.",
@@ -93,7 +99,9 @@ def run_live_verification() -> dict:
 
         settings_c_local = replace(base, database_path=root / "live-c.db", llm_provider="local", deepseek_api_key=None)
         repo_c = Database(settings_c_local.database_path); repo_c.initialize()
-        local_c = build_submission_service(settings_c_local, repo_c)
+        local_c = build_submission_service(
+            settings_c_local, repo_c, revision_repository=repo_c._revision_repository,
+        )
         for index, prompt in enumerate((
             "Should schools require community service?",
             "Should cities limit private cars downtown?",
@@ -101,7 +109,9 @@ def run_live_verification() -> dict:
             local_c.submit(_submission("LIVE-V071-C", prompt, index * 14), synthetic=True)
         settings_c = replace(base, database_path=root / "live-c.db", llm_provider="deepseek")
         start = perf_counter()
-        live_c = build_submission_service(settings_c, repo_c).submit(_submission(
+        live_c = build_submission_service(
+            settings_c, repo_c, revision_repository=repo_c._revision_repository,
+        ).submit(_submission(
             "LIVE-V071-C", "Should universities record lectures?", 28,
         ), synthetic=True)
         report_c = _status(live_c, perf_counter() - start)

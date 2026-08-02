@@ -130,7 +130,9 @@ def setup() -> int:
         _ensure_synthetic_student(repository)
 
         settings = load_settings()
-        submission_service = build_submission_service(settings, repository)
+        submission_service = build_submission_service(
+            settings, repository, revision_repository=repository._revision_repository,
+        )
         practice_service = PracticeService(repository)
 
         original = EssaySubmission(

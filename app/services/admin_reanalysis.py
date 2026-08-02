@@ -8,6 +8,7 @@ from app.config import Settings
 from app.services.configuration import ConfigurationService, settings_from_configuration
 from app.services.factory import build_analyzer
 from app.services.revision import RevisionService
+from app.repositories import RevisionRepository
 from app.services.submission import SubmissionService
 
 
@@ -29,12 +30,13 @@ class ReanalysisRequest(BaseModel):
 
 class AdminReanalysisService:
     def __init__(self, repository, settings: Settings, configurations: ConfigurationService,
-                 submission_service: SubmissionService) -> None:
+                 submission_service: SubmissionService, *,
+                 revision_repository: RevisionRepository) -> None:
         self.repository = repository
         self.settings = settings
         self.configurations = configurations
         self.submission_service = submission_service
-        self.revisions = RevisionService(repository)
+        self.revisions = RevisionService(revision_repository)
 
     def preview(self, request: ReanalysisRequest) -> dict[str, Any]:
         ids = self._scope(request)

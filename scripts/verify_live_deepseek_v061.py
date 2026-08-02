@@ -25,7 +25,9 @@ def verify(*, write_report: bool = True) -> dict:
     with TemporaryDirectory() as temp_dir:
         isolated = replace(settings, database_path=Path(temp_dir) / "live_v061.db")
         repository = Database(isolated.database_path); repository.initialize()
-        result = build_submission_service(isolated, repository).submit(EssaySubmission.model_validate(fixture))
+        result = build_submission_service(
+            isolated, repository, revision_repository=repository._revision_repository,
+        ).submit(EssaySubmission.model_validate(fixture))
         provider = result.provider
         if provider.provider_name != "deepseek" or provider.success_status != "success":
             raise RuntimeError("DeepSeek v0.6.1 verification fell back or failed.")

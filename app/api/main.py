@@ -155,6 +155,7 @@ def _run_startup(api: FastAPI) -> None:
             repository,
             learner_repository=learner_repository,
             configuration_repository=configuration_repository,
+            revision_repository=repository._revision_repository,
         )
         lps = LearnerProfileService(
             repository=learner_repository,
@@ -182,7 +183,7 @@ def _run_startup(api: FastAPI) -> None:
             repository._learner_repository,
             repository._practice_repository,
         )
-        rvs = RevisionService(repository)
+        rvs = RevisionService(repository=repository._revision_repository)
         clf = CalfService(
             calf_repository=repository._calf_repository,
             submission_reader=repository._submission_repository,
@@ -236,6 +237,7 @@ def _run_startup(api: FastAPI) -> None:
     api.state.journey_service = journey_svc
     api.state.admin_reanalysis = AdminReanalysisService(
         repository, settings, cfgs, sub_svc,
+        revision_repository=repository._revision_repository,
     )
 
     # Register feature routers (system router is already included at app creation)
@@ -357,6 +359,7 @@ def _build_full_app(
             repository,
             learner_repository=learner_repository,
             configuration_repository=configuration_repository,
+            revision_repository=repository._revision_repository,
         )
     learner_profiles = LearnerProfileService(
         repository=learner_repository,
@@ -385,7 +388,7 @@ def _build_full_app(
         repository._learner_repository,
         repository._practice_repository,
     )
-    revisions = RevisionService(repository)
+    revisions = RevisionService(repository=repository._revision_repository)
     calf = CalfService(
         calf_repository=repository._calf_repository,
         submission_reader=repository._submission_repository,
@@ -423,7 +426,10 @@ def _build_full_app(
     api.state.calf = calf
     api.state.research = research
     api.state.journey_service = journey
-    api.state.admin_reanalysis = AdminReanalysisService(repository, settings, configurations, submission_service)
+    api.state.admin_reanalysis = AdminReanalysisService(
+        repository, settings, configurations, submission_service,
+        revision_repository=repository._revision_repository,
+    )
 
     api.include_router(system.router)
     _include_business_routers(api)

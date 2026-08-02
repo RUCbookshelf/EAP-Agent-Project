@@ -49,7 +49,7 @@ class FeedbackPipeline:
             diagnoser=self.diagnoser,
             router=self.router,
             learner_profile_service=learner_profile_service,
-            revision_service=RevisionService(self.database),
+            revision_service=RevisionService(self.database._revision_repository),
         )
 
     def submit(self, submission: EssaySubmission, *, synthetic: bool = False) -> PipelineResult:

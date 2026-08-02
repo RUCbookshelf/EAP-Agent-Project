@@ -10,6 +10,7 @@ from .learner_profile import LearnerProfileReadPort, LearnerProfileService
 from .progress import ActiveConfigurationPort, LearnerProgressPort, ProgressService
 from .revision import RevisionService
 from .configuration import settings_from_configuration
+from app.repositories import RevisionRepository
 from app.calibration import DiagnosticCalibrationService
 from app.configuration import ConfigurationPayload
 from app.feedback import FeedbackReliabilityService
@@ -64,6 +65,7 @@ def build_submission_service(
     *,
     learner_repository: LearnerProgressPort | LearnerProfileReadPort | None = None,
     configuration_repository: ActiveConfigurationPort | None = None,
+    revision_repository: RevisionRepository,
 ) -> SubmissionService:
     learner_dependency = learner_repository if learner_repository is not None else repository
     configuration_dependency = (
@@ -89,7 +91,7 @@ def build_submission_service(
         diagnoser=NlpHeuristicDiagnoser(),
         router=build_router(settings, active_configuration.payload if active_configuration else None),
         learner_profile_service=profile_service,
-        revision_service=RevisionService(repository),
+        revision_service=RevisionService(revision_repository),
         calibrator=DiagnosticCalibrationService(
             active_configuration.payload if active_configuration else ConfigurationPayload()
         ),
