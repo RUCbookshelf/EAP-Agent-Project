@@ -1,0 +1,891 @@
+{
+  "label": "after",
+  "files": [
+    "app\\ui\\features\\student\\home.py",
+    "app\\ui\\features\\student\\writing.py",
+    "app\\ui\\features\\student\\feedback.py",
+    "app\\ui\\features\\student\\practice.py",
+    "app\\ui\\features\\student\\revision.py",
+    "app\\ui\\features\\student\\journey.py",
+    "app\\ui\\features\\student\\navigation.py",
+    "app\\ui\\features\\student\\formatting.py",
+    "app\\ui\\features\\student\\session.py",
+    "app\\ui\\features\\research\\overview.py",
+    "app\\ui\\features\\research\\evidence.py",
+    "app\\ui\\features\\research\\calf.py",
+    "app\\ui\\features\\research\\learning_process.py",
+    "app\\ui\\features\\research\\data.py",
+    "app\\ui\\features\\research\\system_audit.py",
+    "app\\ui\\pages\\student_pages.py",
+    "app\\ui\\pages\\research_pages.py"
+  ],
+  "per_file": [
+    {
+      "file": "app\\ui\\features\\student\\home.py",
+      "render_functions": [
+        "render_student_home"
+      ],
+      "all_definitions": [
+        "_home_action_contract",
+        "render_student_home"
+      ],
+      "api_client_calls": [
+        "get_journey",
+        "get_practice_targets"
+      ],
+      "write_capable_api_calls": [],
+      "session_state_keys": [],
+      "widget_keys": [
+        "home_primary_action"
+      ],
+      "locale_keys": [
+        "journey_loading"
+      ],
+      "module_imports": [
+        "__future__",
+        "app.ui.api_client",
+        "app.ui.components",
+        "app.ui.features.student.formatting",
+        "app.ui.features.student.navigation",
+        "app.ui.locale",
+        "app.ui.student_context",
+        "streamlit"
+      ]
+    },
+    {
+      "file": "app\\ui\\features\\student\\writing.py",
+      "render_functions": [
+        "render_writing_page"
+      ],
+      "all_definitions": [
+        "render_writing_page"
+      ],
+      "api_client_calls": [
+        "get_student_revision_candidates",
+        "submit"
+      ],
+      "write_capable_api_calls": [
+        "submit"
+      ],
+      "session_state_keys": [
+        "submission_result",
+        "writing_task_relationship",
+        "writing_validation_state"
+      ],
+      "widget_keys": [
+        "writing_essay",
+        "writing_prompt_input",
+        "writing_review_feedback",
+        "writing_submit_primary",
+        "writing_task_relationship"
+      ],
+      "locale_keys": [
+        "active_duration_help",
+        "active_duration_seconds",
+        "draft_final",
+        "draft_first",
+        "draft_independent",
+        "draft_revised",
+        "draft_stage",
+        "essay_text",
+        "genre",
+        "genre_argumentative",
+        "genre_expository",
+        "genre_narrative",
+        "student_writing_required_help",
+        "student_writing_review_feedback",
+        "student_writing_select_revision",
+        "student_writing_timing",
+        "student_writing_tools",
+        "submit_button",
+        "task_new_independent",
+        "task_relationship",
+        "task_revision_help",
+        "task_revision_within",
+        "time_limit_help",
+        "time_limit_minutes",
+        "timed_writing",
+        "timing_quality",
+        "timing_source",
+        "tool_use",
+        "tool_use_placeholder",
+        "unexplained_interruption",
+        "writing_prompt"
+      ],
+      "module_imports": [
+        "__future__",
+        "app.ui.api_client",
+        "app.ui.components",
+        "app.ui.features.student.navigation",
+        "app.ui.features.student.session",
+        "app.ui.locale",
+        "app.ui.student_context",
+        "streamlit"
+      ]
+    },
+    {
+      "file": "app\\ui\\features\\student\\feedback.py",
+      "render_functions": [
+        "render_feedback_content",
+        "render_feedback_page"
+      ],
+      "all_definitions": [
+        "render_feedback_content",
+        "render_feedback_page"
+      ],
+      "api_client_calls": [
+        "get_student_revision_candidates"
+      ],
+      "write_capable_api_calls": [],
+      "session_state_keys": [
+        "submission_result"
+      ],
+      "widget_keys": [
+        "feedback_primary_action"
+      ],
+      "locale_keys": [
+        "student_feedback_open_practice",
+        "student_feedback_open_writing"
+      ],
+      "module_imports": [
+        "__future__",
+        "app.ui.api_client",
+        "app.ui.components",
+        "app.ui.features.student.formatting",
+        "app.ui.features.student.navigation",
+        "app.ui.features.student.session",
+        "app.ui.locale",
+        "app.ui.student_context",
+        "streamlit"
+      ]
+    },
+    {
+      "file": "app\\ui\\features\\student\\practice.py",
+      "render_functions": [
+        "render_practice_page"
+      ],
+      "all_definitions": [
+        "_practice_attempt_with_cached_evaluation",
+        "_practice_constraint_label",
+        "_practice_instruction",
+        "_practice_status_label",
+        "render_practice_page"
+      ],
+      "api_client_calls": [
+        "create_exercise",
+        "get_exercise_attempts",
+        "get_exercise_instances",
+        "get_practice_targets",
+        "submit_exercise_attempt"
+      ],
+      "write_capable_api_calls": [
+        "create_exercise",
+        "submit_exercise_attempt"
+      ],
+      "session_state_keys": [
+        "exercise_attempts_v2"
+      ],
+      "widget_keys": [
+        "practice_gen",
+        "practice_primary_action",
+        "practice_response_v2",
+        "practice_source_v2",
+        "practice_submit"
+      ],
+      "locale_keys": [
+        "exercise_constraints",
+        "generate_exercise",
+        "practice_loading",
+        "response_field",
+        "student_feedback_open_writing",
+        "student_home_go_revision",
+        "student_practice_response_placeholder",
+        "student_practice_source_placeholder",
+        "student_practice_source_text",
+        "submit_attempt"
+      ],
+      "module_imports": [
+        "__future__",
+        "app.ui.api_client",
+        "app.ui.components",
+        "app.ui.contracts.practice",
+        "app.ui.features.student.navigation",
+        "app.ui.locale",
+        "app.ui.student_context",
+        "streamlit"
+      ]
+    },
+    {
+      "file": "app\\ui\\features\\student\\revision.py",
+      "render_functions": [
+        "render_revision_page"
+      ],
+      "all_definitions": [
+        "_render_revision_observation",
+        "_revision_observation_text",
+        "_revision_status_label",
+        "render_revision_page"
+      ],
+      "api_client_calls": [
+        "get_practice_targets",
+        "get_student_revision_candidates",
+        "get_submission",
+        "submit"
+      ],
+      "write_capable_api_calls": [
+        "submit"
+      ],
+      "session_state_keys": [
+        "revision_validation_state",
+        "submission_result"
+      ],
+      "widget_keys": [
+        "revision_primary_action",
+        "revision_source_select",
+        "revision_submit_primary",
+        "revision_text_input"
+      ],
+      "locale_keys": [
+        "student_feedback_open_writing",
+        "student_revision_loading",
+        "student_revision_open_journey",
+        "student_revision_original_text",
+        "student_revision_revised_text",
+        "student_revision_select_source",
+        "student_revision_submit",
+        "student_writing_required_help"
+      ],
+      "module_imports": [
+        "__future__",
+        "app.ui.api_client",
+        "app.ui.components",
+        "app.ui.features.student.formatting",
+        "app.ui.features.student.navigation",
+        "app.ui.features.student.session",
+        "app.ui.locale",
+        "app.ui.student_context",
+        "streamlit"
+      ]
+    },
+    {
+      "file": "app\\ui\\features\\student\\journey.py",
+      "render_functions": [
+        "render_learning_journey_page"
+      ],
+      "all_definitions": [
+        "_journey_action_contract",
+        "_journey_description_params",
+        "_journey_evidence_label",
+        "_journey_limitation",
+        "_journey_source_label",
+        "_render_journey_action",
+        "_render_journey_empty_state",
+        "render_learning_journey_page"
+      ],
+      "api_client_calls": [
+        "get_journey"
+      ],
+      "write_capable_api_calls": [],
+      "session_state_keys": [],
+      "widget_keys": [
+        "journey_primary_action"
+      ],
+      "locale_keys": [
+        "journey_empty_boundary",
+        "journey_loading"
+      ],
+      "module_imports": [
+        "__future__",
+        "app.ui.api_client",
+        "app.ui.components",
+        "app.ui.features.student.formatting",
+        "app.ui.features.student.navigation",
+        "app.ui.locale",
+        "app.ui.student_context",
+        "streamlit"
+      ]
+    },
+    {
+      "file": "app\\ui\\features\\student\\navigation.py",
+      "render_functions": [],
+      "all_definitions": [
+        "_navigate_student_page"
+      ],
+      "api_client_calls": [],
+      "write_capable_api_calls": [],
+      "session_state_keys": [],
+      "widget_keys": [],
+      "locale_keys": [],
+      "module_imports": [
+        "__future__",
+        "app.ui.locale",
+        "streamlit"
+      ]
+    },
+    {
+      "file": "app\\ui\\features\\student\\formatting.py",
+      "render_functions": [],
+      "all_definitions": [
+        "_feedback_category_label",
+        "_short_timestamp"
+      ],
+      "api_client_calls": [],
+      "write_capable_api_calls": [],
+      "session_state_keys": [],
+      "widget_keys": [],
+      "locale_keys": [],
+      "module_imports": [
+        "__future__",
+        "app.ui.locale"
+      ]
+    },
+    {
+      "file": "app\\ui\\features\\student\\session.py",
+      "render_functions": [],
+      "all_definitions": [
+        "_writing_saved_for_learner"
+      ],
+      "api_client_calls": [],
+      "write_capable_api_calls": [],
+      "session_state_keys": [],
+      "widget_keys": [],
+      "locale_keys": [],
+      "module_imports": [
+        "__future__"
+      ]
+    },
+    {
+      "file": "app\\ui\\features\\research\\overview.py",
+      "render_functions": [
+        "render_research_overview"
+      ],
+      "all_definitions": [
+        "render_research_overview"
+      ],
+      "api_client_calls": [
+        "health",
+        "research_data_quality"
+      ],
+      "write_capable_api_calls": [],
+      "session_state_keys": [],
+      "widget_keys": [],
+      "locale_keys": [
+        "provider_label",
+        "research_overview_analyzer",
+        "research_overview_analyzer_version",
+        "research_overview_api_configured",
+        "research_overview_nlp_model"
+      ],
+      "module_imports": [
+        "__future__",
+        "app.ui.api_client",
+        "app.ui.components",
+        "app.ui.locale",
+        "streamlit"
+      ]
+    },
+    {
+      "file": "app\\ui\\features\\research\\evidence.py",
+      "render_functions": [
+        "render_research_evidence"
+      ],
+      "all_definitions": [
+        "render_research_evidence"
+      ],
+      "api_client_calls": [
+        "get_analyses",
+        "get_diagnostic_audit",
+        "get_submission"
+      ],
+      "write_capable_api_calls": [],
+      "session_state_keys": [],
+      "widget_keys": [
+        "evidence_load"
+      ],
+      "locale_keys": [
+        "load_records",
+        "research_evidence_analysis_details",
+        "research_evidence_diagnosis_details",
+        "research_evidence_submission_details",
+        "research_evidence_submission_id"
+      ],
+      "module_imports": [
+        "__future__",
+        "app.ui.api_client",
+        "app.ui.components",
+        "app.ui.locale",
+        "streamlit"
+      ]
+    },
+    {
+      "file": "app\\ui\\features\\research\\calf.py",
+      "render_functions": [
+        "render_research_calf"
+      ],
+      "all_definitions": [
+        "render_research_calf"
+      ],
+      "api_client_calls": [],
+      "write_capable_api_calls": [],
+      "session_state_keys": [
+        "submission_result"
+      ],
+      "widget_keys": [],
+      "locale_keys": [],
+      "module_imports": [
+        "__future__",
+        "app.ui.api_client",
+        "app.ui.components",
+        "app.ui.locale",
+        "streamlit"
+      ]
+    },
+    {
+      "file": "app\\ui\\features\\research\\learning_process.py",
+      "render_functions": [
+        "render_research_learning_process"
+      ],
+      "all_definitions": [
+        "render_research_learning_process"
+      ],
+      "api_client_calls": [
+        "get_engagement_traces",
+        "get_journey",
+        "get_practice_targets",
+        "get_transfer_evidence"
+      ],
+      "write_capable_api_calls": [],
+      "session_state_keys": [],
+      "widget_keys": [
+        "learning_load"
+      ],
+      "locale_keys": [
+        "journey_counts_label",
+        "journey_counts_value",
+        "journey_known_analyses",
+        "journey_known_attempts",
+        "journey_known_feedback",
+        "journey_known_priorities",
+        "journey_known_submissions",
+        "journey_known_targets",
+        "load_records"
+      ],
+      "module_imports": [
+        "__future__",
+        "app.ui.api_client",
+        "app.ui.components",
+        "app.ui.locale",
+        "app.ui.student_context",
+        "streamlit"
+      ]
+    },
+    {
+      "file": "app\\ui\\features\\research\\data.py",
+      "render_functions": [
+        "render_research_data"
+      ],
+      "all_definitions": [
+        "render_research_data"
+      ],
+      "api_client_calls": [
+        "create_dataset_split",
+        "create_human_review",
+        "get_pii_candidates",
+        "research_data_quality",
+        "research_export_history",
+        "research_export_preview",
+        "research_export_run"
+      ],
+      "write_capable_api_calls": [
+        "create_dataset_split",
+        "create_human_review",
+        "research_export_run"
+      ],
+      "session_state_keys": [],
+      "widget_keys": [
+        "dq_report_btn",
+        "ds_split_btn",
+        "export_hist_btn",
+        "export_preview_btn",
+        "export_run_btn",
+        "hr_comment",
+        "hr_create",
+        "hr_target",
+        "pii_scan_btn",
+        "pii_sub"
+      ],
+      "locale_keys": [
+        "data_quality",
+        "data_quality_report",
+        "dataset_split",
+        "export_formats",
+        "export_history",
+        "export_preview",
+        "export_privacy_mode",
+        "export_run",
+        "export_run_success",
+        "human_review",
+        "human_review_comment",
+        "human_review_create",
+        "human_review_decision",
+        "human_review_target",
+        "human_review_target_id",
+        "pii_scan",
+        "privacy_internal",
+        "privacy_minimal",
+        "privacy_pseudonymized",
+        "research_data_filters",
+        "research_data_privacy",
+        "research_evidence_submission_id"
+      ],
+      "module_imports": [
+        "__future__",
+        "app.ui.api_client",
+        "app.ui.components",
+        "app.ui.contracts.research",
+        "app.ui.locale",
+        "streamlit"
+      ]
+    },
+    {
+      "file": "app\\ui\\features\\research\\system_audit.py",
+      "render_functions": [
+        "render_research_system_audit"
+      ],
+      "all_definitions": [
+        "render_research_system_audit"
+      ],
+      "api_client_calls": [
+        "get_configurations",
+        "get_diagnostic_audit",
+        "preview_learner_model",
+        "rebuild_learner_model"
+      ],
+      "write_capable_api_calls": [
+        "rebuild_learner_model"
+      ],
+      "session_state_keys": [
+        "learner_model_audit_v2"
+      ],
+      "widget_keys": [
+        "diag_load",
+        "diag_sub",
+        "lm_student"
+      ],
+      "locale_keys": [
+        "load_records",
+        "nav_diagnostic_audit",
+        "nav_learner_model_audit",
+        "nav_local_administration",
+        "research_audit_preview",
+        "research_audit_reanalysis",
+        "research_audit_rebuild",
+        "research_audit_strategy",
+        "research_evidence_submission_id",
+        "student_id",
+        "student_id_placeholder"
+      ],
+      "module_imports": [
+        "__future__",
+        "app.ui.api_client",
+        "app.ui.components",
+        "app.ui.locale",
+        "streamlit"
+      ]
+    },
+    {
+      "file": "app\\ui\\pages\\student_pages.py",
+      "render_functions": [],
+      "all_definitions": [],
+      "api_client_calls": [],
+      "write_capable_api_calls": [],
+      "session_state_keys": [],
+      "widget_keys": [],
+      "locale_keys": [],
+      "module_imports": [
+        "__future__",
+        "app.ui.features.student.feedback",
+        "app.ui.features.student.formatting",
+        "app.ui.features.student.home",
+        "app.ui.features.student.journey",
+        "app.ui.features.student.navigation",
+        "app.ui.features.student.practice",
+        "app.ui.features.student.revision",
+        "app.ui.features.student.session",
+        "app.ui.features.student.writing"
+      ]
+    },
+    {
+      "file": "app\\ui\\pages\\research_pages.py",
+      "render_functions": [],
+      "all_definitions": [],
+      "api_client_calls": [],
+      "write_capable_api_calls": [],
+      "session_state_keys": [],
+      "widget_keys": [],
+      "locale_keys": [],
+      "module_imports": [
+        "__future__",
+        "app.ui.features.research.calf",
+        "app.ui.features.research.data",
+        "app.ui.features.research.evidence",
+        "app.ui.features.research.learning_process",
+        "app.ui.features.research.overview",
+        "app.ui.features.research.system_audit"
+      ]
+    }
+  ],
+  "aggregate": {
+    "render_functions": [
+      "render_feedback_content",
+      "render_feedback_page",
+      "render_learning_journey_page",
+      "render_practice_page",
+      "render_research_calf",
+      "render_research_data",
+      "render_research_evidence",
+      "render_research_learning_process",
+      "render_research_overview",
+      "render_research_system_audit",
+      "render_revision_page",
+      "render_student_home",
+      "render_writing_page"
+    ],
+    "all_definitions": [
+      "_feedback_category_label",
+      "_home_action_contract",
+      "_journey_action_contract",
+      "_journey_description_params",
+      "_journey_evidence_label",
+      "_journey_limitation",
+      "_journey_source_label",
+      "_navigate_student_page",
+      "_practice_attempt_with_cached_evaluation",
+      "_practice_constraint_label",
+      "_practice_instruction",
+      "_practice_status_label",
+      "_render_journey_action",
+      "_render_journey_empty_state",
+      "_render_revision_observation",
+      "_revision_observation_text",
+      "_revision_status_label",
+      "_short_timestamp",
+      "_writing_saved_for_learner",
+      "render_feedback_content",
+      "render_feedback_page",
+      "render_learning_journey_page",
+      "render_practice_page",
+      "render_research_calf",
+      "render_research_data",
+      "render_research_evidence",
+      "render_research_learning_process",
+      "render_research_overview",
+      "render_research_system_audit",
+      "render_revision_page",
+      "render_student_home",
+      "render_writing_page"
+    ],
+    "api_client_calls": [
+      "create_dataset_split",
+      "create_exercise",
+      "create_human_review",
+      "get_analyses",
+      "get_configurations",
+      "get_diagnostic_audit",
+      "get_engagement_traces",
+      "get_exercise_attempts",
+      "get_exercise_instances",
+      "get_journey",
+      "get_pii_candidates",
+      "get_practice_targets",
+      "get_student_revision_candidates",
+      "get_submission",
+      "get_transfer_evidence",
+      "health",
+      "preview_learner_model",
+      "rebuild_learner_model",
+      "research_data_quality",
+      "research_export_history",
+      "research_export_preview",
+      "research_export_run",
+      "submit",
+      "submit_exercise_attempt"
+    ],
+    "write_capable_api_calls": [
+      "create_dataset_split",
+      "create_exercise",
+      "create_human_review",
+      "rebuild_learner_model",
+      "research_export_run",
+      "submit",
+      "submit_exercise_attempt"
+    ],
+    "session_state_keys": [
+      "exercise_attempts_v2",
+      "learner_model_audit_v2",
+      "revision_validation_state",
+      "submission_result",
+      "writing_task_relationship",
+      "writing_validation_state"
+    ],
+    "widget_keys": [
+      "diag_load",
+      "diag_sub",
+      "dq_report_btn",
+      "ds_split_btn",
+      "evidence_load",
+      "export_hist_btn",
+      "export_preview_btn",
+      "export_run_btn",
+      "feedback_primary_action",
+      "home_primary_action",
+      "hr_comment",
+      "hr_create",
+      "hr_target",
+      "journey_primary_action",
+      "learning_load",
+      "lm_student",
+      "pii_scan_btn",
+      "pii_sub",
+      "practice_gen",
+      "practice_primary_action",
+      "practice_response_v2",
+      "practice_source_v2",
+      "practice_submit",
+      "revision_primary_action",
+      "revision_source_select",
+      "revision_submit_primary",
+      "revision_text_input",
+      "writing_essay",
+      "writing_prompt_input",
+      "writing_review_feedback",
+      "writing_submit_primary",
+      "writing_task_relationship"
+    ],
+    "locale_keys": [
+      "active_duration_help",
+      "active_duration_seconds",
+      "data_quality",
+      "data_quality_report",
+      "dataset_split",
+      "draft_final",
+      "draft_first",
+      "draft_independent",
+      "draft_revised",
+      "draft_stage",
+      "essay_text",
+      "exercise_constraints",
+      "export_formats",
+      "export_history",
+      "export_preview",
+      "export_privacy_mode",
+      "export_run",
+      "export_run_success",
+      "generate_exercise",
+      "genre",
+      "genre_argumentative",
+      "genre_expository",
+      "genre_narrative",
+      "human_review",
+      "human_review_comment",
+      "human_review_create",
+      "human_review_decision",
+      "human_review_target",
+      "human_review_target_id",
+      "journey_counts_label",
+      "journey_counts_value",
+      "journey_empty_boundary",
+      "journey_known_analyses",
+      "journey_known_attempts",
+      "journey_known_feedback",
+      "journey_known_priorities",
+      "journey_known_submissions",
+      "journey_known_targets",
+      "journey_loading",
+      "load_records",
+      "nav_diagnostic_audit",
+      "nav_learner_model_audit",
+      "nav_local_administration",
+      "pii_scan",
+      "practice_loading",
+      "privacy_internal",
+      "privacy_minimal",
+      "privacy_pseudonymized",
+      "provider_label",
+      "research_audit_preview",
+      "research_audit_reanalysis",
+      "research_audit_rebuild",
+      "research_audit_strategy",
+      "research_data_filters",
+      "research_data_privacy",
+      "research_evidence_analysis_details",
+      "research_evidence_diagnosis_details",
+      "research_evidence_submission_details",
+      "research_evidence_submission_id",
+      "research_overview_analyzer",
+      "research_overview_analyzer_version",
+      "research_overview_api_configured",
+      "research_overview_nlp_model",
+      "response_field",
+      "student_feedback_open_practice",
+      "student_feedback_open_writing",
+      "student_home_go_revision",
+      "student_id",
+      "student_id_placeholder",
+      "student_practice_response_placeholder",
+      "student_practice_source_placeholder",
+      "student_practice_source_text",
+      "student_revision_loading",
+      "student_revision_open_journey",
+      "student_revision_original_text",
+      "student_revision_revised_text",
+      "student_revision_select_source",
+      "student_revision_submit",
+      "student_writing_required_help",
+      "student_writing_review_feedback",
+      "student_writing_select_revision",
+      "student_writing_timing",
+      "student_writing_tools",
+      "submit_attempt",
+      "submit_button",
+      "task_new_independent",
+      "task_relationship",
+      "task_revision_help",
+      "task_revision_within",
+      "time_limit_help",
+      "time_limit_minutes",
+      "timed_writing",
+      "timing_quality",
+      "timing_source",
+      "tool_use",
+      "tool_use_placeholder",
+      "unexplained_interruption",
+      "writing_prompt"
+    ],
+    "module_imports": [
+      "__future__",
+      "app.ui.api_client",
+      "app.ui.components",
+      "app.ui.contracts.practice",
+      "app.ui.contracts.research",
+      "app.ui.features.research.calf",
+      "app.ui.features.research.data",
+      "app.ui.features.research.evidence",
+      "app.ui.features.research.learning_process",
+      "app.ui.features.research.overview",
+      "app.ui.features.research.system_audit",
+      "app.ui.features.student.feedback",
+      "app.ui.features.student.formatting",
+      "app.ui.features.student.home",
+      "app.ui.features.student.journey",
+      "app.ui.features.student.navigation",
+      "app.ui.features.student.practice",
+      "app.ui.features.student.revision",
+      "app.ui.features.student.session",
+      "app.ui.features.student.writing",
+      "app.ui.locale",
+      "app.ui.student_context",
+      "streamlit"
+    ]
+  }
+}

@@ -1,5 +1,24 @@
 # Project State
 
+## Current v0.9.5-C State
+
+- Status: completed and verified; frontend feature extraction scope closed.
+- Six Student feature modules (`home`, `writing`, `feedback`, `practice`,
+  `revision`, `journey`) and six Research feature modules (`overview`,
+  `evidence`, `calf`, `learning_process`, `data`, `system_audit`) under
+  `app/ui/features/`; shared student helpers owned once by `navigation.py`,
+  `formatting.py`, `session.py`.
+- `app/ui/pages/student_pages.py` and `research_pages.py` are thin re-export
+  facades; renderer names/signatures, page order, session/widget keys,
+  data-testids, locale keys, API calls, and payloads unchanged.
+- UI boundaries restored: Practice uses `app/ui/contracts/practice.py`;
+  Research Data uses `app/ui/contracts/research.py`; a static
+  prohibited-import test guards the boundary.
+- Verification: inventory parity (13/13, 32/32, 24/24, 7/7, 6/6, 32/32,
+  98/98); 15 new tests; focused frontend 200+3; 24/24 browser renders;
+  446+8 core; `run.bat --verify` PASS; migration 12; `config-v0.9.0`.
+- No API/backend/schema/service/repository/database/UI-content/visual change.
+  v0.9.5-D remains not started.
 ## Current v0.9.5-B State
 
 - Status: completed and verified; API router decomposition scope closed.

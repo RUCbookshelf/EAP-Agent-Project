@@ -1,5 +1,21 @@
 
 
+## 2026-08-02 - v0.9.5-C Frontend feature extraction and UI boundary restoration
+
+- **Decision**: Move every visible Student and Research page into its own
+  module under `app/ui/features/`, keep the old page modules as explicit
+  re-export facades, and remove the two UI-to-backend-schema imports
+  (Practice instructions, Research export models) through UI-owned contracts.
+- **Rationale**: The 1,296-line Student and 514-line Research page modules
+  concentrated all features in one file each, and the UI leaked backend
+  schema imports into presentation code (documented in the v0.9.5-A audit).
+- **Alternatives**: Keeping the monoliths would preserve the coupling;
+  extracting with substantial refactoring would risk visual/behavior drift.
+- **Impact**: Contract inventory parity on every measured dimension
+  (renderers, definitions, API calls, session/widget keys, locale keys);
+  15 new boundary/extraction tests; 24/24 representative browser renders;
+  446+8 core; exact `run.bat --verify` PASS; no API/backend/content/visual
+  change; development database fingerprint unchanged.
 ## 2026-08-02 - v0.9.5-B Canonical health contract and router decomposition
 
 - **Decision**: Split all FastAPI business routes into feature-owned router

@@ -1,6 +1,18 @@
 # Current Task State
 
 **Date:** 2026-08-02
+**Current task:** v0.9.5-C Frontend Feature Extraction and UI Boundary Restoration
+**Status:** completed and verified (see `RUN_VERIFICATION_V0.9.5_C.md`)
+
+- Twelve feature modules (six Student, six Research) under `app/ui/features/`;
+  old page modules reduced to thin re-export facades; renderer names,
+  signatures, page order, session/widget keys, and locale keys unchanged.
+- Practice and Research Data backend-schema imports removed via
+  `app/ui/contracts/`; prohibited-import static test added.
+- Inventory parity 13/13, 32/32, 24/24, 7/7, 6/6, 32/32, 98/98; 24/24
+  browser renders; 446+8 core; `run.bat --verify` PASS; dev DB unchanged.
+- Next: v0.9.5-D (not started) under a separate goal.
+**Date:** 2026-08-02
 **Current task:** v0.9.5-B API Router Decomposition and Health Contract Reconciliation
 **Status:** completed and verified (see `RUN_VERIFICATION_V0.9.5_B.md`)
 

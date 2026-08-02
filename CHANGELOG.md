@@ -1,3 +1,26 @@
+## v0.9.5-C (2026-08-02)
+
+### Changed
+- Extracted the six Student features and six Research features out of
+  `app/ui/pages/student_pages.py` and `app/ui/pages/research_pages.py` into
+  one module per visible page under `app/ui/features/student/` and
+  `app/ui/features/research/`; the old page modules are now thin explicit
+  re-export facades with unchanged renderer names and signatures.
+- Removed the two UI-to-backend-schema boundary violations: Student Practice
+  now uses the UI-safe `app/ui/contracts/practice.py` instruction contract,
+  and Research Data builds its export payload with
+  `app/ui/contracts/research.py` (exact backend serialization shape).
+- Added a static prohibited-UI-import architecture test and extraction
+  compatibility tests.
+
+### Verified
+- Contract inventory parity: renderers 13/13, definitions 32/32, API calls
+  24/24, write-capable calls 7/7, session keys 6/6, widget keys 32/32,
+  locale keys 98/98; zero missing/added.
+- 15 new boundary/extraction tests; 200+3 focused frontend set; 24/24
+  representative browser renders (en desktop + zh mobile); 446+8 core tests;
+  exact `cmd /c "run.bat --verify"` PASS; migration 12; `config-v0.9.0`;
+  dev database fingerprint unchanged; locale parity 520/520.
 ## v0.9.5-B (2026-08-02)
 
 ### Changed
