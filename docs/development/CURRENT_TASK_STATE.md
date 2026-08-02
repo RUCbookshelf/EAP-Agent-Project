@@ -1,6 +1,26 @@
 # Current Task State
 
 **Date:** 2026-08-02
+**Current task:** v0.9.5-F5B ResearchDataService Dependency Narrowing
+**Status:** completed and verified (see `RUN_VERIFICATION_V0.9.5_F5B.md`)
+
+- `ResearchDataService` narrowed to three explicit consumer-owned Ports
+  (`ResearchSubmissionReadPort`, `ResearchReviewPort`,
+  `ResearchExportReadPort`); all six `hasattr` capability checks removed;
+  both app paths compose it from the existing facade-owned Submission and
+  Research repositories (same Research instance for both Research Ports);
+  the five Research test sites and the one verification-helper site
+  received constructor-only updates.
+- Router-level best-effort `save_export_job` persistence unchanged and
+  outside the Service.
+- Focused 97 PASS; contract inventory 141 PASS; full core 546 passed + 8
+  skipped; exact `run.bat --verify` PASS; migration 12, 33 tables,
+  `config-v0.9.0`, prompt `feedback-prompt-v0.7.1`, facade 86, API 77,
+  client 52, locale 520/520 unchanged; development database unchanged;
+  235 pre-existing user exports untouched.
+- Next: any later stage only under a separate authorization.
+
+**Date:** 2026-08-02
 **Current task:** v0.9.5-F5A CALF Service Dependency Narrowing
 **Status:** completed and verified (see `RUN_VERIFICATION_V0.9.5_F5A.md`)
 

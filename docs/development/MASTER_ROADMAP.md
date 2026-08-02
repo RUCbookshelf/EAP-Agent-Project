@@ -14,6 +14,7 @@
 | v0.9.5-F3 Learner Read-Model Dependency Narrowing | completed and verified |
 | v0.9.5-F4 Reanalysis and Journey Dependency Narrowing | completed and verified |
 | v0.9.5-F5A CALF Service Dependency Narrowing | completed and verified |
+| v0.9.5-F5B ResearchDataService Dependency Narrowing | completed and verified |
 ## v0.9.4 roadmap - 2026-08-01
 
 | Item | Status |

@@ -1,5 +1,45 @@
 
 
+## 2026-08-02 - v0.9.5-F5B ResearchDataService dependency narrowing
+
+- **Decision**: Narrow exactly one Service with consumer-owned Ports:
+  `ResearchDataService` -> `ResearchSubmissionReadPort`
+  (`list_all_submissions`, `list_student_submissions`,
+  `get_submission_bundle`) + `ResearchReviewPort` (`save_human_review`,
+  `list_human_reviews`, `apply_pii_review`) + `ResearchExportReadPort`
+  (`list_export_jobs`, `get_export_job`). Remove all six repository-
+  capability `hasattr` branches associated with the eight approved
+  methods. Compose the Service from the existing facade-owned
+  Submission repository and the same Research repository instance for
+  both Research-owned Ports in both app paths.
+- **Caller updates**: `tests/test_research_v082.py` (five sites) and
+  `verification/v0.9.5-e/capture_prechange_fresh_database.py` (one site)
+  received constructor-only updates discovered in Phase 0; no other
+  active caller exists.
+- **Rationale**: The F1 audit classified ResearchDataService as a
+  medium-risk mixed consumer whose eight calls map exactly to two
+  extracted repositories; the approved production facade always supplies
+  all guarded capabilities, so the capability-absent branches are unused
+  in active production construction.
+- **Alternatives**: preserving the hasattr capability discovery (rejected:
+  unused in production and hides contract); moving Router `save_export_job`
+  into the Service (rejected: forbidden and would change best-effort
+  semantics); leaving the Service on the facade (deferred work).
+- **Parity boundary**: No facade or repository method deleted; repository
+  SQL, transactions, migration 12, 33 tables, `config-v0.9.0`, prompt
+  `feedback-prompt-v0.7.1`, API 77 pairs, client 52 methods, and locale
+  520/520 unchanged. Human Review and PII writes remain repository-owned
+  single-method operations; `save_export_job` remains Router-owned and
+  best-effort; export contents, ordering, file names, and formats
+  unchanged.
+- **Safety decision**: All write-capable verification used fresh guarded
+  temporary databases with python-dotenv disabled and `DATABASE_URL`
+  absent; every newly created export directory was removed; development
+  database remained at SHA-256 `340E0F...AFF4` (unchanged); 235
+  pre-existing user exports untouched.
+- **Evidence**: focused 97 PASS; contract inventory 141 PASS; full
+  non-live core 546 passed + 8 skipped; exact `run.bat --verify` PASS.
+
 ## 2026-08-02 - v0.9.5-F5A CALF Service dependency narrowing
 
 - **Decision**: Narrow exactly one Service with consumer-owned Ports:

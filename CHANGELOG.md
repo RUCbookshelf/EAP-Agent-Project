@@ -1,3 +1,43 @@
+## v0.9.5-F5B (2026-08-02)
+
+### Changed
+- Replaced the broad, untyped persistence dependency of
+  `ResearchDataService` with three explicit consumer-owned
+  `typing.Protocol` Ports defined in `app/research/service.py`:
+  `ResearchSubmissionReadPort` (`list_all_submissions`,
+  `list_student_submissions`, `get_submission_bundle`),
+  `ResearchReviewPort` (`save_human_review`, `list_human_reviews`,
+  `apply_pii_review`), and `ResearchExportReadPort` (`list_export_jobs`,
+  `get_export_job`). Removed all six repository-capability `hasattr`
+  branches associated with the eight approved methods; the Service now
+  has no broad repository field, no untyped persistence parameter, no
+  compatibility fallback, and no `Database`/SQLite imports.
+- Both application-construction paths (`_run_startup`, `_build_full_app`)
+  construct `ResearchDataService` with explicit keyword arguments from
+  the existing facade-owned `SQLiteSubmissionRepository` and the same
+  `SQLiteResearchRepository` instance (both Research-owned Ports share
+  one instance and one connection manager; no second Database or
+  repository graph). `tests/test_research_v082.py` (five sites) and
+  `verification/v0.9.5-e/capture_prechange_fresh_database.py` (one site)
+  received constructor-only updates.
+- Router-level best-effort `save_export_job` persistence is unchanged:
+  `ResearchDataService.run_export` still never writes Export Job rows;
+  the Research router still attempts the best-effort audit-row write
+  after a successful export.
+- Added 20 focused F5B contract tests, the F5B isolated pytest runner,
+  and the F5B SPEC/verification documentation.
+- Preserved public Service methods, export contents/ordering/file names/
+  formats, API paths/schemas, repository SQL, transactions, migration 12,
+  33 tables, `config-v0.9.0`, prompt `feedback-prompt-v0.7.1`, facade 86
+  methods, client 52 methods, and locale 520/520.
+
+### Verified
+- Focused F5B set 97 PASS; frozen-contract inventory 141 PASS; full
+  non-live core 546 passed + 8 skipped; exact `run.bat --verify` PASS
+  (migration 12, 33 tables, `config-v0.9.0`, prompt v0.7.1,
+  health/docs/Streamlit 200); development database unchanged
+  (SHA-256/size/mtime); all 235 pre-existing user exports untouched.
+
 ## v0.9.5-F5A (2026-08-02)
 
 ### Changed

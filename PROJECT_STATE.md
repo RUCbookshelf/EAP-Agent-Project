@@ -2,6 +2,35 @@
 
 # Project State
 
+# Project State
+
+## Current v0.9.5-F5B State
+
+- Status: completed and verified; ResearchDataService dependency narrowing
+  scope closed (one Service narrowed to three explicit consumer-owned
+  Ports).
+- `ResearchDataService` -> `ResearchSubmissionReadPort`
+  (`list_all_submissions`, `list_student_submissions`,
+  `get_submission_bundle`) + `ResearchReviewPort` (`save_human_review`,
+  `list_human_reviews`, `apply_pii_review`) + `ResearchExportReadPort`
+  (`list_export_jobs`, `get_export_job`). All six repository-capability
+  `hasattr` branches were removed; no broad repository field, no untyped
+  persistence parameter, no compatibility fallback, and no
+  `Database`/SQLite imports remain in the Service module.
+- Both application paths reuse the existing facade-owned Submission
+  repository and the same Research repository instance for both
+  Research-owned Ports; the five `tests/test_research_v082.py` sites and
+  the one `capture_prechange_fresh_database.py` site received
+  constructor-only updates. Router-level best-effort `save_export_job`
+  persistence is unchanged and remains outside the Service.
+- Verification: focused 97 PASS; contract inventory 141 PASS; full
+  non-live core 546 passed + 8 skipped; exact `run.bat --verify` PASS;
+  migration 12; 33 tables; `config-v0.9.0`; prompt `feedback-prompt-v0.7.1`;
+  facade 86; API 77; client 52; locale 520/520; development database
+  unchanged (SHA-256/size/mtime); 235 pre-existing user exports untouched.
+- Next: any later stage (e.g., write-orchestration narrowing) only under a
+  separate authorization.
+
 ## Current v0.9.5-F5A State
 
 - Status: completed and verified; CALF Service dependency narrowing scope

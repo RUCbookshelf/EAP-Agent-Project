@@ -50,7 +50,11 @@ class TestPrivacyModes:
     def test_case_a_internal_research(self):
         """Case A: Internal research export retains student ID with privacy warning."""
         db = _db_with_essays(_essay("S001", "Prompt A", "Test essay content."))
-        svc = ResearchDataService(db)
+        svc = ResearchDataService(
+            submission_reader=db._submission_repository,
+            review_repository=db._research_repository,
+            export_reader=db._research_repository,
+        )
         job = ExportJob(filter_spec=ExportFilter(), privacy_mode=PrivacyMode.INTERNAL_RESEARCH, formats=[ExportFormat.JSONL])
         result = svc.run_export(job)
         records = [json.loads(line) for line in open(result['manifest_path'].replace('manifest.json', 'records.jsonl'), encoding='utf-8')]
@@ -62,7 +66,11 @@ class TestPrivacyModes:
     def test_case_b_pseudonymized(self):
         """Case B: Pseudonymized export replaces IDs with stable pseudonyms."""
         db = _db_with_essays(_essay("S001", "Prompt B1", "Essay one."), _essay("S001", "Prompt B2", "Essay two."))
-        svc = ResearchDataService(db)
+        svc = ResearchDataService(
+            submission_reader=db._submission_repository,
+            review_repository=db._research_repository,
+            export_reader=db._research_repository,
+        )
         job = ExportJob(filter_spec=ExportFilter(), privacy_mode=PrivacyMode.PSEUDONYMIZED, formats=[ExportFormat.JSONL])
         result = svc.run_export(job)
         records = [json.loads(line) for line in open(result['manifest_path'].replace('manifest.json', 'records.jsonl'), encoding='utf-8')]
@@ -74,7 +82,11 @@ class TestPrivacyModes:
     def test_case_c_minimal_anonymous(self):
         """Case C: Minimal anonymous removes IDs, generalizes timestamps, removes paths."""
         db = _db_with_essays(_essay("S001", "Prompt C", "Content."))
-        svc = ResearchDataService(db)
+        svc = ResearchDataService(
+            submission_reader=db._submission_repository,
+            review_repository=db._research_repository,
+            export_reader=db._research_repository,
+        )
         job = ExportJob(filter_spec=ExportFilter(), privacy_mode=PrivacyMode.MINIMAL_ANONYMOUS, formats=[ExportFormat.JSONL])
         result = svc.run_export(job)
         records = [json.loads(line) for line in open(result['manifest_path'].replace('manifest.json', 'records.jsonl'), encoding='utf-8')]
@@ -146,7 +158,12 @@ class TestHumanReview:
 class TestDatasetAndMeasures:
     def test_case_h_student_level_split(self):
         """Case H: Student-level split — no student crosses train/val/test."""
-        svc = ResearchDataService(_db_with_essays())
+        db = _db_with_essays()
+        svc = ResearchDataService(
+            submission_reader=db._submission_repository,
+            review_repository=db._research_repository,
+            export_reader=db._research_repository,
+        )
         students = [f"S{i:03d}" for i in range(30)]
         result = svc.build_dataset_split(students, seed=20260730)
         splits = {r.student_pseudonym: r.split for r in result.records}
@@ -192,7 +209,11 @@ class TestCSVAndPreview:
     def test_case_l_preview_export_consistency(self):
         """Case L: Preview counts match formal export counts."""
         db = _db_with_essays(_essay("S001", "P", "Essay."))
-        svc = ResearchDataService(db)
+        svc = ResearchDataService(
+            submission_reader=db._submission_repository,
+            review_repository=db._research_repository,
+            export_reader=db._research_repository,
+        )
         job = ExportJob(filter_spec=ExportFilter(), privacy_mode=PrivacyMode.PSEUDONYMIZED, formats=[ExportFormat.JSONL])
         preview = svc.preview(job)
         result = svc.run_export(job)
