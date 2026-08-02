@@ -1,5 +1,42 @@
 
 
+## 2026-08-02 - v0.9.5-F5A CALF Service dependency narrowing
+
+- **Decision**: Narrow exactly one Service with consumer-owned Ports:
+  `CalfService` -> `CalfDataPort` (`list_analysis_units`,
+  `list_error_annotations`, `save_error_annotations`) +
+  `CalfSubmissionReadPort` (`get_submission_bundle`,
+  `list_student_submissions`) + `CalfAnalysisReadPort`
+  (`get_latest_analysis_run`) + `CalfStudentReadPort` (`get_student`).
+  Compose the Service from the existing facade-owned
+  CALF/Submission/Analysis/Learner repository instances in both app
+  paths with explicit keyword arguments.
+- **Operational-caller update**: `scripts/verify_live_deepseek_v08.py`
+  (line 135) was the only active caller discovered during Phase 0
+  outside the composition root; its constructor-only update passes the
+  four repositories of its existing local facade graph. No other script,
+  test, or verification helper constructs `CalfService`.
+- **Rationale**: The F1 audit classified CalfService as a medium-risk
+  mixed read/write consumer whose seven calls map exactly to four
+  extracted repositories; `save_error_annotations` keeps its
+  repository-owned Essay-existence guard and one-connection batch write.
+- **Alternatives**: internal fallback construction inside CalfService
+  (rejected: forbidden by stop conditions); leaving the Service on the
+  facade (deferred work); ResearchDataService narrowing (out of scope,
+  F5B).
+- **Parity boundary**: No facade or repository method deleted; repository
+  SQL, transactions, migration 12, 33 tables, `config-v0.9.0`, API 77
+  pairs, client 52 methods, and locale 520/520 unchanged. CalfService
+  performs exactly one bundle read before annotation validation and
+  exactly one `save_error_annotations` call on success, zero saves on
+  validation failure.
+- **Safety decision**: All write-capable verification used fresh guarded
+  temporary databases with python-dotenv disabled and `DATABASE_URL`
+  absent; development database remained at SHA-256 `340E0F...AFF4`
+  (unchanged).
+- **Evidence**: focused 63 PASS; contract inventory 123 PASS; full
+  non-live core 526 passed + 8 skipped; exact `run.bat --verify` PASS.
+
 ## 2026-08-02 - v0.9.5-F4 Reanalysis and Journey dependency narrowing
 
 - **Decision**: Narrow exactly two Services with consumer-owned Ports:

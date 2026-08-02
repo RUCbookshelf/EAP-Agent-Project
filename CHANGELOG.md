@@ -1,3 +1,38 @@
+## v0.9.5-F5A (2026-08-02)
+
+### Changed
+- Replaced the broad, untyped persistence dependency of `CalfService`
+  with four explicit consumer-owned `typing.Protocol` Ports defined in
+  `app/services/calf.py`: `CalfDataPort` (`list_analysis_units`,
+  `list_error_annotations`, `save_error_annotations`),
+  `CalfSubmissionReadPort` (`get_submission_bundle`,
+  `list_student_submissions`), `CalfAnalysisReadPort`
+  (`get_latest_analysis_run`), and `CalfStudentReadPort` (`get_student`).
+  The Service now has no broad repository field, no untyped persistence
+  parameter, no compatibility fallback, no `hasattr` capability
+  discovery, and no `Database`/SQLite imports.
+- Both application-construction paths (`_run_startup`, `_build_full_app`)
+  construct `CalfService` with explicit keyword arguments from the
+  existing facade-owned `SQLiteCalfRepository`,
+  `SQLiteSubmissionRepository`, `SQLiteAnalysisRepository`, and
+  `SQLiteLearnerRepository` instances (same connection-manager graph; no
+  second Database or repository graph). `scripts/verify_live_deepseek_v08.py`
+  received the one minimal constructor-only operational-caller update.
+- `save_error_annotations` remains exactly one repository-owned call with
+  the Essay-existence guard inside `SQLiteCalfRepository`; no shared
+  transaction is introduced.
+- Added 18 focused F5A contract tests, the F5A isolated pytest runner,
+  and the F5A SPEC/verification documentation.
+- Preserved public Service methods, API paths/schemas, repository SQL,
+  transactions, migration 12, 33 tables, `config-v0.9.0`, facade 86
+  methods, client 52 methods, and locale 520/520.
+
+### Verified
+- Focused F5A set 63 PASS; frozen-contract inventory 123 PASS; full
+  non-live core 526 passed + 8 skipped; exact `run.bat --verify` PASS
+  (migration 12, 33 tables, `config-v0.9.0`, health/docs/Streamlit 200);
+  development database unchanged (SHA-256/mtime).
+
 ## v0.9.5-F4 (2026-08-02)
 
 ### Changed

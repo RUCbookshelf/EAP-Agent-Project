@@ -1,5 +1,33 @@
 # Project State
 
+# Project State
+
+## Current v0.9.5-F5A State
+
+- Status: completed and verified; CALF Service dependency narrowing scope
+  closed (one Service narrowed to four explicit consumer-owned Ports).
+- `CalfService` -> `CalfDataPort` (`list_analysis_units`,
+  `list_error_annotations`, `save_error_annotations`) +
+  `CalfSubmissionReadPort` (`get_submission_bundle`,
+  `list_student_submissions`) + `CalfAnalysisReadPort`
+  (`get_latest_analysis_run`) + `CalfStudentReadPort` (`get_student`). No
+  broad repository field, no untyped persistence parameter, no
+  compatibility fallback, no `hasattr`, and no `Database`/SQLite imports
+  in the Service module.
+- Both application paths reuse the existing facade-owned CALF,
+  Submission, Analysis, and Learner repository instances with explicit
+  keyword arguments; the one operational-script caller
+  (`scripts/verify_live_deepseek_v08.py`) uses the same four repositories
+  of its own facade. No second connection manager, repository graph,
+  proxy, or singleton was introduced.
+- Verification: focused 63 PASS; contract inventory 123 PASS; full
+  non-live core 526 passed + 8 skipped; exact `run.bat --verify` PASS;
+  migration 12; 33 tables; `config-v0.9.0`; facade 86; API 77; client
+  52; locale 520/520; development database unchanged (SHA-256/mtime).
+- Next: v0.9.5-F5B only under a separate authorization; Research
+  narrowing, write-orchestration narrowing, facade contraction, and
+  schema cleanup remain deferred.
+
 ## Current v0.9.5-F4 State
 
 - Status: completed and verified; Reanalysis and Journey dependency

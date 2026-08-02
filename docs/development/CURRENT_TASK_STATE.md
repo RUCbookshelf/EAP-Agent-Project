@@ -1,6 +1,21 @@
 # Current Task State
 
 **Date:** 2026-08-02
+**Current task:** v0.9.5-F5A CALF Service Dependency Narrowing
+**Status:** completed and verified (see `RUN_VERIFICATION_V0.9.5_F5A.md`)
+
+- `CalfService` narrowed to four explicit consumer-owned Ports
+  (`CalfDataPort`, `CalfSubmissionReadPort`, `CalfAnalysisReadPort`,
+  `CalfStudentReadPort`); both app paths compose it from the existing
+  facade-owned CALF/Submission/Analysis/Learner repositories; the one
+  operational-script caller received a constructor-only update.
+- Focused 63 PASS; contract inventory 123 PASS; full core 526 passed + 8
+  skipped; exact `run.bat --verify` PASS; migration 12, 33 tables,
+  `config-v0.9.0`, facade 86, API 77, client 52, locale 520/520
+  unchanged; development database unchanged.
+- Next: v0.9.5-F5B only under a separate authorization.
+
+**Date:** 2026-08-02
 **Current task:** v0.9.5-F4 Reanalysis and Journey Dependency Narrowing
 **Status:** completed and verified (see `RUN_VERIFICATION_V0.9.5_F4.md`)
 
