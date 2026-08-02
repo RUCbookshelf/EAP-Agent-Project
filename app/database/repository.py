@@ -13,6 +13,18 @@ from app.revision import RevisionGroup, RevisionSnapshot
 from app.configuration import ConfigurationCreate, ConfigurationPayload, ConfigurationVersion, configuration_hash
 from app.calibration import DiagnosticCalibrationResult
 from app.calf import ErrorAnnotation
+from app.infrastructure.sqlite import ClosingConnection, SQLiteConnectionManager
+from app.infrastructure.sqlite.repositories import (
+    SQLiteAnalysisRepository,
+    SQLiteCalfRepository,
+    SQLiteConfigurationRepository,
+    SQLiteLearnerRepository,
+    SQLitePracticeRepository,
+    SQLiteResearchRepository,
+    SQLiteRevisionRepository,
+    SQLiteSubmissionRepository,
+    SQLiteSystemRepository,
+)
 
 
 SCHEMA = """
@@ -118,1413 +130,320 @@ CREATE TABLE IF NOT EXISTS system_versions (
 """
 
 
-class ClosingConnection(sqlite3.Connection):
-    """SQLite connection that closes after the outermost context manager exits."""
-
-    _context_depth = 0
-
-    def __enter__(self):
-        self._context_depth += 1
-        return super().__enter__()
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        try:
-            return super().__exit__(exc_type, exc_value, traceback)
-        finally:
-            self._context_depth -= 1
-            if self._context_depth == 0:
-                self.close()
-
-
 class Database:
     def __init__(self, path: str | Path):
         self.path = Path(path)
+        self._connection_manager = SQLiteConnectionManager(self.path)
+        self._system_repository = SQLiteSystemRepository(self._connection_manager)
+        self._configuration_repository = SQLiteConfigurationRepository(self._connection_manager)
+        self._analysis_repository = SQLiteAnalysisRepository(self._connection_manager)
+        self._calf_repository = SQLiteCalfRepository(self._connection_manager)
+        self._submission_repository = SQLiteSubmissionRepository(
+            self._connection_manager, SQLiteRevisionRepository.normalize_revision_stage
+        )
+        self._revision_repository = SQLiteRevisionRepository(
+            self._connection_manager, self._submission_repository
+        )
+        self._learner_repository = SQLiteLearnerRepository(
+            self._connection_manager, self._analysis_repository, self._calf_repository,
+            SQLiteRevisionRepository.normalize_revision_stage,
+        )
+        self._practice_repository = SQLitePracticeRepository(self._connection_manager)
+        self._research_repository = SQLiteResearchRepository(self._connection_manager)
 
     def connect(self) -> sqlite3.Connection:
-        self.path.parent.mkdir(parents=True, exist_ok=True)
-        connection = sqlite3.connect(self.path, factory=ClosingConnection)
-        connection.row_factory = sqlite3.Row
-        connection.execute("PRAGMA foreign_keys = ON")
-        return connection
+        return self._system_repository.connect()
 
     def initialize(self) -> None:
-        with self.connect() as connection:
-            from app.database.migrations import upgrade
-            upgrade(connection)
+        return self._system_repository.initialize()
 
     @staticmethod
     def _add_column_if_missing(connection: sqlite3.Connection, table: str,
-                               column: str, definition: str) -> None:
-        columns = {row[1] for row in connection.execute(f"PRAGMA table_info({table})")}
-        if column not in columns:
-            connection.execute(f"ALTER TABLE {table} ADD COLUMN {column} {definition}")
+                                   column: str, definition: str) -> None:
+            columns = {row[1] for row in connection.execute(f"PRAGMA table_info({table})")}
+            if column not in columns:
+                connection.execute(f"ALTER TABLE {table} ADD COLUMN {column} {definition}")
 
     def _migrate_v0_1_to_v0_1_1(self, connection: sqlite3.Connection) -> None:
-        additions = {
-            "essays": {"time_limit_minutes": "INTEGER"},
-            "feedback_records": {
-                "system_template_hash": "TEXT NOT NULL DEFAULT ''",
-                "user_template_hash": "TEXT NOT NULL DEFAULT ''",
-                "rendered_prompt_hash": "TEXT NOT NULL DEFAULT ''",
-                "schema_version": "TEXT NOT NULL DEFAULT ''",
-                "temperature": "REAL NOT NULL DEFAULT 0.0",
-                "request_time": "TEXT",
-                "response_time": "TEXT",
-                "validation_status": "TEXT NOT NULL DEFAULT 'not_run'",
-                "retry_count": "INTEGER NOT NULL DEFAULT 0",
-            },
-            "exercises": {"diagnosis_id": "TEXT NOT NULL DEFAULT ''"},
-            "learner_history": {
-                "comparability_status": "TEXT NOT NULL DEFAULT 'insufficient_history'",
-                "history_evidence_json": "TEXT NOT NULL DEFAULT '[]'",
-                "limitations_json": "TEXT NOT NULL DEFAULT '[]'",
-                "comparability_reasons_json": "TEXT NOT NULL DEFAULT '[]'",
-            },
-        }
-        for table, columns in additions.items():
-            for column, definition in columns.items():
-                self._add_column_if_missing(connection, table, column, definition)
+            additions = {
+                "essays": {"time_limit_minutes": "INTEGER"},
+                "feedback_records": {
+                    "system_template_hash": "TEXT NOT NULL DEFAULT ''",
+                    "user_template_hash": "TEXT NOT NULL DEFAULT ''",
+                    "rendered_prompt_hash": "TEXT NOT NULL DEFAULT ''",
+                    "schema_version": "TEXT NOT NULL DEFAULT ''",
+                    "temperature": "REAL NOT NULL DEFAULT 0.0",
+                    "request_time": "TEXT",
+                    "response_time": "TEXT",
+                    "validation_status": "TEXT NOT NULL DEFAULT 'not_run'",
+                    "retry_count": "INTEGER NOT NULL DEFAULT 0",
+                },
+                "exercises": {"diagnosis_id": "TEXT NOT NULL DEFAULT ''"},
+                "learner_history": {
+                    "comparability_status": "TEXT NOT NULL DEFAULT 'insufficient_history'",
+                    "history_evidence_json": "TEXT NOT NULL DEFAULT '[]'",
+                    "limitations_json": "TEXT NOT NULL DEFAULT '[]'",
+                    "comparability_reasons_json": "TEXT NOT NULL DEFAULT '[]'",
+                },
+            }
+            for table, columns in additions.items():
+                for column, definition in columns.items():
+                    self._add_column_if_missing(connection, table, column, definition)
 
     def record_versions(self, versions: dict[str, str]) -> None:
-        with self.connect() as connection:
-            connection.executemany(
-                "INSERT INTO system_versions(component, version) VALUES (?, ?) "
-                "ON CONFLICT(component) DO UPDATE SET version=excluded.version, recorded_at=CURRENT_TIMESTAMP",
-                versions.items(),
-            )
+        return self._system_repository.record_versions(versions)
 
-    def save_essay(self, submission: EssaySubmission, *, synthetic: bool = False) -> int:
-        with self.connect() as connection:
-            connection.execute(
-                "INSERT OR IGNORE INTO students(student_id, created_at, is_synthetic) VALUES (?, ?, ?)",
-                (submission.student_id, submission.submitted_at.isoformat(), int(synthetic)),
-            )
-            cursor = connection.execute(
-                """INSERT INTO essays(
-                    student_id, writing_prompt, genre, draft_stage, timed, time_limit_minutes,
-                    tool_use, essay_text, submitted_at, original_draft_stage, revision_stage,
-                    writing_started_at, writing_submitted_at, active_writing_duration_seconds,
-                    timing_source, timing_quality, unexplained_interruption
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-                (
-                    submission.student_id, submission.writing_prompt, submission.genre,
-                    submission.draft_stage, int(submission.timed), submission.time_limit_minutes,
-                    submission.tool_use,
-                    submission.essay_text, submission.submitted_at.isoformat(),
-                    submission.draft_stage, self.normalize_revision_stage(submission.draft_stage),
-                    submission.writing_started_at.isoformat() if submission.writing_started_at else None,
-                    submission.writing_submitted_at.isoformat() if submission.writing_submitted_at else None,
-                    submission.active_writing_duration_seconds, submission.timing_source,
-                    submission.timing_quality, int(submission.unexplained_interruption),
-                ),
-            )
-            return int(cursor.lastrowid)
+    def save_essay(self, submission: EssaySubmission, *, synthetic: bool=False) -> int:
+        return self._submission_repository.save_essay(submission, synthetic=synthetic)
 
     def save_analysis(self, essay_id: int, analysis: AnalysisResult) -> None:
-        with self.connect() as connection:
-            connection.execute(
-                "INSERT INTO metrics(essay_id, metrics_json, analysis_version, limitations) VALUES (?, ?, ?, ?)",
-                (essay_id, json.dumps(analysis.metrics), analysis.analysis_version, analysis.limitations),
-            )
+        return self._analysis_repository.save_analysis(essay_id, analysis)
 
     def save_analysis_run(self, essay_id: int, analysis: AnalysisResult) -> AnalysisResult:
-        with self.connect() as connection:
-            cursor = connection.execute(
-                """INSERT INTO analysis_runs(
-                    essay_id, analyzer_id, analyzer_version, backend, nlp_library,
-                    nlp_library_version, nlp_model_name, nlp_model_version, parameters_json,
-                    resource_versions_json, configuration_version, fallback_used, fallback_reason,
-                    analysis_duration_ms, limitations, created_at
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-                (
-                    essay_id, analysis.analyzer_id, analysis.analyzer_version, analysis.backend,
-                    analysis.nlp_library, analysis.nlp_library_version, analysis.nlp_model_name,
-                    analysis.nlp_model_version, json.dumps(analysis.parameters),
-                    json.dumps(analysis.resource_versions), analysis.configuration_version,
-                    int(analysis.fallback_used), analysis.fallback_reason,
-                    analysis.analysis_duration_ms, analysis.limitations, analysis.created_at.isoformat(),
-                ),
-            )
-            run_id = f"AR{int(cursor.lastrowid):06d}"
-            connection.execute(
-                "UPDATE analysis_runs SET analysis_run_id=? WHERE analysis_run_row_id=?",
-                (run_id, int(cursor.lastrowid)),
-            )
-            for item in analysis.metric_results:
-                connection.execute(
-                    """INSERT INTO metric_results(
-                        analysis_run_id, metric_id, metric_version, value_json, unit,
-                        parameters_json, analyzer_version, resource_versions_json,
-                        verification_status, status, measurement_status, confidence,
-                        confidence_reasons_json, risk_factors_json, eligible_for_diagnosis,
-                        eligible_for_longitudinal_comparison, measurement_metadata_json,
-                        evidence_json, limitations_json, construct_id, subconstruct_id,
-                        automation_level, analysis_unit_version, numerator_json, denominator_json,
-                        intermediate_values_json, eligible_for_revision_priority,
-                        eligible_for_targeted_practice
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-                    (
-                        run_id, item["metric_id"], item["metric_version"], json.dumps(item.get("value")),
-                        item["unit"], json.dumps(item.get("parameters", {})), item["analyzer_version"],
-                        json.dumps(item.get("resource_versions", {})), item["verification_status"],
-                        item.get("status", "available"), item.get("measurement_status", item.get("status", "available")),
-                        item.get("confidence", "insufficient"), json.dumps(item.get("confidence_reasons", [])),
-                        json.dumps(item.get("risk_factors", [])), int(item.get("eligible_for_diagnosis", False)),
-                        int(item.get("eligible_for_longitudinal_comparison", False)),
-                        json.dumps(item.get("measurement_metadata", {})), json.dumps(item.get("evidence", [])),
-                        json.dumps(item.get("limitations", [])),
-                        item.get("construct_id"), item.get("subconstruct_id"), item.get("automation_level"),
-                        item.get("analysis_unit_version"), json.dumps(item.get("numerator")),
-                        json.dumps(item.get("denominator")), json.dumps(item.get("intermediate_values", {})),
-                        int(item.get("eligible_for_revision_priority", False)),
-                        int(item.get("eligible_for_targeted_practice", False)),
-                    ),
-                )
-            artifact_payload = {
-                "input_quality": analysis.input_quality, "artifacts": analysis.artifacts,
-                "legacy_metrics": analysis.metrics,
-            }
-            connection.execute(
-                "INSERT INTO analysis_artifacts(analysis_run_id, artifact_type, schema_version, artifact_json) VALUES (?, ?, ?, ?)",
-                (run_id, "nlp_analysis", "nlp-analysis-artifact-v0.4.0", json.dumps(artifact_payload)),
-            )
-            for unit in analysis.artifacts.get("analysis_units", []):
-                cursor = connection.execute(
-                    """INSERT INTO analysis_units(
-                        submission_id,analysis_run_id,unit_id,unit_version,validation_status,unit_json
-                    ) VALUES (?,?,?,?,?,?)""",
-                    (essay_id, run_id, unit["unit_id"], unit["unit_version"],
-                     unit["validation_status"], json.dumps(unit)),
-                )
-                unit_id = f"AU{int(cursor.lastrowid):06d}"
-                stored = {**unit, "unit_record_id": unit_id, "submission_id": essay_id, "analysis_run_id": run_id}
-                connection.execute(
-                    "UPDATE analysis_units SET analysis_unit_id=?, unit_json=? WHERE analysis_unit_row_id=?",
-                    (unit_id, json.dumps(stored), int(cursor.lastrowid)),
-                )
-        return analysis.model_copy(update={"analysis_run_id": run_id})
+        return self._analysis_repository.save_analysis_run(essay_id, analysis)
 
     def list_analysis_runs(self, essay_id: int) -> list[dict[str, Any]]:
-        with self.connect() as connection:
-            rows = connection.execute(
-                "SELECT * FROM analysis_runs WHERE essay_id=? ORDER BY analysis_run_row_id", (essay_id,)
-            ).fetchall()
-        results = []
-        for row in rows:
-            item = dict(row)
-            item["fallback_used"] = bool(item["fallback_used"])
-            item["parameters"] = json.loads(item.pop("parameters_json"))
-            item["resource_versions"] = json.loads(item.pop("resource_versions_json"))
-            results.append(item)
-        return results
+        return self._analysis_repository.list_analysis_runs(essay_id)
 
     def get_latest_analysis_run(self, essay_id: int) -> dict[str, Any] | None:
-        runs = self.list_analysis_runs(essay_id)
-        if not runs:
-            return None
-        item = runs[-1]
-        item["artifact"] = self.get_analysis_artifact(item["analysis_run_id"])
-        item["metric_results"] = self.get_metric_results(item["analysis_run_id"])
-        return item
+        return self._analysis_repository.get_latest_analysis_run(essay_id)
 
     def get_analysis_run(self, analysis_run_id: str) -> dict[str, Any] | None:
-        with self.connect() as connection:
-            row = connection.execute(
-                "SELECT essay_id FROM analysis_runs WHERE analysis_run_id=?", (analysis_run_id,)
-            ).fetchone()
-        if row is None:
-            return None
-        return next(
-            (item for item in self.list_analysis_runs(int(row[0])) if item["analysis_run_id"] == analysis_run_id),
-            None,
-        )
+        return self._analysis_repository.get_analysis_run(analysis_run_id)
 
     def get_metric_results(self, analysis_run_id: str) -> list[dict[str, Any]]:
-        with self.connect() as connection:
-            rows = connection.execute(
-                "SELECT * FROM metric_results WHERE analysis_run_id=? ORDER BY metric_result_id",
-                (analysis_run_id,),
-            ).fetchall()
-        results = []
-        for row in rows:
-            item = dict(row)
-            for name in ("value_json", "parameters_json", "resource_versions_json", "confidence_reasons_json",
-                         "risk_factors_json", "measurement_metadata_json", "evidence_json", "limitations_json",
-                         "numerator_json", "denominator_json", "intermediate_values_json"):
-                item[name.removesuffix("_json")] = json.loads(item.pop(name))
-            item["eligible_for_diagnosis"] = bool(item.get("eligible_for_diagnosis"))
-            item["eligible_for_longitudinal_comparison"] = bool(item.get("eligible_for_longitudinal_comparison"))
-            item["eligible_for_revision_priority"] = bool(item.get("eligible_for_revision_priority"))
-            item["eligible_for_targeted_practice"] = bool(item.get("eligible_for_targeted_practice"))
-            results.append(item)
-        return results
+        return self._analysis_repository.get_metric_results(analysis_run_id)
 
     def get_analysis_artifact(self, analysis_run_id: str) -> dict[str, Any] | None:
-        with self.connect() as connection:
-            row = connection.execute(
-                "SELECT artifact_json FROM analysis_artifacts WHERE analysis_run_id=? ORDER BY artifact_id DESC LIMIT 1",
-                (analysis_run_id,),
-            ).fetchone()
-        return json.loads(row[0]) if row else None
+        return self._analysis_repository.get_analysis_artifact(analysis_run_id)
 
     def save_diagnosis(self, essay_id: int, diagnosis: DiagnosisResult) -> None:
-        with self.connect() as connection:
-            connection.execute(
-                "INSERT INTO diagnoses(essay_id, diagnosis_json, diagnosis_version) VALUES (?, ?, ?)",
-                (essay_id, diagnosis.model_dump_json(), diagnosis.diagnosis_version),
-            )
+        return self._analysis_repository.save_diagnosis(essay_id, diagnosis)
 
-    def save_diagnostic_calibration(self, essay_id: int,
-                                    calibration: DiagnosticCalibrationResult) -> DiagnosticCalibrationResult:
-        persisted = calibration.model_copy(update={"essay_id": essay_id})
-        with self.connect() as connection:
-            cursor = connection.execute(
-                """INSERT INTO diagnostic_calibrations(
-                    essay_id,analysis_run_id,calibration_json,calibration_version,gate_version,
-                    priority_version,evidence_validation_version,diagnosis_version,
-                    configuration_version,created_at
-                ) VALUES (?,?,?,?,?,?,?,?,?,?)""",
-                (essay_id, persisted.analysis_run_id, persisted.model_dump_json(),
-                 persisted.calibration_version, persisted.gate_version, persisted.priority_version,
-                 persisted.evidence_validation_version, persisted.diagnosis_version,
-                 persisted.configuration_version, persisted.created_at.isoformat()),
-            )
-            calibration_id = f"DC{int(cursor.lastrowid):06d}"
-            persisted = persisted.model_copy(update={"calibration_id": calibration_id})
-            connection.execute(
-                "UPDATE diagnostic_calibrations SET calibration_id=?, calibration_json=? WHERE calibration_row_id=?",
-                (calibration_id, persisted.model_dump_json(), int(cursor.lastrowid)),
-            )
-        return persisted
+    def save_diagnostic_calibration(self, essay_id: int, calibration: DiagnosticCalibrationResult) -> DiagnosticCalibrationResult:
+        return self._calf_repository.save_diagnostic_calibration(essay_id, calibration)
 
     def get_diagnostic_calibration(self, essay_id: int) -> DiagnosticCalibrationResult | None:
-        with self.connect() as connection:
-            row = connection.execute(
-                "SELECT calibration_json FROM diagnostic_calibrations WHERE essay_id=? ORDER BY calibration_row_id DESC LIMIT 1",
-                (essay_id,),
-            ).fetchone()
-        return DiagnosticCalibrationResult.model_validate_json(row[0]) if row else None
+        return self._calf_repository.get_diagnostic_calibration(essay_id)
 
     def save_feedback(self, essay_id: int, result: ProviderResult, analysis_version: str) -> None:
-        with self.connect() as connection:
-            connection.execute(
-                """INSERT INTO feedback_records(
-                    essay_id, feedback_json, provider_name, model_name, success_status,
-                    fallback_reason, prompt_version, analysis_version, system_template_hash,
-                    user_template_hash, rendered_prompt_hash, schema_version, temperature,
-                    request_time, response_time, validation_status, retry_count, provider_status_json
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-                (
-                    essay_id, result.feedback.model_dump_json(), result.provider_name,
-                    result.model_name, result.success_status, result.fallback_reason,
-                    result.prompt_version, analysis_version, result.system_template_hash,
-                    result.user_template_hash, result.rendered_prompt_hash, result.schema_version,
-                    result.temperature, result.request_time.isoformat(), result.response_time.isoformat(),
-                    result.validation_status, result.retry_count,
-                    result.feedback_provider_status.model_dump_json() if result.feedback_provider_status else "{}",
-                ),
-            )
-            connection.executemany(
-                """INSERT INTO exercises(
-                    essay_id, diagnosis_id, diagnosis_category, exercise_type, exercise_json
-                ) VALUES (?, ?, ?, ?, ?)""",
-                [
-                    (essay_id, item.diagnosis_id, item.diagnosis_category,
-                     item.exercise_type, item.model_dump_json())
-                    for item in result.feedback.exercises
-                ],
-            )
-            connection.executemany(
-                """INSERT INTO llm_call_records(
-                    essay_id, prompt_version, system_template_hash, user_template_hash,
-                    rendered_prompt_hash, schema_version, provider_name, model_name,
-                    temperature, request_time, response_time, success_status,
-                    validation_status, retry_count, fallback_reason
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-                [
-                    (
-                        essay_id, audit.prompt_version, audit.system_template_hash,
-                        audit.user_template_hash, audit.rendered_prompt_hash,
-                        audit.schema_version, audit.provider_name, audit.model_name,
-                        audit.temperature, audit.request_time.isoformat(),
-                        audit.response_time.isoformat(), audit.success_status,
-                        audit.validation_status, audit.retry_count, audit.fallback_reason,
-                    )
-                    for audit in result.call_audits
-                ],
-            )
+        return self._submission_repository.save_feedback(essay_id, result, analysis_version)
 
     def save_history(self, student_id: str, essay_id: int, history: HistoryResult) -> None:
-        with self.connect() as connection:
-            connection.execute(
-                """INSERT INTO learner_history(
-                    student_id, essay_id, history_summary, comparable_count, comparability_status,
-                    history_evidence_json, limitations_json, comparability_reasons_json
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
-                (
-                    student_id, essay_id, history.summary, history.comparable_submission_count,
-                    history.comparability_status,
-                    json.dumps([item.model_dump(mode="json") for item in history.history_evidence]),
-                    json.dumps(history.limitations), json.dumps(history.comparability_reasons),
-                ),
-            )
+        return self._submission_repository.save_history(student_id, essay_id, history)
 
     def prior_records(self, submission: EssaySubmission) -> list[dict[str, Any]]:
-        with self.connect() as connection:
-            rows = connection.execute(
-                """SELECT e.*, m.metrics_json, d.diagnosis_json
-                FROM essays e
-                LEFT JOIN metrics m ON m.essay_id = e.essay_id
-                LEFT JOIN diagnoses d ON d.essay_id = e.essay_id
-                WHERE e.student_id = ? AND e.submitted_at < ?
-                ORDER BY e.submitted_at, e.essay_id""",
-                (submission.student_id, submission.submitted_at.isoformat()),
-            ).fetchall()
-        records = []
-        for row in rows:
-            record = dict(row)
-            record["metrics"] = json.loads(record.pop("metrics_json")) if record.get("metrics_json") else {}
-            record["diagnosis"] = json.loads(record.pop("diagnosis_json")) if record.get("diagnosis_json") else {}
-            records.append(record)
-        return records
+        return self._submission_repository.prior_records(submission)
 
     def counts(self) -> dict[str, int]:
-        tables = ("students", "essays", "metrics", "diagnoses", "feedback_records", "exercises", "learner_history", "llm_call_records", "learner_profile_snapshots", "analysis_runs", "metric_results", "analysis_artifacts", "revision_groups", "revision_snapshots", "diagnostic_calibrations", "system_versions")
-        with self.connect() as connection:
-            return {table: int(connection.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0]) for table in tables}
+        return self._system_repository.counts()
 
     def get_feedback_record(self, essay_id: int) -> dict[str, Any] | None:
-        with self.connect() as connection:
-            row = connection.execute("SELECT * FROM feedback_records WHERE essay_id = ?", (essay_id,)).fetchone()
-        return dict(row) if row else None
+        return self._submission_repository.get_feedback_record(essay_id)
 
     def get_llm_calls(self, essay_id: int) -> list[dict[str, Any]]:
-        with self.connect() as connection:
-            rows = connection.execute(
-                "SELECT * FROM llm_call_records WHERE essay_id = ? ORDER BY call_id", (essay_id,)
-            ).fetchall()
-        return [dict(row) for row in rows]
+        return self._submission_repository.get_llm_calls(essay_id)
 
     def get_history_record(self, essay_id: int) -> dict[str, Any] | None:
-        with self.connect() as connection:
-            row = connection.execute(
-                "SELECT * FROM learner_history WHERE essay_id = ?", (essay_id,)
-            ).fetchone()
-        return dict(row) if row else None
+        return self._submission_repository.get_history_record(essay_id)
 
     def ping(self) -> bool:
-        try:
-            with self.connect() as connection:
-                return connection.execute("SELECT 1").fetchone()[0] == 1
-        except sqlite3.Error:
-            return False
+        return self._system_repository.ping()
 
     def migration_version(self) -> int:
-        with self.connect() as connection:
-            return int(connection.execute("PRAGMA user_version").fetchone()[0])
+        return self._system_repository.migration_version()
 
     @contextmanager
     def transaction(self):
-        connection = self.connect()
-        try:
-            connection.execute("BEGIN")
+        with self._system_repository.transaction() as connection:
             yield connection
-            connection.commit()
-        except Exception:
-            connection.rollback()
-            raise
-        finally:
-            connection.close()
 
     def get_student(self, student_id: str) -> dict[str, Any] | None:
-        with self.connect() as connection:
-            row = connection.execute(
-                """SELECT s.student_id, s.created_at, s.is_synthetic,
-                COUNT(e.essay_id) AS submission_count
-                FROM students s LEFT JOIN essays e ON e.student_id=s.student_id
-                WHERE s.student_id=? GROUP BY s.student_id""",
-                (student_id,),
-            ).fetchone()
-        return dict(row) if row else None
+        return self._learner_repository.get_student(student_id)
 
     def list_all_students(self):
-        with self.connect() as connection:
-            rows = connection.execute("SELECT DISTINCT student_id FROM essays ORDER BY student_id").fetchall()
-            return [{"student_id": r[0]} for r in rows]
+        return self._learner_repository.list_all_students()
 
     def list_all_submissions(self):
-        with self.connect() as connection:
-            rows = connection.execute("SELECT essay_id, student_id, writing_prompt, genre, draft_stage, timed, time_limit_minutes, tool_use, submitted_at, revision_of_submission_id, revision_group_id, essay_text FROM essays ORDER BY essay_id").fetchall()
-            return [dict(r) for r in rows]
+        return self._submission_repository.list_all_submissions()
 
     def get_submission_bundle(self, essay_id: int) -> dict[str, Any] | None:
-        with self.connect() as connection:
-            row = connection.execute(
-                """SELECT e.*, m.metrics_json, m.analysis_version, m.limitations AS analysis_limitations,
-                d.diagnosis_json, d.diagnosis_version, f.feedback_json, f.provider_name, f.model_name,
-                f.feedback_id,
-                f.success_status, f.fallback_reason, f.prompt_version, f.schema_version,
-                f.validation_status, f.retry_count, f.provider_status_json,
-                h.history_summary, h.comparable_count,
-                h.comparability_status, h.history_evidence_json, h.limitations_json,
-                h.comparability_reasons_json
-                FROM essays e
-                LEFT JOIN metrics m ON m.essay_id=e.essay_id
-                LEFT JOIN diagnoses d ON d.essay_id=e.essay_id
-                LEFT JOIN feedback_records f ON f.feedback_id=(
-                    SELECT MAX(f2.feedback_id) FROM feedback_records f2 WHERE f2.essay_id=e.essay_id
-                )
-                LEFT JOIN learner_history h ON h.essay_id=e.essay_id
-                WHERE e.essay_id=?""",
-                (essay_id,),
-            ).fetchone()
-        if not row:
-            return None
-        result = dict(row)
-        for key in ("metrics_json", "diagnosis_json", "feedback_json", "provider_status_json", "history_evidence_json", "limitations_json", "comparability_reasons_json"):
-            raw = result.pop(key, None)
-            result[key.removesuffix("_json")] = json.loads(raw) if raw else None
-        result["timed"] = bool(result["timed"])
-        result["unexplained_interruption"] = bool(result.get("unexplained_interruption"))
-        return result
+        return self._submission_repository.get_submission_bundle(essay_id)
 
     def list_student_submissions(self, student_id: str) -> list[dict[str, Any]]:
-        with self.connect() as connection:
-            rows = connection.execute(
-                """SELECT essay_id, student_id, writing_prompt, genre, draft_stage, timed,
-                   time_limit_minutes, tool_use, submitted_at, revision_of_submission_id,
-                   revision_group_id, revision_sequence, revision_stage, original_draft_stage,
-                   writing_started_at, writing_submitted_at, active_writing_duration_seconds,
-                   timing_source, timing_quality, unexplained_interruption
-                   FROM essays WHERE student_id=? ORDER BY submitted_at, essay_id""",
-                (student_id,),
-            ).fetchall()
-        return [{**dict(row), "timed": bool(row["timed"]),
-                 "unexplained_interruption": bool(row["unexplained_interruption"])} for row in rows]
+        return self._submission_repository.list_student_submissions(student_id)
 
-    def list_analysis_units(self, submission_id: int, analysis_run_id: str | None = None) -> list[dict[str, Any]]:
-        with self.connect() as connection:
-            if analysis_run_id:
-                rows = connection.execute(
-                    "SELECT unit_json FROM analysis_units WHERE submission_id=? AND analysis_run_id=? ORDER BY analysis_unit_row_id",
-                    (submission_id, analysis_run_id),
-                ).fetchall()
-            else:
-                latest = connection.execute(
-                    "SELECT analysis_run_id FROM analysis_runs WHERE essay_id=? ORDER BY analysis_run_row_id DESC LIMIT 1",
-                    (submission_id,),
-                ).fetchone()
-                if latest is None:
-                    return []
-                rows = connection.execute(
-                    "SELECT unit_json FROM analysis_units WHERE submission_id=? AND analysis_run_id=? ORDER BY analysis_unit_row_id",
-                    (submission_id, latest[0]),
-                ).fetchall()
-        return [json.loads(row[0]) for row in rows]
+    def list_analysis_units(self, submission_id: int, analysis_run_id: str | None=None) -> list[dict[str, Any]]:
+        return self._calf_repository.list_analysis_units(submission_id, analysis_run_id)
 
     def save_error_annotations(self, submission_id: int, annotations: list[ErrorAnnotation]) -> list[ErrorAnnotation]:
-        stored: list[ErrorAnnotation] = []
-        with self.connect() as connection:
-            if connection.execute("SELECT 1 FROM essays WHERE essay_id=?", (submission_id,)).fetchone() is None:
-                raise LookupError("Submission not found.")
-            for annotation in annotations:
-                if annotation.submission_id != submission_id:
-                    raise ValueError("Error annotation submission_id does not match the route submission.")
-                cursor = connection.execute(
-                    """INSERT INTO error_annotations(
-                        submission_id,start_offset,end_offset,annotation_source,annotation_status,
-                        eligible_for_formal_accuracy,annotation_json
-                    ) VALUES (?,?,?,?,?,?,?)""",
-                    (submission_id, annotation.start_offset, annotation.end_offset,
-                     annotation.annotation_source, annotation.annotation_status,
-                     int(annotation.eligible_for_formal_accuracy),
-                     annotation.model_dump_json(exclude={"eligible_for_formal_accuracy"})),
-                )
-                annotation_id = f"EA{int(cursor.lastrowid):06d}"
-                item = annotation.model_copy(update={"error_annotation_id": annotation_id})
-                connection.execute(
-                    "UPDATE error_annotations SET error_annotation_id=?, annotation_json=? WHERE error_annotation_row_id=?",
-                    (annotation_id, item.model_dump_json(exclude={"eligible_for_formal_accuracy"}), int(cursor.lastrowid)),
-                )
-                stored.append(item)
-        return stored
+        return self._calf_repository.save_error_annotations(submission_id, annotations)
 
     def list_error_annotations(self, submission_id: int) -> list[ErrorAnnotation]:
-        with self.connect() as connection:
-            rows = connection.execute(
-                "SELECT annotation_json FROM error_annotations WHERE submission_id=? ORDER BY error_annotation_row_id",
-                (submission_id,),
-            ).fetchall()
-        return [ErrorAnnotation.model_validate_json(row[0]) for row in rows]
+        return self._calf_repository.list_error_annotations(submission_id)
 
     def list_student_history(self, student_id: str) -> list[dict[str, Any]]:
-        with self.connect() as connection:
-            rows = connection.execute(
-                "SELECT * FROM learner_history WHERE student_id=? ORDER BY created_at, history_id",
-                (student_id,),
-            ).fetchall()
-        results = []
-        for row in rows:
-            item = dict(row)
-            item["history_evidence"] = json.loads(item.pop("history_evidence_json"))
-            item["limitations"] = json.loads(item.pop("limitations_json"))
-            item["comparability_reasons"] = json.loads(item.pop("comparability_reasons_json"))
-            results.append(item)
-        return results
+        return self._learner_repository.list_student_history(student_id)
 
     def get_exercises(self, essay_id: int) -> list[dict[str, Any]]:
-        with self.connect() as connection:
-            rows = connection.execute(
-                "SELECT exercise_json FROM exercises WHERE essay_id=? ORDER BY exercise_id", (essay_id,)
-            ).fetchall()
-        return [json.loads(row[0]) for row in rows]
+        return self._submission_repository.get_exercises(essay_id)
 
     def get_latest_learner_profile(self, student_id: str) -> dict[str, Any] | None:
-        with self.connect() as connection:
-            row = connection.execute(
-                "SELECT snapshot_json FROM learner_profile_snapshots WHERE student_id=? ORDER BY snapshot_row_id DESC LIMIT 1",
-                (student_id,),
-            ).fetchone()
-        return json.loads(row[0]) if row else None
+        return self._learner_repository.get_latest_learner_profile(student_id)
 
     def save_learner_profile_snapshot(self, snapshot: LearnerProfileSnapshot) -> LearnerProfileSnapshot:
-        with self.connect() as connection:
-            cursor = connection.execute(
-                """INSERT INTO learner_profile_snapshots(
-                student_id, snapshot_json, analysis_version, configuration_version,
-                included_submission_ids_json, created_at
-                ) VALUES (?, ?, ?, ?, ?, ?)""",
-                (
-                    snapshot.student_id, snapshot.model_dump_json(), snapshot.analysis_version,
-                    snapshot.configuration_version, json.dumps(snapshot.included_submission_ids),
-                    snapshot.snapshot_time.isoformat(),
-                ),
-            )
-            snapshot_id = (
-                f"LPS{int(cursor.lastrowid):06d}"
-                if snapshot.profile_version == "learner-profile-v0.7.0"
-                else f"LP{int(cursor.lastrowid):06d}"
-            )
-            stored = snapshot.model_copy(update={"snapshot_id": snapshot_id})
-            connection.execute(
-                """UPDATE learner_profile_snapshots SET snapshot_json=?, profile_version=?,
-                   source_submission_ids_json=?, representative_submission_ids_json=?
-                   WHERE snapshot_row_id=?""",
-                (stored.model_dump_json(), stored.profile_version,
-                 json.dumps(stored.source_submission_ids),
-                 json.dumps(stored.representative_submission_ids), int(cursor.lastrowid)),
-            )
-            for evidence in stored.history_evidence:
-                evidence_cursor = connection.execute(
-                    """INSERT INTO history_evidence_registry(
-                        student_id,snapshot_id,task_cluster_id,evidence_type,evidence_json,
-                        registry_version,created_at
-                    ) VALUES (?,?,?,?,?,?,?)""",
-                    (stored.student_id, snapshot_id, evidence.task_cluster_id,
-                     evidence.evidence_type, evidence.model_dump_json(), evidence.registry_version,
-                     stored.snapshot_time.isoformat()),
-                )
-                evidence_id = f"HE{int(evidence_cursor.lastrowid):06d}"
-                persisted = evidence.model_copy(update={"history_evidence_id": evidence_id,
-                                                        "source_snapshot_id": snapshot_id})
-                connection.execute(
-                    """UPDATE history_evidence_registry
-                       SET history_evidence_id=?, evidence_json=? WHERE history_evidence_row_id=?""",
-                    (evidence_id, persisted.model_dump_json(), int(evidence_cursor.lastrowid)),
-                )
-            if stored.history_evidence:
-                rows = connection.execute(
-                    "SELECT evidence_json FROM history_evidence_registry WHERE snapshot_id=? ORDER BY history_evidence_row_id",
-                    (snapshot_id,),
-                ).fetchall()
-                persisted_evidence = [json.loads(row[0]) for row in rows]
-                evidence_ids = [item["history_evidence_id"] for item in persisted_evidence]
-                targets = []
-                for target in stored.current_learning_targets:
-                    mapped = []
-                    for value in target.history_evidence_ids:
-                        if value.startswith("PENDING-"):
-                            position = int(value.split("-", 1)[1]) - 1
-                            if 0 <= position < len(evidence_ids):
-                                mapped.append(evidence_ids[position])
-                        else:
-                            mapped.append(value)
-                    targets.append(target.model_copy(update={"history_evidence_ids": mapped}))
-                stored = LearnerProfileSnapshot.model_validate({
-                    **stored.model_dump(mode="python"),
-                    "history_evidence": persisted_evidence,
-                    "current_learning_targets": targets,
-                })
-                connection.execute(
-                    "UPDATE learner_profile_snapshots SET snapshot_json=? WHERE snapshot_row_id=?",
-                    (stored.model_dump_json(), int(cursor.lastrowid)),
-                )
-        return stored
+        return self._learner_repository.save_learner_profile_snapshot(snapshot)
 
     def list_history_evidence(self, student_id: str) -> list[dict[str, Any]]:
-        with self.connect() as connection:
-            rows = connection.execute(
-                "SELECT evidence_json FROM history_evidence_registry WHERE student_id=? ORDER BY history_evidence_row_id",
-                (student_id,),
-            ).fetchall()
-        return [json.loads(row[0]) for row in rows]
+        return self._learner_repository.list_history_evidence(student_id)
 
     def list_learner_profile_snapshots(self, student_id: str) -> list[dict[str, Any]]:
-        with self.connect() as connection:
-            rows = connection.execute(
-                "SELECT snapshot_json FROM learner_profile_snapshots WHERE student_id=? ORDER BY snapshot_row_id",
-                (student_id,),
-            ).fetchall()
-        return [json.loads(row[0]) for row in rows]
+        return self._learner_repository.list_learner_profile_snapshots(student_id)
 
     def list_longitudinal_records(self, student_id: str) -> list[dict[str, Any]]:
-        with self.connect() as connection:
-            rows = connection.execute(
-                """SELECT e.*, m.metrics_json, m.analysis_version,
-                d.diagnosis_json, d.diagnosis_version
-                FROM essays e
-                JOIN metrics m ON m.essay_id=e.essay_id
-                JOIN diagnoses d ON d.essay_id=e.essay_id
-                WHERE e.student_id=? ORDER BY e.submitted_at, e.essay_id""",
-                (student_id,),
-            ).fetchall()
-        results = []
-        for row in rows:
-            item = dict(row)
-            item["metrics"] = json.loads(item.pop("metrics_json"))
-            item["diagnosis"] = json.loads(item.pop("diagnosis_json"))
-            item["timed"] = bool(item["timed"])
-            results.append(item)
-        groups: dict[str, list[dict[str, Any]]] = {}
-        for item in results:
-            group_id = item.get("revision_group_id")
-            if group_id:
-                groups.setdefault(str(group_id), []).append(item)
-        representative_ids: set[int] = set()
-        for members in groups.values():
-            final_drafts = [
-                item for item in members
-                if self.normalize_revision_stage(str(item.get("revision_stage") or "")) == "final_draft"
-            ]
-            candidates = final_drafts or members
-            representative = max(
-                candidates,
-                key=lambda item: (int(item.get("revision_sequence") or 0), int(item["essay_id"])),
-            )
-            representative_ids.add(int(representative["essay_id"]))
-        for item in results:
-            group_id = item.get("revision_group_id")
-            is_representative = not group_id or int(item["essay_id"]) in representative_ids
-            item["is_longitudinal_representative"] = is_representative
-            item["revision_exclusion_reason"] = (
-                None if is_representative else
-                "An earlier draft in the same Revision Group is excluded from the default long-term trend."
-            )
-        return results
+        return self._learner_repository.list_longitudinal_records(student_id)
 
     def get_system_versions(self) -> dict[str, str]:
-        with self.connect() as connection:
-            rows = connection.execute("SELECT component, version FROM system_versions").fetchall()
-        return {row["component"]: row["version"] for row in rows}
+        return self._system_repository.get_system_versions()
 
     @staticmethod
     def normalize_revision_stage(value: str) -> str:
-        normalized = value.strip().casefold().replace("-", "_").replace(" ", "_")
-        aliases = {
-            "first": "first_draft", "first_draft": "first_draft",
-            "revised": "revised_draft", "revision": "revised_draft", "revised_draft": "revised_draft",
-            "final": "final_draft", "final_draft": "final_draft",
-            "independent": "independent_submission", "independent_submission": "independent_submission",
-        }
-        return aliases.get(normalized, "independent_submission")
+        return SQLiteRevisionRepository.normalize_revision_stage(value)
 
     def create_revision_group(self, source_submission_id: int) -> RevisionGroup:
-        existing = self.get_revision_group_for_submission(source_submission_id)
-        if existing:
-            return existing
-        source = self.get_submission_bundle(source_submission_id)
-        if source is None:
-            raise LookupError("Source submission not found.")
-        now = __import__("datetime").datetime.now(__import__("datetime").timezone.utc).isoformat()
-        consistency = {"writing_prompt": True, "genre": True, "timed": True, "time_limit_minutes": True, "tool_use": True}
-        limitations = ["Revision grouping is explicit metadata, not evidence of learning or proficiency change."]
-        with self.connect() as connection:
-            cursor = connection.execute(
-                """INSERT INTO revision_groups(
-                    student_id, writing_prompt, genre, root_submission_id, created_at, updated_at,
-                    metadata_consistency_json, limitations_json
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
-                (source["student_id"], source["writing_prompt"], source["genre"], source_submission_id,
-                 now, now, json.dumps(consistency), json.dumps(limitations)),
-            )
-            group_id = f"RG{int(cursor.lastrowid):06d}"
-            connection.execute(
-                "UPDATE revision_groups SET revision_group_id=? WHERE revision_group_row_id=?",
-                (group_id, int(cursor.lastrowid)),
-            )
-            connection.execute(
-                "UPDATE essays SET revision_group_id=?, revision_sequence=1, revision_stage=? WHERE essay_id=?",
-                (group_id, self.normalize_revision_stage(source["draft_stage"]), source_submission_id),
-            )
-        group = self.get_revision_group(group_id)
-        assert group is not None
-        return group
+        return self._revision_repository.create_revision_group(source_submission_id)
 
     def link_revision(self, source_submission_id: int, target_submission_id: int, revision_group_id: str) -> None:
-        source = self.get_submission_bundle(source_submission_id)
-        target = self.get_submission_bundle(target_submission_id)
-        if source is None or target is None:
-            raise LookupError("Source or target submission not found.")
-        sequence = int(source.get("revision_sequence") or 1) + 1
-        consistency = {
-            field: source.get(field) == target.get(field)
-            for field in ("writing_prompt", "genre", "timed", "time_limit_minutes", "tool_use")
-        }
-        now = __import__("datetime").datetime.now(__import__("datetime").timezone.utc).isoformat()
-        with self.connect() as connection:
-            connection.execute(
-                """UPDATE essays SET revision_of_submission_id=?, revision_group_id=?,
-                   revision_sequence=?, revision_stage=? WHERE essay_id=?""",
-                (source_submission_id, revision_group_id, sequence,
-                 self.normalize_revision_stage(target["draft_stage"]), target_submission_id),
-            )
-            connection.execute(
-                "UPDATE revision_groups SET updated_at=?, metadata_consistency_json=? WHERE revision_group_id=?",
-                (now, json.dumps(consistency), revision_group_id),
-            )
+        return self._revision_repository.link_revision(source_submission_id, target_submission_id, revision_group_id)
 
     def get_revision_group(self, revision_group_id: str) -> RevisionGroup | None:
-        with self.connect() as connection:
-            row = connection.execute("SELECT * FROM revision_groups WHERE revision_group_id=?", (revision_group_id,)).fetchone()
-            members = connection.execute(
-                "SELECT essay_id FROM essays WHERE revision_group_id=? ORDER BY revision_sequence, essay_id", (revision_group_id,)
-            ).fetchall() if row else []
-        if not row:
-            return None
-        item = dict(row)
-        member_ids = [int(member[0]) for member in members]
-        return RevisionGroup(
-            revision_group_id=item["revision_group_id"], student_id=item["student_id"],
-            writing_prompt=item["writing_prompt"], genre=item["genre"], root_submission_id=item["root_submission_id"],
-            member_submission_ids=member_ids, current_revision_id=member_ids[-1],
-            created_at=item["created_at"], updated_at=item["updated_at"],
-            metadata_consistency=json.loads(item["metadata_consistency_json"]),
-            limitations=json.loads(item["limitations_json"]),
-        )
+        return self._revision_repository.get_revision_group(revision_group_id)
 
     def get_revision_group_for_submission(self, submission_id: int) -> RevisionGroup | None:
-        with self.connect() as connection:
-            row = connection.execute("SELECT revision_group_id FROM essays WHERE essay_id=?", (submission_id,)).fetchone()
-        return self.get_revision_group(row[0]) if row and row[0] else None
+        return self._revision_repository.get_revision_group_for_submission(submission_id)
 
     def list_revision_candidates(self, submission_id: int) -> list[dict[str, Any]]:
-        target = self.get_submission_bundle(submission_id)
-        if target is None:
-            raise LookupError("Submission not found.")
-        with self.connect() as connection:
-            rows = connection.execute(
-                """SELECT essay_id, submitted_at, writing_prompt, genre, draft_stage, revision_group_id,
-                   revision_sequence FROM essays WHERE student_id=? AND essay_id<>? AND submitted_at<=?
-                   ORDER BY submitted_at DESC, essay_id DESC""",
-                (target["student_id"], submission_id, target["submitted_at"]),
-            ).fetchall()
-        return [dict(row) for row in rows]
+        return self._revision_repository.list_revision_candidates(submission_id)
 
     def save_revision_snapshot(self, snapshot: RevisionSnapshot) -> RevisionSnapshot:
-        with self.connect() as connection:
-            cursor = connection.execute(
-                """INSERT INTO revision_snapshots(
-                    revision_group_id, source_submission_id, target_submission_id, snapshot_json,
-                    alignment_version, uptake_version, configuration_version, created_at
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
-                (snapshot.revision_group_id, snapshot.source_submission_id, snapshot.target_submission_id,
-                 snapshot.model_dump_json(), snapshot.algorithm_versions["alignment"],
-                 snapshot.algorithm_versions["uptake"], snapshot.configuration_version,
-                 snapshot.generated_at.isoformat()),
-            )
-            snapshot_id = f"RS{int(cursor.lastrowid):06d}"
-            stored = snapshot.model_copy(update={"revision_snapshot_id": snapshot_id})
-            connection.execute(
-                "UPDATE revision_snapshots SET revision_snapshot_id=?, snapshot_json=? WHERE revision_snapshot_row_id=?",
-                (snapshot_id, stored.model_dump_json(), int(cursor.lastrowid)),
-            )
-        return stored
+        return self._revision_repository.save_revision_snapshot(snapshot)
 
     def list_revision_snapshots(self, revision_group_id: str) -> list[dict[str, Any]]:
-        with self.connect() as connection:
-            rows = connection.execute(
-                "SELECT snapshot_json FROM revision_snapshots WHERE revision_group_id=? ORDER BY revision_snapshot_row_id",
-                (revision_group_id,),
-            ).fetchall()
-        return [json.loads(row[0]) for row in rows]
+        return self._revision_repository.list_revision_snapshots(revision_group_id)
 
     def get_latest_revision_snapshot(self, revision_group_id: str) -> dict[str, Any] | None:
-        items = self.list_revision_snapshots(revision_group_id)
-        return items[-1] if items else None
-
-    @staticmethod
-    def _configuration_from_row(row: sqlite3.Row) -> ConfigurationVersion:
-        item = dict(row)
-        return ConfigurationVersion(
-            configuration_id=item["configuration_id"], version=item["version"], status=item["status"],
-            created_at=item["created_at"], created_by=item["created_by"], parent_version=item["parent_version"],
-            payload=ConfigurationPayload.model_validate_json(item["payload_json"]),
-            schema_version=item["schema_version"], change_note=item["change_note"],
-            validation_status=item["validation_status"],
-            validation_errors=json.loads(item["validation_errors_json"]),
-            activated_at=item["activated_at"], deactivated_at=item["deactivated_at"],
-            content_hash=item["content_hash"],
-        )
+        return self._revision_repository.get_latest_revision_snapshot(revision_group_id)
 
     def list_configurations(self) -> list[ConfigurationVersion]:
-        with self.connect() as connection:
-            rows = connection.execute(
-                "SELECT * FROM configuration_versions ORDER BY configuration_row_id"
-            ).fetchall()
-        return [self._configuration_from_row(row) for row in rows]
+        return self._configuration_repository.list_configurations()
 
     def get_configuration(self, configuration_id_or_version: str) -> ConfigurationVersion | None:
-        with self.connect() as connection:
-            row = connection.execute(
-                "SELECT * FROM configuration_versions WHERE configuration_id=? OR version=?",
-                (configuration_id_or_version, configuration_id_or_version),
-            ).fetchone()
-        return self._configuration_from_row(row) if row else None
+        return self._configuration_repository.get_configuration(configuration_id_or_version)
 
     def get_active_configuration(self) -> ConfigurationVersion:
-        with self.connect() as connection:
-            row = connection.execute(
-                "SELECT * FROM configuration_versions WHERE status='active'"
-            ).fetchone()
-        if row is None:
-            raise RuntimeError("No active configuration exists.")
-        return self._configuration_from_row(row)
+        return self._configuration_repository.get_active_configuration()
 
     def create_configuration(self, request: ConfigurationCreate, parent_version: str | None) -> ConfigurationVersion:
-        now = datetime.now(timezone.utc).isoformat()
-        with self.connect() as connection:
-            number = int(connection.execute(
-                "SELECT COALESCE(MAX(configuration_row_id),0)+1 FROM configuration_versions"
-            ).fetchone()[0])
-            existing = {str(row[0]) for row in connection.execute("SELECT version FROM configuration_versions")}
-            active = self.get_active_configuration()
-            family = "config-v0.8." if active.version.startswith("config-v0.8.") else "config-v0.7."
-            suffix = max(
-                [int(value.rsplit(".", 1)[1]) for value in existing if value.startswith(family)],
-                default=-1,
-            ) + 1
-            version = f"{family}{suffix}"
-            cursor = connection.execute(
-                """INSERT INTO configuration_versions(
-                    version,status,created_at,created_by,parent_version,payload_json,schema_version,
-                    change_note,validation_status,validation_errors_json,content_hash
-                ) VALUES (?,?,?,?,?,?,?,?,?,?,?)""",
-                (version, "draft", now, request.created_by, parent_version,
-                request.payload.model_dump_json(), "configuration-schema-v0.8.0", request.change_note,
-                 "not_validated", "[]", configuration_hash(request.payload)),
-            )
-            configuration_id = f"CFG{int(cursor.lastrowid):06d}"
-            connection.execute(
-                "UPDATE configuration_versions SET configuration_id=? WHERE configuration_row_id=?",
-                (configuration_id, int(cursor.lastrowid)),
-            )
-            self._insert_configuration_audit(
-                connection, configuration_id, "create", request.created_by, request.change_note,
-                {"parent_version": parent_version}, now,
-            )
-        result = self.get_configuration(configuration_id)
-        assert result is not None
-        return result
+        return self._configuration_repository.create_configuration(request, parent_version)
 
-    def set_configuration_validation(self, configuration_id: str, *, passed: bool,
-                                     errors: list[str], actor: str) -> ConfigurationVersion:
-        now = datetime.now(timezone.utc).isoformat()
-        with self.connect() as connection:
-            updated = connection.execute(
-                """UPDATE configuration_versions SET status=?, validation_status=?, validation_errors_json=?
-                   WHERE configuration_id=? AND status IN ('draft','validated')""",
-                ("validated" if passed else "draft", "passed" if passed else "failed",
-                 json.dumps(errors), configuration_id),
-            ).rowcount
-            if not updated:
-                raise ValueError("Only draft or validated configurations can be validated.")
-            self._insert_configuration_audit(
-                connection, configuration_id, "validate", actor,
-                "Validation passed." if passed else "Validation failed.", {"errors": errors}, now,
-            )
-        result = self.get_configuration(configuration_id)
-        assert result is not None
-        return result
+    def set_configuration_validation(self, configuration_id: str, *, passed: bool, errors: list[str], actor: str) -> ConfigurationVersion:
+        return self._configuration_repository.set_configuration_validation(configuration_id, passed=passed, errors=errors, actor=actor)
 
-    def activate_configuration(self, configuration_id: str, *, actor: str, reason: str,
-                               action: str = "activate") -> ConfigurationVersion:
-        now = datetime.now(timezone.utc).isoformat()
-        with self.connect() as connection:
-            target = connection.execute(
-                "SELECT * FROM configuration_versions WHERE configuration_id=?", (configuration_id,)
-            ).fetchone()
-            if target is None:
-                raise LookupError("Configuration not found.")
-            if target["validation_status"] != "passed":
-                raise ValueError("Invalid or unvalidated configuration cannot be activated.")
-            connection.execute(
-                "UPDATE configuration_versions SET status='inactive', deactivated_at=? WHERE status='active' AND configuration_id<>?",
-                (now, configuration_id),
-            )
-            connection.execute(
-                "UPDATE configuration_versions SET status='active', activated_at=?, deactivated_at=NULL WHERE configuration_id=?",
-                (now, configuration_id),
-            )
-            self._insert_configuration_audit(
-                connection, configuration_id, action, actor, reason, {}, now,
-            )
-        result = self.get_configuration(configuration_id)
-        assert result is not None
-        return result
+    def activate_configuration(self, configuration_id: str, *, actor: str, reason: str, action: str='activate') -> ConfigurationVersion:
+        return self._configuration_repository.activate_configuration(configuration_id, actor=actor, reason=reason, action=action)
 
-    def list_configuration_audit(self, configuration_id: str | None = None) -> list[dict[str, Any]]:
-        with self.connect() as connection:
-            if configuration_id:
-                rows = connection.execute(
-                    "SELECT * FROM configuration_audit WHERE configuration_id=? ORDER BY audit_row_id",
-                    (configuration_id,),
-                ).fetchall()
-            else:
-                rows = connection.execute("SELECT * FROM configuration_audit ORDER BY audit_row_id").fetchall()
-        return [{**dict(row), "details": json.loads(row["details_json"])} for row in rows]
-
-    @staticmethod
-    def _insert_configuration_audit(connection: sqlite3.Connection, configuration_id: str,
-                                    action: str, actor: str, reason: str,
-                                    details: dict[str, Any], created_at: str) -> None:
-        cursor = connection.execute(
-            """INSERT INTO configuration_audit(
-                configuration_id,action,actor,reason,details_json,created_at
-            ) VALUES (?,?,?,?,?,?)""",
-            (configuration_id, action, actor, reason, json.dumps(details), created_at),
-        )
-        connection.execute(
-            "UPDATE configuration_audit SET audit_id=? WHERE audit_row_id=?",
-            (f"CA{int(cursor.lastrowid):06d}", int(cursor.lastrowid)),
-        )
+    def list_configuration_audit(self, configuration_id: str | None=None) -> list[dict[str, Any]]:
+        return self._configuration_repository.list_configuration_audit(configuration_id)
 
     def list_visualization_records(self, student_id: str) -> list[dict[str, Any]]:
-        records = self.list_longitudinal_records(student_id)
-        for item in records:
-            run = self.get_latest_analysis_run(int(item["essay_id"]))
-            item["analysis_run_id"] = run.get("analysis_run_id") if run else None
-            item["analyzer_id"] = run.get("analyzer_id") if run else "legacy"
-            item["analyzer_version"] = run.get("analyzer_version") if run else item.get("analysis_version")
-            item["configuration_version"] = run.get("configuration_version") if run else "legacy"
-            item["input_quality"] = (run.get("artifact") or {}).get("input_quality", {}) if run else {}
-            metric_results = run.get("metric_results", []) if run else []
-            item["versioned_metrics"] = {
-                metric["metric_id"]: {
-                    "value": metric["value"], "metric_version": metric["metric_version"],
-                    "status": metric["status"], "limitations": metric["limitations"],
-                    "confidence": metric.get("confidence", "insufficient"),
-                    "eligible_for_longitudinal_comparison": metric.get(
-                        "eligible_for_longitudinal_comparison", False
-                    ),
-                }
-                for metric in metric_results
-            }
-            legacy_metrics = (run.get("artifact") or {}).get("legacy_metrics", {}) if run else {}
-            for metric_id, value in legacy_metrics.items():
-                item["versioned_metrics"].setdefault(metric_id, {
-                    "value": value, "metric_version": "legacy-v0.1",
-                    "status": "available",
-                    "limitations": ["Legacy compatibility metric; use only with the displayed version."],
-                })
-            calibration = self.get_diagnostic_calibration(int(item["essay_id"]))
-            item["diagnostic_calibration"] = (
-                calibration.model_dump(mode="json") if calibration else None
-            )
-        return records
-    # --- Practice persistence (v0.9) ---
-
-    def _next_practice_id(self, table_prefix: str) -> str:
-        with self.connect() as connection:
-            table = {
-                "practice_target": "practice_targets",
-                "exercise_instance": "exercise_instances",
-                "exercise_attempt": "exercise_attempts",
-                "practice_evaluation": "practice_evaluations",
-                "engagement_trace": "feedback_engagement_traces",
-                "within_task_response": "within_task_response_candidates",
-                "transfer_evidence": "transfer_evidence_candidates",
-                "practice_state_snapshot": "practice_state_snapshots",
-            }[table_prefix]
-            id_col = {
-                "practice_target": "practice_target_id",
-                "exercise_instance": "exercise_id",
-                "exercise_attempt": "attempt_id",
-                "practice_evaluation": "evaluation_id",
-                "engagement_trace": "trace_id",
-                "within_task_response": "response_id",
-                "transfer_evidence": "transfer_evidence_id",
-                "practice_state_snapshot": "practice_state_snapshot_id",
-            }[table_prefix]
-            q = f"SELECT COALESCE(MAX(CAST(SUBSTR({id_col}, 3) AS INTEGER)), 0) + 1 FROM {table}"
-            cursor = connection.execute(q)
-            return int(cursor.fetchone()[0])
+        return self._learner_repository.list_visualization_records(student_id)
 
     def save_practice_target(self, target: dict) -> dict:
-        from app.practice.schemas import PracticeTarget
-        obj = PracticeTarget(**target) if not isinstance(target, PracticeTarget) else target
-        n = self._next_practice_id("practice_target")
-        obj.practice_target_id = f"PT{n:06d}"
-        sv = obj.status.value if hasattr(obj.status, "value") else str(obj.status)
-        with self.connect() as conn:
-            conn.execute(
-                "INSERT INTO practice_targets VALUES (?,?,?,?,?,?,?,?,?)",
-                (obj.practice_target_id, obj.student_id, obj.source_submission_id,
-                 obj.source_diagnosis_id, obj.target_code, obj.target_label,
-                 sv, obj.created_at, json.dumps(obj.model_dump(mode="json"))))
-        return obj.model_dump(mode="json")
+        return self._practice_repository.save_practice_target(target)
 
     def list_practice_targets(self, student_id: str) -> list[dict]:
-        with self.connect() as c:
-            rows = c.execute(
-                "SELECT target_json FROM practice_targets WHERE student_id=? ORDER BY created_at", (student_id,)
-            ).fetchall()
-        return [json.loads(r[0]) for r in rows]
+        return self._practice_repository.list_practice_targets(student_id)
 
     def get_practice_target(self, pid: str) -> dict | None:
-        with self.connect() as c:
-            row = c.execute("SELECT target_json FROM practice_targets WHERE practice_target_id=?", (pid,)).fetchone()
-        return json.loads(row[0]) if row else None
+        return self._practice_repository.get_practice_target(pid)
 
     def save_exercise_instance(self, instance: dict) -> dict:
-        from app.practice.schemas import ExerciseInstance
-        obj = ExerciseInstance(**instance) if not isinstance(instance, ExerciseInstance) else instance
-        n = self._next_practice_id("exercise_instance")
-        obj.exercise_id = f"EX{n:06d}"
-        et = obj.exercise_type.value if hasattr(obj.exercise_type, "value") else str(obj.exercise_type)
-        with self.connect() as conn:
-            conn.execute(
-                "INSERT INTO exercise_instances VALUES (?,?,?,?,?,?)",
-                (obj.exercise_id, obj.practice_target_id, obj.student_id,
-                 et, obj.created_at, json.dumps(obj.model_dump(mode="json"))))
-        return obj.model_dump(mode="json")
+        return self._practice_repository.save_exercise_instance(instance)
 
     def list_exercise_instances(self, practice_target_id=None, student_id=None) -> list[dict]:
-        with self.connect() as c:
-            if practice_target_id:
-                rows = c.execute(
-                    "SELECT instance_json FROM exercise_instances WHERE practice_target_id=? ORDER BY created_at",
-                    (practice_target_id,)).fetchall()
-            elif student_id:
-                rows = c.execute(
-                    "SELECT instance_json FROM exercise_instances WHERE student_id=? ORDER BY created_at",
-                    (student_id,)).fetchall()
-            else: return []
-        return [json.loads(r[0]) for r in rows]
+        return self._practice_repository.list_exercise_instances(practice_target_id, student_id)
 
     def get_exercise_instance(self, eid: str) -> dict | None:
-        with self.connect() as c:
-            row = c.execute("SELECT instance_json FROM exercise_instances WHERE exercise_id=?", (eid,)).fetchone()
-        return json.loads(row[0]) if row else None
+        return self._practice_repository.get_exercise_instance(eid)
 
     def save_exercise_attempt(self, attempt: dict) -> dict:
-        from app.practice.schemas import ExerciseAttempt
-        obj = ExerciseAttempt(**attempt) if not isinstance(attempt, ExerciseAttempt) else attempt
-        n = self._next_practice_id("exercise_attempt")
-        obj.attempt_id = f"EA{n:06d}"
-        sv = obj.status.value if hasattr(obj.status, "value") else str(obj.status)
-        with self.connect() as conn:
-            conn.execute(
-                "INSERT INTO exercise_attempts VALUES (?,?,?,?,?,?,?)",
-                (obj.attempt_id, obj.exercise_id, obj.student_id, obj.attempt_number,
-                 sv, obj.created_at, json.dumps(obj.model_dump(mode="json"))))
-        return obj.model_dump(mode="json")
+        return self._practice_repository.save_exercise_attempt(attempt)
 
     def list_exercise_attempts(self, exercise_id: str) -> list[dict]:
-        with self.connect() as c:
-            rows = c.execute(
-                "SELECT attempt_json FROM exercise_attempts WHERE exercise_id=? ORDER BY attempt_number", (exercise_id,)
-            ).fetchall()
-        return [json.loads(r[0]) for r in rows]
+        return self._practice_repository.list_exercise_attempts(exercise_id)
 
     def save_practice_evaluation(self, evaluation: dict) -> dict:
-        from app.practice.schemas import PracticeEvaluation
-        obj = PracticeEvaluation(**evaluation) if not isinstance(evaluation, PracticeEvaluation) else evaluation
-        n = self._next_practice_id("practice_evaluation")
-        obj.evaluation_id = f"PE{n:06d}"
-        with self.connect() as conn:
-            conn.execute(
-                "INSERT INTO practice_evaluations VALUES (?,?,?,?,?)",
-                (obj.evaluation_id, obj.attempt_id, obj.practice_target_id,
-                 obj.created_at, json.dumps(obj.model_dump(mode="json"))))
-        return obj.model_dump(mode="json")
+        return self._practice_repository.save_practice_evaluation(evaluation)
 
     def list_practice_evaluations(self, attempt_id=None, practice_target_id=None) -> list[dict]:
-        with self.connect() as c:
-            if attempt_id:
-                rows = c.execute(
-                    "SELECT evaluation_json FROM practice_evaluations WHERE attempt_id=? ORDER BY created_at", (attempt_id,)
-                ).fetchall()
-            elif practice_target_id:
-                rows = c.execute(
-                    "SELECT evaluation_json FROM practice_evaluations WHERE practice_target_id=? ORDER BY created_at", (practice_target_id,)
-                ).fetchall()
-            else: return []
-        return [json.loads(r[0]) for r in rows]
+        return self._practice_repository.list_practice_evaluations(attempt_id, practice_target_id)
 
     def list_practice_evaluations_by_student(self, student_id: str) -> list[dict]:
-        """All practice evaluations for a learner (joined through attempts)."""
-        with self.connect() as c:
-            rows = c.execute(
-                """SELECT pe.evaluation_json FROM practice_evaluations pe
-                JOIN exercise_attempts ea ON ea.attempt_id = pe.attempt_id
-                WHERE ea.student_id=? ORDER BY pe.created_at""",
-                (student_id,),
-            ).fetchall()
-        return [json.loads(r[0]) for r in rows]
+        return self._practice_repository.list_practice_evaluations_by_student(student_id)
 
     def list_essays_by_student(self, student_id: str) -> list[dict]:
-        """All essays for a learner, oldest first."""
-        with self.connect() as c:
-            rows = c.execute(
-                "SELECT * FROM essays WHERE student_id=? ORDER BY submitted_at, essay_id", (student_id,)
-            ).fetchall()
-        return [dict(r) for r in rows]
+        return self._practice_repository.list_essays_by_student(student_id)
 
     def list_analysis_runs_for_student(self, student_id: str) -> list[dict]:
-        """All analysis runs for a learner (joined through essays)."""
-        with self.connect() as c:
-            rows = c.execute(
-                """SELECT ar.* FROM analysis_runs ar
-                JOIN essays e ON e.essay_id = ar.essay_id
-                WHERE e.student_id=? ORDER BY ar.created_at, ar.analysis_run_row_id""",
-                (student_id,),
-            ).fetchall()
-        return [dict(r) for r in rows]
+        return self._practice_repository.list_analysis_runs_for_student(student_id)
 
     def list_feedback_records_for_student(self, student_id: str) -> list[dict]:
-        """All feedback records for a learner (joined through essays)."""
-        with self.connect() as c:
-            rows = c.execute(
-                """SELECT fr.* FROM feedback_records fr
-                JOIN essays e ON e.essay_id = fr.essay_id
-                WHERE e.student_id=? ORDER BY fr.created_at, fr.feedback_id""",
-                (student_id,),
-            ).fetchall()
-        return [dict(r) for r in rows]
+        return self._practice_repository.list_feedback_records_for_student(student_id)
 
     def list_exercise_attempts_by_student(self, student_id: str) -> list[dict]:
-        """All exercise attempts for a learner."""
-        with self.connect() as c:
-            rows = c.execute(
-                "SELECT * FROM exercise_attempts WHERE student_id=? ORDER BY created_at, attempt_number", (student_id,)
-            ).fetchall()
-        return [dict(r) for r in rows]
+        return self._practice_repository.list_exercise_attempts_by_student(student_id)
 
     def save_feedback_engagement_trace(self, trace: dict) -> dict:
-        from app.practice.schemas import FeedbackEngagementTrace
-        obj = FeedbackEngagementTrace(**trace) if not isinstance(trace, FeedbackEngagementTrace) else trace
-        n = self._next_practice_id("engagement_trace")
-        obj.trace_id = f"FET{n:06d}"
-        with self.connect() as conn:
-            conn.execute(
-                "INSERT INTO feedback_engagement_traces VALUES (?,?,?,?,?)",
-                (obj.trace_id, obj.student_id, obj.target_code,
-                 obj.created_at, json.dumps(obj.model_dump(mode="json"))))
-        return obj.model_dump(mode="json")
+        return self._practice_repository.save_feedback_engagement_trace(trace)
 
     def list_feedback_engagement_traces(self, student_id: str) -> list[dict]:
-        with self.connect() as c:
-            rows = c.execute(
-                "SELECT trace_json FROM feedback_engagement_traces WHERE student_id=? ORDER BY created_at", (student_id,)
-            ).fetchall()
-        return [json.loads(r[0]) for r in rows]
+        return self._practice_repository.list_feedback_engagement_traces(student_id)
 
     def save_within_task_response_candidate(self, candidate: dict) -> dict:
-        from app.practice.schemas import WithinTaskResponseCandidate
-        obj = WithinTaskResponseCandidate(**candidate) if not isinstance(candidate, WithinTaskResponseCandidate) else candidate
-        n = self._next_practice_id("within_task_response")
-        obj.response_id = f"WTR{n:06d}"
-        with self.connect() as conn:
-            conn.execute(
-                "INSERT INTO within_task_response_candidates VALUES (?,?,?,?,?)",
-                (obj.response_id, obj.student_id, obj.practice_target_id,
-                 obj.created_at, json.dumps(obj.model_dump(mode="json"))))
-        return obj.model_dump(mode="json")
+        return self._practice_repository.save_within_task_response_candidate(candidate)
 
     def list_within_task_responses(self, student_id: str) -> list[dict]:
-        with self.connect() as c:
-            rows = c.execute(
-                "SELECT response_json FROM within_task_response_candidates WHERE student_id=? ORDER BY created_at", (student_id,)
-            ).fetchall()
-        return [json.loads(r[0]) for r in rows]
+        return self._practice_repository.list_within_task_responses(student_id)
 
     def save_transfer_evidence_candidate(self, candidate: dict) -> dict:
-        from app.practice.schemas import TransferEvidenceCandidate
-        obj = TransferEvidenceCandidate(**candidate) if not isinstance(candidate, TransferEvidenceCandidate) else candidate
-        n = self._next_practice_id("transfer_evidence")
-        obj.transfer_evidence_id = f"TE{n:06d}"
-        with self.connect() as conn:
-            conn.execute(
-                "INSERT INTO transfer_evidence_candidates VALUES (?,?,?,?,?)",
-                (obj.transfer_evidence_id, obj.student_id, obj.practice_target_id,
-                 obj.created_at, json.dumps(obj.model_dump(mode="json"))))
-        return obj.model_dump(mode="json")
+        return self._practice_repository.save_transfer_evidence_candidate(candidate)
 
     def list_transfer_evidence_candidates(self, student_id: str) -> list[dict]:
-        with self.connect() as c:
-            rows = c.execute(
-                "SELECT transfer_json FROM transfer_evidence_candidates WHERE student_id=? ORDER BY created_at", (student_id,)
-            ).fetchall()
-        return [json.loads(r[0]) for r in rows]
+        return self._practice_repository.list_transfer_evidence_candidates(student_id)
 
     def save_practice_state_snapshot(self, snapshot: dict) -> dict:
-        from app.practice.schemas import PracticeStateSnapshot
-        obj = PracticeStateSnapshot(**snapshot) if not isinstance(snapshot, PracticeStateSnapshot) else snapshot
-        n = self._next_practice_id("practice_state_snapshot")
-        obj.practice_state_snapshot_id = f"PSS{n:06d}"
-        with self.connect() as conn:
-            conn.execute(
-                "INSERT INTO practice_state_snapshots VALUES (?,?,?,?)",
-                (obj.practice_state_snapshot_id, obj.student_id, obj.created_at,
-                 json.dumps(obj.model_dump(mode="json"))))
-        return obj.model_dump(mode="json")
+        return self._practice_repository.save_practice_state_snapshot(snapshot)
 
     def list_practice_state_snapshots(self, student_id: str) -> list[dict]:
-        with self.connect() as c:
-            rows = c.execute(
-                "SELECT snapshot_json FROM practice_state_snapshots WHERE student_id=? ORDER BY created_at", (student_id,)
-            ).fetchall()
-        return [json.loads(r[0]) for r in rows]
-
-
-
-
-    # --- Research persistence (v0.9.3-B) ---
-
-    def _next_research_id(self, table: str, id_column: str, prefix: str) -> str:
-        with self.connect() as c:
-            row = c.execute(
-                f"SELECT COALESCE(MAX(CAST(SUBSTR({id_column}, {len(prefix) + 1}) AS INTEGER)), 0) + 1 FROM {table}"
-            ).fetchone()
-        return f"{prefix}{int(row[0]):06d}"
+        return self._practice_repository.list_practice_state_snapshots(student_id)
 
     def save_human_review(self, review) -> dict:
-        from app.research.schemas import HumanReview
-        obj = review if isinstance(review, HumanReview) else HumanReview(**review)
-        review_id = obj.review_id or self._next_research_id("human_reviews", "review_id", "HR")
-        obj.review_id = review_id
-        with self.connect() as conn:
-            conn.execute(
-                "INSERT OR REPLACE INTO human_reviews VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-                (
-                    obj.review_id, obj.target_type.value if hasattr(obj.target_type, "value") else str(obj.target_type),
-                    obj.target_id, obj.reviewer_id,
-                    obj.decision.value if hasattr(obj.decision, "value") else str(obj.decision),
-                    obj.confidence, obj.reason_code, obj.comment, obj.guideline_version,
-                    obj.review_status.value if hasattr(obj.review_status, "value") else str(obj.review_status),
-                    obj.created_at, obj.updated_at, obj.superseded_by,
-                    json.dumps(obj.source_system_result_snapshot) if obj.source_system_result_snapshot else None,
-                ),
-            )
-        return obj.model_dump(mode="json")
+        return self._research_repository.save_human_review(review)
 
-    def list_human_reviews(self, target_type: str | None = None, target_id: str | None = None) -> list[dict]:
-        from app.research.schemas import HumanReview
-        with self.connect() as c:
-            if target_type and target_id:
-                rows = c.execute(
-                    "SELECT * FROM human_reviews WHERE target_type=? AND target_id=? ORDER BY created_at",
-                    (target_type, target_id),
-                ).fetchall()
-            elif target_type:
-                rows = c.execute(
-                    "SELECT * FROM human_reviews WHERE target_type=? ORDER BY created_at", (target_type,)
-                ).fetchall()
-            else:
-                rows = c.execute("SELECT * FROM human_reviews ORDER BY created_at").fetchall()
-        result = []
-        for row in rows:
-            d = dict(row)
-            d["source_system_result_snapshot"] = (
-                json.loads(d["source_system_result_snapshot"]) if d.get("source_system_result_snapshot") else None
-            )
-            try:
-                result.append(HumanReview(**d).model_dump(mode="json"))
-            except Exception:
-                result.append(d)
-        return result
+    def list_human_reviews(self, target_type: str | None=None, target_id: str | None=None) -> list[dict]:
+        return self._research_repository.list_human_reviews(target_type, target_id)
 
     def apply_pii_review(self, submission_id: int, reviews: list) -> list[dict]:
-        from app.research.schemas import PiiReview
-        saved = []
-        with self.connect() as c:
-            for item in reviews:
-                obj = item if isinstance(item, PiiReview) else PiiReview(**item)
-                updated = c.execute(
-                    """UPDATE pii_candidates SET review_status=?, action=?, reviewer_id=?, reviewed_at=?
-                       WHERE pii_candidate_id=? AND submission_id=?""",
-                    (
-                        obj.action.value if hasattr(obj.action, "value") else str(obj.action),
-                        obj.action.value if hasattr(obj.action, "value") else str(obj.action),
-                        obj.reviewer_id, obj.reviewed_at, obj.pii_candidate_id, submission_id,
-                    ),
-                ).rowcount
-                if updated:
-                    row = c.execute(
-                        "SELECT * FROM pii_candidates WHERE pii_candidate_id=?",
-                        (obj.pii_candidate_id,),
-                    ).fetchone()
-                    if row:
-                        saved.append(dict(row))
-        return saved
+        return self._research_repository.apply_pii_review(submission_id, reviews)
 
     def save_export_job(self, job: dict) -> dict:
-        with self.connect() as conn:
-            conn.execute(
-                """INSERT OR REPLACE INTO export_jobs(
-                    export_id, filter_json, privacy_mode, formats_json, status,
-                    created_at, completed_at, export_directory, file_count,
-                    record_counts_json, excluded_counts_json, manifest_path
-                ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)""",
-                (
-                    job["export_id"], json.dumps(job.get("filter_spec", {})), job.get("privacy_mode"),
-                    json.dumps(job.get("formats", [])), job.get("status"),
-                    job.get("created_at"), job.get("completed_at"), job.get("export_directory"),
-                    job.get("file_count", 0), json.dumps(job.get("record_counts", {})),
-                    json.dumps(job.get("excluded_counts", {})), job.get("manifest_path"),
-                ),
-            )
-        return job
+        return self._research_repository.save_export_job(job)
 
     def list_export_jobs(self) -> list[dict]:
-        with self.connect() as c:
-            rows = c.execute("SELECT * FROM export_jobs ORDER BY created_at DESC").fetchall()
-        result = []
-        for row in rows:
-            d = dict(row)
-            for key in ("filter_json", "formats_json", "record_counts_json", "excluded_counts_json"):
-                if d.get(key):
-                    d[key.removesuffix("_json")] = json.loads(d.pop(key))
-            if "filter_json" in d and d.get("filter_json") is not None:
-                d["filter_spec"] = json.loads(d.pop("filter_json"))
-            result.append(d)
-        return result
+        return self._research_repository.list_export_jobs()
 
     def get_export_job(self, export_id: str) -> dict | None:
-        with self.connect() as c:
-            row = c.execute("SELECT * FROM export_jobs WHERE export_id=?", (export_id,)).fetchone()
-        if row is None:
-            return None
-        d = dict(row)
-        if d.get("filter_json"):
-            d["filter_spec"] = json.loads(d.pop("filter_json"))
-        if d.get("formats_json"):
-            d["formats"] = json.loads(d.pop("formats_json"))
-        if d.get("record_counts_json"):
-            d["record_counts"] = json.loads(d.pop("record_counts_json"))
-        if d.get("excluded_counts_json"):
-            d["excluded_counts"] = json.loads(d.pop("excluded_counts_json"))
-        return d
+        return self._research_repository.get_export_job(export_id)
 
 
 SQLiteRepository = Database
