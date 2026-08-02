@@ -201,7 +201,15 @@ def test_revision_group_uses_one_timeline_representative(tmp_path):
 def test_admin_reanalysis_preview_append_only_and_no_llm_by_default(tmp_path):
     settings, repository, _, service, ids = _seed(tmp_path, count=1)
     configurations = _configuration_service(repository)
-    admin = AdminReanalysisService(repository, settings, configurations, service, revision_repository=repository._revision_repository)
+    admin = AdminReanalysisService(
+        settings=settings,
+        configuration_reader=repository._configuration_repository,
+        submission_reader=repository._submission_repository,
+        analysis_repository=repository._analysis_repository,
+        configurations=configurations,
+        submission_service=service,
+        revision_repository=repository._revision_repository,
+    )
     request = ReanalysisRequest(scope_type="submission", scope_id=str(ids[0]), analyzer_id="basic")
     before = len(repository.list_analysis_runs(ids[0]))
     preview = admin.preview(request)
@@ -214,7 +222,12 @@ def test_admin_reanalysis_preview_append_only_and_no_llm_by_default(tmp_path):
 def test_admin_reanalysis_explicit_llm_path_is_separately_confirmed(tmp_path):
     settings, repository, _, service, ids = _seed(tmp_path, count=1)
     admin = AdminReanalysisService(
-        repository, settings, _configuration_service(repository), service,
+        settings=settings,
+        configuration_reader=repository._configuration_repository,
+        submission_reader=repository._submission_repository,
+        analysis_repository=repository._analysis_repository,
+        configurations=_configuration_service(repository),
+        submission_service=service,
         revision_repository=repository._revision_repository,
     )
     with pytest.raises(ValidationError, match="confirm_llm_cost"):
@@ -231,7 +244,12 @@ def test_admin_reanalysis_explicit_llm_path_is_separately_confirmed(tmp_path):
 def test_admin_reanalysis_additional_scopes(tmp_path, scope_type):
     settings, repository, _, service, ids = _seed(tmp_path, count=2)
     admin = AdminReanalysisService(
-        repository, settings, _configuration_service(repository), service,
+        settings=settings,
+        configuration_reader=repository._configuration_repository,
+        submission_reader=repository._submission_repository,
+        analysis_repository=repository._analysis_repository,
+        configurations=_configuration_service(repository),
+        submission_service=service,
         revision_repository=repository._revision_repository,
     )
     scope_id = "V06-STUDENT" if scope_type == "student" else repository.get_latest_analysis_run(ids[0])["analysis_run_id"]
@@ -250,7 +268,12 @@ def test_admin_reanalysis_revision_group_appends_snapshots(tmp_path):
     group_id = revised.revision_snapshot.revision_group_id
     before = len(revisions.history(group_id))
     admin = AdminReanalysisService(
-        repository, settings, _configuration_service(repository), service,
+        settings=settings,
+        configuration_reader=repository._configuration_repository,
+        submission_reader=repository._submission_repository,
+        analysis_repository=repository._analysis_repository,
+        configurations=_configuration_service(repository),
+        submission_service=service,
         revision_repository=repository._revision_repository,
     )
     result = admin.run(ReanalysisRequest(scope_type="revision_group", scope_id=group_id, analyzer_id="basic"))

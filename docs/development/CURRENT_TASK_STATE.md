@@ -1,6 +1,27 @@
 # Current Task State
 
 **Date:** 2026-08-02
+**Current task:** v0.9.5-F6B AdminReanalysisService Persistence Dependency Narrowing
+**Status:** completed and verified (see `RUN_VERIFICATION_V0.9.5_F6B.md`)
+
+- `AdminReanalysisService` now depends on `AdminConfigurationReadPort`,
+  `AdminSubmissionReadPort`, `AdminAnalysisPort`, the unchanged central
+  `RevisionRepository`, and the existing settings/Service collaborators; no
+  broad or untyped persistence dependency remains.
+- All six direct calls route to approved owners; both app paths use the
+  existing facade-owned repositories (same connection manager, one graph);
+  `configurations.active()`, `submission_service.regenerate_feedback`, and
+  the embedded `RevisionService` are unchanged; preview is zero-write;
+  Analysis save count/order, feedback conditions, and partial-commit
+  behavior are preserved.
+- Focused 154 PASS; accumulated contracts 204 PASS; full core 589 passed +
+  8 skipped; exact `run.bat --verify` PASS; migration 12, 33 tables,
+  `config-v0.9.0`, prompt `feedback-prompt-v0.7.1`, facade 86, API 77,
+  client 52, locale 520/520 unchanged; development database unchanged.
+- Next: v0.9.5-F6C SubmissionService narrowing only under separate
+  authorization.
+
+**Date:** 2026-08-02
 **Current task:** v0.9.5-F6A RevisionService Runtime Repository Narrowing
 **Status:** completed and verified (see `RUN_VERIFICATION_V0.9.5_F6A.md`)
 

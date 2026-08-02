@@ -120,12 +120,21 @@ class TestRuntimeIdentity:
             settings, database, revision_repository=database._revision_repository,
         )
         admin = AdminReanalysisService(
-            database, settings, None, submission_service,
+            settings=settings,
+            configuration_reader=database._configuration_repository,
+            submission_reader=database._submission_repository,
+            analysis_repository=database._analysis_repository,
+            configurations=None,
+            submission_service=submission_service,
             revision_repository=database._revision_repository,
         )
         assert admin.revisions.repository is database._revision_repository
         assert not isinstance(admin.revisions.repository, Database)
-        assert admin.repository is database
+        assert admin.revision_repository is database._revision_repository
+        assert admin.configuration_reader is database._configuration_repository
+        assert admin.submission_reader is database._submission_repository
+        assert admin.analysis_repository is database._analysis_repository
+        assert not hasattr(admin, "repository")
 
     def test_feedback_pipeline_uses_facade_owned_revision_repository(self, tmp_path):
         database = Database(tmp_path / "pipeline.db")

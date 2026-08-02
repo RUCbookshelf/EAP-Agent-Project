@@ -1,5 +1,31 @@
 
 
+## 2026-08-02 - v0.9.5-F6B AdminReanalysisService persistence dependency narrowing
+
+- **Decision**: Remove the broad, untyped `repository` parameter from
+  `AdminReanalysisService` and replace it with three consumer-owned
+  structural Ports (`AdminConfigurationReadPort` one read,
+  `AdminSubmissionReadPort` two reads, `AdminAnalysisPort` read + write)
+  plus the existing required keyword-only `revision_repository:
+  RevisionRepository`. Both application-construction paths supply the
+  existing facade-owned repository instances.
+- **Rationale**: The orchestrator should receive only the exact repository
+  capabilities it calls; the F6A `revision_repository` remains the single
+  Revision dependency (direct `get_revision_group` read plus embedded
+  `RevisionService` backing).
+- **Parity boundary**: Central `RevisionRepository`, `RevisionService`,
+  `SubmissionService`, `ConfigurationService`, Repository implementations,
+  SQL, transactions (three-sequential-commit workflow and per-method
+  commits unchanged), migration 12, 33 tables, `config-v0.9.0`, prompt
+  `feedback-prompt-v0.7.1`, API 77 pairs, client 52 methods, locale 520/520,
+  and facade 86 methods unchanged. No combined Admin repository, adapter,
+  proxy, Service Locator, Unit of Work, or DI framework.
+- **Evidence**: focused 154 PASS; accumulated contracts 204 PASS; full
+  non-live core 589 passed + 8 skipped; exact `run.bat --verify` PASS;
+  development database unchanged (SHA-256/size/mtime).
+- **Boundary**: v0.9.5-F6C SubmissionService narrowing may begin only under
+  a separate authorization; F6D and later stages remain unstarted.
+
 ## 2026-08-02 - v0.9.5-F6A RevisionService runtime repository narrowing
 
 - **Decision**: After the F6A0 prerequisite (completed and verified), swap

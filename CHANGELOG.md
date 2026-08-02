@@ -1,3 +1,35 @@
+## v0.9.5-F6B (2026-08-02)
+
+### Changed
+- Narrowed `AdminReanalysisService` persistence dependencies: removed the
+  broad, untyped `repository` parameter and replaced it with three
+  consumer-owned structural Ports (`AdminConfigurationReadPort`,
+  `AdminSubmissionReadPort`, `AdminAnalysisPort`) plus the unchanged central
+  `RevisionRepository` (`revision_repository`, required keyword-only).
+- The six direct persistence calls route to approved owners
+  (`get_configuration` -> Configuration reader; `get_submission_bundle` /
+  `list_student_submissions` -> Submission reader; `get_analysis_run` /
+  `save_analysis_run` -> Analysis repository; `get_revision_group` ->
+  existing RevisionRepository); both application-construction paths pass the
+  existing facade-owned repository instances (same connection manager, one
+  repository graph); no Repository implementation, SQL, transaction
+  boundary, API, schema, domain rule, prompt, provider, or UI behavior
+  changed.
+- `ConfigurationService.active()`, `SubmissionService.regenerate_feedback`,
+  and the embedded `RevisionService` collaborations are unchanged; preview
+  remains read-only; Analysis write count/order, feedback conditions, and
+  partial-commit behavior are preserved.
+- Added 16 focused F6B contract/behavior tests, the F6B isolated pytest
+  runner, and the F6B SPEC/verification documentation.
+
+### Verified
+- Focused F6B set 154 PASS; accumulated architecture contracts 204 PASS
+  (F2-F6A + F6B, E parity 86/33, API 77, client 52, locale 520/520); full
+  non-live core 589 passed + 8 skipped; exact `run.bat --verify` PASS
+  (migration 12, 33 tables, `config-v0.9.0`, prompt v0.7.1,
+  health/docs/Streamlit 200); development database unchanged
+  (SHA-256/size/mtime).
+
 ## v0.9.5-F6A (2026-08-02)
 
 ### Changed

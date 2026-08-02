@@ -8,6 +8,28 @@
 
 # Project State
 
+## Current v0.9.5-F6B State
+
+- Status: completed and verified; AdminReanalysisService persistence
+  dependency narrowing scope closed.
+- `AdminReanalysisService` depends on exactly `AdminConfigurationReadPort`,
+  `AdminSubmissionReadPort`, `AdminAnalysisPort`, the unchanged central
+  `RevisionRepository`, and the existing settings/Service collaborators; the
+  broad, untyped `repository` dependency is removed.
+- All six direct calls route to approved owners; both app paths pass the
+  existing facade-owned repositories (one connection manager, one graph);
+  `ConfigurationService.active`, `SubmissionService.regenerate_feedback`,
+  and the embedded `RevisionService` are unchanged; preview is zero-write;
+  Analysis save count/order, feedback conditions, and partial-commit
+  behavior are preserved; F2-F6A boundaries unchanged.
+- Verification: focused 154 PASS; accumulated contracts 204 PASS; full
+  non-live core 589 passed + 8 skipped; exact `run.bat --verify` PASS;
+  migration 12; 33 tables; `config-v0.9.0`; prompt `feedback-prompt-v0.7.1`;
+  facade 86; API 77; client 52; locale 520/520; development database
+  unchanged (SHA-256/size/mtime).
+- Next: v0.9.5-F6C SubmissionService narrowing only under separate
+  authorization; F6D and later stages remain unstarted.
+
 ## Current v0.9.5-F6A State
 
 - Status: completed and verified; RevisionService runtime repository
