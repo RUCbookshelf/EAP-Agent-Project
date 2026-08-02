@@ -135,7 +135,11 @@ def representative_crud(database: Database, settings: Settings) -> dict:
     )
     evaluation = database.save_practice_evaluation(practice.evaluate_attempt(attempt, target, submission.essay_text))
 
-    research = ResearchDataService(database)
+    research = ResearchDataService(
+        submission_reader=database._submission_repository,
+        review_repository=database._research_repository,
+        export_reader=database._research_repository,
+    )
     review = research.create_human_review(HumanReviewCreate(
         target_type=HumanReviewTarget.DIAGNOSIS,
         target_id="D-PRE",

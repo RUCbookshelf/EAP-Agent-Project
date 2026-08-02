@@ -5,7 +5,7 @@ import csv, hashlib, json, os, random
 from datetime import datetime, timezone
 from pathlib import Path
 from io import StringIO
-from typing import Any
+from typing import Any, Protocol, runtime_checkable
 
 from app.research.scanner import scan_essay, redact_essay
 from app.research.schemas import (
@@ -41,11 +41,49 @@ def _csv_safe(value: Any) -> str:
     return s
 
 
+@runtime_checkable
+class ResearchSubmissionReadPort(Protocol):
+    """Submission-owned read contract (ResearchDataService)."""
+
+    def list_all_submissions(self): ...
+
+    def list_student_submissions(self, student_id: str) -> list[dict[str, Any]]: ...
+
+    def get_submission_bundle(self, essay_id: int) -> dict[str, Any] | None: ...
+
+
+@runtime_checkable
+class ResearchReviewPort(Protocol):
+    """Research-owned human/PII review contract (ResearchDataService)."""
+
+    def save_human_review(self, review) -> dict: ...
+
+    def list_human_reviews(self, target_type: str | None = None, target_id: str | None = None) -> list[dict]: ...
+
+    def apply_pii_review(self, submission_id: int, reviews: list) -> list[dict]: ...
+
+
+@runtime_checkable
+class ResearchExportReadPort(Protocol):
+    """Research-owned Export Job read contract (ResearchDataService)."""
+
+    def list_export_jobs(self) -> list[dict]: ...
+
+    def get_export_job(self, export_id: str) -> dict | None: ...
+
+
 class ResearchDataService:
     """Core service for research export, PII scanning, human review, dataset splitting, and data quality."""
 
-    def __init__(self, repository):
-        self.repo = repository
+    def __init__(
+        self,
+        submission_reader: ResearchSubmissionReadPort,
+        review_repository: ResearchReviewPort,
+        export_reader: ResearchExportReadPort,
+    ):
+        self.submission_reader = submission_reader
+        self.review_repository = review_repository
+        self.export_reader = export_reader
 
     def schema(self) -> dict:
         return ResearchExportSchema().model_dump(mode='json')
@@ -66,7 +104,7 @@ class ResearchDataService:
     def _collect(self, filter_spec: ExportFilter, privacy_mode: PrivacyMode | None = None) -> list[dict[str, Any]]:
         mode = privacy_mode or PrivacyMode.INTERNAL_RESEARCH
         records = []
-        all_subs = self.repo.list_all_submissions() if hasattr(self.repo, 'list_all_submissions') else []
+        all_subs = self.submission_reader.list_all_submissions()
         students_seen = {}
         for sub in all_subs:
             sid = sub.get('student_id', '')
@@ -77,7 +115,7 @@ class ResearchDataService:
         for idx, student in enumerate(students_list):
             if mode == PrivacyMode.PSEUDONYMIZED:
                 pseudonym_map[student['student_id']] = _pseudonym(idx + 1)
-            submissions = self.repo.list_student_submissions(student['student_id'])
+            submissions = self.submission_reader.list_student_submissions(student['student_id'])
             for sub in submissions:
                 pid = sub['essay_id']
                 if mode == PrivacyMode.INTERNAL_RESEARCH:
@@ -169,7 +207,7 @@ class ResearchDataService:
         }
 
     def scan_pii(self, submission_id: int) -> list[dict[str, Any]]:
-        sub = self.repo.get_submission_bundle(submission_id)
+        sub = self.submission_reader.get_submission_bundle(submission_id)
         if not sub:
             raise LookupError('Submission not found')
         return scan_essay(submission_id, sub['essay_text'])
@@ -181,35 +219,27 @@ class ResearchDataService:
             confidence=review.confidence, reason_code=review.reason_code,
             comment=review.comment, guideline_version=review.guideline_version,
         )
-        if hasattr(self.repo, 'save_human_review'):
-            self.repo.save_human_review(result)
+        self.review_repository.save_human_review(result)
         return result
 
     def get_human_reviews(self, target_type: str | None = None, target_id: str | None = None) -> list[dict]:
-        if hasattr(self.repo, 'list_human_reviews'):
-            return self.repo.list_human_reviews(target_type, target_id)
-        return []
+        return self.review_repository.list_human_reviews(target_type, target_id)
 
     def apply_pii_review(self, submission_id: int, reviews: list) -> list[dict]:
         """Apply PII review decisions to candidate rows for a submission."""
-        sub = self.repo.get_submission_bundle(submission_id)
+        sub = self.submission_reader.get_submission_bundle(submission_id)
         if not sub:
             raise LookupError("Submission not found")
-        if hasattr(self.repo, "apply_pii_review"):
-            return self.repo.apply_pii_review(submission_id, reviews)
-        return []
+        return self.review_repository.apply_pii_review(submission_id, reviews)
 
     def export_history(self) -> list[dict]:
-        if hasattr(self.repo, "list_export_jobs"):
-            return self.repo.list_export_jobs()
-        return []
+        return self.export_reader.list_export_jobs()
 
     def export_status(self, export_id: str) -> dict:
         """Return export job status; unknown when no persisted job exists."""
-        if hasattr(self.repo, "get_export_job"):
-            job = self.repo.get_export_job(export_id)
-            if job:
-                return job
+        job = self.export_reader.get_export_job(export_id)
+        if job:
+            return job
         return {"export_id": export_id, "status": "unknown"}
 
     def create_dataset_split(self, payload: dict) -> dict:

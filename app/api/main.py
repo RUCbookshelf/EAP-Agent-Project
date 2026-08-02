@@ -189,7 +189,11 @@ def _run_startup(api: FastAPI) -> None:
             analysis_reader=repository._analysis_repository,
             student_reader=repository._learner_repository,
         )
-        research_svc = ResearchDataService(repository)
+        research_svc = ResearchDataService(
+            submission_reader=repository._submission_repository,
+            review_repository=repository._research_repository,
+            export_reader=repository._research_repository,
+        )
 
         lifecycle.llm_provider = settings.llm_provider
         lifecycle.llm_api_configured = bool(settings.deepseek_api_key) if settings.llm_provider == "deepseek" else False
@@ -388,7 +392,11 @@ def _build_full_app(
         analysis_reader=repository._analysis_repository,
         student_reader=repository._learner_repository,
     )
-    research = ResearchDataService(repository)
+    research = ResearchDataService(
+        submission_reader=repository._submission_repository,
+        review_repository=repository._research_repository,
+        export_reader=repository._research_repository,
+    )
 
     lifecycle.application_version = settings.application_version
     lifecycle.prompt_version = settings.prompt_version
