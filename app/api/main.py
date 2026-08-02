@@ -236,7 +236,12 @@ def _run_startup(api: FastAPI) -> None:
     api.state.research = research_svc
     api.state.journey_service = journey_svc
     api.state.admin_reanalysis = AdminReanalysisService(
-        repository, settings, cfgs, sub_svc,
+        settings=settings,
+        configuration_reader=repository._configuration_repository,
+        submission_reader=repository._submission_repository,
+        analysis_repository=repository._analysis_repository,
+        configurations=cfgs,
+        submission_service=sub_svc,
         revision_repository=repository._revision_repository,
     )
 
@@ -427,7 +432,12 @@ def _build_full_app(
     api.state.research = research
     api.state.journey_service = journey
     api.state.admin_reanalysis = AdminReanalysisService(
-        repository, settings, configurations, submission_service,
+        settings=settings,
+        configuration_reader=repository._configuration_repository,
+        submission_reader=repository._submission_repository,
+        analysis_repository=repository._analysis_repository,
+        configurations=configurations,
+        submission_service=submission_service,
         revision_repository=repository._revision_repository,
     )
 

@@ -1,15 +1,42 @@
 from __future__ import annotations
 
-from typing import Any, Literal
+from typing import Any, Literal, Protocol, runtime_checkable
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from app.config import Settings
+from app.configuration import ConfigurationVersion
+from app.models import AnalysisResult
+from app.repositories import RevisionRepository
 from app.services.configuration import ConfigurationService, settings_from_configuration
 from app.services.factory import build_analyzer
 from app.services.revision import RevisionService
-from app.repositories import RevisionRepository
 from app.services.submission import SubmissionService
+
+
+@runtime_checkable
+class AdminConfigurationReadPort(Protocol):
+    """Configuration-owned read contract (AdminReanalysisService)."""
+
+    def get_configuration(self, configuration_id_or_version: str) -> ConfigurationVersion | None: ...
+
+
+@runtime_checkable
+class AdminSubmissionReadPort(Protocol):
+    """Submission-owned read contract (AdminReanalysisService)."""
+
+    def get_submission_bundle(self, essay_id: int) -> dict[str, Any] | None: ...
+
+    def list_student_submissions(self, student_id: str) -> list[dict[str, Any]]: ...
+
+
+@runtime_checkable
+class AdminAnalysisPort(Protocol):
+    """Analysis-owned read/write contract (AdminReanalysisService)."""
+
+    def get_analysis_run(self, analysis_run_id: str) -> dict[str, Any] | None: ...
+
+    def save_analysis_run(self, essay_id: int, analysis: AnalysisResult) -> AnalysisResult: ...
 
 
 class ReanalysisRequest(BaseModel):
@@ -29,20 +56,31 @@ class ReanalysisRequest(BaseModel):
 
 
 class AdminReanalysisService:
-    def __init__(self, repository, settings: Settings, configurations: ConfigurationService,
-                 submission_service: SubmissionService, *,
-                 revision_repository: RevisionRepository) -> None:
-        self.repository = repository
+    def __init__(
+        self,
+        settings: Settings,
+        configuration_reader: AdminConfigurationReadPort,
+        submission_reader: AdminSubmissionReadPort,
+        analysis_repository: AdminAnalysisPort,
+        configurations: ConfigurationService,
+        submission_service: SubmissionService,
+        *,
+        revision_repository: RevisionRepository,
+    ) -> None:
+        self.configuration_reader = configuration_reader
+        self.submission_reader = submission_reader
+        self.analysis_repository = analysis_repository
         self.settings = settings
         self.configurations = configurations
         self.submission_service = submission_service
+        self.revision_repository = revision_repository
         self.revisions = RevisionService(revision_repository)
 
     def preview(self, request: ReanalysisRequest) -> dict[str, Any]:
         ids = self._scope(request)
         configuration = (
             self.configurations.active() if request.configuration_version is None
-            else self.repository.get_configuration(request.configuration_version)
+            else self.configuration_reader.get_configuration(request.configuration_version)
         )
         if configuration is None:
             raise LookupError("Configuration not found.")
@@ -70,7 +108,7 @@ class AdminReanalysisService:
 
     def run(self, request: ReanalysisRequest) -> dict[str, Any]:
         preview = self.preview(request)
-        configuration = self.repository.get_configuration(preview["configuration_id"])
+        configuration = self.configuration_reader.get_configuration(preview["configuration_id"])
         if configuration.validation_status != "passed":
             raise ValueError("Reanalysis requires a validated configuration.")
         analyzer = build_analyzer(settings_from_configuration(self.settings, configuration)).registry.get(
@@ -79,13 +117,13 @@ class AdminReanalysisService:
         runs = []
         feedback = []
         for essay_id in preview["submission_ids"]:
-            row = self.repository.get_submission_bundle(essay_id)
+            row = self.submission_reader.get_submission_bundle(essay_id)
             analysis = analyzer.analyze(
                 row["essay_text"], writing_prompt=row["writing_prompt"],
                 draft_stage=row["draft_stage"], tool_use=row["tool_use"],
             )
             analysis = analysis.model_copy(update={"configuration_version": configuration.version})
-            saved = self.repository.save_analysis_run(essay_id, analysis)
+            saved = self.analysis_repository.save_analysis_run(essay_id, analysis)
             runs.append({"submission_id": essay_id, "analysis_run_id": saved.analysis_run_id})
             if request.call_llm:
                 generated = self.submission_service.regenerate_feedback(essay_id, saved)
@@ -95,7 +133,7 @@ class AdminReanalysisService:
                 })
         snapshots = []
         group_ids = {
-            self.repository.get_submission_bundle(essay_id).get("revision_group_id")
+            self.submission_reader.get_submission_bundle(essay_id).get("revision_group_id")
             for essay_id in preview["submission_ids"]
         } - {None}
         for group_id in sorted(group_ids):
@@ -114,20 +152,20 @@ class AdminReanalysisService:
                 essay_id = int(request.scope_id)
             except ValueError as exc:
                 raise ValueError("submission scope_id must be an integer") from exc
-            if self.repository.get_submission_bundle(essay_id) is None:
+            if self.submission_reader.get_submission_bundle(essay_id) is None:
                 raise LookupError("Submission not found.")
             return [essay_id]
         if request.scope_type == "student":
-            items = self.repository.list_student_submissions(request.scope_id)
+            items = self.submission_reader.list_student_submissions(request.scope_id)
             if not items:
                 raise LookupError("Student has no submissions.")
             return [int(item["essay_id"]) for item in items]
         if request.scope_type == "revision_group":
-            group = self.repository.get_revision_group(request.scope_id)
+            group = self.revision_repository.get_revision_group(request.scope_id)
             if group is None:
                 raise LookupError("Revision group not found.")
             return group.member_submission_ids
-        run = self.repository.get_analysis_run(request.scope_id)
+        run = self.analysis_repository.get_analysis_run(request.scope_id)
         if run is None:
             raise LookupError("AnalysisRun not found.")
         return [int(run["essay_id"])]
