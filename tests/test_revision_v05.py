@@ -31,7 +31,7 @@ def _submission(student: str, text: str, *, when: datetime, stage: str = "first 
 def _stack(tmp_path):
     repository = Database(tmp_path / "revision.db")
     repository.initialize()
-    revisions = RevisionService(repository)
+    revisions = RevisionService(repository=repository._revision_repository)
     service = SubmissionService(
         repository, BasicAnalyzer(), HeuristicDiagnoser(),
         ProviderRouter(LocalDemoProvider(), LocalDemoProvider()),

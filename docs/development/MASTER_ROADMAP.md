@@ -16,6 +16,7 @@
 | v0.9.5-F5A CALF Service Dependency Narrowing | completed and verified |
 | v0.9.5-F5B ResearchDataService Dependency Narrowing | completed and verified |
 | v0.9.5-F6A0 Revision Repository Capability Completion | completed and verified (F6A prerequisite) |
+| v0.9.5-F6A RevisionService Runtime Repository Narrowing | completed and verified |
 ## v0.9.4 roadmap - 2026-08-01
 
 | Item | Status |

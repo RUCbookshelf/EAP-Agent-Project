@@ -238,3 +238,13 @@ facade-owned `SQLiteRevisionRepository` structurally satisfy the central
 wiring). The original F6A runtime narrowing may be rebaselined and resumed
 only after F6A0 is complete and separately authorized; F6A0 itself performs
 no runtime narrowing.
+
+## 11. Resolution completed (2026-08-02)
+
+F6A0 completed and verified (`693ff48`, `b4d37af`), and the owner authorized
+resuming F6A on the new baseline. v0.9.5-F6A itself is now complete and
+verified (`8e20730` refactor + verification commit; see
+`RUN_VERIFICATION_V0.9.5_F6A.md`): every active `RevisionService` receives
+the existing facade-owned `SQLiteRevisionRepository`, the three-sequential-
+commit workflow and Essay-update ownership are unchanged, and no repository,
+SQL, transaction, or Protocol change was required beyond F6A0.

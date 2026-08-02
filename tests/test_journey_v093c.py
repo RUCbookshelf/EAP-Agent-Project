@@ -42,7 +42,9 @@ def services(repo):
     from app.config import load_settings
 
     settings = load_settings()
-    submission_service = build_submission_service(settings, repo)
+    submission_service = build_submission_service(
+        settings, repo, revision_repository=repo._revision_repository,
+    )
     practice_service = PracticeService(repo)
     journey = JourneyService(repo._learner_repository, repo._practice_repository)
     return submission_service, practice_service, journey
@@ -433,7 +435,9 @@ class TestS02Regression:
         Uses a fresh DB with the same record pattern; the real S02 regression is
         exercised through the live browser integration layer.
         """
-        submission_service = build_submission_service(load_settings(), repo)
+        submission_service = build_submission_service(
+        load_settings(), repo, revision_repository=repo._revision_repository,
+    )
         submission_service.submit(_essay("S02", REPETITION_ESSAY), synthetic=True)
         submission_service.submit(_essay("S02", "A second independent draft.", prompt="Another prompt"), synthetic=True)
         journey = JourneyService(repo._learner_repository, repo._practice_repository).get_journey("S02")

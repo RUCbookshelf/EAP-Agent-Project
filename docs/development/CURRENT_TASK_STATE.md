@@ -1,6 +1,23 @@
 # Current Task State
 
 **Date:** 2026-08-02
+**Current task:** v0.9.5-F6A RevisionService Runtime Repository Narrowing
+**Status:** completed and verified (see `RUN_VERIFICATION_V0.9.5_F6A.md`)
+
+- Every active `RevisionService` receives the existing facade-owned
+  `SQLiteRevisionRepository` (both app paths, Submission factory, Admin
+  Reanalysis embedded composition, FeedbackPipeline, operational callers);
+  no broad facade runtime remains; no new Port, fallback, proxy, or shared
+  transaction; the central `RevisionRepository`, Revision writes, SQL, and
+  the three-sequential-commit workflow are unchanged; F6A0 remains the
+  completed capability prerequisite.
+- Focused 155 PASS; accumulated contracts 188 PASS; full core 573 passed +
+  8 skipped; exact `run.bat --verify` PASS; migration 12, 33 tables,
+  `config-v0.9.0`, prompt `feedback-prompt-v0.7.1`, facade 86, API 77,
+  client 52, locale 520/520 unchanged; development database unchanged.
+- Next: v0.9.5-F6B and later stages only under separate authorization.
+
+**Date:** 2026-08-02
 **Current task:** v0.9.5-F6A0 Revision Repository Capability Completion
 **Status:** completed and verified (see `RUN_VERIFICATION_V0.9.5_F6A0.md`)
 

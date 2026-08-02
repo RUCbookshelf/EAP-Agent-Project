@@ -36,7 +36,9 @@ def _db_with_essays(*essays: EssaySubmission) -> Database:
     db = Database(db_path)
     db.initialize()
     from app.services import build_submission_service
-    service = build_submission_service(settings, db)
+    service = build_submission_service(
+        settings, db, revision_repository=db._revision_repository,
+    )
     for essay in essays:
         service.submit(essay, synthetic=True)
     return db

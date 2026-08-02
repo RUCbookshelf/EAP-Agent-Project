@@ -32,7 +32,7 @@ def _settings(tmp_path):
 def _service(tmp_path):
     settings = _settings(tmp_path)
     repository = Database(settings.database_path); repository.initialize()
-    revisions = RevisionService(repository)
+    revisions = RevisionService(repository=repository._revision_repository)
     service = SubmissionService(
         repository, BasicAnalyzer(), HeuristicDiagnoser(),
         ProviderRouter(LocalDemoProvider(), LocalDemoProvider()), revision_service=revisions,
@@ -201,7 +201,7 @@ def test_revision_group_uses_one_timeline_representative(tmp_path):
 def test_admin_reanalysis_preview_append_only_and_no_llm_by_default(tmp_path):
     settings, repository, _, service, ids = _seed(tmp_path, count=1)
     configurations = _configuration_service(repository)
-    admin = AdminReanalysisService(repository, settings, configurations, service)
+    admin = AdminReanalysisService(repository, settings, configurations, service, revision_repository=repository._revision_repository)
     request = ReanalysisRequest(scope_type="submission", scope_id=str(ids[0]), analyzer_id="basic")
     before = len(repository.list_analysis_runs(ids[0]))
     preview = admin.preview(request)
@@ -213,7 +213,10 @@ def test_admin_reanalysis_preview_append_only_and_no_llm_by_default(tmp_path):
 
 def test_admin_reanalysis_explicit_llm_path_is_separately_confirmed(tmp_path):
     settings, repository, _, service, ids = _seed(tmp_path, count=1)
-    admin = AdminReanalysisService(repository, settings, _configuration_service(repository), service)
+    admin = AdminReanalysisService(
+        repository, settings, _configuration_service(repository), service,
+        revision_repository=repository._revision_repository,
+    )
     with pytest.raises(ValidationError, match="confirm_llm_cost"):
         ReanalysisRequest(scope_type="submission", scope_id=str(ids[0]), call_llm=True)
     result = admin.run(ReanalysisRequest(
@@ -227,7 +230,10 @@ def test_admin_reanalysis_explicit_llm_path_is_separately_confirmed(tmp_path):
 @pytest.mark.parametrize("scope_type", ["student", "analysis_run"])
 def test_admin_reanalysis_additional_scopes(tmp_path, scope_type):
     settings, repository, _, service, ids = _seed(tmp_path, count=2)
-    admin = AdminReanalysisService(repository, settings, _configuration_service(repository), service)
+    admin = AdminReanalysisService(
+        repository, settings, _configuration_service(repository), service,
+        revision_repository=repository._revision_repository,
+    )
     scope_id = "V06-STUDENT" if scope_type == "student" else repository.get_latest_analysis_run(ids[0])["analysis_run_id"]
     preview = admin.preview(ReanalysisRequest(scope_type=scope_type, scope_id=scope_id, analyzer_id="basic"))
     assert preview["submission_count"] == (2 if scope_type == "student" else 1)
@@ -243,7 +249,10 @@ def test_admin_reanalysis_revision_group_appends_snapshots(tmp_path):
     ))
     group_id = revised.revision_snapshot.revision_group_id
     before = len(revisions.history(group_id))
-    admin = AdminReanalysisService(repository, settings, _configuration_service(repository), service)
+    admin = AdminReanalysisService(
+        repository, settings, _configuration_service(repository), service,
+        revision_repository=repository._revision_repository,
+    )
     result = admin.run(ReanalysisRequest(scope_type="revision_group", scope_id=group_id, analyzer_id="basic"))
     assert len(result["revision_snapshot_ids"]) == 1
     assert len(revisions.history(group_id)) == before + 1

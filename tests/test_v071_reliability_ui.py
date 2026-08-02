@@ -36,7 +36,9 @@ def local_stack(tmp_path):
         deepseek_api_key=None,
     )
     repository = Database(settings.database_path); repository.initialize()
-    return settings, repository, build_submission_service(settings, repository)
+    return settings, repository, build_submission_service(
+        settings, repository, revision_repository=repository._revision_repository,
+    )
 
 
 class ScriptedProvider(LLMProvider):

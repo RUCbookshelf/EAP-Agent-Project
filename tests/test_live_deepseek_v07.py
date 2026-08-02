@@ -24,7 +24,9 @@ def test_three_task_live_deepseek_uses_screened_v07_history(tmp_path):
         pytest.skip("Local .env does not configure DEEPSEEK_API_KEY.")
     settings = replace(settings, database_path=tmp_path / "live-v07.db", llm_provider="deepseek")
     repository = Database(settings.database_path); repository.initialize()
-    service = build_submission_service(settings, repository)
+    service = build_submission_service(
+        settings, repository, revision_repository=repository._revision_repository,
+    )
     base = datetime(2026, 6, 1, tzinfo=timezone.utc)
     results = []
     for index, prompt in enumerate((

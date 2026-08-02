@@ -1,3 +1,33 @@
+## v0.9.5-F6A (2026-08-02)
+
+### Changed
+- Replaced the broad `Database` facade runtime repository of
+  `RevisionService` with the existing facade-owned `SQLiteRevisionRepository`
+  instance at every active direct and indirect construction path: both
+  application-construction paths, `build_submission_service` (new required
+  keyword-only `revision_repository` input), `AdminReanalysisService`
+  (new required keyword-only `revision_repository` injection for its
+  embedded Revision composition), and the legacy `FeedbackPipeline`
+  composition line. Operational callers (demo and live-verification
+  scripts, the E capture helper) and relevant tests received
+  constructor/factory-argument-only updates.
+- No new Revision Port, no `RevisionService` fallback, no Protocol change,
+  and no repository, SQL, or transaction change; `RevisionService` remains
+  typed against the unchanged central `RevisionRepository`. The
+  three-sequential-commit relationship workflow and Essay-update ownership
+  are preserved. F6A0 (`693ff48`/`b4d37af`) remains the completed
+  capability prerequisite and resolved the original blocker.
+- Added 14 focused F6A runtime tests, the F6A isolated pytest runner, and
+  the F6A SPEC/verification documentation.
+
+### Verified
+- Focused F6A set 155 PASS; accumulated architecture contracts 188 PASS
+  (F2-F6A0, E parity 86/33, API 77, client 52, locale 520/520); full
+  non-live core 573 passed + 8 skipped; exact `run.bat --verify` PASS
+  (migration 12, 33 tables, `config-v0.9.0`, prompt v0.7.1,
+  health/docs/Streamlit 200); development database unchanged
+  (SHA-256/size/mtime).
+
 ## v0.9.5-F6A0 (2026-08-02)
 
 ### Changed

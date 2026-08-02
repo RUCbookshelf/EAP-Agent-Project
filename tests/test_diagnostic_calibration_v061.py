@@ -43,7 +43,9 @@ def analyze(name: str = "first_draft.json"):
 def local_stack(tmp_path):
     settings = replace(load_settings(), database_path=tmp_path / "calibration.db", llm_provider="local")
     repository = Database(settings.database_path); repository.initialize()
-    return repository, build_submission_service(settings, repository)
+    return repository, build_submission_service(
+        settings, repository, revision_repository=repository._revision_repository,
+    )
 
 
 def test_metric_confidence_structure_and_high_medium_insufficient():

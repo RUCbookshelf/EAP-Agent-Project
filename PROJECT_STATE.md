@@ -6,6 +6,28 @@
 
 # Project State
 
+# Project State
+
+## Current v0.9.5-F6A State
+
+- Status: completed and verified; RevisionService runtime repository
+  narrowing scope closed (F6A0 prerequisite completed first).
+- Every active `RevisionService` now receives the existing facade-owned
+  `SQLiteRevisionRepository` instance (both app paths, the Submission
+  factory, AdminReanalysisService embedded composition, FeedbackPipeline,
+  and operational callers); no active instance receives the broad `Database`
+  facade. No new Revision Port, no fallback, no proxy, no shared
+  transaction; the central `RevisionRepository`, `RevisionService`, Revision
+  write methods, SQL, and the three-sequential-commit workflow are
+  unchanged.
+- Verification: focused 155 PASS; accumulated contracts 188 PASS; full
+  non-live core 573 passed + 8 skipped; exact `run.bat --verify` PASS;
+  migration 12; 33 tables; `config-v0.9.0`; prompt `feedback-prompt-v0.7.1`;
+  facade 86; API 77; client 52; locale 520/520; development database
+  unchanged (SHA-256/size/mtime).
+- Next: v0.9.5-F6B (Admin Reanalysis persistence narrowing) and later
+  stages only under separate authorization.
+
 ## Current v0.9.5-F6A0 State
 
 - Status: completed and verified; Revision repository capability completion

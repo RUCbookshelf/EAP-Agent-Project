@@ -1,5 +1,35 @@
 
 
+## 2026-08-02 - v0.9.5-F6A RevisionService runtime repository narrowing
+
+- **Decision**: After the F6A0 prerequisite (completed and verified), swap
+  the runtime repository of `RevisionService` from the broad `Database`
+  facade to the existing facade-owned `SQLiteRevisionRepository` at every
+  active direct and indirect construction path: both app paths, the
+  Submission factory (required keyword-only `revision_repository`), the
+  AdminReanalysisService embedded Revision composition (required
+  keyword-only `revision_repository` injection), and the FeedbackPipeline
+  composition line, plus constructor/factory-argument-only updates to
+  operational callers and tests.
+- **Rationale**: The runtime object should be the already-composed Revision
+  aggregate repository rather than the 86-method facade; F6A0 made the
+  repository structurally satisfy the central `RevisionRepository` first.
+- **Parity boundary**: Central `RevisionRepository`, `RevisionService`
+  (typed `repository: RevisionRepository`), Revision write methods, Essay
+  updates inside `create_revision_group`/`link_revision`, the
+  three-sequential-commit workflow, SQL, transactions, migration 12, 33
+  tables, `config-v0.9.0`, prompt `feedback-prompt-v0.7.1`, API 77 pairs,
+  client 52 methods, locale 520/520, and facade 86 methods unchanged; no
+  new Port, fallback, proxy, or shared transaction.
+- **Safety decision**: All write-capable verification used fresh guarded
+  temporary databases with python-dotenv disabled and `DATABASE_URL`
+  absent; development database remained at SHA-256 `340E0F...AFF4`
+  (unchanged).
+- **Evidence**: focused 155 PASS; accumulated contracts 188 PASS; full
+  non-live core 573 passed + 8 skipped; exact `run.bat --verify` PASS.
+- **Boundary**: v0.9.5-F6B (Admin Reanalysis persistence narrowing) and
+  later stages only under separate authorization.
+
 ## 2026-08-02 - v0.9.5-F6A0 Revision repository capability completion
 
 - **Decision**: Authorized via Option C of the F6A blocker report. Complete

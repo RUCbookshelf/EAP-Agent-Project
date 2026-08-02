@@ -265,10 +265,13 @@ def test_submission_factory_explicit_and_legacy_composition(tmp_path, monkeypatc
         database,
         learner_repository=database._learner_repository,
         configuration_repository=database._configuration_repository,
+        revision_repository=database._revision_repository,
     )
     _assert_extracted_chain(explicit.learner_profile_service, database)
 
-    legacy = build_submission_service(settings, database)
+    legacy = build_submission_service(
+        settings, database, revision_repository=database._revision_repository,
+    )
     assert legacy.learner_profile_service.repository is database
     assert legacy.learner_profile_service.progress.learner_repository is database
     assert legacy.learner_profile_service.progress.configuration_repository is database
