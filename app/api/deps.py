@@ -66,6 +66,26 @@ def get_research(request: Request):
     return request.app.state.research
 
 
+def get_practice_submission_reader(request: Request):
+    return request.app.state.practice_submission_reader
+
+
+def get_practice_reader(request: Request):
+    return request.app.state.practice_reader
+
+
+def get_practice_writer(request: Request):
+    return request.app.state.practice_writer
+
+
+def get_practice_student_reader(request: Request):
+    return request.app.state.practice_student_reader
+
+
+def get_practice_service(request: Request):
+    return request.app.state.practice_service
+
+
 def require_student(repository, student_id: str) -> dict:
     """Return the student row or raise the canonical 404 used by the API."""
     student = repository.get_student(student_id)

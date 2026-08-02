@@ -140,7 +140,7 @@ def setup() -> int:
             configuration_repository=repository._configuration_repository,
             revision_repository=repository._revision_repository,
         )
-        practice_service = PracticeService(repository)
+        practice_service = PracticeService()
 
         original = EssaySubmission(
             student_id=DEMO_LEARNER,

@@ -16,8 +16,7 @@ from app.practice.schemas import (
 class PracticeService:
     """Conservative practice-target and exercise management. No mastery, no scoring, no causal claims."""
 
-    def __init__(self, repository):
-        self.repo = repository
+    def __init__(self):
         self.specs = default_exercise_specifications()
 
     def create_practice_target(self, student_id: str, source_submission_id: int,

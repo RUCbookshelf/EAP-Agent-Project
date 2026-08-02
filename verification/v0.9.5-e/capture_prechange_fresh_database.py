@@ -128,7 +128,7 @@ def representative_crud(database: Database, settings: Settings) -> dict:
     revision_group = database.create_revision_group(essay_id)
     profile = database.get_latest_learner_profile(submission.student_id)
 
-    practice = PracticeService(database)
+    practice = PracticeService()
     target = practice.create_practice_target(
         student_id=submission.student_id,
         source_submission_id=essay_id,

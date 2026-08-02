@@ -35,6 +35,7 @@ from app.api.routers import (
 from app.config import Settings, load_settings
 from app.database import Database
 from app.journey.service import JourneyService
+from app.practice.service import PracticeService
 from app.lifecycle import ServiceState, lifecycle
 from app.research.service import ResearchDataService
 from app.services import (
@@ -238,6 +239,11 @@ def _run_startup(api: FastAPI) -> None:
     api.state.calf = clf
     api.state.research = research_svc
     api.state.journey_service = journey_svc
+    api.state.practice_submission_reader = repository._submission_repository
+    api.state.practice_reader = repository._practice_repository
+    api.state.practice_writer = repository._practice_repository
+    api.state.practice_student_reader = repository._learner_repository
+    api.state.practice_service = PracticeService()
     api.state.admin_reanalysis = AdminReanalysisService(
         settings=settings,
         configuration_reader=repository._configuration_repository,
@@ -437,6 +443,11 @@ def _build_full_app(
     api.state.calf = calf
     api.state.research = research
     api.state.journey_service = journey
+    api.state.practice_submission_reader = repository._submission_repository
+    api.state.practice_reader = repository._practice_repository
+    api.state.practice_writer = repository._practice_repository
+    api.state.practice_student_reader = repository._learner_repository
+    api.state.practice_service = PracticeService()
     api.state.admin_reanalysis = AdminReanalysisService(
         settings=settings,
         configuration_reader=repository._configuration_repository,

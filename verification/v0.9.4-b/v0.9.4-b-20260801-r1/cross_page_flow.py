@@ -122,7 +122,7 @@ def persist_authoritative_response_observation() -> dict:
     group_id = revised.get("revision_group_id")
     snapshot = repository.get_latest_revision_snapshot(group_id)
     assert snapshot is not None
-    candidate = PracticeService(repository).evaluate_within_task_response(
+    candidate = PracticeService().evaluate_within_task_response(
         STUDENT,
         target,
         int(source["essay_id"]),
