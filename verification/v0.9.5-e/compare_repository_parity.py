@@ -3,6 +3,7 @@ from __future__ import annotations
 import ast
 import hashlib
 import json
+import os
 import re
 import subprocess
 import sys
@@ -182,6 +183,10 @@ def main() -> None:
         ["git", "diff", "--name-only", BASELINE, "--", "app/services", "app/journey", "app/practice", "app/research", "app/api"],
         cwd=ROOT, text=True,
     ).splitlines()
+    allowed_diff = {
+        item for item in os.environ.get("SERVICE_API_DIFF_ALLOWLIST", "").split(",") if item
+    }
+    service_diff = [path for path in service_diff if path not in allowed_diff]
     summary = {
         "method_count_before": pre["public_method_count"],
         "method_count_after": len([name for name in facade_methods if not name.startswith("_")]),

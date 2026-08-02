@@ -1,9 +1,8 @@
 from __future__ import annotations
 
 from collections import Counter
-from typing import Any
+from typing import Any, Protocol, runtime_checkable
 
-from app.repositories import LearnerHistoryRepository
 from app.models import (
     AnalysisResult,
     DiagnosisResult,
@@ -19,10 +18,17 @@ HISTORY_LIMITATION = (
 )
 
 
+@runtime_checkable
+class PriorRecordsPort(Protocol):
+    """Consumer-owned one-method read port for earlier-submission records."""
+
+    def prior_records(self, submission: EssaySubmission) -> list[dict[str, Any]]: ...
+
+
 class LearnerHistoryService:
     """Build human-readable and ID-addressable longitudinal evidence."""
 
-    def __init__(self, database: LearnerHistoryRepository):
+    def __init__(self, database: PriorRecordsPort):
         self.database = database
 
     def summarize(self, essay_id: int, submission: EssaySubmission, current_analysis: AnalysisResult,
