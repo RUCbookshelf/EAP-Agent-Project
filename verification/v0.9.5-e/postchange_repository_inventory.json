@@ -1,0 +1,1510 @@
+{
+  "baseline_commit": "769e6d8",
+  "failures": [],
+  "format_version": 1,
+  "methods": [
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self) -> sqlite3.Connection",
+      "implementation_file": "app/infrastructure/sqlite/repositories/system.py",
+      "implementation_signature_parity": true,
+      "name": "connect",
+      "owner": "SystemRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "c409d1b0a511a84003321cca8ff14a9736f2e0a7d77b7599746a7f75abe2f2d7"
+      ],
+      "sql_fingerprints_before": [
+        "c409d1b0a511a84003321cca8ff14a9736f2e0a7d77b7599746a7f75abe2f2d7"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self) -> None",
+      "implementation_file": "app/infrastructure/sqlite/repositories/system.py",
+      "implementation_signature_parity": true,
+      "name": "initialize",
+      "owner": "SystemRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [],
+      "sql_fingerprints_before": []
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, versions: dict[str, str]) -> None",
+      "implementation_file": "app/infrastructure/sqlite/repositories/system.py",
+      "implementation_signature_parity": true,
+      "name": "record_versions",
+      "owner": "SystemRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "0bc095547f870399f5c4356de313d4295a0c0f547437d70f2c9368e0c73b8645"
+      ],
+      "sql_fingerprints_before": [
+        "0bc095547f870399f5c4356de313d4295a0c0f547437d70f2c9368e0c73b8645"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, submission: EssaySubmission, *, synthetic: bool=False) -> int",
+      "implementation_file": "app/infrastructure/sqlite/repositories/submission.py",
+      "implementation_signature_parity": true,
+      "name": "save_essay",
+      "owner": "SubmissionRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "8ca459d0035ed8d50bbeec8fac5b6eaab790b715a8fadff57dd065b38bc062c0",
+        "0c87215b4ac162968ee00a4107724366617cc26507575e416232464ceed9b70a"
+      ],
+      "sql_fingerprints_before": [
+        "8ca459d0035ed8d50bbeec8fac5b6eaab790b715a8fadff57dd065b38bc062c0",
+        "0c87215b4ac162968ee00a4107724366617cc26507575e416232464ceed9b70a"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, essay_id: int, analysis: AnalysisResult) -> None",
+      "implementation_file": "app/infrastructure/sqlite/repositories/analysis.py",
+      "implementation_signature_parity": true,
+      "name": "save_analysis",
+      "owner": "AnalysisRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "f52a5735b1279851854cda80e287a6ff722c655b7703d296c5ce062bd1097c7a"
+      ],
+      "sql_fingerprints_before": [
+        "f52a5735b1279851854cda80e287a6ff722c655b7703d296c5ce062bd1097c7a"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, essay_id: int, analysis: AnalysisResult) -> AnalysisResult",
+      "implementation_file": "app/infrastructure/sqlite/repositories/analysis.py",
+      "implementation_signature_parity": true,
+      "name": "save_analysis_run",
+      "owner": "AnalysisRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "dbbe06c2d20c79f20cf8258f6e080a1d39a55df45f93889e1f27c0be7a469a53",
+        "19f3b57892376c0d236b5f0e85f633bb9b3bbdabd5911ec8f613df6612a893e5",
+        "5baa2dce09b7356c3c213a9029f6bd6ef5263dc7c94ebfd9dc072ccb4943355e",
+        "89a9eafdb30b7fd62aa27593e4a11be1814624d78814cac67b370924c2a27753",
+        "94a8c988b02ac1e6a39250da1dbda6e264951c32f03058331e749c6c3e9fda68",
+        "e36bd11eb7e64e7bda8cf841c348cb205a4c519ab1dc627b78232a1dbdb8e589"
+      ],
+      "sql_fingerprints_before": [
+        "dbbe06c2d20c79f20cf8258f6e080a1d39a55df45f93889e1f27c0be7a469a53",
+        "19f3b57892376c0d236b5f0e85f633bb9b3bbdabd5911ec8f613df6612a893e5",
+        "5baa2dce09b7356c3c213a9029f6bd6ef5263dc7c94ebfd9dc072ccb4943355e",
+        "89a9eafdb30b7fd62aa27593e4a11be1814624d78814cac67b370924c2a27753",
+        "94a8c988b02ac1e6a39250da1dbda6e264951c32f03058331e749c6c3e9fda68",
+        "e36bd11eb7e64e7bda8cf841c348cb205a4c519ab1dc627b78232a1dbdb8e589"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, essay_id: int) -> list[dict[str, Any]]",
+      "implementation_file": "app/infrastructure/sqlite/repositories/analysis.py",
+      "implementation_signature_parity": true,
+      "name": "list_analysis_runs",
+      "owner": "AnalysisRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "7d22f4c770c991de8fde092432b974d708ae2eb47ee77d2fc9c8980c3df79dd7"
+      ],
+      "sql_fingerprints_before": [
+        "7d22f4c770c991de8fde092432b974d708ae2eb47ee77d2fc9c8980c3df79dd7"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, essay_id: int) -> dict[str, Any] | None",
+      "implementation_file": "app/infrastructure/sqlite/repositories/analysis.py",
+      "implementation_signature_parity": true,
+      "name": "get_latest_analysis_run",
+      "owner": "AnalysisRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [],
+      "sql_fingerprints_before": []
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, analysis_run_id: str) -> dict[str, Any] | None",
+      "implementation_file": "app/infrastructure/sqlite/repositories/analysis.py",
+      "implementation_signature_parity": true,
+      "name": "get_analysis_run",
+      "owner": "AnalysisRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "a0f639ff1e1f782f178548df41ca39bfac50a707b1459ae8dd572914328e6ec9"
+      ],
+      "sql_fingerprints_before": [
+        "a0f639ff1e1f782f178548df41ca39bfac50a707b1459ae8dd572914328e6ec9"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, analysis_run_id: str) -> list[dict[str, Any]]",
+      "implementation_file": "app/infrastructure/sqlite/repositories/analysis.py",
+      "implementation_signature_parity": true,
+      "name": "get_metric_results",
+      "owner": "AnalysisRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "1327205df3fbdedc93cc81a1f325df728724bf50cea0ff881fb87983da0c3814"
+      ],
+      "sql_fingerprints_before": [
+        "1327205df3fbdedc93cc81a1f325df728724bf50cea0ff881fb87983da0c3814"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, analysis_run_id: str) -> dict[str, Any] | None",
+      "implementation_file": "app/infrastructure/sqlite/repositories/analysis.py",
+      "implementation_signature_parity": true,
+      "name": "get_analysis_artifact",
+      "owner": "AnalysisRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "d7c1c36a0e556e86a2cce0f1fea9135591e4436cfeb2c0980e405d7014f6f433"
+      ],
+      "sql_fingerprints_before": [
+        "d7c1c36a0e556e86a2cce0f1fea9135591e4436cfeb2c0980e405d7014f6f433"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, essay_id: int, diagnosis: DiagnosisResult) -> None",
+      "implementation_file": "app/infrastructure/sqlite/repositories/analysis.py",
+      "implementation_signature_parity": true,
+      "name": "save_diagnosis",
+      "owner": "AnalysisRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "eddb2108ffecd66f72e040d20f418c2b93f89f6ee95be4555e7067a34021cc97"
+      ],
+      "sql_fingerprints_before": [
+        "eddb2108ffecd66f72e040d20f418c2b93f89f6ee95be4555e7067a34021cc97"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, essay_id: int, calibration: DiagnosticCalibrationResult) -> DiagnosticCalibrationResult",
+      "implementation_file": "app/infrastructure/sqlite/repositories/calf.py",
+      "implementation_signature_parity": true,
+      "name": "save_diagnostic_calibration",
+      "owner": "CalfRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "d7dda2a6882bccc9b9dc28c964c2783adf35273f950162a5f1943513621f40ed",
+        "a71f2c1c6c25adfc7d6b6e7509c46800d908e305728eff17635121e0710065f1"
+      ],
+      "sql_fingerprints_before": [
+        "d7dda2a6882bccc9b9dc28c964c2783adf35273f950162a5f1943513621f40ed",
+        "a71f2c1c6c25adfc7d6b6e7509c46800d908e305728eff17635121e0710065f1"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, essay_id: int) -> DiagnosticCalibrationResult | None",
+      "implementation_file": "app/infrastructure/sqlite/repositories/calf.py",
+      "implementation_signature_parity": true,
+      "name": "get_diagnostic_calibration",
+      "owner": "CalfRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "120c3119d88f4f325098cf71b5441feab66fb24e752576afd975207d21eeac43"
+      ],
+      "sql_fingerprints_before": [
+        "120c3119d88f4f325098cf71b5441feab66fb24e752576afd975207d21eeac43"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, essay_id: int, result: ProviderResult, analysis_version: str) -> None",
+      "implementation_file": "app/infrastructure/sqlite/repositories/submission.py",
+      "implementation_signature_parity": true,
+      "name": "save_feedback",
+      "owner": "SubmissionRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "20e9389673f1065eae2ecb38519249fe905c5978869265be30cc2ddce4d21b61",
+        "266895756a0e3af8f242018601ac74c7548501143215bf4739677e49247a9079",
+        "5317ef23f082defbcc983c8f0224e2898e6ad3591e84bb2a9908495bacf0cd03"
+      ],
+      "sql_fingerprints_before": [
+        "20e9389673f1065eae2ecb38519249fe905c5978869265be30cc2ddce4d21b61",
+        "266895756a0e3af8f242018601ac74c7548501143215bf4739677e49247a9079",
+        "5317ef23f082defbcc983c8f0224e2898e6ad3591e84bb2a9908495bacf0cd03"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, student_id: str, essay_id: int, history: HistoryResult) -> None",
+      "implementation_file": "app/infrastructure/sqlite/repositories/submission.py",
+      "implementation_signature_parity": true,
+      "name": "save_history",
+      "owner": "SubmissionRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "a8481f359bc5ed3c3f7c5325d00cf510fb5ed417f9fae586dd51ee38ee96b24a"
+      ],
+      "sql_fingerprints_before": [
+        "a8481f359bc5ed3c3f7c5325d00cf510fb5ed417f9fae586dd51ee38ee96b24a"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, submission: EssaySubmission) -> list[dict[str, Any]]",
+      "implementation_file": "app/infrastructure/sqlite/repositories/submission.py",
+      "implementation_signature_parity": true,
+      "name": "prior_records",
+      "owner": "SubmissionRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "fbc6def8cd536812d0996b3d113228194fce2caf1d72f3992fd47c6d30375f44"
+      ],
+      "sql_fingerprints_before": [
+        "fbc6def8cd536812d0996b3d113228194fce2caf1d72f3992fd47c6d30375f44"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self) -> dict[str, int]",
+      "implementation_file": "app/infrastructure/sqlite/repositories/system.py",
+      "implementation_signature_parity": true,
+      "name": "counts",
+      "owner": "SystemRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "5f941c498253baf76c90d4c2de2b5719cc7b4b75c229a34c41cfb13758de5197"
+      ],
+      "sql_fingerprints_before": [
+        "5f941c498253baf76c90d4c2de2b5719cc7b4b75c229a34c41cfb13758de5197"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, essay_id: int) -> dict[str, Any] | None",
+      "implementation_file": "app/infrastructure/sqlite/repositories/submission.py",
+      "implementation_signature_parity": true,
+      "name": "get_feedback_record",
+      "owner": "SubmissionRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "f2f08b0ba88b8a865591292ea45ffa2033e45bd28b7f07b1fa58251322521044"
+      ],
+      "sql_fingerprints_before": [
+        "f2f08b0ba88b8a865591292ea45ffa2033e45bd28b7f07b1fa58251322521044"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, essay_id: int) -> list[dict[str, Any]]",
+      "implementation_file": "app/infrastructure/sqlite/repositories/submission.py",
+      "implementation_signature_parity": true,
+      "name": "get_llm_calls",
+      "owner": "SubmissionRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "1668a0747e51192b3f16040f520402500b28e457ec61dba623aa483c701489a0"
+      ],
+      "sql_fingerprints_before": [
+        "1668a0747e51192b3f16040f520402500b28e457ec61dba623aa483c701489a0"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, essay_id: int) -> dict[str, Any] | None",
+      "implementation_file": "app/infrastructure/sqlite/repositories/submission.py",
+      "implementation_signature_parity": true,
+      "name": "get_history_record",
+      "owner": "SubmissionRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "899ac1ce3cbaecff4396817039b391c451c7c200db7b1d2f4492148caf6dbbb0"
+      ],
+      "sql_fingerprints_before": [
+        "899ac1ce3cbaecff4396817039b391c451c7c200db7b1d2f4492148caf6dbbb0"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self) -> bool",
+      "implementation_file": "app/infrastructure/sqlite/repositories/system.py",
+      "implementation_signature_parity": true,
+      "name": "ping",
+      "owner": "SystemRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "e004ebd5b5532a4b85984a62f8ad48a81aa3460c1ca07701f386135d72cdecf5"
+      ],
+      "sql_fingerprints_before": [
+        "e004ebd5b5532a4b85984a62f8ad48a81aa3460c1ca07701f386135d72cdecf5"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self) -> int",
+      "implementation_file": "app/infrastructure/sqlite/repositories/system.py",
+      "implementation_signature_parity": true,
+      "name": "migration_version",
+      "owner": "SystemRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "80b42ff05db7c2ccd104f2c3e8b50803117eea987d16e403a2c6873e31200ac3"
+      ],
+      "sql_fingerprints_before": [
+        "80b42ff05db7c2ccd104f2c3e8b50803117eea987d16e403a2c6873e31200ac3"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self)",
+      "implementation_file": "app/infrastructure/sqlite/repositories/system.py",
+      "implementation_signature_parity": true,
+      "name": "transaction",
+      "owner": "SystemRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "a8402858d4f1e1d27afee976520485ebb4b96a5387355b823f0d0b8079729032"
+      ],
+      "sql_fingerprints_before": [
+        "a8402858d4f1e1d27afee976520485ebb4b96a5387355b823f0d0b8079729032"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, student_id: str) -> dict[str, Any] | None",
+      "implementation_file": "app/infrastructure/sqlite/repositories/learner.py",
+      "implementation_signature_parity": true,
+      "name": "get_student",
+      "owner": "LearnerRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "6bf1561ab9c253b28d66bd810f23ef6e38d96e26a09f273e09bb08ce9d5f3c23"
+      ],
+      "sql_fingerprints_before": [
+        "6bf1561ab9c253b28d66bd810f23ef6e38d96e26a09f273e09bb08ce9d5f3c23"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self)",
+      "implementation_file": "app/infrastructure/sqlite/repositories/learner.py",
+      "implementation_signature_parity": true,
+      "name": "list_all_students",
+      "owner": "LearnerRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "d0f8f57b177f72589c7442de46c0d9edf4b8d13016cf5fc320e9bde995096fb1"
+      ],
+      "sql_fingerprints_before": [
+        "d0f8f57b177f72589c7442de46c0d9edf4b8d13016cf5fc320e9bde995096fb1"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self)",
+      "implementation_file": "app/infrastructure/sqlite/repositories/submission.py",
+      "implementation_signature_parity": true,
+      "name": "list_all_submissions",
+      "owner": "SubmissionRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "4f65ab56900b38ad65a9123948ada7d01809152457fcbb88df84b0bab3102618"
+      ],
+      "sql_fingerprints_before": [
+        "4f65ab56900b38ad65a9123948ada7d01809152457fcbb88df84b0bab3102618"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, essay_id: int) -> dict[str, Any] | None",
+      "implementation_file": "app/infrastructure/sqlite/repositories/submission.py",
+      "implementation_signature_parity": true,
+      "name": "get_submission_bundle",
+      "owner": "SubmissionRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "b7a35b882843c23e0069e631a4ec9743c170fdd897c56c33fe4622666f0fbd7d"
+      ],
+      "sql_fingerprints_before": [
+        "b7a35b882843c23e0069e631a4ec9743c170fdd897c56c33fe4622666f0fbd7d"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, student_id: str) -> list[dict[str, Any]]",
+      "implementation_file": "app/infrastructure/sqlite/repositories/submission.py",
+      "implementation_signature_parity": true,
+      "name": "list_student_submissions",
+      "owner": "SubmissionRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "a7da065cf3236cd174d43eaa1c5d8de09071302258e93f3f56f1dd338be8dd4c"
+      ],
+      "sql_fingerprints_before": [
+        "a7da065cf3236cd174d43eaa1c5d8de09071302258e93f3f56f1dd338be8dd4c"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, submission_id: int, analysis_run_id: str | None=None) -> list[dict[str, Any]]",
+      "implementation_file": "app/infrastructure/sqlite/repositories/calf.py",
+      "implementation_signature_parity": true,
+      "name": "list_analysis_units",
+      "owner": "CalfRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "ef87aff8af22180312347eb96ee033e9698b6f558150e596e6573839c2aa4060",
+        "f53945395d8c3fd17a42d08e0a2f1a1131612be03008e629b0e0aa0020ef3741",
+        "ef87aff8af22180312347eb96ee033e9698b6f558150e596e6573839c2aa4060"
+      ],
+      "sql_fingerprints_before": [
+        "ef87aff8af22180312347eb96ee033e9698b6f558150e596e6573839c2aa4060",
+        "f53945395d8c3fd17a42d08e0a2f1a1131612be03008e629b0e0aa0020ef3741",
+        "ef87aff8af22180312347eb96ee033e9698b6f558150e596e6573839c2aa4060"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, submission_id: int, annotations: list[ErrorAnnotation]) -> list[ErrorAnnotation]",
+      "implementation_file": "app/infrastructure/sqlite/repositories/calf.py",
+      "implementation_signature_parity": true,
+      "name": "save_error_annotations",
+      "owner": "CalfRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "8cd7ffe1acb60850acb36d7c7f7a661ce37267481eb74e4c9ad5c7d08bd37e85",
+        "3995fad3e8e4a18a154aef6bc5c017d86c55d95d7c5e5f68c58746671ad6944c",
+        "2d9cfd1a06c2939c770ff984d8adc451a9af02e2de79e18b8ed6baac5ef1d57b"
+      ],
+      "sql_fingerprints_before": [
+        "8cd7ffe1acb60850acb36d7c7f7a661ce37267481eb74e4c9ad5c7d08bd37e85",
+        "3995fad3e8e4a18a154aef6bc5c017d86c55d95d7c5e5f68c58746671ad6944c",
+        "2d9cfd1a06c2939c770ff984d8adc451a9af02e2de79e18b8ed6baac5ef1d57b"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, submission_id: int) -> list[ErrorAnnotation]",
+      "implementation_file": "app/infrastructure/sqlite/repositories/calf.py",
+      "implementation_signature_parity": true,
+      "name": "list_error_annotations",
+      "owner": "CalfRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "1a7371171f99762c1ae720661f1f7862eea3ea12e76a2cd3894afcf279fac7db"
+      ],
+      "sql_fingerprints_before": [
+        "1a7371171f99762c1ae720661f1f7862eea3ea12e76a2cd3894afcf279fac7db"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, student_id: str) -> list[dict[str, Any]]",
+      "implementation_file": "app/infrastructure/sqlite/repositories/learner.py",
+      "implementation_signature_parity": true,
+      "name": "list_student_history",
+      "owner": "LearnerRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "3e25a8e4790feb495d18fa8e67c5d28e794a5c8683fb2b41918d57e2a13cd882"
+      ],
+      "sql_fingerprints_before": [
+        "3e25a8e4790feb495d18fa8e67c5d28e794a5c8683fb2b41918d57e2a13cd882"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, essay_id: int) -> list[dict[str, Any]]",
+      "implementation_file": "app/infrastructure/sqlite/repositories/submission.py",
+      "implementation_signature_parity": true,
+      "name": "get_exercises",
+      "owner": "SubmissionRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "0ab2b09457b7e26ba744c40ff9774f931f298d973edb83c84109ae9ad32a81bb"
+      ],
+      "sql_fingerprints_before": [
+        "0ab2b09457b7e26ba744c40ff9774f931f298d973edb83c84109ae9ad32a81bb"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, student_id: str) -> dict[str, Any] | None",
+      "implementation_file": "app/infrastructure/sqlite/repositories/learner.py",
+      "implementation_signature_parity": true,
+      "name": "get_latest_learner_profile",
+      "owner": "LearnerRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "4b3bb6cc538f2d117f25c32f4d86b62d2bceb8992de49a0fd8fd35b38ee4f80e"
+      ],
+      "sql_fingerprints_before": [
+        "4b3bb6cc538f2d117f25c32f4d86b62d2bceb8992de49a0fd8fd35b38ee4f80e"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, snapshot: LearnerProfileSnapshot) -> LearnerProfileSnapshot",
+      "implementation_file": "app/infrastructure/sqlite/repositories/learner.py",
+      "implementation_signature_parity": true,
+      "name": "save_learner_profile_snapshot",
+      "owner": "LearnerRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "316a5a8bddf5279abdffc436b550f71a5a1099766c8dfe618a6e771563966647",
+        "f1efa949fa3606563f632b369045ef6f2c1ebad5e16d0298dc647625c5dd011d",
+        "f90a60a5f3981daeb9c13c16616298301ce4ac0ff37d04053ed25cab781bc814",
+        "2b7a2a701c1662e81d35a1c63d8f8461881c9a1adc023f00c63f7321a84c5dfc",
+        "8346dd4d4ad30336ad6ec4834d5f8a7697f957ffb40c54840ac8da626773039a",
+        "652b85ecfe11a431e91170852c16e17a17a5605a40adfc4092843fcf04101d00"
+      ],
+      "sql_fingerprints_before": [
+        "316a5a8bddf5279abdffc436b550f71a5a1099766c8dfe618a6e771563966647",
+        "f1efa949fa3606563f632b369045ef6f2c1ebad5e16d0298dc647625c5dd011d",
+        "f90a60a5f3981daeb9c13c16616298301ce4ac0ff37d04053ed25cab781bc814",
+        "2b7a2a701c1662e81d35a1c63d8f8461881c9a1adc023f00c63f7321a84c5dfc",
+        "8346dd4d4ad30336ad6ec4834d5f8a7697f957ffb40c54840ac8da626773039a",
+        "652b85ecfe11a431e91170852c16e17a17a5605a40adfc4092843fcf04101d00"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, student_id: str) -> list[dict[str, Any]]",
+      "implementation_file": "app/infrastructure/sqlite/repositories/learner.py",
+      "implementation_signature_parity": true,
+      "name": "list_history_evidence",
+      "owner": "LearnerRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "db78dda3024fa0d05cdae8f96da312c353bca226d09555e035a28f7eaca739cc"
+      ],
+      "sql_fingerprints_before": [
+        "db78dda3024fa0d05cdae8f96da312c353bca226d09555e035a28f7eaca739cc"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, student_id: str) -> list[dict[str, Any]]",
+      "implementation_file": "app/infrastructure/sqlite/repositories/learner.py",
+      "implementation_signature_parity": true,
+      "name": "list_learner_profile_snapshots",
+      "owner": "LearnerRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "7586872aa16cc74a5e78dba84743b8fe939d9c017803ead6a4e35eebcc2fd703"
+      ],
+      "sql_fingerprints_before": [
+        "7586872aa16cc74a5e78dba84743b8fe939d9c017803ead6a4e35eebcc2fd703"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, student_id: str) -> list[dict[str, Any]]",
+      "implementation_file": "app/infrastructure/sqlite/repositories/learner.py",
+      "implementation_signature_parity": true,
+      "name": "list_longitudinal_records",
+      "owner": "LearnerRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "b46249b80887a551a1b70bc8b82b2ed288bb0084a3f52f5ca0da040ec5e133ba"
+      ],
+      "sql_fingerprints_before": [
+        "b46249b80887a551a1b70bc8b82b2ed288bb0084a3f52f5ca0da040ec5e133ba"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self) -> dict[str, str]",
+      "implementation_file": "app/infrastructure/sqlite/repositories/system.py",
+      "implementation_signature_parity": true,
+      "name": "get_system_versions",
+      "owner": "SystemRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "8827fb08c528f4c26cc5cd30dcdb3d6770d38ee1c17c4a040d3b3cc3c50cf1f4"
+      ],
+      "sql_fingerprints_before": [
+        "8827fb08c528f4c26cc5cd30dcdb3d6770d38ee1c17c4a040d3b3cc3c50cf1f4"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(value: str) -> str",
+      "implementation_file": "app/infrastructure/sqlite/repositories/revision.py",
+      "implementation_signature_parity": true,
+      "name": "normalize_revision_stage",
+      "owner": "RevisionRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [],
+      "sql_fingerprints_before": []
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, source_submission_id: int) -> RevisionGroup",
+      "implementation_file": "app/infrastructure/sqlite/repositories/revision.py",
+      "implementation_signature_parity": true,
+      "name": "create_revision_group",
+      "owner": "RevisionRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "e8b9ed877e2c91214b8c153a88fedc1ec0f13c9117f8e689d392c44248357ce5",
+        "abc3de8138ac99d2ad3ff81cbc7a3e1a11d8ae7a0930f7fc61923202411b6c5a",
+        "e4401ead4ac18a56d9eef4c72c8f0c63671d645c293d93986d23ba12c382a998"
+      ],
+      "sql_fingerprints_before": [
+        "e8b9ed877e2c91214b8c153a88fedc1ec0f13c9117f8e689d392c44248357ce5",
+        "abc3de8138ac99d2ad3ff81cbc7a3e1a11d8ae7a0930f7fc61923202411b6c5a",
+        "e4401ead4ac18a56d9eef4c72c8f0c63671d645c293d93986d23ba12c382a998"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, source_submission_id: int, target_submission_id: int, revision_group_id: str) -> None",
+      "implementation_file": "app/infrastructure/sqlite/repositories/revision.py",
+      "implementation_signature_parity": true,
+      "name": "link_revision",
+      "owner": "RevisionRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "9cd1b03c5d106910adb70a735978cab3e788d1048c6765b71341f30bae90043e",
+        "ac5b94a8a0fe5d87ef7804bc11ed03c1101444f10b1c41eb9aa9989963d31f60"
+      ],
+      "sql_fingerprints_before": [
+        "9cd1b03c5d106910adb70a735978cab3e788d1048c6765b71341f30bae90043e",
+        "ac5b94a8a0fe5d87ef7804bc11ed03c1101444f10b1c41eb9aa9989963d31f60"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, revision_group_id: str) -> RevisionGroup | None",
+      "implementation_file": "app/infrastructure/sqlite/repositories/revision.py",
+      "implementation_signature_parity": true,
+      "name": "get_revision_group",
+      "owner": "RevisionRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "5af1e88a0f80077553f5b24d3ec4bb8bd66b3a88f38886b647953e00a525546e",
+        "7872d018e278a41e19c45360b4b7c6f3ad9ce35b90e3804e0527a79497ac793c"
+      ],
+      "sql_fingerprints_before": [
+        "5af1e88a0f80077553f5b24d3ec4bb8bd66b3a88f38886b647953e00a525546e",
+        "7872d018e278a41e19c45360b4b7c6f3ad9ce35b90e3804e0527a79497ac793c"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, submission_id: int) -> RevisionGroup | None",
+      "implementation_file": "app/infrastructure/sqlite/repositories/revision.py",
+      "implementation_signature_parity": true,
+      "name": "get_revision_group_for_submission",
+      "owner": "RevisionRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "e2441395853307169c49867257a0be84800aa0d4996ed62043cf342e6ccb96fc"
+      ],
+      "sql_fingerprints_before": [
+        "e2441395853307169c49867257a0be84800aa0d4996ed62043cf342e6ccb96fc"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, submission_id: int) -> list[dict[str, Any]]",
+      "implementation_file": "app/infrastructure/sqlite/repositories/revision.py",
+      "implementation_signature_parity": true,
+      "name": "list_revision_candidates",
+      "owner": "RevisionRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "1a92c594d16e2946c16085ab03b11fbeef02add94ec15c177573f4a8ab006ed7"
+      ],
+      "sql_fingerprints_before": [
+        "1a92c594d16e2946c16085ab03b11fbeef02add94ec15c177573f4a8ab006ed7"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, snapshot: RevisionSnapshot) -> RevisionSnapshot",
+      "implementation_file": "app/infrastructure/sqlite/repositories/revision.py",
+      "implementation_signature_parity": true,
+      "name": "save_revision_snapshot",
+      "owner": "RevisionRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "d06771bc4abd5ac330f3a10f78cfa22bdfaff95e856da54ec978529d46761160",
+        "d5041b6ec8c1ddfc4290702164287f57f48c10cfb318d7602cf45f71f52f6fbe"
+      ],
+      "sql_fingerprints_before": [
+        "d06771bc4abd5ac330f3a10f78cfa22bdfaff95e856da54ec978529d46761160",
+        "d5041b6ec8c1ddfc4290702164287f57f48c10cfb318d7602cf45f71f52f6fbe"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, revision_group_id: str) -> list[dict[str, Any]]",
+      "implementation_file": "app/infrastructure/sqlite/repositories/revision.py",
+      "implementation_signature_parity": true,
+      "name": "list_revision_snapshots",
+      "owner": "RevisionRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "a6b0deb338f8ff87cb6a3ab29f40f6f0153347a9774193c14e8099f908702c97"
+      ],
+      "sql_fingerprints_before": [
+        "a6b0deb338f8ff87cb6a3ab29f40f6f0153347a9774193c14e8099f908702c97"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, revision_group_id: str) -> dict[str, Any] | None",
+      "implementation_file": "app/infrastructure/sqlite/repositories/revision.py",
+      "implementation_signature_parity": true,
+      "name": "get_latest_revision_snapshot",
+      "owner": "RevisionRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [],
+      "sql_fingerprints_before": []
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self) -> list[ConfigurationVersion]",
+      "implementation_file": "app/infrastructure/sqlite/repositories/configuration.py",
+      "implementation_signature_parity": true,
+      "name": "list_configurations",
+      "owner": "ConfigurationRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "b8579fdc56ef258108ffd2095d5e5298e335fe67a6d0ac4e0f15adaee6cfc68d"
+      ],
+      "sql_fingerprints_before": [
+        "b8579fdc56ef258108ffd2095d5e5298e335fe67a6d0ac4e0f15adaee6cfc68d"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, configuration_id_or_version: str) -> ConfigurationVersion | None",
+      "implementation_file": "app/infrastructure/sqlite/repositories/configuration.py",
+      "implementation_signature_parity": true,
+      "name": "get_configuration",
+      "owner": "ConfigurationRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "151ccfd717fbdf47d0071a3f47f533e040b95c31203d9349d3cc73f2b959db1a"
+      ],
+      "sql_fingerprints_before": [
+        "151ccfd717fbdf47d0071a3f47f533e040b95c31203d9349d3cc73f2b959db1a"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self) -> ConfigurationVersion",
+      "implementation_file": "app/infrastructure/sqlite/repositories/configuration.py",
+      "implementation_signature_parity": true,
+      "name": "get_active_configuration",
+      "owner": "ConfigurationRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "0aa07f77450199a7c718883ed11f4485b5d37834dc26b9a983df708a7faa6ab3"
+      ],
+      "sql_fingerprints_before": [
+        "0aa07f77450199a7c718883ed11f4485b5d37834dc26b9a983df708a7faa6ab3"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, request: ConfigurationCreate, parent_version: str | None) -> ConfigurationVersion",
+      "implementation_file": "app/infrastructure/sqlite/repositories/configuration.py",
+      "implementation_signature_parity": true,
+      "name": "create_configuration",
+      "owner": "ConfigurationRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "edae9111f3e879fb0af13ac327a2abfb468fdab37000a6faa5593ee5a9f88a27",
+        "735bbeb327805f7ba4e5dadaacc8cd8abff49720a0fc7a7e022e6cd6dfa77cdf",
+        "fa8847b0c33183273f5945508b31c3208a9e4ece58ca47233a05628d8dba3799",
+        "2b050c6dafc37d0468d90df79b0908cdbc135698cd7c272ef8fd13b830f7a299",
+        "a1f3c8dd503ea6412f1749f17fcaf60acc286c311d932f47574b1b87c596def3"
+      ],
+      "sql_fingerprints_before": [
+        "edae9111f3e879fb0af13ac327a2abfb468fdab37000a6faa5593ee5a9f88a27",
+        "735bbeb327805f7ba4e5dadaacc8cd8abff49720a0fc7a7e022e6cd6dfa77cdf",
+        "fa8847b0c33183273f5945508b31c3208a9e4ece58ca47233a05628d8dba3799",
+        "2b050c6dafc37d0468d90df79b0908cdbc135698cd7c272ef8fd13b830f7a299",
+        "a1f3c8dd503ea6412f1749f17fcaf60acc286c311d932f47574b1b87c596def3"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, configuration_id: str, *, passed: bool, errors: list[str], actor: str) -> ConfigurationVersion",
+      "implementation_file": "app/infrastructure/sqlite/repositories/configuration.py",
+      "implementation_signature_parity": true,
+      "name": "set_configuration_validation",
+      "owner": "ConfigurationRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "bcb6a4f65cd75560d0115793876a9dbdcf032803598dce7b9b5adfd88ce19179"
+      ],
+      "sql_fingerprints_before": [
+        "bcb6a4f65cd75560d0115793876a9dbdcf032803598dce7b9b5adfd88ce19179"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, configuration_id: str, *, actor: str, reason: str, action: str='activate') -> ConfigurationVersion",
+      "implementation_file": "app/infrastructure/sqlite/repositories/configuration.py",
+      "implementation_signature_parity": true,
+      "name": "activate_configuration",
+      "owner": "ConfigurationRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "f16e71f516f662183cfdd9271bd3ab74d6e3d9dfba6d8f47a99fd1817d35a904",
+        "9f6d54890eeaff5f793fdb7fbdb7859fbbea5e62823b7429ac915cbac9fe3466",
+        "0bbd1aa7d72e105f4e5f62bd4548b13ecc7488b365bc01cccbfc469bd11bf957"
+      ],
+      "sql_fingerprints_before": [
+        "f16e71f516f662183cfdd9271bd3ab74d6e3d9dfba6d8f47a99fd1817d35a904",
+        "9f6d54890eeaff5f793fdb7fbdb7859fbbea5e62823b7429ac915cbac9fe3466",
+        "0bbd1aa7d72e105f4e5f62bd4548b13ecc7488b365bc01cccbfc469bd11bf957"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, configuration_id: str | None=None) -> list[dict[str, Any]]",
+      "implementation_file": "app/infrastructure/sqlite/repositories/configuration.py",
+      "implementation_signature_parity": true,
+      "name": "list_configuration_audit",
+      "owner": "ConfigurationRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "07cba45a1c0c73358434452fbc0bb51d0a72045324ad48e6c30997e2af73c898",
+        "cde5e6e9c39c96acd84d619532c41ea732669a68276e24c9f5a35ef76f79a507"
+      ],
+      "sql_fingerprints_before": [
+        "07cba45a1c0c73358434452fbc0bb51d0a72045324ad48e6c30997e2af73c898",
+        "cde5e6e9c39c96acd84d619532c41ea732669a68276e24c9f5a35ef76f79a507"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, student_id: str) -> list[dict[str, Any]]",
+      "implementation_file": "app/infrastructure/sqlite/repositories/learner.py",
+      "implementation_signature_parity": true,
+      "name": "list_visualization_records",
+      "owner": "LearnerRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [],
+      "sql_fingerprints_before": []
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, target: dict) -> dict",
+      "implementation_file": "app/infrastructure/sqlite/repositories/practice.py",
+      "implementation_signature_parity": true,
+      "name": "save_practice_target",
+      "owner": "PracticeRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "7903c00a5d4b2807c05f3efac94a3adc5fcfd1e9cfbd191b990b905ff3c19894"
+      ],
+      "sql_fingerprints_before": [
+        "7903c00a5d4b2807c05f3efac94a3adc5fcfd1e9cfbd191b990b905ff3c19894"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, student_id: str) -> list[dict]",
+      "implementation_file": "app/infrastructure/sqlite/repositories/practice.py",
+      "implementation_signature_parity": true,
+      "name": "list_practice_targets",
+      "owner": "PracticeRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "4cc2c806f9145d46a983655f7861d4b6f96b10e809c4555dde87b18a239354f4"
+      ],
+      "sql_fingerprints_before": [
+        "4cc2c806f9145d46a983655f7861d4b6f96b10e809c4555dde87b18a239354f4"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, pid: str) -> dict | None",
+      "implementation_file": "app/infrastructure/sqlite/repositories/practice.py",
+      "implementation_signature_parity": true,
+      "name": "get_practice_target",
+      "owner": "PracticeRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "e651b38500e1051e91a988763e8e07b4d8a39787055fea21d036f9de8a9f2a01"
+      ],
+      "sql_fingerprints_before": [
+        "e651b38500e1051e91a988763e8e07b4d8a39787055fea21d036f9de8a9f2a01"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, instance: dict) -> dict",
+      "implementation_file": "app/infrastructure/sqlite/repositories/practice.py",
+      "implementation_signature_parity": true,
+      "name": "save_exercise_instance",
+      "owner": "PracticeRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "ff2dc87b897004f82e0a27f24a4a06389270ed980943dc81ae00941eb4126cb2"
+      ],
+      "sql_fingerprints_before": [
+        "ff2dc87b897004f82e0a27f24a4a06389270ed980943dc81ae00941eb4126cb2"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, practice_target_id=None, student_id=None) -> list[dict]",
+      "implementation_file": "app/infrastructure/sqlite/repositories/practice.py",
+      "implementation_signature_parity": true,
+      "name": "list_exercise_instances",
+      "owner": "PracticeRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "c0a0de64031b2319e3ed792c6d04efd3a4a0f89ac66c12d6bce2740b5eb8b2e5",
+        "a56725a274f69aa504ee01bd56aedea2f5ea4e5f6eb07ac8e74df6c4c1d42bdd"
+      ],
+      "sql_fingerprints_before": [
+        "c0a0de64031b2319e3ed792c6d04efd3a4a0f89ac66c12d6bce2740b5eb8b2e5",
+        "a56725a274f69aa504ee01bd56aedea2f5ea4e5f6eb07ac8e74df6c4c1d42bdd"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, eid: str) -> dict | None",
+      "implementation_file": "app/infrastructure/sqlite/repositories/practice.py",
+      "implementation_signature_parity": true,
+      "name": "get_exercise_instance",
+      "owner": "PracticeRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "b06de5acfe54a81ad40c5e77a4fedf35eabf359742dbd004643ad4c81b274afa"
+      ],
+      "sql_fingerprints_before": [
+        "b06de5acfe54a81ad40c5e77a4fedf35eabf359742dbd004643ad4c81b274afa"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, attempt: dict) -> dict",
+      "implementation_file": "app/infrastructure/sqlite/repositories/practice.py",
+      "implementation_signature_parity": true,
+      "name": "save_exercise_attempt",
+      "owner": "PracticeRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "142ccd20165c94a938c4b0628a890a63ab25d98a23e82467f1c5973fbd69394d"
+      ],
+      "sql_fingerprints_before": [
+        "142ccd20165c94a938c4b0628a890a63ab25d98a23e82467f1c5973fbd69394d"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, exercise_id: str) -> list[dict]",
+      "implementation_file": "app/infrastructure/sqlite/repositories/practice.py",
+      "implementation_signature_parity": true,
+      "name": "list_exercise_attempts",
+      "owner": "PracticeRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "68f4f0554df8bd8fc0209f05763c89a63313066329043f4b276147b95db96dfa"
+      ],
+      "sql_fingerprints_before": [
+        "68f4f0554df8bd8fc0209f05763c89a63313066329043f4b276147b95db96dfa"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, evaluation: dict) -> dict",
+      "implementation_file": "app/infrastructure/sqlite/repositories/practice.py",
+      "implementation_signature_parity": true,
+      "name": "save_practice_evaluation",
+      "owner": "PracticeRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "98f153b17ec1feebb4155e6b8fae4e04ae6de8a28b85e84b44ebcbf8f520fbb3"
+      ],
+      "sql_fingerprints_before": [
+        "98f153b17ec1feebb4155e6b8fae4e04ae6de8a28b85e84b44ebcbf8f520fbb3"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, attempt_id=None, practice_target_id=None) -> list[dict]",
+      "implementation_file": "app/infrastructure/sqlite/repositories/practice.py",
+      "implementation_signature_parity": true,
+      "name": "list_practice_evaluations",
+      "owner": "PracticeRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "402aa69d766dd569a2ac57c478af0bd6c405180bd2a70ca86e675b56146cec98",
+        "87738cbf7f497a3fb4d06d7e286a3af4b72d14d8bfcebf841da19cbb9fb1c4db"
+      ],
+      "sql_fingerprints_before": [
+        "402aa69d766dd569a2ac57c478af0bd6c405180bd2a70ca86e675b56146cec98",
+        "87738cbf7f497a3fb4d06d7e286a3af4b72d14d8bfcebf841da19cbb9fb1c4db"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, student_id: str) -> list[dict]",
+      "implementation_file": "app/infrastructure/sqlite/repositories/practice.py",
+      "implementation_signature_parity": true,
+      "name": "list_practice_evaluations_by_student",
+      "owner": "PracticeRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "e9eb52dda75d2d7a064f3c8ae972542c83969fc6e3a99d14ebd1d43750e64b92"
+      ],
+      "sql_fingerprints_before": [
+        "e9eb52dda75d2d7a064f3c8ae972542c83969fc6e3a99d14ebd1d43750e64b92"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, student_id: str) -> list[dict]",
+      "implementation_file": "app/infrastructure/sqlite/repositories/practice.py",
+      "implementation_signature_parity": true,
+      "name": "list_essays_by_student",
+      "owner": "PracticeRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "fdb96a601217ec2930bbd2f5fdf6630db1ccb300bb49535d423683f125b42338"
+      ],
+      "sql_fingerprints_before": [
+        "fdb96a601217ec2930bbd2f5fdf6630db1ccb300bb49535d423683f125b42338"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, student_id: str) -> list[dict]",
+      "implementation_file": "app/infrastructure/sqlite/repositories/practice.py",
+      "implementation_signature_parity": true,
+      "name": "list_analysis_runs_for_student",
+      "owner": "PracticeRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "a720114fab421be69a908d2c394c846c9ca69d61acc030b665bd6e473be30b22"
+      ],
+      "sql_fingerprints_before": [
+        "a720114fab421be69a908d2c394c846c9ca69d61acc030b665bd6e473be30b22"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, student_id: str) -> list[dict]",
+      "implementation_file": "app/infrastructure/sqlite/repositories/practice.py",
+      "implementation_signature_parity": true,
+      "name": "list_feedback_records_for_student",
+      "owner": "PracticeRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "63df956642bba9be9145ff47d4080f3915c32de80ccbfab70d350ca96bde900a"
+      ],
+      "sql_fingerprints_before": [
+        "63df956642bba9be9145ff47d4080f3915c32de80ccbfab70d350ca96bde900a"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, student_id: str) -> list[dict]",
+      "implementation_file": "app/infrastructure/sqlite/repositories/practice.py",
+      "implementation_signature_parity": true,
+      "name": "list_exercise_attempts_by_student",
+      "owner": "PracticeRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "3e1c4a999be65af2edecae08860db7d81a1918f11f5589015a41b83baa073091"
+      ],
+      "sql_fingerprints_before": [
+        "3e1c4a999be65af2edecae08860db7d81a1918f11f5589015a41b83baa073091"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, trace: dict) -> dict",
+      "implementation_file": "app/infrastructure/sqlite/repositories/practice.py",
+      "implementation_signature_parity": true,
+      "name": "save_feedback_engagement_trace",
+      "owner": "PracticeRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "caf4595dd944074ef3295f8548dfdabb7f79eee37194f683d20f3986a6692f0b"
+      ],
+      "sql_fingerprints_before": [
+        "caf4595dd944074ef3295f8548dfdabb7f79eee37194f683d20f3986a6692f0b"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, student_id: str) -> list[dict]",
+      "implementation_file": "app/infrastructure/sqlite/repositories/practice.py",
+      "implementation_signature_parity": true,
+      "name": "list_feedback_engagement_traces",
+      "owner": "PracticeRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "941613fa68204d5d009d9953379d4feb127192ad54b9d4a35e9303d0de2859e5"
+      ],
+      "sql_fingerprints_before": [
+        "941613fa68204d5d009d9953379d4feb127192ad54b9d4a35e9303d0de2859e5"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, candidate: dict) -> dict",
+      "implementation_file": "app/infrastructure/sqlite/repositories/practice.py",
+      "implementation_signature_parity": true,
+      "name": "save_within_task_response_candidate",
+      "owner": "PracticeRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "e16113c35231a70c968dd812dbe9b537054e75eb4323b645138987af613e5547"
+      ],
+      "sql_fingerprints_before": [
+        "e16113c35231a70c968dd812dbe9b537054e75eb4323b645138987af613e5547"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, student_id: str) -> list[dict]",
+      "implementation_file": "app/infrastructure/sqlite/repositories/practice.py",
+      "implementation_signature_parity": true,
+      "name": "list_within_task_responses",
+      "owner": "PracticeRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "c2c036ff6043113b68189ca029a3d94462fd8e0b8a5a87da5c23ebba6d9c21b5"
+      ],
+      "sql_fingerprints_before": [
+        "c2c036ff6043113b68189ca029a3d94462fd8e0b8a5a87da5c23ebba6d9c21b5"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, candidate: dict) -> dict",
+      "implementation_file": "app/infrastructure/sqlite/repositories/practice.py",
+      "implementation_signature_parity": true,
+      "name": "save_transfer_evidence_candidate",
+      "owner": "PracticeRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "63f948674e63d895f4afd76070d8aefccef01a3b1860166f24d8f9f9fd322fb7"
+      ],
+      "sql_fingerprints_before": [
+        "63f948674e63d895f4afd76070d8aefccef01a3b1860166f24d8f9f9fd322fb7"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, student_id: str) -> list[dict]",
+      "implementation_file": "app/infrastructure/sqlite/repositories/practice.py",
+      "implementation_signature_parity": true,
+      "name": "list_transfer_evidence_candidates",
+      "owner": "PracticeRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "ef983614a1ba8b52895ff4c5db0a633b6d343baa3fbbae6fa06fcb0d1caca00f"
+      ],
+      "sql_fingerprints_before": [
+        "ef983614a1ba8b52895ff4c5db0a633b6d343baa3fbbae6fa06fcb0d1caca00f"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, snapshot: dict) -> dict",
+      "implementation_file": "app/infrastructure/sqlite/repositories/practice.py",
+      "implementation_signature_parity": true,
+      "name": "save_practice_state_snapshot",
+      "owner": "PracticeRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "d1568cfe82cca7f8b51ed7c3713729daf59fff9dca30623938305c83465d80a5"
+      ],
+      "sql_fingerprints_before": [
+        "d1568cfe82cca7f8b51ed7c3713729daf59fff9dca30623938305c83465d80a5"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, student_id: str) -> list[dict]",
+      "implementation_file": "app/infrastructure/sqlite/repositories/practice.py",
+      "implementation_signature_parity": true,
+      "name": "list_practice_state_snapshots",
+      "owner": "PracticeRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "e97fcfce622da6e195a91b5274ef2b2b55fc84ee2bd5affed7a7de8b52404423"
+      ],
+      "sql_fingerprints_before": [
+        "e97fcfce622da6e195a91b5274ef2b2b55fc84ee2bd5affed7a7de8b52404423"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, review) -> dict",
+      "implementation_file": "app/infrastructure/sqlite/repositories/research.py",
+      "implementation_signature_parity": true,
+      "name": "save_human_review",
+      "owner": "ResearchRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "463295db09f63bf4bdbfcd3eb8e2509e0676d5a815bb84cac49c7fa088739ef6"
+      ],
+      "sql_fingerprints_before": [
+        "463295db09f63bf4bdbfcd3eb8e2509e0676d5a815bb84cac49c7fa088739ef6"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, target_type: str | None=None, target_id: str | None=None) -> list[dict]",
+      "implementation_file": "app/infrastructure/sqlite/repositories/research.py",
+      "implementation_signature_parity": true,
+      "name": "list_human_reviews",
+      "owner": "ResearchRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "0d3114d61ea7cf1a64c8cac83550e4132b602e6ad035be5f2512057ed1390f88",
+        "e461f30096c93f62517278fc2dd8e3396886d04c35f52256f86f43308e2e6e0b",
+        "725e259131f38025d9deb05f3fda3b45fca22d27f57ff168fd87f8801a655245"
+      ],
+      "sql_fingerprints_before": [
+        "0d3114d61ea7cf1a64c8cac83550e4132b602e6ad035be5f2512057ed1390f88",
+        "e461f30096c93f62517278fc2dd8e3396886d04c35f52256f86f43308e2e6e0b",
+        "725e259131f38025d9deb05f3fda3b45fca22d27f57ff168fd87f8801a655245"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, submission_id: int, reviews: list) -> list[dict]",
+      "implementation_file": "app/infrastructure/sqlite/repositories/research.py",
+      "implementation_signature_parity": true,
+      "name": "apply_pii_review",
+      "owner": "ResearchRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "2fac028432ad3af9033b24bb49fb8d32b68b326e6336ef07e70c59b62cc64b80",
+        "50797f1bde0cbdeaabb8e5416914a283e6c8793c015eaab0a4035068343932e8"
+      ],
+      "sql_fingerprints_before": [
+        "2fac028432ad3af9033b24bb49fb8d32b68b326e6336ef07e70c59b62cc64b80",
+        "50797f1bde0cbdeaabb8e5416914a283e6c8793c015eaab0a4035068343932e8"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, job: dict) -> dict",
+      "implementation_file": "app/infrastructure/sqlite/repositories/research.py",
+      "implementation_signature_parity": true,
+      "name": "save_export_job",
+      "owner": "ResearchRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "181e40dc7470a0687a7c763fbc734364996b5035b32e9dedaa8a5efc4234ad2c"
+      ],
+      "sql_fingerprints_before": [
+        "181e40dc7470a0687a7c763fbc734364996b5035b32e9dedaa8a5efc4234ad2c"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self) -> list[dict]",
+      "implementation_file": "app/infrastructure/sqlite/repositories/research.py",
+      "implementation_signature_parity": true,
+      "name": "list_export_jobs",
+      "owner": "ResearchRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "09809ab7d80b907e0d8e06019cb59ef33892b44b69b4e06b8c949fc6df7d46e7"
+      ],
+      "sql_fingerprints_before": [
+        "09809ab7d80b907e0d8e06019cb59ef33892b44b69b4e06b8c949fc6df7d46e7"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self, export_id: str) -> dict | None",
+      "implementation_file": "app/infrastructure/sqlite/repositories/research.py",
+      "implementation_signature_parity": true,
+      "name": "get_export_job",
+      "owner": "ResearchRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "5fdbc231fb48d73c777cf0b76fd412bec82b6cca61a911d658cb4ab627c16d7e"
+      ],
+      "sql_fingerprints_before": [
+        "5fdbc231fb48d73c777cf0b76fd412bec82b6cca61a911d658cb4ab627c16d7e"
+      ]
+    }
+  ],
+  "summary": {
+    "added_methods": [],
+    "delegation_drift_count": 0,
+    "dynamic_delegation_present": false,
+    "implementation_signature_drift_count": 0,
+    "method_count_after": 86,
+    "method_count_before": 86,
+    "migrations_source_parity": true,
+    "missing_methods": [],
+    "private_sql_parity": {
+      "_configuration_from_row": true,
+      "_insert_configuration_audit": true,
+      "_next_practice_id": true,
+      "_next_research_id": true
+    },
+    "prohibited_repository_imports": [],
+    "public_sql_in_facade": {},
+    "schema_constant_parity": true,
+    "service_api_domain_diff": [],
+    "signature_drift_count": 0,
+    "sql_fingerprint_drift_count": 0,
+    "table_owner_count": 33,
+    "table_owners_unique": true
+  },
+  "table_owners": {
+    "AnalysisRepository": [
+      "metrics",
+      "analysis_runs",
+      "metric_results",
+      "analysis_artifacts"
+    ],
+    "CalfRepository": [
+      "analysis_units",
+      "error_annotations",
+      "diagnostic_calibrations"
+    ],
+    "ConfigurationRepository": [
+      "configuration_versions",
+      "configuration_audit"
+    ],
+    "LearnerRepository": [
+      "learner_profile_snapshots",
+      "history_evidence_registry"
+    ],
+    "PracticeRepository": [
+      "practice_targets",
+      "exercise_instances",
+      "exercise_attempts",
+      "practice_evaluations",
+      "feedback_engagement_traces",
+      "within_task_response_candidates",
+      "transfer_evidence_candidates",
+      "practice_state_snapshots"
+    ],
+    "ResearchRepository": [
+      "human_reviews",
+      "pii_candidates",
+      "export_jobs"
+    ],
+    "RevisionRepository": [
+      "revision_groups",
+      "revision_snapshots"
+    ],
+    "SubmissionRepository": [
+      "students",
+      "essays",
+      "diagnoses",
+      "feedback_records",
+      "exercises",
+      "learner_history",
+      "llm_call_records"
+    ],
+    "SystemRepository": [
+      "schema_migrations",
+      "system_versions"
+    ]
+  }
+}

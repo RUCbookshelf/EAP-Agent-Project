@@ -1,5 +1,23 @@
 
 
+## 2026-08-02 - v0.9.5-E SQLite repository modularization
+
+- **Decision**: Keep the explicit 86-method `Database` facade and alias while
+  extracting one shared connection manager and nine aggregate-owned SQLite
+  repository implementations.
+- **Rationale**: Make table/method ownership structural and auditable without
+  changing the broad compatibility surface currently consumed by Services.
+- **Parity boundary**: Preserve SQL, schema, signatures, return shapes, IDs,
+  transactions, exceptions, migration 12, 33 tables, and `config-v0.9.0`;
+  defer Service Dependency Narrowing and facade contraction.
+- **Safety decision**: Accept the modified development database as disposable,
+  prohibit further access or writes, and accept later write-capable evidence
+  only from fresh temporary databases with python-dotenv disabled,
+  `DATABASE_URL` absent, the local provider forced, resolved-path/empty-state
+  assertions, hash guards, and process/port cleanup.
+- **Evidence**: static/fresh-schema parity PASS; 175 focused; runtime/restart
+  smoke PASS; 469+8 full regression; exact `run.bat --verify` PASS.
+
 ## 2026-08-02 - v0.9.5-D Frontend API Ports and API-surface contract
 
 - **Decision**: Define twelve narrow feature-owned `typing.Protocol` API Ports

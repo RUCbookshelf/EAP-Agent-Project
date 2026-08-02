@@ -1,0 +1,5196 @@
+{
+  "baseline_commit": "769e6d8b516b18a6221d59c51ac5ff1f90d37058",
+  "classification_counts": {
+    "infrastructure_write_capable": 3,
+    "pure": 1,
+    "read": 55,
+    "write": 27
+  },
+  "cross_aggregate_method_count": 17,
+  "format_version": 1,
+  "methods": [
+    {
+      "classification": "infrastructure_write_capable",
+      "commit_behavior": "none",
+      "connection_behavior": "returns_open_caller_owned_closing_connection",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "mkdir"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 141
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 424
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 147
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 185
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 193
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 214
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 221
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 269
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 291
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 299
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 306
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 354
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 369
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 389
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 393
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 398
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 405
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 419
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 436
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 447
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 474
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 482
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 497
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 504
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 512
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 533
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 541
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 561
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 586
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 619
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 632
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 651
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 659
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 669
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 689
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 413
+        },
+        {
+          "file": "tests/live/test_v0921_playwright.py",
+          "line": 370
+        },
+        {
+          "file": "tests/test_analysis_runs_v04.py",
+          "line": 77
+        },
+        {
+          "file": "tests/test_calf_v08.py",
+          "line": 178
+        },
+        {
+          "file": "tests/test_calf_v08.py",
+          "line": 185
+        },
+        {
+          "file": "tests/test_database.py",
+          "line": 12
+        },
+        {
+          "file": "tests/test_database.py",
+          "line": 19
+        },
+        {
+          "file": "tests/test_database.py",
+          "line": 33
+        },
+        {
+          "file": "tests/test_diagnostic_calibration_v061.py",
+          "line": 309
+        },
+        {
+          "file": "tests/test_diagnostic_calibration_v061.py",
+          "line": 300
+        },
+        {
+          "file": "tests/test_journey_v093c.py",
+          "line": 205
+        },
+        {
+          "file": "tests/test_journey_v093c.py",
+          "line": 199
+        },
+        {
+          "file": "tests/test_journey_v093c.py",
+          "line": 225
+        },
+        {
+          "file": "tests/test_journey_v093c.py",
+          "line": 236
+        },
+        {
+          "file": "tests/test_journey_v093c.py",
+          "line": 321
+        },
+        {
+          "file": "tests/test_journey_v093c.py",
+          "line": 332
+        },
+        {
+          "file": "tests/test_journey_v093c.py",
+          "line": 343
+        },
+        {
+          "file": "tests/test_journey_v093c.py",
+          "line": 355
+        },
+        {
+          "file": "tests/test_journey_v093c.py",
+          "line": 402
+        },
+        {
+          "file": "tests/test_learner_model_v07.py",
+          "line": 141
+        },
+        {
+          "file": "tests/test_migrations_v02.py",
+          "line": 20
+        },
+        {
+          "file": "tests/test_practice_v09.py",
+          "line": 239
+        },
+        {
+          "file": "tests/test_repository_v02.py",
+          "line": 43
+        },
+        {
+          "file": "tests/test_research_v082.py",
+          "line": 262
+        },
+        {
+          "file": "tests/test_revision_v05.py",
+          "line": 161
+        },
+        {
+          "file": "tests/test_revision_v05.py",
+          "line": 248
+        },
+        {
+          "file": "tests/test_snapshot_repository_v03.py",
+          "line": 28
+        },
+        {
+          "file": "tests/test_streamlit_api_integration_v02.py",
+          "line": 53
+        },
+        {
+          "file": "tests/test_streamlit_api_integration_v02.py",
+          "line": 61
+        },
+        {
+          "file": "tests/test_v06_configuration_dashboard.py",
+          "line": 161
+        },
+        {
+          "file": "tests/test_v06_configuration_dashboard.py",
+          "line": 306
+        },
+        {
+          "file": "tests/test_v071_reliability_ui.py",
+          "line": 261
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 148,
+      "line_start": 143,
+      "name": "connect",
+      "owner": "SystemRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "sqlite3.Connection",
+      "rollback_behavior": "none",
+      "signature": "(self) -> sqlite3.Connection",
+      "sql": [
+        {
+          "normalized_sql": "PRAGMA foreign_keys = ON",
+          "ordinal": 1,
+          "sha256": "c409d1b0a511a84003321cca8ff14a9736f2e0a7d77b7599746a7f75abe2f2d7",
+          "tables_read": [],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "infrastructure_write_capable",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/api/main.py",
+          "line": 311
+        },
+        {
+          "file": "app/api/main.py",
+          "line": 116
+        },
+        {
+          "file": "app/feedback/service.py",
+          "line": 31
+        },
+        {
+          "file": "tests/test_analysis_runs_v04.py",
+          "line": 76
+        },
+        {
+          "file": "tests/test_calf_v08.py",
+          "line": 176
+        },
+        {
+          "file": "tests/test_database.py",
+          "line": 11
+        },
+        {
+          "file": "tests/test_database.py",
+          "line": 32
+        },
+        {
+          "file": "tests/test_diagnostic_calibration_v061.py",
+          "line": 45
+        },
+        {
+          "file": "tests/test_journey_v093c.py",
+          "line": 36
+        },
+        {
+          "file": "tests/test_journey_v093c.py",
+          "line": 373
+        },
+        {
+          "file": "tests/test_learner_model_v07.py",
+          "line": 139
+        },
+        {
+          "file": "tests/test_live_deepseek_v07.py",
+          "line": 26
+        },
+        {
+          "file": "tests/test_longitudinal_api_v03.py",
+          "line": 45
+        },
+        {
+          "file": "tests/test_migrations_v02.py",
+          "line": 10
+        },
+        {
+          "file": "tests/test_migrations_v02.py",
+          "line": 13
+        },
+        {
+          "file": "tests/test_migrations_v02.py",
+          "line": 28
+        },
+        {
+          "file": "tests/test_practice_v09.py",
+          "line": 238
+        },
+        {
+          "file": "tests/test_practice_v09.py",
+          "line": 254
+        },
+        {
+          "file": "tests/test_repository_v02.py",
+          "line": 22
+        },
+        {
+          "file": "tests/test_repository_v02.py",
+          "line": 22
+        },
+        {
+          "file": "tests/test_repository_v02.py",
+          "line": 30
+        },
+        {
+          "file": "tests/test_repository_v02.py",
+          "line": 42
+        },
+        {
+          "file": "tests/test_research_v082.py",
+          "line": 37
+        },
+        {
+          "file": "tests/test_research_v082.py",
+          "line": 261
+        },
+        {
+          "file": "tests/test_research_v082.py",
+          "line": 271
+        },
+        {
+          "file": "tests/test_revision_v05.py",
+          "line": 33
+        },
+        {
+          "file": "tests/test_snapshot_repository_v03.py",
+          "line": 10
+        },
+        {
+          "file": "tests/test_snapshot_repository_v03.py",
+          "line": 16
+        },
+        {
+          "file": "tests/test_snapshot_repository_v03.py",
+          "line": 26
+        },
+        {
+          "file": "tests/test_snapshot_repository_v03.py",
+          "line": 31
+        },
+        {
+          "file": "tests/test_v06_configuration_dashboard.py",
+          "line": 34
+        },
+        {
+          "file": "tests/test_v06_configuration_dashboard.py",
+          "line": 71
+        },
+        {
+          "file": "tests/test_v06_configuration_dashboard.py",
+          "line": 79
+        },
+        {
+          "file": "tests/test_v06_configuration_dashboard.py",
+          "line": 90
+        },
+        {
+          "file": "tests/test_v06_configuration_dashboard.py",
+          "line": 110
+        },
+        {
+          "file": "tests/test_v06_configuration_dashboard.py",
+          "line": 137
+        },
+        {
+          "file": "tests/test_v071_reliability_ui.py",
+          "line": 38
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 153,
+      "line_start": 150,
+      "name": "initialize",
+      "owner": "SystemRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "None",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self) -> None",
+      "sql": [],
+      "tables_read_direct": [],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "write",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "executemany",
+        "items"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/feedback/service.py",
+          "line": 32
+        },
+        {
+          "file": "app/services/submission-\u51b2\u7a81-Rain_Win11.py",
+          "line": 53
+        },
+        {
+          "file": "app/services/submission.py",
+          "line": 60
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 194,
+      "line_start": 188,
+      "name": "record_versions",
+      "owner": "SystemRepository",
+      "protocols_declaring_method": [
+        "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:SystemVersionRepository",
+        "app/repositories/protocols.py:SystemVersionRepository"
+      ],
+      "return_annotation": "None",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, versions: dict[str, str]) -> None",
+      "sql": [
+        {
+          "normalized_sql": "INSERT INTO system_versions(component, version) VALUES (?, ?) ON CONFLICT(component) DO UPDATE SET version=excluded.version, recorded_at=CURRENT_TIMESTAMP",
+          "ordinal": 1,
+          "sha256": "0bc095547f870399f5c4356de313d4295a0c0f547437d70f2c9368e0c73b8645",
+          "tables_read": [],
+          "tables_written": [
+            "SET",
+            "system_versions"
+          ]
+        }
+      ],
+      "tables_read_direct": [],
+      "tables_written_direct": [
+        "SET",
+        "system_versions"
+      ]
+    },
+    {
+      "classification": "write",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "isoformat",
+        "normalize_revision_stage"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/services/submission-\u51b2\u7a81-Rain_Win11.py",
+          "line": 69
+        },
+        {
+          "file": "app/services/submission.py",
+          "line": 84
+        },
+        {
+          "file": "tests/test_journey_v093c.py",
+          "line": 242
+        },
+        {
+          "file": "tests/test_longitudinal_api_v03.py",
+          "line": 16
+        },
+        {
+          "file": "tests/test_repository_v02.py",
+          "line": 23
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 221,
+      "line_start": 196,
+      "name": "save_essay",
+      "owner": "SubmissionRepository",
+      "protocols_declaring_method": [
+        "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:EssayRepository",
+        "app/repositories/protocols.py:EssayRepository"
+      ],
+      "return_annotation": "int",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, submission: EssaySubmission, *, synthetic: bool=False) -> int",
+      "sql": [
+        {
+          "normalized_sql": "INSERT OR IGNORE INTO students(student_id, created_at, is_synthetic) VALUES (?, ?, ?)",
+          "ordinal": 1,
+          "sha256": "8ca459d0035ed8d50bbeec8fac5b6eaab790b715a8fadff57dd065b38bc062c0",
+          "tables_read": [],
+          "tables_written": [
+            "students"
+          ]
+        },
+        {
+          "normalized_sql": "INSERT INTO essays( student_id, writing_prompt, genre, draft_stage, timed, time_limit_minutes, tool_use, essay_text, submitted_at, original_draft_stage, revision_stage, writing_started_at, writing_submitted_at, active_writing_duration_seconds, timing_source, timing_quality, unexplained_interruption ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+          "ordinal": 2,
+          "sha256": "0c87215b4ac162968ee00a4107724366617cc26507575e416232464ceed9b70a",
+          "tables_read": [],
+          "tables_written": [
+            "essays"
+          ]
+        }
+      ],
+      "tables_read_direct": [],
+      "tables_written_direct": [
+        "essays",
+        "students"
+      ]
+    },
+    {
+      "classification": "write",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "dumps",
+        "execute"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/services/submission-\u51b2\u7a81-Rain_Win11.py",
+          "line": 75
+        },
+        {
+          "file": "app/services/submission.py",
+          "line": 94
+        },
+        {
+          "file": "tests/test_longitudinal_api_v03.py",
+          "line": 22
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 228,
+      "line_start": 223,
+      "name": "save_analysis",
+      "owner": "AnalysisRepository",
+      "protocols_declaring_method": [
+        "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:MetricRepository",
+        "app/repositories/protocols.py:MetricRepository"
+      ],
+      "return_annotation": "None",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, essay_id: int, analysis: AnalysisResult) -> None",
+      "sql": [
+        {
+          "normalized_sql": "INSERT INTO metrics(essay_id, metrics_json, analysis_version, limitations) VALUES (?, ?, ?, ?)",
+          "ordinal": 1,
+          "sha256": "f52a5735b1279851854cda80e287a6ff722c655b7703d296c5ce062bd1097c7a",
+          "tables_read": [],
+          "tables_written": [
+            "metrics"
+          ]
+        }
+      ],
+      "tables_read_direct": [],
+      "tables_written_direct": [
+        "metrics"
+      ]
+    },
+    {
+      "classification": "write",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "dumps",
+        "execute",
+        "get",
+        "isoformat",
+        "model_copy"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/services/admin_reanalysis.py",
+          "line": 86
+        },
+        {
+          "file": "app/services/reanalysis.py",
+          "line": 33
+        },
+        {
+          "file": "app/services/submission-\u51b2\u7a81-Rain_Win11.py",
+          "line": 74
+        },
+        {
+          "file": "app/services/submission.py",
+          "line": 93
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 305,
+      "line_start": 230,
+      "name": "save_analysis_run",
+      "owner": "AnalysisRepository",
+      "protocols_declaring_method": [
+        "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:MetricRepository",
+        "app/repositories/protocols.py:MetricRepository"
+      ],
+      "return_annotation": "AnalysisResult",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, essay_id: int, analysis: AnalysisResult) -> AnalysisResult",
+      "sql": [
+        {
+          "normalized_sql": "INSERT INTO analysis_runs( essay_id, analyzer_id, analyzer_version, backend, nlp_library, nlp_library_version, nlp_model_name, nlp_model_version, parameters_json, resource_versions_json, configuration_version, fallback_used, fallback_reason, analysis_duration_ms, limitations, created_at ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+          "ordinal": 1,
+          "sha256": "dbbe06c2d20c79f20cf8258f6e080a1d39a55df45f93889e1f27c0be7a469a53",
+          "tables_read": [],
+          "tables_written": [
+            "analysis_runs"
+          ]
+        },
+        {
+          "normalized_sql": "UPDATE analysis_runs SET analysis_run_id=? WHERE analysis_run_row_id=?",
+          "ordinal": 2,
+          "sha256": "19f3b57892376c0d236b5f0e85f633bb9b3bbdabd5911ec8f613df6612a893e5",
+          "tables_read": [],
+          "tables_written": [
+            "analysis_runs"
+          ]
+        },
+        {
+          "normalized_sql": "INSERT INTO analysis_artifacts(analysis_run_id, artifact_type, schema_version, artifact_json) VALUES (?, ?, ?, ?)",
+          "ordinal": 3,
+          "sha256": "5baa2dce09b7356c3c213a9029f6bd6ef5263dc7c94ebfd9dc072ccb4943355e",
+          "tables_read": [],
+          "tables_written": [
+            "analysis_artifacts"
+          ]
+        },
+        {
+          "normalized_sql": "INSERT INTO metric_results( analysis_run_id, metric_id, metric_version, value_json, unit, parameters_json, analyzer_version, resource_versions_json, verification_status, status, measurement_status, confidence, confidence_reasons_json, risk_factors_json, eligible_for_diagnosis, eligible_for_longitudinal_comparison, measurement_metadata_json, evidence_json, limitations_json, construct_id, subconstruct_id, automation_level, analysis_unit_version, numerator_json, denominator_json, intermediate_values_json, eligible_for_revision_priority, eligible_for_targeted_practice ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+          "ordinal": 4,
+          "sha256": "89a9eafdb30b7fd62aa27593e4a11be1814624d78814cac67b370924c2a27753",
+          "tables_read": [],
+          "tables_written": [
+            "metric_results"
+          ]
+        },
+        {
+          "normalized_sql": "INSERT INTO analysis_units( submission_id,analysis_run_id,unit_id,unit_version,validation_status,unit_json ) VALUES (?,?,?,?,?,?)",
+          "ordinal": 5,
+          "sha256": "94a8c988b02ac1e6a39250da1dbda6e264951c32f03058331e749c6c3e9fda68",
+          "tables_read": [],
+          "tables_written": [
+            "analysis_units"
+          ]
+        },
+        {
+          "normalized_sql": "UPDATE analysis_units SET analysis_unit_id=?, unit_json=? WHERE analysis_unit_row_id=?",
+          "ordinal": 6,
+          "sha256": "e36bd11eb7e64e7bda8cf841c348cb205a4c519ab1dc627b78232a1dbdb8e589",
+          "tables_read": [],
+          "tables_written": [
+            "analysis_units"
+          ]
+        }
+      ],
+      "tables_read_direct": [],
+      "tables_written_direct": [
+        "analysis_artifacts",
+        "analysis_runs",
+        "analysis_units",
+        "metric_results"
+      ]
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "append",
+        "connect",
+        "execute",
+        "fetchall",
+        "loads",
+        "pop"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/api/routers/analysis.py",
+          "line": 17
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 283
+        },
+        {
+          "file": "tests/test_analysis_runs_v04.py",
+          "line": 69
+        },
+        {
+          "file": "tests/test_v06_configuration_dashboard.py",
+          "line": 198
+        },
+        {
+          "file": "tests/test_v06_configuration_dashboard.py",
+          "line": 203
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 319,
+      "line_start": 307,
+      "name": "list_analysis_runs",
+      "owner": "AnalysisRepository",
+      "protocols_declaring_method": [
+        "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:MetricRepository",
+        "app/repositories/protocols.py:MetricRepository"
+      ],
+      "return_annotation": "list[dict[str, Any]]",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, essay_id: int) -> list[dict[str, Any]]",
+      "sql": [
+        {
+          "normalized_sql": "SELECT * FROM analysis_runs WHERE essay_id=? ORDER BY analysis_run_row_id",
+          "ordinal": 1,
+          "sha256": "7d22f4c770c991de8fde092432b974d708ae2eb47ee77d2fc9c8980c3df79dd7",
+          "tables_read": [
+            "analysis_runs"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "analysis_runs"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "multiple_separate_connection_scopes",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "get_analysis_artifact",
+        "get_metric_results",
+        "list_analysis_runs"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/services/calf.py",
+          "line": 20
+        },
+        {
+          "file": "app/services/calf.py",
+          "line": 84
+        },
+        {
+          "file": "app/services/revision.py",
+          "line": 79
+        },
+        {
+          "file": "app/services/revision.py",
+          "line": 80
+        },
+        {
+          "file": "tests/test_v06_configuration_dashboard.py",
+          "line": 160
+        },
+        {
+          "file": "tests/test_v06_configuration_dashboard.py",
+          "line": 223
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 328,
+      "line_start": 321,
+      "name": "get_latest_analysis_run",
+      "owner": "AnalysisRepository",
+      "protocols_declaring_method": [
+        "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:RevisionRepository",
+        "app/repositories/protocols.py:MetricRepository",
+        "app/repositories/protocols.py:RevisionRepository"
+      ],
+      "return_annotation": "dict[str, Any] | None",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, essay_id: int) -> dict[str, Any] | None",
+      "sql": [],
+      "tables_read_direct": [],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "multiple_separate_connection_scopes",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchone",
+        "list_analysis_runs"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/services/admin_reanalysis.py",
+          "line": 128
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 340,
+      "line_start": 330,
+      "name": "get_analysis_run",
+      "owner": "AnalysisRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "dict[str, Any] | None",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, analysis_run_id: str) -> dict[str, Any] | None",
+      "sql": [
+        {
+          "normalized_sql": "SELECT essay_id FROM analysis_runs WHERE analysis_run_id=?",
+          "ordinal": 1,
+          "sha256": "a0f639ff1e1f782f178548df41ca39bfac50a707b1459ae8dd572914328e6ec9",
+          "tables_read": [
+            "analysis_runs"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "analysis_runs"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "append",
+        "connect",
+        "execute",
+        "fetchall",
+        "get",
+        "loads",
+        "pop",
+        "removesuffix"
+      ],
+      "direct_call_sites": [],
+      "file": "app/database/repository.py",
+      "line_end": 360,
+      "line_start": 342,
+      "name": "get_metric_results",
+      "owner": "AnalysisRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "list[dict[str, Any]]",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, analysis_run_id: str) -> list[dict[str, Any]]",
+      "sql": [
+        {
+          "normalized_sql": "SELECT * FROM metric_results WHERE analysis_run_id=? ORDER BY metric_result_id",
+          "ordinal": 1,
+          "sha256": "1327205df3fbdedc93cc81a1f325df728724bf50cea0ff881fb87983da0c3814",
+          "tables_read": [
+            "metric_results"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "metric_results"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchone",
+        "loads"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 287
+        },
+        {
+          "file": "tests/test_analysis_runs_v04.py",
+          "line": 43
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 368,
+      "line_start": 362,
+      "name": "get_analysis_artifact",
+      "owner": "AnalysisRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "dict[str, Any] | None",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, analysis_run_id: str) -> dict[str, Any] | None",
+      "sql": [
+        {
+          "normalized_sql": "SELECT artifact_json FROM analysis_artifacts WHERE analysis_run_id=? ORDER BY artifact_id DESC LIMIT 1",
+          "ordinal": 1,
+          "sha256": "d7c1c36a0e556e86a2cce0f1fea9135591e4436cfeb2c0980e405d7014f6f433",
+          "tables_read": [
+            "analysis_artifacts"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "analysis_artifacts"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "write",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "model_dump_json"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/services/submission-\u51b2\u7a81-Rain_Win11.py",
+          "line": 77
+        },
+        {
+          "file": "app/services/submission.py",
+          "line": 114
+        },
+        {
+          "file": "tests/test_longitudinal_api_v03.py",
+          "line": 30
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 375,
+      "line_start": 370,
+      "name": "save_diagnosis",
+      "owner": "AnalysisRepository",
+      "protocols_declaring_method": [
+        "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:DiagnosisRepository",
+        "app/repositories/protocols.py:DiagnosisRepository"
+      ],
+      "return_annotation": "None",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, essay_id: int, diagnosis: DiagnosisResult) -> None",
+      "sql": [
+        {
+          "normalized_sql": "INSERT INTO diagnoses(essay_id, diagnosis_json, diagnosis_version) VALUES (?, ?, ?)",
+          "ordinal": 1,
+          "sha256": "eddb2108ffecd66f72e040d20f418c2b93f89f6ee95be4555e7067a34021cc97",
+          "tables_read": [],
+          "tables_written": [
+            "diagnoses"
+          ]
+        }
+      ],
+      "tables_read_direct": [],
+      "tables_written_direct": [
+        "diagnoses"
+      ]
+    },
+    {
+      "classification": "write",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "isoformat",
+        "model_copy",
+        "model_dump_json"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/services/submission.py",
+          "line": 116
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 398,
+      "line_start": 377,
+      "name": "save_diagnostic_calibration",
+      "owner": "CalfRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "DiagnosticCalibrationResult",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, essay_id: int, calibration: DiagnosticCalibrationResult) -> DiagnosticCalibrationResult",
+      "sql": [
+        {
+          "normalized_sql": "INSERT INTO diagnostic_calibrations( essay_id,analysis_run_id,calibration_json,calibration_version,gate_version, priority_version,evidence_validation_version,diagnosis_version, configuration_version,created_at ) VALUES (?,?,?,?,?,?,?,?,?,?)",
+          "ordinal": 1,
+          "sha256": "d7dda2a6882bccc9b9dc28c964c2783adf35273f950162a5f1943513621f40ed",
+          "tables_read": [],
+          "tables_written": [
+            "diagnostic_calibrations"
+          ]
+        },
+        {
+          "normalized_sql": "UPDATE diagnostic_calibrations SET calibration_id=?, calibration_json=? WHERE calibration_row_id=?",
+          "ordinal": 2,
+          "sha256": "a71f2c1c6c25adfc7d6b6e7509c46800d908e305728eff17635121e0710065f1",
+          "tables_read": [],
+          "tables_written": [
+            "diagnostic_calibrations"
+          ]
+        }
+      ],
+      "tables_read_direct": [],
+      "tables_written_direct": [
+        "diagnostic_calibrations"
+      ]
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchone",
+        "model_validate_json"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/api/routers/submissions.py",
+          "line": 45
+        },
+        {
+          "file": "app/services/submission.py",
+          "line": 210
+        },
+        {
+          "file": "tests/test_diagnostic_calibration_v061.py",
+          "line": 386
+        },
+        {
+          "file": "tests/test_diagnostic_calibration_v061.py",
+          "line": 304
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 406,
+      "line_start": 400,
+      "name": "get_diagnostic_calibration",
+      "owner": "CalfRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "DiagnosticCalibrationResult | None",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, essay_id: int) -> DiagnosticCalibrationResult | None",
+      "sql": [
+        {
+          "normalized_sql": "SELECT calibration_json FROM diagnostic_calibrations WHERE essay_id=? ORDER BY calibration_row_id DESC LIMIT 1",
+          "ordinal": 1,
+          "sha256": "120c3119d88f4f325098cf71b5441feab66fb24e752576afd975207d21eeac43",
+          "tables_read": [
+            "diagnostic_calibrations"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "diagnostic_calibrations"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "write",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "executemany",
+        "isoformat",
+        "model_dump_json"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/services/submission-\u51b2\u7a81-Rain_Win11.py",
+          "line": 90
+        },
+        {
+          "file": "app/services/submission.py",
+          "line": 165
+        },
+        {
+          "file": "app/services/submission.py",
+          "line": 226
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 455,
+      "line_start": 408,
+      "name": "save_feedback",
+      "owner": "SubmissionRepository",
+      "protocols_declaring_method": [
+        "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:FeedbackRepository",
+        "app/repositories/protocols.py:FeedbackRepository"
+      ],
+      "return_annotation": "None",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, essay_id: int, result: ProviderResult, analysis_version: str) -> None",
+      "sql": [
+        {
+          "normalized_sql": "INSERT INTO feedback_records( essay_id, feedback_json, provider_name, model_name, success_status, fallback_reason, prompt_version, analysis_version, system_template_hash, user_template_hash, rendered_prompt_hash, schema_version, temperature, request_time, response_time, validation_status, retry_count, provider_status_json ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+          "ordinal": 1,
+          "sha256": "20e9389673f1065eae2ecb38519249fe905c5978869265be30cc2ddce4d21b61",
+          "tables_read": [],
+          "tables_written": [
+            "feedback_records"
+          ]
+        },
+        {
+          "normalized_sql": "INSERT INTO exercises( essay_id, diagnosis_id, diagnosis_category, exercise_type, exercise_json ) VALUES (?, ?, ?, ?, ?)",
+          "ordinal": 2,
+          "sha256": "266895756a0e3af8f242018601ac74c7548501143215bf4739677e49247a9079",
+          "tables_read": [],
+          "tables_written": [
+            "exercises"
+          ]
+        },
+        {
+          "normalized_sql": "INSERT INTO llm_call_records( essay_id, prompt_version, system_template_hash, user_template_hash, rendered_prompt_hash, schema_version, provider_name, model_name, temperature, request_time, response_time, success_status, validation_status, retry_count, fallback_reason ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+          "ordinal": 3,
+          "sha256": "5317ef23f082defbcc983c8f0224e2898e6ad3591e84bb2a9908495bacf0cd03",
+          "tables_read": [],
+          "tables_written": [
+            "llm_call_records"
+          ]
+        }
+      ],
+      "tables_read_direct": [],
+      "tables_written_direct": [
+        "exercises",
+        "feedback_records",
+        "llm_call_records"
+      ]
+    },
+    {
+      "classification": "write",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "dumps",
+        "execute",
+        "model_dump"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/services/submission-\u51b2\u7a81-Rain_Win11.py",
+          "line": 91
+        },
+        {
+          "file": "app/services/submission.py",
+          "line": 166
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 470,
+      "line_start": 457,
+      "name": "save_history",
+      "owner": "SubmissionRepository",
+      "protocols_declaring_method": [
+        "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:LearnerHistoryRepository",
+        "app/repositories/protocols.py:LearnerHistoryRepository"
+      ],
+      "return_annotation": "None",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, student_id: str, essay_id: int, history: HistoryResult) -> None",
+      "sql": [
+        {
+          "normalized_sql": "INSERT INTO learner_history( student_id, essay_id, history_summary, comparable_count, comparability_status, history_evidence_json, limitations_json, comparability_reasons_json ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+          "ordinal": 1,
+          "sha256": "a8481f359bc5ed3c3f7c5325d00cf510fb5ed417f9fae586dd51ee38ee96b24a",
+          "tables_read": [],
+          "tables_written": [
+            "learner_history"
+          ]
+        }
+      ],
+      "tables_read_direct": [],
+      "tables_written_direct": [
+        "learner_history"
+      ]
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": true,
+      "delegates_or_calls": [
+        "append",
+        "connect",
+        "execute",
+        "fetchall",
+        "get",
+        "isoformat",
+        "loads",
+        "pop"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/learner/history.py",
+          "line": 30
+        },
+        {
+          "file": "app/services/submission.py",
+          "line": 98
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 489,
+      "line_start": 472,
+      "name": "prior_records",
+      "owner": "SubmissionRepository",
+      "protocols_declaring_method": [
+        "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:LearnerHistoryRepository",
+        "app/repositories/protocols.py:LearnerHistoryRepository"
+      ],
+      "return_annotation": "list[dict[str, Any]]",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, submission: EssaySubmission) -> list[dict[str, Any]]",
+      "sql": [
+        {
+          "normalized_sql": "SELECT e.*, m.metrics_json, d.diagnosis_json FROM essays e LEFT JOIN metrics m ON m.essay_id = e.essay_id LEFT JOIN diagnoses d ON d.essay_id = e.essay_id WHERE e.student_id = ? AND e.submitted_at < ? ORDER BY e.submitted_at, e.essay_id",
+          "ordinal": 1,
+          "sha256": "fbc6def8cd536812d0996b3d113228194fce2caf1d72f3992fd47c6d30375f44",
+          "tables_read": [
+            "diagnoses",
+            "essays",
+            "metrics"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "diagnoses",
+        "essays",
+        "metrics"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": true,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchone"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "tests/test_analysis_runs_v04.py",
+          "line": 41
+        },
+        {
+          "file": "tests/test_analysis_runs_v04.py",
+          "line": 42
+        },
+        {
+          "file": "tests/test_database.py",
+          "line": 45
+        },
+        {
+          "file": "tests/test_migrations_v02.py",
+          "line": 12
+        },
+        {
+          "file": "tests/test_migrations_v02.py",
+          "line": 15
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 494,
+      "line_start": 491,
+      "name": "counts",
+      "owner": "SystemRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "dict[str, int]",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self) -> dict[str, int]",
+      "sql": [
+        {
+          "normalized_sql": "SELECT COUNT(*) FROM",
+          "ordinal": 1,
+          "sha256": "5f941c498253baf76c90d4c2de2b5719cc7b4b75c229a34c41cfb13758de5197",
+          "tables_read": [],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchone"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "tests/test_database.py",
+          "line": 50
+        },
+        {
+          "file": "tests/test_database.py",
+          "line": 100
+        },
+        {
+          "file": "tests/test_revision_v05.py",
+          "line": 214
+        },
+        {
+          "file": "tests/test_v071_reliability_ui.py",
+          "line": 71
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 499,
+      "line_start": 496,
+      "name": "get_feedback_record",
+      "owner": "SubmissionRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "dict[str, Any] | None",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, essay_id: int) -> dict[str, Any] | None",
+      "sql": [
+        {
+          "normalized_sql": "SELECT * FROM feedback_records WHERE essay_id = ?",
+          "ordinal": 1,
+          "sha256": "f2f08b0ba88b8a865591292ea45ffa2033e45bd28b7f07b1fa58251322521044",
+          "tables_read": [
+            "feedback_records"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "feedback_records"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchall"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "tests/test_database.py",
+          "line": 101
+        },
+        {
+          "file": "tests/test_database.py",
+          "line": 59
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 506,
+      "line_start": 501,
+      "name": "get_llm_calls",
+      "owner": "SubmissionRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "list[dict[str, Any]]",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, essay_id: int) -> list[dict[str, Any]]",
+      "sql": [
+        {
+          "normalized_sql": "SELECT * FROM llm_call_records WHERE essay_id = ? ORDER BY call_id",
+          "ordinal": 1,
+          "sha256": "1668a0747e51192b3f16040f520402500b28e457ec61dba623aa483c701489a0",
+          "tables_read": [
+            "llm_call_records"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "llm_call_records"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchone"
+      ],
+      "direct_call_sites": [],
+      "file": "app/database/repository.py",
+      "line_end": 513,
+      "line_start": 508,
+      "name": "get_history_record",
+      "owner": "SubmissionRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "dict[str, Any] | None",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, essay_id: int) -> dict[str, Any] | None",
+      "sql": [
+        {
+          "normalized_sql": "SELECT * FROM learner_history WHERE essay_id = ?",
+          "ordinal": 1,
+          "sha256": "899ac1ce3cbaecff4396817039b391c451c7c200db7b1d2f4492148caf6dbbb0",
+          "tables_read": [
+            "learner_history"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "learner_history"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchone"
+      ],
+      "direct_call_sites": [],
+      "file": "app/database/repository.py",
+      "line_end": 520,
+      "line_start": 515,
+      "name": "ping",
+      "owner": "SystemRepository",
+      "protocols_declaring_method": [
+        "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:ConfigurationRepository",
+        "app/repositories/protocols.py:ConfigurationRepository"
+      ],
+      "return_annotation": "bool",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self) -> bool",
+      "sql": [
+        {
+          "normalized_sql": "SELECT 1",
+          "ordinal": 1,
+          "sha256": "e004ebd5b5532a4b85984a62f8ad48a81aa3460c1ca07701f386135d72cdecf5",
+          "tables_read": [],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchone"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/api/main.py",
+          "line": 327
+        },
+        {
+          "file": "app/api/main.py",
+          "line": 117
+        },
+        {
+          "file": "app/api/routers/system.py",
+          "line": 85
+        },
+        {
+          "file": "tests/test_analysis_runs_v04.py",
+          "line": 79
+        },
+        {
+          "file": "tests/test_calf_v08.py",
+          "line": 177
+        },
+        {
+          "file": "tests/test_diagnostic_calibration_v061.py",
+          "line": 299
+        },
+        {
+          "file": "tests/test_learner_model_v07.py",
+          "line": 140
+        },
+        {
+          "file": "tests/test_migrations_v02.py",
+          "line": 11
+        },
+        {
+          "file": "tests/test_migrations_v02.py",
+          "line": 14
+        },
+        {
+          "file": "tests/test_migrations_v02.py",
+          "line": 29
+        },
+        {
+          "file": "tests/test_revision_v05.py",
+          "line": 252
+        },
+        {
+          "file": "tests/test_snapshot_repository_v03.py",
+          "line": 17
+        },
+        {
+          "file": "tests/test_snapshot_repository_v03.py",
+          "line": 32
+        },
+        {
+          "file": "tests/test_v06_configuration_dashboard.py",
+          "line": 72
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 524,
+      "line_start": 522,
+      "name": "migration_version",
+      "owner": "SystemRepository",
+      "protocols_declaring_method": [
+        "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:ConfigurationRepository",
+        "app/repositories/protocols.py:ConfigurationRepository"
+      ],
+      "return_annotation": "int",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self) -> int",
+      "sql": [
+        {
+          "normalized_sql": "PRAGMA user_version",
+          "ordinal": 1,
+          "sha256": "80b42ff05db7c2ccd104f2c3e8b50803117eea987d16e403a2c6873e31200ac3",
+          "tables_read": [],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "infrastructure_write_capable",
+      "commit_behavior": "explicit",
+      "connection_behavior": "explicit_BEGIN_commit_rollback_close",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "close",
+        "commit",
+        "connect",
+        "execute",
+        "rollback"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "tests/test_repository_v02.py",
+          "line": 32
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 537,
+      "line_start": 527,
+      "name": "transaction",
+      "owner": "SystemRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": null,
+      "rollback_behavior": "explicit_and_reraise",
+      "signature": "(self)",
+      "sql": [
+        {
+          "normalized_sql": "BEGIN",
+          "ordinal": 1,
+          "sha256": "a8402858d4f1e1d27afee976520485ebb4b96a5387355b823f0d0b8079729032",
+          "tables_read": [],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": true,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchone"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/api/deps.py",
+          "line": 67
+        },
+        {
+          "file": "app/journey/service.py",
+          "line": 109
+        },
+        {
+          "file": "app/services/calf.py",
+          "line": 79
+        },
+        {
+          "file": "tests/test_migrations_v02.py",
+          "line": 30
+        },
+        {
+          "file": "tests/test_repository_v02.py",
+          "line": 25
+        },
+        {
+          "file": "tests/test_repository_v02.py",
+          "line": 37
+        },
+        {
+          "file": "tests/test_snapshot_repository_v03.py",
+          "line": 33
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 548,
+      "line_start": 539,
+      "name": "get_student",
+      "owner": "LearnerRepository",
+      "protocols_declaring_method": [
+        "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:StudentRepository",
+        "app/repositories/protocols.py:StudentRepository"
+      ],
+      "return_annotation": "dict[str, Any] | None",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, student_id: str) -> dict[str, Any] | None",
+      "sql": [
+        {
+          "normalized_sql": "SELECT s.student_id, s.created_at, s.is_synthetic, COUNT(e.essay_id) AS submission_count FROM students s LEFT JOIN essays e ON e.student_id=s.student_id WHERE s.student_id=? GROUP BY s.student_id",
+          "ordinal": 1,
+          "sha256": "6bf1561ab9c253b28d66bd810f23ef6e38d96e26a09f273e09bb08ce9d5f3c23",
+          "tables_read": [
+            "essays",
+            "students"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "essays",
+        "students"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": true,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchall"
+      ],
+      "direct_call_sites": [],
+      "file": "app/database/repository.py",
+      "line_end": 553,
+      "line_start": 550,
+      "name": "list_all_students",
+      "owner": "LearnerRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": null,
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self)",
+      "sql": [
+        {
+          "normalized_sql": "SELECT DISTINCT student_id FROM essays ORDER BY student_id",
+          "ordinal": 1,
+          "sha256": "d0f8f57b177f72589c7442de46c0d9edf4b8d13016cf5fc320e9bde995096fb1",
+          "tables_read": [
+            "essays"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "essays"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchall"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/research/service.py",
+          "line": 69
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 558,
+      "line_start": 555,
+      "name": "list_all_submissions",
+      "owner": "SubmissionRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": null,
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self)",
+      "sql": [
+        {
+          "normalized_sql": "SELECT essay_id, student_id, writing_prompt, genre, draft_stage, timed, time_limit_minutes, tool_use, submitted_at, revision_of_submission_id, revision_group_id, essay_text FROM essays ORDER BY essay_id",
+          "ordinal": 1,
+          "sha256": "4f65ab56900b38ad65a9123948ada7d01809152457fcbb88df84b0bab3102618",
+          "tables_read": [
+            "essays"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "essays"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": true,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchone",
+        "get",
+        "loads",
+        "pop",
+        "removesuffix"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/api/routers/analysis.py",
+          "line": 15
+        },
+        {
+          "file": "app/api/routers/calf.py",
+          "line": 60
+        },
+        {
+          "file": "app/api/routers/calf.py",
+          "line": 68
+        },
+        {
+          "file": "app/api/routers/calf.py",
+          "line": 80
+        },
+        {
+          "file": "app/api/routers/practice.py",
+          "line": 71
+        },
+        {
+          "file": "app/api/routers/submissions.py",
+          "line": 53
+        },
+        {
+          "file": "app/api/routers/submissions.py",
+          "line": 43
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 580
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 609
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 610
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 656
+        },
+        {
+          "file": "app/research/service.py",
+          "line": 172
+        },
+        {
+          "file": "app/research/service.py",
+          "line": 195
+        },
+        {
+          "file": "app/services/admin_reanalysis.py",
+          "line": 80
+        },
+        {
+          "file": "app/services/admin_reanalysis.py",
+          "line": 115
+        },
+        {
+          "file": "app/services/admin_reanalysis.py",
+          "line": 96
+        },
+        {
+          "file": "app/services/calf.py",
+          "line": 17
+        },
+        {
+          "file": "app/services/calf.py",
+          "line": 129
+        },
+        {
+          "file": "app/services/reanalysis.py",
+          "line": 22
+        },
+        {
+          "file": "app/services/revision.py",
+          "line": 24
+        },
+        {
+          "file": "app/services/revision.py",
+          "line": 64
+        },
+        {
+          "file": "app/services/revision.py",
+          "line": 65
+        },
+        {
+          "file": "app/services/revision.py",
+          "line": 30
+        },
+        {
+          "file": "app/services/revision.py",
+          "line": 46
+        },
+        {
+          "file": "app/services/revision.py",
+          "line": 48
+        },
+        {
+          "file": "app/services/revision.py",
+          "line": 137
+        },
+        {
+          "file": "app/services/submission.py",
+          "line": 185
+        },
+        {
+          "file": "tests/test_migrations_v02.py",
+          "line": 31
+        },
+        {
+          "file": "tests/test_repository_v02.py",
+          "line": 24
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 589,
+      "line_start": 560,
+      "name": "get_submission_bundle",
+      "owner": "SubmissionRepository",
+      "protocols_declaring_method": [
+        "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:EssayRepository",
+        "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:RevisionRepository",
+        "app/repositories/protocols.py:EssayRepository",
+        "app/repositories/protocols.py:RevisionRepository"
+      ],
+      "return_annotation": "dict[str, Any] | None",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, essay_id: int) -> dict[str, Any] | None",
+      "sql": [
+        {
+          "normalized_sql": "SELECT e.*, m.metrics_json, m.analysis_version, m.limitations AS analysis_limitations, d.diagnosis_json, d.diagnosis_version, f.feedback_json, f.provider_name, f.model_name, f.feedback_id, f.success_status, f.fallback_reason, f.prompt_version, f.schema_version, f.validation_status, f.retry_count, f.provider_status_json, h.history_summary, h.comparable_count, h.comparability_status, h.history_evidence_json, h.limitations_json, h.comparability_reasons_json FROM essays e LEFT JOIN metrics m ON m.essay_id=e.essay_id LEFT JOIN diagnoses d ON d.essay_id=e.essay_id LEFT JOIN feedback_records f ON f.feedback_id=( SELECT MAX(f2.feedback_id) FROM feedback_records f2 WHERE f2.essay_id=e.essay_id ) LEFT JOIN learner_history h ON h.essay_id=e.essay_id WHERE e.essay_id=?",
+          "ordinal": 1,
+          "sha256": "b7a35b882843c23e0069e631a4ec9743c170fdd897c56c33fe4622666f0fbd7d",
+          "tables_read": [
+            "diagnoses",
+            "essays",
+            "feedback_records",
+            "learner_history",
+            "metrics"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "diagnoses",
+        "essays",
+        "feedback_records",
+        "learner_history",
+        "metrics"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchall"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/api/routers/revisions.py",
+          "line": 27
+        },
+        {
+          "file": "app/api/routers/students.py",
+          "line": 44
+        },
+        {
+          "file": "app/research/service.py",
+          "line": 80
+        },
+        {
+          "file": "app/services/admin_reanalysis.py",
+          "line": 119
+        },
+        {
+          "file": "app/services/calf.py",
+          "line": 83
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 603,
+      "line_start": 591,
+      "name": "list_student_submissions",
+      "owner": "SubmissionRepository",
+      "protocols_declaring_method": [
+        "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:EssayRepository",
+        "app/repositories/protocols.py:EssayRepository"
+      ],
+      "return_annotation": "list[dict[str, Any]]",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, student_id: str) -> list[dict[str, Any]]",
+      "sql": [
+        {
+          "normalized_sql": "SELECT essay_id, student_id, writing_prompt, genre, draft_stage, timed, time_limit_minutes, tool_use, submitted_at, revision_of_submission_id, revision_group_id, revision_sequence, revision_stage, original_draft_stage, writing_started_at, writing_submitted_at, active_writing_duration_seconds, timing_source, timing_quality, unexplained_interruption FROM essays WHERE student_id=? ORDER BY submitted_at, essay_id",
+          "ordinal": 1,
+          "sha256": "a7da065cf3236cd174d43eaa1c5d8de09071302258e93f3f56f1dd338be8dd4c",
+          "tables_read": [
+            "essays"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "essays"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": true,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchall",
+        "fetchone",
+        "loads"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/api/routers/calf.py",
+          "line": 70
+        },
+        {
+          "file": "app/api/routers/calf.py",
+          "line": 63
+        },
+        {
+          "file": "app/services/calf.py",
+          "line": 39
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 623,
+      "line_start": 605,
+      "name": "list_analysis_units",
+      "owner": "CalfRepository",
+      "protocols_declaring_method": [
+        "app/repositories/protocols.py:MetricRepository"
+      ],
+      "return_annotation": "list[dict[str, Any]]",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, submission_id: int, analysis_run_id: str | None=None) -> list[dict[str, Any]]",
+      "sql": [
+        {
+          "normalized_sql": "SELECT unit_json FROM analysis_units WHERE submission_id=? AND analysis_run_id=? ORDER BY analysis_unit_row_id",
+          "ordinal": 1,
+          "sha256": "ef87aff8af22180312347eb96ee033e9698b6f558150e596e6573839c2aa4060",
+          "tables_read": [
+            "analysis_units"
+          ],
+          "tables_written": []
+        },
+        {
+          "normalized_sql": "SELECT analysis_run_id FROM analysis_runs WHERE essay_id=? ORDER BY analysis_run_row_id DESC LIMIT 1",
+          "ordinal": 2,
+          "sha256": "f53945395d8c3fd17a42d08e0a2f1a1131612be03008e629b0e0aa0020ef3741",
+          "tables_read": [
+            "analysis_runs"
+          ],
+          "tables_written": []
+        },
+        {
+          "normalized_sql": "SELECT unit_json FROM analysis_units WHERE submission_id=? AND analysis_run_id=? ORDER BY analysis_unit_row_id",
+          "ordinal": 3,
+          "sha256": "ef87aff8af22180312347eb96ee033e9698b6f558150e596e6573839c2aa4060",
+          "tables_read": [
+            "analysis_units"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "analysis_runs",
+        "analysis_units"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "write",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": true,
+      "delegates_or_calls": [
+        "append",
+        "connect",
+        "execute",
+        "fetchone",
+        "model_copy",
+        "model_dump_json"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/services/calf.py",
+          "line": 138
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 650,
+      "line_start": 625,
+      "name": "save_error_annotations",
+      "owner": "CalfRepository",
+      "protocols_declaring_method": [
+        "app/repositories/protocols.py:ErrorAnnotationRepository"
+      ],
+      "return_annotation": "list[ErrorAnnotation]",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, submission_id: int, annotations: list[ErrorAnnotation]) -> list[ErrorAnnotation]",
+      "sql": [
+        {
+          "normalized_sql": "INSERT INTO error_annotations( submission_id,start_offset,end_offset,annotation_source,annotation_status, eligible_for_formal_accuracy,annotation_json ) VALUES (?,?,?,?,?,?,?)",
+          "ordinal": 1,
+          "sha256": "8cd7ffe1acb60850acb36d7c7f7a661ce37267481eb74e4c9ad5c7d08bd37e85",
+          "tables_read": [],
+          "tables_written": [
+            "error_annotations"
+          ]
+        },
+        {
+          "normalized_sql": "UPDATE error_annotations SET error_annotation_id=?, annotation_json=? WHERE error_annotation_row_id=?",
+          "ordinal": 2,
+          "sha256": "3995fad3e8e4a18a154aef6bc5c017d86c55d95d7c5e5f68c58746671ad6944c",
+          "tables_read": [],
+          "tables_written": [
+            "error_annotations"
+          ]
+        },
+        {
+          "normalized_sql": "SELECT 1 FROM essays WHERE essay_id=?",
+          "ordinal": 3,
+          "sha256": "2d9cfd1a06c2939c770ff984d8adc451a9af02e2de79e18b8ed6baac5ef1d57b",
+          "tables_read": [
+            "essays"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "essays"
+      ],
+      "tables_written_direct": [
+        "error_annotations"
+      ]
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchall",
+        "model_validate_json"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/api/routers/calf.py",
+          "line": 82
+        },
+        {
+          "file": "app/services/calf.py",
+          "line": 32
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 658,
+      "line_start": 652,
+      "name": "list_error_annotations",
+      "owner": "CalfRepository",
+      "protocols_declaring_method": [
+        "app/repositories/protocols.py:ErrorAnnotationRepository"
+      ],
+      "return_annotation": "list[ErrorAnnotation]",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, submission_id: int) -> list[ErrorAnnotation]",
+      "sql": [
+        {
+          "normalized_sql": "SELECT annotation_json FROM error_annotations WHERE submission_id=? ORDER BY error_annotation_row_id",
+          "ordinal": 1,
+          "sha256": "1a7371171f99762c1ae720661f1f7862eea3ea12e76a2cd3894afcf279fac7db",
+          "tables_read": [
+            "error_annotations"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "error_annotations"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "append",
+        "connect",
+        "execute",
+        "fetchall",
+        "loads",
+        "pop"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/api/routers/students.py",
+          "line": 45
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 673,
+      "line_start": 660,
+      "name": "list_student_history",
+      "owner": "LearnerRepository",
+      "protocols_declaring_method": [
+        "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:LearnerHistoryRepository",
+        "app/repositories/protocols.py:LearnerHistoryRepository"
+      ],
+      "return_annotation": "list[dict[str, Any]]",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, student_id: str) -> list[dict[str, Any]]",
+      "sql": [
+        {
+          "normalized_sql": "SELECT * FROM learner_history WHERE student_id=? ORDER BY created_at, history_id",
+          "ordinal": 1,
+          "sha256": "3e25a8e4790feb495d18fa8e67c5d28e794a5c8683fb2b41918d57e2a13cd882",
+          "tables_read": [
+            "learner_history"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "learner_history"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchall",
+        "loads"
+      ],
+      "direct_call_sites": [],
+      "file": "app/database/repository.py",
+      "line_end": 680,
+      "line_start": 675,
+      "name": "get_exercises",
+      "owner": "SubmissionRepository",
+      "protocols_declaring_method": [
+        "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:ExerciseRepository",
+        "app/repositories/protocols.py:ExerciseRepository"
+      ],
+      "return_annotation": "list[dict[str, Any]]",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, essay_id: int) -> list[dict[str, Any]]",
+      "sql": [
+        {
+          "normalized_sql": "SELECT exercise_json FROM exercises WHERE essay_id=? ORDER BY exercise_id",
+          "ordinal": 1,
+          "sha256": "0ab2b09457b7e26ba744c40ff9774f931f298d973edb83c84109ae9ad32a81bb",
+          "tables_read": [
+            "exercises"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "exercises"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchone",
+        "loads"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/services/learner_profile.py",
+          "line": 19
+        },
+        {
+          "file": "tests/test_live_deepseek_v07.py",
+          "line": 54
+        },
+        {
+          "file": "tests/test_longitudinal_api_v03.py",
+          "line": 127
+        },
+        {
+          "file": "tests/test_snapshot_repository_v03.py",
+          "line": 34
+        },
+        {
+          "file": "tests/test_snapshot_repository_v03.py",
+          "line": 18
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 688,
+      "line_start": 682,
+      "name": "get_latest_learner_profile",
+      "owner": "LearnerRepository",
+      "protocols_declaring_method": [
+        "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:LearnerProfileRepository",
+        "app/repositories/protocols.py:LearnerProfileRepository"
+      ],
+      "return_annotation": "dict[str, Any] | None",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, student_id: str) -> dict[str, Any] | None",
+      "sql": [
+        {
+          "normalized_sql": "SELECT snapshot_json FROM learner_profile_snapshots WHERE student_id=? ORDER BY snapshot_row_id DESC LIMIT 1",
+          "ordinal": 1,
+          "sha256": "4b3bb6cc538f2d117f25c32f4d86b62d2bceb8992de49a0fd8fd35b38ee4f80e",
+          "tables_read": [
+            "learner_profile_snapshots"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "learner_profile_snapshots"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "write",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "append",
+        "connect",
+        "dumps",
+        "execute",
+        "fetchall",
+        "isoformat",
+        "loads",
+        "model_copy",
+        "model_dump",
+        "model_dump_json",
+        "model_validate",
+        "split",
+        "startswith"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/services/progress.py",
+          "line": 171
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 762,
+      "line_start": 690,
+      "name": "save_learner_profile_snapshot",
+      "owner": "LearnerRepository",
+      "protocols_declaring_method": [
+        "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:LearnerProfileRepository",
+        "app/repositories/protocols.py:LearnerProfileRepository"
+      ],
+      "return_annotation": "LearnerProfileSnapshot",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, snapshot: LearnerProfileSnapshot) -> LearnerProfileSnapshot",
+      "sql": [
+        {
+          "normalized_sql": "INSERT INTO learner_profile_snapshots( student_id, snapshot_json, analysis_version, configuration_version, included_submission_ids_json, created_at ) VALUES (?, ?, ?, ?, ?, ?)",
+          "ordinal": 1,
+          "sha256": "316a5a8bddf5279abdffc436b550f71a5a1099766c8dfe618a6e771563966647",
+          "tables_read": [],
+          "tables_written": [
+            "learner_profile_snapshots"
+          ]
+        },
+        {
+          "normalized_sql": "UPDATE learner_profile_snapshots SET snapshot_json=?, profile_version=?, source_submission_ids_json=?, representative_submission_ids_json=? WHERE snapshot_row_id=?",
+          "ordinal": 2,
+          "sha256": "f1efa949fa3606563f632b369045ef6f2c1ebad5e16d0298dc647625c5dd011d",
+          "tables_read": [],
+          "tables_written": [
+            "learner_profile_snapshots"
+          ]
+        },
+        {
+          "normalized_sql": "INSERT INTO history_evidence_registry( student_id,snapshot_id,task_cluster_id,evidence_type,evidence_json, registry_version,created_at ) VALUES (?,?,?,?,?,?,?)",
+          "ordinal": 3,
+          "sha256": "f90a60a5f3981daeb9c13c16616298301ce4ac0ff37d04053ed25cab781bc814",
+          "tables_read": [],
+          "tables_written": [
+            "history_evidence_registry"
+          ]
+        },
+        {
+          "normalized_sql": "UPDATE history_evidence_registry SET history_evidence_id=?, evidence_json=? WHERE history_evidence_row_id=?",
+          "ordinal": 4,
+          "sha256": "2b7a2a701c1662e81d35a1c63d8f8461881c9a1adc023f00c63f7321a84c5dfc",
+          "tables_read": [],
+          "tables_written": [
+            "history_evidence_registry"
+          ]
+        },
+        {
+          "normalized_sql": "UPDATE learner_profile_snapshots SET snapshot_json=? WHERE snapshot_row_id=?",
+          "ordinal": 5,
+          "sha256": "8346dd4d4ad30336ad6ec4834d5f8a7697f957ffb40c54840ac8da626773039a",
+          "tables_read": [],
+          "tables_written": [
+            "learner_profile_snapshots"
+          ]
+        },
+        {
+          "normalized_sql": "SELECT evidence_json FROM history_evidence_registry WHERE snapshot_id=? ORDER BY history_evidence_row_id",
+          "ordinal": 6,
+          "sha256": "652b85ecfe11a431e91170852c16e17a17a5605a40adfc4092843fcf04101d00",
+          "tables_read": [
+            "history_evidence_registry"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "history_evidence_registry"
+      ],
+      "tables_written_direct": [
+        "history_evidence_registry",
+        "learner_profile_snapshots"
+      ]
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchall",
+        "loads"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/api/routers/students.py",
+          "line": 155
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 770,
+      "line_start": 764,
+      "name": "list_history_evidence",
+      "owner": "LearnerRepository",
+      "protocols_declaring_method": [
+        "app/repositories/protocols.py:LearnerProfileRepository"
+      ],
+      "return_annotation": "list[dict[str, Any]]",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, student_id: str) -> list[dict[str, Any]]",
+      "sql": [
+        {
+          "normalized_sql": "SELECT evidence_json FROM history_evidence_registry WHERE student_id=? ORDER BY history_evidence_row_id",
+          "ordinal": 1,
+          "sha256": "db78dda3024fa0d05cdae8f96da312c353bca226d09555e035a28f7eaca739cc",
+          "tables_read": [
+            "history_evidence_registry"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "history_evidence_registry"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchall",
+        "loads"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/api/routers/students.py",
+          "line": 161
+        },
+        {
+          "file": "app/api/routers/students.py",
+          "line": 171
+        },
+        {
+          "file": "app/services/learner_profile.py",
+          "line": 27
+        },
+        {
+          "file": "tests/test_longitudinal_api_v03.py",
+          "line": 130
+        },
+        {
+          "file": "tests/test_snapshot_repository_v03.py",
+          "line": 19
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 778,
+      "line_start": 772,
+      "name": "list_learner_profile_snapshots",
+      "owner": "LearnerRepository",
+      "protocols_declaring_method": [
+        "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:LearnerProfileRepository",
+        "app/repositories/protocols.py:LearnerProfileRepository"
+      ],
+      "return_annotation": "list[dict[str, Any]]",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, student_id: str) -> list[dict[str, Any]]",
+      "sql": [
+        {
+          "normalized_sql": "SELECT snapshot_json FROM learner_profile_snapshots WHERE student_id=? ORDER BY snapshot_row_id",
+          "ordinal": 1,
+          "sha256": "7586872aa16cc74a5e78dba84743b8fe939d9c017803ead6a4e35eebcc2fd703",
+          "tables_read": [
+            "learner_profile_snapshots"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "learner_profile_snapshots"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": true,
+      "delegates_or_calls": [
+        "add",
+        "append",
+        "connect",
+        "execute",
+        "fetchall",
+        "get",
+        "loads",
+        "normalize_revision_stage",
+        "pop",
+        "setdefault",
+        "values"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/services/progress.py",
+          "line": 51
+        },
+        {
+          "file": "tests/test_revision_v05.py",
+          "line": 196
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 823,
+      "line_start": 780,
+      "name": "list_longitudinal_records",
+      "owner": "LearnerRepository",
+      "protocols_declaring_method": [
+        "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:LearnerProfileRepository",
+        "app/repositories/protocols.py:LearnerProfileRepository"
+      ],
+      "return_annotation": "list[dict[str, Any]]",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, student_id: str) -> list[dict[str, Any]]",
+      "sql": [
+        {
+          "normalized_sql": "SELECT e.*, m.metrics_json, m.analysis_version, d.diagnosis_json, d.diagnosis_version FROM essays e JOIN metrics m ON m.essay_id=e.essay_id JOIN diagnoses d ON d.essay_id=e.essay_id WHERE e.student_id=? ORDER BY e.submitted_at, e.essay_id",
+          "ordinal": 1,
+          "sha256": "b46249b80887a551a1b70bc8b82b2ed288bb0084a3f52f5ca0da040ec5e133ba",
+          "tables_read": [
+            "diagnoses",
+            "essays",
+            "metrics"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "diagnoses",
+        "essays",
+        "metrics"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchall"
+      ],
+      "direct_call_sites": [],
+      "file": "app/database/repository.py",
+      "line_end": 828,
+      "line_start": 825,
+      "name": "get_system_versions",
+      "owner": "SystemRepository",
+      "protocols_declaring_method": [
+        "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:SystemVersionRepository",
+        "app/repositories/protocols.py:SystemVersionRepository"
+      ],
+      "return_annotation": "dict[str, str]",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self) -> dict[str, str]",
+      "sql": [
+        {
+          "normalized_sql": "SELECT component, version FROM system_versions",
+          "ordinal": 1,
+          "sha256": "8827fb08c528f4c26cc5cd30dcdb3d6770d38ee1c17c4a040d3b3cc3c50cf1f4",
+          "tables_read": [
+            "system_versions"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "system_versions"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "pure",
+      "commit_behavior": "none",
+      "connection_behavior": "no_connection",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "casefold",
+        "get",
+        "replace",
+        "strip"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 208
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 602
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 624
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 839,
+      "line_start": 831,
+      "name": "normalize_revision_stage",
+      "owner": "RevisionRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "str",
+      "rollback_behavior": "none",
+      "signature": "(value: str) -> str",
+      "sql": [],
+      "tables_read_direct": [],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "write",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "multiple_separate_connection_scopes",
+      "cross_aggregate": true,
+      "delegates_or_calls": [
+        "connect",
+        "dumps",
+        "execute",
+        "get_revision_group",
+        "get_revision_group_for_submission",
+        "get_submission_bundle",
+        "isoformat",
+        "normalize_revision_stage",
+        "now"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/services/revision.py",
+          "line": 54
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 871,
+      "line_start": 841,
+      "name": "create_revision_group",
+      "owner": "RevisionRepository",
+      "protocols_declaring_method": [
+        "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:RevisionRepository",
+        "app/repositories/protocols.py:RevisionRepository"
+      ],
+      "return_annotation": "RevisionGroup",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, source_submission_id: int) -> RevisionGroup",
+      "sql": [
+        {
+          "normalized_sql": "INSERT INTO revision_groups( student_id, writing_prompt, genre, root_submission_id, created_at, updated_at, metadata_consistency_json, limitations_json ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+          "ordinal": 1,
+          "sha256": "e8b9ed877e2c91214b8c153a88fedc1ec0f13c9117f8e689d392c44248357ce5",
+          "tables_read": [],
+          "tables_written": [
+            "revision_groups"
+          ]
+        },
+        {
+          "normalized_sql": "UPDATE revision_groups SET revision_group_id=? WHERE revision_group_row_id=?",
+          "ordinal": 2,
+          "sha256": "abc3de8138ac99d2ad3ff81cbc7a3e1a11d8ae7a0930f7fc61923202411b6c5a",
+          "tables_read": [],
+          "tables_written": [
+            "revision_groups"
+          ]
+        },
+        {
+          "normalized_sql": "UPDATE essays SET revision_group_id=?, revision_sequence=1, revision_stage=? WHERE essay_id=?",
+          "ordinal": 3,
+          "sha256": "e4401ead4ac18a56d9eef4c72c8f0c63671d645c293d93986d23ba12c382a998",
+          "tables_read": [],
+          "tables_written": [
+            "essays"
+          ]
+        }
+      ],
+      "tables_read_direct": [],
+      "tables_written_direct": [
+        "essays",
+        "revision_groups"
+      ]
+    },
+    {
+      "classification": "write",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "multiple_separate_connection_scopes",
+      "cross_aggregate": true,
+      "delegates_or_calls": [
+        "connect",
+        "dumps",
+        "execute",
+        "get",
+        "get_submission_bundle",
+        "isoformat",
+        "normalize_revision_stage",
+        "now"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/services/revision.py",
+          "line": 55
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 894,
+      "line_start": 873,
+      "name": "link_revision",
+      "owner": "RevisionRepository",
+      "protocols_declaring_method": [
+        "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:RevisionRepository",
+        "app/repositories/protocols.py:RevisionRepository"
+      ],
+      "return_annotation": "None",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, source_submission_id: int, target_submission_id: int, revision_group_id: str) -> None",
+      "sql": [
+        {
+          "normalized_sql": "UPDATE essays SET revision_of_submission_id=?, revision_group_id=?, revision_sequence=?, revision_stage=? WHERE essay_id=?",
+          "ordinal": 1,
+          "sha256": "9cd1b03c5d106910adb70a735978cab3e788d1048c6765b71341f30bae90043e",
+          "tables_read": [],
+          "tables_written": [
+            "essays"
+          ]
+        },
+        {
+          "normalized_sql": "UPDATE revision_groups SET updated_at=?, metadata_consistency_json=? WHERE revision_group_id=?",
+          "ordinal": 2,
+          "sha256": "ac5b94a8a0fe5d87ef7804bc11ed03c1101444f10b1c41eb9aa9989963d31f60",
+          "tables_read": [],
+          "tables_written": [
+            "revision_groups"
+          ]
+        }
+      ],
+      "tables_read_direct": [],
+      "tables_written_direct": [
+        "essays",
+        "revision_groups"
+      ]
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": true,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchall",
+        "fetchone",
+        "loads"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 604
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 653
+        },
+        {
+          "file": "app/services/admin_reanalysis.py",
+          "line": 124
+        },
+        {
+          "file": "app/services/revision.py",
+          "line": 113
+        },
+        {
+          "file": "tests/test_ui_api_client_v02.py",
+          "line": 53
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 913,
+      "line_start": 896,
+      "name": "get_revision_group",
+      "owner": "RevisionRepository",
+      "protocols_declaring_method": [
+        "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:RevisionRepository",
+        "app/repositories/protocols.py:RevisionRepository"
+      ],
+      "return_annotation": "RevisionGroup | None",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, revision_group_id: str) -> RevisionGroup | None",
+      "sql": [
+        {
+          "normalized_sql": "SELECT * FROM revision_groups WHERE revision_group_id=?",
+          "ordinal": 1,
+          "sha256": "5af1e88a0f80077553f5b24d3ec4bb8bd66b3a88f38886b647953e00a525546e",
+          "tables_read": [
+            "revision_groups"
+          ],
+          "tables_written": []
+        },
+        {
+          "normalized_sql": "SELECT essay_id FROM essays WHERE revision_group_id=? ORDER BY revision_sequence, essay_id",
+          "ordinal": 2,
+          "sha256": "7872d018e278a41e19c45360b4b7c6f3ad9ce35b90e3804e0527a79497ac793c",
+          "tables_read": [
+            "essays"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "essays",
+        "revision_groups"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "multiple_separate_connection_scopes",
+      "cross_aggregate": true,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchone",
+        "get_revision_group"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/api/routers/revisions.py",
+          "line": 80
+        },
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 577
+        },
+        {
+          "file": "tests/test_revision_v05.py",
+          "line": 64
+        },
+        {
+          "file": "tests/test_revision_v05.py",
+          "line": 63
+        },
+        {
+          "file": "tests/test_revision_v05.py",
+          "line": 81
+        },
+        {
+          "file": "tests/test_revision_v05.py",
+          "line": 82
+        },
+        {
+          "file": "tests/test_revision_v05.py",
+          "line": 93
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 918,
+      "line_start": 915,
+      "name": "get_revision_group_for_submission",
+      "owner": "RevisionRepository",
+      "protocols_declaring_method": [
+        "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:RevisionRepository",
+        "app/repositories/protocols.py:RevisionRepository"
+      ],
+      "return_annotation": "RevisionGroup | None",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, submission_id: int) -> RevisionGroup | None",
+      "sql": [
+        {
+          "normalized_sql": "SELECT revision_group_id FROM essays WHERE essay_id=?",
+          "ordinal": 1,
+          "sha256": "e2441395853307169c49867257a0be84800aa0d4996ed62043cf342e6ccb96fc",
+          "tables_read": [
+            "essays"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "essays"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "multiple_separate_connection_scopes",
+      "cross_aggregate": true,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchall",
+        "get_submission_bundle"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/services/revision.py",
+          "line": 110
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 931,
+      "line_start": 920,
+      "name": "list_revision_candidates",
+      "owner": "RevisionRepository",
+      "protocols_declaring_method": [
+        "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:RevisionRepository",
+        "app/repositories/protocols.py:RevisionRepository"
+      ],
+      "return_annotation": "list[dict[str, Any]]",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, submission_id: int) -> list[dict[str, Any]]",
+      "sql": [
+        {
+          "normalized_sql": "SELECT essay_id, submitted_at, writing_prompt, genre, draft_stage, revision_group_id, revision_sequence FROM essays WHERE student_id=? AND essay_id<>? AND submitted_at<=? ORDER BY submitted_at DESC, essay_id DESC",
+          "ordinal": 1,
+          "sha256": "1a92c594d16e2946c16085ab03b11fbeef02add94ec15c177573f4a8ab006ed7",
+          "tables_read": [
+            "essays"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "essays"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "write",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "isoformat",
+        "model_copy",
+        "model_dump_json"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/services/revision.py",
+          "line": 59
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 951,
+      "line_start": 933,
+      "name": "save_revision_snapshot",
+      "owner": "RevisionRepository",
+      "protocols_declaring_method": [
+        "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:RevisionRepository",
+        "app/repositories/protocols.py:RevisionRepository"
+      ],
+      "return_annotation": "RevisionSnapshot",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, snapshot: RevisionSnapshot) -> RevisionSnapshot",
+      "sql": [
+        {
+          "normalized_sql": "INSERT INTO revision_snapshots( revision_group_id, source_submission_id, target_submission_id, snapshot_json, alignment_version, uptake_version, configuration_version, created_at ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+          "ordinal": 1,
+          "sha256": "d06771bc4abd5ac330f3a10f78cfa22bdfaff95e856da54ec978529d46761160",
+          "tables_read": [],
+          "tables_written": [
+            "revision_snapshots"
+          ]
+        },
+        {
+          "normalized_sql": "UPDATE revision_snapshots SET revision_snapshot_id=?, snapshot_json=? WHERE revision_snapshot_row_id=?",
+          "ordinal": 2,
+          "sha256": "d5041b6ec8c1ddfc4290702164287f57f48c10cfb318d7602cf45f71f52f6fbe",
+          "tables_read": [],
+          "tables_written": [
+            "revision_snapshots"
+          ]
+        }
+      ],
+      "tables_read_direct": [],
+      "tables_written_direct": [
+        "revision_snapshots"
+      ]
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchall",
+        "loads"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/database/repository-\u51b2\u7a81-Rain_Win11.py",
+          "line": 697
+        },
+        {
+          "file": "app/services/revision.py",
+          "line": 125
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 959,
+      "line_start": 953,
+      "name": "list_revision_snapshots",
+      "owner": "RevisionRepository",
+      "protocols_declaring_method": [
+        "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:RevisionRepository",
+        "app/repositories/protocols.py:RevisionRepository"
+      ],
+      "return_annotation": "list[dict[str, Any]]",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, revision_group_id: str) -> list[dict[str, Any]]",
+      "sql": [
+        {
+          "normalized_sql": "SELECT snapshot_json FROM revision_snapshots WHERE revision_group_id=? ORDER BY revision_snapshot_row_id",
+          "ordinal": 1,
+          "sha256": "a6b0deb338f8ff87cb6a3ab29f40f6f0153347a9774193c14e8099f908702c97",
+          "tables_read": [
+            "revision_snapshots"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "revision_snapshots"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "multiple_separate_connection_scopes",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "list_revision_snapshots"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/services/revision.py",
+          "line": 119
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 963,
+      "line_start": 961,
+      "name": "get_latest_revision_snapshot",
+      "owner": "RevisionRepository",
+      "protocols_declaring_method": [
+        "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:RevisionRepository",
+        "app/repositories/protocols.py:RevisionRepository"
+      ],
+      "return_annotation": "dict[str, Any] | None",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, revision_group_id: str) -> dict[str, Any] | None",
+      "sql": [],
+      "tables_read_direct": [],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "_configuration_from_row",
+        "connect",
+        "execute",
+        "fetchall"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/services/configuration.py",
+          "line": 34
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 984,
+      "line_start": 979,
+      "name": "list_configurations",
+      "owner": "ConfigurationRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "list[ConfigurationVersion]",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self) -> list[ConfigurationVersion]",
+      "sql": [
+        {
+          "normalized_sql": "SELECT * FROM configuration_versions ORDER BY configuration_row_id",
+          "ordinal": 1,
+          "sha256": "b8579fdc56ef258108ffd2095d5e5298e335fe67a6d0ac4e0f15adaee6cfc68d",
+          "tables_read": [
+            "configuration_versions"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "configuration_versions"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "_configuration_from_row",
+        "connect",
+        "execute",
+        "fetchone"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/services/admin_reanalysis.py",
+          "line": 71
+        },
+        {
+          "file": "app/services/admin_reanalysis.py",
+          "line": 43
+        },
+        {
+          "file": "app/services/configuration.py",
+          "line": 43
+        },
+        {
+          "file": "app/services/configuration.py",
+          "line": 82
+        },
+        {
+          "file": "app/services/configuration.py",
+          "line": 89
+        },
+        {
+          "file": "tests/test_diagnostic_calibration_v061.py",
+          "line": 330
+        },
+        {
+          "file": "tests/test_diagnostic_calibration_v061.py",
+          "line": 340
+        },
+        {
+          "file": "tests/test_diagnostic_calibration_v061.py",
+          "line": 341
+        },
+        {
+          "file": "tests/test_v06_configuration_dashboard.py",
+          "line": 103
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 992,
+      "line_start": 986,
+      "name": "get_configuration",
+      "owner": "ConfigurationRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "ConfigurationVersion | None",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, configuration_id_or_version: str) -> ConfigurationVersion | None",
+      "sql": [
+        {
+          "normalized_sql": "SELECT * FROM configuration_versions WHERE configuration_id=? OR version=?",
+          "ordinal": 1,
+          "sha256": "151ccfd717fbdf47d0071a3f47f533e040b95c31203d9349d3cc73f2b959db1a",
+          "tables_read": [
+            "configuration_versions"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "configuration_versions"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "_configuration_from_row",
+        "connect",
+        "execute",
+        "fetchone"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/api/main.py",
+          "line": 163
+        },
+        {
+          "file": "app/services/configuration.py",
+          "line": 37
+        },
+        {
+          "file": "app/services/factory.py",
+          "line": 66
+        },
+        {
+          "file": "app/services/progress.py",
+          "line": 62
+        },
+        {
+          "file": "tests/test_calf_v08.py",
+          "line": 184
+        },
+        {
+          "file": "tests/test_calf_v08.py",
+          "line": 177
+        },
+        {
+          "file": "tests/test_calf_v08.py",
+          "line": 187
+        },
+        {
+          "file": "tests/test_diagnostic_calibration_v061.py",
+          "line": 328
+        },
+        {
+          "file": "tests/test_diagnostic_calibration_v061.py",
+          "line": 338
+        },
+        {
+          "file": "tests/test_learner_model_v07.py",
+          "line": 146
+        },
+        {
+          "file": "tests/test_practice_v09.py",
+          "line": 255
+        },
+        {
+          "file": "tests/test_research_v082.py",
+          "line": 272
+        },
+        {
+          "file": "tests/test_v06_configuration_dashboard.py",
+          "line": 73
+        },
+        {
+          "file": "tests/test_v071_reliability_ui.py",
+          "line": 274
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 1001,
+      "line_start": 994,
+      "name": "get_active_configuration",
+      "owner": "ConfigurationRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "ConfigurationVersion",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self) -> ConfigurationVersion",
+      "sql": [
+        {
+          "normalized_sql": "SELECT * FROM configuration_versions WHERE status='active'",
+          "ordinal": 1,
+          "sha256": "0aa07f77450199a7c718883ed11f4485b5d37834dc26b9a983df708a7faa6ab3",
+          "tables_read": [
+            "configuration_versions"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "configuration_versions"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "write",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "multiple_separate_connection_scopes",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "_insert_configuration_audit",
+        "connect",
+        "execute",
+        "fetchone",
+        "get_active_configuration",
+        "get_configuration",
+        "isoformat",
+        "model_dump_json",
+        "now",
+        "rsplit",
+        "startswith"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/services/configuration.py",
+          "line": 40
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 1037,
+      "line_start": 1003,
+      "name": "create_configuration",
+      "owner": "ConfigurationRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "ConfigurationVersion",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, request: ConfigurationCreate, parent_version: str | None) -> ConfigurationVersion",
+      "sql": [
+        {
+          "normalized_sql": "INSERT INTO configuration_versions( version,status,created_at,created_by,parent_version,payload_json,schema_version, change_note,validation_status,validation_errors_json,content_hash ) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+          "ordinal": 1,
+          "sha256": "edae9111f3e879fb0af13ac327a2abfb468fdab37000a6faa5593ee5a9f88a27",
+          "tables_read": [],
+          "tables_written": [
+            "configuration_versions"
+          ]
+        },
+        {
+          "normalized_sql": "UPDATE configuration_versions SET configuration_id=? WHERE configuration_row_id=?",
+          "ordinal": 2,
+          "sha256": "735bbeb327805f7ba4e5dadaacc8cd8abff49720a0fc7a7e022e6cd6dfa77cdf",
+          "tables_read": [],
+          "tables_written": [
+            "configuration_versions"
+          ]
+        },
+        {
+          "normalized_sql": "create",
+          "ordinal": 3,
+          "sha256": "fa8847b0c33183273f5945508b31c3208a9e4ece58ca47233a05628d8dba3799",
+          "tables_read": [],
+          "tables_written": []
+        },
+        {
+          "normalized_sql": "SELECT version FROM configuration_versions",
+          "ordinal": 4,
+          "sha256": "2b050c6dafc37d0468d90df79b0908cdbc135698cd7c272ef8fd13b830f7a299",
+          "tables_read": [
+            "configuration_versions"
+          ],
+          "tables_written": []
+        },
+        {
+          "normalized_sql": "SELECT COALESCE(MAX(configuration_row_id),0)+1 FROM configuration_versions",
+          "ordinal": 5,
+          "sha256": "a1f3c8dd503ea6412f1749f17fcaf60acc286c311d932f47574b1b87c596def3",
+          "tables_read": [
+            "configuration_versions"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "configuration_versions"
+      ],
+      "tables_written_direct": [
+        "configuration_versions"
+      ]
+    },
+    {
+      "classification": "write",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "multiple_separate_connection_scopes",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "_insert_configuration_audit",
+        "connect",
+        "dumps",
+        "execute",
+        "get_configuration",
+        "isoformat",
+        "now"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/services/configuration.py",
+          "line": 70
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 1057,
+      "line_start": 1039,
+      "name": "set_configuration_validation",
+      "owner": "ConfigurationRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "ConfigurationVersion",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, configuration_id: str, *, passed: bool, errors: list[str], actor: str) -> ConfigurationVersion",
+      "sql": [
+        {
+          "normalized_sql": "UPDATE configuration_versions SET status=?, validation_status=?, validation_errors_json=? WHERE configuration_id=? AND status IN ('draft','validated')",
+          "ordinal": 1,
+          "sha256": "bcb6a4f65cd75560d0115793876a9dbdcf032803598dce7b9b5adfd88ce19179",
+          "tables_read": [],
+          "tables_written": [
+            "configuration_versions"
+          ]
+        }
+      ],
+      "tables_read_direct": [],
+      "tables_written_direct": [
+        "configuration_versions"
+      ]
+    },
+    {
+      "classification": "write",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "multiple_separate_connection_scopes",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "_insert_configuration_audit",
+        "connect",
+        "execute",
+        "fetchone",
+        "get_configuration",
+        "isoformat",
+        "now"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/services/configuration.py",
+          "line": 76
+        },
+        {
+          "file": "app/services/configuration.py",
+          "line": 92
+        },
+        {
+          "file": "tests/test_ui_api_client_v02.py",
+          "line": 79
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 1083,
+      "line_start": 1059,
+      "name": "activate_configuration",
+      "owner": "ConfigurationRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "ConfigurationVersion",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, configuration_id: str, *, actor: str, reason: str, action: str='activate') -> ConfigurationVersion",
+      "sql": [
+        {
+          "normalized_sql": "UPDATE configuration_versions SET status='inactive', deactivated_at=? WHERE status='active' AND configuration_id<>?",
+          "ordinal": 1,
+          "sha256": "f16e71f516f662183cfdd9271bd3ab74d6e3d9dfba6d8f47a99fd1817d35a904",
+          "tables_read": [],
+          "tables_written": [
+            "configuration_versions"
+          ]
+        },
+        {
+          "normalized_sql": "UPDATE configuration_versions SET status='active', activated_at=?, deactivated_at=NULL WHERE configuration_id=?",
+          "ordinal": 2,
+          "sha256": "9f6d54890eeaff5f793fdb7fbdb7859fbbea5e62823b7429ac915cbac9fe3466",
+          "tables_read": [],
+          "tables_written": [
+            "configuration_versions"
+          ]
+        },
+        {
+          "normalized_sql": "SELECT * FROM configuration_versions WHERE configuration_id=?",
+          "ordinal": 3,
+          "sha256": "0bbd1aa7d72e105f4e5f62bd4548b13ecc7488b365bc01cccbfc469bd11bf957",
+          "tables_read": [
+            "configuration_versions"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "configuration_versions"
+      ],
+      "tables_written_direct": [
+        "configuration_versions"
+      ]
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchall",
+        "loads"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/services/configuration.py",
+          "line": 97
+        },
+        {
+          "file": "tests/test_v06_configuration_dashboard.py",
+          "line": 75
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 1094,
+      "line_start": 1085,
+      "name": "list_configuration_audit",
+      "owner": "ConfigurationRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "list[dict[str, Any]]",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, configuration_id: str | None=None) -> list[dict[str, Any]]",
+      "sql": [
+        {
+          "normalized_sql": "SELECT * FROM configuration_audit WHERE configuration_id=? ORDER BY audit_row_id",
+          "ordinal": 1,
+          "sha256": "07cba45a1c0c73358434452fbc0bb51d0a72045324ad48e6c30997e2af73c898",
+          "tables_read": [
+            "configuration_audit"
+          ],
+          "tables_written": []
+        },
+        {
+          "normalized_sql": "SELECT * FROM configuration_audit ORDER BY audit_row_id",
+          "ordinal": 2,
+          "sha256": "cde5e6e9c39c96acd84d619532c41ea732669a68276e24c9f5a35ef76f79a507",
+          "tables_read": [
+            "configuration_audit"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "configuration_audit"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "multiple_separate_connection_scopes",
+      "cross_aggregate": true,
+      "delegates_or_calls": [
+        "get",
+        "get_diagnostic_calibration",
+        "get_latest_analysis_run",
+        "items",
+        "list_longitudinal_records",
+        "model_dump",
+        "setdefault"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/services/dashboard.py",
+          "line": 27
+        },
+        {
+          "file": "app/services/progress.py",
+          "line": 49
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 1143,
+      "line_start": 1111,
+      "name": "list_visualization_records",
+      "owner": "LearnerRepository",
+      "protocols_declaring_method": [
+        "app/repositories/protocols.py:LearnerProfileRepository"
+      ],
+      "return_annotation": "list[dict[str, Any]]",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, student_id: str) -> list[dict[str, Any]]",
+      "sql": [],
+      "tables_read_direct": [],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "write",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "multiple_separate_connection_scopes",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "_next_practice_id",
+        "connect",
+        "dumps",
+        "execute",
+        "model_dump"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/api/routers/practice.py",
+          "line": 31
+        },
+        {
+          "file": "tests/test_journey_v093c.py",
+          "line": 94
+        },
+        {
+          "file": "tests/test_journey_v093c.py",
+          "line": 270
+        },
+        {
+          "file": "tests/test_journey_v093c.py",
+          "line": 278
+        },
+        {
+          "file": "tests/test_journey_v093c.py",
+          "line": 306
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 1184,
+      "line_start": 1172,
+      "name": "save_practice_target",
+      "owner": "PracticeRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "dict",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, target: dict) -> dict",
+      "sql": [
+        {
+          "normalized_sql": "INSERT INTO practice_targets VALUES (?,?,?,?,?,?,?,?,?)",
+          "ordinal": 1,
+          "sha256": "7903c00a5d4b2807c05f3efac94a3adc5fcfd1e9cfbd191b990b905ff3c19894",
+          "tables_read": [],
+          "tables_written": [
+            "practice_targets"
+          ]
+        }
+      ],
+      "tables_read_direct": [],
+      "tables_written_direct": [
+        "practice_targets"
+      ]
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchall",
+        "loads"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/api/routers/practice.py",
+          "line": 16
+        },
+        {
+          "file": "app/journey/service.py",
+          "line": 122
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 1191,
+      "line_start": 1186,
+      "name": "list_practice_targets",
+      "owner": "PracticeRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "list[dict]",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, student_id: str) -> list[dict]",
+      "sql": [
+        {
+          "normalized_sql": "SELECT target_json FROM practice_targets WHERE student_id=? ORDER BY created_at",
+          "ordinal": 1,
+          "sha256": "4cc2c806f9145d46a983655f7861d4b6f96b10e809c4555dde87b18a239354f4",
+          "tables_read": [
+            "practice_targets"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "practice_targets"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchone",
+        "loads"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/api/routers/practice.py",
+          "line": 37
+        },
+        {
+          "file": "app/api/routers/practice.py",
+          "line": 49
+        },
+        {
+          "file": "app/api/routers/practice.py",
+          "line": 68
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 1196,
+      "line_start": 1193,
+      "name": "get_practice_target",
+      "owner": "PracticeRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "dict | None",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, pid: str) -> dict | None",
+      "sql": [
+        {
+          "normalized_sql": "SELECT target_json FROM practice_targets WHERE practice_target_id=?",
+          "ordinal": 1,
+          "sha256": "e651b38500e1051e91a988763e8e07b4d8a39787055fea21d036f9de8a9f2a01",
+          "tables_read": [
+            "practice_targets"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "practice_targets"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "write",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "multiple_separate_connection_scopes",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "_next_practice_id",
+        "connect",
+        "dumps",
+        "execute",
+        "model_dump"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/api/routers/practice.py",
+          "line": 43
+        },
+        {
+          "file": "tests/test_journey_v093c.py",
+          "line": 95
+        },
+        {
+          "file": "tests/test_journey_v093c.py",
+          "line": 282
+        },
+        {
+          "file": "tests/test_journey_v093c.py",
+          "line": 310
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 1209,
+      "line_start": 1198,
+      "name": "save_exercise_instance",
+      "owner": "PracticeRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "dict",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, instance: dict) -> dict",
+      "sql": [
+        {
+          "normalized_sql": "INSERT INTO exercise_instances VALUES (?,?,?,?,?,?)",
+          "ordinal": 1,
+          "sha256": "ff2dc87b897004f82e0a27f24a4a06389270ed980943dc81ae00941eb4126cb2",
+          "tables_read": [],
+          "tables_written": [
+            "exercise_instances"
+          ]
+        }
+      ],
+      "tables_read_direct": [],
+      "tables_written_direct": [
+        "exercise_instances"
+      ]
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchall",
+        "loads"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/api/routers/practice.py",
+          "line": 51
+        },
+        {
+          "file": "tests/test_journey_v093c.py",
+          "line": 311
+        },
+        {
+          "file": "tests/test_journey_v093c.py",
+          "line": 314
+        },
+        {
+          "file": "tests/test_journey_v093c.py",
+          "line": 315
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 1222,
+      "line_start": 1211,
+      "name": "list_exercise_instances",
+      "owner": "PracticeRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "list[dict]",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, practice_target_id=None, student_id=None) -> list[dict]",
+      "sql": [
+        {
+          "normalized_sql": "SELECT instance_json FROM exercise_instances WHERE practice_target_id=? ORDER BY created_at",
+          "ordinal": 1,
+          "sha256": "c0a0de64031b2319e3ed792c6d04efd3a4a0f89ac66c12d6bce2740b5eb8b2e5",
+          "tables_read": [
+            "exercise_instances"
+          ],
+          "tables_written": []
+        },
+        {
+          "normalized_sql": "SELECT instance_json FROM exercise_instances WHERE student_id=? ORDER BY created_at",
+          "ordinal": 2,
+          "sha256": "a56725a274f69aa504ee01bd56aedea2f5ea4e5f6eb07ac8e74df6c4c1d42bdd",
+          "tables_read": [
+            "exercise_instances"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "exercise_instances"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchone",
+        "loads"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/api/routers/practice.py",
+          "line": 56
+        },
+        {
+          "file": "app/api/routers/practice.py",
+          "line": 82
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 1227,
+      "line_start": 1224,
+      "name": "get_exercise_instance",
+      "owner": "PracticeRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "dict | None",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, eid: str) -> dict | None",
+      "sql": [
+        {
+          "normalized_sql": "SELECT instance_json FROM exercise_instances WHERE exercise_id=?",
+          "ordinal": 1,
+          "sha256": "b06de5acfe54a81ad40c5e77a4fedf35eabf359742dbd004643ad4c81b274afa",
+          "tables_read": [
+            "exercise_instances"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "exercise_instances"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "write",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "multiple_separate_connection_scopes",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "_next_practice_id",
+        "connect",
+        "dumps",
+        "execute",
+        "model_dump"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/api/routers/practice.py",
+          "line": 64
+        },
+        {
+          "file": "tests/test_journey_v093c.py",
+          "line": 96
+        },
+        {
+          "file": "tests/test_journey_v093c.py",
+          "line": 283
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 1240,
+      "line_start": 1229,
+      "name": "save_exercise_attempt",
+      "owner": "PracticeRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "dict",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, attempt: dict) -> dict",
+      "sql": [
+        {
+          "normalized_sql": "INSERT INTO exercise_attempts VALUES (?,?,?,?,?,?,?)",
+          "ordinal": 1,
+          "sha256": "142ccd20165c94a938c4b0628a890a63ab25d98a23e82467f1c5973fbd69394d",
+          "tables_read": [],
+          "tables_written": [
+            "exercise_attempts"
+          ]
+        }
+      ],
+      "tables_read_direct": [],
+      "tables_written_direct": [
+        "exercise_attempts"
+      ]
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchall",
+        "loads"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/api/routers/practice.py",
+          "line": 59
+        },
+        {
+          "file": "app/api/routers/practice.py",
+          "line": 84
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 1247,
+      "line_start": 1242,
+      "name": "list_exercise_attempts",
+      "owner": "PracticeRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "list[dict]",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, exercise_id: str) -> list[dict]",
+      "sql": [
+        {
+          "normalized_sql": "SELECT attempt_json FROM exercise_attempts WHERE exercise_id=? ORDER BY attempt_number",
+          "ordinal": 1,
+          "sha256": "68f4f0554df8bd8fc0209f05763c89a63313066329043f4b276147b95db96dfa",
+          "tables_read": [
+            "exercise_attempts"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "exercise_attempts"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "write",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "multiple_separate_connection_scopes",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "_next_practice_id",
+        "connect",
+        "dumps",
+        "execute",
+        "model_dump"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/api/routers/practice.py",
+          "line": 74
+        },
+        {
+          "file": "tests/test_journey_v093c.py",
+          "line": 99
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 1259,
+      "line_start": 1249,
+      "name": "save_practice_evaluation",
+      "owner": "PracticeRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "dict",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, evaluation: dict) -> dict",
+      "sql": [
+        {
+          "normalized_sql": "INSERT INTO practice_evaluations VALUES (?,?,?,?,?)",
+          "ordinal": 1,
+          "sha256": "98f153b17ec1feebb4155e6b8fae4e04ae6de8a28b85e84b44ebcbf8f520fbb3",
+          "tables_read": [],
+          "tables_written": [
+            "practice_evaluations"
+          ]
+        }
+      ],
+      "tables_read_direct": [],
+      "tables_written_direct": [
+        "practice_evaluations"
+      ]
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchall",
+        "loads"
+      ],
+      "direct_call_sites": [],
+      "file": "app/database/repository.py",
+      "line_end": 1272,
+      "line_start": 1261,
+      "name": "list_practice_evaluations",
+      "owner": "PracticeRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "list[dict]",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, attempt_id=None, practice_target_id=None) -> list[dict]",
+      "sql": [
+        {
+          "normalized_sql": "SELECT evaluation_json FROM practice_evaluations WHERE attempt_id=? ORDER BY created_at",
+          "ordinal": 1,
+          "sha256": "402aa69d766dd569a2ac57c478af0bd6c405180bd2a70ca86e675b56146cec98",
+          "tables_read": [
+            "practice_evaluations"
+          ],
+          "tables_written": []
+        },
+        {
+          "normalized_sql": "SELECT evaluation_json FROM practice_evaluations WHERE practice_target_id=? ORDER BY created_at",
+          "ordinal": 2,
+          "sha256": "87738cbf7f497a3fb4d06d7e286a3af4b72d14d8bfcebf841da19cbb9fb1c4db",
+          "tables_read": [
+            "practice_evaluations"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "practice_evaluations"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchall",
+        "loads"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/journey/service.py",
+          "line": 124
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 1283,
+      "line_start": 1274,
+      "name": "list_practice_evaluations_by_student",
+      "owner": "PracticeRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "list[dict]",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, student_id: str) -> list[dict]",
+      "sql": [
+        {
+          "normalized_sql": "SELECT pe.evaluation_json FROM practice_evaluations pe JOIN exercise_attempts ea ON ea.attempt_id = pe.attempt_id WHERE ea.student_id=? ORDER BY pe.created_at",
+          "ordinal": 1,
+          "sha256": "e9eb52dda75d2d7a064f3c8ae972542c83969fc6e3a99d14ebd1d43750e64b92",
+          "tables_read": [
+            "exercise_attempts",
+            "practice_evaluations"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "exercise_attempts",
+        "practice_evaluations"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": true,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchall"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/journey/service.py",
+          "line": 113
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 1291,
+      "line_start": 1285,
+      "name": "list_essays_by_student",
+      "owner": "PracticeRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "list[dict]",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, student_id: str) -> list[dict]",
+      "sql": [
+        {
+          "normalized_sql": "SELECT * FROM essays WHERE student_id=? ORDER BY submitted_at, essay_id",
+          "ordinal": 1,
+          "sha256": "fdb96a601217ec2930bbd2f5fdf6630db1ccb300bb49535d423683f125b42338",
+          "tables_read": [
+            "essays"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "essays"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": true,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchall"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/journey/service.py",
+          "line": 116
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 1302,
+      "line_start": 1293,
+      "name": "list_analysis_runs_for_student",
+      "owner": "PracticeRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "list[dict]",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, student_id: str) -> list[dict]",
+      "sql": [
+        {
+          "normalized_sql": "SELECT ar.* FROM analysis_runs ar JOIN essays e ON e.essay_id = ar.essay_id WHERE e.student_id=? ORDER BY ar.created_at, ar.analysis_run_row_id",
+          "ordinal": 1,
+          "sha256": "a720114fab421be69a908d2c394c846c9ca69d61acc030b665bd6e473be30b22",
+          "tables_read": [
+            "analysis_runs",
+            "essays"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "analysis_runs",
+        "essays"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": true,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchall"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/journey/service.py",
+          "line": 120
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 1313,
+      "line_start": 1304,
+      "name": "list_feedback_records_for_student",
+      "owner": "PracticeRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "list[dict]",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, student_id: str) -> list[dict]",
+      "sql": [
+        {
+          "normalized_sql": "SELECT fr.* FROM feedback_records fr JOIN essays e ON e.essay_id = fr.essay_id WHERE e.student_id=? ORDER BY fr.created_at, fr.feedback_id",
+          "ordinal": 1,
+          "sha256": "63df956642bba9be9145ff47d4080f3915c32de80ccbfab70d350ca96bde900a",
+          "tables_read": [
+            "essays",
+            "feedback_records"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "essays",
+        "feedback_records"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchall"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/journey/service.py",
+          "line": 123
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 1321,
+      "line_start": 1315,
+      "name": "list_exercise_attempts_by_student",
+      "owner": "PracticeRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "list[dict]",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, student_id: str) -> list[dict]",
+      "sql": [
+        {
+          "normalized_sql": "SELECT * FROM exercise_attempts WHERE student_id=? ORDER BY created_at, attempt_number",
+          "ordinal": 1,
+          "sha256": "3e1c4a999be65af2edecae08860db7d81a1918f11f5589015a41b83baa073091",
+          "tables_read": [
+            "exercise_attempts"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "exercise_attempts"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "write",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "multiple_separate_connection_scopes",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "_next_practice_id",
+        "connect",
+        "dumps",
+        "execute",
+        "model_dump"
+      ],
+      "direct_call_sites": [],
+      "file": "app/database/repository.py",
+      "line_end": 1333,
+      "line_start": 1323,
+      "name": "save_feedback_engagement_trace",
+      "owner": "PracticeRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "dict",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, trace: dict) -> dict",
+      "sql": [
+        {
+          "normalized_sql": "INSERT INTO feedback_engagement_traces VALUES (?,?,?,?,?)",
+          "ordinal": 1,
+          "sha256": "caf4595dd944074ef3295f8548dfdabb7f79eee37194f683d20f3986a6692f0b",
+          "tables_read": [],
+          "tables_written": [
+            "feedback_engagement_traces"
+          ]
+        }
+      ],
+      "tables_read_direct": [],
+      "tables_written_direct": [
+        "feedback_engagement_traces"
+      ]
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchall",
+        "loads"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/api/routers/practice.py",
+          "line": 90
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 1340,
+      "line_start": 1335,
+      "name": "list_feedback_engagement_traces",
+      "owner": "PracticeRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "list[dict]",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, student_id: str) -> list[dict]",
+      "sql": [
+        {
+          "normalized_sql": "SELECT trace_json FROM feedback_engagement_traces WHERE student_id=? ORDER BY created_at",
+          "ordinal": 1,
+          "sha256": "941613fa68204d5d009d9953379d4feb127192ad54b9d4a35e9303d0de2859e5",
+          "tables_read": [
+            "feedback_engagement_traces"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "feedback_engagement_traces"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "write",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "multiple_separate_connection_scopes",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "_next_practice_id",
+        "connect",
+        "dumps",
+        "execute",
+        "model_dump"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "tests/test_journey_v093c.py",
+          "line": 110
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 1352,
+      "line_start": 1342,
+      "name": "save_within_task_response_candidate",
+      "owner": "PracticeRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "dict",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, candidate: dict) -> dict",
+      "sql": [
+        {
+          "normalized_sql": "INSERT INTO within_task_response_candidates VALUES (?,?,?,?,?)",
+          "ordinal": 1,
+          "sha256": "e16113c35231a70c968dd812dbe9b537054e75eb4323b645138987af613e5547",
+          "tables_read": [],
+          "tables_written": [
+            "within_task_response_candidates"
+          ]
+        }
+      ],
+      "tables_read_direct": [],
+      "tables_written_direct": [
+        "within_task_response_candidates"
+      ]
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchall",
+        "loads"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/journey/service.py",
+          "line": 125
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 1359,
+      "line_start": 1354,
+      "name": "list_within_task_responses",
+      "owner": "PracticeRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "list[dict]",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, student_id: str) -> list[dict]",
+      "sql": [
+        {
+          "normalized_sql": "SELECT response_json FROM within_task_response_candidates WHERE student_id=? ORDER BY created_at",
+          "ordinal": 1,
+          "sha256": "c2c036ff6043113b68189ca029a3d94462fd8e0b8a5a87da5c23ebba6d9c21b5",
+          "tables_read": [
+            "within_task_response_candidates"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "within_task_response_candidates"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "write",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "multiple_separate_connection_scopes",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "_next_practice_id",
+        "connect",
+        "dumps",
+        "execute",
+        "model_dump"
+      ],
+      "direct_call_sites": [],
+      "file": "app/database/repository.py",
+      "line_end": 1371,
+      "line_start": 1361,
+      "name": "save_transfer_evidence_candidate",
+      "owner": "PracticeRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "dict",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, candidate: dict) -> dict",
+      "sql": [
+        {
+          "normalized_sql": "INSERT INTO transfer_evidence_candidates VALUES (?,?,?,?,?)",
+          "ordinal": 1,
+          "sha256": "63f948674e63d895f4afd76070d8aefccef01a3b1860166f24d8f9f9fd322fb7",
+          "tables_read": [],
+          "tables_written": [
+            "transfer_evidence_candidates"
+          ]
+        }
+      ],
+      "tables_read_direct": [],
+      "tables_written_direct": [
+        "transfer_evidence_candidates"
+      ]
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchall",
+        "loads"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/api/routers/practice.py",
+          "line": 96
+        },
+        {
+          "file": "app/journey/service.py",
+          "line": 126
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 1378,
+      "line_start": 1373,
+      "name": "list_transfer_evidence_candidates",
+      "owner": "PracticeRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "list[dict]",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, student_id: str) -> list[dict]",
+      "sql": [
+        {
+          "normalized_sql": "SELECT transfer_json FROM transfer_evidence_candidates WHERE student_id=? ORDER BY created_at",
+          "ordinal": 1,
+          "sha256": "ef983614a1ba8b52895ff4c5db0a633b6d343baa3fbbae6fa06fcb0d1caca00f",
+          "tables_read": [
+            "transfer_evidence_candidates"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "transfer_evidence_candidates"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "write",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "multiple_separate_connection_scopes",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "_next_practice_id",
+        "connect",
+        "dumps",
+        "execute",
+        "model_dump"
+      ],
+      "direct_call_sites": [],
+      "file": "app/database/repository.py",
+      "line_end": 1390,
+      "line_start": 1380,
+      "name": "save_practice_state_snapshot",
+      "owner": "PracticeRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "dict",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, snapshot: dict) -> dict",
+      "sql": [
+        {
+          "normalized_sql": "INSERT INTO practice_state_snapshots VALUES (?,?,?,?)",
+          "ordinal": 1,
+          "sha256": "d1568cfe82cca7f8b51ed7c3713729daf59fff9dca30623938305c83465d80a5",
+          "tables_read": [],
+          "tables_written": [
+            "practice_state_snapshots"
+          ]
+        }
+      ],
+      "tables_read_direct": [],
+      "tables_written_direct": [
+        "practice_state_snapshots"
+      ]
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchall",
+        "loads"
+      ],
+      "direct_call_sites": [],
+      "file": "app/database/repository.py",
+      "line_end": 1397,
+      "line_start": 1392,
+      "name": "list_practice_state_snapshots",
+      "owner": "PracticeRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "list[dict]",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, student_id: str) -> list[dict]",
+      "sql": [
+        {
+          "normalized_sql": "SELECT snapshot_json FROM practice_state_snapshots WHERE student_id=? ORDER BY created_at",
+          "ordinal": 1,
+          "sha256": "e97fcfce622da6e195a91b5274ef2b2b55fc84ee2bd5affed7a7de8b52404423",
+          "tables_read": [
+            "practice_state_snapshots"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "practice_state_snapshots"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "write",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "multiple_separate_connection_scopes",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "_next_research_id",
+        "connect",
+        "dumps",
+        "execute",
+        "model_dump"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/research/service.py",
+          "line": 185
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 1429,
+      "line_start": 1411,
+      "name": "save_human_review",
+      "owner": "ResearchRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "dict",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, review) -> dict",
+      "sql": [
+        {
+          "normalized_sql": "INSERT OR REPLACE INTO human_reviews VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+          "ordinal": 1,
+          "sha256": "463295db09f63bf4bdbfcd3eb8e2509e0676d5a815bb84cac49c7fa088739ef6",
+          "tables_read": [],
+          "tables_written": [
+            "human_reviews"
+          ]
+        }
+      ],
+      "tables_read_direct": [],
+      "tables_written_direct": [
+        "human_reviews"
+      ]
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "append",
+        "connect",
+        "execute",
+        "fetchall",
+        "get",
+        "loads",
+        "model_dump"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/research/service.py",
+          "line": 190
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 1455,
+      "line_start": 1431,
+      "name": "list_human_reviews",
+      "owner": "ResearchRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "list[dict]",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, target_type: str | None=None, target_id: str | None=None) -> list[dict]",
+      "sql": [
+        {
+          "normalized_sql": "SELECT * FROM human_reviews WHERE target_type=? AND target_id=? ORDER BY created_at",
+          "ordinal": 1,
+          "sha256": "0d3114d61ea7cf1a64c8cac83550e4132b602e6ad035be5f2512057ed1390f88",
+          "tables_read": [
+            "human_reviews"
+          ],
+          "tables_written": []
+        },
+        {
+          "normalized_sql": "SELECT * FROM human_reviews WHERE target_type=? ORDER BY created_at",
+          "ordinal": 2,
+          "sha256": "e461f30096c93f62517278fc2dd8e3396886d04c35f52256f86f43308e2e6e0b",
+          "tables_read": [
+            "human_reviews"
+          ],
+          "tables_written": []
+        },
+        {
+          "normalized_sql": "SELECT * FROM human_reviews ORDER BY created_at",
+          "ordinal": 3,
+          "sha256": "725e259131f38025d9deb05f3fda3b45fca22d27f57ff168fd87f8801a655245",
+          "tables_read": [
+            "human_reviews"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "human_reviews"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "write",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "append",
+        "connect",
+        "execute",
+        "fetchone"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/api/routers/research.py",
+          "line": 113
+        },
+        {
+          "file": "app/research/service.py",
+          "line": 199
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 1479,
+      "line_start": 1457,
+      "name": "apply_pii_review",
+      "owner": "ResearchRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "list[dict]",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, submission_id: int, reviews: list) -> list[dict]",
+      "sql": [
+        {
+          "normalized_sql": "UPDATE pii_candidates SET review_status=?, action=?, reviewer_id=?, reviewed_at=? WHERE pii_candidate_id=? AND submission_id=?",
+          "ordinal": 1,
+          "sha256": "2fac028432ad3af9033b24bb49fb8d32b68b326e6336ef07e70c59b62cc64b80",
+          "tables_read": [],
+          "tables_written": [
+            "pii_candidates"
+          ]
+        },
+        {
+          "normalized_sql": "SELECT * FROM pii_candidates WHERE pii_candidate_id=?",
+          "ordinal": 2,
+          "sha256": "50797f1bde0cbdeaabb8e5416914a283e6c8793c015eaab0a4035068343932e8",
+          "tables_read": [
+            "pii_candidates"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "pii_candidates"
+      ],
+      "tables_written_direct": [
+        "pii_candidates"
+      ]
+    },
+    {
+      "classification": "write",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "dumps",
+        "execute",
+        "get"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/api/routers/research.py",
+          "line": 49
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 1497,
+      "line_start": 1481,
+      "name": "save_export_job",
+      "owner": "ResearchRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "dict",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, job: dict) -> dict",
+      "sql": [
+        {
+          "normalized_sql": "INSERT OR REPLACE INTO export_jobs( export_id, filter_json, privacy_mode, formats_json, status, created_at, completed_at, export_directory, file_count, record_counts_json, excluded_counts_json, manifest_path ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
+          "ordinal": 1,
+          "sha256": "181e40dc7470a0687a7c763fbc734364996b5035b32e9dedaa8a5efc4234ad2c",
+          "tables_read": [],
+          "tables_written": [
+            "export_jobs"
+          ]
+        }
+      ],
+      "tables_read_direct": [],
+      "tables_written_direct": [
+        "export_jobs"
+      ]
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "append",
+        "connect",
+        "execute",
+        "fetchall",
+        "get",
+        "loads",
+        "pop",
+        "removesuffix"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/research/service.py",
+          "line": 204
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 1511,
+      "line_start": 1499,
+      "name": "list_export_jobs",
+      "owner": "ResearchRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "list[dict]",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self) -> list[dict]",
+      "sql": [
+        {
+          "normalized_sql": "SELECT * FROM export_jobs ORDER BY created_at DESC",
+          "ordinal": 1,
+          "sha256": "09809ab7d80b907e0d8e06019cb59ef33892b44b69b4e06b8c949fc6df7d46e7",
+          "tables_read": [
+            "export_jobs"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "export_jobs"
+      ],
+      "tables_written_direct": []
+    },
+    {
+      "classification": "read",
+      "commit_behavior": "context_manager",
+      "connection_behavior": "single_with_connect_scope_auto_commit_or_rollback",
+      "cross_aggregate": false,
+      "delegates_or_calls": [
+        "connect",
+        "execute",
+        "fetchone",
+        "get",
+        "loads",
+        "pop"
+      ],
+      "direct_call_sites": [
+        {
+          "file": "app/research/service.py",
+          "line": 210
+        }
+      ],
+      "file": "app/database/repository.py",
+      "line_end": 1527,
+      "line_start": 1513,
+      "name": "get_export_job",
+      "owner": "ResearchRepository",
+      "protocols_declaring_method": [],
+      "return_annotation": "dict | None",
+      "rollback_behavior": "sqlite_connection_context",
+      "signature": "(self, export_id: str) -> dict | None",
+      "sql": [
+        {
+          "normalized_sql": "SELECT * FROM export_jobs WHERE export_id=?",
+          "ordinal": 1,
+          "sha256": "5fdbc231fb48d73c777cf0b76fd412bec82b6cca61a911d658cb4ab627c16d7e",
+          "tables_read": [
+            "export_jobs"
+          ],
+          "tables_written": []
+        }
+      ],
+      "tables_read_direct": [
+        "export_jobs"
+      ],
+      "tables_written_direct": []
+    }
+  ],
+  "owner_counts": {
+    "AnalysisRepository": 8,
+    "CalfRepository": 5,
+    "ConfigurationRepository": 7,
+    "LearnerRepository": 9,
+    "PracticeRepository": 23,
+    "ResearchRepository": 6,
+    "RevisionRepository": 9,
+    "SubmissionRepository": 11,
+    "SystemRepository": 8
+  },
+  "protocols": {
+    "app/analysis/base-\u51b2\u7a81-Rain_Win11.py:AnalyzerProtocol": [
+      "analyze"
+    ],
+    "app/analysis/base-\u51b2\u7a81-Rain_Win11.py:MetricCalculator": [
+      "calculate"
+    ],
+    "app/analysis/base.py:AnalyzerProtocol": [
+      "analyze"
+    ],
+    "app/analysis/base.py:MetricCalculator": [
+      "calculate"
+    ],
+    "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:ConfigurationRepository": [
+      "ping",
+      "migration_version"
+    ],
+    "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:DiagnosisRepository": [
+      "save_diagnosis"
+    ],
+    "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:EssayRepository": [
+      "save_essay",
+      "get_submission_bundle",
+      "list_student_submissions"
+    ],
+    "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:ExerciseRepository": [
+      "get_exercises"
+    ],
+    "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:FeedbackRepository": [
+      "save_feedback"
+    ],
+    "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:LearnerHistoryRepository": [
+      "prior_records",
+      "save_history",
+      "list_student_history"
+    ],
+    "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:LearnerProfileRepository": [
+      "get_latest_learner_profile",
+      "save_learner_profile_snapshot",
+      "list_learner_profile_snapshots",
+      "list_longitudinal_records"
+    ],
+    "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:MetricRepository": [
+      "save_analysis",
+      "save_analysis_run",
+      "list_analysis_runs"
+    ],
+    "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:RevisionRepository": [
+      "get_submission_bundle",
+      "get_latest_analysis_run",
+      "create_revision_group",
+      "link_revision",
+      "get_revision_group",
+      "get_revision_group_for_submission",
+      "list_revision_candidates",
+      "save_revision_snapshot",
+      "list_revision_snapshots",
+      "get_latest_revision_snapshot"
+    ],
+    "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:StudentRepository": [
+      "get_student"
+    ],
+    "app/repositories/protocols-\u51b2\u7a81-Rain_Win11.py:SystemVersionRepository": [
+      "record_versions",
+      "get_system_versions"
+    ],
+    "app/repositories/protocols.py:ConfigurationRepository": [
+      "ping",
+      "migration_version"
+    ],
+    "app/repositories/protocols.py:DiagnosisRepository": [
+      "save_diagnosis"
+    ],
+    "app/repositories/protocols.py:ErrorAnnotationRepository": [
+      "save_error_annotations",
+      "list_error_annotations"
+    ],
+    "app/repositories/protocols.py:EssayRepository": [
+      "save_essay",
+      "get_submission_bundle",
+      "list_student_submissions"
+    ],
+    "app/repositories/protocols.py:ExerciseRepository": [
+      "get_exercises"
+    ],
+    "app/repositories/protocols.py:FeedbackRepository": [
+      "save_feedback"
+    ],
+    "app/repositories/protocols.py:LearnerHistoryRepository": [
+      "prior_records",
+      "save_history",
+      "list_student_history"
+    ],
+    "app/repositories/protocols.py:LearnerProfileRepository": [
+      "get_latest_learner_profile",
+      "save_learner_profile_snapshot",
+      "list_learner_profile_snapshots",
+      "list_longitudinal_records",
+      "list_visualization_records",
+      "list_history_evidence"
+    ],
+    "app/repositories/protocols.py:MetricRepository": [
+      "save_analysis",
+      "save_analysis_run",
+      "list_analysis_runs",
+      "get_latest_analysis_run",
+      "list_analysis_units"
+    ],
+    "app/repositories/protocols.py:RevisionRepository": [
+      "get_submission_bundle",
+      "get_latest_analysis_run",
+      "create_revision_group",
+      "link_revision",
+      "get_revision_group",
+      "get_revision_group_for_submission",
+      "list_revision_candidates",
+      "save_revision_snapshot",
+      "list_revision_snapshots",
+      "get_latest_revision_snapshot"
+    ],
+    "app/repositories/protocols.py:StudentRepository": [
+      "get_student"
+    ],
+    "app/repositories/protocols.py:SystemVersionRepository": [
+      "record_versions",
+      "get_system_versions"
+    ]
+  },
+  "public_method_count": 86,
+  "source_sha256": "7ab65f7bdd6651702d5a068a4e0d48325608316b081e3b992d777891d2d06c3e"
+}

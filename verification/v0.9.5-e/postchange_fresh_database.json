@@ -1,0 +1,3259 @@
+{
+  "active_configuration": "config-v0.9.0",
+  "baseline_commit": "769e6d8b516b18a6221d59c51ac5ff1f90d37058",
+  "database_path_assertions": {
+    "actual_opened_path_matches": true,
+    "database_url_cleared": true,
+    "inside_temporary_directory": true,
+    "llm_provider": "local",
+    "not_data_directory": true,
+    "not_development_database": true
+  },
+  "development_database_after": {
+    "mtime_utc": 1785635309049648700,
+    "sha256": "5575da268311490300ecfdb3e4a9a689c19f088f111a26d97df68a347b527291",
+    "size": 8298496
+  },
+  "development_database_before": {
+    "mtime_utc": 1785635309049648700,
+    "path": "A:\\EAP Agent Project\\writing-feedback-mvp\\data\\writing_feedback.db",
+    "sha256": "5575da268311490300ecfdb3e4a9a689c19f088f111a26d97df68a347b527291",
+    "size": 8298496
+  },
+  "development_database_unchanged": {
+    "mtime": true,
+    "sha256": true,
+    "size": true
+  },
+  "empty_state_row_counts": {
+    "analysis_artifacts": 0,
+    "analysis_runs": 0,
+    "analysis_units": 0,
+    "configuration_audit": 7,
+    "configuration_versions": 7,
+    "diagnoses": 0,
+    "diagnostic_calibrations": 0,
+    "error_annotations": 0,
+    "essays": 0,
+    "exercise_attempts": 0,
+    "exercise_instances": 0,
+    "exercises": 0,
+    "export_jobs": 0,
+    "feedback_engagement_traces": 0,
+    "feedback_records": 0,
+    "history_evidence_registry": 0,
+    "human_reviews": 0,
+    "learner_history": 0,
+    "learner_profile_snapshots": 0,
+    "llm_call_records": 0,
+    "metric_results": 0,
+    "metrics": 0,
+    "pii_candidates": 0,
+    "practice_evaluations": 0,
+    "practice_state_snapshots": 0,
+    "practice_targets": 0,
+    "revision_groups": 0,
+    "revision_snapshots": 0,
+    "schema_migrations": 12,
+    "students": 0,
+    "system_versions": 0,
+    "transfer_evidence_candidates": 0,
+    "within_task_response_candidates": 0
+  },
+  "foreign_key_violations": [],
+  "format_version": 1,
+  "integrity_check": "ok",
+  "post_crud_row_counts": {
+    "analysis_artifacts": 1,
+    "analysis_runs": 1,
+    "analysis_units": 10,
+    "configuration_audit": 7,
+    "configuration_versions": 7,
+    "diagnoses": 1,
+    "diagnostic_calibrations": 1,
+    "error_annotations": 1,
+    "essays": 1,
+    "exercise_attempts": 1,
+    "exercise_instances": 1,
+    "exercises": 0,
+    "export_jobs": 0,
+    "feedback_engagement_traces": 0,
+    "feedback_records": 1,
+    "history_evidence_registry": 0,
+    "human_reviews": 1,
+    "learner_history": 1,
+    "learner_profile_snapshots": 1,
+    "llm_call_records": 1,
+    "metric_results": 24,
+    "metrics": 1,
+    "pii_candidates": 0,
+    "practice_evaluations": 1,
+    "practice_state_snapshots": 0,
+    "practice_targets": 1,
+    "revision_groups": 1,
+    "revision_snapshots": 0,
+    "schema_migrations": 12,
+    "students": 1,
+    "system_versions": 15,
+    "transfer_evidence_candidates": 0,
+    "within_task_response_candidates": 0
+  },
+  "representative_crud": {
+    "AnalysisRepository": {
+      "analysis_run_id": "AR000001",
+      "metric_result_count": 24
+    },
+    "CalfRepository": {
+      "analysis_unit_count": 10,
+      "error_annotation_id": "EA000001"
+    },
+    "ConfigurationRepository": {
+      "active_configuration": "config-v0.9.0"
+    },
+    "LearnerRepository": {
+      "snapshot_id": "LPS000001",
+      "student_id": "V095E-PRE"
+    },
+    "PracticeRepository": {
+      "attempt_id": "EA000001",
+      "evaluation_id": "PE000001",
+      "exercise_id": "EX000001",
+      "practice_target_id": "PT000001"
+    },
+    "ResearchRepository": {
+      "review_count": 1,
+      "review_id": "HR000001"
+    },
+    "RevisionRepository": {
+      "members": [
+        1
+      ],
+      "revision_group_id": "RG000001"
+    },
+    "SubmissionRepository": {
+      "bundle_student_id": "V095E-PRE",
+      "essay_id": 1,
+      "feedback_id": 1
+    },
+    "SystemRepository": {
+      "migration_version": 12,
+      "ping": true,
+      "version_record": "769e6d8"
+    }
+  },
+  "schema": {
+    "columns": {
+      "analysis_artifacts": [
+        {
+          "cid": 0,
+          "dflt_value": null,
+          "name": "artifact_id",
+          "notnull": 0,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "dflt_value": null,
+          "name": "analysis_run_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 2,
+          "dflt_value": null,
+          "name": "artifact_type",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 3,
+          "dflt_value": null,
+          "name": "schema_version",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 4,
+          "dflt_value": null,
+          "name": "artifact_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 5,
+          "dflt_value": "CURRENT_TIMESTAMP",
+          "name": "created_at",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        }
+      ],
+      "analysis_runs": [
+        {
+          "cid": 0,
+          "dflt_value": null,
+          "name": "analysis_run_row_id",
+          "notnull": 0,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "dflt_value": null,
+          "name": "analysis_run_id",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 2,
+          "dflt_value": null,
+          "name": "essay_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 3,
+          "dflt_value": null,
+          "name": "analyzer_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 4,
+          "dflt_value": null,
+          "name": "analyzer_version",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 5,
+          "dflt_value": null,
+          "name": "backend",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 6,
+          "dflt_value": null,
+          "name": "nlp_library",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 7,
+          "dflt_value": null,
+          "name": "nlp_library_version",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 8,
+          "dflt_value": null,
+          "name": "nlp_model_name",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 9,
+          "dflt_value": null,
+          "name": "nlp_model_version",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 10,
+          "dflt_value": null,
+          "name": "parameters_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 11,
+          "dflt_value": null,
+          "name": "resource_versions_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 12,
+          "dflt_value": null,
+          "name": "configuration_version",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 13,
+          "dflt_value": "0",
+          "name": "fallback_used",
+          "notnull": 1,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 14,
+          "dflt_value": null,
+          "name": "fallback_reason",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 15,
+          "dflt_value": null,
+          "name": "analysis_duration_ms",
+          "notnull": 1,
+          "pk": 0,
+          "type": "REAL"
+        },
+        {
+          "cid": 16,
+          "dflt_value": null,
+          "name": "limitations",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 17,
+          "dflt_value": null,
+          "name": "created_at",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        }
+      ],
+      "analysis_units": [
+        {
+          "cid": 0,
+          "dflt_value": null,
+          "name": "analysis_unit_row_id",
+          "notnull": 0,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "dflt_value": null,
+          "name": "analysis_unit_id",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 2,
+          "dflt_value": null,
+          "name": "submission_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 3,
+          "dflt_value": null,
+          "name": "analysis_run_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 4,
+          "dflt_value": null,
+          "name": "unit_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 5,
+          "dflt_value": null,
+          "name": "unit_version",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 6,
+          "dflt_value": null,
+          "name": "validation_status",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 7,
+          "dflt_value": null,
+          "name": "unit_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 8,
+          "dflt_value": "CURRENT_TIMESTAMP",
+          "name": "created_at",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        }
+      ],
+      "configuration_audit": [
+        {
+          "cid": 0,
+          "dflt_value": null,
+          "name": "audit_row_id",
+          "notnull": 0,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "dflt_value": null,
+          "name": "audit_id",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 2,
+          "dflt_value": null,
+          "name": "configuration_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 3,
+          "dflt_value": null,
+          "name": "action",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 4,
+          "dflt_value": null,
+          "name": "actor",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 5,
+          "dflt_value": null,
+          "name": "reason",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 6,
+          "dflt_value": null,
+          "name": "details_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 7,
+          "dflt_value": null,
+          "name": "created_at",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        }
+      ],
+      "configuration_versions": [
+        {
+          "cid": 0,
+          "dflt_value": null,
+          "name": "configuration_row_id",
+          "notnull": 0,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "dflt_value": null,
+          "name": "configuration_id",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 2,
+          "dflt_value": null,
+          "name": "version",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 3,
+          "dflt_value": null,
+          "name": "status",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 4,
+          "dflt_value": null,
+          "name": "created_at",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 5,
+          "dflt_value": null,
+          "name": "created_by",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 6,
+          "dflt_value": null,
+          "name": "parent_version",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 7,
+          "dflt_value": null,
+          "name": "payload_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 8,
+          "dflt_value": null,
+          "name": "schema_version",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 9,
+          "dflt_value": null,
+          "name": "change_note",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 10,
+          "dflt_value": null,
+          "name": "validation_status",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 11,
+          "dflt_value": null,
+          "name": "validation_errors_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 12,
+          "dflt_value": null,
+          "name": "activated_at",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 13,
+          "dflt_value": null,
+          "name": "deactivated_at",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 14,
+          "dflt_value": null,
+          "name": "content_hash",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        }
+      ],
+      "diagnoses": [
+        {
+          "cid": 0,
+          "dflt_value": null,
+          "name": "diagnosis_id",
+          "notnull": 0,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "dflt_value": null,
+          "name": "essay_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 2,
+          "dflt_value": null,
+          "name": "diagnosis_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 3,
+          "dflt_value": null,
+          "name": "diagnosis_version",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 4,
+          "dflt_value": "CURRENT_TIMESTAMP",
+          "name": "created_at",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        }
+      ],
+      "diagnostic_calibrations": [
+        {
+          "cid": 0,
+          "dflt_value": null,
+          "name": "calibration_row_id",
+          "notnull": 0,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "dflt_value": null,
+          "name": "calibration_id",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 2,
+          "dflt_value": null,
+          "name": "essay_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 3,
+          "dflt_value": null,
+          "name": "analysis_run_id",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 4,
+          "dflt_value": null,
+          "name": "calibration_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 5,
+          "dflt_value": null,
+          "name": "calibration_version",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 6,
+          "dflt_value": null,
+          "name": "gate_version",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 7,
+          "dflt_value": null,
+          "name": "priority_version",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 8,
+          "dflt_value": null,
+          "name": "evidence_validation_version",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 9,
+          "dflt_value": null,
+          "name": "diagnosis_version",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 10,
+          "dflt_value": null,
+          "name": "configuration_version",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 11,
+          "dflt_value": null,
+          "name": "created_at",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        }
+      ],
+      "error_annotations": [
+        {
+          "cid": 0,
+          "dflt_value": null,
+          "name": "error_annotation_row_id",
+          "notnull": 0,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "dflt_value": null,
+          "name": "error_annotation_id",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 2,
+          "dflt_value": null,
+          "name": "submission_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 3,
+          "dflt_value": null,
+          "name": "start_offset",
+          "notnull": 1,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 4,
+          "dflt_value": null,
+          "name": "end_offset",
+          "notnull": 1,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 5,
+          "dflt_value": null,
+          "name": "annotation_source",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 6,
+          "dflt_value": null,
+          "name": "annotation_status",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 7,
+          "dflt_value": "0",
+          "name": "eligible_for_formal_accuracy",
+          "notnull": 1,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 8,
+          "dflt_value": null,
+          "name": "annotation_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 9,
+          "dflt_value": "CURRENT_TIMESTAMP",
+          "name": "created_at",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        }
+      ],
+      "essays": [
+        {
+          "cid": 0,
+          "dflt_value": null,
+          "name": "essay_id",
+          "notnull": 0,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "dflt_value": null,
+          "name": "student_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 2,
+          "dflt_value": null,
+          "name": "writing_prompt",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 3,
+          "dflt_value": null,
+          "name": "genre",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 4,
+          "dflt_value": null,
+          "name": "draft_stage",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 5,
+          "dflt_value": null,
+          "name": "timed",
+          "notnull": 1,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 6,
+          "dflt_value": null,
+          "name": "time_limit_minutes",
+          "notnull": 0,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 7,
+          "dflt_value": null,
+          "name": "tool_use",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 8,
+          "dflt_value": null,
+          "name": "essay_text",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 9,
+          "dflt_value": null,
+          "name": "submitted_at",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 10,
+          "dflt_value": null,
+          "name": "revision_of_submission_id",
+          "notnull": 0,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 11,
+          "dflt_value": null,
+          "name": "revision_group_id",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 12,
+          "dflt_value": null,
+          "name": "revision_sequence",
+          "notnull": 0,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 13,
+          "dflt_value": "'independent_submission'",
+          "name": "revision_stage",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 14,
+          "dflt_value": null,
+          "name": "original_draft_stage",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 15,
+          "dflt_value": null,
+          "name": "writing_started_at",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 16,
+          "dflt_value": null,
+          "name": "writing_submitted_at",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 17,
+          "dflt_value": null,
+          "name": "active_writing_duration_seconds",
+          "notnull": 0,
+          "pk": 0,
+          "type": "REAL"
+        },
+        {
+          "cid": 18,
+          "dflt_value": "'unknown'",
+          "name": "timing_source",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 19,
+          "dflt_value": "'unavailable'",
+          "name": "timing_quality",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 20,
+          "dflt_value": "0",
+          "name": "unexplained_interruption",
+          "notnull": 1,
+          "pk": 0,
+          "type": "INTEGER"
+        }
+      ],
+      "exercise_attempts": [
+        {
+          "cid": 0,
+          "dflt_value": null,
+          "name": "attempt_id",
+          "notnull": 0,
+          "pk": 1,
+          "type": "TEXT"
+        },
+        {
+          "cid": 1,
+          "dflt_value": null,
+          "name": "exercise_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 2,
+          "dflt_value": null,
+          "name": "student_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 3,
+          "dflt_value": null,
+          "name": "attempt_number",
+          "notnull": 1,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 4,
+          "dflt_value": "'submitted'",
+          "name": "status",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 5,
+          "dflt_value": null,
+          "name": "created_at",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 6,
+          "dflt_value": null,
+          "name": "attempt_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        }
+      ],
+      "exercise_instances": [
+        {
+          "cid": 0,
+          "dflt_value": null,
+          "name": "exercise_id",
+          "notnull": 0,
+          "pk": 1,
+          "type": "TEXT"
+        },
+        {
+          "cid": 1,
+          "dflt_value": null,
+          "name": "practice_target_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 2,
+          "dflt_value": null,
+          "name": "student_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 3,
+          "dflt_value": null,
+          "name": "exercise_type",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 4,
+          "dflt_value": null,
+          "name": "created_at",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 5,
+          "dflt_value": null,
+          "name": "instance_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        }
+      ],
+      "exercises": [
+        {
+          "cid": 0,
+          "dflt_value": null,
+          "name": "exercise_id",
+          "notnull": 0,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "dflt_value": null,
+          "name": "essay_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 2,
+          "dflt_value": "''",
+          "name": "diagnosis_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 3,
+          "dflt_value": null,
+          "name": "diagnosis_category",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 4,
+          "dflt_value": null,
+          "name": "exercise_type",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 5,
+          "dflt_value": null,
+          "name": "exercise_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 6,
+          "dflt_value": "CURRENT_TIMESTAMP",
+          "name": "created_at",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        }
+      ],
+      "export_jobs": [
+        {
+          "cid": 0,
+          "dflt_value": null,
+          "name": "export_id",
+          "notnull": 0,
+          "pk": 1,
+          "type": "TEXT"
+        },
+        {
+          "cid": 1,
+          "dflt_value": null,
+          "name": "filter_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 2,
+          "dflt_value": null,
+          "name": "privacy_mode",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 3,
+          "dflt_value": null,
+          "name": "formats_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 4,
+          "dflt_value": "'preview'",
+          "name": "status",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 5,
+          "dflt_value": null,
+          "name": "created_at",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 6,
+          "dflt_value": null,
+          "name": "completed_at",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 7,
+          "dflt_value": null,
+          "name": "export_directory",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 8,
+          "dflt_value": "0",
+          "name": "file_count",
+          "notnull": 1,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 9,
+          "dflt_value": null,
+          "name": "record_counts_json",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 10,
+          "dflt_value": null,
+          "name": "excluded_counts_json",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 11,
+          "dflt_value": null,
+          "name": "manifest_path",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        }
+      ],
+      "feedback_engagement_traces": [
+        {
+          "cid": 0,
+          "dflt_value": null,
+          "name": "trace_id",
+          "notnull": 0,
+          "pk": 1,
+          "type": "TEXT"
+        },
+        {
+          "cid": 1,
+          "dflt_value": null,
+          "name": "student_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 2,
+          "dflt_value": null,
+          "name": "target_code",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 3,
+          "dflt_value": null,
+          "name": "created_at",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 4,
+          "dflt_value": null,
+          "name": "trace_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        }
+      ],
+      "feedback_records": [
+        {
+          "cid": 0,
+          "dflt_value": null,
+          "name": "feedback_id",
+          "notnull": 0,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "dflt_value": null,
+          "name": "essay_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 2,
+          "dflt_value": null,
+          "name": "feedback_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 3,
+          "dflt_value": null,
+          "name": "provider_name",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 4,
+          "dflt_value": null,
+          "name": "model_name",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 5,
+          "dflt_value": null,
+          "name": "success_status",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 6,
+          "dflt_value": null,
+          "name": "fallback_reason",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 7,
+          "dflt_value": null,
+          "name": "prompt_version",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 8,
+          "dflt_value": null,
+          "name": "analysis_version",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 9,
+          "dflt_value": "''",
+          "name": "system_template_hash",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 10,
+          "dflt_value": "''",
+          "name": "user_template_hash",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 11,
+          "dflt_value": "''",
+          "name": "rendered_prompt_hash",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 12,
+          "dflt_value": "''",
+          "name": "schema_version",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 13,
+          "dflt_value": "0.0",
+          "name": "temperature",
+          "notnull": 1,
+          "pk": 0,
+          "type": "REAL"
+        },
+        {
+          "cid": 14,
+          "dflt_value": null,
+          "name": "request_time",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 15,
+          "dflt_value": null,
+          "name": "response_time",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 16,
+          "dflt_value": "'not_run'",
+          "name": "validation_status",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 17,
+          "dflt_value": "0",
+          "name": "retry_count",
+          "notnull": 1,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 18,
+          "dflt_value": "CURRENT_TIMESTAMP",
+          "name": "created_at",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 19,
+          "dflt_value": "'{}'",
+          "name": "provider_status_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        }
+      ],
+      "history_evidence_registry": [
+        {
+          "cid": 0,
+          "dflt_value": null,
+          "name": "history_evidence_row_id",
+          "notnull": 0,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "dflt_value": null,
+          "name": "history_evidence_id",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 2,
+          "dflt_value": null,
+          "name": "student_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 3,
+          "dflt_value": null,
+          "name": "snapshot_id",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 4,
+          "dflt_value": null,
+          "name": "task_cluster_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 5,
+          "dflt_value": null,
+          "name": "evidence_type",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 6,
+          "dflt_value": null,
+          "name": "evidence_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 7,
+          "dflt_value": null,
+          "name": "registry_version",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 8,
+          "dflt_value": null,
+          "name": "created_at",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        }
+      ],
+      "human_reviews": [
+        {
+          "cid": 0,
+          "dflt_value": null,
+          "name": "review_id",
+          "notnull": 0,
+          "pk": 1,
+          "type": "TEXT"
+        },
+        {
+          "cid": 1,
+          "dflt_value": null,
+          "name": "target_type",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 2,
+          "dflt_value": null,
+          "name": "target_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 3,
+          "dflt_value": null,
+          "name": "reviewer_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 4,
+          "dflt_value": null,
+          "name": "decision",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 5,
+          "dflt_value": "'medium'",
+          "name": "confidence",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 6,
+          "dflt_value": null,
+          "name": "reason_code",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 7,
+          "dflt_value": "''",
+          "name": "comment",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 8,
+          "dflt_value": "'human-review-v0.1'",
+          "name": "guideline_version",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 9,
+          "dflt_value": "'completed'",
+          "name": "review_status",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 10,
+          "dflt_value": null,
+          "name": "created_at",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 11,
+          "dflt_value": null,
+          "name": "updated_at",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 12,
+          "dflt_value": null,
+          "name": "superseded_by",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 13,
+          "dflt_value": null,
+          "name": "source_system_result_snapshot",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        }
+      ],
+      "learner_history": [
+        {
+          "cid": 0,
+          "dflt_value": null,
+          "name": "history_id",
+          "notnull": 0,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "dflt_value": null,
+          "name": "student_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 2,
+          "dflt_value": null,
+          "name": "essay_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 3,
+          "dflt_value": null,
+          "name": "history_summary",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 4,
+          "dflt_value": null,
+          "name": "comparable_count",
+          "notnull": 1,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 5,
+          "dflt_value": "'insufficient_history'",
+          "name": "comparability_status",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 6,
+          "dflt_value": "'[]'",
+          "name": "history_evidence_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 7,
+          "dflt_value": "'[]'",
+          "name": "limitations_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 8,
+          "dflt_value": "'[]'",
+          "name": "comparability_reasons_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 9,
+          "dflt_value": "CURRENT_TIMESTAMP",
+          "name": "created_at",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        }
+      ],
+      "learner_profile_snapshots": [
+        {
+          "cid": 0,
+          "dflt_value": null,
+          "name": "snapshot_row_id",
+          "notnull": 0,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "dflt_value": null,
+          "name": "student_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 2,
+          "dflt_value": null,
+          "name": "snapshot_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 3,
+          "dflt_value": null,
+          "name": "analysis_version",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 4,
+          "dflt_value": null,
+          "name": "configuration_version",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 5,
+          "dflt_value": null,
+          "name": "included_submission_ids_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 6,
+          "dflt_value": null,
+          "name": "created_at",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 7,
+          "dflt_value": "'learner-profile-v0.3.0'",
+          "name": "profile_version",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 8,
+          "dflt_value": "'[]'",
+          "name": "source_submission_ids_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 9,
+          "dflt_value": "'[]'",
+          "name": "representative_submission_ids_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        }
+      ],
+      "llm_call_records": [
+        {
+          "cid": 0,
+          "dflt_value": null,
+          "name": "call_id",
+          "notnull": 0,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "dflt_value": null,
+          "name": "essay_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 2,
+          "dflt_value": null,
+          "name": "prompt_version",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 3,
+          "dflt_value": null,
+          "name": "system_template_hash",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 4,
+          "dflt_value": null,
+          "name": "user_template_hash",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 5,
+          "dflt_value": null,
+          "name": "rendered_prompt_hash",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 6,
+          "dflt_value": null,
+          "name": "schema_version",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 7,
+          "dflt_value": null,
+          "name": "provider_name",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 8,
+          "dflt_value": null,
+          "name": "model_name",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 9,
+          "dflt_value": null,
+          "name": "temperature",
+          "notnull": 1,
+          "pk": 0,
+          "type": "REAL"
+        },
+        {
+          "cid": 10,
+          "dflt_value": null,
+          "name": "request_time",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 11,
+          "dflt_value": null,
+          "name": "response_time",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 12,
+          "dflt_value": null,
+          "name": "success_status",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 13,
+          "dflt_value": null,
+          "name": "validation_status",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 14,
+          "dflt_value": null,
+          "name": "retry_count",
+          "notnull": 1,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 15,
+          "dflt_value": null,
+          "name": "fallback_reason",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 16,
+          "dflt_value": "CURRENT_TIMESTAMP",
+          "name": "created_at",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        }
+      ],
+      "metric_results": [
+        {
+          "cid": 0,
+          "dflt_value": null,
+          "name": "metric_result_id",
+          "notnull": 0,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "dflt_value": null,
+          "name": "analysis_run_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 2,
+          "dflt_value": null,
+          "name": "metric_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 3,
+          "dflt_value": null,
+          "name": "metric_version",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 4,
+          "dflt_value": null,
+          "name": "value_json",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 5,
+          "dflt_value": null,
+          "name": "unit",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 6,
+          "dflt_value": null,
+          "name": "parameters_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 7,
+          "dflt_value": null,
+          "name": "analyzer_version",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 8,
+          "dflt_value": null,
+          "name": "resource_versions_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 9,
+          "dflt_value": null,
+          "name": "verification_status",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 10,
+          "dflt_value": null,
+          "name": "status",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 11,
+          "dflt_value": null,
+          "name": "evidence_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 12,
+          "dflt_value": null,
+          "name": "limitations_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 13,
+          "dflt_value": "CURRENT_TIMESTAMP",
+          "name": "created_at",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 14,
+          "dflt_value": "'insufficient_data'",
+          "name": "measurement_status",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 15,
+          "dflt_value": "'insufficient'",
+          "name": "confidence",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 16,
+          "dflt_value": "'[]'",
+          "name": "confidence_reasons_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 17,
+          "dflt_value": "'[]'",
+          "name": "risk_factors_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 18,
+          "dflt_value": "0",
+          "name": "eligible_for_diagnosis",
+          "notnull": 1,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 19,
+          "dflt_value": "0",
+          "name": "eligible_for_longitudinal_comparison",
+          "notnull": 1,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 20,
+          "dflt_value": "'{}'",
+          "name": "measurement_metadata_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 21,
+          "dflt_value": null,
+          "name": "construct_id",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 22,
+          "dflt_value": null,
+          "name": "subconstruct_id",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 23,
+          "dflt_value": null,
+          "name": "automation_level",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 24,
+          "dflt_value": null,
+          "name": "analysis_unit_version",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 25,
+          "dflt_value": "'null'",
+          "name": "numerator_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 26,
+          "dflt_value": "'null'",
+          "name": "denominator_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 27,
+          "dflt_value": "'{}'",
+          "name": "intermediate_values_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 28,
+          "dflt_value": "0",
+          "name": "eligible_for_revision_priority",
+          "notnull": 1,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 29,
+          "dflt_value": "0",
+          "name": "eligible_for_targeted_practice",
+          "notnull": 1,
+          "pk": 0,
+          "type": "INTEGER"
+        }
+      ],
+      "metrics": [
+        {
+          "cid": 0,
+          "dflt_value": null,
+          "name": "metric_id",
+          "notnull": 0,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "dflt_value": null,
+          "name": "essay_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 2,
+          "dflt_value": null,
+          "name": "metrics_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 3,
+          "dflt_value": null,
+          "name": "analysis_version",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 4,
+          "dflt_value": null,
+          "name": "limitations",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 5,
+          "dflt_value": "CURRENT_TIMESTAMP",
+          "name": "created_at",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        }
+      ],
+      "pii_candidates": [
+        {
+          "cid": 0,
+          "dflt_value": null,
+          "name": "pii_candidate_id",
+          "notnull": 0,
+          "pk": 1,
+          "type": "TEXT"
+        },
+        {
+          "cid": 1,
+          "dflt_value": null,
+          "name": "submission_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 2,
+          "dflt_value": null,
+          "name": "category",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 3,
+          "dflt_value": null,
+          "name": "start_offset",
+          "notnull": 1,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 4,
+          "dflt_value": null,
+          "name": "end_offset",
+          "notnull": 1,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 5,
+          "dflt_value": null,
+          "name": "matched_text",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 6,
+          "dflt_value": "'medium'",
+          "name": "confidence",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 7,
+          "dflt_value": null,
+          "name": "rule_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 8,
+          "dflt_value": "'candidate'",
+          "name": "review_status",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 9,
+          "dflt_value": null,
+          "name": "action",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 10,
+          "dflt_value": null,
+          "name": "reviewer_id",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 11,
+          "dflt_value": null,
+          "name": "reviewed_at",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 12,
+          "dflt_value": null,
+          "name": "replacement_marker",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        }
+      ],
+      "practice_evaluations": [
+        {
+          "cid": 0,
+          "dflt_value": null,
+          "name": "evaluation_id",
+          "notnull": 0,
+          "pk": 1,
+          "type": "TEXT"
+        },
+        {
+          "cid": 1,
+          "dflt_value": null,
+          "name": "attempt_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 2,
+          "dflt_value": null,
+          "name": "practice_target_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 3,
+          "dflt_value": null,
+          "name": "created_at",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 4,
+          "dflt_value": null,
+          "name": "evaluation_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        }
+      ],
+      "practice_state_snapshots": [
+        {
+          "cid": 0,
+          "dflt_value": null,
+          "name": "practice_state_snapshot_id",
+          "notnull": 0,
+          "pk": 1,
+          "type": "TEXT"
+        },
+        {
+          "cid": 1,
+          "dflt_value": null,
+          "name": "student_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 2,
+          "dflt_value": null,
+          "name": "created_at",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 3,
+          "dflt_value": null,
+          "name": "snapshot_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        }
+      ],
+      "practice_targets": [
+        {
+          "cid": 0,
+          "dflt_value": null,
+          "name": "practice_target_id",
+          "notnull": 0,
+          "pk": 1,
+          "type": "TEXT"
+        },
+        {
+          "cid": 1,
+          "dflt_value": null,
+          "name": "student_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 2,
+          "dflt_value": null,
+          "name": "source_submission_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 3,
+          "dflt_value": null,
+          "name": "source_diagnosis_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 4,
+          "dflt_value": null,
+          "name": "target_code",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 5,
+          "dflt_value": null,
+          "name": "target_label",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 6,
+          "dflt_value": "'active'",
+          "name": "status",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 7,
+          "dflt_value": null,
+          "name": "created_at",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 8,
+          "dflt_value": null,
+          "name": "target_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        }
+      ],
+      "revision_groups": [
+        {
+          "cid": 0,
+          "dflt_value": null,
+          "name": "revision_group_row_id",
+          "notnull": 0,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "dflt_value": null,
+          "name": "revision_group_id",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 2,
+          "dflt_value": null,
+          "name": "student_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 3,
+          "dflt_value": null,
+          "name": "writing_prompt",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 4,
+          "dflt_value": null,
+          "name": "genre",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 5,
+          "dflt_value": null,
+          "name": "root_submission_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 6,
+          "dflt_value": null,
+          "name": "created_at",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 7,
+          "dflt_value": null,
+          "name": "updated_at",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 8,
+          "dflt_value": null,
+          "name": "metadata_consistency_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 9,
+          "dflt_value": null,
+          "name": "limitations_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        }
+      ],
+      "revision_snapshots": [
+        {
+          "cid": 0,
+          "dflt_value": null,
+          "name": "revision_snapshot_row_id",
+          "notnull": 0,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "dflt_value": null,
+          "name": "revision_snapshot_id",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 2,
+          "dflt_value": null,
+          "name": "revision_group_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 3,
+          "dflt_value": null,
+          "name": "source_submission_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 4,
+          "dflt_value": null,
+          "name": "target_submission_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 5,
+          "dflt_value": null,
+          "name": "snapshot_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 6,
+          "dflt_value": null,
+          "name": "alignment_version",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 7,
+          "dflt_value": null,
+          "name": "uptake_version",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 8,
+          "dflt_value": null,
+          "name": "configuration_version",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 9,
+          "dflt_value": null,
+          "name": "created_at",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        }
+      ],
+      "schema_migrations": [
+        {
+          "cid": 0,
+          "dflt_value": null,
+          "name": "version",
+          "notnull": 0,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "dflt_value": null,
+          "name": "name",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 2,
+          "dflt_value": "CURRENT_TIMESTAMP",
+          "name": "applied_at",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        }
+      ],
+      "students": [
+        {
+          "cid": 0,
+          "dflt_value": null,
+          "name": "student_id",
+          "notnull": 0,
+          "pk": 1,
+          "type": "TEXT"
+        },
+        {
+          "cid": 1,
+          "dflt_value": null,
+          "name": "created_at",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 2,
+          "dflt_value": "0",
+          "name": "is_synthetic",
+          "notnull": 1,
+          "pk": 0,
+          "type": "INTEGER"
+        }
+      ],
+      "system_versions": [
+        {
+          "cid": 0,
+          "dflt_value": null,
+          "name": "component",
+          "notnull": 0,
+          "pk": 1,
+          "type": "TEXT"
+        },
+        {
+          "cid": 1,
+          "dflt_value": null,
+          "name": "version",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 2,
+          "dflt_value": "CURRENT_TIMESTAMP",
+          "name": "recorded_at",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        }
+      ],
+      "transfer_evidence_candidates": [
+        {
+          "cid": 0,
+          "dflt_value": null,
+          "name": "transfer_evidence_id",
+          "notnull": 0,
+          "pk": 1,
+          "type": "TEXT"
+        },
+        {
+          "cid": 1,
+          "dflt_value": null,
+          "name": "student_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 2,
+          "dflt_value": null,
+          "name": "practice_target_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 3,
+          "dflt_value": null,
+          "name": "created_at",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 4,
+          "dflt_value": null,
+          "name": "transfer_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        }
+      ],
+      "within_task_response_candidates": [
+        {
+          "cid": 0,
+          "dflt_value": null,
+          "name": "response_id",
+          "notnull": 0,
+          "pk": 1,
+          "type": "TEXT"
+        },
+        {
+          "cid": 1,
+          "dflt_value": null,
+          "name": "student_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 2,
+          "dflt_value": null,
+          "name": "practice_target_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 3,
+          "dflt_value": null,
+          "name": "created_at",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 4,
+          "dflt_value": null,
+          "name": "response_json",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        }
+      ]
+    },
+    "foreign_key_definition_count": 23,
+    "foreign_keys": {
+      "analysis_artifacts": [
+        {
+          "from": "analysis_run_id",
+          "id": 0,
+          "match": "NONE",
+          "on_delete": "NO ACTION",
+          "on_update": "NO ACTION",
+          "seq": 0,
+          "table": "analysis_runs",
+          "to": "analysis_run_id"
+        }
+      ],
+      "analysis_runs": [
+        {
+          "from": "essay_id",
+          "id": 0,
+          "match": "NONE",
+          "on_delete": "NO ACTION",
+          "on_update": "NO ACTION",
+          "seq": 0,
+          "table": "essays",
+          "to": "essay_id"
+        }
+      ],
+      "analysis_units": [
+        {
+          "from": "analysis_run_id",
+          "id": 0,
+          "match": "NONE",
+          "on_delete": "NO ACTION",
+          "on_update": "NO ACTION",
+          "seq": 0,
+          "table": "analysis_runs",
+          "to": "analysis_run_id"
+        },
+        {
+          "from": "submission_id",
+          "id": 1,
+          "match": "NONE",
+          "on_delete": "NO ACTION",
+          "on_update": "NO ACTION",
+          "seq": 0,
+          "table": "essays",
+          "to": "essay_id"
+        }
+      ],
+      "configuration_audit": [],
+      "configuration_versions": [],
+      "diagnoses": [
+        {
+          "from": "essay_id",
+          "id": 0,
+          "match": "NONE",
+          "on_delete": "NO ACTION",
+          "on_update": "NO ACTION",
+          "seq": 0,
+          "table": "essays",
+          "to": "essay_id"
+        }
+      ],
+      "diagnostic_calibrations": [
+        {
+          "from": "analysis_run_id",
+          "id": 0,
+          "match": "NONE",
+          "on_delete": "NO ACTION",
+          "on_update": "NO ACTION",
+          "seq": 0,
+          "table": "analysis_runs",
+          "to": "analysis_run_id"
+        },
+        {
+          "from": "essay_id",
+          "id": 1,
+          "match": "NONE",
+          "on_delete": "NO ACTION",
+          "on_update": "NO ACTION",
+          "seq": 0,
+          "table": "essays",
+          "to": "essay_id"
+        }
+      ],
+      "error_annotations": [
+        {
+          "from": "submission_id",
+          "id": 0,
+          "match": "NONE",
+          "on_delete": "NO ACTION",
+          "on_update": "NO ACTION",
+          "seq": 0,
+          "table": "essays",
+          "to": "essay_id"
+        }
+      ],
+      "essays": [
+        {
+          "from": "revision_of_submission_id",
+          "id": 0,
+          "match": "NONE",
+          "on_delete": "NO ACTION",
+          "on_update": "NO ACTION",
+          "seq": 0,
+          "table": "essays",
+          "to": "essay_id"
+        },
+        {
+          "from": "student_id",
+          "id": 1,
+          "match": "NONE",
+          "on_delete": "NO ACTION",
+          "on_update": "NO ACTION",
+          "seq": 0,
+          "table": "students",
+          "to": "student_id"
+        }
+      ],
+      "exercise_attempts": [],
+      "exercise_instances": [],
+      "exercises": [
+        {
+          "from": "essay_id",
+          "id": 0,
+          "match": "NONE",
+          "on_delete": "NO ACTION",
+          "on_update": "NO ACTION",
+          "seq": 0,
+          "table": "essays",
+          "to": "essay_id"
+        }
+      ],
+      "export_jobs": [],
+      "feedback_engagement_traces": [],
+      "feedback_records": [
+        {
+          "from": "essay_id",
+          "id": 0,
+          "match": "NONE",
+          "on_delete": "NO ACTION",
+          "on_update": "NO ACTION",
+          "seq": 0,
+          "table": "essays",
+          "to": "essay_id"
+        }
+      ],
+      "history_evidence_registry": [
+        {
+          "from": "student_id",
+          "id": 0,
+          "match": "NONE",
+          "on_delete": "NO ACTION",
+          "on_update": "NO ACTION",
+          "seq": 0,
+          "table": "students",
+          "to": "student_id"
+        }
+      ],
+      "human_reviews": [],
+      "learner_history": [
+        {
+          "from": "essay_id",
+          "id": 0,
+          "match": "NONE",
+          "on_delete": "NO ACTION",
+          "on_update": "NO ACTION",
+          "seq": 0,
+          "table": "essays",
+          "to": "essay_id"
+        },
+        {
+          "from": "student_id",
+          "id": 1,
+          "match": "NONE",
+          "on_delete": "NO ACTION",
+          "on_update": "NO ACTION",
+          "seq": 0,
+          "table": "students",
+          "to": "student_id"
+        }
+      ],
+      "learner_profile_snapshots": [
+        {
+          "from": "student_id",
+          "id": 0,
+          "match": "NONE",
+          "on_delete": "NO ACTION",
+          "on_update": "NO ACTION",
+          "seq": 0,
+          "table": "students",
+          "to": "student_id"
+        }
+      ],
+      "llm_call_records": [
+        {
+          "from": "essay_id",
+          "id": 0,
+          "match": "NONE",
+          "on_delete": "NO ACTION",
+          "on_update": "NO ACTION",
+          "seq": 0,
+          "table": "essays",
+          "to": "essay_id"
+        }
+      ],
+      "metric_results": [
+        {
+          "from": "analysis_run_id",
+          "id": 0,
+          "match": "NONE",
+          "on_delete": "NO ACTION",
+          "on_update": "NO ACTION",
+          "seq": 0,
+          "table": "analysis_runs",
+          "to": "analysis_run_id"
+        }
+      ],
+      "metrics": [
+        {
+          "from": "essay_id",
+          "id": 0,
+          "match": "NONE",
+          "on_delete": "NO ACTION",
+          "on_update": "NO ACTION",
+          "seq": 0,
+          "table": "essays",
+          "to": "essay_id"
+        }
+      ],
+      "pii_candidates": [],
+      "practice_evaluations": [],
+      "practice_state_snapshots": [],
+      "practice_targets": [],
+      "revision_groups": [
+        {
+          "from": "root_submission_id",
+          "id": 0,
+          "match": "NONE",
+          "on_delete": "NO ACTION",
+          "on_update": "NO ACTION",
+          "seq": 0,
+          "table": "essays",
+          "to": "essay_id"
+        },
+        {
+          "from": "student_id",
+          "id": 1,
+          "match": "NONE",
+          "on_delete": "NO ACTION",
+          "on_update": "NO ACTION",
+          "seq": 0,
+          "table": "students",
+          "to": "student_id"
+        }
+      ],
+      "revision_snapshots": [
+        {
+          "from": "target_submission_id",
+          "id": 0,
+          "match": "NONE",
+          "on_delete": "NO ACTION",
+          "on_update": "NO ACTION",
+          "seq": 0,
+          "table": "essays",
+          "to": "essay_id"
+        },
+        {
+          "from": "source_submission_id",
+          "id": 1,
+          "match": "NONE",
+          "on_delete": "NO ACTION",
+          "on_update": "NO ACTION",
+          "seq": 0,
+          "table": "essays",
+          "to": "essay_id"
+        }
+      ],
+      "schema_migrations": [],
+      "students": [],
+      "system_versions": [],
+      "transfer_evidence_candidates": [],
+      "within_task_response_candidates": []
+    },
+    "index_count": 17,
+    "indexes": [
+      {
+        "name": "idx_analysis_artifacts_run",
+        "sql": "CREATE INDEX idx_analysis_artifacts_run ON analysis_artifacts(analysis_run_id, artifact_id)",
+        "table": "analysis_artifacts",
+        "type": "index"
+      },
+      {
+        "name": "idx_analysis_runs_essay_created",
+        "sql": "CREATE INDEX idx_analysis_runs_essay_created ON analysis_runs(essay_id, analysis_run_row_id)",
+        "table": "analysis_runs",
+        "type": "index"
+      },
+      {
+        "name": "idx_analysis_units_submission_run",
+        "sql": "CREATE INDEX idx_analysis_units_submission_run ON analysis_units(submission_id, analysis_run_id, unit_id)",
+        "table": "analysis_units",
+        "type": "index"
+      },
+      {
+        "name": "idx_configuration_audit_config",
+        "sql": "CREATE INDEX idx_configuration_audit_config ON configuration_audit(configuration_id, audit_row_id)",
+        "table": "configuration_audit",
+        "type": "index"
+      },
+      {
+        "name": "idx_configuration_one_active",
+        "sql": "CREATE UNIQUE INDEX idx_configuration_one_active ON configuration_versions(status) WHERE status='active'",
+        "table": "configuration_versions",
+        "type": "index"
+      },
+      {
+        "name": "idx_diagnostic_calibration_essay",
+        "sql": "CREATE INDEX idx_diagnostic_calibration_essay ON diagnostic_calibrations(essay_id, calibration_row_id)",
+        "table": "diagnostic_calibrations",
+        "type": "index"
+      },
+      {
+        "name": "idx_error_annotations_submission",
+        "sql": "CREATE INDEX idx_error_annotations_submission ON error_annotations(submission_id, annotation_status, annotation_source)",
+        "table": "error_annotations",
+        "type": "index"
+      },
+      {
+        "name": "idx_essays_revision_group",
+        "sql": "CREATE INDEX idx_essays_revision_group ON essays(revision_group_id, revision_sequence)",
+        "table": "essays",
+        "type": "index"
+      },
+      {
+        "name": "idx_essays_student_submitted",
+        "sql": "CREATE INDEX idx_essays_student_submitted ON essays(student_id, submitted_at)",
+        "table": "essays",
+        "type": "index"
+      },
+      {
+        "name": "idx_feedback_records_essay",
+        "sql": "CREATE INDEX idx_feedback_records_essay ON feedback_records(essay_id, feedback_id)",
+        "table": "feedback_records",
+        "type": "index"
+      },
+      {
+        "name": "idx_history_evidence_student",
+        "sql": "CREATE INDEX idx_history_evidence_student ON history_evidence_registry(student_id, history_evidence_row_id)",
+        "table": "history_evidence_registry",
+        "type": "index"
+      },
+      {
+        "name": "idx_hr_target",
+        "sql": "CREATE INDEX idx_hr_target ON human_reviews(target_type, target_id)",
+        "table": "human_reviews",
+        "type": "index"
+      },
+      {
+        "name": "idx_metric_results_run_metric",
+        "sql": "CREATE INDEX idx_metric_results_run_metric ON metric_results(analysis_run_id, metric_id, metric_version)",
+        "table": "metric_results",
+        "type": "index"
+      },
+      {
+        "name": "idx_pii_sub",
+        "sql": "CREATE INDEX idx_pii_sub ON pii_candidates(submission_id)",
+        "table": "pii_candidates",
+        "type": "index"
+      },
+      {
+        "name": "idx_profile_student_created",
+        "sql": "CREATE INDEX idx_profile_student_created ON learner_profile_snapshots(student_id, created_at, snapshot_row_id)",
+        "table": "learner_profile_snapshots",
+        "type": "index"
+      },
+      {
+        "name": "idx_revision_groups_student",
+        "sql": "CREATE INDEX idx_revision_groups_student ON revision_groups(student_id, revision_group_row_id)",
+        "table": "revision_groups",
+        "type": "index"
+      },
+      {
+        "name": "idx_revision_snapshots_group",
+        "sql": "CREATE INDEX idx_revision_snapshots_group ON revision_snapshots(revision_group_id, revision_snapshot_row_id)",
+        "table": "revision_snapshots",
+        "type": "index"
+      }
+    ],
+    "migration_version": 12,
+    "schema_fingerprint_sha256": "9a73c4e1693bcdff441127427eb502f6956c8516ea27d297cea417f779206c31",
+    "table_count": 33,
+    "tables": [
+      "analysis_artifacts",
+      "analysis_runs",
+      "analysis_units",
+      "configuration_audit",
+      "configuration_versions",
+      "diagnoses",
+      "diagnostic_calibrations",
+      "error_annotations",
+      "essays",
+      "exercise_attempts",
+      "exercise_instances",
+      "exercises",
+      "export_jobs",
+      "feedback_engagement_traces",
+      "feedback_records",
+      "history_evidence_registry",
+      "human_reviews",
+      "learner_history",
+      "learner_profile_snapshots",
+      "llm_call_records",
+      "metric_results",
+      "metrics",
+      "pii_candidates",
+      "practice_evaluations",
+      "practice_state_snapshots",
+      "practice_targets",
+      "revision_groups",
+      "revision_snapshots",
+      "schema_migrations",
+      "students",
+      "system_versions",
+      "transfer_evidence_candidates",
+      "within_task_response_candidates"
+    ]
+  },
+  "temporary_database_path": "C:\\Users\\16073\\AppData\\Local\\Temp\\v095e-prechange-eohnmpji\\prechange.db",
+  "temporary_database_removed": true,
+  "temporary_directory": "C:\\Users\\16073\\AppData\\Local\\Temp\\v095e-prechange-eohnmpji"
+}

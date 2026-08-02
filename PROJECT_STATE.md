@@ -1,5 +1,22 @@
 # Project State
 
+## Current v0.9.5-E State
+
+- Status: completed and verified; facade-first SQLite repository
+  modularization scope closed.
+- Explicit 86-method `Database` facade and `SQLiteRepository` alias preserved.
+- One shared connection manager and nine aggregate repositories now own the
+  persistence implementation; 33/33 tables have a single owner.
+- SQL, schema, signatures, return shapes, transactions, IDs, migration 12,
+  active configuration `config-v0.9.0`, API/client contracts, and locale
+  parity remain unchanged.
+- Verification: static and fresh-database parity PASS; 175 focused; runtime
+  restart smoke PASS; 469 passed + 8 skipped; exact `run.bat --verify` PASS.
+- All accepted write-capable evidence used guarded fresh temporary databases.
+  The development-database incident and isolation hardening are recorded in
+  `RUN_VERIFICATION_V0.9.5_E.md`.
+- Service Dependency Narrowing remains separately gated and was not started.
+
 ## Current v0.9.5-D State
 
 - Status: completed and verified; frontend contract hardening scope closed.

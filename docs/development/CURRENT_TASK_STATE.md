@@ -1,6 +1,24 @@
 # Current Task State
 
 **Date:** 2026-08-02
+**Current task:** v0.9.5-E SQLite Repository Modularization (Facade-first)
+**Status:** completed and verified (see `RUN_VERIFICATION_V0.9.5_E.md`)
+
+- Explicit 86-method `Database` facade and `SQLiteRepository` alias retained.
+- One shared SQLite connection manager and nine aggregate repositories own all
+  persistence methods; all 33 tables have one documented implementation owner.
+- SQL/schema/signature/transaction/return-shape parity preserved; migration 12
+  and active configuration `config-v0.9.0` unchanged.
+- Hardened focused suite 175 passed; runtime/restart smoke PASS; full regression
+  469 passed + 8 skipped; exact `run.bat --verify` PASS.
+- All accepted write-capable evidence used fresh guarded temporary databases;
+  the earlier development-database incident and dotenv isolation hardening are
+  disclosed in the verification report.
+- Service Dependency Narrowing, facade contraction, schema cleanup, Migration
+  13, UI/API/domain changes, and historical-data compatibility remain deferred.
+- Next: Service Dependency Narrowing only under a separate authorization.
+
+**Date:** 2026-08-02
 **Current task:** v0.9.5-D Frontend Contract Hardening and API Client Port Isolation
 **Status:** completed and verified (see `RUN_VERIFICATION_V0.9.5_D.md`)
 

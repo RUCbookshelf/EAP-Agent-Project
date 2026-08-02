@@ -8,7 +8,7 @@
 | v0.9.5-B API Router Decomposition + Health Contract Reconciliation | completed and verified |
 | v0.9.5-C Frontend Feature Extraction + UI Boundary Restoration | completed and verified |
 | v0.9.5-D Frontend Contract Hardening + API Client Port Isolation | completed and verified |
-| v0.9.5-E Database Repository Decomposition | not started |
+| v0.9.5-E Database Repository Decomposition | completed and verified |
 ## v0.9.4 roadmap - 2026-08-01
 
 | Item | Status |

@@ -1,3 +1,23 @@
+## v0.9.5-E (2026-08-02)
+
+### Changed
+- Replaced the monolithic SQLite repository implementation with one shared
+  connection manager and nine aggregate-owned repository modules behind the
+  unchanged explicit 86-method `Database` facade.
+- Preserved public imports, signatures, SQL/schema behavior, return shapes,
+  transactions, IDs, migration 12, 33 tables, and `config-v0.9.0`.
+- Added machine-readable pre/post inventories, parity checks, isolated database
+  guards, focused facade tests, and a restart/persistence runtime smoke.
+
+### Verified
+- Static/signature/delegation/SQL/schema/CRUD parity PASS; 175 focused tests.
+- Runtime smoke PASS; full suite 469 passed + 8 skipped; exact
+  `run.bat --verify` PASS; all accepted write-capable evidence used fresh
+  temporary databases and left no processes or ports.
+- Disclosed the earlier development-database incident and hardened all later
+  runs against `.env` rehydration; the accepted disposable database was not
+  changed again.
+
 ## v0.9.5-D (2026-08-02)
 
 ### Changed
