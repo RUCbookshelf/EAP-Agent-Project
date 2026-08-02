@@ -1,8 +1,8 @@
-"""Research View pages — thin compatibility facade (v0.9.5-C).
+"""Research feature modules (v0.9.5-C).
 
-Feature implementations moved to app/ui/features/research/* (one module per
-visible Research page). This module only re-exports the public renderers;
-no renderer, state, API-call, or business-display logic lives here.
+One module per visible Research page. Research features are self-contained
+(the only module-level constant, CALF_CLASSIFICATION, belongs to the CALF
+feature).
 """
 
 from __future__ import annotations
