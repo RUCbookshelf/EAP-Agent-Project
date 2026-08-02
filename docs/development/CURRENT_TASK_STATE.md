@@ -1,6 +1,26 @@
 # Current Task State
 
 **Date:** 2026-08-02
+**Current task:** v0.9.5-F6D Practice Write-Boundary Narrowing
+**Status:** completed and verified (see `RUN_VERIFICATION_V0.9.5_F6D.md`)
+
+- The Practice Router now depends on `PracticeSubmissionReadPort`,
+  `PracticeReadPort`, `PracticeWritePort`, the preserved `require_student`
+  guard, and the pure `PracticeService()`; no `Depends(get_repository)`
+  remains in the Router; `PracticeService` has no persistence dependency or
+  field.
+- Both app paths compose facade-owned Submission/Practice repositories and
+  the pure Service on `app.state`; five narrow dependency accessors added;
+  Attempt-first/Evaluation-best-effort semantics, all eight Practice
+  endpoints, schemas, status codes, and error behavior are unchanged.
+- Focused 187 PASS; accumulated contracts 253 PASS; full core 638 passed +
+  8 skipped; exact `run.bat --verify` PASS; migration 12, 33 tables,
+  `config-v0.9.0`, prompt `feedback-prompt-v0.7.1`, facade 86, API 77,
+  client 52, locale 520/520 unchanged; development database unchanged.
+- Next: v0.9.5-G Database facade contraction only under separate
+  authorization.
+
+**Date:** 2026-08-02
 **Current task:** v0.9.5-F6C SubmissionService Persistence Dependency Narrowing
 **Status:** completed and verified (see `RUN_VERIFICATION_V0.9.5_F6C.md`)
 

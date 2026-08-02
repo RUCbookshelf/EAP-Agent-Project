@@ -20,7 +20,7 @@ def db():
 
 @pytest.fixture
 def svc(db):
-    return PracticeService(db)
+    return PracticeService()
 
 
 class TestLiveA_SupportedPracticeTarget:

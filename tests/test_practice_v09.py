@@ -13,11 +13,8 @@ from app.practice.schemas import (
 from app.practice.service import PracticeService
 
 
-class _FakeRepo:
-    pass
-
 def _svc():
-    return PracticeService(_FakeRepo())
+    return PracticeService()
 
 def _target(target_code="lexical_repetition_local", gate="selected"):
     t = _svc().create_practice_target(

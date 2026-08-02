@@ -1,3 +1,36 @@
+## v0.9.5-F6D (2026-08-02)
+
+### Changed
+- Narrowed the Practice Router persistence boundary: removed every active
+  `Depends(get_repository)` dependency on the broad `Database` facade and
+  replaced it with three consumer-owned Ports (`PracticeSubmissionReadPort`
+  one Submission read, `PracticeReadPort` seven Practice reads,
+  `PracticeWritePort` four Practice writes) defined in new
+  `app/practice/ports.py`; the same facade-owned `SQLitePracticeRepository`
+  satisfies the read and write Ports.
+- Removed the dormant Repository dependency from `PracticeService`
+  (constructor now `PracticeService()`); it remains a pure domain service.
+  Both application paths compose facade-owned Submission/Practice (and the
+  Learner reader backing the preserved `require_student` guard) plus the pure
+  Service on `app.state`; five narrow application-state dependency accessors
+  were added to `app/api/deps.py`.
+- Router ownership of the Attempt-first/Evaluation-best-effort orchestration
+  is unchanged: Attempt persists once and independently before Evaluation;
+  any Evaluation failure leaves the committed Attempt authoritative with
+  `evaluation: None`; no compensation, retry, or shared transaction. All
+  eight Practice endpoints, schemas, status codes, domain calculations, and
+  error behavior are unchanged; no new Practice writer workflow was added.
+- Added 20 focused F6D Port/identity/Router/transaction tests, the F6D
+  isolated pytest runner, and the F6D SPEC/verification documentation.
+
+### Verified
+- Focused F6D set 187 PASS; accumulated architecture contracts 253 PASS
+  (F2-F6C + F6D, E parity 86/33, API 77, client 52, locale 520/520); full
+  non-live core 638 passed + 8 skipped; exact `run.bat --verify` PASS
+  (migration 12, 33 tables, `config-v0.9.0`, prompt v0.7.1,
+  health/docs/Streamlit 200); development database unchanged
+  (SHA-256/size/mtime).
+
 ## v0.9.5-F6C (2026-08-02)
 
 ### Changed

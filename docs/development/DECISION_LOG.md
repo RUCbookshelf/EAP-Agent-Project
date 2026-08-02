@@ -1,5 +1,34 @@
 
 
+## 2026-08-02 - v0.9.5-F6D Practice write-boundary narrowing
+
+- **Decision**: Remove every active Practice Router dependency on the broad
+  `Database` facade and replace it with three consumer-owned Ports
+  (`PracticeSubmissionReadPort` 1 method, `PracticeReadPort` 7 methods,
+  `PracticeWritePort` 4 methods) defined in `app/practice/ports.py`; remove
+  the dormant Repository parameter/field from `PracticeService` (now pure,
+  constructor `PracticeService()`); compose facade-owned Submission/Practice
+  repositories and the pure Service on `app.state` in both application paths
+  with five narrow dependency accessors. The preserved `require_student`
+  guard receives the facade-owned Learner reader (F4 journey pattern); its
+  learner-read dependency remains a v0.9.5-G candidate.
+- **Rationale**: The Router should receive only the exact repository
+  capabilities it calls; `PracticeService.repo` was dead state; the
+  Attempt-first/Evaluation-best-effort orchestration stays Router-owned and
+  must not move into the Service or a shared transaction.
+- **Parity boundary**: Central Repository Protocols, Repository
+  implementations, SQL, transactions (Attempt and Evaluation remain separate
+  independent commits; no compensation/retry/shared transaction), migration
+  12, 33 tables, `config-v0.9.0`, prompt `feedback-prompt-v0.7.1`, API 77
+  pairs, client 52 methods, locale 520/520, and facade 86 methods unchanged.
+  No new Practice writer workflow or endpoint; WTR collision deferred.
+- **Evidence**: focused 187 PASS; accumulated contracts 253 PASS; full
+  non-live core 638 passed + 8 skipped; exact `run.bat --verify` PASS;
+  development database unchanged (SHA-256/size/mtime).
+- **Boundary**: v0.9.5-G Database facade contraction may begin only under a
+  separate authorization; Protocol consolidation, `require_student`
+  narrowing, and FeedbackPipeline cleanup remain deferred.
+
 ## 2026-08-02 - v0.9.5-F6C SubmissionService persistence dependency narrowing
 
 - **Decision**: Remove the broad, inherited `SubmissionRepository` dependency

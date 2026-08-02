@@ -52,7 +52,7 @@ def services(repo):
         configuration_repository=repo._configuration_repository,
         revision_repository=repo._revision_repository,
     )
-    practice_service = PracticeService(repo)
+    practice_service = PracticeService()
     journey = JourneyService(repo._learner_repository, repo._practice_repository)
     return submission_service, practice_service, journey
 
@@ -90,7 +90,7 @@ def _selected_priority(result):
 
 def _full_demo_journey(repo, submission_service, practice_service):
     """Build the complete conservative journey for a synthetic learner."""
-    practice_service = practice_service or PracticeService(repo)
+    practice_service = practice_service or PracticeService()
     original = submission_service.submit(_essay("JTEST", REPETITION_ESSAY), synthetic=True)
     priority = _selected_priority(original)
     assert priority is not None, "demo fixture must pass the Diagnostic Gate"

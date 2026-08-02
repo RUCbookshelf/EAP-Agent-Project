@@ -8,6 +8,28 @@
 
 # Project State
 
+## Current v0.9.5-F6D State
+
+- Status: completed and verified; Practice write-boundary narrowing scope
+  closed; final v0.9.5-F6 dependency-narrowing stage.
+- The Practice Router depends on exactly `PracticeSubmissionReadPort`,
+  `PracticeReadPort`, `PracticeWritePort` (new `app/practice/ports.py`), the
+  preserved `require_student` guard (facade-owned Learner reader), and the
+  pure `PracticeService()`; no broad `Database` dependency remains.
+- `PracticeService` is persistence-free (constructor `PracticeService()`);
+  both app paths compose facade-owned Submission/Practice repositories and
+  the Service on `app.state`; five narrow dependency accessors added;
+  Attempt-first/Evaluation-best-effort semantics, all eight endpoints, and
+  the 77-pair API contract are unchanged; no new Practice writer workflow.
+- Verification: focused 187 PASS; accumulated contracts 253 PASS; full
+  non-live core 638 passed + 8 skipped; exact `run.bat --verify` PASS;
+  migration 12; 33 tables; `config-v0.9.0`; prompt `feedback-prompt-v0.7.1`;
+  facade 86; API 77; client 52; locale 520/520; development database
+  unchanged (SHA-256/size/mtime).
+- Next: v0.9.5-G Database facade contraction only under separate
+  authorization; Protocol consolidation, `require_student` narrowing, and
+  FeedbackPipeline cleanup remain deferred.
+
 ## Current v0.9.5-F6C State
 
 - Status: completed and verified; SubmissionService persistence dependency
