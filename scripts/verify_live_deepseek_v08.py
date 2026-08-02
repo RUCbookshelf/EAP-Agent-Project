@@ -132,7 +132,12 @@ def run_live_verification() -> dict:
             "wpm_value": c_wpm["value"],
             "time_limit_used_as_duration": False,
         }
-        calf_report = CalfService(local_repo).submission_report(live_d.essay_id)
+        calf_report = CalfService(
+            calf_repository=local_repo._calf_repository,
+            submission_reader=local_repo._submission_repository,
+            analysis_reader=local_repo._analysis_repository,
+            student_reader=local_repo._learner_repository,
+        ).submission_report(live_d.essay_id)
         assert calf_report["interpretation_boundary"]
         assert calf_report["accuracy_annotation_availability"]["measurement_status"] == "unavailable"
         return {"live_a": report_a, "live_b": report_b, "live_c": report_c, "live_d": report_d}

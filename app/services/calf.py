@@ -1,23 +1,66 @@
 from __future__ import annotations
 
 from collections import defaultdict
-from typing import Any
+from typing import Any, Protocol, runtime_checkable
 
-from app.calf import accuracy_availability, default_calf_registry
+from app.calf import ErrorAnnotation, accuracy_availability, default_calf_registry
+
+
+@runtime_checkable
+class CalfDataPort(Protocol):
+    """CALF-owned read/write contract (CalfService)."""
+
+    def list_analysis_units(self, submission_id: int, analysis_run_id: str | None = None) -> list[dict[str, Any]]: ...
+
+    def list_error_annotations(self, submission_id: int) -> list[ErrorAnnotation]: ...
+
+    def save_error_annotations(self, submission_id: int, annotations: list[ErrorAnnotation]) -> list[ErrorAnnotation]: ...
+
+
+@runtime_checkable
+class CalfSubmissionReadPort(Protocol):
+    """Submission-owned read contract (CalfService)."""
+
+    def get_submission_bundle(self, essay_id: int) -> dict[str, Any] | None: ...
+
+    def list_student_submissions(self, student_id: str) -> list[dict[str, Any]]: ...
+
+
+@runtime_checkable
+class CalfAnalysisReadPort(Protocol):
+    """Analysis-owned read contract (CalfService)."""
+
+    def get_latest_analysis_run(self, essay_id: int) -> dict[str, Any] | None: ...
+
+
+@runtime_checkable
+class CalfStudentReadPort(Protocol):
+    """Learner-owned read contract (CalfService)."""
+
+    def get_student(self, student_id: str) -> dict[str, Any] | None: ...
 
 
 class CalfService:
     """Read-only research views over append-only Analyzer and annotation evidence."""
 
-    def __init__(self, repository) -> None:
-        self.repository = repository
+    def __init__(
+        self,
+        calf_repository: CalfDataPort,
+        submission_reader: CalfSubmissionReadPort,
+        analysis_reader: CalfAnalysisReadPort,
+        student_reader: CalfStudentReadPort,
+    ) -> None:
+        self.calf_repository = calf_repository
+        self.submission_reader = submission_reader
+        self.analysis_reader = analysis_reader
+        self.student_reader = student_reader
         self.registry = default_calf_registry()
 
     def submission_report(self, submission_id: int) -> dict[str, Any]:
-        submission = self.repository.get_submission_bundle(submission_id)
+        submission = self.submission_reader.get_submission_bundle(submission_id)
         if submission is None:
             raise LookupError("Submission not found.")
-        run = self.repository.get_latest_analysis_run(submission_id)
+        run = self.analysis_reader.get_latest_analysis_run(submission_id)
         metrics = run.get("metric_results", []) if run else []
         by_id = {item["metric_id"]: item for item in metrics}
         result_items: list[dict[str, Any]] = []
@@ -29,14 +72,14 @@ class CalfService:
                 })
             elif specification.metric_id == "lexical_sophistication":
                 result_items.append(self._unavailable(specification, "No authorized versioned frequency resource is configured."))
-        annotations = self.repository.list_error_annotations(submission_id)
+        annotations = self.calf_repository.list_error_annotations(submission_id)
         accuracy = accuracy_availability(annotations)
         for specification in self.registry.list_specifications(construct_id="accuracy"):
             result_items.append({
                 **self._unavailable(specification, accuracy["reason"]),
                 "eligible_annotation_count": accuracy["eligible_annotation_count"],
             })
-        units = self.repository.list_analysis_units(submission_id, run.get("analysis_run_id") if run else None)
+        units = self.calf_repository.list_analysis_units(submission_id, run.get("analysis_run_id") if run else None)
         grouped: dict[str, list[dict]] = defaultdict(list)
         for item in result_items:
             grouped[item["construct_id"]].append(item)
@@ -76,12 +119,12 @@ class CalfService:
         }
 
     def trajectories(self, student_id: str) -> dict[str, Any]:
-        if self.repository.get_student(student_id) is None:
+        if self.student_reader.get_student(student_id) is None:
             raise LookupError("Student not found.")
         series: dict[tuple[str, str, str, str], list[dict]] = defaultdict(list)
         excluded: list[dict] = []
-        for submission in self.repository.list_student_submissions(student_id):
-            run = self.repository.get_latest_analysis_run(int(submission["essay_id"]))
+        for submission in self.submission_reader.list_student_submissions(student_id):
+            run = self.analysis_reader.get_latest_analysis_run(int(submission["essay_id"]))
             if not run:
                 continue
             for item in run.get("metric_results", []):
@@ -126,7 +169,7 @@ class CalfService:
         }
 
     def import_error_annotations(self, submission_id: int, annotations: list) -> list:
-        submission = self.repository.get_submission_bundle(submission_id)
+        submission = self.submission_reader.get_submission_bundle(submission_id)
         if submission is None:
             raise LookupError("Submission not found.")
         text = submission["essay_text"]
@@ -135,4 +178,4 @@ class CalfService:
                 raise ValueError("Error annotation offsets exceed the stored essay text.")
             if text[annotation.start_offset:annotation.end_offset] != annotation.original_text:
                 raise ValueError("Error annotation original_text must exactly match the stored essay span.")
-        return self.repository.save_error_annotations(submission_id, annotations)
+        return self.calf_repository.save_error_annotations(submission_id, annotations)

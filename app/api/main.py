@@ -183,7 +183,12 @@ def _run_startup(api: FastAPI) -> None:
             repository._practice_repository,
         )
         rvs = RevisionService(repository)
-        clf = CalfService(repository)
+        clf = CalfService(
+            calf_repository=repository._calf_repository,
+            submission_reader=repository._submission_repository,
+            analysis_reader=repository._analysis_repository,
+            student_reader=repository._learner_repository,
+        )
         research_svc = ResearchDataService(repository)
 
         lifecycle.llm_provider = settings.llm_provider
@@ -377,7 +382,12 @@ def _build_full_app(
         repository._practice_repository,
     )
     revisions = RevisionService(repository)
-    calf = CalfService(repository)
+    calf = CalfService(
+        calf_repository=repository._calf_repository,
+        submission_reader=repository._submission_repository,
+        analysis_reader=repository._analysis_repository,
+        student_reader=repository._learner_repository,
+    )
     research = ResearchDataService(repository)
 
     lifecycle.application_version = settings.application_version
