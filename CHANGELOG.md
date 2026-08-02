@@ -1,3 +1,25 @@
+## v0.9.5-F2 (2026-08-02)
+
+### Changed
+- Narrowed exactly two Service dependencies without behavior change:
+  `ConfigurationService` now receives the existing `SQLiteConfigurationRepository`
+  instance composed by the `Database` facade (both application-construction
+  paths), and `LearnerHistoryService` now declares a consumer-owned one-method
+  `PriorRecordsPort` instead of the broader central `LearnerHistoryRepository`.
+- Added the one-method `PriorRecordsPort` in `app/learner/history.py` and the
+  focused F2 contract test file; the v0.9.5-E static parity script gained a
+  default-off `SERVICE_API_DIFF_ALLOWLIST` so its unchanged parity test can
+  run under the F2-approved composition change.
+- Preserved public Service names/methods, constructor compatibility, API
+  paths/schemas, repository SQL, transactions, migration 12, 33 tables, and
+  `config-v0.9.0`.
+
+### Verified
+- 53 focused tests PASS (11 new); full non-live core 480 passed + 8 skipped;
+  exact `run.bat --verify` PASS (migration 12, 33 tables, `config-v0.9.0`,
+  health/docs/Streamlit 200); API 77 pairs, client 52 methods, locale 520/520;
+  development database unchanged (SHA-256/mtime).
+
 ## v0.9.5-E (2026-08-02)
 
 ### Changed

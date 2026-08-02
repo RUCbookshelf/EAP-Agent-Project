@@ -1,5 +1,23 @@
 # Project State
 
+## Current v0.9.5-F2 State
+
+- Status: completed and verified; low-risk Service dependency narrowing scope
+  closed (exactly two Services narrowed).
+- `ConfigurationService` receives the existing `SQLiteConfigurationRepository`
+  instance in both application-construction paths; the 86-method facade is no
+  longer passed to it.
+- `LearnerHistoryService` depends on the one-method `PriorRecordsPort`
+  (`prior_records(submission)`); its runtime object and all behavior are
+  unchanged.
+- `DashboardService`, `ProgressService`, `LearnerProfileService`, and all other
+  Services untouched; facade surface 86 methods; migration 12; 33 tables;
+  `config-v0.9.0`; API 77 pairs; client 52 methods; locale 520/520.
+- Verification: 53 focused PASS; full core 480 passed + 8 skipped; exact
+  `run.bat --verify` PASS; development database unchanged (SHA-256/mtime).
+- Next: v0.9.5-F3 (Dashboard/Progress/LearnerProfile and read-only domain
+  narrowing) only under a separate authorization.
+
 ## Current v0.9.5-E State
 
 - Status: completed and verified; facade-first SQLite repository

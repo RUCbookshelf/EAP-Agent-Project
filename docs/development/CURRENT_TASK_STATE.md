@@ -1,6 +1,22 @@
 # Current Task State
 
 **Date:** 2026-08-02
+**Current task:** v0.9.5-F2 Low-Risk Service Repository Dependency Narrowing
+**Status:** completed and verified (see `RUN_VERIFICATION_V0.9.5_F2.md`)
+
+- Exactly two Service dependencies narrowed: `ConfigurationService` receives
+  the existing `SQLiteConfigurationRepository` instance in both
+  application-construction paths; `LearnerHistoryService` declares the
+  one-method `PriorRecordsPort` with an unchanged runtime object.
+- `DashboardService`, `ProgressService`, `LearnerProfileService`, and all other
+  Services, repositories, facade surface, SQL, transactions, migration 12,
+  `config-v0.9.0`, API (77), client (52), and locale (520/520) contracts
+  unchanged.
+- 53 focused tests PASS; full non-live core 480 passed + 8 skipped; exact
+  `run.bat --verify` PASS; development database unchanged.
+- Next: v0.9.5-F3 only under a separate authorization.
+
+**Date:** 2026-08-02
 **Current task:** v0.9.5-E SQLite Repository Modularization (Facade-first)
 **Status:** completed and verified (see `RUN_VERIFICATION_V0.9.5_E.md`)
 

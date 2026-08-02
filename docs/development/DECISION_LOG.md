@@ -1,5 +1,30 @@
 
 
+## 2026-08-02 - v0.9.5-F2 Low-risk Service dependency narrowing
+
+- **Decision**: Narrow exactly two Service dependencies: pass the facade's
+  existing composed `SQLiteConfigurationRepository` instance (not the 86-method
+  `Database` facade) to `ConfigurationService` in both composition paths, and
+  annotate `LearnerHistoryService` against a new one-method `PriorRecordsPort`
+  while leaving its runtime object unchanged.
+- **Rationale**: The F1 audit showed both consumer contracts are exact fits
+  for single extracted repositories; neither change touches transaction
+  boundaries. Dashboard/Progress/LearnerProfile redesign is deferred because
+  `DashboardService` reaches `get_active_configuration` through a
+  `ProgressService` `hasattr` branch.
+- **Alternatives**: Leaving both Services on the facade (no narrowing) or
+  narrowing Dashboard in the same stage (would change the hasattr branch).
+- **Parity boundary**: Preserve the exact seven-method Configuration contract,
+  the exact `prior_records` signature, all Service/API/repository/SQL/
+  transaction/schema behavior, migration 12, 33 tables, `config-v0.9.0`, API
+  77 pairs, client 52 methods, and locale 520/520; do not begin F3/F4/G.
+- **Safety decision**: All write-capable evidence used fresh guarded temporary
+  databases with python-dotenv disabled and `DATABASE_URL` absent; the
+  development database remained at SHA-256 `340E0F...AFF4` (unchanged).
+- **Evidence**: 53 focused PASS; full non-live core 480 passed + 8 skipped;
+  exact `run.bat --verify` PASS; v0.9.5-E facade-parity test unchanged and
+  passing via the default-off `SERVICE_API_DIFF_ALLOWLIST`.
+
 ## 2026-08-02 - v0.9.5-E SQLite repository modularization
 
 - **Decision**: Keep the explicit 86-method `Database` facade and alias while
