@@ -1,5 +1,12 @@
 # Master roadmap
 
+## v0.9.5 roadmap - 2026-08-02
+
+| Item | Status |
+|---|---|
+| v0.9.5-A Architecture Coupling Audit (read-only) | completed |
+| v0.9.5-B API Router Decomposition + Health Contract Reconciliation | completed and verified |
+| v0.9.5-C Frontend Feature Extraction | not started |
 ## v0.9.4 roadmap - 2026-08-01
 
 | Item | Status |

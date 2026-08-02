@@ -1,0 +1,1506 @@
+{
+  "label": "after",
+  "test_builder_routes": [
+    {
+      "index": 0,
+      "path": "/openapi.json",
+      "methods": [
+        "GET"
+      ],
+      "name": "openapi",
+      "handler": "fastapi.applications.openapi",
+      "response_model": null,
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 1,
+      "path": "/docs",
+      "methods": [
+        "GET"
+      ],
+      "name": "swagger_ui_html",
+      "handler": "fastapi.applications.swagger_ui_html",
+      "response_model": null,
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 2,
+      "path": "/docs/oauth2-redirect",
+      "methods": [
+        "GET"
+      ],
+      "name": "swagger_ui_redirect",
+      "handler": "fastapi.applications.swagger_ui_redirect",
+      "response_model": null,
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 3,
+      "path": "/redoc",
+      "methods": [
+        "GET"
+      ],
+      "name": "redoc_html",
+      "handler": "fastapi.applications.redoc_html",
+      "response_model": null,
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 4,
+      "path": "/api/v1/system/live",
+      "methods": [
+        "GET"
+      ],
+      "name": "liveness",
+      "handler": "app.api.routers.system.liveness",
+      "response_model": null,
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 5,
+      "path": "/api/v1/system/ready",
+      "methods": [
+        "GET"
+      ],
+      "name": "readiness",
+      "handler": "app.api.routers.system.readiness",
+      "response_model": null,
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 6,
+      "path": "/api/v1/system/health",
+      "methods": [
+        "GET"
+      ],
+      "name": "health",
+      "handler": "app.api.routers.system.health",
+      "response_model": "HealthResponse",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 7,
+      "path": "/api/v1/system/version",
+      "methods": [
+        "GET"
+      ],
+      "name": "version",
+      "handler": "app.api.routers.system.version",
+      "response_model": "VersionResponse",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 8,
+      "path": "/api/v1/submissions",
+      "methods": [
+        "POST"
+      ],
+      "name": "create_submission",
+      "handler": "app.api.routers.submissions.create_submission",
+      "response_model": "SubmissionResponse",
+      "status_code": 201,
+      "tags": []
+    },
+    {
+      "index": 9,
+      "path": "/api/v1/submissions/{submission_id}/diagnostic-audit",
+      "methods": [
+        "GET"
+      ],
+      "name": "diagnostic_audit",
+      "handler": "app.api.routers.submissions.diagnostic_audit",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 10,
+      "path": "/api/v1/submissions/{submission_id}",
+      "methods": [
+        "GET"
+      ],
+      "name": "get_submission",
+      "handler": "app.api.routers.submissions.get_submission",
+      "response_model": "SubmissionRecordResponse",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 11,
+      "path": "/api/v1/submissions/{submission_id}/analyses",
+      "methods": [
+        "GET"
+      ],
+      "name": "get_analyses",
+      "handler": "app.api.routers.analysis.get_analyses",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 12,
+      "path": "/api/v1/submissions/{submission_id}/analyses",
+      "methods": [
+        "POST"
+      ],
+      "name": "reanalyze_submission",
+      "handler": "app.api.routers.analysis.reanalyze_submission",
+      "response_model": "ReanalysisResponse",
+      "status_code": 201,
+      "tags": []
+    },
+    {
+      "index": 13,
+      "path": "/api/v1/calf/constructs",
+      "methods": [
+        "GET"
+      ],
+      "name": "calf_constructs",
+      "handler": "app.api.routers.calf.calf_constructs",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 14,
+      "path": "/api/v1/calf/metrics",
+      "methods": [
+        "GET"
+      ],
+      "name": "calf_metrics",
+      "handler": "app.api.routers.calf.calf_metrics",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 15,
+      "path": "/api/v1/calf/metrics/{metric_id}",
+      "methods": [
+        "GET"
+      ],
+      "name": "calf_metric",
+      "handler": "app.api.routers.calf.calf_metric",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 16,
+      "path": "/api/v1/calf/analysis-units",
+      "methods": [
+        "GET"
+      ],
+      "name": "calf_analysis_unit_registry",
+      "handler": "app.api.routers.calf.calf_analysis_unit_registry",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 17,
+      "path": "/api/v1/submissions/{submission_id}/calf",
+      "methods": [
+        "GET"
+      ],
+      "name": "submission_calf",
+      "handler": "app.api.routers.calf.submission_calf",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 18,
+      "path": "/api/v1/submissions/{submission_id}/analysis-units",
+      "methods": [
+        "GET"
+      ],
+      "name": "submission_analysis_units",
+      "handler": "app.api.routers.calf.submission_analysis_units",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 19,
+      "path": "/api/v1/submissions/{submission_id}/syntactic-units",
+      "methods": [
+        "GET"
+      ],
+      "name": "submission_syntactic_units",
+      "handler": "app.api.routers.calf.submission_syntactic_units",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 20,
+      "path": "/api/v1/submissions/{submission_id}/error-annotations",
+      "methods": [
+        "GET"
+      ],
+      "name": "get_error_annotations",
+      "handler": "app.api.routers.calf.get_error_annotations",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 21,
+      "path": "/api/v1/submissions/{submission_id}/error-annotations/import",
+      "methods": [
+        "POST"
+      ],
+      "name": "import_error_annotations",
+      "handler": "app.api.routers.calf.import_error_annotations",
+      "response_model": "dict",
+      "status_code": 201,
+      "tags": []
+    },
+    {
+      "index": 22,
+      "path": "/api/v1/students/{student_id}/calf-trajectories",
+      "methods": [
+        "GET"
+      ],
+      "name": "calf_trajectories",
+      "handler": "app.api.routers.calf.calf_trajectories",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 23,
+      "path": "/api/v1/submissions/{submission_id}/calf/reanalyze",
+      "methods": [
+        "POST"
+      ],
+      "name": "calf_reanalyze",
+      "handler": "app.api.routers.calf.calf_reanalyze",
+      "response_model": "dict",
+      "status_code": 201,
+      "tags": []
+    },
+    {
+      "index": 24,
+      "path": "/api/v1/submissions/{submission_id}/revision-candidates",
+      "methods": [
+        "GET"
+      ],
+      "name": "revision_candidates",
+      "handler": "app.api.routers.revisions.revision_candidates",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 25,
+      "path": "/api/v1/students/{student_id}/revision-candidates",
+      "methods": [
+        "GET"
+      ],
+      "name": "student_revision_candidates",
+      "handler": "app.api.routers.revisions.student_revision_candidates",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 26,
+      "path": "/api/v1/revisions",
+      "methods": [
+        "POST"
+      ],
+      "name": "create_revision",
+      "handler": "app.api.routers.revisions.create_revision",
+      "response_model": "RevisionGroupResponse",
+      "status_code": 201,
+      "tags": []
+    },
+    {
+      "index": 27,
+      "path": "/api/v1/revisions/{revision_group_id}",
+      "methods": [
+        "GET"
+      ],
+      "name": "get_revision_group",
+      "handler": "app.api.routers.revisions.get_revision_group",
+      "response_model": "RevisionGroupResponse",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 28,
+      "path": "/api/v1/revisions/{revision_group_id}/comparison",
+      "methods": [
+        "GET"
+      ],
+      "name": "get_revision_comparison",
+      "handler": "app.api.routers.revisions.get_revision_comparison",
+      "response_model": null,
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 29,
+      "path": "/api/v1/revisions/{revision_group_id}/trajectory",
+      "methods": [
+        "GET"
+      ],
+      "name": "get_revision_trajectory",
+      "handler": "app.api.routers.revisions.get_revision_trajectory",
+      "response_model": null,
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 30,
+      "path": "/api/v1/submissions/{submission_id}/revision-analysis",
+      "methods": [
+        "GET"
+      ],
+      "name": "get_submission_revision_analysis",
+      "handler": "app.api.routers.revisions.get_submission_revision_analysis",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 31,
+      "path": "/api/v1/students/{student_id}",
+      "methods": [
+        "GET"
+      ],
+      "name": "get_student",
+      "handler": "app.api.routers.students.get_student",
+      "response_model": "StudentResponse",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 32,
+      "path": "/api/v1/students/{student_id}/history",
+      "methods": [
+        "GET"
+      ],
+      "name": "get_history",
+      "handler": "app.api.routers.students.get_history",
+      "response_model": "HistoryResponse",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 33,
+      "path": "/api/v1/students/{student_id}/profile",
+      "methods": [
+        "GET"
+      ],
+      "name": "get_profile",
+      "handler": "app.api.routers.students.get_profile",
+      "response_model": "LearnerProfileResponse",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 34,
+      "path": "/api/v1/students/{student_id}/progress",
+      "methods": [
+        "GET"
+      ],
+      "name": "get_progress",
+      "handler": "app.api.routers.students.get_progress",
+      "response_model": "LearnerProfileSnapshot",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 35,
+      "path": "/api/v1/students/{student_id}/learner-model",
+      "methods": [
+        "GET"
+      ],
+      "name": "get_learner_model",
+      "handler": "app.api.routers.students.get_learner_model",
+      "response_model": "LearnerProfileSnapshot",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 36,
+      "path": "/api/v1/students/{student_id}/learner-model/task-clusters",
+      "methods": [
+        "GET"
+      ],
+      "name": "get_task_clusters",
+      "handler": "app.api.routers.students.get_task_clusters",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 37,
+      "path": "/api/v1/students/{student_id}/learner-model/metric-trajectories",
+      "methods": [
+        "GET"
+      ],
+      "name": "get_metric_trajectories",
+      "handler": "app.api.routers.students.get_metric_trajectories",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 38,
+      "path": "/api/v1/students/{student_id}/learner-model/diagnostic-trajectories",
+      "methods": [
+        "GET"
+      ],
+      "name": "get_diagnostic_trajectories",
+      "handler": "app.api.routers.students.get_diagnostic_trajectories",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 39,
+      "path": "/api/v1/students/{student_id}/learner-model/learning-targets",
+      "methods": [
+        "GET"
+      ],
+      "name": "get_learning_targets",
+      "handler": "app.api.routers.students.get_learning_targets",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 40,
+      "path": "/api/v1/students/{student_id}/learner-model/history-evidence",
+      "methods": [
+        "GET"
+      ],
+      "name": "get_history_evidence",
+      "handler": "app.api.routers.students.get_history_evidence",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 41,
+      "path": "/api/v1/students/{student_id}/learner-model/snapshots",
+      "methods": [
+        "GET"
+      ],
+      "name": "list_learner_model_snapshots",
+      "handler": "app.api.routers.students.list_learner_model_snapshots",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 42,
+      "path": "/api/v1/students/{student_id}/learner-model/snapshots/{snapshot_id}",
+      "methods": [
+        "GET"
+      ],
+      "name": "get_learner_model_snapshot",
+      "handler": "app.api.routers.students.get_learner_model_snapshot",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 43,
+      "path": "/api/v1/students/{student_id}/learner-model/preview",
+      "methods": [
+        "POST"
+      ],
+      "name": "preview_learner_model",
+      "handler": "app.api.routers.students.preview_learner_model",
+      "response_model": "LearnerProfileSnapshot",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 44,
+      "path": "/api/v1/students/{student_id}/learner-model/rebuild",
+      "methods": [
+        "POST"
+      ],
+      "name": "rebuild_learner_model",
+      "handler": "app.api.routers.students.rebuild_learner_model",
+      "response_model": "LearnerProfileSnapshot",
+      "status_code": 201,
+      "tags": []
+    },
+    {
+      "index": 45,
+      "path": "/api/v1/students/{student_id}/dashboard",
+      "methods": [
+        "GET"
+      ],
+      "name": "get_dashboard",
+      "handler": "app.api.routers.students.get_dashboard",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 46,
+      "path": "/api/v1/admin/configurations",
+      "methods": [
+        "GET"
+      ],
+      "name": "list_configurations",
+      "handler": "app.api.routers.admin.list_configurations",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 47,
+      "path": "/api/v1/admin/configurations",
+      "methods": [
+        "POST"
+      ],
+      "name": "create_configuration",
+      "handler": "app.api.routers.admin.create_configuration",
+      "response_model": "ConfigurationVersion",
+      "status_code": 201,
+      "tags": []
+    },
+    {
+      "index": 48,
+      "path": "/api/v1/admin/configurations/{configuration_id}/validate",
+      "methods": [
+        "POST"
+      ],
+      "name": "validate_configuration",
+      "handler": "app.api.routers.admin.validate_configuration",
+      "response_model": "ConfigurationVersion",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 49,
+      "path": "/api/v1/admin/configurations/{configuration_id}/activate",
+      "methods": [
+        "POST"
+      ],
+      "name": "activate_configuration",
+      "handler": "app.api.routers.admin.activate_configuration",
+      "response_model": "ConfigurationVersion",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 50,
+      "path": "/api/v1/admin/configurations/{configuration_id}/rollback",
+      "methods": [
+        "POST"
+      ],
+      "name": "rollback_configuration",
+      "handler": "app.api.routers.admin.rollback_configuration",
+      "response_model": "ConfigurationVersion",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 51,
+      "path": "/api/v1/admin/algorithms",
+      "methods": [
+        "GET"
+      ],
+      "name": "list_algorithms",
+      "handler": "app.api.routers.admin.list_algorithms",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 52,
+      "path": "/api/v1/admin/metrics",
+      "methods": [
+        "GET"
+      ],
+      "name": "list_metrics",
+      "handler": "app.api.routers.admin.list_metrics",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 53,
+      "path": "/api/v1/admin/registries",
+      "methods": [
+        "GET"
+      ],
+      "name": "list_registries",
+      "handler": "app.api.routers.admin.list_registries",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 54,
+      "path": "/api/v1/admin/reanalysis/preview",
+      "methods": [
+        "POST"
+      ],
+      "name": "preview_admin_reanalysis",
+      "handler": "app.api.routers.admin.preview_admin_reanalysis",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 55,
+      "path": "/api/v1/admin/reanalysis/run",
+      "methods": [
+        "POST"
+      ],
+      "name": "run_admin_reanalysis",
+      "handler": "app.api.routers.admin.run_admin_reanalysis",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 56,
+      "path": "/api/v1/students/{student_id}/practice-targets",
+      "methods": [
+        "GET"
+      ],
+      "name": "get_practice_targets",
+      "handler": "app.api.routers.practice.get_practice_targets",
+      "response_model": "list",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 57,
+      "path": "/api/v1/practice-targets",
+      "methods": [
+        "POST"
+      ],
+      "name": "create_practice_target",
+      "handler": "app.api.routers.practice.create_practice_target",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 58,
+      "path": "/api/v1/practice-targets/{practice_target_id}/exercises",
+      "methods": [
+        "POST"
+      ],
+      "name": "create_exercise",
+      "handler": "app.api.routers.practice.create_exercise",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 59,
+      "path": "/api/v1/practice-targets/{practice_target_id}/exercises",
+      "methods": [
+        "GET"
+      ],
+      "name": "get_exercises",
+      "handler": "app.api.routers.practice.get_exercises",
+      "response_model": "list",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 60,
+      "path": "/api/v1/exercises/{exercise_id}/attempts",
+      "methods": [
+        "POST"
+      ],
+      "name": "submit_exercise_attempt",
+      "handler": "app.api.routers.practice.submit_exercise_attempt",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 61,
+      "path": "/api/v1/exercises/{exercise_id}/attempts",
+      "methods": [
+        "GET"
+      ],
+      "name": "get_exercise_attempts",
+      "handler": "app.api.routers.practice.get_exercise_attempts",
+      "response_model": "list",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 62,
+      "path": "/api/v1/students/{student_id}/engagement-traces",
+      "methods": [
+        "GET"
+      ],
+      "name": "get_engagement_traces",
+      "handler": "app.api.routers.practice.get_engagement_traces",
+      "response_model": "list",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 63,
+      "path": "/api/v1/students/{student_id}/transfer-evidence",
+      "methods": [
+        "GET"
+      ],
+      "name": "get_transfer_evidence",
+      "handler": "app.api.routers.practice.get_transfer_evidence",
+      "response_model": "list",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 64,
+      "path": "/api/v1/students/{student_id}/journey",
+      "methods": [
+        "GET"
+      ],
+      "name": "get_student_journey",
+      "handler": "app.api.routers.journey.get_student_journey",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 65,
+      "path": "/api/v1/research/export/schema",
+      "methods": [
+        "GET"
+      ],
+      "name": "research_export_schema",
+      "handler": "app.api.routers.research.research_export_schema",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 66,
+      "path": "/api/v1/research/export/preview",
+      "methods": [
+        "POST"
+      ],
+      "name": "research_export_preview",
+      "handler": "app.api.routers.research.research_export_preview",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 67,
+      "path": "/api/v1/research/export/run",
+      "methods": [
+        "POST"
+      ],
+      "name": "research_export_run",
+      "handler": "app.api.routers.research.research_export_run",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 68,
+      "path": "/api/v1/research/export/history",
+      "methods": [
+        "GET"
+      ],
+      "name": "research_export_history",
+      "handler": "app.api.routers.research.research_export_history",
+      "response_model": "list",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 69,
+      "path": "/api/v1/research/export/{export_id}/manifest",
+      "methods": [
+        "GET"
+      ],
+      "name": "research_export_manifest",
+      "handler": "app.api.routers.research.research_export_manifest",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 70,
+      "path": "/api/v1/research/export/{export_id}",
+      "methods": [
+        "GET"
+      ],
+      "name": "research_export_status",
+      "handler": "app.api.routers.research.research_export_status",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 71,
+      "path": "/api/v1/research/data-quality",
+      "methods": [
+        "GET"
+      ],
+      "name": "research_data_quality",
+      "handler": "app.api.routers.research.research_data_quality",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 72,
+      "path": "/api/v1/submissions/{submission_id}/pii-candidates",
+      "methods": [
+        "GET"
+      ],
+      "name": "pii_candidates",
+      "handler": "app.api.routers.research.pii_candidates",
+      "response_model": "list",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 73,
+      "path": "/api/v1/submissions/{submission_id}/pii-review",
+      "methods": [
+        "POST"
+      ],
+      "name": "pii_review",
+      "handler": "app.api.routers.research.pii_review",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 74,
+      "path": "/api/v1/research/reviews",
+      "methods": [
+        "POST"
+      ],
+      "name": "create_human_review",
+      "handler": "app.api.routers.research.create_human_review",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 75,
+      "path": "/api/v1/research/reviews",
+      "methods": [
+        "GET"
+      ],
+      "name": "list_human_reviews",
+      "handler": "app.api.routers.research.list_human_reviews",
+      "response_model": "list",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 76,
+      "path": "/api/v1/research/dataset-split",
+      "methods": [
+        "POST"
+      ],
+      "name": "create_dataset_split",
+      "handler": "app.api.routers.research.create_dataset_split",
+      "response_model": "dict",
+      "status_code": 200,
+      "tags": []
+    }
+  ],
+  "prod_created_routes": [
+    {
+      "index": 0,
+      "path": "/openapi.json",
+      "methods": [
+        "GET"
+      ],
+      "name": "openapi",
+      "handler": "fastapi.applications.openapi",
+      "response_model": null,
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 1,
+      "path": "/docs",
+      "methods": [
+        "GET"
+      ],
+      "name": "swagger_ui_html",
+      "handler": "fastapi.applications.swagger_ui_html",
+      "response_model": null,
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 2,
+      "path": "/docs/oauth2-redirect",
+      "methods": [
+        "GET"
+      ],
+      "name": "swagger_ui_redirect",
+      "handler": "fastapi.applications.swagger_ui_redirect",
+      "response_model": null,
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 3,
+      "path": "/redoc",
+      "methods": [
+        "GET"
+      ],
+      "name": "redoc_html",
+      "handler": "fastapi.applications.redoc_html",
+      "response_model": null,
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 4,
+      "path": "/api/v1/system/live",
+      "methods": [
+        "GET"
+      ],
+      "name": "liveness",
+      "handler": "app.api.routers.system.liveness",
+      "response_model": null,
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 5,
+      "path": "/api/v1/system/ready",
+      "methods": [
+        "GET"
+      ],
+      "name": "readiness",
+      "handler": "app.api.routers.system.readiness",
+      "response_model": null,
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 6,
+      "path": "/api/v1/system/health",
+      "methods": [
+        "GET"
+      ],
+      "name": "health",
+      "handler": "app.api.routers.system.health",
+      "response_model": "HealthResponse",
+      "status_code": 200,
+      "tags": []
+    },
+    {
+      "index": 7,
+      "path": "/api/v1/system/version",
+      "methods": [
+        "GET"
+      ],
+      "name": "version",
+      "handler": "app.api.routers.system.version",
+      "response_model": "VersionResponse",
+      "status_code": 200,
+      "tags": []
+    }
+  ],
+  "test_builder_openapi": [
+    {
+      "path": "/api/v1/system/live",
+      "method": "GET",
+      "operationId": "liveness_api_v1_system_live_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/system/ready",
+      "method": "GET",
+      "operationId": "readiness_api_v1_system_ready_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/system/health",
+      "method": "GET",
+      "operationId": "health_api_v1_system_health_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/system/version",
+      "method": "GET",
+      "operationId": "version_api_v1_system_version_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/submissions",
+      "method": "POST",
+      "operationId": "create_submission_api_v1_submissions_post",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/submissions/{submission_id}/diagnostic-audit",
+      "method": "GET",
+      "operationId": "diagnostic_audit_api_v1_submissions__submission_id__diagnostic_audit_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/submissions/{submission_id}",
+      "method": "GET",
+      "operationId": "get_submission_api_v1_submissions__submission_id__get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/submissions/{submission_id}/analyses",
+      "method": "GET",
+      "operationId": "get_analyses_api_v1_submissions__submission_id__analyses_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/submissions/{submission_id}/analyses",
+      "method": "POST",
+      "operationId": "reanalyze_submission_api_v1_submissions__submission_id__analyses_post",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/calf/constructs",
+      "method": "GET",
+      "operationId": "calf_constructs_api_v1_calf_constructs_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/calf/metrics",
+      "method": "GET",
+      "operationId": "calf_metrics_api_v1_calf_metrics_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/calf/metrics/{metric_id}",
+      "method": "GET",
+      "operationId": "calf_metric_api_v1_calf_metrics__metric_id__get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/calf/analysis-units",
+      "method": "GET",
+      "operationId": "calf_analysis_unit_registry_api_v1_calf_analysis_units_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/submissions/{submission_id}/calf",
+      "method": "GET",
+      "operationId": "submission_calf_api_v1_submissions__submission_id__calf_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/submissions/{submission_id}/analysis-units",
+      "method": "GET",
+      "operationId": "submission_analysis_units_api_v1_submissions__submission_id__analysis_units_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/submissions/{submission_id}/syntactic-units",
+      "method": "GET",
+      "operationId": "submission_syntactic_units_api_v1_submissions__submission_id__syntactic_units_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/submissions/{submission_id}/error-annotations",
+      "method": "GET",
+      "operationId": "get_error_annotations_api_v1_submissions__submission_id__error_annotations_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/submissions/{submission_id}/error-annotations/import",
+      "method": "POST",
+      "operationId": "import_error_annotations_api_v1_submissions__submission_id__error_annotations_import_post",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/students/{student_id}/calf-trajectories",
+      "method": "GET",
+      "operationId": "calf_trajectories_api_v1_students__student_id__calf_trajectories_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/submissions/{submission_id}/calf/reanalyze",
+      "method": "POST",
+      "operationId": "calf_reanalyze_api_v1_submissions__submission_id__calf_reanalyze_post",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/submissions/{submission_id}/revision-candidates",
+      "method": "GET",
+      "operationId": "revision_candidates_api_v1_submissions__submission_id__revision_candidates_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/students/{student_id}/revision-candidates",
+      "method": "GET",
+      "operationId": "student_revision_candidates_api_v1_students__student_id__revision_candidates_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/revisions",
+      "method": "POST",
+      "operationId": "create_revision_api_v1_revisions_post",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/revisions/{revision_group_id}",
+      "method": "GET",
+      "operationId": "get_revision_group_api_v1_revisions__revision_group_id__get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/revisions/{revision_group_id}/comparison",
+      "method": "GET",
+      "operationId": "get_revision_comparison_api_v1_revisions__revision_group_id__comparison_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/revisions/{revision_group_id}/trajectory",
+      "method": "GET",
+      "operationId": "get_revision_trajectory_api_v1_revisions__revision_group_id__trajectory_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/submissions/{submission_id}/revision-analysis",
+      "method": "GET",
+      "operationId": "get_submission_revision_analysis_api_v1_submissions__submission_id__revision_analysis_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/students/{student_id}",
+      "method": "GET",
+      "operationId": "get_student_api_v1_students__student_id__get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/students/{student_id}/history",
+      "method": "GET",
+      "operationId": "get_history_api_v1_students__student_id__history_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/students/{student_id}/profile",
+      "method": "GET",
+      "operationId": "get_profile_api_v1_students__student_id__profile_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/students/{student_id}/progress",
+      "method": "GET",
+      "operationId": "get_progress_api_v1_students__student_id__progress_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/students/{student_id}/learner-model",
+      "method": "GET",
+      "operationId": "get_learner_model_api_v1_students__student_id__learner_model_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/students/{student_id}/learner-model/task-clusters",
+      "method": "GET",
+      "operationId": "get_task_clusters_api_v1_students__student_id__learner_model_task_clusters_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/students/{student_id}/learner-model/metric-trajectories",
+      "method": "GET",
+      "operationId": "get_metric_trajectories_api_v1_students__student_id__learner_model_metric_trajectories_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/students/{student_id}/learner-model/diagnostic-trajectories",
+      "method": "GET",
+      "operationId": "get_diagnostic_trajectories_api_v1_students__student_id__learner_model_diagnostic_trajectories_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/students/{student_id}/learner-model/learning-targets",
+      "method": "GET",
+      "operationId": "get_learning_targets_api_v1_students__student_id__learner_model_learning_targets_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/students/{student_id}/learner-model/history-evidence",
+      "method": "GET",
+      "operationId": "get_history_evidence_api_v1_students__student_id__learner_model_history_evidence_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/students/{student_id}/learner-model/snapshots",
+      "method": "GET",
+      "operationId": "list_learner_model_snapshots_api_v1_students__student_id__learner_model_snapshots_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/students/{student_id}/learner-model/snapshots/{snapshot_id}",
+      "method": "GET",
+      "operationId": "get_learner_model_snapshot_api_v1_students__student_id__learner_model_snapshots__snapshot_id__get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/students/{student_id}/learner-model/preview",
+      "method": "POST",
+      "operationId": "preview_learner_model_api_v1_students__student_id__learner_model_preview_post",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/students/{student_id}/learner-model/rebuild",
+      "method": "POST",
+      "operationId": "rebuild_learner_model_api_v1_students__student_id__learner_model_rebuild_post",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/students/{student_id}/dashboard",
+      "method": "GET",
+      "operationId": "get_dashboard_api_v1_students__student_id__dashboard_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/admin/configurations",
+      "method": "GET",
+      "operationId": "list_configurations_api_v1_admin_configurations_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/admin/configurations",
+      "method": "POST",
+      "operationId": "create_configuration_api_v1_admin_configurations_post",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/admin/configurations/{configuration_id}/validate",
+      "method": "POST",
+      "operationId": "validate_configuration_api_v1_admin_configurations__configuration_id__validate_post",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/admin/configurations/{configuration_id}/activate",
+      "method": "POST",
+      "operationId": "activate_configuration_api_v1_admin_configurations__configuration_id__activate_post",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/admin/configurations/{configuration_id}/rollback",
+      "method": "POST",
+      "operationId": "rollback_configuration_api_v1_admin_configurations__configuration_id__rollback_post",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/admin/algorithms",
+      "method": "GET",
+      "operationId": "list_algorithms_api_v1_admin_algorithms_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/admin/metrics",
+      "method": "GET",
+      "operationId": "list_metrics_api_v1_admin_metrics_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/admin/registries",
+      "method": "GET",
+      "operationId": "list_registries_api_v1_admin_registries_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/admin/reanalysis/preview",
+      "method": "POST",
+      "operationId": "preview_admin_reanalysis_api_v1_admin_reanalysis_preview_post",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/admin/reanalysis/run",
+      "method": "POST",
+      "operationId": "run_admin_reanalysis_api_v1_admin_reanalysis_run_post",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/students/{student_id}/practice-targets",
+      "method": "GET",
+      "operationId": "get_practice_targets_api_v1_students__student_id__practice_targets_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/practice-targets",
+      "method": "POST",
+      "operationId": "create_practice_target_api_v1_practice_targets_post",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/practice-targets/{practice_target_id}/exercises",
+      "method": "POST",
+      "operationId": "create_exercise_api_v1_practice_targets__practice_target_id__exercises_post",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/practice-targets/{practice_target_id}/exercises",
+      "method": "GET",
+      "operationId": "get_exercises_api_v1_practice_targets__practice_target_id__exercises_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/exercises/{exercise_id}/attempts",
+      "method": "POST",
+      "operationId": "submit_exercise_attempt_api_v1_exercises__exercise_id__attempts_post",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/exercises/{exercise_id}/attempts",
+      "method": "GET",
+      "operationId": "get_exercise_attempts_api_v1_exercises__exercise_id__attempts_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/students/{student_id}/engagement-traces",
+      "method": "GET",
+      "operationId": "get_engagement_traces_api_v1_students__student_id__engagement_traces_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/students/{student_id}/transfer-evidence",
+      "method": "GET",
+      "operationId": "get_transfer_evidence_api_v1_students__student_id__transfer_evidence_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/students/{student_id}/journey",
+      "method": "GET",
+      "operationId": "get_student_journey_api_v1_students__student_id__journey_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/research/export/schema",
+      "method": "GET",
+      "operationId": "research_export_schema_api_v1_research_export_schema_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/research/export/preview",
+      "method": "POST",
+      "operationId": "research_export_preview_api_v1_research_export_preview_post",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/research/export/run",
+      "method": "POST",
+      "operationId": "research_export_run_api_v1_research_export_run_post",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/research/export/history",
+      "method": "GET",
+      "operationId": "research_export_history_api_v1_research_export_history_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/research/export/{export_id}/manifest",
+      "method": "GET",
+      "operationId": "research_export_manifest_api_v1_research_export__export_id__manifest_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/research/export/{export_id}",
+      "method": "GET",
+      "operationId": "research_export_status_api_v1_research_export__export_id__get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/research/data-quality",
+      "method": "GET",
+      "operationId": "research_data_quality_api_v1_research_data_quality_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/submissions/{submission_id}/pii-candidates",
+      "method": "GET",
+      "operationId": "pii_candidates_api_v1_submissions__submission_id__pii_candidates_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/submissions/{submission_id}/pii-review",
+      "method": "POST",
+      "operationId": "pii_review_api_v1_submissions__submission_id__pii_review_post",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/research/reviews",
+      "method": "POST",
+      "operationId": "create_human_review_api_v1_research_reviews_post",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/research/reviews",
+      "method": "GET",
+      "operationId": "list_human_reviews_api_v1_research_reviews_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/research/dataset-split",
+      "method": "POST",
+      "operationId": "create_dataset_split_api_v1_research_dataset_split_post",
+      "tags": []
+    }
+  ],
+  "prod_created_openapi": [
+    {
+      "path": "/api/v1/system/live",
+      "method": "GET",
+      "operationId": "liveness_api_v1_system_live_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/system/ready",
+      "method": "GET",
+      "operationId": "readiness_api_v1_system_ready_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/system/health",
+      "method": "GET",
+      "operationId": "health_api_v1_system_health_get",
+      "tags": []
+    },
+    {
+      "path": "/api/v1/system/version",
+      "method": "GET",
+      "operationId": "version_api_v1_system_version_get",
+      "tags": []
+    }
+  ],
+  "health_first_match_test_builder": {
+    "path": "/api/v1/system/health",
+    "index": 6,
+    "handler": "app.api.routers.system.health"
+  },
+  "health_first_match_prod_created": {
+    "path": "/api/v1/system/health",
+    "index": 6,
+    "handler": "app.api.routers.system.health"
+  },
+  "test_builder_count": 77,
+  "prod_created_count": 8,
+  "test_builder_duplicates": []
+}

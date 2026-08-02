@@ -1,3 +1,22 @@
+## v0.9.5-B (2026-08-02)
+
+### Changed
+- Split the centralized FastAPI business-route registration into feature-owned
+  router modules under `app/api/routers/` (system, submissions, analysis,
+  students, revisions, practice, journey, research, calf, admin); `app/api/main.py`
+  is now an application composition root.
+- `/api/v1/system/health` now has exactly one canonical lifecycle-based handler
+  with identical production/test semantics; the duplicate business health handler
+  and the unreachable duplicate lifecycle-route block in `create_app` were removed.
+- Production and test builders now populate the same lifecycle analyzer/NLP
+  facts, fixing production health reporting of the spaCy model.
+
+### Verified
+- Route inventory parity: 77 unique path+method pairs before and after; zero
+  missing/added endpoints; no duplicate path+method; operation IDs unchanged.
+- 274 passed + 3 skipped focused API tests; 431 passed + 8 skipped core tests
+  (+10 new contract tests); minimal runtime smoke PASS; exact
+  `cmd /c "run.bat --verify"` PASS; migration 12; `config-v0.9.0`.
 ## v0.9.4-B (2026-08-01)
 
 ### Added

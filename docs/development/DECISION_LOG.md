@@ -1,5 +1,20 @@
 
 
+## 2026-08-02 - v0.9.5-B Canonical health contract and router decomposition
+
+- **Decision**: Split all FastAPI business routes into feature-owned router
+  modules under `app/api/routers/` and make `GET /api/v1/system/health` the
+  single lifecycle-based handler in both production and test builders.
+- **Rationale**: `_register_business_routes` concentrated ~65 endpoints in one
+  684-line function; health was registered twice with different handlers, so
+  production and tests resolved different semantics. The lifecycle
+  representation is the canonical source for readiness/health state.
+- **Alternatives**: Keeping the business health handler (live repository ping)
+  would preserve prod/test divergence; a second compatibility endpoint was
+  rejected to keep exactly one contract.
+- **Impact**: Route inventory parity 77/77 with unchanged operation IDs,
+  response models, and status codes; 431+8 core tests; minimal runtime smoke
+  and exact `run.bat --verify` PASS; no schema/service/database/UI changes.
 ## 2026-07-31 — v0.9.1 Role-based UI
 
 - **Decision**: Reorganize Streamlit UI from 10-page flat navigation to role-based dual-view (Student/Research) with 6 pages each.

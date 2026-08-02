@@ -1,5 +1,19 @@
 # Current Task State
 
+**Date:** 2026-08-02
+**Current task:** v0.9.5-B API Router Decomposition and Health Contract Reconciliation
+**Status:** completed and verified (see `RUN_VERIFICATION_V0.9.5_B.md`)
+
+- Feature routers under `app/api/routers/`; `app/api/main.py` reduced to a
+  composition root; one canonical lifecycle-based `/api/v1/system/health`;
+  unreachable duplicate lifecycle-route code removed.
+- Route parity 77/77; operation IDs and response models unchanged; 274+3
+  focused API tests; 431+8 core tests; runtime smoke PASS; `run.bat --verify` PASS.
+- No schema, service, repository, database, UI, or API-client change. Next:
+  v0.9.5-C (not started) under a separate goal.
+
+
+
 **Date:** 2026-08-01
 **Current task:** v0.9.4-B Student Experience Redesign
 **Status:** completed and verified (see `RUN_VERIFICATION_V0.9.4_B.md`)

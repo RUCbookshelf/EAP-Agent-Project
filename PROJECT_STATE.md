@@ -1,5 +1,19 @@
 # Project State
 
+## Current v0.9.5-B State
+
+- Status: completed and verified; API router decomposition scope closed.
+- Feature routers exist under `app/api/routers/`; `app/api/main.py` is the
+  composition root (creation, lifespan, middleware, error handlers, service
+  construction, router inclusion).
+- `/api/v1/system/health` is registered exactly once with lifecycle-based
+  semantics identical in production and tests; `/live` and `/ready` unchanged.
+- Route inventory parity: 77 unique path+method pairs before/after; operation
+  IDs, response models, and declared status codes unchanged.
+- Verification: 274+3 focused API tests; 431+8 core; minimal runtime smoke PASS;
+  exact `run.bat --verify` PASS; migration 12; `config-v0.9.0`.
+- Schemas, services, repositories, database, UI, API client, and domain
+  semantics unchanged. v0.9.5-C remains not started.
 ## Current v0.9.4-B State
 
 - Status: completed and verified; Student-only redesign scope closed.
