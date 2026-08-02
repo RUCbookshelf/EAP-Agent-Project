@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import json
 from datetime import datetime, timezone
-from typing import Any
+from typing import Any, Protocol, runtime_checkable
 
 from pydantic import BaseModel, ConfigDict
 
@@ -99,31 +99,57 @@ def _fb_priority_count(feedback_record: dict[str, Any]) -> int:
     return len(priorities) if isinstance(priorities, list) else 0
 
 
+@runtime_checkable
+class JourneyStudentReadPort(Protocol):
+    """Student lookup contract for JourneyService (Learner-owned)."""
+
+    def get_student(self, student_id: str) -> dict[str, Any] | None: ...
+
+
+@runtime_checkable
+class JourneyProjectionReadPort(Protocol):
+    """Practice-owned Journey projection contract for JourneyService."""
+
+    def list_essays_by_student(self, student_id: str) -> list[dict]: ...
+    def list_analysis_runs_for_student(self, student_id: str) -> list[dict]: ...
+    def list_feedback_records_for_student(self, student_id: str) -> list[dict]: ...
+    def list_practice_targets(self, student_id: str) -> list[dict]: ...
+    def list_exercise_attempts_by_student(self, student_id: str) -> list[dict]: ...
+    def list_practice_evaluations_by_student(self, student_id: str) -> list[dict]: ...
+    def list_within_task_responses(self, student_id: str) -> list[dict]: ...
+    def list_transfer_evidence_candidates(self, student_id: str) -> list[dict]: ...
+
+
 class JourneyService:
     """Derive the Learning Journey for one learner from persisted records."""
 
-    def __init__(self, repository: Any) -> None:
-        self.repo = repository
+    def __init__(
+        self,
+        student_reader: JourneyStudentReadPort,
+        projection_reader: JourneyProjectionReadPort,
+    ) -> None:
+        self.student_reader = student_reader
+        self.projection_reader = projection_reader
 
     def get_journey(self, student_id: str) -> dict[str, Any]:
-        learner = self.repo.get_student(student_id)
+        learner = self.student_reader.get_student(student_id)
         if learner is None:
             raise LookupError("Student not found.")
 
-        essays = self.repo.list_essays_by_student(student_id)
+        essays = self.projection_reader.list_essays_by_student(student_id)
         analyses = {
             int(run.get("essay_id")): run
-            for run in self.repo.list_analysis_runs_for_student(student_id)
+            for run in self.projection_reader.list_analysis_runs_for_student(student_id)
         }
         feedbacks = {
             int(rec.get("essay_id")): rec
-            for rec in self.repo.list_feedback_records_for_student(student_id)
+            for rec in self.projection_reader.list_feedback_records_for_student(student_id)
         }
-        targets = self.repo.list_practice_targets(student_id)
-        attempts = self.repo.list_exercise_attempts_by_student(student_id)
-        evaluations = self.repo.list_practice_evaluations_by_student(student_id)
-        responses = self.repo.list_within_task_responses(student_id)
-        transfers = self.repo.list_transfer_evidence_candidates(student_id)
+        targets = self.projection_reader.list_practice_targets(student_id)
+        attempts = self.projection_reader.list_exercise_attempts_by_student(student_id)
+        evaluations = self.projection_reader.list_practice_evaluations_by_student(student_id)
+        responses = self.projection_reader.list_within_task_responses(student_id)
+        transfers = self.projection_reader.list_transfer_evidence_candidates(student_id)
 
         events: list[JourneyEvent] = []
 

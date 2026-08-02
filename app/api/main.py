@@ -34,6 +34,7 @@ from app.api.routers import (
 )
 from app.config import Settings, load_settings
 from app.database import Database
+from app.journey.service import JourneyService
 from app.lifecycle import ServiceState, lifecycle
 from app.research.service import ResearchDataService
 from app.services import (
@@ -172,7 +173,15 @@ def _run_startup(api: FastAPI) -> None:
                 configuration_repository=configuration_repository,
             ),
         )
-        reanalysis_svc = ReanalysisService(repository, analyzer)
+        reanalysis_svc = ReanalysisService(
+            repository._submission_repository,
+            repository._analysis_repository,
+            analyzer,
+        )
+        journey_svc = JourneyService(
+            repository._learner_repository,
+            repository._practice_repository,
+        )
         rvs = RevisionService(repository)
         clf = CalfService(repository)
         research_svc = ResearchDataService(repository)
@@ -215,6 +224,7 @@ def _run_startup(api: FastAPI) -> None:
     api.state.revisions = rvs
     api.state.calf = clf
     api.state.research = research_svc
+    api.state.journey_service = journey_svc
     api.state.admin_reanalysis = AdminReanalysisService(
         repository, settings, cfgs, sub_svc,
     )
@@ -357,7 +367,15 @@ def _build_full_app(
             configuration_repository=configuration_repository,
         ),
     )
-    reanalysis = ReanalysisService(repository, analyzer)
+    reanalysis = ReanalysisService(
+        repository._submission_repository,
+        repository._analysis_repository,
+        analyzer,
+    )
+    journey = JourneyService(
+        repository._learner_repository,
+        repository._practice_repository,
+    )
     revisions = RevisionService(repository)
     calf = CalfService(repository)
     research = ResearchDataService(repository)
@@ -386,6 +404,7 @@ def _build_full_app(
     api.state.revisions = revisions
     api.state.calf = calf
     api.state.research = research
+    api.state.journey_service = journey
     api.state.admin_reanalysis = AdminReanalysisService(repository, settings, configurations, submission_service)
 
     api.include_router(system.router)

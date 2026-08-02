@@ -102,7 +102,10 @@ def _backup_database(repository: Database) -> pathlib.Path:
 
 def setup() -> int:
     repository = _repository()
-    journey = JourneyService(repository)
+    journey = JourneyService(
+        repository._learner_repository,
+        repository._practice_repository,
+    )
     try:
         existing = journey.get_journey(DEMO_LEARNER)
     except LookupError:
@@ -238,7 +241,10 @@ def setup() -> int:
 
 def status() -> int:
     repository = _repository()
-    journey = JourneyService(repository).get_journey(DEMO_LEARNER)
+    journey = JourneyService(
+        repository._learner_repository,
+        repository._practice_repository,
+    ).get_journey(DEMO_LEARNER)
     print(f"Learner: {DEMO_LEARNER}")
     print(f"State: {journey['state']}")
     print("Counts:", json.dumps(journey["counts"], indent=2))

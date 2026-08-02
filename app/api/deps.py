@@ -42,6 +42,10 @@ def get_reanalysis(request: Request):
     return request.app.state.reanalysis
 
 
+def get_journey_service(request: Request):
+    return request.app.state.journey_service
+
+
 def get_revisions(request: Request):
     return request.app.state.revisions
 
