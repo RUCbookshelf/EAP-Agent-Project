@@ -6,7 +6,8 @@ from app.config import Settings
 from app.diagnosis import NlpHeuristicDiagnoser
 from app.llm import DeepSeekProvider, LocalDemoProvider, ProviderRouter
 from .submission import SubmissionRepository, SubmissionService
-from .learner_profile import LearnerProfileService
+from .learner_profile import LearnerProfileReadPort, LearnerProfileService
+from .progress import ActiveConfigurationPort, LearnerProgressPort, ProgressService
 from .revision import RevisionService
 from .configuration import settings_from_configuration
 from app.calibration import DiagnosticCalibrationService
@@ -58,16 +59,30 @@ def build_analyzer(settings: Settings) -> AnalyzerCoordinator:
 
 
 def build_submission_service(
-    settings: Settings, repository: SubmissionRepository
+    settings: Settings,
+    repository: SubmissionRepository,
+    *,
+    learner_repository: LearnerProgressPort | LearnerProfileReadPort | None = None,
+    configuration_repository: ActiveConfigurationPort | None = None,
 ) -> SubmissionService:
+    learner_dependency = learner_repository if learner_repository is not None else repository
+    configuration_dependency = (
+        configuration_repository if configuration_repository is not None else repository
+    )
     active_configuration = None
-    if hasattr(repository, "get_active_configuration"):
-        try:
-            active_configuration = repository.get_active_configuration()
-            settings = settings_from_configuration(settings, active_configuration)
-        except (LookupError, RuntimeError):
-            pass
-    profile_service = LearnerProfileService(repository)
+    try:
+        active_configuration = configuration_dependency.get_active_configuration()
+        settings = settings_from_configuration(settings, active_configuration)
+    except (LookupError, RuntimeError):
+        pass
+    progress_service = ProgressService(
+        learner_repository=learner_dependency,
+        configuration_repository=configuration_dependency,
+    )
+    profile_service = LearnerProfileService(
+        repository=learner_dependency,
+        progress_service=progress_service,
+    )
     return SubmissionService(
         repository=repository,
         analyzer=build_analyzer(settings),

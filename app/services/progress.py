@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import date, datetime, timezone
 from statistics import mean, pstdev
-from typing import Any
+from typing import Any, Protocol, runtime_checkable
 
 from app.config.longitudinal import (
     DESCRIPTIVE_METRICS, LENGTH_SENSITIVE_METRICS, METRIC_NAMES, RULES, LongitudinalRules,
@@ -11,24 +11,36 @@ from app.core import (
     ComparabilityResult, ExcludedSubmission, IssueTrajectory, LearnerProfileSnapshot,
     MetricObservation, MetricTrend, PriorityCandidate,
 )
-from app.repositories import LearnerProfileRepository
 from app.models import HistoryEvidence, HistoryResult
-from app.configuration import ConfigurationPayload
+from app.configuration import ConfigurationPayload, ConfigurationVersion
 
 from .baseline import BaselineService
 from .comparability import ComparabilityService
 from .learner_model import LearnerModelEngine
 
 
-class LongitudinalRepository(LearnerProfileRepository):
-    def list_longitudinal_records(self, student_id: str) -> list[dict[str, Any]]: ...
-    def save_learner_profile_snapshot(self, snapshot: LearnerProfileSnapshot) -> LearnerProfileSnapshot: ...
-    def list_learner_profile_snapshots(self, student_id: str) -> list[dict[str, Any]]: ...
+@runtime_checkable
+class LearnerProgressPort(Protocol):
+    def list_visualization_records(self, student_id: str) -> list[dict[str, Any]]: ...
+    def save_learner_profile_snapshot(
+        self, snapshot: LearnerProfileSnapshot,
+    ) -> LearnerProfileSnapshot: ...
+
+
+@runtime_checkable
+class ActiveConfigurationPort(Protocol):
+    def get_active_configuration(self) -> ConfigurationVersion: ...
 
 
 class ProgressService:
-    def __init__(self, repository: LongitudinalRepository, rules: LongitudinalRules = RULES) -> None:
-        self.repository = repository
+    def __init__(
+        self,
+        learner_repository: LearnerProgressPort,
+        configuration_repository: ActiveConfigurationPort,
+        rules: LongitudinalRules = RULES,
+    ) -> None:
+        self.learner_repository = learner_repository
+        self.configuration_repository = configuration_repository
         self.rules = rules
         self.comparability = ComparabilityService(rules)
         self.baselines = BaselineService(rules)
@@ -45,11 +57,7 @@ class ProgressService:
         representative_draft_strategy: str | None = None,
         persist: bool = True,
     ) -> LearnerProfileSnapshot:
-        raw_records = (
-            self.repository.list_visualization_records(student_id)
-            if hasattr(self.repository, "list_visualization_records")
-            else self.repository.list_longitudinal_records(student_id)
-        )
+        raw_records = self.learner_repository.list_visualization_records(student_id)
         raw_records = [record for record in raw_records if self._within(record, start_date, end_date)]
         if analysis_version:
             raw_records = [record for record in raw_records if record.get("analysis_version") == analysis_version]
@@ -57,13 +65,13 @@ class ProgressService:
             raise ValueError("No submissions are available for the requested longitudinal window.")
         configuration_version = self.rules.configuration_version
         configuration = ConfigurationPayload()
-        if hasattr(self.repository, "get_active_configuration"):
-            try:
-                active = self.repository.get_active_configuration()
+        try:
+            active = self.configuration_repository.get_active_configuration()
+            if active is not None:
                 configuration = active.payload
                 configuration_version = active.version
-            except (LookupError, RuntimeError):
-                pass
+        except (LookupError, RuntimeError):
+            pass
         if representative_draft_strategy is not None:
             configuration = configuration.model_copy(update={
                 "representative_draft_strategy": representative_draft_strategy
@@ -168,7 +176,7 @@ class ProgressService:
             representative_draft_strategy=configuration.representative_draft_strategy,
         )
         if persist:
-            return self.repository.save_learner_profile_snapshot(snapshot)
+            return self.learner_repository.save_learner_profile_snapshot(snapshot)
         return snapshot.model_copy(update={
             "current_learning_targets": [
                 item.model_copy(update={

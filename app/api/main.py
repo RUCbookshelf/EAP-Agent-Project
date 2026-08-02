@@ -42,6 +42,7 @@ from app.services import (
     ConfigurationService,
     DashboardService,
     LearnerProfileService,
+    ProgressService,
     ReanalysisService,
     RevisionService,
     SubmissionService,
@@ -146,11 +147,31 @@ def _run_startup(api: FastAPI) -> None:
     # Stage 4: Business services
     stage = lifecycle.start_stage("build_services")
     try:
-        sub_svc = build_submission_service(settings, repository)
-        lps = LearnerProfileService(repository)
+        learner_repository = repository._learner_repository
+        configuration_repository = repository._configuration_repository
+        sub_svc = build_submission_service(
+            settings,
+            repository,
+            learner_repository=learner_repository,
+            configuration_repository=configuration_repository,
+        )
+        lps = LearnerProfileService(
+            repository=learner_repository,
+            progress_service=ProgressService(
+                learner_repository=learner_repository,
+                configuration_repository=configuration_repository,
+            ),
+        )
         m_registry = default_metric_registry()
-        cfgs = ConfigurationService(repository._configuration_repository, analyzer.registry, m_registry)
-        dbs = DashboardService(repository, m_registry)
+        cfgs = ConfigurationService(configuration_repository, analyzer.registry, m_registry)
+        dbs = DashboardService(
+            learner_repository,
+            m_registry,
+            ProgressService(
+                learner_repository=learner_repository,
+                configuration_repository=configuration_repository,
+            ),
+        )
         reanalysis_svc = ReanalysisService(repository, analyzer)
         rvs = RevisionService(repository)
         clf = CalfService(repository)
@@ -309,13 +330,33 @@ def _build_full_app(
     if repository is None:
         repository = Database(settings.database_path)
     repository.initialize()
+    learner_repository = repository._learner_repository
+    configuration_repository = repository._configuration_repository
     if submission_service is None:
-        submission_service = build_submission_service(settings, repository)
-    learner_profiles = LearnerProfileService(repository)
+        submission_service = build_submission_service(
+            settings,
+            repository,
+            learner_repository=learner_repository,
+            configuration_repository=configuration_repository,
+        )
+    learner_profiles = LearnerProfileService(
+        repository=learner_repository,
+        progress_service=ProgressService(
+            learner_repository=learner_repository,
+            configuration_repository=configuration_repository,
+        ),
+    )
     analyzer = submission_service.analyzer if hasattr(submission_service, "analyzer") else build_analyzer(settings)
     metrics = default_metric_registry()
-    configurations = ConfigurationService(repository._configuration_repository, analyzer.registry, metrics)
-    dashboards = DashboardService(repository, metrics)
+    configurations = ConfigurationService(configuration_repository, analyzer.registry, metrics)
+    dashboards = DashboardService(
+        learner_repository,
+        metrics,
+        ProgressService(
+            learner_repository=learner_repository,
+            configuration_repository=configuration_repository,
+        ),
+    )
     reanalysis = ReanalysisService(repository, analyzer)
     revisions = RevisionService(repository)
     calf = CalfService(repository)

@@ -1,14 +1,15 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Protocol, runtime_checkable
 
 from app.analysis import MetricRegistry
 from app.services.comparability import ComparabilityService
 from app.services.progress import ProgressService
 
 
-class DashboardRepository:
-    def list_visualization_records(self, student_id: str): ...
+@runtime_checkable
+class DashboardReadPort(Protocol):
+    def list_visualization_records(self, student_id: str) -> list[dict[str, Any]]: ...
 
 
 class DashboardService:
@@ -16,11 +17,16 @@ class DashboardService:
 
     version = "progress-visualization-data-v0.6.0"
 
-    def __init__(self, repository: DashboardRepository, metrics: MetricRegistry) -> None:
+    def __init__(
+        self,
+        repository: DashboardReadPort,
+        metrics: MetricRegistry,
+        progress_service: ProgressService,
+    ) -> None:
         self.repository = repository
         self.metrics = metrics
         self.comparability = ComparabilityService()
-        self.progress = ProgressService(repository)
+        self.progress = progress_service
 
     def build(self, student_id: str, metric_id: str = "word_count") -> dict[str, Any]:
         definition = self.metrics.get(metric_id)

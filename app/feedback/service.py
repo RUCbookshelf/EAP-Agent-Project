@@ -9,6 +9,7 @@ from app.llm import DeepSeekProvider, FeedbackContext, LocalDemoProvider, Provid
 from app.models import EssaySubmission, PipelineResult
 from app.services.submission import SubmissionService
 from app.services.learner_profile import LearnerProfileService
+from app.services.progress import ProgressService
 from app.services.revision import RevisionService
 
 
@@ -34,12 +35,20 @@ class FeedbackPipeline:
             "diagnosis": settings.diagnosis_version, "prompt": settings.prompt_version,
             "feedback_schema": "structured-feedback-v0.7.1",
         })
+        progress_service = ProgressService(
+            learner_repository=self.database._learner_repository,
+            configuration_repository=self.database._configuration_repository,
+        )
+        learner_profile_service = LearnerProfileService(
+            repository=self.database._learner_repository,
+            progress_service=progress_service,
+        )
         self._service = SubmissionService(
             repository=self.database,
             analyzer=self.analyzer,
             diagnoser=self.diagnoser,
             router=self.router,
-            learner_profile_service=LearnerProfileService(self.database),
+            learner_profile_service=learner_profile_service,
             revision_service=RevisionService(self.database),
         )
 
