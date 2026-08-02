@@ -1,0 +1,1129 @@
+{
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/algorithms"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/configurations"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/configurations"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/configurations/{configuration_id}/activate"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/configurations/{configuration_id}/rollback"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/configurations/{configuration_id}/validate"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/metrics"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/reanalysis/preview"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/reanalysis/run"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/registries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/calf/analysis-units"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/calf/constructs"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/calf/metrics"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/calf/metrics/{metric_id}"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/exercises/{exercise_id}/attempts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/exercises/{exercise_id}/attempts"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/practice-targets"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/practice-targets/{practice_target_id}/exercises"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/practice-targets/{practice_target_id}/exercises"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/research/data-quality"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/research/dataset-split"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/research/export/history"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/research/export/preview"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/research/export/run"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/research/export/schema"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/research/export/{export_id}"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/research/export/{export_id}/manifest"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/research/reviews"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/research/reviews"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/revisions"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/revisions/{revision_group_id}"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/revisions/{revision_group_id}/comparison"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/revisions/{revision_group_id}/trajectory"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/students/{student_id}"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/students/{student_id}/calf-trajectories"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/students/{student_id}/dashboard"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/students/{student_id}/engagement-traces"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/students/{student_id}/history"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/students/{student_id}/journey"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/students/{student_id}/learner-model"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/students/{student_id}/learner-model/diagnostic-trajectories"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/students/{student_id}/learner-model/history-evidence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/students/{student_id}/learner-model/learning-targets"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/students/{student_id}/learner-model/metric-trajectories"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/students/{student_id}/learner-model/preview"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/students/{student_id}/learner-model/rebuild"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/students/{student_id}/learner-model/snapshots"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/students/{student_id}/learner-model/snapshots/{snapshot_id}"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/students/{student_id}/learner-model/task-clusters"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/students/{student_id}/practice-targets"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/students/{student_id}/profile"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/students/{student_id}/progress"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/students/{student_id}/revision-candidates"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/students/{student_id}/transfer-evidence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/submissions"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/submissions/{submission_id}"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/submissions/{submission_id}/analyses"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/submissions/{submission_id}/analyses"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/submissions/{submission_id}/analysis-units"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/submissions/{submission_id}/calf"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/submissions/{submission_id}/calf/reanalyze"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/submissions/{submission_id}/diagnostic-audit"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/submissions/{submission_id}/error-annotations"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/submissions/{submission_id}/error-annotations/import"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/submissions/{submission_id}/pii-candidates"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/submissions/{submission_id}/pii-review"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/submissions/{submission_id}/revision-analysis"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/submissions/{submission_id}/revision-candidates"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/submissions/{submission_id}/syntactic-units"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/system/health"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/system/live"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/system/ready"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/system/version"
+    },
+    {
+      "method": "GET",
+      "path": "/docs"
+    },
+    {
+      "method": "GET",
+      "path": "/docs/oauth2-redirect"
+    },
+    {
+      "method": "GET",
+      "path": "/openapi.json"
+    },
+    {
+      "method": "GET",
+      "path": "/redoc"
+    }
+  ],
+  "endpoint_count": 77,
+  "client_methods": [
+    {
+      "name": "activate_configuration",
+      "signature": "(configuration_id: 'str') -> 'dict[str, Any]'"
+    },
+    {
+      "name": "create_configuration",
+      "signature": "(payload: 'dict[str, Any]') -> 'dict[str, Any]'"
+    },
+    {
+      "name": "create_dataset_split",
+      "signature": "(payload: 'dict[str, Any]') -> 'dict[str, Any]'"
+    },
+    {
+      "name": "create_exercise",
+      "signature": "(practice_target_id: 'str', payload: 'dict[str, Any]') -> 'dict[str, Any]'"
+    },
+    {
+      "name": "create_human_review",
+      "signature": "(payload: 'dict[str, Any]') -> 'dict[str, Any]'"
+    },
+    {
+      "name": "create_practice_target",
+      "signature": "(payload: 'dict[str, Any]') -> 'dict[str, Any]'"
+    },
+    {
+      "name": "create_revision",
+      "signature": "(source_submission_id: 'int', target_submission_id: 'int') -> 'dict[str, Any]'"
+    },
+    {
+      "name": "get_analyses",
+      "signature": "(submission_id: 'int') -> 'dict[str, Any]'"
+    },
+    {
+      "name": "get_calf",
+      "signature": "(submission_id: 'int') -> 'dict[str, Any]'"
+    },
+    {
+      "name": "get_calf_constructs",
+      "signature": "() -> 'dict[str, Any]'"
+    },
+    {
+      "name": "get_calf_metrics",
+      "signature": "() -> 'dict[str, Any]'"
+    },
+    {
+      "name": "get_configurations",
+      "signature": "() -> 'dict[str, Any]'"
+    },
+    {
+      "name": "get_dashboard",
+      "signature": "(student_id: 'str', metric_id: 'str') -> 'dict[str, Any]'"
+    },
+    {
+      "name": "get_diagnostic_audit",
+      "signature": "(submission_id: 'int') -> 'dict[str, Any]'"
+    },
+    {
+      "name": "get_engagement_traces",
+      "signature": "(student_id: 'str') -> 'list[dict[str, Any]]'"
+    },
+    {
+      "name": "get_exercise_attempts",
+      "signature": "(exercise_id: 'str') -> 'list[dict[str, Any]]'"
+    },
+    {
+      "name": "get_exercise_instances",
+      "signature": "(practice_target_id: 'str') -> 'list[dict[str, Any]]'"
+    },
+    {
+      "name": "get_journey",
+      "signature": "(student_id: 'str') -> 'dict[str, Any]'"
+    },
+    {
+      "name": "get_learner_model",
+      "signature": "(student_id: 'str') -> 'dict[str, Any]'"
+    },
+    {
+      "name": "get_learner_model_snapshot",
+      "signature": "(student_id: 'str', snapshot_id: 'str') -> 'dict[str, Any]'"
+    },
+    {
+      "name": "get_learner_model_snapshots",
+      "signature": "(student_id: 'str') -> 'dict[str, Any]'"
+    },
+    {
+      "name": "get_pii_candidates",
+      "signature": "(submission_id: 'int') -> 'list[dict[str, Any]]'"
+    },
+    {
+      "name": "get_practice_targets",
+      "signature": "(student_id: 'str') -> 'list[dict[str, Any]]'"
+    },
+    {
+      "name": "get_registries",
+      "signature": "() -> 'dict[str, Any]'"
+    },
+    {
+      "name": "get_revision_analysis",
+      "signature": "(submission_id: 'int') -> 'dict[str, Any]'"
+    },
+    {
+      "name": "get_revision_candidates",
+      "signature": "(submission_id: 'int') -> 'dict[str, Any]'"
+    },
+    {
+      "name": "get_revision_comparison",
+      "signature": "(revision_group_id: 'str') -> 'dict[str, Any]'"
+    },
+    {
+      "name": "get_revision_group",
+      "signature": "(revision_group_id: 'str') -> 'dict[str, Any]'"
+    },
+    {
+      "name": "get_revision_trajectory",
+      "signature": "(revision_group_id: 'str') -> 'dict[str, Any]'"
+    },
+    {
+      "name": "get_student_revision_candidates",
+      "signature": "(student_id: 'str') -> 'dict[str, Any]'"
+    },
+    {
+      "name": "get_submission",
+      "signature": "(submission_id: 'int') -> 'dict[str, Any]'"
+    },
+    {
+      "name": "get_transfer_evidence",
+      "signature": "(student_id: 'str') -> 'list[dict[str, Any]]'"
+    },
+    {
+      "name": "health",
+      "signature": "() -> 'dict[str, Any]'"
+    },
+    {
+      "name": "lifecycle_state",
+      "signature": "() -> 'str'"
+    },
+    {
+      "name": "list_human_reviews",
+      "signature": "(target_type: 'str | None' = None, target_id: 'str | None' = None) -> 'list[dict[str, Any]]'"
+    },
+    {
+      "name": "live",
+      "signature": "() -> 'dict[str, Any]'"
+    },
+    {
+      "name": "preview_learner_model",
+      "signature": "(student_id: 'str', strategy: 'str') -> 'dict[str, Any]'"
+    },
+    {
+      "name": "preview_reanalysis",
+      "signature": "(payload: 'dict[str, Any]') -> 'dict[str, Any]'"
+    },
+    {
+      "name": "ready",
+      "signature": "() -> 'dict[str, Any]'"
+    },
+    {
+      "name": "reanalyze",
+      "signature": "(submission_id: 'int') -> 'dict[str, Any]'"
+    },
+    {
+      "name": "rebuild_learner_model",
+      "signature": "(student_id: 'str', strategy: 'str') -> 'dict[str, Any]'"
+    },
+    {
+      "name": "research_data_quality",
+      "signature": "() -> 'dict[str, Any]'"
+    },
+    {
+      "name": "research_export_history",
+      "signature": "() -> 'list[dict[str, Any]]'"
+    },
+    {
+      "name": "research_export_manifest",
+      "signature": "(export_id: 'str') -> 'dict[str, Any]'"
+    },
+    {
+      "name": "research_export_preview",
+      "signature": "(payload: 'dict[str, Any]') -> 'dict[str, Any]'"
+    },
+    {
+      "name": "research_export_run",
+      "signature": "(payload: 'dict[str, Any]') -> 'dict[str, Any]'"
+    },
+    {
+      "name": "research_export_schema",
+      "signature": "() -> 'dict[str, Any]'"
+    },
+    {
+      "name": "rollback_configuration",
+      "signature": "(configuration_id: 'str', reason: 'str') -> 'dict[str, Any]'"
+    },
+    {
+      "name": "run_reanalysis",
+      "signature": "(payload: 'dict[str, Any]') -> 'dict[str, Any]'"
+    },
+    {
+      "name": "submit",
+      "signature": "(submission: 'dict[str, Any]') -> 'dict[str, Any]'"
+    },
+    {
+      "name": "submit_exercise_attempt",
+      "signature": "(exercise_id: 'str', payload: 'dict[str, Any]') -> 'dict[str, Any]'"
+    },
+    {
+      "name": "validate_configuration",
+      "signature": "(configuration_id: 'str') -> 'dict[str, Any]'"
+    }
+  ],
+  "client_method_count": 52,
+  "client_endpoint_map": {
+    "live": [
+      {
+        "method": "GET",
+        "path": "/api/v1/system/live"
+      }
+    ],
+    "ready": [
+      {
+        "method": "GET",
+        "path": "/api/v1/system/ready"
+      }
+    ],
+    "health": [
+      {
+        "method": "GET",
+        "path": "/api/v1/system/health"
+      }
+    ],
+    "submit": [
+      {
+        "method": "POST",
+        "path": "/api/v1/submissions"
+      }
+    ],
+    "get_submission": [
+      {
+        "method": "GET",
+        "path": "/api/v1/submissions/{}"
+      }
+    ],
+    "get_analyses": [
+      {
+        "method": "GET",
+        "path": "/api/v1/submissions/{}/analyses"
+      }
+    ],
+    "get_diagnostic_audit": [
+      {
+        "method": "GET",
+        "path": "/api/v1/submissions/{}/diagnostic-audit"
+      }
+    ],
+    "reanalyze": [
+      {
+        "method": "POST",
+        "path": "/api/v1/submissions/{}/analyses"
+      }
+    ],
+    "get_calf": [
+      {
+        "method": "GET",
+        "path": "/api/v1/submissions/{}/calf"
+      }
+    ],
+    "get_calf_constructs": [
+      {
+        "method": "GET",
+        "path": "/api/v1/calf/constructs"
+      }
+    ],
+    "get_calf_metrics": [
+      {
+        "method": "GET",
+        "path": "/api/v1/calf/metrics"
+      }
+    ],
+    "get_student_revision_candidates": [
+      {
+        "method": "GET",
+        "path": "/api/v1/students/{}/revision-candidates"
+      }
+    ],
+    "create_revision": [
+      {
+        "method": "POST",
+        "path": "/api/v1/revisions"
+      }
+    ],
+    "get_revision_group": [
+      {
+        "method": "GET",
+        "path": "/api/v1/revisions/{}"
+      }
+    ],
+    "get_revision_comparison": [
+      {
+        "method": "GET",
+        "path": "/api/v1/revisions/{}/comparison"
+      }
+    ],
+    "get_revision_trajectory": [
+      {
+        "method": "GET",
+        "path": "/api/v1/revisions/{}/trajectory"
+      }
+    ],
+    "get_revision_candidates": [
+      {
+        "method": "GET",
+        "path": "/api/v1/submissions/{}/revision-candidates"
+      }
+    ],
+    "get_revision_analysis": [
+      {
+        "method": "GET",
+        "path": "/api/v1/submissions/{}/revision-analysis"
+      }
+    ],
+    "get_dashboard": [
+      {
+        "method": "GET",
+        "path": "/api/v1/students/{}/dashboard"
+      }
+    ],
+    "get_learner_model": [
+      {
+        "method": "GET",
+        "path": "/api/v1/students/{}/learner-model"
+      }
+    ],
+    "get_learner_model_snapshots": [
+      {
+        "method": "GET",
+        "path": "/api/v1/students/{}/learner-model/snapshots"
+      }
+    ],
+    "get_learner_model_snapshot": [
+      {
+        "method": "GET",
+        "path": "/api/v1/students/{}/learner-model/snapshots/{}"
+      }
+    ],
+    "preview_learner_model": [
+      {
+        "method": "POST",
+        "path": "/api/v1/students/{}/learner-model/preview"
+      }
+    ],
+    "rebuild_learner_model": [
+      {
+        "method": "POST",
+        "path": "/api/v1/students/{}/learner-model/rebuild"
+      }
+    ],
+    "get_configurations": [
+      {
+        "method": "GET",
+        "path": "/api/v1/admin/configurations"
+      }
+    ],
+    "create_configuration": [
+      {
+        "method": "POST",
+        "path": "/api/v1/admin/configurations"
+      }
+    ],
+    "validate_configuration": [
+      {
+        "method": "POST",
+        "path": "/api/v1/admin/configurations/{}/validate"
+      }
+    ],
+    "activate_configuration": [
+      {
+        "method": "POST",
+        "path": "/api/v1/admin/configurations/{}/activate"
+      }
+    ],
+    "rollback_configuration": [
+      {
+        "method": "POST",
+        "path": "/api/v1/admin/configurations/{}/rollback"
+      }
+    ],
+    "get_registries": [
+      {
+        "method": "GET",
+        "path": "/api/v1/admin/registries"
+      }
+    ],
+    "preview_reanalysis": [
+      {
+        "method": "POST",
+        "path": "/api/v1/admin/reanalysis/preview"
+      }
+    ],
+    "run_reanalysis": [
+      {
+        "method": "POST",
+        "path": "/api/v1/admin/reanalysis/run"
+      }
+    ],
+    "research_export_preview": [
+      {
+        "method": "POST",
+        "path": "/api/v1/research/export/preview"
+      }
+    ],
+    "research_export_run": [
+      {
+        "method": "POST",
+        "path": "/api/v1/research/export/run"
+      }
+    ],
+    "research_export_schema": [
+      {
+        "method": "GET",
+        "path": "/api/v1/research/export/schema"
+      }
+    ],
+    "research_data_quality": [
+      {
+        "method": "GET",
+        "path": "/api/v1/research/data-quality"
+      }
+    ],
+    "get_pii_candidates": [
+      {
+        "method": "GET",
+        "path": "/api/v1/submissions/{}/pii-candidates"
+      }
+    ],
+    "create_human_review": [
+      {
+        "method": "POST",
+        "path": "/api/v1/research/reviews"
+      }
+    ],
+    "research_export_history": [
+      {
+        "method": "GET",
+        "path": "/api/v1/research/export/history"
+      }
+    ],
+    "research_export_manifest": [
+      {
+        "method": "GET",
+        "path": "/api/v1/research/export/{}/manifest"
+      }
+    ],
+    "create_dataset_split": [
+      {
+        "method": "POST",
+        "path": "/api/v1/research/dataset-split"
+      }
+    ],
+    "get_practice_targets": [
+      {
+        "method": "GET",
+        "path": "/api/v1/students/{}/practice-targets"
+      }
+    ],
+    "create_practice_target": [
+      {
+        "method": "POST",
+        "path": "/api/v1/practice-targets"
+      }
+    ],
+    "create_exercise": [
+      {
+        "method": "POST",
+        "path": "/api/v1/practice-targets/{}/exercises"
+      }
+    ],
+    "submit_exercise_attempt": [
+      {
+        "method": "POST",
+        "path": "/api/v1/exercises/{}/attempts"
+      }
+    ],
+    "get_engagement_traces": [
+      {
+        "method": "GET",
+        "path": "/api/v1/students/{}/engagement-traces"
+      }
+    ],
+    "get_transfer_evidence": [
+      {
+        "method": "GET",
+        "path": "/api/v1/students/{}/transfer-evidence"
+      }
+    ],
+    "get_journey": [
+      {
+        "method": "GET",
+        "path": "/api/v1/students/{}/journey"
+      }
+    ],
+    "get_exercise_instances": [
+      {
+        "method": "GET",
+        "path": "/api/v1/practice-targets/{}/exercises"
+      }
+    ],
+    "get_exercise_attempts": [
+      {
+        "method": "GET",
+        "path": "/api/v1/exercises/{}/attempts"
+      }
+    ]
+  },
+  "feature_calls": {
+    "student_home": {
+      "module": "A:\\EAP Agent Project\\writing-feedback-mvp\\app\\ui\\features\\student\\home.py",
+      "calls": [
+        "get_journey",
+        "get_practice_targets"
+      ],
+      "write_calls": []
+    },
+    "student_writing": {
+      "module": "A:\\EAP Agent Project\\writing-feedback-mvp\\app\\ui\\features\\student\\writing.py",
+      "calls": [
+        "get_student_revision_candidates",
+        "submit"
+      ],
+      "write_calls": [
+        "submit"
+      ]
+    },
+    "student_feedback": {
+      "module": "A:\\EAP Agent Project\\writing-feedback-mvp\\app\\ui\\features\\student\\feedback.py",
+      "calls": [
+        "get_student_revision_candidates"
+      ],
+      "write_calls": []
+    },
+    "student_practice": {
+      "module": "A:\\EAP Agent Project\\writing-feedback-mvp\\app\\ui\\features\\student\\practice.py",
+      "calls": [
+        "create_exercise",
+        "get_exercise_attempts",
+        "get_exercise_instances",
+        "get_practice_targets",
+        "submit_exercise_attempt"
+      ],
+      "write_calls": [
+        "create_exercise",
+        "submit_exercise_attempt"
+      ]
+    },
+    "student_revision": {
+      "module": "A:\\EAP Agent Project\\writing-feedback-mvp\\app\\ui\\features\\student\\revision.py",
+      "calls": [
+        "get_practice_targets",
+        "get_student_revision_candidates",
+        "get_submission",
+        "submit"
+      ],
+      "write_calls": [
+        "submit"
+      ]
+    },
+    "student_journey": {
+      "module": "A:\\EAP Agent Project\\writing-feedback-mvp\\app\\ui\\features\\student\\journey.py",
+      "calls": [
+        "get_journey"
+      ],
+      "write_calls": []
+    },
+    "research_overview": {
+      "module": "A:\\EAP Agent Project\\writing-feedback-mvp\\app\\ui\\features\\research\\overview.py",
+      "calls": [
+        "health",
+        "research_data_quality"
+      ],
+      "write_calls": []
+    },
+    "research_evidence": {
+      "module": "A:\\EAP Agent Project\\writing-feedback-mvp\\app\\ui\\features\\research\\evidence.py",
+      "calls": [
+        "get_analyses",
+        "get_diagnostic_audit",
+        "get_submission"
+      ],
+      "write_calls": []
+    },
+    "research_calf": {
+      "module": "A:\\EAP Agent Project\\writing-feedback-mvp\\app\\ui\\features\\research\\calf.py",
+      "calls": [],
+      "write_calls": []
+    },
+    "research_learning_process": {
+      "module": "A:\\EAP Agent Project\\writing-feedback-mvp\\app\\ui\\features\\research\\learning_process.py",
+      "calls": [
+        "get_engagement_traces",
+        "get_journey",
+        "get_practice_targets",
+        "get_transfer_evidence"
+      ],
+      "write_calls": []
+    },
+    "research_data": {
+      "module": "A:\\EAP Agent Project\\writing-feedback-mvp\\app\\ui\\features\\research\\data.py",
+      "calls": [
+        "create_dataset_split",
+        "create_human_review",
+        "get_pii_candidates",
+        "research_data_quality",
+        "research_export_history",
+        "research_export_preview",
+        "research_export_run"
+      ],
+      "write_calls": [
+        "create_dataset_split",
+        "create_human_review",
+        "research_export_run"
+      ]
+    },
+    "research_system_audit": {
+      "module": "A:\\EAP Agent Project\\writing-feedback-mvp\\app\\ui\\features\\research\\system_audit.py",
+      "calls": [
+        "get_configurations",
+        "get_diagnostic_audit",
+        "preview_learner_model",
+        "rebuild_learner_model"
+      ],
+      "write_calls": [
+        "rebuild_learner_model"
+      ]
+    }
+  },
+  "write_capable_methods": [
+    "activate_configuration",
+    "create_configuration",
+    "create_dataset_split",
+    "create_exercise",
+    "create_human_review",
+    "create_practice_target",
+    "create_revision",
+    "preview_reanalysis",
+    "reanalyze",
+    "rebuild_learner_model",
+    "research_export_run",
+    "rollback_configuration",
+    "run_reanalysis",
+    "submit",
+    "submit_exercise_attempt",
+    "validate_configuration"
+  ],
+  "facade_private_imports_in_tests": [
+    {
+      "test": "A:\\EAP Agent Project\\writing-feedback-mvp\\tests\\test_student_experience_v094b.py",
+      "module": "app.ui.pages.student_pages",
+      "name": "_home_action_contract",
+      "line": 96
+    },
+    {
+      "test": "A:\\EAP Agent Project\\writing-feedback-mvp\\tests\\test_student_experience_v094b.py",
+      "module": "app.ui.pages.student_pages",
+      "name": "_writing_saved_for_learner",
+      "line": 102
+    },
+    {
+      "test": "A:\\EAP Agent Project\\writing-feedback-mvp\\tests\\test_student_experience_v094b.py",
+      "module": "app.ui.pages.student_pages",
+      "name": "_feedback_category_label",
+      "line": 125
+    },
+    {
+      "test": "A:\\EAP Agent Project\\writing-feedback-mvp\\tests\\test_student_experience_v094b.py",
+      "module": "app.ui.pages.student_pages",
+      "name": "_practice_instruction",
+      "line": 169
+    },
+    {
+      "test": "A:\\EAP Agent Project\\writing-feedback-mvp\\tests\\test_student_experience_v094b.py",
+      "module": "app.ui.pages.student_pages",
+      "name": "_practice_constraint_label",
+      "line": 180
+    },
+    {
+      "test": "A:\\EAP Agent Project\\writing-feedback-mvp\\tests\\test_student_experience_v094b.py",
+      "module": "app.ui.pages.student_pages",
+      "name": "_practice_status_label",
+      "line": 180
+    },
+    {
+      "test": "A:\\EAP Agent Project\\writing-feedback-mvp\\tests\\test_student_experience_v094b.py",
+      "module": "app.ui.pages.student_pages",
+      "name": "_revision_saved_for_source",
+      "line": 200
+    },
+    {
+      "test": "A:\\EAP Agent Project\\writing-feedback-mvp\\tests\\test_student_experience_v094b.py",
+      "module": "app.ui.pages.student_pages",
+      "name": "_revision_observation_text",
+      "line": 213
+    },
+    {
+      "test": "A:\\EAP Agent Project\\writing-feedback-mvp\\tests\\test_student_experience_v094b.py",
+      "module": "app.ui.pages.student_pages",
+      "name": "_revision_status_label",
+      "line": 213
+    },
+    {
+      "test": "A:\\EAP Agent Project\\writing-feedback-mvp\\tests\\test_student_experience_v094b.py",
+      "module": "app.ui.pages.student_pages",
+      "name": "_journey_description_params",
+      "line": 248
+    },
+    {
+      "test": "A:\\EAP Agent Project\\writing-feedback-mvp\\tests\\test_student_experience_v094b.py",
+      "module": "app.ui.pages.student_pages",
+      "name": "_journey_evidence_label",
+      "line": 248
+    },
+    {
+      "test": "A:\\EAP Agent Project\\writing-feedback-mvp\\tests\\test_student_experience_v094b.py",
+      "module": "app.ui.pages.student_pages",
+      "name": "_journey_source_label",
+      "line": 248
+    },
+    {
+      "test": "A:\\EAP Agent Project\\writing-feedback-mvp\\tests\\test_student_experience_v094b.py",
+      "module": "app.ui.pages.student_pages",
+      "name": "_journey_action_contract",
+      "line": 272
+    },
+    {
+      "test": "A:\\EAP Agent Project\\writing-feedback-mvp\\tests\\test_v095c_feature_extraction.py",
+      "module": "app.ui.pages.student_pages",
+      "name": "_feedback_category_label",
+      "line": 54
+    },
+    {
+      "test": "A:\\EAP Agent Project\\writing-feedback-mvp\\tests\\test_v095c_feature_extraction.py",
+      "module": "app.ui.pages.student_pages",
+      "name": "_home_action_contract",
+      "line": 54
+    },
+    {
+      "test": "A:\\EAP Agent Project\\writing-feedback-mvp\\tests\\test_v095c_feature_extraction.py",
+      "module": "app.ui.pages.student_pages",
+      "name": "_journey_action_contract",
+      "line": 54
+    },
+    {
+      "test": "A:\\EAP Agent Project\\writing-feedback-mvp\\tests\\test_v095c_feature_extraction.py",
+      "module": "app.ui.pages.student_pages",
+      "name": "_journey_description_params",
+      "line": 54
+    },
+    {
+      "test": "A:\\EAP Agent Project\\writing-feedback-mvp\\tests\\test_v095c_feature_extraction.py",
+      "module": "app.ui.pages.student_pages",
+      "name": "_journey_evidence_label",
+      "line": 54
+    },
+    {
+      "test": "A:\\EAP Agent Project\\writing-feedback-mvp\\tests\\test_v095c_feature_extraction.py",
+      "module": "app.ui.pages.student_pages",
+      "name": "_journey_source_label",
+      "line": 54
+    },
+    {
+      "test": "A:\\EAP Agent Project\\writing-feedback-mvp\\tests\\test_v095c_feature_extraction.py",
+      "module": "app.ui.pages.student_pages",
+      "name": "_practice_constraint_label",
+      "line": 54
+    },
+    {
+      "test": "A:\\EAP Agent Project\\writing-feedback-mvp\\tests\\test_v095c_feature_extraction.py",
+      "module": "app.ui.pages.student_pages",
+      "name": "_practice_instruction",
+      "line": 54
+    },
+    {
+      "test": "A:\\EAP Agent Project\\writing-feedback-mvp\\tests\\test_v095c_feature_extraction.py",
+      "module": "app.ui.pages.student_pages",
+      "name": "_practice_status_label",
+      "line": 54
+    },
+    {
+      "test": "A:\\EAP Agent Project\\writing-feedback-mvp\\tests\\test_v095c_feature_extraction.py",
+      "module": "app.ui.pages.student_pages",
+      "name": "_revision_observation_text",
+      "line": 54
+    },
+    {
+      "test": "A:\\EAP Agent Project\\writing-feedback-mvp\\tests\\test_v095c_feature_extraction.py",
+      "module": "app.ui.pages.student_pages",
+      "name": "_revision_saved_for_source",
+      "line": 54
+    },
+    {
+      "test": "A:\\EAP Agent Project\\writing-feedback-mvp\\tests\\test_v095c_feature_extraction.py",
+      "module": "app.ui.pages.student_pages",
+      "name": "_revision_status_label",
+      "line": 54
+    },
+    {
+      "test": "A:\\EAP Agent Project\\writing-feedback-mvp\\tests\\test_v095c_feature_extraction.py",
+      "module": "app.ui.pages.student_pages",
+      "name": "_short_timestamp",
+      "line": 54
+    },
+    {
+      "test": "A:\\EAP Agent Project\\writing-feedback-mvp\\tests\\test_v095c_feature_extraction.py",
+      "module": "app.ui.pages.student_pages",
+      "name": "_writing_saved_for_learner",
+      "line": 54
+    }
+  ]
+}

@@ -93,13 +93,13 @@ def test_focus_token_meets_three_to_one_on_adjacent_surfaces():
     ],
 )
 def test_home_action_contract(state, expected):
-    from app.ui.pages.student_pages import _home_action_contract
+    from app.ui.features.student.home import _home_action_contract
 
     assert _home_action_contract(state) == expected
 
 
 def test_writing_lock_is_scoped_to_the_submitting_learner():
-    from app.ui.pages.student_pages import _writing_saved_for_learner
+    from app.ui.features.student.session import _writing_saved_for_learner
 
     saved = {"submission_id": 12, "ui_submission": {"student_id": "S02"}}
     assert _writing_saved_for_learner(saved, " S02 ")
@@ -122,7 +122,7 @@ def test_feedback_priority_card_omits_empty_quote(captured_markdown):
 
 
 def test_feedback_category_uses_approved_localized_label():
-    from app.ui.pages.student_pages import _feedback_category_label
+    from app.ui.features.student.formatting import _feedback_category_label
 
     assert _feedback_category_label("lexical_repetition", "en") == "Reduce lexical repetition"
     assert _feedback_category_label("lexical_repetition", "zh_CN") == "减少词汇重复"
@@ -166,7 +166,7 @@ def test_student_section_headers_pass_locale_by_keyword():
 
 
 def test_practice_uses_authoritative_localized_instruction():
-    from app.ui.pages.student_pages import _practice_instruction
+    from app.ui.features.student.practice import _practice_instruction
 
     exercise = {
         "exercise_type": "guided_sentence_rewrite",
@@ -177,7 +177,7 @@ def test_practice_uses_authoritative_localized_instruction():
 
 
 def test_practice_localizes_frozen_constraints_and_statuses():
-    from app.ui.pages.student_pages import _practice_constraint_label, _practice_status_label
+    from app.ui.features.student.practice import _practice_constraint_label, _practice_status_label
 
     assert _practice_constraint_label("Retain original meaning.", "zh_CN") == "保留原意。"
     assert _practice_status_label("completion", "completed", "en") == "Response completed"
@@ -197,7 +197,7 @@ def test_practice_page_auto_reads_and_has_no_manual_load_action():
 
 
 def test_revision_lock_is_learner_and_source_scoped():
-    from app.ui.pages.student_pages import _revision_saved_for_source
+    from app.ui.features.student.revision import _revision_saved_for_source
 
     saved = {
         "submission_id": 22,
@@ -210,7 +210,7 @@ def test_revision_lock_is_learner_and_source_scoped():
 
 
 def test_revision_observation_uses_localized_conservative_text():
-    from app.ui.pages.student_pages import _revision_observation_text, _revision_status_label
+    from app.ui.features.student.revision import _revision_observation_text, _revision_status_label
 
     observed = "The prior signal is not currently observed in the linked draft."
     assert _revision_observation_text(observed, "zh_CN") == "当前关联草稿中未观察到先前信号。"
@@ -245,7 +245,7 @@ def test_timeline_event_separates_time_evidence_source_and_limit(captured_markdo
 
 
 def test_journey_mappings_localize_evidence_source_and_target():
-    from app.ui.pages.student_pages import (
+    from app.ui.features.student.journey import (
         _journey_description_params, _journey_evidence_label, _journey_source_label,
     )
 
@@ -269,7 +269,7 @@ def test_journey_page_auto_reads_without_manual_load():
 
 
 def test_journey_action_contract_is_state_specific():
-    from app.ui.pages.student_pages import _journey_action_contract
+    from app.ui.features.student.journey import _journey_action_contract
 
     assert _journey_action_contract("target_no_attempt")[1:] == (
         "practice", "student_home_go_practice"

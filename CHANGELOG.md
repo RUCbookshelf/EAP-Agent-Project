@@ -1,3 +1,29 @@
+## v0.9.5-D (2026-08-02)
+
+### Changed
+- Defined twelve narrow feature-owned `typing.Protocol` API Ports under
+  `app/ui/ports/` (six Student, six Research); each feature is annotated only
+  with its own Port, and `WritingFeedbackApiClient` remains the sole concrete
+  HTTP client (structural conformance, unchanged method bodies).
+- Created a machine-readable Endpoint-Client-Feature ownership contract
+  (`tests/contracts/api_surface_contract.py`) classifying all 77 endpoint
+  contracts and all 52 public client methods, with documented reasons for
+  intentionally unwrapped endpoints and retained-but-unused methods.
+- Hardened Practice and Research UI-safe contracts with backend-parity tests.
+- Migrated repository tests from facade private-helper imports to
+  feature-owner modules; compatibility exports retained and deprecated in
+  comments; a static test prohibits new facade private-helper imports.
+
+### Verified
+- Port contracts: 12/12 Ports, feature calls == Port methods, no unused Port
+  methods, no cross-feature method gains, signatures compatible with the
+  concrete client.
+- Endpoint contract: 24 wrapped+used, 27 wrapped+unused, 26 intentionally
+  unwrapped (22 business + 4 docs); client methods: 24 used, 27 retained, 1
+  obsolete candidate (`lifecycle_state`).
+- 19 new contract/parity tests; focused frontend set 220+3; 4/4 representative
+  browser renders; 465+8 core tests; exact `cmd /c "run.bat --verify"` PASS;
+  migration 12; `config-v0.9.0`; locale parity 520/520; dev DB unchanged.
 ## v0.9.5-C (2026-08-02)
 
 ### Changed

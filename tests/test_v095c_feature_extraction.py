@@ -1,7 +1,10 @@
-"""v0.9.5-C feature-extraction compatibility tests.
+"""v0.9.5-C feature-extraction compatibility tests (updated for v0.9.5-D).
 
 Pins the old import paths, render-function signatures, page order, facade
 thinness, and locale-key integrity after the frontend feature extraction.
+v0.9.5-D narrowed renderer API-client annotations to feature Ports; the
+signature expectations below reflect that intentional type-only change
+(parameter names, order, defaults, and call behavior are unchanged).
 """
 
 from __future__ import annotations
@@ -51,6 +54,12 @@ def test_old_import_style_still_works():
 
 
 def test_private_helpers_remain_importable_from_facade():
+    """Explicit compatibility-resolution test (v0.9.5-D allow-list).
+
+    Private-helper imports through the legacy facades are deprecated for new
+    code; this test is the documented exception that pins their continued
+    availability.
+    """
     from app.ui.pages.student_pages import (  # noqa: F401
         _feedback_category_label,
         _home_action_contract,
@@ -70,24 +79,25 @@ def test_private_helpers_remain_importable_from_facade():
 
 
 # Signatures are stringified because the modules use `from __future__ import
-# annotations`; these strings are exactly what inspect.signature reports.
+# annotations`; v0.9.5-D narrowed the api_client annotation to feature Ports
+# (type-only change; parameter names/order/defaults unchanged).
 STUDENT_RENDERERS = {
-    "render_student_home": "(api_client: 'WritingFeedbackApiClient', lang: 'str') -> 'None'",
-    "render_writing_page": "(api_client: 'WritingFeedbackApiClient', lang: 'str') -> 'None'",
-    "render_feedback_content": "(result: 'dict', api_client: 'WritingFeedbackApiClient', lang: 'str') -> 'None'",
-    "render_feedback_page": "(api_client: 'WritingFeedbackApiClient', lang: 'str') -> 'None'",
-    "render_revision_page": "(api_client: 'WritingFeedbackApiClient', lang: 'str') -> 'None'",
-    "render_practice_page": "(api_client: 'WritingFeedbackApiClient', lang: 'str') -> 'None'",
-    "render_learning_journey_page": "(api_client: 'WritingFeedbackApiClient', lang: 'str') -> 'None'",
+    "render_student_home": "(api_client: 'StudentHomeApiPort', lang: 'str') -> 'None'",
+    "render_writing_page": "(api_client: 'StudentWritingApiPort', lang: 'str') -> 'None'",
+    "render_feedback_content": "(result: 'dict', api_client: 'StudentFeedbackApiPort', lang: 'str') -> 'None'",
+    "render_feedback_page": "(api_client: 'StudentFeedbackApiPort', lang: 'str') -> 'None'",
+    "render_revision_page": "(api_client: 'StudentRevisionApiPort', lang: 'str') -> 'None'",
+    "render_practice_page": "(api_client: 'StudentPracticeApiPort', lang: 'str') -> 'None'",
+    "render_learning_journey_page": "(api_client: 'StudentJourneyApiPort', lang: 'str') -> 'None'",
 }
 
 RESEARCH_RENDERERS = {
-    "render_research_overview": "(api_client: 'WritingFeedbackApiClient', lang: 'str') -> 'None'",
-    "render_research_evidence": "(api_client: 'WritingFeedbackApiClient', lang: 'str') -> 'None'",
-    "render_research_calf": "(api_client: 'WritingFeedbackApiClient', lang: 'str') -> 'None'",
-    "render_research_learning_process": "(api_client: 'WritingFeedbackApiClient', lang: 'str') -> 'None'",
-    "render_research_data": "(api_client: 'WritingFeedbackApiClient', lang: 'str') -> 'None'",
-    "render_research_system_audit": "(api_client: 'WritingFeedbackApiClient', lang: 'str') -> 'None'",
+    "render_research_overview": "(api_client: 'ResearchOverviewApiPort', lang: 'str') -> 'None'",
+    "render_research_evidence": "(api_client: 'ResearchEvidenceApiPort', lang: 'str') -> 'None'",
+    "render_research_calf": "(api_client: 'ResearchCalfApiPort', lang: 'str') -> 'None'",
+    "render_research_learning_process": "(api_client: 'ResearchLearningProcessApiPort', lang: 'str') -> 'None'",
+    "render_research_data": "(api_client: 'ResearchDataApiPort', lang: 'str') -> 'None'",
+    "render_research_system_audit": "(api_client: 'ResearchSystemAuditApiPort', lang: 'str') -> 'None'",
 }
 
 

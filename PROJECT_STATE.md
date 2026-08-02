@@ -1,5 +1,20 @@
 # Project State
 
+## Current v0.9.5-D State
+
+- Status: completed and verified; frontend contract hardening scope closed.
+- Twelve feature-owned API Ports under `app/ui/ports/`; each feature depends
+  only on its Port; `WritingFeedbackApiClient` is the sole concrete client.
+- Endpoint-Client-Feature contract under `tests/contracts/`: 77 endpoints and
+  52 client methods fully classified (24 A / 27 B / 26 C endpoints; 24 A /
+  27 B / 1 C methods) with documented reasons; AST enforcement tests.
+- Practice and Research UI contracts parity-tested against backend schemas.
+- Tests migrated off facade private-helper imports; compatibility exports
+  retained and marked deprecated (comments only).
+- Verification: 19 new tests; focused frontend 220+3; 4/4 renders; 465+8 core;
+  `run.bat --verify` PASS; migration 12; `config-v0.9.0`; locale 520/520.
+- No API/backend/schema/service/repository/database/UI-content/visual change.
+  v0.9.5-E remains not started.
 ## Current v0.9.5-C State
 
 - Status: completed and verified; frontend feature extraction scope closed.

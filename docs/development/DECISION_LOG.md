@@ -1,5 +1,23 @@
 
 
+## 2026-08-02 - v0.9.5-D Frontend API Ports and API-surface contract
+
+- **Decision**: Define twelve narrow feature-owned `typing.Protocol` API Ports
+  under `app/ui/ports/`, annotate each feature with its own Port, keep
+  `WritingFeedbackApiClient` as the sole concrete HTTP client, and version a
+  machine-readable Endpoint-Client-Feature classification contract.
+- **Rationale**: Features received the broad 52-method concrete client; no
+  enforced boundary existed between a feature and the methods it may call,
+  and the unwrapped/unused API surface was undocumented.
+- **Alternatives**: Splitting the client into per-feature HTTP clients or
+  introducing a DI framework would add runtime layers; a broad base Port
+  would recreate the monolith.
+- **Impact**: Type-only annotation changes (parameter names/order/defaults
+  unchanged); 19 new contract/parity tests; 77 endpoints and 52 client
+  methods fully classified with reasons; Practice and Research UI contracts
+  pinned against backend schemas; facade private-helper imports migrated in
+  tests; 465+8 core; exact `run.bat --verify` PASS; no runtime/visual/backend
+  change.
 ## 2026-08-02 - v0.9.5-C Frontend feature extraction and UI boundary restoration
 
 - **Decision**: Move every visible Student and Research page into its own

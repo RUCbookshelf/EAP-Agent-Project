@@ -1,6 +1,21 @@
 # Current Task State
 
 **Date:** 2026-08-02
+**Current task:** v0.9.5-D Frontend Contract Hardening and API Client Port Isolation
+**Status:** completed and verified (see `RUN_VERIFICATION_V0.9.5_D.md`)
+
+- Twelve narrow feature API Ports (`app/ui/ports/`); features typed only
+  against their Port; `WritingFeedbackApiClient` remains the sole concrete
+  client with unchanged method bodies.
+- Approved endpoint/client/feature contract (77 endpoints, 52 client methods)
+  under `tests/contracts/` with AST enforcement; unwrapped/unused surfaces
+  documented.
+- Practice and Research UI contracts parity-tested; facade private-helper
+  test imports migrated; compatibility exports retained and deprecated.
+- 19 new tests; focused frontend 220+3; 4/4 renders; 465+8 core;
+  `run.bat --verify` PASS; dev DB unchanged; locale 520/520.
+- Next: v0.9.5-E (not started) under a separate goal.
+**Date:** 2026-08-02
 **Current task:** v0.9.5-C Frontend Feature Extraction and UI Boundary Restoration
 **Status:** completed and verified (see `RUN_VERIFICATION_V0.9.5_C.md`)
 
