@@ -1,6 +1,6 @@
 # v0.9.5-H2B Verification - Rename Active Configuration Repository Contract
 
-**Status:** IMPLEMENTATION COMPLETE; focused and launcher verification PASS; **full-core regression NOT CLEAN - final verification closure PENDING**
+**Status:** **PASS - v0.9.5-H2B is COMPLETE and fully verified** (full-core closure run: exit code 0)
 
 ## Scope
 
@@ -11,8 +11,9 @@ Naming-only rename of the active local configuration contract `ConfigurationRepo
 | Item | Value |
 | --- | --- |
 | Baseline HEAD | `8a01f5b` (H2A full verification closure) |
-| Implementation commit | `refactor(v0.9.5-h2b): rename configuration contract` |
-| Verification commit | `test(v0.9.5-h2b): verify configuration contract rename` |
+| Implementation commit | `refactor(v0.9.5-h2b): rename configuration contract` (`bd13ccc`) |
+| Verification commit | `test(v0.9.5-h2b): verify configuration contract rename` (`e687e84`) |
+| Closure commit | `test(v0.9.5-h2b): close full-core verification` |
 
 ## Rename rationale
 
@@ -46,13 +47,15 @@ Naming-only rename of the active local configuration contract `ConfigurationRepo
 
 - Application construction (both `create_app` paths) and `ConfigurationService` construction with the renamed contract: PASS (covered by the focused suite and the H2B runtime test: list, active, create, validate, activate, audit).
 
-### Full non-live core regression - NOT CLEAN (2 runs)
+### Full non-live core regression - CLOSED (clean run established by v0.9.5-H2B-V1)
 
 - Command (each run): `.venv\Scripts\python.exe verification/v0.9.5-h2a/isolated_pytest_runner.py --full` (`pytest -q -p no:cacheprovider --ignore=tests/live tests`), fresh unique isolated database per run.
 - Run 1: **exit code 1**; `1 failed, 668 passed, 8 skipped, 2 warnings in 311.23s`; failure `tests/test_v095b_router_contract.py::test_live_and_ready_unchanged` (lifecycle_state `ready` instead of `starting`).
 - Run 2 (fresh, after classification): **exit code 1**; `1 failed, 668 passed, 8 skipped, 2 warnings in 309.09s`; failure `tests/test_v095b_router_contract.py::test_business_route_gated_until_ready_while_health_available` (identical traceback to the pre-H2B H2A full-core failure).
 - Both failures are instances of the documented pre-existing lifecycle-race flake in `test_v095b_router_contract.py` (prod-mode TestClient + background startup thread mutating the global lifecycle singleton inside large sets; recorded in `RUN_VERIFICATION_V0.9.5_G.md`). Both pass in isolation (`test_live_and_ready_unchanged` 2.12s; the gated-route test 0.52s in the H2A stage). The failures are unrelated to the H2B rename (identical failure occurred before H2B changed anything).
-- Per the v0.9.5-H2A-V1 full-core closure standard, an isolated pass is not a substitute for a clean exit-0 full-core run, and no automatic reruns are performed after failures. A clean full-core run has not been established for H2B; final verification closure is PENDING.
+- Per the v0.9.5-H2A-V1 full-core closure standard, an isolated pass is not a substitute for a clean exit-0 full-core run, and no automatic reruns are performed after failures.
+- **v0.9.5-H2B-V1 closure run (exactly one fresh run, new isolated database `C:\Users\16073\AppData\Local\Temp\v095h2a-ivur6qa4\h2a.db`): exit code 0; `669 passed, 8 skipped, 2 warnings in 312.17s`; zero failed, zero errors, complete non-live core collection, no test excluded, retried, reordered, or weakened; neither lifecycle-race test failed in this run.
+- Conclusion: full-core regression **PASS**; `v0.9.5-H2B is COMPLETE and fully verified.` The `test_v095b_router_contract` lifecycle-race flake remains documented as a pre-existing intermittent issue (recorded in `RUN_VERIFICATION_V0.9.5_G.md`); it failed once in each of the two prior H2B runs and passed in isolation and in the closure run. Not repaired (out of scope).
 
 ### Launcher verification (separate fresh isolated database)
 
@@ -65,11 +68,11 @@ Database public methods 2; API 77; frontend client 52; locale 520/520; migration
 ## Database isolation
 
 - Focused run DB: `C:\Users\16073\AppData\Local\Temp\v095h2a-vis6ddbc\h2a.db` (fresh temp dir, resolved and asserted).
-- Full-core run 1 DB: `C:\Users\16073\AppData\Local\Temp\v095h2a-0zbqb234\h2a.db`; run 2 DB: `C:\Users\16073\AppData\Local\Temp\v095h2a-soqpph9l\h2a.db` (both fresh).
+- Full-core run 1 DB: `C:\Users\16073\AppData\Local\Temp\v095h2a-0zbqb234\h2a.db`; run 2 DB: `C:\Users\16073\AppData\Local\Temp\v095h2a-soqpph9l\h2a.db`; closure run DB: `C:\Users\16073\AppData\Local\Temp\v095h2a-ivur6qa4\h2a.db` (all fresh).
 - Launcher DB: `C:\Users\16073\AppData\Local\Temp\v095h2b-verify-6c387098\verify.db` (fresh).
 - Development database before/after every write-capable run: SHA-256 `340E0F3739FEFFD3DEF87BB6E711CB6F90A8478E7E18D833C715EDCFAB03AFF4`, size 8,298,496 bytes, mtime `2026-08-02T11:02:25.887+08:00` - unchanged; never opened.
 - Ports 8000/8501 free before and after; all temporary databases and processes removed; `research_exports/` untouched; no live provider.
 
 ## Conclusion
 
-`v0.9.5-H2B is incomplete; verification pending.` (Implementation, focused contract suite, and launcher verification are complete and passing; the full-core clean exit-0 run is not yet established because the documented pre-existing `test_v095b_router_contract` lifecycle-race flake failed once in each of the two full-core attempts, with both instances passing in isolation. H2B did not cause these failures.)
+`v0.9.5-H2B is COMPLETE and fully verified.` (Implementation, focused contract suite, launcher verification, and the v0.9.5-H2B-V1 closure full-core run - exit code 0, 669 passed, 8 skipped, 2 warnings - all pass.)

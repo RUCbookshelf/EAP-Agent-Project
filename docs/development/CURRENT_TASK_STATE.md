@@ -2,7 +2,7 @@
 
 **Date:** 2026-08-03
 **Current task:** v0.9.5-H2B Rename Active Configuration Repository Contract
-**Status:** implementation complete; focused + launcher verification PASS; full-core NOT CLEAN (final closure pending, see `RUN_VERIFICATION_V0.9.5_H2B.md`)
+**Status:** completed and fully verified (full-core closure exit 0; see `RUN_VERIFICATION_V0.9.5_H2B.md`)
 
 - Renamed the active local configuration contract `ConfigurationRepository`
   to `ConfigurationPort` (consumer-owned boundary; naming-only). Seven
@@ -14,13 +14,12 @@
   `feedback-prompt-v0.7.1`, health/docs/Streamlit 200); Database public
   methods 2, API 77, client 52, locale 520/520; development database
   unchanged.
-- Full non-live core: two attempts, each exit 1 with exactly one failure -
-  both documented pre-existing `test_v095b_router_contract` lifecycle-race
-  flake instances (pass in isolation; identical failure predates H2B). A
-  clean exit-0 full-core run is not yet established; verification closure
-  pending.
-- Next: full-core closure follow-up, then H2C-H2E each under separate
-  authorization.
+- Full non-live core: closure run (v0.9.5-H2B-V1) exit code 0, **669
+  passed, 8 skipped, 2 warnings** (the two prior attempts each failed once
+  on the documented pre-existing `test_v095b_router_contract`
+  lifecycle-race flake, which passes in isolation and in the closure run);
+  full-core regression PASS.
+- Next: H2C-H2E each under separate authorization.
 
 
 **Status:** completed and fully verified (full-core closure exit 0; see `RUN_VERIFICATION_V0.9.5_H2A.md`)

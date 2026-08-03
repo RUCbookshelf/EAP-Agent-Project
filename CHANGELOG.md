@@ -22,10 +22,12 @@
   `config-v0.9.0`, prompt `feedback-prompt-v0.7.1`, health/docs/Streamlit
   200); Database public methods 2; API 77; client 52; locale 520/520;
   development database unchanged (SHA-256/size/mtime).
-- Full non-live core: NOT CLEAN - two attempts each exited 1 with exactly one
-  failure, both instances of the documented pre-existing
-  `test_v095b_router_contract` lifecycle-race flake (pass in isolation;
-  identical failure occurred before H2B). Final full-core closure pending.
+- Full non-live core: **PASS** - v0.9.5-H2B-V1 closure run exit code 0,
+  669 passed, 8 skipped, 2 warnings (the two prior attempts each exited 1
+  with exactly one failure, both instances of the documented pre-existing
+  `test_v095b_router_contract` lifecycle-race flake, which passes in
+  isolation and in the closure run). v0.9.5-H2B is COMPLETE and fully
+  verified.
 
 
 

@@ -1,0 +1,30 @@
+{
+  "stage": "v0.9.5-H2B-V1",
+  "baseline_head": "e687e84",
+  "verification_head": "e687e84",
+  "classification": "B",
+  "fresh_run_executed": true,
+  "command": ".venv\\Scripts\\python.exe verification/v0.9.5-h2a/isolated_pytest_runner.py --full (pytest -q -p no:cacheprovider --ignore=tests/live tests)",
+  "exit_code": 0,
+  "passed": 669,
+  "failed": 0,
+  "errors": 0,
+  "skipped": 8,
+  "warnings": 2,
+  "known_lifecycle_failure": false,
+  "database_path_kind": "fresh unique temporary directory (C:\\Users\\16073\\AppData\\Local\\Temp\\v095h2a-ivur6qa4\\h2a.db)",
+  "temporary_database_removed": true,
+  "development_database_before": {
+    "sha256": "340E0F3739FEFFD3DEF87BB6E711CB6F90A8478E7E18D833C715EDCFAB03AFF4",
+    "size": 8298496,
+    "mtime": "2026-08-02T11:02:25.887+08:00"
+  },
+  "development_database_after": {
+    "sha256": "340E0F3739FEFFD3DEF87BB6E711CB6F90A8478E7E18D833C715EDCFAB03AFF4",
+    "size": 8298496,
+    "mtime": "2026-08-02T11:02:25.887+08:00"
+  },
+  "ports_free": true,
+  "exports_untouched": true,
+  "final_status": "v0.9.5-H2B is COMPLETE and fully verified."
+}

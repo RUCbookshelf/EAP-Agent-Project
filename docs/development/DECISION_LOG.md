@@ -20,13 +20,13 @@
   locale 520/520, `config-v0.9.0`, prompt `feedback-prompt-v0.7.1`, Database
   public methods 2 unchanged; all 42 active persistence contracts valid.
 - **Evidence**: focused 203 passed, 2 warnings; exact `run.bat --verify`
-  PASS; full non-live core ran twice, each exit 1 with exactly one failure -
-  both documented pre-existing `test_v095b_router_contract` lifecycle-race
-  flake instances passing in isolation (identical failure predates H2B);
+  PASS; full non-live core closure run (v0.9.5-H2B-V1) **exit code 0, 669
+  passed, 8 skipped, 2 warnings** (the two prior attempts each failed once
+  on the documented pre-existing `test_v095b_router_contract`
+  lifecycle-race flake, which passes in isolation and in the closure run);
   development database unchanged (SHA-256/size/mtime).
-- **Boundary**: full-core verification closure pending; H2C
-  (`_AnalysisRunReader` canonicalization), H2D, H2E each require separate
-  authorization; none begun.
+- **Boundary**: H2C (`_AnalysisRunReader` canonicalization), H2D, H2E each
+  require separate authorization; none begun.
 
 
 
