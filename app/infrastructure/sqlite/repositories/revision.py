@@ -4,6 +4,7 @@ import json
 from typing import Any, Protocol
 
 from app.infrastructure.sqlite import SQLiteConnectionManager
+from app.infrastructure.sqlite.repositories.contracts import AnalysisRunReader
 from app.revision import RevisionGroup, RevisionSnapshot
 
 
@@ -11,14 +12,10 @@ class _SubmissionBundleReader(Protocol):
     def get_submission_bundle(self, essay_id: int) -> dict[str, Any] | None: ...
 
 
-class _AnalysisRunReader(Protocol):
-    def get_latest_analysis_run(self, essay_id: int) -> dict[str, Any] | None: ...
-
-
 class SQLiteRevisionRepository:
     def __init__(self, connection_manager: SQLiteConnectionManager,
                  submission_reader: _SubmissionBundleReader,
-                 analysis_reader: _AnalysisRunReader):
+                 analysis_reader: AnalysisRunReader):
         self._connection_manager = connection_manager
         self._submission_reader = submission_reader
         self._analysis_reader = analysis_reader

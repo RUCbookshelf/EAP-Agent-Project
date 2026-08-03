@@ -7,10 +7,7 @@ from typing import Any, Protocol
 from app.calibration import DiagnosticCalibrationResult
 from app.core import LearnerProfileSnapshot
 from app.infrastructure.sqlite import SQLiteConnectionManager
-
-
-class _AnalysisRunReader(Protocol):
-    def get_latest_analysis_run(self, essay_id: int) -> dict[str, Any] | None: ...
+from app.infrastructure.sqlite.repositories.contracts import AnalysisRunReader
 
 
 class _DiagnosticCalibrationReader(Protocol):
@@ -19,7 +16,7 @@ class _DiagnosticCalibrationReader(Protocol):
 
 class SQLiteLearnerRepository:
     def __init__(self, connection_manager: SQLiteConnectionManager,
-                 analysis_reader: _AnalysisRunReader,
+                 analysis_reader: AnalysisRunReader,
                  calf_reader: _DiagnosticCalibrationReader,
                  revision_stage_normalizer: Callable[[str], str]):
         self._connection_manager = connection_manager

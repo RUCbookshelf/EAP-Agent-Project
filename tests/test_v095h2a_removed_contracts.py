@@ -4,6 +4,12 @@ Proves the 13 H1-approved unused persistence contracts are gone (definitions,
 re-exports, imports) and that every H1-active contract (A/B/C), its method
 set, and its intended concrete Repository satisfier are unchanged. Source
 structure is read via AST; no unstable line numbers are hard-coded.
+
+v0.9.5-H2C canonicalized the exact duplicate infrastructure reader pair
+(_AnalysisRunReader in revision.py and learner.py) into one shared
+AnalysisRunReader contract in app/infrastructure/sqlite/repositories/
+contracts.py; the two historical inventory entries map to that single
+canonical definition while the H1 inventory remains historical evidence.
 """
 
 from __future__ import annotations
@@ -19,6 +25,12 @@ H1_INVENTORY = ROOT / "verification" / "v0.9.5-h1" / "protocol_inventory.json"
 # H1-inventory name -> post-H2B active name (v0.9.5-H2B renamed the active
 # local configuration contract; the H1 inventory remains historical evidence).
 H1_RENAMED = {"ConfigurationRepository": "ConfigurationPort"}
+
+# H1-inventory duplicate reader pair -> post-H2C canonical definition
+# (v0.9.5-H2C; the H1 inventory remains historical evidence).
+H2C_REPLACED = {
+    "_AnalysisRunReader": ("AnalysisRunReader", "app.infrastructure.sqlite.repositories.contracts"),
+}
 
 REMOVED_NAMES = {
     "StudentRepository",
@@ -91,6 +103,15 @@ def _import_class(module: str, name: str):
     return getattr(mod, name)
 
 
+def _current_contract_target(contract: dict) -> tuple[str, str]:
+    """Map an H1-inventory contract entry to its current definition target."""
+    name = H1_RENAMED.get(contract["contract_name"], contract["contract_name"])
+    module = contract["module"]
+    if contract["contract_name"] in H2C_REPLACED:
+        name, module = H2C_REPLACED[contract["contract_name"]]
+    return name, module
+
+
 # ---------------------------------------------------------------------------
 # 1. Removed definitions and re-exports are absent
 # ---------------------------------------------------------------------------
@@ -161,8 +182,7 @@ def test_all_h1_active_contracts_remain_defined_with_exact_method_sets():
     active = _active_contracts(inv)
     assert len(active) == 42
     for contract in active:
-        name = H1_RENAMED.get(contract["contract_name"], contract["contract_name"])
-        module = contract["module"]
+        name, module = _current_contract_target(contract)
         expected = {m["name"] for m in contract["declared_methods"]}
         if contract["contract_kind"] == "alias":
             continue
@@ -181,7 +201,8 @@ def test_intended_concrete_repositories_satisfy_active_contracts():
     for contract in _active_contracts(inv):
         port_class = None
         if contract["contract_kind"] == "protocol":
-            port_class = _import_class(contract["module"], contract["contract_name"])
+            name, module = _current_contract_target(contract)
+            port_class = _import_class(module, name)
         expected = {m["name"] for m in contract["declared_methods"]}
         assert contract["concrete_structural_implementations"], contract["contract_name"]
         for impl_ref in contract["concrete_structural_implementations"]:

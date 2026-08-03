@@ -1,0 +1,259 @@
+{
+  "stage": "v0.9.5-H2C",
+  "mode": "after",
+  "generated_at": null,
+  "duplicate_definitions": 0,
+  "canonical_definitions": 1,
+  "active_consumers": 2,
+  "definitions": [
+    {
+      "name": "AnalysisRunReader",
+      "module": "app.infrastructure.sqlite.repositories.contracts",
+      "rel": "app/infrastructure/sqlite/repositories/contracts.py",
+      "line": 6,
+      "base_classes": [
+        "Protocol"
+      ],
+      "decorators": [],
+      "runtime_checkable": false,
+      "declared_methods": [
+        {
+          "name": "get_latest_analysis_run",
+          "signature": "get_latest_analysis_run(self, essay_id: int) -> dict[str, Any] | None",
+          "params": [
+            {
+              "name": "self",
+              "kind": "positional",
+              "annotation": null,
+              "has_default": false
+            },
+            {
+              "name": "essay_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "dict[str, Any] | None",
+          "line": 7
+        }
+      ],
+      "method_order": [
+        "get_latest_analysis_run"
+      ]
+    }
+  ],
+  "consumers": [
+    {
+      "module": "app.infrastructure.sqlite.repositories.revision",
+      "rel": "app/infrastructure/sqlite/repositories/revision.py",
+      "consumer_class": "SQLiteRevisionRepository",
+      "consumer_class_line": 15,
+      "constructor_line": 16,
+      "constructor_parameters": [
+        {
+          "name": "self",
+          "annotation": null,
+          "has_default": false
+        },
+        {
+          "name": "connection_manager",
+          "annotation": "SQLiteConnectionManager",
+          "has_default": false
+        },
+        {
+          "name": "submission_reader",
+          "annotation": "_SubmissionBundleReader",
+          "has_default": false
+        },
+        {
+          "name": "analysis_reader",
+          "annotation": "AnalysisRunReader",
+          "has_default": false
+        }
+      ],
+      "reader_parameter": {
+        "name": "analysis_reader",
+        "annotation": "AnalysisRunReader",
+        "has_default": false
+      },
+      "stored_attribute": "_analysis_reader",
+      "imports": [
+        {
+          "module": "__future__",
+          "name": "annotations",
+          "line": 1
+        },
+        {
+          "module": "typing",
+          "name": "Any",
+          "line": 4
+        },
+        {
+          "module": "typing",
+          "name": "Protocol",
+          "line": 4
+        },
+        {
+          "module": "app.infrastructure.sqlite",
+          "name": "SQLiteConnectionManager",
+          "line": 6
+        },
+        {
+          "module": "app.infrastructure.sqlite.repositories.contracts",
+          "name": "AnalysisRunReader",
+          "line": 7
+        },
+        {
+          "module": "app.revision",
+          "name": "RevisionGroup",
+          "line": 8
+        },
+        {
+          "module": "app.revision",
+          "name": "RevisionSnapshot",
+          "line": 8
+        }
+      ]
+    },
+    {
+      "module": "app.infrastructure.sqlite.repositories.learner",
+      "rel": "app/infrastructure/sqlite/repositories/learner.py",
+      "consumer_class": "SQLiteLearnerRepository",
+      "consumer_class_line": 17,
+      "constructor_line": 18,
+      "constructor_parameters": [
+        {
+          "name": "self",
+          "annotation": null,
+          "has_default": false
+        },
+        {
+          "name": "connection_manager",
+          "annotation": "SQLiteConnectionManager",
+          "has_default": false
+        },
+        {
+          "name": "analysis_reader",
+          "annotation": "AnalysisRunReader",
+          "has_default": false
+        },
+        {
+          "name": "calf_reader",
+          "annotation": "_DiagnosticCalibrationReader",
+          "has_default": false
+        },
+        {
+          "name": "revision_stage_normalizer",
+          "annotation": "Callable[[str], str]",
+          "has_default": false
+        }
+      ],
+      "reader_parameter": {
+        "name": "analysis_reader",
+        "annotation": "AnalysisRunReader",
+        "has_default": false
+      },
+      "stored_attribute": "_analysis_reader",
+      "imports": [
+        {
+          "module": "__future__",
+          "name": "annotations",
+          "line": 1
+        },
+        {
+          "module": "collections.abc",
+          "name": "Callable",
+          "line": 4
+        },
+        {
+          "module": "typing",
+          "name": "Any",
+          "line": 5
+        },
+        {
+          "module": "typing",
+          "name": "Protocol",
+          "line": 5
+        },
+        {
+          "module": "app.calibration",
+          "name": "DiagnosticCalibrationResult",
+          "line": 7
+        },
+        {
+          "module": "app.core",
+          "name": "LearnerProfileSnapshot",
+          "line": 8
+        },
+        {
+          "module": "app.infrastructure.sqlite",
+          "name": "SQLiteConnectionManager",
+          "line": 9
+        },
+        {
+          "module": "app.infrastructure.sqlite.repositories.contracts",
+          "name": "AnalysisRunReader",
+          "line": 10
+        }
+      ]
+    }
+  ],
+  "intended_concrete_implementation": {
+    "module": "app.infrastructure.sqlite.repositories.analysis",
+    "rel": "app/infrastructure/sqlite/repositories/analysis.py",
+    "class": "SQLiteAnalysisRepository",
+    "method": {
+      "name": "get_latest_analysis_run",
+      "signature": "get_latest_analysis_run(self, essay_id: int) -> dict[str, Any] | None",
+      "params": [
+        {
+          "name": "self",
+          "kind": "positional",
+          "annotation": null,
+          "has_default": false
+        },
+        {
+          "name": "essay_id",
+          "kind": "positional",
+          "annotation": "int",
+          "has_default": false
+        }
+      ],
+      "return_annotation": "dict[str, Any] | None",
+      "line": 112
+    }
+  },
+  "runtime_check_usage": [],
+  "references": [
+    {
+      "rel": "app/infrastructure/sqlite/repositories/contracts.py",
+      "line": 6,
+      "text": "class AnalysisRunReader(Protocol):"
+    },
+    {
+      "rel": "app/infrastructure/sqlite/repositories/learner.py",
+      "line": 10,
+      "text": "from app.infrastructure.sqlite.repositories.contracts import AnalysisRunReader"
+    },
+    {
+      "rel": "app/infrastructure/sqlite/repositories/learner.py",
+      "line": 19,
+      "text": "analysis_reader: AnalysisRunReader,"
+    },
+    {
+      "rel": "app/infrastructure/sqlite/repositories/revision.py",
+      "line": 7,
+      "text": "from app.infrastructure.sqlite.repositories.contracts import AnalysisRunReader"
+    },
+    {
+      "rel": "app/infrastructure/sqlite/repositories/revision.py",
+      "line": 18,
+      "text": "analysis_reader: AnalysisRunReader):"
+    }
+  ],
+  "notes": [
+    "After state: local _AnalysisRunReader definitions must be 0; canonical AnalysisRunReader definitions must be 1.",
+    "Consumers must import the canonical contract from app.infrastructure.sqlite.repositories.contracts."
+  ]
+}
