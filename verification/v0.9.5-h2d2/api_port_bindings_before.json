@@ -1,0 +1,824 @@
+{
+  "ambiguous_accessor_mappings": 0,
+  "ambiguous_port_mappings": 0,
+  "api_port_count": 10,
+  "bindings": [
+    {
+      "accessor_body_fingerprint": "d7eb5dc7bfccb629317abf4fa6169db93d100b0027abefcd80dadd1cba9f875a",
+      "accessor_line": 17,
+      "accessor_module": "app.api.deps",
+      "accessor_parameters": [
+        {
+          "annotation": "Request",
+          "name": "request"
+        }
+      ],
+      "app_state_assignment_sites": [
+        [
+          247,
+          "api.state.submission_bundle_reader = repository._submission_repository"
+        ],
+        [
+          461,
+          "api.state.submission_bundle_reader = repository._submission_repository"
+        ]
+      ],
+      "assigned_concrete_class": "SQLiteSubmissionRepository",
+      "assigned_concrete_object": "_submission_repository",
+      "assigned_object_owner": "Database facade-owned repository",
+      "current_production_reference_count": 0,
+      "current_return_annotation": null,
+      "current_test_reference_count": 3,
+      "cycle_risk": "none",
+      "declared_methods": [
+        {
+          "line": 21,
+          "name": "get_submission_bundle",
+          "signature": "get_submission_bundle(self, essay_id: int) -> dict[str, Any] | None"
+        }
+      ],
+      "definition_line": 18,
+      "import_direction": "api -> api (deps imports ports; ports imports domain only)",
+      "port_module": "app.api.ports",
+      "port_name": "SubmissionBundleReadPort",
+      "production_router_or_guard_consumers": [
+        {
+          "line": 7,
+          "router": "analysis.py",
+          "text": "from app.api.deps import get_analysis_runs_reader, get_reanalysis, get_submission_bundle_reader"
+        },
+        {
+          "line": 15,
+          "router": "analysis.py",
+          "text": "bundle_reader=Depends(get_submission_bundle_reader),"
+        },
+        {
+          "line": 7,
+          "router": "calf.py",
+          "text": "from app.api.deps import get_calf, get_calf_reader, get_reanalysis, get_submission_bundle_reader"
+        },
+        {
+          "line": 58,
+          "router": "calf.py",
+          "text": "bundle_reader=Depends(get_submission_bundle_reader),"
+        },
+        {
+          "line": 70,
+          "router": "calf.py",
+          "text": "bundle_reader=Depends(get_submission_bundle_reader),"
+        },
+        {
+          "line": 86,
+          "router": "calf.py",
+          "text": "bundle_reader=Depends(get_submission_bundle_reader),"
+        },
+        {
+          "line": 8,
+          "router": "submissions.py",
+          "text": "get_submission_bundle_reader,"
+        },
+        {
+          "line": 48,
+          "router": "submissions.py",
+          "text": "bundle_reader=Depends(get_submission_bundle_reader),"
+        },
+        {
+          "line": 62,
+          "router": "submissions.py",
+          "text": "bundle_reader=Depends(get_submission_bundle_reader),"
+        }
+      ],
+      "returned_app_state_attribute": "submission_bundle_reader",
+      "runtime_checkable_status": true,
+      "structural_details": [
+        {
+          "exists": true,
+          "method": "get_submission_bundle",
+          "parameter_parity": true
+        }
+      ],
+      "structural_satisfaction_result": "PASS",
+      "target_accessor": "get_submission_bundle_reader",
+      "target_return_annotation": "app.api.ports::SubmissionBundleReadPort"
+    },
+    {
+      "accessor_body_fingerprint": "a97d0b50f4893d594220b44043fe7aa5940f547fb25e1971fed27a599edf3b5a",
+      "accessor_line": 21,
+      "accessor_module": "app.api.deps",
+      "accessor_parameters": [
+        {
+          "annotation": "Request",
+          "name": "request"
+        }
+      ],
+      "app_state_assignment_sites": [
+        [
+          248,
+          "api.state.student_lookup = repository._learner_repository"
+        ],
+        [
+          462,
+          "api.state.student_lookup = repository._learner_repository"
+        ]
+      ],
+      "assigned_concrete_class": "SQLiteLearnerRepository",
+      "assigned_concrete_object": "_learner_repository",
+      "assigned_object_owner": "Database facade-owned repository",
+      "current_production_reference_count": 0,
+      "current_return_annotation": null,
+      "current_test_reference_count": 3,
+      "cycle_risk": "none",
+      "declared_methods": [
+        {
+          "line": 28,
+          "name": "get_student",
+          "signature": "get_student(self, student_id: str) -> dict[str, Any] | None"
+        }
+      ],
+      "definition_line": 25,
+      "import_direction": "api -> api (deps imports ports; ports imports domain only)",
+      "port_module": "app.api.ports",
+      "port_name": "StudentLookupPort",
+      "production_router_or_guard_consumers": [
+        {
+          "line": 10,
+          "router": "revisions.py",
+          "text": "get_student_lookup,"
+        },
+        {
+          "line": 30,
+          "router": "revisions.py",
+          "text": "student_lookup=Depends(get_student_lookup),"
+        },
+        {
+          "line": 14,
+          "router": "students.py",
+          "text": "get_student_lookup,"
+        },
+        {
+          "line": 35,
+          "router": "students.py",
+          "text": "def get_student(student_id: str, student_lookup=Depends(get_student_lookup)) -> StudentResponse:"
+        },
+        {
+          "line": 44,
+          "router": "students.py",
+          "text": "student_lookup=Depends(get_student_lookup),"
+        },
+        {
+          "line": 59,
+          "router": "students.py",
+          "text": "student_lookup=Depends(get_student_lookup),"
+        },
+        {
+          "line": 88,
+          "router": "students.py",
+          "text": "student_lookup=Depends(get_student_lookup),"
+        },
+        {
+          "line": 106,
+          "router": "students.py",
+          "text": "student_lookup=Depends(get_student_lookup),"
+        },
+        {
+          "line": 115,
+          "router": "students.py",
+          "text": "student_lookup=Depends(get_student_lookup),"
+        },
+        {
+          "line": 126,
+          "router": "students.py",
+          "text": "student_lookup=Depends(get_student_lookup),"
+        },
+        {
+          "line": 137,
+          "router": "students.py",
+          "text": "student_lookup=Depends(get_student_lookup),"
+        },
+        {
+          "line": 148,
+          "router": "students.py",
+          "text": "student_lookup=Depends(get_student_lookup),"
+        },
+        {
+          "line": 161,
+          "router": "students.py",
+          "text": "student_lookup=Depends(get_student_lookup),"
+        },
+        {
+          "line": 172,
+          "router": "students.py",
+          "text": "student_lookup=Depends(get_student_lookup),"
+        },
+        {
+          "line": 183,
+          "router": "students.py",
+          "text": "student_lookup=Depends(get_student_lookup),"
+        },
+        {
+          "line": 197,
+          "router": "students.py",
+          "text": "student_lookup=Depends(get_student_lookup),"
+        },
+        {
+          "line": 212,
+          "router": "students.py",
+          "text": "student_lookup=Depends(get_student_lookup),"
+        },
+        {
+          "line": 228,
+          "router": "students.py",
+          "text": "student_lookup=Depends(get_student_lookup),"
+        }
+      ],
+      "returned_app_state_attribute": "student_lookup",
+      "runtime_checkable_status": true,
+      "structural_details": [
+        {
+          "exists": true,
+          "method": "get_student",
+          "parameter_parity": true
+        }
+      ],
+      "structural_satisfaction_result": "PASS",
+      "target_accessor": "get_student_lookup",
+      "target_return_annotation": "app.api.ports::StudentLookupPort"
+    },
+    {
+      "accessor_body_fingerprint": "979fe86999a8d3e6edeebdb64970523e586c05a1f8c11b3851bac14d388f3513",
+      "accessor_line": 25,
+      "accessor_module": "app.api.deps",
+      "accessor_parameters": [
+        {
+          "annotation": "Request",
+          "name": "request"
+        }
+      ],
+      "app_state_assignment_sites": [
+        [
+          249,
+          "api.state.analysis_runs_reader = repository._analysis_repository"
+        ],
+        [
+          463,
+          "api.state.analysis_runs_reader = repository._analysis_repository"
+        ]
+      ],
+      "assigned_concrete_class": "SQLiteAnalysisRepository",
+      "assigned_concrete_object": "_analysis_repository",
+      "assigned_object_owner": "Database facade-owned repository",
+      "current_production_reference_count": 0,
+      "current_return_annotation": null,
+      "current_test_reference_count": 3,
+      "cycle_risk": "none",
+      "declared_methods": [
+        {
+          "line": 35,
+          "name": "list_analysis_runs",
+          "signature": "list_analysis_runs(self, essay_id: int) -> list[dict[str, Any]]"
+        }
+      ],
+      "definition_line": 32,
+      "import_direction": "api -> api (deps imports ports; ports imports domain only)",
+      "port_module": "app.api.ports",
+      "port_name": "AnalysisRunReadPort",
+      "production_router_or_guard_consumers": [
+        {
+          "line": 7,
+          "router": "analysis.py",
+          "text": "from app.api.deps import get_analysis_runs_reader, get_reanalysis, get_submission_bundle_reader"
+        },
+        {
+          "line": 16,
+          "router": "analysis.py",
+          "text": "runs_reader=Depends(get_analysis_runs_reader)) -> dict:"
+        }
+      ],
+      "returned_app_state_attribute": "analysis_runs_reader",
+      "runtime_checkable_status": true,
+      "structural_details": [
+        {
+          "exists": true,
+          "method": "list_analysis_runs",
+          "parameter_parity": true
+        }
+      ],
+      "structural_satisfaction_result": "PASS",
+      "target_accessor": "get_analysis_runs_reader",
+      "target_return_annotation": "app.api.ports::AnalysisRunReadPort"
+    },
+    {
+      "accessor_body_fingerprint": "e9b376569fe1e8bec5f51d20078c393fe6a743266860a364745bf3c6762442a2",
+      "accessor_line": 29,
+      "accessor_module": "app.api.deps",
+      "accessor_parameters": [
+        {
+          "annotation": "Request",
+          "name": "request"
+        }
+      ],
+      "app_state_assignment_sites": [
+        [
+          250,
+          "api.state.calf_reader = repository._calf_repository"
+        ],
+        [
+          464,
+          "api.state.calf_reader = repository._calf_repository"
+        ]
+      ],
+      "assigned_concrete_class": "SQLiteCalfRepository",
+      "assigned_concrete_object": "_calf_repository",
+      "assigned_object_owner": "Database facade-owned repository",
+      "current_production_reference_count": 0,
+      "current_return_annotation": null,
+      "current_test_reference_count": 3,
+      "cycle_risk": "none",
+      "declared_methods": [
+        {
+          "line": 42,
+          "name": "list_analysis_units",
+          "signature": "list_analysis_units(self, submission_id: int, analysis_run_id: str | None=None) -> list[dict[str, Any]]"
+        },
+        {
+          "line": 44,
+          "name": "list_error_annotations",
+          "signature": "list_error_annotations(self, submission_id: int) -> list[ErrorAnnotation]"
+        }
+      ],
+      "definition_line": 39,
+      "import_direction": "api -> api (deps imports ports; ports imports domain only)",
+      "port_module": "app.api.ports",
+      "port_name": "CalfReadPort",
+      "production_router_or_guard_consumers": [
+        {
+          "line": 7,
+          "router": "calf.py",
+          "text": "from app.api.deps import get_calf, get_calf_reader, get_reanalysis, get_submission_bundle_reader"
+        },
+        {
+          "line": 59,
+          "router": "calf.py",
+          "text": "calf_reader=Depends(get_calf_reader),"
+        },
+        {
+          "line": 71,
+          "router": "calf.py",
+          "text": "calf_reader=Depends(get_calf_reader),"
+        },
+        {
+          "line": 87,
+          "router": "calf.py",
+          "text": "calf_reader=Depends(get_calf_reader),"
+        }
+      ],
+      "returned_app_state_attribute": "calf_reader",
+      "runtime_checkable_status": true,
+      "structural_details": [
+        {
+          "exists": true,
+          "method": "list_analysis_units",
+          "parameter_parity": true
+        },
+        {
+          "exists": true,
+          "method": "list_error_annotations",
+          "parameter_parity": true
+        }
+      ],
+      "structural_satisfaction_result": "PASS",
+      "target_accessor": "get_calf_reader",
+      "target_return_annotation": "app.api.ports::CalfReadPort"
+    },
+    {
+      "accessor_body_fingerprint": "85c21588c85293dbd097d2a104d470cf16b4c654768f31526c008bd4397cce7a",
+      "accessor_line": 33,
+      "accessor_module": "app.api.deps",
+      "accessor_parameters": [
+        {
+          "annotation": "Request",
+          "name": "request"
+        }
+      ],
+      "app_state_assignment_sites": [
+        [
+          251,
+          "api.state.research_export_writer = repository._research_repository"
+        ],
+        [
+          465,
+          "api.state.research_export_writer = repository._research_repository"
+        ]
+      ],
+      "assigned_concrete_class": "SQLiteResearchRepository",
+      "assigned_concrete_object": "_research_repository",
+      "assigned_object_owner": "Database facade-owned repository",
+      "current_production_reference_count": 0,
+      "current_return_annotation": null,
+      "current_test_reference_count": 3,
+      "cycle_risk": "none",
+      "declared_methods": [
+        {
+          "line": 51,
+          "name": "save_export_job",
+          "signature": "save_export_job(self, job: dict) -> dict"
+        }
+      ],
+      "definition_line": 48,
+      "import_direction": "api -> api (deps imports ports; ports imports domain only)",
+      "port_module": "app.api.ports",
+      "port_name": "ResearchExportWritePort",
+      "production_router_or_guard_consumers": [
+        {
+          "line": 9,
+          "router": "research.py",
+          "text": "from app.api.deps import get_research, get_research_export_writer"
+        },
+        {
+          "line": 34,
+          "router": "research.py",
+          "text": "export_writer=Depends(get_research_export_writer),"
+        }
+      ],
+      "returned_app_state_attribute": "research_export_writer",
+      "runtime_checkable_status": true,
+      "structural_details": [
+        {
+          "exists": true,
+          "method": "save_export_job",
+          "parameter_parity": true
+        }
+      ],
+      "structural_satisfaction_result": "PASS",
+      "target_accessor": "get_research_export_writer",
+      "target_return_annotation": "app.api.ports::ResearchExportWritePort"
+    },
+    {
+      "accessor_body_fingerprint": "fac26a37cfcf0f1a007cf0ee5dd19c7c0ca6a21d64f51589f6a486899fc6bc3d",
+      "accessor_line": 37,
+      "accessor_module": "app.api.deps",
+      "accessor_parameters": [
+        {
+          "annotation": "Request",
+          "name": "request"
+        }
+      ],
+      "app_state_assignment_sites": [
+        [
+          252,
+          "api.state.student_submission_list = repository._submission_repository"
+        ],
+        [
+          466,
+          "api.state.student_submission_list = repository._submission_repository"
+        ]
+      ],
+      "assigned_concrete_class": "SQLiteSubmissionRepository",
+      "assigned_concrete_object": "_submission_repository",
+      "assigned_object_owner": "Database facade-owned repository",
+      "current_production_reference_count": 0,
+      "current_return_annotation": null,
+      "current_test_reference_count": 3,
+      "cycle_risk": "none",
+      "declared_methods": [
+        {
+          "line": 58,
+          "name": "list_student_submissions",
+          "signature": "list_student_submissions(self, student_id: str) -> list[dict[str, Any]]"
+        }
+      ],
+      "definition_line": 55,
+      "import_direction": "api -> api (deps imports ports; ports imports domain only)",
+      "port_module": "app.api.ports",
+      "port_name": "StudentSubmissionListPort",
+      "production_router_or_guard_consumers": [
+        {
+          "line": 11,
+          "router": "revisions.py",
+          "text": "get_student_submission_list,"
+        },
+        {
+          "line": 31,
+          "router": "revisions.py",
+          "text": "student_submission_list=Depends(get_student_submission_list),"
+        },
+        {
+          "line": 15,
+          "router": "students.py",
+          "text": "get_student_submission_list,"
+        },
+        {
+          "line": 45,
+          "router": "students.py",
+          "text": "student_submission_list=Depends(get_student_submission_list),"
+        }
+      ],
+      "returned_app_state_attribute": "student_submission_list",
+      "runtime_checkable_status": true,
+      "structural_details": [
+        {
+          "exists": true,
+          "method": "list_student_submissions",
+          "parameter_parity": true
+        }
+      ],
+      "structural_satisfaction_result": "PASS",
+      "target_accessor": "get_student_submission_list",
+      "target_return_annotation": "app.api.ports::StudentSubmissionListPort"
+    },
+    {
+      "accessor_body_fingerprint": "bd27101bae64bf90c963d82910cffc4af6033c967955d3bd9e6f0b43e289e962",
+      "accessor_line": 41,
+      "accessor_module": "app.api.deps",
+      "accessor_parameters": [
+        {
+          "annotation": "Request",
+          "name": "request"
+        }
+      ],
+      "app_state_assignment_sites": [
+        [
+          253,
+          "api.state.revision_group_lookup = repository._revision_repository"
+        ],
+        [
+          467,
+          "api.state.revision_group_lookup = repository._revision_repository"
+        ]
+      ],
+      "assigned_concrete_class": "SQLiteRevisionRepository",
+      "assigned_concrete_object": "_revision_repository",
+      "assigned_object_owner": "Database facade-owned repository",
+      "current_production_reference_count": 0,
+      "current_return_annotation": null,
+      "current_test_reference_count": 3,
+      "cycle_risk": "none",
+      "declared_methods": [
+        {
+          "line": 65,
+          "name": "get_revision_group_for_submission",
+          "signature": "get_revision_group_for_submission(self, submission_id: int) -> RevisionGroup | None"
+        }
+      ],
+      "definition_line": 62,
+      "import_direction": "api -> api (deps imports ports; ports imports domain only)",
+      "port_module": "app.api.ports",
+      "port_name": "RevisionGroupLookupPort",
+      "production_router_or_guard_consumers": [
+        {
+          "line": 8,
+          "router": "revisions.py",
+          "text": "get_revision_group_lookup,"
+        },
+        {
+          "line": 84,
+          "router": "revisions.py",
+          "text": "group_lookup=Depends(get_revision_group_lookup),"
+        }
+      ],
+      "returned_app_state_attribute": "revision_group_lookup",
+      "runtime_checkable_status": true,
+      "structural_details": [
+        {
+          "exists": true,
+          "method": "get_revision_group_for_submission",
+          "parameter_parity": true
+        }
+      ],
+      "structural_satisfaction_result": "PASS",
+      "target_accessor": "get_revision_group_lookup",
+      "target_return_annotation": "app.api.ports::RevisionGroupLookupPort"
+    },
+    {
+      "accessor_body_fingerprint": "76c83ee733b25e5632a2a04d0ec4fdf9727b45e169d65945437d033202e7d532",
+      "accessor_line": 45,
+      "accessor_module": "app.api.deps",
+      "accessor_parameters": [
+        {
+          "annotation": "Request",
+          "name": "request"
+        }
+      ],
+      "app_state_assignment_sites": [
+        [
+          254,
+          "api.state.student_learner_reader = repository._learner_repository"
+        ],
+        [
+          468,
+          "api.state.student_learner_reader = repository._learner_repository"
+        ]
+      ],
+      "assigned_concrete_class": "SQLiteLearnerRepository",
+      "assigned_concrete_object": "_learner_repository",
+      "assigned_object_owner": "Database facade-owned repository",
+      "current_production_reference_count": 0,
+      "current_return_annotation": null,
+      "current_test_reference_count": 3,
+      "cycle_risk": "none",
+      "declared_methods": [
+        {
+          "line": 72,
+          "name": "list_student_history",
+          "signature": "list_student_history(self, student_id: str) -> list[dict[str, Any]]"
+        },
+        {
+          "line": 74,
+          "name": "list_history_evidence",
+          "signature": "list_history_evidence(self, student_id: str) -> list[dict[str, Any]]"
+        },
+        {
+          "line": 76,
+          "name": "list_learner_profile_snapshots",
+          "signature": "list_learner_profile_snapshots(self, student_id: str) -> list[dict[str, Any]]"
+        }
+      ],
+      "definition_line": 69,
+      "import_direction": "api -> api (deps imports ports; ports imports domain only)",
+      "port_module": "app.api.ports",
+      "port_name": "StudentLearnerReadPort",
+      "production_router_or_guard_consumers": [
+        {
+          "line": 13,
+          "router": "students.py",
+          "text": "get_student_learner_reader,"
+        },
+        {
+          "line": 46,
+          "router": "students.py",
+          "text": "learner_reader=Depends(get_student_learner_reader),"
+        },
+        {
+          "line": 162,
+          "router": "students.py",
+          "text": "learner_reader=Depends(get_student_learner_reader),"
+        },
+        {
+          "line": 173,
+          "router": "students.py",
+          "text": "learner_reader=Depends(get_student_learner_reader),"
+        },
+        {
+          "line": 184,
+          "router": "students.py",
+          "text": "learner_reader=Depends(get_student_learner_reader),"
+        }
+      ],
+      "returned_app_state_attribute": "student_learner_reader",
+      "runtime_checkable_status": true,
+      "structural_details": [
+        {
+          "exists": true,
+          "method": "list_student_history",
+          "parameter_parity": true
+        },
+        {
+          "exists": true,
+          "method": "list_history_evidence",
+          "parameter_parity": true
+        },
+        {
+          "exists": true,
+          "method": "list_learner_profile_snapshots",
+          "parameter_parity": true
+        }
+      ],
+      "structural_satisfaction_result": "PASS",
+      "target_accessor": "get_student_learner_reader",
+      "target_return_annotation": "app.api.ports::StudentLearnerReadPort"
+    },
+    {
+      "accessor_body_fingerprint": "d59e768cfa239d6b458b405497ea06f1c56d49cca1447bfc921b28ce882f5620",
+      "accessor_line": 49,
+      "accessor_module": "app.api.deps",
+      "accessor_parameters": [
+        {
+          "annotation": "Request",
+          "name": "request"
+        }
+      ],
+      "app_state_assignment_sites": [
+        [
+          255,
+          "api.state.submission_calibration_reader = repository._calf_repository"
+        ],
+        [
+          469,
+          "api.state.submission_calibration_reader = repository._calf_repository"
+        ]
+      ],
+      "assigned_concrete_class": "SQLiteCalfRepository",
+      "assigned_concrete_object": "_calf_repository",
+      "assigned_object_owner": "Database facade-owned repository",
+      "current_production_reference_count": 0,
+      "current_return_annotation": null,
+      "current_test_reference_count": 3,
+      "cycle_risk": "none",
+      "declared_methods": [
+        {
+          "line": 83,
+          "name": "get_diagnostic_calibration",
+          "signature": "get_diagnostic_calibration(self, essay_id: int) -> DiagnosticCalibrationResult | None"
+        }
+      ],
+      "definition_line": 80,
+      "import_direction": "api -> api (deps imports ports; ports imports domain only)",
+      "port_module": "app.api.ports",
+      "port_name": "SubmissionCalibrationReadPort",
+      "production_router_or_guard_consumers": [
+        {
+          "line": 9,
+          "router": "submissions.py",
+          "text": "get_submission_calibration_reader,"
+        },
+        {
+          "line": 49,
+          "router": "submissions.py",
+          "text": "calibration_reader=Depends(get_submission_calibration_reader),"
+        }
+      ],
+      "returned_app_state_attribute": "submission_calibration_reader",
+      "runtime_checkable_status": true,
+      "structural_details": [
+        {
+          "exists": true,
+          "method": "get_diagnostic_calibration",
+          "parameter_parity": true
+        }
+      ],
+      "structural_satisfaction_result": "PASS",
+      "target_accessor": "get_submission_calibration_reader",
+      "target_return_annotation": "app.api.ports::SubmissionCalibrationReadPort"
+    },
+    {
+      "accessor_body_fingerprint": "c23ca7be06b6dd955a495ab46f41eabddcfc1ed94533920c31f0b34bb35a6a40",
+      "accessor_line": 53,
+      "accessor_module": "app.api.deps",
+      "accessor_parameters": [
+        {
+          "annotation": "Request",
+          "name": "request"
+        }
+      ],
+      "app_state_assignment_sites": [
+        [
+          256,
+          "api.state.system_migration_reader = repository._system_repository"
+        ],
+        [
+          470,
+          "api.state.system_migration_reader = repository._system_repository"
+        ]
+      ],
+      "assigned_concrete_class": "SQLiteSystemRepository",
+      "assigned_concrete_object": "_system_repository",
+      "assigned_object_owner": "Database facade-owned repository",
+      "current_production_reference_count": 0,
+      "current_return_annotation": null,
+      "current_test_reference_count": 3,
+      "cycle_risk": "none",
+      "declared_methods": [
+        {
+          "line": 90,
+          "name": "migration_version",
+          "signature": "migration_version(self) -> int"
+        }
+      ],
+      "definition_line": 87,
+      "import_direction": "api -> api (deps imports ports; ports imports domain only)",
+      "port_module": "app.api.ports",
+      "port_name": "SystemMigrationPort",
+      "production_router_or_guard_consumers": [
+        {
+          "line": 13,
+          "router": "system.py",
+          "text": "get_system_migration_reader,"
+        },
+        {
+          "line": 71,
+          "router": "system.py",
+          "text": "migration_reader=Depends(get_system_migration_reader),"
+        }
+      ],
+      "returned_app_state_attribute": "system_migration_reader",
+      "runtime_checkable_status": true,
+      "structural_details": [
+        {
+          "exists": true,
+          "method": "migration_version",
+          "parameter_parity": true
+        }
+      ],
+      "structural_satisfaction_result": "PASS",
+      "target_accessor": "get_system_migration_reader",
+      "target_return_annotation": "app.api.ports::SystemMigrationPort"
+    }
+  ],
+  "composition_changes_required": 0,
+  "eligible_accessor_count": 10,
+  "kind": "api_port_bindings_before",
+  "one_to_one_mappings": 10,
+  "router_changes_required": 0,
+  "stage": "v0.9.5-H2D2",
+  "union_annotations_required": 0
+}

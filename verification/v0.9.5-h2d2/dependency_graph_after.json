@@ -1,0 +1,1062 @@
+{
+  "depends_calls": [
+    {
+      "dependency_function": "get_configurations",
+      "line": 37,
+      "router": "admin.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_configurations",
+      "line": 49,
+      "router": "admin.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_configurations",
+      "line": 57,
+      "router": "admin.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_configurations",
+      "line": 71,
+      "router": "admin.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_configurations",
+      "line": 88,
+      "router": "admin.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_configurations",
+      "line": 101,
+      "router": "admin.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_configurations",
+      "line": 106,
+      "router": "admin.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_configurations",
+      "line": 111,
+      "router": "admin.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_admin_reanalysis",
+      "line": 118,
+      "router": "admin.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_admin_reanalysis",
+      "line": 131,
+      "router": "admin.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_submission_bundle_reader",
+      "line": 15,
+      "router": "analysis.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_analysis_runs_reader",
+      "line": 16,
+      "router": "analysis.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_reanalysis",
+      "line": 23,
+      "router": "analysis.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_calf",
+      "line": 14,
+      "router": "calf.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_calf",
+      "line": 24,
+      "router": "calf.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_calf",
+      "line": 35,
+      "router": "calf.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_calf",
+      "line": 43,
+      "router": "calf.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_calf",
+      "line": 48,
+      "router": "calf.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_submission_bundle_reader",
+      "line": 58,
+      "router": "calf.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_calf_reader",
+      "line": 59,
+      "router": "calf.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_submission_bundle_reader",
+      "line": 70,
+      "router": "calf.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_calf_reader",
+      "line": 71,
+      "router": "calf.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_submission_bundle_reader",
+      "line": 86,
+      "router": "calf.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_calf_reader",
+      "line": 87,
+      "router": "calf.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_calf",
+      "line": 99,
+      "router": "calf.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_calf",
+      "line": 112,
+      "router": "calf.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_reanalysis",
+      "line": 122,
+      "router": "calf.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_calf",
+      "line": 123,
+      "router": "calf.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_journey_service",
+      "line": 13,
+      "router": "journey.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_practice_student_reader",
+      "line": 21,
+      "router": "practice.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_practice_reader",
+      "line": 22,
+      "router": "practice.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_practice_writer",
+      "line": 29,
+      "router": "practice.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_practice_service",
+      "line": 30,
+      "router": "practice.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_practice_reader",
+      "line": 47,
+      "router": "practice.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_practice_writer",
+      "line": 48,
+      "router": "practice.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_practice_service",
+      "line": 49,
+      "router": "practice.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_practice_reader",
+      "line": 61,
+      "router": "practice.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_practice_reader",
+      "line": 69,
+      "router": "practice.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_practice_writer",
+      "line": 70,
+      "router": "practice.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_practice_submission_reader",
+      "line": 71,
+      "router": "practice.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_practice_service",
+      "line": 72,
+      "router": "practice.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_practice_reader",
+      "line": 98,
+      "router": "practice.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_practice_student_reader",
+      "line": 106,
+      "router": "practice.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_practice_reader",
+      "line": 107,
+      "router": "practice.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_practice_student_reader",
+      "line": 114,
+      "router": "practice.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_practice_reader",
+      "line": 115,
+      "router": "practice.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_research",
+      "line": 16,
+      "router": "research.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_research",
+      "line": 21,
+      "router": "research.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_research",
+      "line": 33,
+      "router": "research.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_research_export_writer",
+      "line": 34,
+      "router": "research.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_research",
+      "line": 70,
+      "router": "research.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_research",
+      "line": 75,
+      "router": "research.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_research",
+      "line": 87,
+      "router": "research.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_research",
+      "line": 92,
+      "router": "research.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_research",
+      "line": 97,
+      "router": "research.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_research",
+      "line": 107,
+      "router": "research.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_research",
+      "line": 117,
+      "router": "research.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_research",
+      "line": 129,
+      "router": "research.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_research",
+      "line": 135,
+      "router": "research.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_revisions",
+      "line": 20,
+      "router": "revisions.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_student_lookup",
+      "line": 30,
+      "router": "revisions.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_student_submission_list",
+      "line": 31,
+      "router": "revisions.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_revisions",
+      "line": 41,
+      "router": "revisions.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_revisions",
+      "line": 55,
+      "router": "revisions.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_revisions",
+      "line": 66,
+      "router": "revisions.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_revisions",
+      "line": 74,
+      "router": "revisions.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_revision_group_lookup",
+      "line": 84,
+      "router": "revisions.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_revisions",
+      "line": 85,
+      "router": "revisions.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_student_lookup",
+      "line": 35,
+      "router": "students.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_student_lookup",
+      "line": 44,
+      "router": "students.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_student_submission_list",
+      "line": 45,
+      "router": "students.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_student_learner_reader",
+      "line": 46,
+      "router": "students.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_student_lookup",
+      "line": 59,
+      "router": "students.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_learner_profiles",
+      "line": 60,
+      "router": "students.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_student_lookup",
+      "line": 88,
+      "router": "students.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_learner_profiles",
+      "line": 89,
+      "router": "students.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_student_lookup",
+      "line": 106,
+      "router": "students.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_learner_profiles",
+      "line": 107,
+      "router": "students.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_student_lookup",
+      "line": 115,
+      "router": "students.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_learner_profiles",
+      "line": 116,
+      "router": "students.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_student_lookup",
+      "line": 126,
+      "router": "students.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_learner_profiles",
+      "line": 127,
+      "router": "students.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_student_lookup",
+      "line": 137,
+      "router": "students.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_learner_profiles",
+      "line": 138,
+      "router": "students.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_student_lookup",
+      "line": 148,
+      "router": "students.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_learner_profiles",
+      "line": 149,
+      "router": "students.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_student_lookup",
+      "line": 161,
+      "router": "students.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_student_learner_reader",
+      "line": 162,
+      "router": "students.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_student_lookup",
+      "line": 172,
+      "router": "students.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_student_learner_reader",
+      "line": 173,
+      "router": "students.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_student_lookup",
+      "line": 183,
+      "router": "students.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_student_learner_reader",
+      "line": 184,
+      "router": "students.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_student_lookup",
+      "line": 197,
+      "router": "students.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_learner_profiles",
+      "line": 198,
+      "router": "students.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_student_lookup",
+      "line": 212,
+      "router": "students.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_learner_profiles",
+      "line": 213,
+      "router": "students.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_student_lookup",
+      "line": 228,
+      "router": "students.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_dashboards",
+      "line": 229,
+      "router": "students.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_submission_service",
+      "line": 24,
+      "router": "submissions.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_submission_bundle_reader",
+      "line": 48,
+      "router": "submissions.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_submission_calibration_reader",
+      "line": 49,
+      "router": "submissions.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_submission_bundle_reader",
+      "line": 62,
+      "router": "submissions.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_settings",
+      "line": 70,
+      "router": "system.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_system_migration_reader",
+      "line": 71,
+      "router": "system.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_analyzer",
+      "line": 72,
+      "router": "system.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_metrics",
+      "line": 73,
+      "router": "system.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_configurations",
+      "line": 74,
+      "router": "system.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_submission_service",
+      "line": 75,
+      "router": "system.py",
+      "use_cache": null
+    }
+  ],
+  "kind": "dependency_graph_after",
+  "route_count": 81,
+  "routes": [
+    {
+      "method": "GET",
+      "name": "list_algorithms",
+      "path": "/api/v1/admin/algorithms"
+    },
+    {
+      "method": "GET",
+      "name": "list_configurations",
+      "path": "/api/v1/admin/configurations"
+    },
+    {
+      "method": "POST",
+      "name": "create_configuration",
+      "path": "/api/v1/admin/configurations"
+    },
+    {
+      "method": "POST",
+      "name": "activate_configuration",
+      "path": "/api/v1/admin/configurations/{configuration_id}/activate"
+    },
+    {
+      "method": "POST",
+      "name": "rollback_configuration",
+      "path": "/api/v1/admin/configurations/{configuration_id}/rollback"
+    },
+    {
+      "method": "POST",
+      "name": "validate_configuration",
+      "path": "/api/v1/admin/configurations/{configuration_id}/validate"
+    },
+    {
+      "method": "GET",
+      "name": "list_metrics",
+      "path": "/api/v1/admin/metrics"
+    },
+    {
+      "method": "POST",
+      "name": "preview_admin_reanalysis",
+      "path": "/api/v1/admin/reanalysis/preview"
+    },
+    {
+      "method": "POST",
+      "name": "run_admin_reanalysis",
+      "path": "/api/v1/admin/reanalysis/run"
+    },
+    {
+      "method": "GET",
+      "name": "list_registries",
+      "path": "/api/v1/admin/registries"
+    },
+    {
+      "method": "GET",
+      "name": "calf_analysis_unit_registry",
+      "path": "/api/v1/calf/analysis-units"
+    },
+    {
+      "method": "GET",
+      "name": "calf_constructs",
+      "path": "/api/v1/calf/constructs"
+    },
+    {
+      "method": "GET",
+      "name": "calf_metrics",
+      "path": "/api/v1/calf/metrics"
+    },
+    {
+      "method": "GET",
+      "name": "calf_metric",
+      "path": "/api/v1/calf/metrics/{metric_id}"
+    },
+    {
+      "method": "GET",
+      "name": "get_exercise_attempts",
+      "path": "/api/v1/exercises/{exercise_id}/attempts"
+    },
+    {
+      "method": "POST",
+      "name": "submit_exercise_attempt",
+      "path": "/api/v1/exercises/{exercise_id}/attempts"
+    },
+    {
+      "method": "POST",
+      "name": "create_practice_target",
+      "path": "/api/v1/practice-targets"
+    },
+    {
+      "method": "GET",
+      "name": "get_exercises",
+      "path": "/api/v1/practice-targets/{practice_target_id}/exercises"
+    },
+    {
+      "method": "POST",
+      "name": "create_exercise",
+      "path": "/api/v1/practice-targets/{practice_target_id}/exercises"
+    },
+    {
+      "method": "GET",
+      "name": "research_data_quality",
+      "path": "/api/v1/research/data-quality"
+    },
+    {
+      "method": "POST",
+      "name": "create_dataset_split",
+      "path": "/api/v1/research/dataset-split"
+    },
+    {
+      "method": "GET",
+      "name": "research_export_history",
+      "path": "/api/v1/research/export/history"
+    },
+    {
+      "method": "POST",
+      "name": "research_export_preview",
+      "path": "/api/v1/research/export/preview"
+    },
+    {
+      "method": "POST",
+      "name": "research_export_run",
+      "path": "/api/v1/research/export/run"
+    },
+    {
+      "method": "GET",
+      "name": "research_export_schema",
+      "path": "/api/v1/research/export/schema"
+    },
+    {
+      "method": "GET",
+      "name": "research_export_status",
+      "path": "/api/v1/research/export/{export_id}"
+    },
+    {
+      "method": "GET",
+      "name": "research_export_manifest",
+      "path": "/api/v1/research/export/{export_id}/manifest"
+    },
+    {
+      "method": "GET",
+      "name": "list_human_reviews",
+      "path": "/api/v1/research/reviews"
+    },
+    {
+      "method": "POST",
+      "name": "create_human_review",
+      "path": "/api/v1/research/reviews"
+    },
+    {
+      "method": "POST",
+      "name": "create_revision",
+      "path": "/api/v1/revisions"
+    },
+    {
+      "method": "GET",
+      "name": "get_revision_group",
+      "path": "/api/v1/revisions/{revision_group_id}"
+    },
+    {
+      "method": "GET",
+      "name": "get_revision_comparison",
+      "path": "/api/v1/revisions/{revision_group_id}/comparison"
+    },
+    {
+      "method": "GET",
+      "name": "get_revision_trajectory",
+      "path": "/api/v1/revisions/{revision_group_id}/trajectory"
+    },
+    {
+      "method": "GET",
+      "name": "get_student",
+      "path": "/api/v1/students/{student_id}"
+    },
+    {
+      "method": "GET",
+      "name": "calf_trajectories",
+      "path": "/api/v1/students/{student_id}/calf-trajectories"
+    },
+    {
+      "method": "GET",
+      "name": "get_dashboard",
+      "path": "/api/v1/students/{student_id}/dashboard"
+    },
+    {
+      "method": "GET",
+      "name": "get_engagement_traces",
+      "path": "/api/v1/students/{student_id}/engagement-traces"
+    },
+    {
+      "method": "GET",
+      "name": "get_history",
+      "path": "/api/v1/students/{student_id}/history"
+    },
+    {
+      "method": "GET",
+      "name": "get_student_journey",
+      "path": "/api/v1/students/{student_id}/journey"
+    },
+    {
+      "method": "GET",
+      "name": "get_learner_model",
+      "path": "/api/v1/students/{student_id}/learner-model"
+    },
+    {
+      "method": "GET",
+      "name": "get_diagnostic_trajectories",
+      "path": "/api/v1/students/{student_id}/learner-model/diagnostic-trajectories"
+    },
+    {
+      "method": "GET",
+      "name": "get_history_evidence",
+      "path": "/api/v1/students/{student_id}/learner-model/history-evidence"
+    },
+    {
+      "method": "GET",
+      "name": "get_learning_targets",
+      "path": "/api/v1/students/{student_id}/learner-model/learning-targets"
+    },
+    {
+      "method": "GET",
+      "name": "get_metric_trajectories",
+      "path": "/api/v1/students/{student_id}/learner-model/metric-trajectories"
+    },
+    {
+      "method": "POST",
+      "name": "preview_learner_model",
+      "path": "/api/v1/students/{student_id}/learner-model/preview"
+    },
+    {
+      "method": "POST",
+      "name": "rebuild_learner_model",
+      "path": "/api/v1/students/{student_id}/learner-model/rebuild"
+    },
+    {
+      "method": "GET",
+      "name": "list_learner_model_snapshots",
+      "path": "/api/v1/students/{student_id}/learner-model/snapshots"
+    },
+    {
+      "method": "GET",
+      "name": "get_learner_model_snapshot",
+      "path": "/api/v1/students/{student_id}/learner-model/snapshots/{snapshot_id}"
+    },
+    {
+      "method": "GET",
+      "name": "get_task_clusters",
+      "path": "/api/v1/students/{student_id}/learner-model/task-clusters"
+    },
+    {
+      "method": "GET",
+      "name": "get_practice_targets",
+      "path": "/api/v1/students/{student_id}/practice-targets"
+    },
+    {
+      "method": "GET",
+      "name": "get_profile",
+      "path": "/api/v1/students/{student_id}/profile"
+    },
+    {
+      "method": "GET",
+      "name": "get_progress",
+      "path": "/api/v1/students/{student_id}/progress"
+    },
+    {
+      "method": "GET",
+      "name": "student_revision_candidates",
+      "path": "/api/v1/students/{student_id}/revision-candidates"
+    },
+    {
+      "method": "GET",
+      "name": "get_transfer_evidence",
+      "path": "/api/v1/students/{student_id}/transfer-evidence"
+    },
+    {
+      "method": "POST",
+      "name": "create_submission",
+      "path": "/api/v1/submissions"
+    },
+    {
+      "method": "GET",
+      "name": "get_submission",
+      "path": "/api/v1/submissions/{submission_id}"
+    },
+    {
+      "method": "GET",
+      "name": "get_analyses",
+      "path": "/api/v1/submissions/{submission_id}/analyses"
+    },
+    {
+      "method": "POST",
+      "name": "reanalyze_submission",
+      "path": "/api/v1/submissions/{submission_id}/analyses"
+    },
+    {
+      "method": "GET",
+      "name": "submission_analysis_units",
+      "path": "/api/v1/submissions/{submission_id}/analysis-units"
+    },
+    {
+      "method": "GET",
+      "name": "submission_calf",
+      "path": "/api/v1/submissions/{submission_id}/calf"
+    },
+    {
+      "method": "POST",
+      "name": "calf_reanalyze",
+      "path": "/api/v1/submissions/{submission_id}/calf/reanalyze"
+    },
+    {
+      "method": "GET",
+      "name": "diagnostic_audit",
+      "path": "/api/v1/submissions/{submission_id}/diagnostic-audit"
+    },
+    {
+      "method": "GET",
+      "name": "get_error_annotations",
+      "path": "/api/v1/submissions/{submission_id}/error-annotations"
+    },
+    {
+      "method": "POST",
+      "name": "import_error_annotations",
+      "path": "/api/v1/submissions/{submission_id}/error-annotations/import"
+    },
+    {
+      "method": "GET",
+      "name": "pii_candidates",
+      "path": "/api/v1/submissions/{submission_id}/pii-candidates"
+    },
+    {
+      "method": "POST",
+      "name": "pii_review",
+      "path": "/api/v1/submissions/{submission_id}/pii-review"
+    },
+    {
+      "method": "GET",
+      "name": "get_submission_revision_analysis",
+      "path": "/api/v1/submissions/{submission_id}/revision-analysis"
+    },
+    {
+      "method": "GET",
+      "name": "revision_candidates",
+      "path": "/api/v1/submissions/{submission_id}/revision-candidates"
+    },
+    {
+      "method": "GET",
+      "name": "submission_syntactic_units",
+      "path": "/api/v1/submissions/{submission_id}/syntactic-units"
+    },
+    {
+      "method": "GET",
+      "name": "health",
+      "path": "/api/v1/system/health"
+    },
+    {
+      "method": "GET",
+      "name": "liveness",
+      "path": "/api/v1/system/live"
+    },
+    {
+      "method": "GET",
+      "name": "readiness",
+      "path": "/api/v1/system/ready"
+    },
+    {
+      "method": "GET",
+      "name": "version",
+      "path": "/api/v1/system/version"
+    },
+    {
+      "method": "GET",
+      "name": "swagger_ui_html",
+      "path": "/docs"
+    },
+    {
+      "method": "HEAD",
+      "name": "swagger_ui_html",
+      "path": "/docs"
+    },
+    {
+      "method": "GET",
+      "name": "swagger_ui_redirect",
+      "path": "/docs/oauth2-redirect"
+    },
+    {
+      "method": "HEAD",
+      "name": "swagger_ui_redirect",
+      "path": "/docs/oauth2-redirect"
+    },
+    {
+      "method": "GET",
+      "name": "openapi",
+      "path": "/openapi.json"
+    },
+    {
+      "method": "HEAD",
+      "name": "openapi",
+      "path": "/openapi.json"
+    },
+    {
+      "method": "GET",
+      "name": "redoc_html",
+      "path": "/redoc"
+    },
+    {
+      "method": "HEAD",
+      "name": "redoc_html",
+      "path": "/redoc"
+    }
+  ],
+  "stage": "v0.9.5-H2D2"
+}
