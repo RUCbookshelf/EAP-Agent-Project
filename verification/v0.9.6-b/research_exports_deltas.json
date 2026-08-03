@@ -1,0 +1,352 @@
+{
+  "added_directory_count": 10,
+  "added_file_count": 20,
+  "ambiguous_count": 0,
+  "baseline_directory_count": 388,
+  "baseline_file_count": 776,
+  "detected_at_utc": "2026-08-03T14:09:43.733178Z",
+  "entries": [
+    {
+      "candidate_group": "export_20260803T135746",
+      "classification": "A",
+      "creation_time_utc": "2026-08-03T13:57:46.437745Z",
+      "deletion_authorized": true,
+      "entry_type": "file",
+      "evidence_types": [
+        "absent from approved pre-layer baseline manifest",
+        "test-export content signature (application_version 0.8.2, empty system metadata)",
+        "manifest created_at == directory creation time"
+      ],
+      "modification_time_utc": "2026-08-03T13:57:46.437745Z",
+      "ownership_confidence": "exact",
+      "relative_path": "export_20260803T135746/manifest.json",
+      "sha256": "7e406fbe982f9327e6acdcc2e98f5e3ec3af27e11042ae89ab89800a9ed0dd3e",
+      "size_bytes": 1673
+    },
+    {
+      "candidate_group": "export_20260803T135746",
+      "classification": "A",
+      "creation_time_utc": "2026-08-03T13:57:46.436241Z",
+      "deletion_authorized": true,
+      "entry_type": "file",
+      "evidence_types": [
+        "absent from approved pre-layer baseline manifest",
+        "test-export content signature (application_version 0.8.2, empty system metadata)",
+        "manifest created_at == directory creation time"
+      ],
+      "modification_time_utc": "2026-08-03T13:57:46.436241Z",
+      "ownership_confidence": "exact",
+      "relative_path": "export_20260803T135746/records.jsonl",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "candidate_group": "export_20260803T135948",
+      "classification": "A",
+      "creation_time_utc": "2026-08-03T13:59:48.679399Z",
+      "deletion_authorized": true,
+      "entry_type": "file",
+      "evidence_types": [
+        "absent from approved pre-layer baseline manifest",
+        "test-export content signature (application_version 0.8.2, empty system metadata)",
+        "manifest created_at == directory creation time"
+      ],
+      "modification_time_utc": "2026-08-03T13:59:48.679399Z",
+      "ownership_confidence": "exact",
+      "relative_path": "export_20260803T135948/manifest.json",
+      "sha256": "16df12aec1424e99e17f0e64c6bb734c404c705d3292bba458ad2b50d0be6e14",
+      "size_bytes": 1653
+    },
+    {
+      "candidate_group": "export_20260803T135948",
+      "classification": "A",
+      "creation_time_utc": "2026-08-03T13:59:48.676893Z",
+      "deletion_authorized": true,
+      "entry_type": "file",
+      "evidence_types": [
+        "absent from approved pre-layer baseline manifest",
+        "test-export content signature (application_version 0.8.2, empty system metadata)",
+        "manifest created_at == directory creation time"
+      ],
+      "modification_time_utc": "2026-08-03T13:59:48.676893Z",
+      "ownership_confidence": "exact",
+      "relative_path": "export_20260803T135948/records.jsonl",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "candidate_group": "export_20260803T140516",
+      "classification": "A",
+      "creation_time_utc": "2026-08-03T14:05:16.738806Z",
+      "deletion_authorized": true,
+      "entry_type": "file",
+      "evidence_types": [
+        "absent from approved pre-layer baseline manifest",
+        "test-export content signature (application_version 0.8.2, empty system metadata)",
+        "manifest created_at == directory creation time"
+      ],
+      "modification_time_utc": "2026-08-03T14:05:16.738806Z",
+      "ownership_confidence": "exact",
+      "relative_path": "export_20260803T140516/manifest.json",
+      "sha256": "bf66699958de32751ca980c6d2b2aeee62b7d00095c541975769f8fb7a43a4a1",
+      "size_bytes": 1673
+    },
+    {
+      "candidate_group": "export_20260803T140516",
+      "classification": "A",
+      "creation_time_utc": "2026-08-03T14:05:16.737735Z",
+      "deletion_authorized": true,
+      "entry_type": "file",
+      "evidence_types": [
+        "absent from approved pre-layer baseline manifest",
+        "test-export content signature (application_version 0.8.2, empty system metadata)",
+        "manifest created_at == directory creation time"
+      ],
+      "modification_time_utc": "2026-08-03T14:05:16.737735Z",
+      "ownership_confidence": "exact",
+      "relative_path": "export_20260803T140516/records.jsonl",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "candidate_group": "export_20260803T140525",
+      "classification": "A",
+      "creation_time_utc": "2026-08-03T14:05:25.676807Z",
+      "deletion_authorized": true,
+      "entry_type": "file",
+      "evidence_types": [
+        "absent from approved pre-layer baseline manifest",
+        "test-export content signature (application_version 0.8.2, empty system metadata)",
+        "manifest created_at == directory creation time"
+      ],
+      "modification_time_utc": "2026-08-03T14:05:25.676807Z",
+      "ownership_confidence": "exact",
+      "relative_path": "export_20260803T140525/manifest.json",
+      "sha256": "6086ff62e0229931aa671504d1fbcb0ca5f2227ad04fcb23c90a55244fa1cde0",
+      "size_bytes": 1653
+    },
+    {
+      "candidate_group": "export_20260803T140525",
+      "classification": "A",
+      "creation_time_utc": "2026-08-03T14:05:25.668682Z",
+      "deletion_authorized": true,
+      "entry_type": "file",
+      "evidence_types": [
+        "absent from approved pre-layer baseline manifest",
+        "test-export content signature (application_version 0.8.2, empty system metadata)",
+        "manifest created_at == directory creation time"
+      ],
+      "modification_time_utc": "2026-08-03T14:05:25.668682Z",
+      "ownership_confidence": "exact",
+      "relative_path": "export_20260803T140525/records.jsonl",
+      "sha256": "83827a0b8b524d4b0ce6627dbd2d40df3b139c50a4345da57afb529bb0a04bab",
+      "size_bytes": 527
+    },
+    {
+      "candidate_group": "export_20260803T140526",
+      "classification": "A",
+      "creation_time_utc": "2026-08-03T14:05:26.770053Z",
+      "deletion_authorized": true,
+      "entry_type": "file",
+      "evidence_types": [
+        "absent from approved pre-layer baseline manifest",
+        "test-export content signature (application_version 0.8.2, empty system metadata)",
+        "manifest created_at == directory creation time"
+      ],
+      "modification_time_utc": "2026-08-03T14:05:26.770053Z",
+      "ownership_confidence": "exact",
+      "relative_path": "export_20260803T140526/manifest.json",
+      "sha256": "296d510bff636ae25f2fee809170addc06ddeb32de8bb9fb39f45ff36a7c0b20",
+      "size_bytes": 1673
+    },
+    {
+      "candidate_group": "export_20260803T140526",
+      "classification": "A",
+      "creation_time_utc": "2026-08-03T14:05:26.762977Z",
+      "deletion_authorized": true,
+      "entry_type": "file",
+      "evidence_types": [
+        "absent from approved pre-layer baseline manifest",
+        "test-export content signature (application_version 0.8.2, empty system metadata)",
+        "manifest created_at == directory creation time"
+      ],
+      "modification_time_utc": "2026-08-03T14:05:26.763994Z",
+      "ownership_confidence": "exact",
+      "relative_path": "export_20260803T140526/records.jsonl",
+      "sha256": "13fdf7bb1855fb1c002758b4724ae118192e84bb334ea3cb51ed9bcda1be962f",
+      "size_bytes": 1062
+    },
+    {
+      "candidate_group": "export_20260803T140527",
+      "classification": "A",
+      "creation_time_utc": "2026-08-03T14:05:27.747360Z",
+      "deletion_authorized": true,
+      "entry_type": "file",
+      "evidence_types": [
+        "absent from approved pre-layer baseline manifest",
+        "test-export content signature (application_version 0.8.2, empty system metadata)",
+        "manifest created_at == directory creation time"
+      ],
+      "modification_time_utc": "2026-08-03T14:05:27.747360Z",
+      "ownership_confidence": "exact",
+      "relative_path": "export_20260803T140527/manifest.json",
+      "sha256": "002eff94097a93a6007cd8ba0fc9e0a959000b3c3092039211c7e2192157d43c",
+      "size_bytes": 1653
+    },
+    {
+      "candidate_group": "export_20260803T140527",
+      "classification": "A",
+      "creation_time_utc": "2026-08-03T14:05:27.740853Z",
+      "deletion_authorized": true,
+      "entry_type": "file",
+      "evidence_types": [
+        "absent from approved pre-layer baseline manifest",
+        "test-export content signature (application_version 0.8.2, empty system metadata)",
+        "manifest created_at == directory creation time"
+      ],
+      "modification_time_utc": "2026-08-03T14:05:27.740853Z",
+      "ownership_confidence": "exact",
+      "relative_path": "export_20260803T140527/records.jsonl",
+      "sha256": "42764fb119e983b589b9758fdfd3956ade3fba0d4cc746d2c0669cebee8e7702",
+      "size_bytes": 510
+    },
+    {
+      "candidate_group": "export_20260803T140529",
+      "classification": "A",
+      "creation_time_utc": "2026-08-03T14:05:29.706309Z",
+      "deletion_authorized": true,
+      "entry_type": "file",
+      "evidence_types": [
+        "absent from approved pre-layer baseline manifest",
+        "test-export content signature (application_version 0.8.2, empty system metadata)",
+        "manifest created_at == directory creation time"
+      ],
+      "modification_time_utc": "2026-08-03T14:05:29.706309Z",
+      "ownership_confidence": "exact",
+      "relative_path": "export_20260803T140529/manifest.json",
+      "sha256": "af0605397b505d2293659d10ca6c4c9720db71698b3d82fc5684710cdd1f77a1",
+      "size_bytes": 1673
+    },
+    {
+      "candidate_group": "export_20260803T140529",
+      "classification": "A",
+      "creation_time_utc": "2026-08-03T14:05:29.699787Z",
+      "deletion_authorized": true,
+      "entry_type": "file",
+      "evidence_types": [
+        "absent from approved pre-layer baseline manifest",
+        "test-export content signature (application_version 0.8.2, empty system metadata)",
+        "manifest created_at == directory creation time"
+      ],
+      "modification_time_utc": "2026-08-03T14:05:29.699787Z",
+      "ownership_confidence": "exact",
+      "relative_path": "export_20260803T140529/records.jsonl",
+      "sha256": "86f1cb51761e25b59d3f7ef1885e7734551634ac3157864183c4b89bc68f7911",
+      "size_bytes": 523
+    },
+    {
+      "candidate_group": "export_20260803T140641",
+      "classification": "A",
+      "creation_time_utc": "2026-08-03T14:06:41.882943Z",
+      "deletion_authorized": true,
+      "entry_type": "file",
+      "evidence_types": [
+        "absent from approved pre-layer baseline manifest",
+        "test-export content signature (application_version 0.8.2, empty system metadata)",
+        "manifest created_at == directory creation time"
+      ],
+      "modification_time_utc": "2026-08-03T14:06:41.882943Z",
+      "ownership_confidence": "exact",
+      "relative_path": "export_20260803T140641/manifest.json",
+      "sha256": "2939505e47b240408ce8642dfdcb6afb48121e03ddd2c63f163bf5beffc907c5",
+      "size_bytes": 1653
+    },
+    {
+      "candidate_group": "export_20260803T140641",
+      "classification": "A",
+      "creation_time_utc": "2026-08-03T14:06:41.875401Z",
+      "deletion_authorized": true,
+      "entry_type": "file",
+      "evidence_types": [
+        "absent from approved pre-layer baseline manifest",
+        "test-export content signature (application_version 0.8.2, empty system metadata)",
+        "manifest created_at == directory creation time"
+      ],
+      "modification_time_utc": "2026-08-03T14:06:41.875401Z",
+      "ownership_confidence": "exact",
+      "relative_path": "export_20260803T140641/records.jsonl",
+      "sha256": "4fbc78fcf5b8362191f41aeba1a71b25357d9261b47be41c8ae84e4d51813dad",
+      "size_bytes": 519
+    },
+    {
+      "candidate_group": "export_20260803T140642",
+      "classification": "A",
+      "creation_time_utc": "2026-08-03T14:06:42.994152Z",
+      "deletion_authorized": true,
+      "entry_type": "file",
+      "evidence_types": [
+        "absent from approved pre-layer baseline manifest",
+        "test-export content signature (application_version 0.8.2, empty system metadata)",
+        "manifest created_at == directory creation time"
+      ],
+      "modification_time_utc": "2026-08-03T14:06:42.994152Z",
+      "ownership_confidence": "exact",
+      "relative_path": "export_20260803T140642/manifest.json",
+      "sha256": "233786c67975c00ebb113455eca1bc2648bb84c20f853b1c898248afe6f6b77f",
+      "size_bytes": 1653
+    },
+    {
+      "candidate_group": "export_20260803T140642",
+      "classification": "A",
+      "creation_time_utc": "2026-08-03T14:06:42.985623Z",
+      "deletion_authorized": true,
+      "entry_type": "file",
+      "evidence_types": [
+        "absent from approved pre-layer baseline manifest",
+        "test-export content signature (application_version 0.8.2, empty system metadata)",
+        "manifest created_at == directory creation time"
+      ],
+      "modification_time_utc": "2026-08-03T14:06:42.985623Z",
+      "ownership_confidence": "exact",
+      "relative_path": "export_20260803T140642/records.jsonl",
+      "sha256": "2cb257ea1d22d31252d4a9d24ace4c00d4a2ff2175a722a1805e952fe312b7f1",
+      "size_bytes": 520
+    },
+    {
+      "candidate_group": "export_20260803T140746",
+      "classification": "A",
+      "creation_time_utc": "2026-08-03T14:07:46.160418Z",
+      "deletion_authorized": true,
+      "entry_type": "file",
+      "evidence_types": [
+        "absent from approved pre-layer baseline manifest",
+        "test-export content signature (application_version 0.8.2, empty system metadata)",
+        "manifest created_at == directory creation time"
+      ],
+      "modification_time_utc": "2026-08-03T14:07:46.161417Z",
+      "ownership_confidence": "exact",
+      "relative_path": "export_20260803T140746/manifest.json",
+      "sha256": "8e2f670a1cc0631e6155961bb2669c17924309fc83fd50e45d0d4daef108fd0b",
+      "size_bytes": 1653
+    },
+    {
+      "candidate_group": "export_20260803T140746",
+      "classification": "A",
+      "creation_time_utc": "2026-08-03T14:07:46.160418Z",
+      "deletion_authorized": true,
+      "entry_type": "file",
+      "evidence_types": [
+        "absent from approved pre-layer baseline manifest",
+        "test-export content signature (application_version 0.8.2, empty system metadata)",
+        "manifest created_at == directory creation time"
+      ],
+      "modification_time_utc": "2026-08-03T14:07:46.160418Z",
+      "ownership_confidence": "exact",
+      "relative_path": "export_20260803T140746/records.jsonl",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    }
+  ],
+  "kind": "test_export_deltas",
+  "stage": "v0.9.5-H2D2"
+}

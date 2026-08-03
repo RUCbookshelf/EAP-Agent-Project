@@ -1,0 +1,53 @@
+{
+  "baseline_head": "cb3870c",
+  "conclusion": "submit() has exactly one active production call site (the writing page) and is the first-draft long-running submission path; changing it to the shared long-running policy affects only the two approved essay-submission modes (first draft and writing-page revision). No unrelated call sites exist.",
+  "first_draft_path": {
+    "button_key": "writing_submit_primary",
+    "client_method": "WritingFeedbackApiClient.submit",
+    "endpoint": "POST /api/v1/submissions",
+    "form_keys": [
+      "writing_student",
+      "writing_task_relationship",
+      "writing_prompt_input",
+      "writing_essay",
+      "writing_submit_primary"
+    ],
+    "mode_notes": "The writing page submits BOTH first drafts (task_new_independent; revision_of_submission_id=None) and writing-page revisions (task_revision_within; revision_of_submission_id=<selected>) through the same submit() call; the incident essay 27 was a first draft.",
+    "pending_state": "none - only loading_box('student_writing_submitting') while the run is blocked; no session-state guard; a second click after the timeout error issues a second POST",
+    "reconciliation": "none",
+    "retry_policy": "no automatic retry (retry only ever applies to GET)",
+    "success_handling": "stores submission_result and reruns to the saved state",
+    "timeout_exception_handling": "ApiClientError REQUEST_TIMEOUT -> render_api_error -> error_request_timeout ('The request took too long and was stopped. Please try again.') + error_operation_suffix '(while submit)' + Retry button (retryable)",
+    "timeout_tuple": "(2.0, 30.0) from DEFAULT_TIMEOUTS (POST uses connect, write)",
+    "ui_module": "app/ui/features/student/writing.py (render_writing_page)"
+  },
+  "kind": "submission_paths_before",
+  "linked_revision_path": {
+    "button_key": "revision_submit_primary",
+    "client_method": "WritingFeedbackApiClient.submit_linked_revision",
+    "endpoint": "POST /api/v1/submissions",
+    "mode_notes": "v0.9.6-A verified behavior; must be preserved.",
+    "pending_state": "session-state guard (revision_submit_pending / revision_submit_outcome); queued clicks consumed without a second POST; release after success/outcome consumption/ordinary error",
+    "reconciliation": "yes (v0.9.6-A)",
+    "retry_policy": "no automatic retry",
+    "success_handling": "stores submission_result and reruns to the saved state",
+    "timeout_exception_handling": "REQUEST_TIMEOUT -> bounded read-only reconciliation (server-timestamp baseline + revision candidates + submission bundle) -> CONFIRMED_SUCCESS / STILL_PROCESSING / UNCONFIRMED messages; no Retry button",
+    "timeout_tuple": "(2.0, 180.0) from LONG_SUBMIT_TIMEOUTS",
+    "ui_module": "app/ui/features/student/revision.py (render_revision_page)"
+  },
+  "stage": "v0.9.6-B",
+  "submit_call_sites": [
+    {
+      "file": "app/ui/features/student/writing.py",
+      "line": 218,
+      "method": "submit",
+      "usage": "first drafts AND writing-page revisions (same long-running pipeline)"
+    },
+    {
+      "file": "app/ui/features/student/revision.py",
+      "line": 411,
+      "method": "submit_linked_revision",
+      "usage": "linked revisions (revision page)"
+    }
+  ]
+}

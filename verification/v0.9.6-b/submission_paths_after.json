@@ -1,0 +1,45 @@
+{
+  "baseline_head": "cb3870c",
+  "first_draft_path_after": {
+    "baseline": "_submission_baseline: one bounded GET of get_student_revision_candidates before the POST; newest server submitted_at of same-mode rows",
+    "button_key": "writing_submit_primary",
+    "guard": "consume_pending('writing', mode, lang) before building the submission; enter_pending('writing') before the POST; release on success/ordinary error; outcome stored + held until consumed on timeout",
+    "mode": "FIRST_DRAFT when revision_of_submission_id is None else LINKED_REVISION",
+    "no_retry_ui": "REQUEST_TIMEOUT never reaches render_api_error; no Retry button on ambiguous timeouts",
+    "pending_keys": [
+      "writing_submit_pending",
+      "writing_submit_outcome"
+    ],
+    "reconciliation": "_reconcile_writing_submission: same-mode rows with submitted_at > baseline, exactly one, submission bundle with student + exact essay text equality; feedback present -> CONFIRMED_SUCCESS, else STILL_PROCESSING; zero/multiple/read-failure/mismatch -> UNCONFIRMED",
+    "timeout_messages": "student_writing_submit_pending / student_writing_timeout_confirmed_success / student_writing_timeout_still_processing / student_writing_timeout_unconfirmed (mode-dependent; revision-mode reuses student_revision_* keys)",
+    "ui_module": "app/ui/features/student/writing.py"
+  },
+  "kind": "submission_paths_after",
+  "linked_revision_path_after": {
+    "baseline": "render-time server submitted_at baseline for the source (unchanged v0.9.6-A)",
+    "button_key": "revision_submit_primary",
+    "guard": "consume_pending('revision', 'LINKED_REVISION', lang); enter_pending('revision') before the POST; identical session keys as v0.9.6-A (revision_submit_pending / revision_submit_outcome)",
+    "messages": "student_revision_* keys (unchanged)",
+    "reconciliation": "_reconcile_linked_revision (unchanged v0.9.6-A)",
+    "ui_module": "app/ui/features/student/revision.py"
+  },
+  "no_backend_change": true,
+  "public_entries": {
+    "frontend_public_method_count": 53,
+    "submit": "delegates to _submit_long_running; used by the Writing page for first drafts AND writing-page revisions",
+    "submit_linked_revision": "delegates to _submit_long_running; used by the Revision page"
+  },
+  "shared_client_transport": {
+    "endpoint": "POST /api/v1/submissions",
+    "helper": "WritingFeedbackApiClient._submit_long_running (private)",
+    "operation": "submit",
+    "retry": "no automatic POST retry (retry applies only to GET)",
+    "timeout": "LONG_SUBMIT_TIMEOUTS (connect 2.0 / read 180.0 / write 180.0)"
+  },
+  "shared_ui_helper": {
+    "backend_dependency": "none",
+    "module": "app/ui/features/student/submit_reliability.py",
+    "responsibilities": "pending-state entry/release, queued-click consumption, outcome storage/rendering, per-mode message mapping"
+  },
+  "stage": "v0.9.6-B"
+}

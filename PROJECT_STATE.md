@@ -8,6 +8,26 @@
 
 # Project State
 
+## Current v0.9.6-B State (first draft and unified submission reliability)
+
+- Status: **COMPLETE and fully verified** (full non-live core exit 0,
+  760 passed, 8 skipped; launcher PASS).
+- Incident classified C (read-only DB inspection): first draft essay 27
+  completed after the UI timeout (30.46 s provider call vs the old 30 s
+  client timeout); no duplicate first draft found in the incident.
+- Fix: `submit()` and `submit_linked_revision()` share the private
+  `_submit_long_running` transport (LONG_SUBMIT_TIMEOUTS 180 s, one
+  POST, no retry); shared UI reliability helper; writing-page pending
+  guard and bounded read-only exact reconciliation (CONFIRMED_SUCCESS /
+  STILL_PROCESSING / UNCONFIRMED); accurate en/zh messages (parity
+  528/528). Linked-revision behavior preserved.
+- Contracts: API 77 pairs unchanged; Database public methods 2; frontend
+  client 53 (no new public method); `StudentWritingApiPort` gained
+  `get_submission`; migration 12; tables 33; `config-v0.9.0`;
+  `feedback-prompt-v0.7.1`; development database unchanged; research
+  exports restored to 776 files / 388 dirs.
+- Next: continue v0.9.6 user-visible feature development.
+
 ## Current v0.9.6-A State (linked revision submission reliability)
 
 - Status: **COMPLETE and fully verified** (full non-live core exit 0,

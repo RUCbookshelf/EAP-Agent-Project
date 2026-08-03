@@ -1,3 +1,31 @@
+## v0.9.6-B (2026-08-03)
+
+### Changed
+- Unified reliable essay submission: `submit()` and
+  `submit_linked_revision()` now share the private
+  `_submit_long_running` transport (one POST, `LONG_SUBMIT_TIMEOUTS`
+  2.0/180.0/180.0, no automatic retry); first drafts and writing-page
+  revisions use the same dedicated bounded timeout as linked revisions.
+- New shared UI reliability helper `app/ui/features/student/
+  submit_reliability.py` (pending guard, queued-click consumption,
+  outcome storage/rendering); the Writing page gained a pending guard
+  and bounded read-only exact reconciliation (CONFIRMED_SUCCESS /
+  STILL_PROCESSING / UNCONFIRMED) with accurate en/zh messages; the
+  Revision page now uses the shared mechanics with identical behavior.
+- Locale: four new first-draft keys in en.json and zh_CN.json (parity
+  528/528); `StudentWritingApiPort` gained `get_submission` for
+  reconciliation; contract ledger updated.
+
+### Verified
+- Focused 30 + 21 passed; contract rerun 72 passed; relevant regression
+  242 passed, 3 skipped; full non-live core 760 passed, 8 skipped,
+  0 failed, exit 0; exact `cmd /c "run.bat --verify"` PASS (migration
+  12, 33 tables, `config-v0.9.0`, `feedback-prompt-v0.7.1`,
+  health/docs/Streamlit 200); API 77 pairs unchanged; Database public
+  methods 2; client 53; locale parity exact; research exports restored
+  to 776 files / 388 dirs; development database unchanged.
+
+
 ## v0.9.6-A (2026-08-03)
 
 ### Changed

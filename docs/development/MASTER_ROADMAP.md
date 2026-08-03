@@ -36,6 +36,7 @@
 | Item | Status |
 |---|---|
 | v0.9.6-A Linked Revision Submission Reliability | completed and verified (dedicated long-operation timeout, pending guard, no duplicate POST, bounded reconciliation; full core 730 passed / 8 skipped, launcher PASS) |
+| v0.9.6-B First Draft and Unified Submission Reliability | completed and verified (shared long-submit transport, pending guard, no duplicate POST, exact first-draft reconciliation; full core 760 passed / 8 skipped, launcher PASS) |
 
 Next stage: **v0.9.6 user-visible feature development** (the next goal
 must deliver a user-visible or research-workflow-visible functional

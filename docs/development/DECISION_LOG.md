@@ -1,5 +1,33 @@
 
 
+## 2026-08-03 - v0.9.6-B Unify reliable essay submission for first drafts
+
+- **Decision**: Extend the v0.9.6-A reliability policy to first drafts
+  through one shared internal mechanism: `submit()` and
+  `submit_linked_revision()` delegate to a private `_submit_long_running`
+  transport (LONG_SUBMIT_TIMEOUTS 180 s, one POST, no automatic retry),
+  and both pages share a small UI reliability helper (pending guard,
+  queued-click consumption, outcome storage/rendering) while keeping
+  mode-specific reconciliation and messages.
+- **Rationale**: Read-only inspection classified the new incident as C -
+  first draft essay 27 completed after the old 30 s client timeout
+  (30.46 s provider call). The writing page had no pending guard and no
+  reconciliation, so the same false-failure and duplicate-submission
+  risk proven in v0.9.6-A applied to first drafts; the duplicate risk
+  was reproduced (1 -> 2 POSTs, two byte-identical durable first
+  drafts). First-draft reconciliation uses exact evidence only
+  (same-mode rows, server submitted_at > pre-submit baseline, exactly
+  one match, student + exact text equality).
+- **Evidence**: focused 30 + 21 passed; contract rerun 72 passed;
+  relevant regression 242 passed, 3 skipped; full core 760 passed,
+  8 skipped, exit 0; launcher PASS; API 77 pairs unchanged; Database
+  methods 2; client 53; locale 528/528; exports restored to 776/388;
+  development database unchanged.
+- **Boundary**: no queue, migration, job table, WebSocket, SSE, or
+  generic idempotency framework; no backend production change; ordinary
+  non-submission request timeouts unchanged.
+
+
 ## 2026-08-03 - v0.9.6-A Make linked revision submission reliable
 
 - **Decision**: Fix the linked-revision submit path with a dedicated

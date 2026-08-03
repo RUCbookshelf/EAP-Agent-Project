@@ -1,6 +1,28 @@
 # Current Task State
 
 **Date:** 2026-08-03
+**Current task:** v0.9.6-B First Draft and Unified Submission Reliability
+**Status:** completed and fully verified (see `RUN_VERIFICATION_V0.9.6_B.md`)
+
+- Incident classified C by read-only database inspection: first draft
+  essay 27 completed after the UI timeout (30.46 s provider call); no
+  duplicate first draft in the incident; duplicate risk reproduced
+  deterministically.
+- Fix: `submit()` and `submit_linked_revision()` share the private
+  `_submit_long_running` transport (LONG_SUBMIT_TIMEOUTS, one POST, no
+  retry); shared UI reliability helper; writing-page pending guard and
+  bounded read-only exact reconciliation; accurate en/zh messages
+  (parity 528/528); linked-revision behavior preserved.
+- Verification: focused 30 + 21 passed; relevant regression 242 passed,
+  3 skipped; full non-live core 760 passed, 8 skipped, exit 0;
+  `run.bat --verify` PASS; API 77 pairs unchanged; Database public
+  methods 2; client 53; development database unchanged; research
+  exports restored to 776/388.
+- Next: continue v0.9.6 user-visible feature development.
+
+
+
+**Date:** 2026-08-03
 **Current task:** v0.9.6-A Linked Revision Submission Reliability
 **Status:** completed and fully verified (see `RUN_VERIFICATION_V0.9.6_A.md`)
 

@@ -1,0 +1,60 @@
+{
+  "case_1_below_old_timeout": {
+    "duration_s": 0.141,
+    "essay_id": 1,
+    "is_first_draft": true,
+    "post_count": 1,
+    "success": true
+  },
+  "case_2_backend_after_disconnect": {
+    "backend_completed": true,
+    "classification_reproduced": "C - first draft completed after the client timeout",
+    "completed_after_client_timeout_s": 3.313,
+    "controlled_provider_delay_s": 6.0,
+    "essay_id": 2,
+    "feedback_id": 2,
+    "first_draft_durable": true
+  },
+  "case_2_exceeds_old_timeout": {
+    "client_category": "request_timeout",
+    "client_message_key": "error_request_timeout",
+    "client_operation": "submit",
+    "old_timeout_profile": {
+      "connect": 2.0,
+      "write": 30.0
+    },
+    "post_count": 1,
+    "timeout_elapsed_s": 3.015
+  },
+  "case_3_duplicate_retry_risk": {
+    "distinct_ids": true,
+    "duplicate_first_draft_created": true,
+    "essay_1": 3,
+    "essay_2": 4,
+    "post_count": 2,
+    "same_prompt": true,
+    "same_student": true,
+    "same_text_hash": true
+  },
+  "case_4_linked_revision_regression_baseline": {
+    "feedback_id": 6,
+    "linked_revision_success": true,
+    "revision_group_id": "RG000001",
+    "revision_sequence": 2,
+    "v096a_focused_suite_baseline": "21 passed (recorded at v0.9.6-A closure)"
+  },
+  "development_database": {
+    "after": {
+      "mtime": 1785755463.17822,
+      "sha256": "646B6555A67EAF6D3F63B6D175948A660890C942F4A73BFFDB6AB5DB54E1C39B",
+      "size_bytes": 9854976
+    },
+    "before": {
+      "mtime": 1785755463.17822,
+      "sha256": "646B6555A67EAF6D3F63B6D175948A660890C942F4A73BFFDB6AB5DB54E1C39B",
+      "size_bytes": 9854976
+    },
+    "unchanged": true
+  },
+  "temporary_database": "C:\\Users\\16073\\AppData\\Local\\Temp\\v096b-repro-i5lloei8\\repro.db"
+}

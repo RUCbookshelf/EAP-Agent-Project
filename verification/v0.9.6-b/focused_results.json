@@ -1,0 +1,65 @@
+{
+  "baseline_head": "cb3870c",
+  "contract_rerun": {
+    "files": [
+      "tests/test_v095d_api_contract.py",
+      "tests/test_v095d_port_contract.py",
+      "tests/test_v095c_feature_extraction.py",
+      "tests/test_v096a_linked_revision_submission.py",
+      "tests/test_v096b_first_draft_submission.py"
+    ],
+    "result": "72 passed, 0 failed"
+  },
+  "development_database": {
+    "incident_baseline": {
+      "mtime_local": "2026-08-03T19:11:03.178+08:00",
+      "sha256": "646B6555A67EAF6D3F63B6D175948A660890C942F4A73BFFDB6AB5DB54E1C39B",
+      "size_bytes": 9854976
+    },
+    "read_only_inspection_only": true,
+    "unchanged_by_all_verification": true
+  },
+  "focused_combined": "51 passed, 0 failed, 0 errors",
+  "focused_files": [
+    {
+      "file": "tests/test_v096b_first_draft_submission.py",
+      "result": "30 passed, 0 failed, 0 errors, 3 warnings"
+    },
+    {
+      "file": "tests/test_v096a_linked_revision_submission.py",
+      "result": "21 passed, 0 failed, 0 errors (updated for the unified policy)"
+    }
+  ],
+  "full_non_live_core": {
+    "duration_s": 401.93,
+    "exit_code": 0,
+    "isolated_db": "C:\\Users\\16073\\AppData\\Local\\Temp\\v095h2a-1b76i0jn\\h2a.db",
+    "result": "760 passed, 8 skipped, 0 failed, 0 errors, 4 warnings"
+  },
+  "kind": "focused_results",
+  "launcher": {
+    "active_configuration": "config-v0.9.0",
+    "command": "cmd /c \"run.bat --verify\"",
+    "docs": 200,
+    "exit_code": 0,
+    "feedback_prompt": "feedback-prompt-v0.7.1",
+    "health": 200,
+    "isolated_db": "C:\\Users\\16073\\AppData\\Local\\Temp\\v096b-verify-f730ba88\\verify.db",
+    "migration": 12,
+    "result": "PASS",
+    "streamlit": 200,
+    "tables": 33
+  },
+  "relevant_regression": {
+    "result": "242 passed, 3 skipped, 0 failed, 0 errors (initial 239 passed + 3 contract fixes verified in the rerun)"
+  },
+  "research_exports": {
+    "baseline_dirs": 388,
+    "baseline_files": 776,
+    "final_dirs": 388,
+    "final_files": 776,
+    "guard": "BASELINE OK (all retained paths and hashes unchanged)"
+  },
+  "stage": "v0.9.6-B",
+  "user_flows": "verification/v0.9.6-b/user_flows_after.json (flows A-D all passed)"
+}

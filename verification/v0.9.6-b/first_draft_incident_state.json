@@ -1,0 +1,76 @@
+{
+  "baseline_head": "cb3870c",
+  "classification": "C",
+  "classification_label": "first draft completed after the UI timeout",
+  "conclusion": "The timed-out first draft was durably completed server-side after the UI stopped waiting: essay 27 has complete analysis, 24 metric results, diagnosis, learner history, and feedback, ending exactly at the database mtime. The old generic 30 s client timeout vs the 30.46 s provider call produced the false-failure message; the same duplicate/retry risk proven in v0.9.6-A applies to first drafts (no duplicate was actually created in this incident).",
+  "development_database": {
+    "fingerprint_after_readonly_inspection": {
+      "mtime_local": "2026-08-03T19:11:03.178+08:00",
+      "sha256": "646B6555A67EAF6D3F63B6D175948A660890C942F4A73BFFDB6AB5DB54E1C39B",
+      "size_bytes": 9854976
+    },
+    "fingerprint_before_readonly_inspection": {
+      "mtime_local": "2026-08-03T19:11:03.178+08:00",
+      "sha256": "646B6555A67EAF6D3F63B6D175948A660890C942F4A73BFFDB6AB5DB54E1C39B",
+      "size_bytes": 9854976
+    },
+    "note": "Fingerprint differs from the v0.9.6-A closure value (1DD4B42D..., 9,404,416 bytes, mtime 16:34:04) because of the real user submissions preceding this task; the current value is the authorized v0.9.6-B incident baseline.",
+    "read_only_mode": true,
+    "unchanged": true
+  },
+  "duplicate_first_draft": {
+    "evidence": "Only one first draft exists in the incident window (essay 27). The only other S02 first drafts are 2026-07-29/08-01 records with different text lengths/hashes. Essay 27's text hash equals essay 26 (a linked revision from 16:33 +08:00, 2.6 h earlier, different submission mode) - not a duplicate pair under the required criteria (different mode and non-close timestamps).",
+    "found": false
+  },
+  "evidence": {
+    "analysis_run": "AR000026 (spacy, 65.8 ms, created 11:10:32.51 UTC)",
+    "database_mtime_alignment": "development database mtime 19:11:03.178+08:00 equals feedback record 26 completion (11:11:03 UTC) - the final write of the incident window",
+    "diagnosis_count": 1,
+    "draft_stage": "first draft",
+    "essay_id": 27,
+    "essay_text_length": 1503,
+    "essay_text_sha256_redacted": "9E7A80C670B01482767FE90A0227A79D5C6643F162EFC0502EE170182556FC19",
+    "feedback": {
+      "completed_at_utc": "2026-08-03T11:11:03.153892+00:00",
+      "feedback_id": 26,
+      "provider": "local-demo",
+      "success_status": "fallback_success"
+    },
+    "genre": "argumentative essay",
+    "learner_history_count": 1,
+    "llm_calls": [
+      {
+        "call_id": 38,
+        "duration_s": 30.46,
+        "provider": "deepseek",
+        "request_utc": "2026-08-03T11:10:32.693276+00:00",
+        "response_utc": "2026-08-03T11:11:03.152861+00:00"
+      },
+      {
+        "call_id": 39,
+        "duration_ms": 1,
+        "provider": "local-demo",
+        "request_utc": "2026-08-03T11:11:03.153892+00:00",
+        "response_utc": "2026-08-03T11:11:03.153892+00:00"
+      }
+    ],
+    "metric_results_count": 24,
+    "student_id": "S02",
+    "submission_type": "first draft (revision_of_submission_id=None, revision_group_id=None, revision_sequence=None, revision_stage=first_draft)",
+    "submitted_at_local": "2026-08-03T19:10:32+08:00",
+    "submitted_at_utc": "2026-08-03T11:10:32.427483+00:00",
+    "writing_prompt": "Should Cities Add More Parks?"
+  },
+  "incident_window_local": "2026-08-03 19:00-19:15 +08:00",
+  "incident_window_utc": "2026-08-03 11:00-11:15 UTC",
+  "kind": "first_draft_incident_state",
+  "no_repair": "Incident records were not modified or removed.",
+  "stage": "v0.9.6-B",
+  "timeline_local": [
+    "19:10:32 - essay 27 durably created (first draft, S02)",
+    "19:10:32 - analysis AR000026 completed (~66 ms)",
+    "19:10:32 - deepseek call 38 started",
+    "~19:11:02 - old client 30 s write timeout would have fired while the backend was still in the provider call",
+    "19:11:03 - deepseek call 38 ended (30.46 s); local-demo fallback call 39; feedback 26 fallback_success saved; response committed"
+  ]
+}

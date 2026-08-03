@@ -1,0 +1,11 @@
+{
+  "conclusion": "Pre-fix: the writing page has no pending guard; after the old timeout message is displayed, a second click issues a second POST with the same payload, which can create a duplicate first draft server-side.",
+  "duplicate_post_possible_from_ui": true,
+  "first_click_post_count": 1,
+  "flow": "open first-draft form -> enter prompt + draft -> submit (first POST raises client REQUEST_TIMEOUT) -> old timeout message rendered -> click submit again",
+  "kind": "reproduction_before_ui",
+  "old_timeout_error_message_rendered": true,
+  "retry_button_rendered": true,
+  "second_click_post_count": 2,
+  "stage": "v0.9.6-B"
+}

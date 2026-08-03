@@ -1,0 +1,36 @@
+{
+  "flow_a_first_draft_success": {
+    "pending_released": true,
+    "post_count": 1,
+    "slow_beyond_old_timeout_proof": "focused integration test test_controlled_slow_first_draft_succeeds_below_new_timeout (31.5 s provider, success, one first draft)",
+    "steps": "open first-draft form -> enter valid draft -> submit once -> processing -> success",
+    "success_rendered": true
+  },
+  "flow_b_first_draft_timeout_backend_completion": {
+    "backend_completion_proof": "focused test test_no_duplicate_first_draft_in_controlled_timeout_case (backend completes after timeout; exactly one new first draft)",
+    "message_rendered": true,
+    "no_retry_button": true,
+    "post_count": 1,
+    "steps": "capture pre-submit baseline -> submit once -> force client timeout -> bounded reconciliation -> confirmed success"
+  },
+  "flow_c_first_draft_unconfirmed": {
+    "draft_text_preserved": true,
+    "message_rendered": true,
+    "no_blind_retry": true,
+    "no_retry_button": true,
+    "post_count": 1,
+    "steps": "submit once -> force client timeout -> reconciliation unavailable -> unconfirmed message"
+  },
+  "flow_d_linked_revision_regression": {
+    "linkage_proof": "focused tests test_linked_revision_identity_and_parent_group_linkage and v0.9.6-A suite (21 passed)",
+    "post_count": 1,
+    "success_rendered": true
+  },
+  "real_api_first_draft_slow_success": {
+    "controlled_provider_delay_s": 5.0,
+    "elapsed_s": 5.12,
+    "exactly_one_first_draft": true,
+    "first_draft_count_in_history": 1,
+    "success": true
+  }
+}
