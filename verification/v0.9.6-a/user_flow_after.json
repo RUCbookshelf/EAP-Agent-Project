@@ -1,0 +1,31 @@
+{
+  "flow_a_ui_success": {
+    "post_count": 1,
+    "post_count_after_journey_click": 1,
+    "processing_state": {
+      "pending_flag_cleared_after_success": true
+    },
+    "revision_appears_once": true,
+    "second_post_after_saved_state": null,
+    "steps": "open linked-revision form -> enter revised text -> submit once -> observe success",
+    "success_rendered": true
+  },
+  "flow_b_ui_timeout_unconfirmed": {
+    "guard_released_after_consume": true,
+    "message_rendered": true,
+    "no_blind_retry_instruction": true,
+    "no_retry_button": true,
+    "no_second_post": true,
+    "pending_flag_held_until_consumed": true,
+    "post_count": 1,
+    "post_count_after_queued_click": 1,
+    "steps": "submit once -> force client timeout -> bounded reconciliation -> unconfirmed message"
+  },
+  "flow_c_real_api_slow_success": {
+    "controlled_provider_delay_s": 5.0,
+    "elapsed_s": 5.17,
+    "revision_appears_exactly_once": true,
+    "revision_count_in_history": 1,
+    "success": true
+  }
+}

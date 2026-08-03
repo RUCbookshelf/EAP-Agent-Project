@@ -1,0 +1,111 @@
+{
+  "classification": "C",
+  "classification_definition": {
+    "A": "no durable revision created",
+    "B": "revision created, downstream analysis/feedback incomplete",
+    "C": "complete linked revision created after the UI timeout",
+    "D": "ambiguous from available evidence"
+  },
+  "classification_label": "complete linked revision created after the UI timeout",
+  "conclusion": "The timed-out linked revision was durably completed server-side after the UI stopped waiting: essay 26 (revision of 25, group RG000005, sequence 3) has a complete essay row, revision snapshot RS000012, analysis run AR000025, diagnosis, learner history, and feedback record 25 (deepseek call ~30.4 s then local-demo fallback) ending at 08:34:04 UTC = 16:34:04 +08:00, exactly the database mtime. In addition, essays 24 and 25 are byte-identical linked revisions (same parent 13, same sequence 2) created 37 s apart - evidence that a duplicate POST occurred during the same window.",
+  "development_database": {
+    "approved_baseline_before_task": {
+      "mtime_local": "2026-08-02T11:02:25.887+08:00",
+      "sha256": "340E0F3739FEFFD3DEF87BB6E711CB6F90A8478E7E18D833C715EDCFAB03AFF4",
+      "size_bytes": 8298496
+    },
+    "note": "Development database was modified at 2026-08-03T16:34:04.205+08:00 (inside the incident window) - grown by ~1.1 MB vs the approved baseline. Read-only inspection (SQLite mode=ro) did not change the fingerprint.",
+    "observed_after_readonly_inspection": {
+      "mtime_local": "2026-08-03T16:34:04.205+08:00",
+      "sha256": "1DD4B42DB339BBCE3C6A7E0A05749DDDCF07B588770A65AEE84973272109381B",
+      "size_bytes": 9404416
+    },
+    "observed_before_readonly_inspection": {
+      "mtime_local": "2026-08-03T16:34:04.205+08:00",
+      "sha256": "1DD4B42DB339BBCE3C6A7E0A05749DDDCF07B588770A65AEE84973272109381B",
+      "size_bytes": 9404416
+    },
+    "read_only_mode": true,
+    "repair_performed": false
+  },
+  "downstream_completeness": {
+    "essay_24": {
+      "analysis_units": 0,
+      "diagnoses": 1,
+      "feedback": "success",
+      "learner_history": 1,
+      "metric_results": 24
+    },
+    "essay_25": {
+      "analysis_units": 0,
+      "diagnoses": 1,
+      "feedback": "success",
+      "learner_history": 1,
+      "metric_results": 24
+    },
+    "essay_26": {
+      "analysis_units": 0,
+      "diagnoses": 1,
+      "feedback": "fallback_success",
+      "learner_history": 1,
+      "metric_results": 24
+    }
+  },
+  "evidence_rows": [
+    {
+      "analysis_run": "AR000023 (duration_ms 25.68)",
+      "essay_id": 24,
+      "essay_text_length": 795,
+      "essay_text_sha256_redacted": "1F6A0ED098D1D0C5BBBAFEABBEE8D607E71FA4FE9E33E153A4ECDE1D85825B74",
+      "feedback": "record 23 provider=deepseek status=success request 08:30:33.21 response 08:30:48.90",
+      "llm_call_seconds": 35.3,
+      "revision_group_id": "RG000005",
+      "revision_of_submission_id": 13,
+      "revision_sequence": 2,
+      "snapshot": "RS000010 (source 13 -> target 24)",
+      "student_id": "S02",
+      "submitted_at_utc": "2026-08-03T08:30:13.281975+00:00"
+    },
+    {
+      "analysis_run": "AR000024 (duration_ms 34.70)",
+      "duplicate_evidence": "identical essay_text SHA-256, identical revision_of_submission_id=13, identical revision_sequence=2; created 36.9 s after essay 24",
+      "duplicate_of": 24,
+      "essay_id": 25,
+      "essay_text_length": 795,
+      "essay_text_sha256_redacted": "1F6A0ED098D1D0C5BBBAFEABBEE8D607E71FA4FE9E33E153A4ECDE1D85825B74",
+      "feedback": "record 24 provider=deepseek status=success request 08:31:09.59 response 08:31:28.38",
+      "llm_call_seconds": 37.7,
+      "revision_group_id": "RG000005",
+      "revision_of_submission_id": 13,
+      "revision_sequence": 2,
+      "snapshot": "RS000011 (source 13 -> target 25)",
+      "student_id": "S02",
+      "submitted_at_utc": "2026-08-03T08:30:50.305726+00:00"
+    },
+    {
+      "analysis_run": "AR000025 (duration_ms 61.11)",
+      "essay_id": 26,
+      "essay_text_length": 1503,
+      "essay_text_sha256_redacted": "9E7A80C670B01482767FE90A0227A79D5C6643F162EFC0502EE170182556FC19",
+      "feedback": "record 25 provider=local-demo status=fallback_success request 08:34:04.13 response 08:34:04.13",
+      "llm_call_seconds": 30.4,
+      "llm_calls": [
+        "call 36 provider=deepseek request 08:33:33.68 response 08:34:04.13 (~30.44 s, then fallback)",
+        "call 37 provider=local-demo request 08:34:04.13 response 08:34:04.13 (~1 ms)"
+      ],
+      "revision_group_id": "RG000005",
+      "revision_of_submission_id": 25,
+      "revision_sequence": 3,
+      "snapshot": "RS000012 (source 25 -> target 26)",
+      "student_id": "S02",
+      "submitted_at_utc": "2026-08-03T08:33:33.311328+00:00"
+    }
+  ],
+  "incident_window_local": "2026-08-03 16:30-16:40 +08:00",
+  "incident_window_utc": "2026-08-03 08:30-08:40 UTC",
+  "kind": "incident_state",
+  "mtime_alignment": "development database mtime 2026-08-03T16:34:04.205+08:00 equals feedback record 25 completion 08:34:04.13 UTC (16:34:04 +08:00) - the final write of the incident window",
+  "no_repair": "Incident records were not deleted, modified, or repaired in this task.",
+  "stage": "v0.9.6-A",
+  "user_visible_effect": "UI showed 'The request took too long and was stopped. Please try again. (while submit)' while the backend continued and committed the full linked revision; a second identical linked revision (24/25 pair) was also created."
+}

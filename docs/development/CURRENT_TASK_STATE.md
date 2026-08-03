@@ -1,6 +1,26 @@
 # Current Task State
 
 **Date:** 2026-08-03
+**Current task:** v0.9.6-A Linked Revision Submission Reliability
+**Status:** completed and fully verified (see `RUN_VERIFICATION_V0.9.6_A.md`)
+
+- Incident classified C by read-only database inspection: the timed-out
+  linked revision was durably completed server-side after the UI timeout;
+  a byte-identical duplicate pair showed the double-POST mechanism.
+- Fix: dedicated 180 s timeout for the linked-revision submit path only;
+  pending-state submit guard; no automatic POST retry; bounded read-only
+  reconciliation through existing GET APIs (CONFIRMED_SUCCESS /
+  STILL_PROCESSING / UNCONFIRMED); accurate en/zh messages; locale parity
+  524/524.
+- Verification: focused 21 passed; relevant suite 212 passed, 3 skipped;
+  full non-live core 730 passed, 8 skipped, exit 0; `run.bat --verify`
+  PASS; API 77 pairs unchanged; Database public methods 2; development
+  database unchanged; research exports restored to 776/388.
+- Next: continue v0.9.6 user-visible feature development.
+
+
+
+**Date:** 2026-08-03
 **Current task:** v0.9.5-H2E Architecture Freeze
 **Status:** completed - v0.9.5 architecture optimization is COMPLETE and
 frozen; repository ready for v0.9.6 user-visible feature development (see

@@ -8,6 +8,24 @@
 
 # Project State
 
+## Current v0.9.6-A State (linked revision submission reliability)
+
+- Status: **COMPLETE and fully verified** (full non-live core exit 0,
+  730 passed, 8 skipped; launcher PASS).
+- Incident classified C (read-only DB inspection): the timed-out linked
+  revision (essay 26) was durably completed after the UI timeout; a
+  duplicate pair (essays 24/25) was created by a second POST.
+- Fix: dedicated 180 s long-operation timeout for the linked-revision
+  submit path only; pending-state submit guard (no duplicate POST); no
+  automatic POST retry; bounded read-only reconciliation via existing
+  GET APIs with CONFIRMED_SUCCESS / STILL_PROCESSING / UNCONFIRMED
+  outcomes; accurate en/zh messages (parity 524/524).
+- Contracts: API 77 pairs unchanged; Database public methods 2; frontend
+  client 52 -> 53 (feature-driven ledger update); migration 12; tables
+  33; `config-v0.9.0`; `feedback-prompt-v0.7.1`; development database
+  unchanged; research exports restored to 776 files / 388 dirs.
+- Next: continue v0.9.6 user-visible feature development.
+
 ## Current v0.9.5-H2E State (architecture freeze)
 
 - Status: **COMPLETE - v0.9.5 architecture optimization is COMPLETE and

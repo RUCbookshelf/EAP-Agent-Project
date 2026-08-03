@@ -1,0 +1,75 @@
+{
+  "baseline_head": "a5459e3",
+  "error_string_origin": "frontend API-client timeout conversion (requests ReadTimeout -> ErrorCategory.REQUEST_TIMEOUT -> locale error_request_timeout + error_operation_suffix). Not a server error, not a reverse-proxy timeout, not a provider-side exception surfaced directly.",
+  "flow": [
+    {
+      "detail": "st.button(t('student_revision_submit'), type='primary', use_container_width=True, key='revision_submit_primary') in app/ui/features/student/revision.py (render_revision_page). No disabled/locked state; no session-state pending guard.",
+      "layer": "Streamlit submit control",
+      "step": 1
+    },
+    {
+      "detail": "On click: builds submission dict with revision_of_submission_id=source_id (selected via revision_source_select), calls loading_box('student_revision_submitting'), then api_client.submit(submission). On ApiClientError -> render_api_error(exc, lang); on generic Exception -> error_box('submission_error', lang).",
+      "layer": "Page/helper",
+      "step": 2
+    },
+    {
+      "detail": "WritingFeedbackApiClient.submit(submission) -> self._request('POST', '/api/v1/submissions', operation='submit', json=submission). No profile argument -> DEFAULT_TIMEOUTS. No retry (retry defaults False; automatic retry only ever allowed for GET).",
+      "layer": "Frontend API client method",
+      "step": 3
+    },
+    {
+      "detail": "_request computes timeout_tuple = (profile.connect, profile.read) for GET else (profile.connect, profile.write); POST -> (2.0, 30.0). requests.Session.request(timeout=(2.0, 30.0)). Connect timeout 2.0 s; response (write/read) timeout 30.0 s for the linked-revision POST.",
+      "layer": "HTTP timeout behavior",
+      "step": 4
+    },
+    {
+      "detail": "requests.exceptions.ReadTimeout or ConnectTimeout -> classify_exception -> ApiClientError(ErrorCategory.REQUEST_TIMEOUT, 'read timed out'/'connect timed out', operation='submit'); retryable=True. render_api_error shows locale error_request_timeout ('The request took too long and was stopped. Please try again.') + error_operation_suffix ('(while {operation})' -> '(while submit)') and, because retryable, a Retry button (st.rerun()).",
+      "layer": "Error classification",
+      "step": 5
+    },
+    {
+      "detail": "POST /api/v1/submissions -> app/api/routers/submissions.py::create_submission (status 201, response_model=SubmissionResponse); Depends(get_submission_service) -> SubmissionService.submit(payload).",
+      "layer": "HTTP endpoint",
+      "step": 6
+    },
+    {
+      "detail": "SubmissionService.submit: (1) validate_relationship when revision_of_submission_id is set; (2) save_essay (durable essay row; revision fields); (3) analyzer.analyze (spaCy, ~25-61 ms); (4) save_analysis_run + save_analysis; (5) diagnose; (6) calibrate + save_diagnostic_calibration; (7) revision_service.create_relationship (revision group / link / snapshot - durable); (8) history.summarize; (9) learner_profile recalc; (10) reliability assessment; (11) router.generate(context) - the slow provider/LLM call (incident: deepseek 30.4-37.7 s then local-demo fallback); (12) revision group_summary + trajectory; (13) save_feedback + save_history; (14) return PipelineResult -> response.",
+      "layer": "Service operation",
+      "step": 7
+    },
+    {
+      "detail": "Essay, analysis, diagnosis, calibration, revision relationship, history, and learner profile are durably saved BEFORE router.generate; feedback and history are saved after it. The response is created only after the provider call completes. A client disconnect does not cancel the FastAPI sync endpoint thread; the backend continues and commits.",
+      "layer": "Write order vs response",
+      "step": 8
+    },
+    {
+      "detail": "GET /api/v1/students/{student_id}/revision-candidates (returns reversed list_student_submissions: essay_id, revision_of_submission_id, revision_group_id, revision_sequence, submitted_at (server ISO UTC), stage fields; newest first; GET with retry=True). GET /api/v1/submissions/{submission_id} (full bundle incl. essay_text, metrics, diagnosis, feedback_id, success_status, provider_name).",
+      "layer": "Existing read endpoints usable for reconciliation",
+      "step": 9
+    },
+    {
+      "detail": "student_id (learner_id), source essay_id (revision_of_submission_id), revision_group_id, revision_sequence, server submitted_at timestamps. Baseline capture: the revision page already fetches the candidate list at render, so the newest server submitted_at for (student, source) before the attempt is available in-session.",
+      "layer": "Existing stable IDs usable for exact matching",
+      "step": 10
+    }
+  ],
+  "incident_evidence_timeline_utc": [
+    "08:30:13 essay 24 created (revision of 13, RG000005, seq 2); deepseek request 08:30:13.57 -> 08:30:48.90 (~35.3 s)",
+    "08:30:50 essay 25 created (identical text, same parent 13, same seq 2); deepseek 08:30:50.63 -> 08:31:28.38 (~37.7 s) - duplicate pair",
+    "08:33:33 essay 26 created (revision of 25, seq 3, 1503 chars); deepseek 08:33:33.68 -> 08:34:04.13 (~30.4 s) then local-demo fallback; feedback 25 fallback_success at 08:34:04.13",
+    "development database mtime 2026-08-03T16:34:04.205+08:00 == feedback completion (08:34:04 UTC)"
+  ],
+  "kind": "linked_revision_flow_before",
+  "old_timeout": {
+    "connect": 2.0,
+    "source": "DEFAULT_TIMEOUTS in app/ui/api_client.py; POST timeout tuple (connect, write)",
+    "write": 30.0
+  },
+  "retry_behavior_before": {
+    "client_auto_retry": "none for POST (retry=True only allowed for GET; submit passes no retry)",
+    "double_submit_possible": "yes - no pending guard; after a timeout the form remains interactive and a second click issues a second POST (incident essays 24/25 are byte-identical linked revisions of source 13 created 37 s apart)",
+    "ui_manual_retry": "render_api_error renders a Retry button for retryable categories (REQUEST_TIMEOUT is retryable) - the revision page inherits this, instructing a blind retry that can duplicate a linked revision that already completed server-side"
+  },
+  "slow_operation": "router.generate(context) - provider feedback generation (incident deepseek calls 30.4-37.7 s before fallback); measured DB evidence below",
+  "stage": "v0.9.6-A"
+}

@@ -1,3 +1,29 @@
+## v0.9.6-A (2026-08-03)
+
+### Changed
+- Linked-revision submission reliability: the Student Revision page now
+  submits through the dedicated `submit_linked_revision` client method
+  with a bounded 180 s long-operation timeout (`LONG_SUBMIT_TIMEOUTS`);
+  the generic `submit()` and all ordinary request timeouts are unchanged
+  (30 s write). A session-state pending guard consumes queued clicks so a
+  linked revision is never double-POSTed; after a final timeout the page
+  performs a bounded read-only reconciliation through existing GET APIs
+  and shows CONFIRMED_SUCCESS / STILL_PROCESSING / UNCONFIRMED messages
+  instead of a blind "Please try again" retry.
+- Locale: four new keys in en.json and zh_CN.json (parity 524/524);
+  `tests/contracts/api_surface_contract.py` ledger updated for the
+  feature-driven client method and revision-port change.
+
+### Verified
+- Focused suite 21 passed; relevant regression set 212 passed, 3 skipped;
+  full non-live core 730 passed, 8 skipped, 0 failed, exit 0; exact
+  `cmd /c "run.bat --verify"` PASS (migration 12, 33 tables,
+  `config-v0.9.0`, `feedback-prompt-v0.7.1`, health/docs/Streamlit 200);
+  API 77 pairs unchanged; Database public methods 2; locale parity
+  exact; research exports restored to 776 files / 388 dirs; development
+  database unchanged.
+
+
 ## v0.9.5-H2E (2026-08-03)
 
 ### Changed

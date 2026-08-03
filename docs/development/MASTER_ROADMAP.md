@@ -31,6 +31,12 @@
 | v0.9.5-F6C SubmissionService Persistence Dependency Narrowing | completed and verified |
 | v0.9.5-F6B AdminReanalysisService Persistence Dependency Narrowing | completed and verified |
 | v0.9.5-F6A RevisionService Runtime Repository Narrowing | completed and verified |
+## v0.9.6 roadmap - 2026-08-03
+
+| Item | Status |
+|---|---|
+| v0.9.6-A Linked Revision Submission Reliability | completed and verified (dedicated long-operation timeout, pending guard, no duplicate POST, bounded reconciliation; full core 730 passed / 8 skipped, launcher PASS) |
+
 Next stage: **v0.9.6 user-visible feature development** (the next goal
 must deliver a user-visible or research-workflow-visible functional
 outcome; no further generic architecture audit or cleanup is authorized).

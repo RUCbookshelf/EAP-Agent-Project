@@ -1,5 +1,31 @@
 
 
+## 2026-08-03 - v0.9.6-A Make linked revision submission reliable
+
+- **Decision**: Fix the linked-revision submit path with a dedicated
+  bounded long-operation timeout (180 s, `submit_linked_revision`),
+  a pending-state submit guard that consumes queued clicks, no automatic
+  POST retry, and bounded read-only reconciliation through existing GET
+  APIs after a final timeout (CONFIRMED_SUCCESS / STILL_PROCESSING /
+  UNCONFIRMED) with accurate en/zh messages.
+- **Rationale**: Read-only inspection classified the incident as C - the
+  backend durably committed the linked revision after the 30 s client
+  write timeout, and the "Please try again" UI plus a second click
+  created a byte-identical duplicate (essays 24/25). The provider call
+  is the slow pole (30.4-37.7 s in the incident; controlled local
+  reproduction 3.0 s timeout vs 6.0 s backend). 180 s is within the
+  approved 300 s cap and far above measured calls; the client still
+  never auto-retries the POST.
+- **Evidence**: focused 21 passed; relevant suite 212 passed, 3 skipped;
+  full core 730 passed, 8 skipped, exit 0; launcher PASS; API 77 pairs
+  unchanged; Database methods 2; client 52 -> 53 (ledger updated);
+  locale 524/524; exports restored to 776/388; development database
+  unchanged.
+- **Boundary**: no queue, migration, job table, WebSocket, SSE, or generic
+  idempotency framework; no backend production change; original
+  non-linked submissions keep the generic 30 s timeout and behavior.
+
+
 ## 2026-08-03 - v0.9.5-H2E Freeze the architecture for feature development
 
 - **Decision**: Close the v0.9.5 architecture-optimization program with a

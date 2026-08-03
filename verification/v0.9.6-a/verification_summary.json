@@ -1,0 +1,76 @@
+{
+  "baseline_head": "a5459e3",
+  "contract_invariants": {
+    "active_configuration": "config-v0.9.0",
+    "api_path_method_pairs": 77,
+    "database_public_methods": 2,
+    "feedback_prompt": "feedback-prompt-v0.7.1",
+    "frontend_client_change": "52 -> 53 (submit_linked_revision added; feature-driven contract update approved under the v0.9.5 change policy)",
+    "frontend_client_public_methods": 53,
+    "locale_parity": "524/524 (4 new keys added to both files)",
+    "migration": 12,
+    "tables": 33
+  },
+  "development_database": {
+    "before_task_approved_baseline": {
+      "mtime_local": "2026-08-02T11:02:25.887+08:00",
+      "sha256": "340E0F3739FEFFD3DEF87BB6E711CB6F90A8478E7E18D833C715EDCFAB03AFF4",
+      "size_bytes": 8298496
+    },
+    "observed_incident_state": {
+      "mtime_local": "2026-08-03T16:34:04.205+08:00",
+      "sha256": "1DD4B42DB339BBCE3C6A7E0A05749DDDCF07B588770A65AEE84973272109381B",
+      "size_bytes": 9404416
+    },
+    "read_only_inspection_only": true,
+    "unchanged_by_all_verification": true
+  },
+  "export_restoration": [
+    {
+      "final_dirs": 388,
+      "final_files": 776,
+      "generated_dirs": 2,
+      "generated_files": 4,
+      "run": "relevant suite"
+    },
+    {
+      "final_dirs": 388,
+      "final_files": 776,
+      "generated_dirs": 8,
+      "generated_files": 16,
+      "run": "full core"
+    }
+  ],
+  "focused_tests": {
+    "duration_s": 42.45,
+    "file": "tests/test_v096a_linked_revision_submission.py",
+    "result": "21 passed, 0 failed, 0 errors, 3 warnings"
+  },
+  "full_non_live_core": {
+    "command": "pytest -q -p no:cacheprovider --ignore=tests/live tests",
+    "duration_s": 351.65,
+    "exit_code": 0,
+    "isolated_db": "C:\\Users\\16073\\AppData\\Local\\Temp\\v095h2a-hcvd71aa\\h2a.db",
+    "result": "730 passed, 8 skipped, 0 failed, 0 errors, 4 warnings"
+  },
+  "kind": "verification_summary",
+  "launcher": {
+    "active_configuration": "config-v0.9.0",
+    "command": "cmd /c \"run.bat --verify\"",
+    "docs": 200,
+    "exit_code": 0,
+    "feedback_prompt": "feedback-prompt-v0.7.1",
+    "health": 200,
+    "isolated_db": "C:\\Users\\16073\\AppData\\Local\\Temp\\v096a-verify-f297c78d\\verify.db",
+    "migration": 12,
+    "result": "PASS",
+    "streamlit": 200,
+    "tables": 33
+  },
+  "relevant_suite": {
+    "duration_s": 188.97,
+    "files": 17,
+    "result": "212 passed, 3 skipped, 0 failed, 0 errors, 4 warnings"
+  },
+  "stage": "v0.9.6-A"
+}
