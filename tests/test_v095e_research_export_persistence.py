@@ -20,9 +20,9 @@ def test_export_job_repository_surface_round_trips_without_creating_export_files
         "excluded_counts": {},
         "manifest_path": None,
     }
-    assert database.save_export_job(job) is job
-    assert database.get_export_job(job["export_id"]) == job
-    listed = database.list_export_jobs()
+    assert database._research_repository.save_export_job(job) is job
+    assert database._research_repository.get_export_job(job["export_id"]) == job
+    listed = database._research_repository.list_export_jobs()
     assert len(listed) == 1
     assert listed[0]["filter"] == job["filter_spec"]
     assert "filter_spec" not in listed[0]

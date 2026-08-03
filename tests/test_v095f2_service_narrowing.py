@@ -111,7 +111,7 @@ def test_learner_history_service_annotated_against_prior_records_port():
 
 def test_facade_and_submission_repository_satisfy_prior_records_port(tmp_path):
     repository = Database(tmp_path / "not-opened.db")
-    assert isinstance(repository, PriorRecordsPort)
+    assert isinstance(repository._submission_repository, PriorRecordsPort)
     assert isinstance(repository._submission_repository, SQLiteSubmissionRepository)
     assert isinstance(repository._submission_repository, PriorRecordsPort)
     assert not (tmp_path / "not-opened.db").exists()
@@ -159,9 +159,9 @@ def test_prior_records_delegation_unchanged(tmp_path):
     repository.initialize()
     first = _submission("S1", datetime(2026, 1, 1, tzinfo=timezone.utc))
     second = _submission("S1", datetime(2026, 1, 8, tzinfo=timezone.utc))
-    repository.save_essay(first)
-    repository.save_essay(second)
-    facade_rows = repository.prior_records(second)
+    repository._submission_repository.save_essay(first)
+    repository._submission_repository.save_essay(second)
+    facade_rows = repository._submission_repository.prior_records(second)
     repo_rows = repository._submission_repository.prior_records(second)
     assert facade_rows == repo_rows
     assert len(facade_rows) == 1
@@ -172,9 +172,9 @@ def test_learner_history_runtime_object_compatible_through_submission_service(tm
     settings = _settings(tmp_path)
     repository = Database(settings.database_path)
     repository.initialize()
-    service = LearnerHistoryService(repository)
-    assert isinstance(repository, PriorRecordsPort)
-    assert service.database is repository
+    service = LearnerHistoryService(repository._submission_repository)
+    assert isinstance(repository._submission_repository, PriorRecordsPort)
+    assert service.database is repository._submission_repository
 
 
 # ---------------------------------------------------------------------------

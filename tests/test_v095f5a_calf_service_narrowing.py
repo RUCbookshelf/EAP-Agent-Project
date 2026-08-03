@@ -218,11 +218,6 @@ class TestFourPorts:
         assert isinstance(submission, CalfSubmissionReadPort)
         assert isinstance(analysis, CalfAnalysisReadPort)
         assert isinstance(learner, CalfStudentReadPort)
-        # Legacy verification only: the facade remains structurally compatible.
-        assert isinstance(database, CalfDataPort)
-        assert isinstance(database, CalfSubmissionReadPort)
-        assert isinstance(database, CalfAnalysisReadPort)
-        assert isinstance(database, CalfStudentReadPort)
 
 
 class TestCalfServiceNarrowing:

@@ -160,10 +160,6 @@ def test_concrete_repositories_and_facade_structurally_satisfy_ports(tmp_path):
     assert isinstance(learner, LearnerProfileReadPort)
     assert isinstance(learner, LearnerProgressPort)
     assert isinstance(configuration, ActiveConfigurationPort)
-    assert isinstance(database, DashboardReadPort)
-    assert isinstance(database, LearnerProfileReadPort)
-    assert isinstance(database, LearnerProgressPort)
-    assert isinstance(database, ActiveConfigurationPort)
 
 
 def test_progress_uses_only_exact_ports_and_preserves_persist_behavior():

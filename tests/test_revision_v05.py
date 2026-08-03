@@ -65,8 +65,8 @@ def _drafts(tmp_path, student: str = "REV001"):
 
 def test_first_revised_and_final_drafts_form_explicit_group(tmp_path):
     repository, revisions, service, first, revised, start = _drafts(tmp_path)
-    assert repository.get_revision_group_for_submission(first.essay_id) is not None
-    group = repository.get_revision_group_for_submission(revised.essay_id)
+    assert repository._revision_repository.get_revision_group_for_submission(first.essay_id) is not None
+    group = repository._revision_repository.get_revision_group_for_submission(revised.essay_id)
     assert group.member_submission_ids == [first.essay_id, revised.essay_id]
     final = service.submit(_submission(
         "REV001", "Universities should provide quiet rooms. Libraries are full, so unused seminar rooms should open.",
@@ -83,8 +83,8 @@ def test_same_prompt_does_not_automatically_create_relationship(tmp_path):
     now = datetime(2026, 1, 1, tzinfo=timezone.utc)
     first = service.submit(_submission("NOAUTO", "One independent essay has sufficient text for analysis.", when=now))
     second = service.submit(_submission("NOAUTO", "Another independent essay has sufficient text for analysis.", when=now + timedelta(days=1)))
-    assert repository.get_revision_group_for_submission(first.essay_id) is None
-    assert repository.get_revision_group_for_submission(second.essay_id) is None
+    assert repository._revision_repository.get_revision_group_for_submission(first.essay_id) is None
+    assert repository._revision_repository.get_revision_group_for_submission(second.essay_id) is None
 
 
 def test_candidates_are_same_student_and_require_explicit_choice(tmp_path):
@@ -95,7 +95,7 @@ def test_candidates_are_same_student_and_require_explicit_choice(tmp_path):
     service.submit(_submission("OTHER", "Another student's essay must not be offered.", when=now))
     candidates = revisions.candidates(second.essay_id)
     assert [item["essay_id"] for item in candidates] == [first.essay_id]
-    assert repository.get_revision_group_for_submission(second.essay_id) is None
+    assert repository._revision_repository.get_revision_group_for_submission(second.essay_id) is None
 
 
 def test_cross_student_self_duplicate_and_cycle_links_are_rejected(tmp_path):
@@ -198,7 +198,7 @@ def test_revision_group_deduplicates_longitudinal_representatives(tmp_path):
         "REV001", "The final draft retains the same task but uses a concise argument and conclusion.",
         when=start + timedelta(days=2), stage="final draft", source=revised.essay_id,
     ))
-    records = repository.list_longitudinal_records("REV001")
+    records = repository._learner_repository.list_longitudinal_records("REV001")
     included = [row["essay_id"] for row in records if row["is_longitudinal_representative"]]
     assert included == [final.essay_id]
     excluded = [row for row in records if not row["is_longitudinal_representative"]]
@@ -216,7 +216,7 @@ def test_revision_prompt_local_demo_and_evidence_validation(tmp_path):
     assert {item.status for item in revised.revision_snapshot.uptake_candidates} >= {"supported", "partially_supported"}
     assert all(item.source_type in {"student_source_sentence", "synthetic_practice_sentence"} for item in revised.provider.feedback.exercises)
     assert all(item.generation_version == "exercise-generator-v0.5.0" for item in revised.provider.feedback.exercises)
-    stored = repository.get_feedback_record(revised.essay_id)
+    stored = repository._submission_repository.get_feedback_record(revised.essay_id)
     assert stored["validation_status"] == "passed"
 
 
@@ -254,7 +254,7 @@ def test_migration_5_preserves_existing_essay_and_adds_revision_tables(tmp_path)
         tables = {row[0] for row in connection.execute("SELECT name FROM sqlite_master WHERE type='table'")}
         columns = {row[1] for row in connection.execute("PRAGMA table_info(essays)")}
         count = connection.execute("SELECT COUNT(*) FROM essays WHERE essay_id=?", (saved.essay_id,)).fetchone()[0]
-    assert repository.migration_version() == 12
+    assert repository._system_repository.migration_version() == 12
     assert {"revision_groups", "revision_snapshots"} <= tables
     assert {"revision_of_submission_id", "revision_group_id", "revision_sequence", "revision_stage", "original_draft_stage"} <= columns
     assert count == 1

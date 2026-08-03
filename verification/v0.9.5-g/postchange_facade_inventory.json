@@ -1,0 +1,197 @@
+{
+  "baseline_commit": "769e6d8",
+  "failures": [],
+  "format_version": 1,
+  "methods": [
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self) -> sqlite3.Connection",
+      "implementation_file": "app/infrastructure/sqlite/repositories/system.py",
+      "implementation_signature_parity": true,
+      "name": "connect",
+      "owner": "SystemRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [
+        "c409d1b0a511a84003321cca8ff14a9736f2e0a7d77b7599746a7f75abe2f2d7"
+      ],
+      "sql_fingerprints_before": [
+        "c409d1b0a511a84003321cca8ff14a9736f2e0a7d77b7599746a7f75abe2f2d7"
+      ]
+    },
+    {
+      "explicit_delegation_parity": true,
+      "facade_signature": "(self) -> None",
+      "implementation_file": "app/infrastructure/sqlite/repositories/system.py",
+      "implementation_signature_parity": true,
+      "name": "initialize",
+      "owner": "SystemRepository",
+      "signature_parity": true,
+      "sql_fingerprint_parity": true,
+      "sql_fingerprints_after": [],
+      "sql_fingerprints_before": []
+    }
+  ],
+  "summary": {
+    "added_methods": [],
+    "delegation_drift_count": 0,
+    "dynamic_delegation_present": false,
+    "implementation_signature_drift_count": 0,
+    "method_count_after": 2,
+    "method_count_before": 86,
+    "migrations_source_parity": true,
+    "missing_methods": [
+      "activate_configuration",
+      "apply_pii_review",
+      "counts",
+      "create_configuration",
+      "create_revision_group",
+      "get_active_configuration",
+      "get_analysis_artifact",
+      "get_analysis_run",
+      "get_configuration",
+      "get_diagnostic_calibration",
+      "get_exercise_instance",
+      "get_exercises",
+      "get_export_job",
+      "get_feedback_record",
+      "get_history_record",
+      "get_latest_analysis_run",
+      "get_latest_learner_profile",
+      "get_latest_revision_snapshot",
+      "get_llm_calls",
+      "get_metric_results",
+      "get_practice_target",
+      "get_revision_group",
+      "get_revision_group_for_submission",
+      "get_student",
+      "get_submission_bundle",
+      "get_system_versions",
+      "link_revision",
+      "list_all_students",
+      "list_all_submissions",
+      "list_analysis_runs",
+      "list_analysis_runs_for_student",
+      "list_analysis_units",
+      "list_configuration_audit",
+      "list_configurations",
+      "list_error_annotations",
+      "list_essays_by_student",
+      "list_exercise_attempts",
+      "list_exercise_attempts_by_student",
+      "list_exercise_instances",
+      "list_export_jobs",
+      "list_feedback_engagement_traces",
+      "list_feedback_records_for_student",
+      "list_history_evidence",
+      "list_human_reviews",
+      "list_learner_profile_snapshots",
+      "list_longitudinal_records",
+      "list_practice_evaluations",
+      "list_practice_evaluations_by_student",
+      "list_practice_state_snapshots",
+      "list_practice_targets",
+      "list_revision_candidates",
+      "list_revision_snapshots",
+      "list_student_history",
+      "list_student_submissions",
+      "list_transfer_evidence_candidates",
+      "list_visualization_records",
+      "list_within_task_responses",
+      "migration_version",
+      "normalize_revision_stage",
+      "ping",
+      "prior_records",
+      "record_versions",
+      "save_analysis",
+      "save_analysis_run",
+      "save_diagnosis",
+      "save_diagnostic_calibration",
+      "save_error_annotations",
+      "save_essay",
+      "save_exercise_attempt",
+      "save_exercise_instance",
+      "save_export_job",
+      "save_feedback",
+      "save_feedback_engagement_trace",
+      "save_history",
+      "save_human_review",
+      "save_learner_profile_snapshot",
+      "save_practice_evaluation",
+      "save_practice_state_snapshot",
+      "save_practice_target",
+      "save_revision_snapshot",
+      "save_transfer_evidence_candidate",
+      "save_within_task_response_candidate",
+      "set_configuration_validation",
+      "transaction"
+    ],
+    "private_sql_parity": {
+      "_configuration_from_row": true,
+      "_insert_configuration_audit": true,
+      "_next_practice_id": true,
+      "_next_research_id": true
+    },
+    "prohibited_repository_imports": [],
+    "public_sql_in_facade": {},
+    "schema_constant_parity": true,
+    "service_api_domain_diff": [],
+    "signature_drift_count": 0,
+    "sql_fingerprint_drift_count": 0,
+    "table_owner_count": 33,
+    "table_owners_unique": true
+  },
+  "table_owners": {
+    "AnalysisRepository": [
+      "metrics",
+      "analysis_runs",
+      "metric_results",
+      "analysis_artifacts"
+    ],
+    "CalfRepository": [
+      "analysis_units",
+      "error_annotations",
+      "diagnostic_calibrations"
+    ],
+    "ConfigurationRepository": [
+      "configuration_versions",
+      "configuration_audit"
+    ],
+    "LearnerRepository": [
+      "learner_profile_snapshots",
+      "history_evidence_registry"
+    ],
+    "PracticeRepository": [
+      "practice_targets",
+      "exercise_instances",
+      "exercise_attempts",
+      "practice_evaluations",
+      "feedback_engagement_traces",
+      "within_task_response_candidates",
+      "transfer_evidence_candidates",
+      "practice_state_snapshots"
+    ],
+    "ResearchRepository": [
+      "human_reviews",
+      "pii_candidates",
+      "export_jobs"
+    ],
+    "RevisionRepository": [
+      "revision_groups",
+      "revision_snapshots"
+    ],
+    "SubmissionRepository": [
+      "students",
+      "essays",
+      "diagnoses",
+      "feedback_records",
+      "exercises",
+      "learner_history",
+      "llm_call_records"
+    ],
+    "SystemRepository": [
+      "schema_migrations",
+      "system_versions"
+    ]
+  }
+}

@@ -168,9 +168,6 @@ class TestPortContracts:
         assert isinstance(database._configuration_repository, AdminConfigurationReadPort)
         assert isinstance(database._submission_repository, AdminSubmissionReadPort)
         assert isinstance(database._analysis_repository, AdminAnalysisPort)
-        assert isinstance(database, AdminConfigurationReadPort)
-        assert isinstance(database, AdminSubmissionReadPort)
-        assert isinstance(database, AdminAnalysisPort)
         from app.infrastructure.sqlite.repositories.revision import SQLiteRevisionRepository
         for name, member in vars(RevisionRepository).items():
             if name.startswith("_") or not callable(member):
@@ -308,12 +305,12 @@ class TestPreviewZeroWrite:
         rec("save_revision_snapshot", repository._revision_repository, "save_revision_snapshot")
         rec("regenerate_feedback", service, "regenerate_feedback")
 
-        before = len(repository.list_analysis_runs(ids[0]))
+        before = len(repository._analysis_repository.list_analysis_runs(ids[0]))
         preview = admin.preview(ReanalysisRequest(
             scope_type="submission", scope_id=str(ids[0]), analyzer_id="basic"))
         assert preview["submission_count"] == 1
         assert calls == ["bundle"]
-        assert len(repository.list_analysis_runs(ids[0])) == before
+        assert len(repository._analysis_repository.list_analysis_runs(ids[0])) == before
 
 
 class TestRunBehavior:
@@ -393,11 +390,11 @@ class TestRunBehavior:
             return row
 
         monkeypatch.setattr(repository._submission_repository, "get_submission_bundle", broken)
-        before = len(repository.list_analysis_runs(ids[0]))
+        before = len(repository._analysis_repository.list_analysis_runs(ids[0]))
         with pytest.raises(KeyError):
             admin.run(ReanalysisRequest(
                 scope_type="submission", scope_id=str(ids[0]), analyzer_id="basic"))
-        assert len(repository.list_analysis_runs(ids[0])) == before
+        assert len(repository._analysis_repository.list_analysis_runs(ids[0])) == before
 
     def test_failure_in_save_analysis_run_propagates_without_later_calls(self, tmp_path, monkeypatch):
         settings, repository, _, service, ids = _seed(tmp_path, count=1)
@@ -405,7 +402,7 @@ class TestRunBehavior:
         calls: list[str] = []
         original_regenerate = service.regenerate_feedback
 
-        before = len(repository.list_analysis_runs(ids[0]))
+        before = len(repository._analysis_repository.list_analysis_runs(ids[0]))
 
         def boom(*args, **kwargs):
             raise RuntimeError("save exploded")
@@ -422,12 +419,12 @@ class TestRunBehavior:
                 call_llm=True, confirm_llm_cost=True,
             ))
         assert calls == []
-        assert len(repository.list_analysis_runs(ids[0])) == before
+        assert len(repository._analysis_repository.list_analysis_runs(ids[0])) == before
 
     def test_failure_after_save_preserves_committed_analysis(self, tmp_path, monkeypatch):
         settings, repository, _, service, ids = _seed(tmp_path, count=1)
         admin = _admin(repository, settings, _configuration_service(repository), service)
-        before = len(repository.list_analysis_runs(ids[0]))
+        before = len(repository._analysis_repository.list_analysis_runs(ids[0]))
 
         def boom(*args, **kwargs):
             raise RuntimeError("feedback exploded")
@@ -438,7 +435,7 @@ class TestRunBehavior:
                 scope_type="submission", scope_id=str(ids[0]), analyzer_id="basic",
                 call_llm=True, confirm_llm_cost=True,
             ))
-        assert len(repository.list_analysis_runs(ids[0])) == before + 1
+        assert len(repository._analysis_repository.list_analysis_runs(ids[0])) == before + 1
 
     def test_revision_failure_preserves_analysis_and_exception_after_revision_group_run(
             self, tmp_path, monkeypatch):
@@ -461,8 +458,8 @@ class TestRunBehavior:
         with pytest.raises(RuntimeError, match="recalculate exploded"):
             admin.run(ReanalysisRequest(
                 scope_type="revision_group", scope_id=group_id, analyzer_id="basic"))
-        assert len(repository.list_analysis_runs(first.essay_id)) == 2
-        assert len(repository.list_analysis_runs(revised.essay_id)) == 2
+        assert len(repository._analysis_repository.list_analysis_runs(first.essay_id)) == 2
+        assert len(repository._analysis_repository.list_analysis_runs(revised.essay_id)) == 2
         assert len(revisions.history(group_id)) == before
 
 

@@ -202,4 +202,4 @@ class TestFacadeComposition:
             line for line in source.splitlines()
             if line.startswith("    def ") and not line.startswith("    def _")
         ]
-        assert len(public) == 86
+        assert len(public) == 2  # v0.9.5-G evidence-supported surface: connect, initialize

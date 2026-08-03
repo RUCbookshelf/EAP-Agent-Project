@@ -13,13 +13,13 @@ from app.models import AnalysisResult, DiagnosisResult, DiagnosisSignal, EssaySu
 def seed(repository: Database, student: str, values: list[int], *, genre="argumentative essay"):
     start = datetime(2026, 1, 1, tzinfo=timezone.utc)
     for index, value in enumerate(values):
-        essay_id = repository.save_essay(EssaySubmission(
+        essay_id = repository._submission_repository.save_essay(EssaySubmission(
             student_id=student, writing_prompt="Should cities protect public parks?",
             genre=genre, draft_stage="first draft", timed=False, tool_use="none",
             essay_text="Synthetic essay text supports transparent testing.",
             submitted_at=start + timedelta(days=index * 14),
         ), synthetic=True)
-        repository.save_analysis(essay_id, AnalysisResult(
+        repository._analysis_repository.save_analysis(essay_id, AnalysisResult(
             metrics={
                 "word_count": value, "sentence_count": value / 10, "paragraph_count": 3,
                 "average_sentence_length": 10, "unique_word_count": value * .7,
@@ -27,7 +27,7 @@ def seed(repository: Database, student: str, values: list[int], *, genre="argume
                 "repeated_content_words": {},
             }, analysis_version="basic-analyzer-v0.1", limitations="prototype",
         ))
-        repository.save_diagnosis(essay_id, DiagnosisResult(
+        repository._analysis_repository.save_diagnosis(essay_id, DiagnosisResult(
             strengths=[], improvement_priorities=[DiagnosisSignal(
                 diagnosis_id="D001", category="lexical_repetition", evidence="prototype",
                 source_metrics=["repeated_content_words"], interpretation="May warrant review.",
@@ -124,8 +124,8 @@ def test_three_api_submissions_feed_filtered_snapshot_evidence_to_feedback(tmp_p
         allowed = {item["history_evidence_id"] for item in evidence}
         used = set(third["feedback_result"]["feedback"]["longitudinal"]["history_evidence_ids"])
         assert used <= allowed
-        profile = repository.get_latest_learner_profile("LLMSNAP01")
+        profile = repository._learner_repository.get_latest_learner_profile("LLMSNAP01")
         if not profile.get("current_learning_targets"):
             assert not used
-        snapshots = repository.list_learner_profile_snapshots("LLMSNAP01")
+        snapshots = repository._learner_repository.list_learner_profile_snapshots("LLMSNAP01")
         assert len(snapshots) == 3 and snapshots[-1]["baseline_status"] == "available"

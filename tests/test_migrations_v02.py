@@ -8,11 +8,11 @@ from app.database import Database, LATEST_MIGRATION_VERSION
 def test_empty_database_upgrades_and_is_idempotent(tmp_path):
     repository = Database(tmp_path / "empty.db")
     repository.initialize()
-    assert repository.migration_version() == LATEST_MIGRATION_VERSION
-    before = repository.counts()
+    assert repository._system_repository.migration_version() == LATEST_MIGRATION_VERSION
+    before = repository._system_repository.counts()
     repository.initialize()
-    assert repository.migration_version() == LATEST_MIGRATION_VERSION
-    assert repository.counts() == before
+    assert repository._system_repository.migration_version() == LATEST_MIGRATION_VERSION
+    assert repository._system_repository.counts() == before
 
 
 def test_legacy_database_upgrades_without_losing_history(tmp_path):
@@ -26,6 +26,6 @@ def test_legacy_database_upgrades_without_losing_history(tmp_path):
         """)
     repository = Database(path)
     repository.initialize()
-    assert repository.migration_version() == LATEST_MIGRATION_VERSION
-    assert repository.get_student("LEGACY")["submission_count"] == 1
-    assert repository.get_submission_bundle(1)["essay_text"] == "Legacy essay."
+    assert repository._system_repository.migration_version() == LATEST_MIGRATION_VERSION
+    assert repository._learner_repository.get_student("LEGACY")["submission_count"] == 1
+    assert repository._submission_repository.get_submission_bundle(1)["essay_text"] == "Legacy essay."

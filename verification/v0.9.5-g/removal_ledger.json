@@ -1,0 +1,342 @@
+{
+  "format_version": 1,
+  "removed": [
+    {
+      "aggregate_owner": "configuration",
+      "method": "activate_configuration"
+    },
+    {
+      "aggregate_owner": "research",
+      "method": "apply_pii_review"
+    },
+    {
+      "aggregate_owner": "system",
+      "method": "counts"
+    },
+    {
+      "aggregate_owner": "configuration",
+      "method": "create_configuration"
+    },
+    {
+      "aggregate_owner": "revision",
+      "method": "create_revision_group"
+    },
+    {
+      "aggregate_owner": "configuration",
+      "method": "get_active_configuration"
+    },
+    {
+      "aggregate_owner": "analysis",
+      "method": "get_analysis_artifact"
+    },
+    {
+      "aggregate_owner": "analysis",
+      "method": "get_analysis_run"
+    },
+    {
+      "aggregate_owner": "configuration",
+      "method": "get_configuration"
+    },
+    {
+      "aggregate_owner": "calf",
+      "method": "get_diagnostic_calibration"
+    },
+    {
+      "aggregate_owner": "practice",
+      "method": "get_exercise_instance"
+    },
+    {
+      "aggregate_owner": "submission",
+      "method": "get_exercises"
+    },
+    {
+      "aggregate_owner": "research",
+      "method": "get_export_job"
+    },
+    {
+      "aggregate_owner": "submission",
+      "method": "get_feedback_record"
+    },
+    {
+      "aggregate_owner": "submission",
+      "method": "get_history_record"
+    },
+    {
+      "aggregate_owner": "analysis",
+      "method": "get_latest_analysis_run"
+    },
+    {
+      "aggregate_owner": "learner",
+      "method": "get_latest_learner_profile"
+    },
+    {
+      "aggregate_owner": "revision",
+      "method": "get_latest_revision_snapshot"
+    },
+    {
+      "aggregate_owner": "submission",
+      "method": "get_llm_calls"
+    },
+    {
+      "aggregate_owner": "analysis",
+      "method": "get_metric_results"
+    },
+    {
+      "aggregate_owner": "practice",
+      "method": "get_practice_target"
+    },
+    {
+      "aggregate_owner": "revision",
+      "method": "get_revision_group"
+    },
+    {
+      "aggregate_owner": "revision",
+      "method": "get_revision_group_for_submission"
+    },
+    {
+      "aggregate_owner": "learner",
+      "method": "get_student"
+    },
+    {
+      "aggregate_owner": "submission",
+      "method": "get_submission_bundle"
+    },
+    {
+      "aggregate_owner": "system",
+      "method": "get_system_versions"
+    },
+    {
+      "aggregate_owner": "revision",
+      "method": "link_revision"
+    },
+    {
+      "aggregate_owner": "learner",
+      "method": "list_all_students"
+    },
+    {
+      "aggregate_owner": "submission",
+      "method": "list_all_submissions"
+    },
+    {
+      "aggregate_owner": "analysis",
+      "method": "list_analysis_runs"
+    },
+    {
+      "aggregate_owner": "practice",
+      "method": "list_analysis_runs_for_student"
+    },
+    {
+      "aggregate_owner": "calf",
+      "method": "list_analysis_units"
+    },
+    {
+      "aggregate_owner": "configuration",
+      "method": "list_configuration_audit"
+    },
+    {
+      "aggregate_owner": "configuration",
+      "method": "list_configurations"
+    },
+    {
+      "aggregate_owner": "calf",
+      "method": "list_error_annotations"
+    },
+    {
+      "aggregate_owner": "practice",
+      "method": "list_essays_by_student"
+    },
+    {
+      "aggregate_owner": "practice",
+      "method": "list_exercise_attempts"
+    },
+    {
+      "aggregate_owner": "practice",
+      "method": "list_exercise_attempts_by_student"
+    },
+    {
+      "aggregate_owner": "practice",
+      "method": "list_exercise_instances"
+    },
+    {
+      "aggregate_owner": "research",
+      "method": "list_export_jobs"
+    },
+    {
+      "aggregate_owner": "practice",
+      "method": "list_feedback_engagement_traces"
+    },
+    {
+      "aggregate_owner": "practice",
+      "method": "list_feedback_records_for_student"
+    },
+    {
+      "aggregate_owner": "learner",
+      "method": "list_history_evidence"
+    },
+    {
+      "aggregate_owner": "research",
+      "method": "list_human_reviews"
+    },
+    {
+      "aggregate_owner": "learner",
+      "method": "list_learner_profile_snapshots"
+    },
+    {
+      "aggregate_owner": "learner",
+      "method": "list_longitudinal_records"
+    },
+    {
+      "aggregate_owner": "practice",
+      "method": "list_practice_evaluations"
+    },
+    {
+      "aggregate_owner": "practice",
+      "method": "list_practice_evaluations_by_student"
+    },
+    {
+      "aggregate_owner": "practice",
+      "method": "list_practice_state_snapshots"
+    },
+    {
+      "aggregate_owner": "practice",
+      "method": "list_practice_targets"
+    },
+    {
+      "aggregate_owner": "revision",
+      "method": "list_revision_candidates"
+    },
+    {
+      "aggregate_owner": "revision",
+      "method": "list_revision_snapshots"
+    },
+    {
+      "aggregate_owner": "learner",
+      "method": "list_student_history"
+    },
+    {
+      "aggregate_owner": "submission",
+      "method": "list_student_submissions"
+    },
+    {
+      "aggregate_owner": "practice",
+      "method": "list_transfer_evidence_candidates"
+    },
+    {
+      "aggregate_owner": "learner",
+      "method": "list_visualization_records"
+    },
+    {
+      "aggregate_owner": "practice",
+      "method": "list_within_task_responses"
+    },
+    {
+      "aggregate_owner": "system",
+      "method": "migration_version"
+    },
+    {
+      "aggregate_owner": "revision",
+      "method": "normalize_revision_stage"
+    },
+    {
+      "aggregate_owner": "system",
+      "method": "ping"
+    },
+    {
+      "aggregate_owner": "submission",
+      "method": "prior_records"
+    },
+    {
+      "aggregate_owner": "system",
+      "method": "record_versions"
+    },
+    {
+      "aggregate_owner": "analysis",
+      "method": "save_analysis"
+    },
+    {
+      "aggregate_owner": "analysis",
+      "method": "save_analysis_run"
+    },
+    {
+      "aggregate_owner": "analysis",
+      "method": "save_diagnosis"
+    },
+    {
+      "aggregate_owner": "calf",
+      "method": "save_diagnostic_calibration"
+    },
+    {
+      "aggregate_owner": "calf",
+      "method": "save_error_annotations"
+    },
+    {
+      "aggregate_owner": "submission",
+      "method": "save_essay"
+    },
+    {
+      "aggregate_owner": "practice",
+      "method": "save_exercise_attempt"
+    },
+    {
+      "aggregate_owner": "practice",
+      "method": "save_exercise_instance"
+    },
+    {
+      "aggregate_owner": "research",
+      "method": "save_export_job"
+    },
+    {
+      "aggregate_owner": "submission",
+      "method": "save_feedback"
+    },
+    {
+      "aggregate_owner": "practice",
+      "method": "save_feedback_engagement_trace"
+    },
+    {
+      "aggregate_owner": "submission",
+      "method": "save_history"
+    },
+    {
+      "aggregate_owner": "research",
+      "method": "save_human_review"
+    },
+    {
+      "aggregate_owner": "learner",
+      "method": "save_learner_profile_snapshot"
+    },
+    {
+      "aggregate_owner": "practice",
+      "method": "save_practice_evaluation"
+    },
+    {
+      "aggregate_owner": "practice",
+      "method": "save_practice_state_snapshot"
+    },
+    {
+      "aggregate_owner": "practice",
+      "method": "save_practice_target"
+    },
+    {
+      "aggregate_owner": "revision",
+      "method": "save_revision_snapshot"
+    },
+    {
+      "aggregate_owner": "practice",
+      "method": "save_transfer_evidence_candidate"
+    },
+    {
+      "aggregate_owner": "practice",
+      "method": "save_within_task_response_candidate"
+    },
+    {
+      "aggregate_owner": "configuration",
+      "method": "set_configuration_validation"
+    },
+    {
+      "aggregate_owner": "system",
+      "method": "transaction"
+    }
+  ],
+  "stage": "v0.9.5-G"
+}

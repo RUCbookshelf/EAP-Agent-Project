@@ -1,5 +1,24 @@
 # Current Task State
 
+**Date:** 2026-08-03
+**Current task:** v0.9.5-G Database Facade Contraction
+**Status:** completed and verified (see `RUN_VERIFICATION_V0.9.5_G.md`)
+
+- The `Database` public surface is `connect` and `initialize`; the 84 removed
+  business-delegation methods are in the exact G removal ledger with
+  replacement paths; the `SQLiteRepository` alias is removed; one connection
+  manager and one Repository graph remain.
+- Zero production Router uses `Depends(get_repository)`; ten API-owned Ports
+  compose facade-owned Repositories on app state; `require_student` uses
+  `StudentLookupPort`; FeedbackPipeline, scripts, and tests use facade-owned
+  aggregate Repositories; no Repository implementation, SQL, or transaction
+  boundary changed.
+- Focused 437 PASS; full core 653 passed + 8 skipped; exact `run.bat
+  --verify` PASS; migration 12, 33 tables, `config-v0.9.0`, prompt
+  `feedback-prompt-v0.7.1`, API 77, client 52, locale 520/520, Database public
+  methods 2; development database unchanged.
+- Next: no further stage without separate authorization.
+
 **Date:** 2026-08-02
 **Current task:** v0.9.5-F6D Practice Write-Boundary Narrowing
 **Status:** completed and verified (see `RUN_VERIFICATION_V0.9.5_F6D.md`)

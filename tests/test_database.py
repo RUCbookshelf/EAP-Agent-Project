@@ -42,12 +42,12 @@ def test_v0_1_database_schema_is_migrated_in_place(tmp_path):
 def test_essay_and_full_pipeline_are_saved(settings, submission):
     result = FeedbackPipeline(settings).submit(submission)
     database = Database(settings.database_path)
-    counts = database.counts()
+    counts = database._system_repository.counts()
     assert result.essay_id == 1
     assert counts["essays"] == counts["metrics"] == counts["diagnoses"] == counts["feedback_records"] == 1
     assert counts["exercises"] >= 1
     assert counts["llm_call_records"] == 1
-    record = database.get_feedback_record(1)
+    record = database._submission_repository.get_feedback_record(1)
     assert record["analysis_version"] == "basic-analyzer-v0.1"
     assert record["prompt_version"] == "feedback-prompt-v0.7.1"
     assert len(record["system_template_hash"]) == 64
@@ -56,7 +56,7 @@ def test_essay_and_full_pipeline_are_saved(settings, submission):
     assert record["schema_version"] == "structured-feedback-v0.7.1"
     assert record["validation_status"] == "passed"
     assert "API" not in " ".join(record.keys()).upper()
-    call = database.get_llm_calls(1)[0]
+    call = database._submission_repository.get_llm_calls(1)[0]
     assert call["request_time"]
     assert call["response_time"]
     assert call["temperature"] == 0.2
@@ -97,8 +97,8 @@ def test_unvalidated_primary_feedback_is_never_saved_as_formal_feedback(
     router = ProviderRouter(InvalidProvider())
     result = FeedbackPipeline(settings, router=router).submit(submission)
     database = Database(settings.database_path)
-    record = database.get_feedback_record(result.essay_id)
-    calls = database.get_llm_calls(result.essay_id)
+    record = database._submission_repository.get_feedback_record(result.essay_id)
+    calls = database._submission_repository.get_llm_calls(result.essay_id)
     assert record["provider_name"] == "local-demo"
     assert "Fabricated quote not in essay." not in record["feedback_json"]
     assert [call["validation_status"] for call in calls] == ["failed", "failed", "passed"]

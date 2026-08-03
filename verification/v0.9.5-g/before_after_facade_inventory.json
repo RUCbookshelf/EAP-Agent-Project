@@ -1,0 +1,12 @@
+{
+  "after_public_method_count": 2,
+  "baseline_commit": "eacf76b",
+  "before_public_method_count": 86,
+  "format_version": 1,
+  "removed_count": 84,
+  "retained": [
+    "connect",
+    "initialize"
+  ],
+  "stage": "v0.9.5-G"
+}

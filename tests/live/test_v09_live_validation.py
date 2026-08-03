@@ -55,23 +55,23 @@ class TestLiveB_ExerciseAttempt:
 
     def test_attempt_persists_via_repo(self, svc, db):
         target = svc.create_practice_target("S001", 10, "D001", "lexical_repetition_local", "target")
-        target = db.save_practice_target(target)
+        target = db._practice_repository.save_practice_target(target)
         exercise = svc.generate_exercise(target, "source text here")
-        exercise = db.save_exercise_instance(exercise)
+        exercise = db._practice_repository.save_exercise_instance(exercise)
         a1 = svc.submit_attempt(exercise["exercise_id"], "S001", "A valid response.", 1)
-        a1 = db.save_exercise_attempt(a1)
+        a1 = db._practice_repository.save_exercise_attempt(a1)
         assert a1["attempt_id"].startswith("EA")
-        attempts = db.list_exercise_attempts(exercise["exercise_id"])
+        attempts = db._practice_repository.list_exercise_attempts(exercise["exercise_id"])
         assert len(attempts) == 1
 
     def test_second_attempt_appends(self, svc, db):
         target = svc.create_practice_target("S001", 10, "D001", "lexical_repetition_local", "target")
-        target = db.save_practice_target(target)
+        target = db._practice_repository.save_practice_target(target)
         exercise = svc.generate_exercise(target, "source")
-        exercise = db.save_exercise_instance(exercise)
-        a1 = db.save_exercise_attempt(svc.submit_attempt(exercise["exercise_id"], "S001", "First.", 1))
-        a2 = db.save_exercise_attempt(svc.submit_attempt(exercise["exercise_id"], "S001", "Second.", 2))
-        attempts = db.list_exercise_attempts(exercise["exercise_id"])
+        exercise = db._practice_repository.save_exercise_instance(exercise)
+        a1 = db._practice_repository.save_exercise_attempt(svc.submit_attempt(exercise["exercise_id"], "S001", "First.", 1))
+        a2 = db._practice_repository.save_exercise_attempt(svc.submit_attempt(exercise["exercise_id"], "S001", "Second.", 2))
+        attempts = db._practice_repository.list_exercise_attempts(exercise["exercise_id"])
         assert len(attempts) == 2
         assert attempts[0]["attempt_number"] == 1
         assert attempts[1]["attempt_number"] == 2

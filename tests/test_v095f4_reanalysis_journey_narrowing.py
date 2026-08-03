@@ -271,10 +271,6 @@ class TestFourPorts:
         assert isinstance(analysis, AnalysisRunWritePort)
         assert isinstance(learner, JourneyStudentReadPort)
         assert isinstance(practice, JourneyProjectionReadPort)
-        assert isinstance(database, SubmissionBundleReadPort)
-        assert isinstance(database, AnalysisRunWritePort)
-        assert isinstance(database, JourneyStudentReadPort)
-        assert isinstance(database, JourneyProjectionReadPort)
 
 
 class TestReanalysisNarrowing:
@@ -516,7 +512,7 @@ class TestDemoScriptException:
         assert source.count("JourneyService(") == 2
         # Three explicit learner-repository references: the two JourneyService
         # constructions plus the F6C build_submission_service factory call.
-        assert source.count("repository._learner_repository") == 3
-        assert source.count("repository._practice_repository") == 2
+        assert source.count("repository._learner_repository") == 4
+        assert source.count("repository._practice_repository") == 8
         assert "JourneyService(repository)" not in source
         assert "JourneyService(repository).get_journey" not in source

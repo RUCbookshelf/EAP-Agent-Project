@@ -100,12 +100,12 @@ def _full_demo_journey(repo, submission_service, practice_service):
         source_priority_id=f"PRIO-{original.essay_id}",
         evidence_ids=priority.source_metrics, gate_status="selected",
     )
-    target = repo.save_practice_target(target)
-    exercise = repo.save_exercise_instance(practice_service.generate_exercise(target, REPETITION_ESSAY))
-    attempt = repo.save_exercise_attempt(
+    target = repo._practice_repository.save_practice_target(target)
+    exercise = repo._practice_repository.save_exercise_instance(practice_service.generate_exercise(target, REPETITION_ESSAY))
+    attempt = repo._practice_repository.save_exercise_attempt(
         practice_service.submit_attempt(exercise["exercise_id"], "JTEST", "A valid response reducing repetition.", 1)
     )
-    evaluation = repo.save_practice_evaluation(
+    evaluation = repo._practice_repository.save_practice_evaluation(
         practice_service.evaluate_attempt(attempt, target, REPETITION_ESSAY)
     )
     revised = submission_service.submit(
@@ -116,7 +116,7 @@ def _full_demo_journey(repo, submission_service, practice_service):
     group_id = None
     if revised.revision_group_summary:
         group_id = revised.revision_group_summary.revision_group_id
-    response = repo.save_within_task_response_candidate(
+    response = repo._practice_repository.save_within_task_response_candidate(
         practice_service.evaluate_within_task_response(
             "JTEST", target, original.essay_id, revised.essay_id,
             revision_group_id=group_id, major_rewrite=False,
@@ -248,7 +248,7 @@ class TestJourneyStates:
                 ("NOANA", datetime.now(timezone.utc).isoformat()),
             )
         submission = _essay("NOANA", REPETITION_ESSAY)
-        repo.save_essay(submission)
+        repo._submission_repository.save_essay(submission)
         data = journey.get_journey("NOANA")
         assert data["state"] == "submission_without_analysis"
         types = {e["event_type"] for e in data["events"]}
@@ -276,7 +276,7 @@ class TestJourneyStates:
             "NOATT", original.essay_id, priority.diagnosis_id, "lexical_repetition_local",
             priority.interpretation, gate_status="selected",
         )
-        repo.save_practice_target(target)
+        repo._practice_repository.save_practice_target(target)
         data = journey.get_journey("NOATT")
         assert data["state"] == "target_no_attempt"
 
@@ -284,12 +284,12 @@ class TestJourneyStates:
         submission_service, practice_service, journey = services
         original = submission_service.submit(_essay("NOEVAL", REPETITION_ESSAY), synthetic=True)
         priority = _selected_priority(original)
-        target = repo.save_practice_target(practice_service.create_practice_target(
+        target = repo._practice_repository.save_practice_target(practice_service.create_practice_target(
             "NOEVAL", original.essay_id, priority.diagnosis_id, "lexical_repetition_local",
             priority.interpretation, gate_status="selected",
         ))
-        exercise = repo.save_exercise_instance(practice_service.generate_exercise(target, REPETITION_ESSAY))
-        repo.save_exercise_attempt(
+        exercise = repo._practice_repository.save_exercise_instance(practice_service.generate_exercise(target, REPETITION_ESSAY))
+        repo._practice_repository.save_exercise_attempt(
             practice_service.submit_attempt(exercise["exercise_id"], "NOEVAL", "A response.", 1)
         )
         data = journey.get_journey("NOEVAL")
@@ -312,16 +312,16 @@ class TestPracticeIdempotency:
         submission_service, practice_service, _ = services
         original = submission_service.submit(_essay("IDEM", REPETITION_ESSAY), synthetic=True)
         priority = _selected_priority(original)
-        target = repo.save_practice_target(practice_service.create_practice_target(
+        target = repo._practice_repository.save_practice_target(practice_service.create_practice_target(
             "IDEM", original.essay_id, priority.diagnosis_id, "lexical_repetition_local",
             priority.interpretation, gate_status="selected",
         ))
-        repo.save_exercise_instance(practice_service.generate_exercise(target, REPETITION_ESSAY))
-        instances = repo.list_exercise_instances(practice_target_id=target["practice_target_id"])
+        repo._practice_repository.save_exercise_instance(practice_service.generate_exercise(target, REPETITION_ESSAY))
+        instances = repo._practice_repository.list_exercise_instances(practice_target_id=target["practice_target_id"])
         assert len(instances) == 1
         # Repeated reads must not create instances.
-        repo.list_exercise_instances(practice_target_id=target["practice_target_id"])
-        assert len(repo.list_exercise_instances(practice_target_id=target["practice_target_id"])) == 1
+        repo._practice_repository.list_exercise_instances(practice_target_id=target["practice_target_id"])
+        assert len(repo._practice_repository.list_exercise_instances(practice_target_id=target["practice_target_id"])) == 1
 
     def test_empty_attempt_is_invalid_and_not_saved(self, repo, services):
         _, practice_service, _ = services

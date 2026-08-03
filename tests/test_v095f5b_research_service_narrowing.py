@@ -204,10 +204,6 @@ class TestThreePorts:
         assert isinstance(research, ResearchExportReadPort)
         # The same repository instance satisfies both Research-owned Ports.
         assert isinstance(research, ResearchReviewPort) and isinstance(research, ResearchExportReadPort)
-        # Legacy verification only: the facade remains structurally compatible.
-        assert isinstance(database, ResearchSubmissionReadPort)
-        assert isinstance(database, ResearchReviewPort)
-        assert isinstance(database, ResearchExportReadPort)
 
 
 class TestServiceNarrowing:
@@ -417,7 +413,8 @@ class TestComposition:
     def test_research_router_source_constructs_nothing_and_keeps_best_effort_write(self):
         source = (ROOT / "app/api/routers/research.py").read_text(encoding="utf-8")
         assert "get_research" in source
-        assert "get_repository" in source
+        assert "get_research_export_writer" in source
+        assert "get_repository" not in source
         assert "save_export_job" in source
         assert "ResearchDataService(" not in source
         assert "app.research.service" not in source
@@ -448,7 +445,7 @@ class TestRouterBoundary:
             assert body["status"] == "completed"
             assert body["export_directory"]
             repository = client.app.state.repository
-            jobs = repository.list_export_jobs()
+            jobs = repository._research_repository.list_export_jobs()
             assert len(jobs) == 1
             assert jobs[0]["export_id"] == body["export_id"]
             history = client.get("/api/v1/research/export/history")
@@ -466,7 +463,7 @@ class TestRouterBoundary:
             def _boom(job: dict) -> dict:
                 raise RuntimeError("audit row failed")
 
-            repository.save_export_job = _boom
+            repository._research_repository.save_export_job = _boom
             payload = self._export_payload()
             created = client.post("/api/v1/submissions", json={
                 "student_id": "F5B-EXP2", "writing_prompt": "P",
@@ -479,7 +476,7 @@ class TestRouterBoundary:
             assert result.status_code == 200
             body = result.json()
             assert body["status"] == "completed"
-            assert len(repository.list_export_jobs()) == 0
+            assert len(repository._research_repository.list_export_jobs()) == 0
             # Without an audit row the manifest lookup is unknown -> 404 (unchanged behavior).
             manifest = client.get(f"/api/v1/research/export/{body['export_id']}/manifest")
             assert manifest.status_code == 404

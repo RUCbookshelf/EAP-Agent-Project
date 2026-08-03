@@ -305,12 +305,12 @@ def test_feedback_validator_cannot_restore_monitored_diagnosis(tmp_path):
 def test_migration_7_and_append_only_calibration_repository(tmp_path):
     repository, service = local_stack(tmp_path)
     result = service.submit(EssaySubmission.model_validate(payload()))
-    assert repository.migration_version() == 12
+    assert repository._system_repository.migration_version() == 12
     with repository.connect() as connection:
         columns = {row[1] for row in connection.execute("PRAGMA table_info(metric_results)")}
         count = connection.execute("SELECT COUNT(*) FROM diagnostic_calibrations WHERE essay_id=?", (result.essay_id,)).fetchone()[0]
     assert {"confidence", "measurement_metadata_json", "eligible_for_diagnosis"} <= columns
-    assert count == 1 and repository.get_diagnostic_calibration(result.essay_id).calibration_id
+    assert count == 1 and repository._calf_repository.get_diagnostic_calibration(result.essay_id).calibration_id
 
 
 def test_v06_database_upgrades_without_losing_historical_essay(tmp_path):
@@ -334,20 +334,20 @@ def test_v06_database_upgrades_without_losing_historical_essay(tmp_path):
 
 def test_configuration_v061_is_new_active_child_and_old_preserved(tmp_path):
     repository, _ = local_stack(tmp_path)
-    active = repository.get_active_configuration()
+    active = repository._configuration_repository.get_active_configuration()
     assert active.version == "config-v0.9.0"
-    assert repository.get_configuration("config-v0.6.1") is not None
+    assert repository._configuration_repository.get_configuration("config-v0.6.1") is not None
     assert active.payload.lexical_repetition_minimum_count == 4
     assert active.payload.active_prompt_version == "feedback-prompt-v0.7.1"
 
 
 def test_direct_rollback_to_preserved_v06_configuration(tmp_path):
     repository, service = local_stack(tmp_path)
-    configurations = ConfigurationService(repository, service.analyzer.registry, default_metric_registry())
-    rolled = configurations.rollback(repository.get_active_configuration().configuration_id, reason="Human review rollback test.")
+    configurations = ConfigurationService(repository._configuration_repository, service.analyzer.registry, default_metric_registry())
+    rolled = configurations.rollback(repository._configuration_repository.get_active_configuration().configuration_id, reason="Human review rollback test.")
     assert rolled.version == "config-v0.8.2"
-    assert repository.get_configuration("config-v0.8.2").status == "active"
-    assert repository.get_configuration("config-v0.9.0").status == "inactive"
+    assert repository._configuration_repository.get_configuration("config-v0.8.2").status == "active"
+    assert repository._configuration_repository.get_configuration("config-v0.9.0").status == "inactive"
 
 
 def test_api_exposes_research_audit_but_student_feedback_is_filtered(tmp_path):
@@ -392,4 +392,4 @@ def test_revision_workflow_retains_calibration_and_does_not_mark_monitored_bias_
     assert revised.diagnostic_calibration.diagnosis_version == "prototype-diagnosis-v0.6.1"
     trajectories = revised.revision_snapshot.diagnosis_trajectories
     assert not any(item.get("category") == "lexical_repetition" and item.get("status") in {"solved", "mastered"} for item in trajectories)
-    assert repository.get_diagnostic_calibration(first.essay_id).monitored_signals
+    assert repository._calf_repository.get_diagnostic_calibration(first.essay_id).monitored_signals

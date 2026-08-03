@@ -8,6 +8,29 @@
 
 # Project State
 
+## Current v0.9.5-G State
+
+- Status: completed and verified; Database facade contraction scope closed;
+  core v0.9.5 modularization and persistence decoupling complete.
+- The `Database` public surface is `connect`, `initialize` (evidence-supported
+  infrastructure); all 84 removed business-delegation methods are recorded in
+  the exact G removal ledger with replacements (aggregate Repositories or API
+  Ports) or zero-caller proofs; the `SQLiteRepository` alias and export are
+  removed; one connection manager and one Repository graph remain.
+- Zero production Router uses `Depends(get_repository)`; ten exact API-owned
+  Ports (`app/api/ports.py`) compose facade-owned Repositories on app state;
+  `require_student` uses `StudentLookupPort`; FeedbackPipeline and scripts use
+  facade-owned aggregate Repositories; Research export-job best-effort
+  behavior unchanged.
+- Verification: focused 437 PASS; full non-live core 653 passed + 8 skipped;
+  exact `run.bat --verify` PASS; migration 12; 33 tables; `config-v0.9.0`;
+  prompt `feedback-prompt-v0.7.1`; API 77; client 52; locale 520/520;
+  Database public methods 2; development database unchanged
+  (SHA-256/size/mtime).
+- Next: no further v0.9.5 stage without separate authorization; Protocol
+  consolidation, legacy `SubmissionRepository` removal, FeedbackPipeline
+  removal, WTR collision, and export-job redesign remain deferred.
+
 ## Current v0.9.5-F6D State
 
 - Status: completed and verified; Practice write-boundary narrowing scope

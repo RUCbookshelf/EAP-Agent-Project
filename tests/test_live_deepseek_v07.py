@@ -60,7 +60,7 @@ def test_three_task_live_deepseek_uses_screened_v07_history(tmp_path):
     assert final.provider.fallback_reason is None
     assert final.provider.prompt_version == "feedback-prompt-v0.7.1"
     assert final.provider.schema_version == "structured-feedback-v0.7.1"
-    profile = repository.get_latest_learner_profile("LIVE-V07-SYNTHETIC")
+    profile = repository._learner_repository.get_latest_learner_profile("LIVE-V07-SYNTHETIC")
     assert profile["profile_version"] == "learner-profile-v0.7.0"
     assert len(profile["representative_submission_ids"]) == 3
     assert profile["data_sufficiency"]["status"] == "provisional"

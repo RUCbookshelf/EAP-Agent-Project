@@ -1,5 +1,37 @@
 
 
+## 2026-08-03 - v0.9.5-G Database facade contraction
+
+- **Decision**: Contract the `Database` public facade from 86 methods to the
+  evidence-supported infrastructure surface (`connect`, `initialize`) after
+  migrating every active caller to existing facade-owned aggregate
+  Repositories, Services, or new exact API Ports; remove the
+  `SQLiteRepository = Database` alias and export; keep `Database` as the sole
+  owner of one `SQLiteConnectionManager` and one Repository graph. Ten
+  API-owned Ports in `app/api/ports.py` (including `StudentLookupPort` for
+  `require_student`) are composed on app state in both application paths;
+  `get_repository` is removed from `app/api/deps.py`.
+- **Rationale**: After F2-F6D, the remaining facade business delegation had no
+  evidence-supported production need; the aggregate Repositories own every
+  behavior; the retained pair covers graph lifecycle and connection
+  infrastructure. Per-method disposition (A retain, B/C/D migrate, E remove)
+  is recorded for all 86 methods; 84 removals have replacements or zero-caller
+  proofs; the historical E inventory JSON is preserved unchanged with the
+  parity verification updated to a G-era contract.
+- **Parity boundary**: Repository implementations, signatures, SQL, DDL,
+  migrations (12), table ownership (33), transaction boundaries (all F2-F6D
+  partial-commit and write workflows unchanged), API 77 pairs, client 52
+  methods, locale 520/520, `config-v0.9.0`, prompt `feedback-prompt-v0.7.1`
+  unchanged. No public Repository bundle, generic accessor, proxy, adapter,
+  Service Locator, Unit of Work, or dynamic delegation.
+- **Evidence**: focused 437 PASS; full non-live core 653 passed + 8 skipped;
+  exact `run.bat --verify` PASS; Database public methods 2; development
+  database unchanged (SHA-256/size/mtime).
+- **Boundary**: no further v0.9.5 stage without separate authorization;
+  Protocol consolidation, legacy `SubmissionRepository` removal,
+  FeedbackPipeline removal, WTR collision, export-job redesign remain
+  deferred.
+
 ## 2026-08-02 - v0.9.5-F6D Practice write-boundary narrowing
 
 - **Decision**: Remove every active Practice Router dependency on the broad

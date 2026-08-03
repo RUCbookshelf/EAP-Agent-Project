@@ -77,7 +77,7 @@ def test_case_1_no_history_uses_structured_status_without_retry_or_fallback(tmp_
     assert result.provider.retry_count == 0 and result.provider.success_status == "success"
     assert result.provider.prompt_version == "feedback-prompt-v0.7.1"
     assert result.provider.schema_version == "structured-feedback-v0.7.1"
-    assert repository.get_feedback_record(result.essay_id)["validation_status"] == "passed"
+    assert repository._submission_repository.get_feedback_record(result.essay_id)["validation_status"] == "passed"
 
 
 def test_cases_3_and_5_four_drafts_are_one_task_with_explained_empty_states(tmp_path):
@@ -280,7 +280,7 @@ def test_migration_9_is_additive_persists_provider_status_and_rolls_back_logical
             "SELECT version FROM configuration_versions WHERE status='active'"
         ).fetchone()[0] == "config-v0.8.2"
         assert upgrade(connection) == 12
-        assert repository.get_active_configuration().version == "config-v0.9.0"
+        assert repository._configuration_repository.get_active_configuration().version == "config-v0.9.0"
     assert settings.application_version == "0.8.0"
 
 

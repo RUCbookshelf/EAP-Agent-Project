@@ -178,10 +178,6 @@ class TestPortContracts:
         assert isinstance(database._submission_repository, SubmissionDataPort)
         assert isinstance(database._analysis_repository, SubmissionAnalysisPort)
         assert isinstance(database._calf_repository, SubmissionCalibrationPort)
-        assert isinstance(database, SubmissionSystemPort)
-        assert isinstance(database, SubmissionDataPort)
-        assert isinstance(database, SubmissionAnalysisPort)
-        assert isinstance(database, SubmissionCalibrationPort)
 
     def test_no_cross_port_method_and_exact_eleven_method_union(self):
         all_methods = (
@@ -445,7 +441,7 @@ class TestSubmitBehavior:
             "save_diagnosis", "save_diagnostic_calibration", "prior_records",
             "recalculate", "generate", "save_feedback", "save_history",
         ]
-        counts = database.counts()
+        counts = database._system_repository.counts()
         assert counts["essays"] == 1
         assert counts["analysis_runs"] == 1
         assert counts["diagnoses"] == 1
@@ -622,7 +618,7 @@ class TestFailurePartialCommits:
         with pytest.raises(RuntimeError, match=f"{boundary} exploded"):
             service.submit(_submission(f"F6C-{boundary}"), synthetic=True)
 
-        counts = database.counts()
+        counts = database._system_repository.counts()
         order = ["save_essay", "save_analysis_run", "save_analysis", "save_diagnosis",
                  "save_diagnostic_calibration", "save_feedback", "save_history"]
         boundary_index = order.index(boundary)
@@ -648,12 +644,12 @@ class TestFailurePartialCommits:
         monkeypatch.setattr(database._submission_repository, "save_essay", boom)
         with pytest.raises(RuntimeError, match="save_essay exploded"):
             service.submit(_submission("F6C-Z"), synthetic=True)
-        counts = database.counts()
+        counts = database._system_repository.counts()
         assert counts["essays"] == 0
 
     def test_regenerate_feedback_failure_preserves_committed_feedback(self, tmp_path, monkeypatch):
         database, service, result = self._seeded(tmp_path)
-        before = len(database.list_analysis_runs(result.essay_id))
+        before = len(database._analysis_repository.list_analysis_runs(result.essay_id))
 
         def boom(*args, **kwargs):
             raise RuntimeError("feedback write exploded")
@@ -661,7 +657,7 @@ class TestFailurePartialCommits:
         monkeypatch.setattr(database._submission_repository, "save_feedback", boom)
         with pytest.raises(RuntimeError, match="feedback write exploded"):
             service.regenerate_feedback(result.essay_id, result.analysis)
-        assert len(database.list_analysis_runs(result.essay_id)) == before
+        assert len(database._analysis_repository.list_analysis_runs(result.essay_id)) == before
         with database.connect() as connection:
             assert connection.execute(
                 "SELECT COUNT(*) FROM feedback_records WHERE essay_id=?",

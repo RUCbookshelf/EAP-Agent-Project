@@ -1,3 +1,43 @@
+## v0.9.5-G (2026-08-03)
+
+### Changed
+- Contracted the `Database` public facade from 86 methods to the
+  evidence-supported infrastructure surface (`connect`, `initialize`);
+  removed all 84 business-delegation methods, each recorded in the exact G
+  removal ledger with a replacement access path (facade-owned aggregate
+  Repository or an exact API Port) or a zero-caller proof. `Database`
+  continues owning one `SQLiteConnectionManager` and one Repository graph.
+- Migrated all remaining production broad-facade callers: zero
+  `Depends(get_repository)` in production Routers (analysis, calf, research,
+  revisions, students, submissions, system now use ten exact API-owned Ports
+  from new `app/api/ports.py` composed on app state with narrow dependency
+  accessors); `require_student` uses the new `StudentLookupPort`; main.py
+  lifecycle and FeedbackPipeline use facade-owned aggregate Repositories;
+  Research export-job best-effort behavior preserved.
+- Removed the `SQLiteRepository = Database` alias and its export
+  (`app/database/__init__.py` now exports `Database`,
+  `LATEST_MIGRATION_VERSION`, `rollback`, `upgrade`); operational scripts,
+  verification helpers, and ~24 test files migrated from broad-facade
+  convenience to facade-owned aggregate Repositories; the v0.9.5-E parity
+  verification updated to the G-era contract (historical E inventory JSON
+  preserved unchanged).
+- No Repository implementation, SQL, DDL, migration, transaction boundary,
+  API contract, schema, prompt, provider, UI, or localization change;
+  transaction-preservation matrix (Submission independent commits, Revision
+  three-commit workflow, Admin partial commits, Practice Attempt-first/
+  Evaluation-best-effort, Research best-effort, learner atomicity, CALF
+  guards) verified unchanged.
+- Added 15 focused G facade-contraction tests, the G isolation runner, the
+  G SPEC/verification documentation, the removal ledger, and the before/after
+  facade inventory.
+
+### Verified
+- Focused G set 437 PASS; full non-live core 653 passed + 8 skipped; exact
+  `run.bat --verify` PASS (migration 12, 33 tables, `config-v0.9.0`, prompt
+  v0.7.1, health/docs/Streamlit 200); API 77; client 52; locale 520/520;
+  Database public methods 2; development database unchanged
+  (SHA-256/size/mtime).
+
 ## v0.9.5-F6D (2026-08-02)
 
 ### Changed

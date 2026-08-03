@@ -299,6 +299,6 @@ class TestMigrationConfig:
         """config-v0.9.0 is the active configuration."""
         db = Database(pathlib.Path(tempfile.mkdtemp()) / "test.db")
         db.initialize()
-        config = db.get_active_configuration()
+        config = db._configuration_repository.get_active_configuration()
         assert config is not None
         assert config.version == "config-v0.9.0"

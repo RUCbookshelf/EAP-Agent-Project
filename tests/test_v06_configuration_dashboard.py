@@ -70,7 +70,7 @@ def _seed(tmp_path, count=3):
 
 def _configuration_service(repository):
     analyzers = AnalyzerRegistry([BasicAnalyzer()])
-    return ConfigurationService(repository, analyzers, default_metric_registry())
+    return ConfigurationService(repository._configuration_repository, analyzers, default_metric_registry())
 
 
 def _dashboard_service(repository):
@@ -83,10 +83,10 @@ def _dashboard_service(repository):
 
 def test_migration_6_creates_active_configuration_and_audit(tmp_path):
     repository = Database(tmp_path / "migration.db"); repository.initialize()
-    assert repository.migration_version() == 12
-    active = repository.get_active_configuration()
+    assert repository._system_repository.migration_version() == 12
+    active = repository._configuration_repository.get_active_configuration()
     assert active.version == "config-v0.9.0" and active.status == "active"
-    assert len(repository.list_configuration_audit()) >= 5
+    assert len(repository._configuration_repository.list_configuration_audit()) >= 5
 
 
 def test_configuration_create_hash_change_note_and_append_only(tmp_path):
@@ -125,7 +125,7 @@ def test_invalid_or_unavailable_configuration_cannot_activate(tmp_path):
     analyzers = AnalyzerRegistry([
         BasicAnalyzer(), UnavailableAnalyzer("spacy", "spacy-analyzer-v0.4.0", "missing test model")
     ])
-    service = ConfigurationService(repository, analyzers, default_metric_registry())
+    service = ConfigurationService(repository._configuration_repository, analyzers, default_metric_registry())
     created = service.create(ConfigurationCreate(
         payload=ConfigurationPayload(active_analyzer="spacy"), change_note="Test unavailable model.",
     ))
@@ -171,7 +171,7 @@ def test_dashboard_timeline_inclusion_exclusion_issues_and_limitations(tmp_path)
 
 def test_dashboard_never_connects_incompatible_analyzer_metric_or_config_versions(tmp_path):
     _, repository, _, _, ids = _seed(tmp_path)
-    second = repository.get_latest_analysis_run(ids[1])
+    second = repository._analysis_repository.get_latest_analysis_run(ids[1])
     with repository.connect() as connection:
         connection.execute(
             "UPDATE analysis_runs SET analyzer_version='alternate-analyzer-v9', configuration_version='config-v9' WHERE analysis_run_id=?",
@@ -217,12 +217,12 @@ def test_admin_reanalysis_preview_append_only_and_no_llm_by_default(tmp_path):
         revision_repository=repository._revision_repository,
     )
     request = ReanalysisRequest(scope_type="submission", scope_id=str(ids[0]), analyzer_id="basic")
-    before = len(repository.list_analysis_runs(ids[0]))
+    before = len(repository._analysis_repository.list_analysis_runs(ids[0]))
     preview = admin.preview(request)
     assert preview["submission_count"] == 1 and preview["llm_requested"] is False
     result = admin.run(request)
     assert result["llm_called"] is False and result["feedback_records"] == []
-    assert len(repository.list_analysis_runs(ids[0])) == before + 1
+    assert len(repository._analysis_repository.list_analysis_runs(ids[0])) == before + 1
 
 
 def test_admin_reanalysis_explicit_llm_path_is_separately_confirmed(tmp_path):
@@ -258,7 +258,7 @@ def test_admin_reanalysis_additional_scopes(tmp_path, scope_type):
         submission_service=service,
         revision_repository=repository._revision_repository,
     )
-    scope_id = "V06-STUDENT" if scope_type == "student" else repository.get_latest_analysis_run(ids[0])["analysis_run_id"]
+    scope_id = "V06-STUDENT" if scope_type == "student" else repository._analysis_repository.get_latest_analysis_run(ids[0])["analysis_run_id"]
     preview = admin.preview(ReanalysisRequest(scope_type=scope_type, scope_id=scope_id, analyzer_id="basic"))
     assert preview["submission_count"] == (2 if scope_type == "student" else 1)
 

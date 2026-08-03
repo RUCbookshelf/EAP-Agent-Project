@@ -38,9 +38,9 @@ def test_analysis_runs_are_append_only_and_reanalysis_does_not_call_llm(tmp_path
         runs = client.get("/api/v1/submissions/1/analyses").json()["analysis_runs"]
         assert [item["analysis_run_id"] for item in runs] == ["AR000001", "AR000002"]
     database = Database(settings.database_path)
-    assert database.counts()["feedback_records"] == 1
-    assert database.counts()["analysis_runs"] == 2
-    assert database.get_analysis_artifact("AR000001")["artifacts"]["tokens"]
+    assert database._system_repository.counts()["feedback_records"] == 1
+    assert database._system_repository.counts()["analysis_runs"] == 2
+    assert database._analysis_repository.get_analysis_artifact("AR000001")["artifacts"]["tokens"]
 
 
 def test_health_reports_nlp_resource_and_never_returns_secret(tmp_path):
@@ -66,7 +66,7 @@ def test_missing_model_fallback_reason_and_raw_text_are_persisted(tmp_path):
         assert "unavailable" in analysis["fallback_reason"]
         stored = client.get("/api/v1/submissions/1").json()
         assert stored["essay_text"] == payload["essay_text"]
-    run = Database(settings.database_path).list_analysis_runs(1)[0]
+    run = Database(settings.database_path)._analysis_repository.list_analysis_runs(1)[0]
     assert run["fallback_used"] is True
     assert run["fallback_reason"]
 
@@ -76,5 +76,5 @@ def test_migration_4_preserves_legacy_metrics_and_adds_analysis_tables(tmp_path)
     database.initialize()
     with database.connect() as connection:
         tables = {row[0] for row in connection.execute("select name from sqlite_master where type='table'")}
-    assert database.migration_version() == 12
+    assert database._system_repository.migration_version() == 12
     assert {"metrics", "analysis_runs", "metric_results", "analysis_artifacts"} <= tables

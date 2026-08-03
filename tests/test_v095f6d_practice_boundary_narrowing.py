@@ -130,9 +130,6 @@ class TestPortContracts:
         assert isinstance(database._submission_repository, PracticeSubmissionReadPort)
         assert isinstance(database._practice_repository, PracticeReadPort)
         assert isinstance(database._practice_repository, PracticeWritePort)
-        assert isinstance(database, PracticeSubmissionReadPort)
-        assert isinstance(database, PracticeReadPort)
-        assert isinstance(database, PracticeWritePort)
 
     def test_port_module_has_no_broad_or_concrete_imports(self):
         source = (ROOT / "app/practice/ports.py").read_text(encoding="utf-8")
