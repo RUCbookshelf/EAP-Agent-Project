@@ -1,6 +1,25 @@
 # Current Task State
 
 **Date:** 2026-08-03
+**Current task:** v0.9.5-H2D2-V1 Full-Core Verification Closure
+**Status:** completed - v0.9.5-H2D2 is COMPLETE and fully verified (one fresh
+full non-live core run: exit code 0, 709 passed, 8 skipped, 2 warnings, zero
+failures/errors; see `RUN_VERIFICATION_V0.9.5_H2D2_V1.md`)
+
+- Exactly one full-core run on a fresh isolated database
+  (`C:\Users\16073\AppData\Local\Temp\v095h2a-g__xwr8r\h2a.db`), exact
+  command `pytest -q -p no:cacheprovider --ignore=tests/live tests`: exit
+  code 0, zero failures, zero errors; 709 passed, 8 skipped, 2 warnings.
+- Research-export baseline restored exactly (8 run-generated dirs / 16 files
+  removed via the exact guard allowlist; 776 files / 388 dirs, all retained
+  paths and hashes unchanged); development database unchanged
+  (SHA-256/size/mtime); ports 8000/8501 free; no production/test change.
+- Next: H2E (architecture freeze) in the same authorized goal, pending this
+  closure commit.
+
+
+
+**Date:** 2026-08-03
 **Current task:** v0.9.5-H2D2 Bind API Ports to Production Dependency Accessors
 **Status:** implementation and focused verification complete; final full-core closure pending (see `RUN_VERIFICATION_V0.9.5_H2D2.md`)
 

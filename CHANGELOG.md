@@ -1,3 +1,17 @@
+## v0.9.5-H2D2-V1 (2026-08-03)
+
+### Verified
+- Full non-live core closure: one fresh isolated run, exact command
+  `pytest -q -p no:cacheprovider --ignore=tests/live tests`, exit code 0,
+  **709 passed, 8 skipped, 2 warnings**, zero failures and zero errors;
+  development database unchanged (SHA-256/size/mtime); research-export
+  baseline restored exactly to 776 files / 388 dirs (8 run-generated dirs /
+  16 files removed via the exact guard allowlist); ports free; no
+  production or test change.
+- v0.9.5-H2D2 is COMPLETE and fully verified. H2E (architecture freeze)
+  follows in the same authorized goal.
+
+
 ## v0.9.5-H2D2 (2026-08-03)
 
 ### Changed

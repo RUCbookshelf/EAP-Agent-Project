@@ -1,5 +1,26 @@
 
 
+## 2026-08-03 - v0.9.5-H2D2-V1 Close full-core verification
+
+- **Decision**: Execute exactly one fresh full non-live core closure run on
+  an isolated temporary database; restore the research-export baseline
+  exactly; mark v0.9.5-H2D2 fully verified; then proceed to the authorized
+  H2E documentation-only architecture freeze.
+- **Rationale**: The H2D2 full-core gate was pending because the single H2D2
+  run exited 1 on the documented pre-existing `test_v095b_router_contract`
+  lifecycle-race flake (passes in isolation). The closure run is the
+  authorized one-shot re-execution of the same exact command; no test,
+  timing, or production change was made.
+- **Evidence**: one fresh run, exit code 0, **709 passed, 8 skipped,
+  2 warnings**, zero failures/errors; 8 run-generated export directories /
+  16 files removed through the exact guard allowlist; baseline restored to
+  776 files / 388 dirs with all retained paths/hashes unchanged;
+  development database unchanged (SHA-256/size/mtime); ports free; no
+  production/test change.
+- **Boundary**: H2E (architecture freeze) is authorized in the same goal and
+  begins only after the H2D2-V1 closure commit.
+
+
 ## 2026-08-03 - v0.9.5-H2D2 Bind API Ports to production dependency accessors
 
 - **Decision**: Add the exact ten API-owned persistence Ports

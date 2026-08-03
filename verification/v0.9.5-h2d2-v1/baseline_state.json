@@ -1,0 +1,83 @@
+{
+    "stage":  "v0.9.5-H2D2-V1",
+    "kind":  "baseline_state",
+    "recorded_at_utc":  "2026-08-03T07:58:45.7749353Z",
+    "approved_head":  "4cbf908",
+    "branch":  "master",
+    "head_sha":  "4cbf90871738b30892832a69944f0de36240443f",
+    "head_short":  "4cbf908",
+    "log10":  [
+                  "4cbf908 test(v0.9.5-h2d2): verify api dependency port bindings",
+                  "10ed388 refactor(v0.9.5-h2d2): bind api ports to dependency accessors",
+                  "e4d8be8 test(v0.9.5-h2d1): close research export cleanup",
+                  "f73cf24 test(v0.9.5-h2d1): verify configuration port typing",
+                  "621a6f0 refactor(v0.9.5-h2d1): formalize configuration port protocol",
+                  "79c94bd test(v0.9.5-h2c): verify shared analysis reader contract",
+                  "85d1da2 refactor(v0.9.5-h2c): canonicalize analysis run reader",
+                  "7974ebc test(v0.9.5-h2b): close full-core verification",
+                  "e687e84 test(v0.9.5-h2b): verify configuration contract rename",
+                  "bd13ccc refactor(v0.9.5-h2b): rename configuration contract"
+              ],
+    "ancestry":  {
+                     "e4d8be8_is_ancestor_of_10ed388":  true,
+                     "10ed388_is_ancestor_of_4cbf908":  true,
+                     "e4d8be8_is_ancestor_of_4cbf908":  true
+                 },
+    "git_status_short":  [
+                             " M AGENTS.md",
+                             " M RUN_VERIFICATION_V0.7.md",
+                             " M RUN_VERIFICATION_V0.8.2.md",
+                             "?? .claude/",
+                             "?? ARCHITECTURE_COUPLING_AUDIT_V0.9.5_A.md",
+                             "?? CLAUDE.md",
+                             "?? data/demo_journey_manifest.json",
+                             "?? verification/v0.9.5-h2d2-v1/"
+                         ],
+    "production_or_test_changes_after_h2d2":  false,
+    "prod_test_diff_command":  "git diff --stat HEAD -- app tests scripts",
+    "development_database":  {
+                                 "path":  "data/writing_feedback.db",
+                                 "sha256":  "340E0F3739FEFFD3DEF87BB6E711CB6F90A8478E7E18D833C715EDCFAB03AFF4",
+                                 "size_bytes":  8298496,
+                                 "mtime_local":  "2026-08-02T11:02:25.887+08:00",
+                                 "opened":  false
+                             },
+    "research_exports":  {
+                             "file_count":  776,
+                             "directory_count":  388,
+                             "tracked_file_count":  0,
+                             "git_ignored":  true,
+                             "guard_check":  "BASELINE OK: 776 files / 388 dirs; all baseline paths and hashes unchanged."
+                         },
+    "ports":  {
+                  "8000":  "free",
+                  "8501":  "free"
+              },
+    "running_python_processes":  [
+                                     {
+                                         "id":  28592,
+                                         "name":  "python",
+                                         "path":  "C:\\Users\\16073\\AppData\\Roaming\\uv\\tools\\code-review-graph\\Scripts\\python.exe",
+                                         "start_time":  "2026-08-03T13:07:43+08:00",
+                                         "note":  "code-review-graph tooling process (known degraded); not app/test/export process"
+                                     },
+                                     {
+                                         "id":  31572,
+                                         "name":  "python",
+                                         "path":  "C:\\Users\\16073\\AppData\\Roaming\\uv\\python\\cpython-3.11-windows-x86_64-none\\python.exe",
+                                         "start_time":  "2026-08-03T13:07:43+08:00",
+                                         "note":  "code-review-graph tooling process (known degraded); not app/test/export process"
+                                     }
+                                 ],
+    "preserved_user_owned_paths":  [
+                                       "AGENTS.md (modified, user-owned)",
+                                       "RUN_VERIFICATION_V0.7.md (modified, user-owned)",
+                                       "RUN_VERIFICATION_V0.8.2.md (modified, user-owned)",
+                                       ".claude/ (untracked, user-owned)",
+                                       "ARCHITECTURE_COUPLING_AUDIT_V0.9.5_A.md (untracked, user-owned)",
+                                       "CLAUDE.md (untracked, user-owned)",
+                                       "data/demo_journey_manifest.json (untracked, user-owned)",
+                                       "data/writing_feedback.db (development database; never opened)",
+                                       "research_exports/ (776 files / 388 dirs approved baseline)"
+                                   ]
+}

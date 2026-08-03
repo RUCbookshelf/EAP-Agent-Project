@@ -10,10 +10,9 @@
 
 ## Current v0.9.5-H2D2 State
 
-- Status: **implementation and focused verification COMPLETE; final full-core
-  closure PENDING** (the single full-core run exited 1 on the documented
-  pre-existing `test_v095b_router_contract` lifecycle-race flake, which passes
-  in isolation; 708 passed, 8 skipped otherwise).
+- Status: **COMPLETE and fully verified** (H2D2-V1 full non-live core
+  closure: exit code 0, 709 passed, 8 skipped, 2 warnings, zero
+  failures/errors).
 - Bound the ten v0.9.5-G API-owned persistence Ports as exact production
   return annotations on their ten dependency accessors in `app/api/deps.py`
   (type-only: import block + ten annotations). Accessor bodies, parameters,
@@ -27,11 +26,12 @@
   tables; `config-v0.9.0`; `feedback-prompt-v0.7.1`.
 - Verification: focused contract suite 243 passed, 2 warnings; OpenAPI and
   dependency-graph parity 0 differences; exact `run.bat --verify` PASS;
-  full non-live core **NOT CLEAN** (documented lifecycle-race flake, exit 1,
-  708 passed, 8 skipped); research_export baseline restored to 776 files /
-  388 dirs after every layer; development database unchanged
+  H2D2-V1 full non-live core closure **exit code 0, 709 passed, 8 skipped,
+  2 warnings, zero failures/errors**; research_export baseline restored to
+  776 files / 388 dirs after every layer (8 dirs / 16 files removed from the
+  closure run via the exact guard allowlist); development database unchanged
   (SHA-256/size/mtime).
-- Next: H2E (contract freeze) requires separate authorization.
+- Next: H2E (architecture freeze) - authorized in the same goal, pending the H2D2-V1 closure commit.
 
 ## Current v0.9.5-H2D1 State (incl. v0.9.5-H2D1-V1 workspace cleanup)
 

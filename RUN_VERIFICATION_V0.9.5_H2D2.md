@@ -1,9 +1,9 @@
 # v0.9.5-H2D2 Verification - Bind API Ports to Production Dependency Accessors
 
-**Status:** **PASS (implementation and focused verification) - final full-core
-closure PENDING** (the single full-core run exited 1 on the documented
-pre-existing `test_v095b_router_contract` lifecycle-race flake, which passes
-in isolation; 708 passed, 8 skipped otherwise)
+**Status:** **v0.9.5-H2D2 is COMPLETE and fully verified.** (Implementation
+and focused verification PASS; exact `run.bat --verify` PASS; H2D2-V1 full
+non-live core closure: exit code 0, 709 passed, 8 skipped, 2 warnings, zero
+failures and zero errors.)
 
 ## Scope
 
@@ -84,7 +84,7 @@ task-scoped `git diff --check` PASS; encoding scan clean.
   13 new H2D2 tests). Export workspace guard captured 3 new test export
   directories (6 files) and restored the baseline exactly afterward.
 
-### Full non-live core regression - NOT CLEAN (documented flake)
+### Full non-live core regression (H2D2 run) - NOT CLEAN (documented flake, historical)
 
 - Command (exactly once, fresh isolated database
   `C:\Users\16073\AppData\Local\Temp\v095h2a-kk3ml16i\h2a.db`):
@@ -103,6 +103,29 @@ task-scoped `git diff --check` PASS; encoding scan clean.
   verification complete).
 - Export workspace guard captured 8 new test export directories (16 files)
   from the run and restored the baseline exactly afterward.
+
+### H2D2-V1 full non-live core closure - CLEAN
+
+- Command (exactly once, fresh isolated database
+  `C:\Users\16073\AppData\Local\Temp\v095h2a-g__xwr8r\h2a.db`):
+  `.venv\Scripts\python.exe verification/v0.9.5-h2a/isolated_pytest_runner.py --full`
+  (effective command `pytest -q -p no:cacheprovider --ignore=tests/live tests`;
+  `PYTHON_DOTENV_DISABLED=1`, `DATABASE_URL` removed, `LLM_PROVIDER=local`;
+  resolved database path asserted inside the fresh temporary directory).
+- Result: **exit code 0; 709 passed, 8 skipped, 2 warnings; 0 failed;
+  0 errors** in 310.80 s. Start 2026-08-03T16:00:34 +08:00, end
+  2026-08-03T16:05:48 +08:00, duration 313.9 s.
+- Research-export workspace: the run generated 8 new top-level export
+  directories / 16 files; the exact guard allowlist (`--delta` +
+  `--restore`) removed them leaf-first; final state **776 files / 388 dirs,
+  all retained paths and hashes unchanged** (`research_exports_after.json`,
+  guard `--check` PASS).
+- Development database unchanged (SHA-256/size/mtime, see below); temporary
+  directory and `.pytest_cache` removed; ports 8000/8501 free; no
+  production or test file changed. H2D2 tracked verification artifacts
+  reused by the guard were restored byte-identical from `4cbf908`.
+- This closure makes the full-core gate PASS; per the authorized
+  H2D2-V1/H2E goal, H2D2 is now fully verified and H2E may begin.
 
 ### Launcher verification (separate fresh isolated database)
 
@@ -137,6 +160,7 @@ client methods 52; locale parity 520/520; migration 12; tables 33;
 - Focused run DB: `C:\Users\16073\AppData\Local\Temp\v095h2a-p4ulpu4b\h2a.db`.
 - Full-core run DB: `C:\Users\16073\AppData\Local\Temp\v095h2a-kk3ml16i\h2a.db`.
 - Launcher DB: `C:\Users\16073\AppData\Local\Temp\v095h2d2-verify-6631bbdd\verify.db`.
+- H2D2-V1 closure DB: `C:\Users\16073\AppData\Local\Temp\v095h2a-g__xwr8r\h2a.db` (fresh; removed after the run).
 - Development database before/after every write-capable run: SHA-256
   `340E0F3739FEFFD3DEF87BB6E711CB6F90A8478E7E18D833C715EDCFAB03AFF4`, size
   8,298,496 bytes, mtime `2026-08-02T11:02:25.887+08:00` - unchanged; never
@@ -144,9 +168,11 @@ client methods 52; locale parity 520/520; migration 12; tables 33;
 
 ## Conclusion
 
-`v0.9.5-H2D2 implementation is complete, but full-core verification remains
-pending.` (Implementation, all focused layers, OpenAPI/dependency-graph
-parity, and launcher verification pass; the single full-core run exited 1 on
-the documented pre-existing lifecycle-race flake, which passes in isolation
-and is unrelated to H2D2. A clean full-core closure is required for the
-fully-verified status; H2E has not begun.)
+`v0.9.5-H2D2 is COMPLETE and fully verified.` (Implementation, all focused
+layers, OpenAPI/dependency-graph parity, and launcher verification pass; the
+earlier full-core run exited 1 on the documented pre-existing
+lifecycle-race flake, which passes in isolation and is unrelated to H2D2.
+The separate H2D2-V1 closure run completed clean - exit code 0, 709 passed,
+8 skipped, 2 warnings, zero failures/errors; research-export baseline
+restored exactly; development database unchanged. H2E follows in the same
+authorized goal.)

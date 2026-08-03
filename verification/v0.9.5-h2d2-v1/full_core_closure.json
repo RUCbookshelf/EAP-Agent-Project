@@ -1,0 +1,63 @@
+{
+  "baseline_head": "4cbf908",
+  "classification": "Outcome A - clean run",
+  "development_database_after": {
+    "mtime_local": "2026-08-02T11:02:25.887+08:00",
+    "sha256": "340E0F3739FEFFD3DEF87BB6E711CB6F90A8478E7E18D833C715EDCFAB03AFF4",
+    "size_bytes": 8298496
+  },
+  "development_database_before": {
+    "mtime_local": "2026-08-02T11:02:25.887+08:00",
+    "sha256": "340E0F3739FEFFD3DEF87BB6E711CB6F90A8478E7E18D833C715EDCFAB03AFF4",
+    "size_bytes": 8298496
+  },
+  "development_database_opened": false,
+  "development_database_unchanged": true,
+  "duration_seconds": 313.879,
+  "effective_command": "A:\\EAP Agent Project\\writing-feedback-mvp\\.venv\\Scripts\\python.exe -m pytest -q -p no:cacheprovider --ignore=tests/live tests",
+  "end_time_local": "2026-08-03T16:05:48.5656138+08:00",
+  "errors": 0,
+  "exact_command": "pytest -q -p no:cacheprovider --ignore=tests/live tests",
+  "exit_code": 0,
+  "export_additions": {
+    "delta_manifest": "verification/v0.9.5-h2d2-v1/research_exports_delta.json",
+    "directory_names": [
+      "export_20260803T080313",
+      "export_20260803T080322",
+      "export_20260803T080323",
+      "export_20260803T080324",
+      "export_20260803T080326",
+      "export_20260803T080436",
+      "export_20260803T080437",
+      "export_20260803T080537"
+    ],
+    "files": 16,
+    "top_level_directories": 8
+  },
+  "export_restoration": {
+    "final_directory_count": 388,
+    "final_file_count": 776,
+    "final_manifest": "verification/v0.9.5-h2d2-v1/research_exports_after.json",
+    "guard_result": "BASELINE OK: 776 files / 388 dirs; all baseline paths and hashes unchanged.",
+    "method": "verification/v0.9.5-h2d2/export_workspace_guard.py --delta + --restore (exact manifest-listed leaf-first deletion)"
+  },
+  "failed": 0,
+  "failed_test_names": [],
+  "failure_signatures": [],
+  "kind": "full_core_closure",
+  "passed": 709,
+  "ports_after": {
+    "8000": "free",
+    "8501": "free"
+  },
+  "production_or_test_changes": false,
+  "skipped": 8,
+  "stage": "v0.9.5-H2D2-V1",
+  "start_time_local": "2026-08-03T16:00:34.7262845+08:00",
+  "stderr": "",
+  "stdout": "........................................................................ [ 10%]\n........................................................................ [ 20%]\n.................................................sssss.................. [ 30%]\n........................................................................ [ 40%]\n.............................................................s....ss.... [ 50%]\n........................................................................ [ 60%]\n........................................................................ [ 70%]\n........................................................................ [ 80%]\n........................................................................ [ 90%]\n.....................................................................    [100%]\n============================== warnings summary ===============================\n.venv\\Lib\\site-packages\\fastapi\\testclient.py:1\n  A:\\EAP Agent Project\\writing-feedback-mvp\\.venv\\Lib\\site-packages\\fastapi\\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.\n    from starlette.testclient import TestClient as TestClient  # noqa\n\ntests/test_analysis_runs_v04.py::test_analysis_runs_are_append_only_and_reanalysis_does_not_call_llm\n  A:\\EAP Agent Project\\writing-feedback-mvp\\.venv\\Lib\\site-packages\\spacy\\cli\\_util.py:23: DeprecationWarning: Importing 'parser.split_arg_string' is deprecated, it will only be available in 'shell_completion' in Click 9.0.\n    from click.parser import split_arg_string\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n709 passed, 8 skipped, 2 warnings in 310.80s (0:05:10)\n[h2a-isolation] dev db before: {'sha256': '340E0F3739FEFFD3DEF87BB6E711CB6F90A8478E7E18D833C715EDCFAB03AFF4', 'size': 8298496, 'mtime': 1785639745.887009}\n[h2a-isolation] resolved settings.database_path = C:\\Users\\16073\\AppData\\Local\\Temp\\v095h2a-g__xwr8r\\h2a.db\n[h2a-isolation] running: A:\\EAP Agent Project\\writing-feedback-mvp\\.venv\\Scripts\\python.exe -m pytest -q -p no:cacheprovider --ignore=tests/live tests\n[h2a-isolation] dev db after: {'sha256': '340E0F3739FEFFD3DEF87BB6E711CB6F90A8478E7E18D833C715EDCFAB03AFF4', 'size': 8298496, 'mtime': 1785639745.887009}\n",
+  "summary_line": "709 passed, 8 skipped, 2 warnings in 310.80s (0:05:10)",
+  "temporary_database_path": "C:\\Users\\16073\\AppData\\Local\\Temp\\v095h2a-g__xwr8r\\h2a.db",
+  "temporary_directory_removed": true,
+  "warnings": 2
+}
