@@ -1,0 +1,382 @@
+{
+  "stage": "v0.9.5-H2A",
+  "generated_at": "2026-08-03T10:19:58+08:00",
+  "removed_count_expected": 13,
+  "active_count_expected": 42,
+  "removed": [
+    {
+      "contract_name": "StudentRepository",
+      "definition_module": "app.repositories.protocols",
+      "definition_line": 11,
+      "absent": true
+    },
+    {
+      "contract_name": "EssayRepository",
+      "definition_module": "app.repositories.protocols",
+      "definition_line": 15,
+      "absent": true
+    },
+    {
+      "contract_name": "MetricRepository",
+      "definition_module": "app.repositories.protocols",
+      "definition_line": 21,
+      "absent": true
+    },
+    {
+      "contract_name": "ErrorAnnotationRepository",
+      "definition_module": "app.repositories.protocols",
+      "definition_line": 29,
+      "absent": true
+    },
+    {
+      "contract_name": "DiagnosisRepository",
+      "definition_module": "app.repositories.protocols",
+      "definition_line": 34,
+      "absent": true
+    },
+    {
+      "contract_name": "FeedbackRepository",
+      "definition_module": "app.repositories.protocols",
+      "definition_line": 38,
+      "absent": true
+    },
+    {
+      "contract_name": "ExerciseRepository",
+      "definition_module": "app.repositories.protocols",
+      "definition_line": 42,
+      "absent": true
+    },
+    {
+      "contract_name": "LearnerHistoryRepository",
+      "definition_module": "app.repositories.protocols",
+      "definition_line": 46,
+      "absent": true
+    },
+    {
+      "contract_name": "LearnerProfileRepository",
+      "definition_module": "app.repositories.protocols",
+      "definition_line": 52,
+      "absent": true
+    },
+    {
+      "contract_name": "ConfigurationRepository",
+      "definition_module": "app.repositories.protocols",
+      "definition_line": 74,
+      "absent": true
+    },
+    {
+      "contract_name": "SystemVersionRepository",
+      "definition_module": "app.repositories.protocols",
+      "definition_line": 79,
+      "absent": true
+    },
+    {
+      "contract_name": "SubmissionRepositories",
+      "definition_module": "app.repositories.protocols",
+      "definition_line": 84,
+      "absent": true
+    },
+    {
+      "contract_name": "SubmissionRepository",
+      "definition_module": "app.services.submission",
+      "definition_line": 78,
+      "absent": true
+    }
+  ],
+  "active": [
+    {
+      "contract_name": "RevisionRepository",
+      "module": "app.repositories.protocols",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "SubmissionBundleReadPort",
+      "module": "app.api.ports",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "StudentLookupPort",
+      "module": "app.api.ports",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "AnalysisRunReadPort",
+      "module": "app.api.ports",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "CalfReadPort",
+      "module": "app.api.ports",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "ResearchExportWritePort",
+      "module": "app.api.ports",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "StudentSubmissionListPort",
+      "module": "app.api.ports",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "RevisionGroupLookupPort",
+      "module": "app.api.ports",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "StudentLearnerReadPort",
+      "module": "app.api.ports",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "SubmissionCalibrationReadPort",
+      "module": "app.api.ports",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "SystemMigrationPort",
+      "module": "app.api.ports",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "CalfDataPort",
+      "module": "app.services.calf",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "CalfSubmissionReadPort",
+      "module": "app.services.calf",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "CalfAnalysisReadPort",
+      "module": "app.services.calf",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "CalfStudentReadPort",
+      "module": "app.services.calf",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "ResearchSubmissionReadPort",
+      "module": "app.research.service",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "ResearchReviewPort",
+      "module": "app.research.service",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "ResearchExportReadPort",
+      "module": "app.research.service",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "AdminConfigurationReadPort",
+      "module": "app.services.admin_reanalysis",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "AdminSubmissionReadPort",
+      "module": "app.services.admin_reanalysis",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "AdminAnalysisPort",
+      "module": "app.services.admin_reanalysis",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "SubmissionSystemPort",
+      "module": "app.services.submission",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "SubmissionDataPort",
+      "module": "app.services.submission",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "SubmissionAnalysisPort",
+      "module": "app.services.submission",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "SubmissionCalibrationPort",
+      "module": "app.services.submission",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "SubmissionBundleReadPort",
+      "module": "app.services.reanalysis",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "AnalysisRunWritePort",
+      "module": "app.services.reanalysis",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "LearnerProfileReadPort",
+      "module": "app.services.learner_profile",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "LearnerProgressPort",
+      "module": "app.services.progress",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "ActiveConfigurationPort",
+      "module": "app.services.progress",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "DashboardReadPort",
+      "module": "app.services.dashboard",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "PriorRecordsPort",
+      "module": "app.learner.history",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "JourneyStudentReadPort",
+      "module": "app.journey.service",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "JourneyProjectionReadPort",
+      "module": "app.journey.service",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "ConfigurationRepository",
+      "module": "app.services.configuration",
+      "kind": "plain_class",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "PracticeSubmissionReadPort",
+      "module": "app.practice.ports",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "PracticeReadPort",
+      "module": "app.practice.ports",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "PracticeWritePort",
+      "module": "app.practice.ports",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "_SubmissionBundleReader",
+      "module": "app.infrastructure.sqlite.repositories.revision",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "_AnalysisRunReader",
+      "module": "app.infrastructure.sqlite.repositories.revision",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "_AnalysisRunReader",
+      "module": "app.infrastructure.sqlite.repositories.learner",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    },
+    {
+      "contract_name": "_DiagnosticCalibrationReader",
+      "module": "app.infrastructure.sqlite.repositories.learner",
+      "kind": "protocol",
+      "present": true,
+      "method_set_exact": true
+    }
+  ]
+}

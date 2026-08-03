@@ -1,20 +1,5 @@
-from .protocols import (
-    ConfigurationRepository,
-    DiagnosisRepository,
-    EssayRepository,
-    ExerciseRepository,
-    FeedbackRepository,
-    LearnerHistoryRepository,
-    LearnerProfileRepository,
-    MetricRepository,
-    RevisionRepository,
-    StudentRepository,
-    SystemVersionRepository,
-)
+from .protocols import RevisionRepository
 
 __all__ = [
-    "ConfigurationRepository", "DiagnosisRepository", "EssayRepository",
-    "ExerciseRepository", "FeedbackRepository", "LearnerHistoryRepository",
-    "LearnerProfileRepository", "MetricRepository", "RevisionRepository", "StudentRepository",
-    "SystemVersionRepository",
+    "RevisionRepository",
 ]

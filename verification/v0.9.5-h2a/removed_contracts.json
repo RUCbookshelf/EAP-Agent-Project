@@ -1,0 +1,628 @@
+{
+  "stage": "v0.9.5-H2A",
+  "generated_at": "2026-08-03T10:16:35+08:00",
+  "candidate_count": 13,
+  "contracts": [
+    {
+      "contract_name": "StudentRepository",
+      "contract_kind": "protocol",
+      "definition_module": "app.repositories.protocols",
+      "definition_line": 11,
+      "classification": "G",
+      "declared_methods": [
+        "get_student"
+      ],
+      "union_members": null,
+      "import_references": [
+        [
+          "app/repositories/__init__.py",
+          1
+        ]
+      ],
+      "annotation_references": [],
+      "inheritance_references": [],
+      "reexport_references": [
+        [
+          "app/repositories/__init__.py",
+          15
+        ]
+      ],
+      "test_references": [],
+      "verification_references": [],
+      "string_references": [
+        [
+          "app/repositories/__init__.py",
+          18
+        ]
+      ],
+      "active_runtime_consumer_count": 0,
+      "replacement_contract": "none",
+      "removal_action": "delete definition and all references existing only to support it"
+    },
+    {
+      "contract_name": "EssayRepository",
+      "contract_kind": "protocol",
+      "definition_module": "app.repositories.protocols",
+      "definition_line": 15,
+      "classification": "G",
+      "declared_methods": [
+        "save_essay",
+        "get_submission_bundle",
+        "list_student_submissions"
+      ],
+      "union_members": null,
+      "import_references": [
+        [
+          "app/repositories/__init__.py",
+          1
+        ],
+        [
+          "app/services/submission.py",
+          20
+        ]
+      ],
+      "annotation_references": [],
+      "inheritance_references": [
+        [
+          "app/services/submission.py",
+          78
+        ]
+      ],
+      "reexport_references": [
+        [
+          "app/repositories/__init__.py",
+          15
+        ]
+      ],
+      "test_references": [],
+      "verification_references": [],
+      "string_references": [
+        [
+          "app/repositories/__init__.py",
+          16
+        ]
+      ],
+      "active_runtime_consumer_count": 0,
+      "replacement_contract": "none",
+      "removal_action": "delete definition and all references existing only to support it"
+    },
+    {
+      "contract_name": "MetricRepository",
+      "contract_kind": "protocol",
+      "definition_module": "app.repositories.protocols",
+      "definition_line": 21,
+      "classification": "G",
+      "declared_methods": [
+        "save_analysis",
+        "save_analysis_run",
+        "list_analysis_runs",
+        "get_latest_analysis_run",
+        "list_analysis_units"
+      ],
+      "union_members": null,
+      "import_references": [
+        [
+          "app/repositories/__init__.py",
+          1
+        ],
+        [
+          "app/services/submission.py",
+          20
+        ]
+      ],
+      "annotation_references": [],
+      "inheritance_references": [
+        [
+          "app/services/submission.py",
+          78
+        ]
+      ],
+      "reexport_references": [
+        [
+          "app/repositories/__init__.py",
+          15
+        ]
+      ],
+      "test_references": [],
+      "verification_references": [],
+      "string_references": [
+        [
+          "app/repositories/__init__.py",
+          18
+        ]
+      ],
+      "active_runtime_consumer_count": 0,
+      "replacement_contract": "none",
+      "removal_action": "delete definition and all references existing only to support it"
+    },
+    {
+      "contract_name": "ErrorAnnotationRepository",
+      "contract_kind": "protocol",
+      "definition_module": "app.repositories.protocols",
+      "definition_line": 29,
+      "classification": "G",
+      "declared_methods": [
+        "save_error_annotations",
+        "list_error_annotations"
+      ],
+      "union_members": null,
+      "import_references": [],
+      "annotation_references": [],
+      "inheritance_references": [],
+      "reexport_references": [],
+      "test_references": [],
+      "verification_references": [],
+      "string_references": [],
+      "active_runtime_consumer_count": 0,
+      "replacement_contract": "none",
+      "removal_action": "delete definition and all references existing only to support it"
+    },
+    {
+      "contract_name": "DiagnosisRepository",
+      "contract_kind": "protocol",
+      "definition_module": "app.repositories.protocols",
+      "definition_line": 34,
+      "classification": "G",
+      "declared_methods": [
+        "save_diagnosis"
+      ],
+      "union_members": null,
+      "import_references": [
+        [
+          "app/repositories/__init__.py",
+          1
+        ],
+        [
+          "app/services/submission.py",
+          20
+        ]
+      ],
+      "annotation_references": [],
+      "inheritance_references": [
+        [
+          "app/services/submission.py",
+          78
+        ]
+      ],
+      "reexport_references": [
+        [
+          "app/repositories/__init__.py",
+          15
+        ]
+      ],
+      "test_references": [],
+      "verification_references": [],
+      "string_references": [
+        [
+          "app/repositories/__init__.py",
+          16
+        ]
+      ],
+      "active_runtime_consumer_count": 0,
+      "replacement_contract": "none",
+      "removal_action": "delete definition and all references existing only to support it"
+    },
+    {
+      "contract_name": "FeedbackRepository",
+      "contract_kind": "protocol",
+      "definition_module": "app.repositories.protocols",
+      "definition_line": 38,
+      "classification": "G",
+      "declared_methods": [
+        "save_feedback"
+      ],
+      "union_members": null,
+      "import_references": [
+        [
+          "app/repositories/__init__.py",
+          1
+        ],
+        [
+          "app/services/submission.py",
+          20
+        ]
+      ],
+      "annotation_references": [],
+      "inheritance_references": [
+        [
+          "app/services/submission.py",
+          78
+        ]
+      ],
+      "reexport_references": [
+        [
+          "app/repositories/__init__.py",
+          15
+        ]
+      ],
+      "test_references": [],
+      "verification_references": [],
+      "string_references": [
+        [
+          "app/repositories/__init__.py",
+          17
+        ]
+      ],
+      "active_runtime_consumer_count": 0,
+      "replacement_contract": "none",
+      "removal_action": "delete definition and all references existing only to support it"
+    },
+    {
+      "contract_name": "ExerciseRepository",
+      "contract_kind": "protocol",
+      "definition_module": "app.repositories.protocols",
+      "definition_line": 42,
+      "classification": "G",
+      "declared_methods": [
+        "get_exercises"
+      ],
+      "union_members": null,
+      "import_references": [
+        [
+          "app/repositories/__init__.py",
+          1
+        ]
+      ],
+      "annotation_references": [],
+      "inheritance_references": [],
+      "reexport_references": [
+        [
+          "app/repositories/__init__.py",
+          15
+        ]
+      ],
+      "test_references": [],
+      "verification_references": [],
+      "string_references": [
+        [
+          "app/repositories/__init__.py",
+          17
+        ]
+      ],
+      "active_runtime_consumer_count": 0,
+      "replacement_contract": "none",
+      "removal_action": "delete definition and all references existing only to support it"
+    },
+    {
+      "contract_name": "LearnerHistoryRepository",
+      "contract_kind": "protocol",
+      "definition_module": "app.repositories.protocols",
+      "definition_line": 46,
+      "classification": "G",
+      "declared_methods": [
+        "prior_records",
+        "save_history",
+        "list_student_history"
+      ],
+      "union_members": null,
+      "import_references": [
+        [
+          "app/repositories/__init__.py",
+          1
+        ],
+        [
+          "app/services/submission.py",
+          20
+        ]
+      ],
+      "annotation_references": [],
+      "inheritance_references": [
+        [
+          "app/services/submission.py",
+          78
+        ]
+      ],
+      "reexport_references": [
+        [
+          "app/repositories/__init__.py",
+          15
+        ]
+      ],
+      "test_references": [
+        [
+          "tests/test_v095f2_service_narrowing.py",
+          109
+        ]
+      ],
+      "verification_references": [],
+      "string_references": [
+        [
+          "app/repositories/__init__.py",
+          17
+        ],
+        [
+          "tests/test_v095f2_service_narrowing.py",
+          109
+        ]
+      ],
+      "active_runtime_consumer_count": 0,
+      "replacement_contract": "none",
+      "removal_action": "delete definition and all references existing only to support it"
+    },
+    {
+      "contract_name": "LearnerProfileRepository",
+      "contract_kind": "protocol",
+      "definition_module": "app.repositories.protocols",
+      "definition_line": 52,
+      "classification": "G",
+      "declared_methods": [
+        "get_latest_learner_profile",
+        "save_learner_profile_snapshot",
+        "list_learner_profile_snapshots",
+        "list_longitudinal_records",
+        "list_visualization_records",
+        "list_history_evidence"
+      ],
+      "union_members": null,
+      "import_references": [
+        [
+          "app/repositories/__init__.py",
+          1
+        ]
+      ],
+      "annotation_references": [],
+      "inheritance_references": [],
+      "reexport_references": [
+        [
+          "app/repositories/__init__.py",
+          15
+        ]
+      ],
+      "test_references": [],
+      "verification_references": [],
+      "string_references": [
+        [
+          "app/repositories/__init__.py",
+          18
+        ]
+      ],
+      "active_runtime_consumer_count": 0,
+      "replacement_contract": "none",
+      "removal_action": "delete definition and all references existing only to support it"
+    },
+    {
+      "contract_name": "ConfigurationRepository",
+      "contract_kind": "protocol",
+      "definition_module": "app.repositories.protocols",
+      "definition_line": 74,
+      "classification": "G",
+      "declared_methods": [
+        "ping",
+        "migration_version"
+      ],
+      "union_members": null,
+      "import_references": [
+        [
+          "app/repositories/__init__.py",
+          1
+        ]
+      ],
+      "annotation_references": [
+        [
+          "app/services/configuration.py",
+          25
+        ]
+      ],
+      "inheritance_references": [],
+      "reexport_references": [
+        [
+          "app/repositories/__init__.py",
+          15
+        ]
+      ],
+      "test_references": [],
+      "verification_references": [
+        [
+          "verification/v0.9.5-e/build_database_facade.py",
+          22
+        ],
+        [
+          "verification/v0.9.5-e/build_prechange_inventory.py",
+          47
+        ],
+        [
+          "verification/v0.9.5-e/capture_prechange_fresh_database.py",
+          170
+        ],
+        [
+          "verification/v0.9.5-e/compare_repository_parity.py",
+          22
+        ],
+        [
+          "verification/v0.9.5-e/compare_repository_parity.py",
+          41
+        ],
+        [
+          "verification/v0.9.5-e/compare_repository_parity.py",
+          151
+        ]
+      ],
+      "string_references": [
+        [
+          "app/repositories/__init__.py",
+          16
+        ],
+        [
+          "verification/v0.9.5-e/build_database_facade.py",
+          22
+        ],
+        [
+          "verification/v0.9.5-e/build_prechange_inventory.py",
+          47
+        ],
+        [
+          "verification/v0.9.5-e/capture_prechange_fresh_database.py",
+          170
+        ],
+        [
+          "verification/v0.9.5-e/compare_repository_parity.py",
+          22
+        ],
+        [
+          "verification/v0.9.5-e/compare_repository_parity.py",
+          41
+        ],
+        [
+          "verification/v0.9.5-e/compare_repository_parity.py",
+          151
+        ]
+      ],
+      "active_runtime_consumer_count": 0,
+      "replacement_contract": "none",
+      "removal_action": "delete definition and all references existing only to support it"
+    },
+    {
+      "contract_name": "SystemVersionRepository",
+      "contract_kind": "protocol",
+      "definition_module": "app.repositories.protocols",
+      "definition_line": 79,
+      "classification": "G",
+      "declared_methods": [
+        "record_versions",
+        "get_system_versions"
+      ],
+      "union_members": null,
+      "import_references": [
+        [
+          "app/repositories/__init__.py",
+          1
+        ],
+        [
+          "app/services/submission.py",
+          20
+        ]
+      ],
+      "annotation_references": [],
+      "inheritance_references": [
+        [
+          "app/services/submission.py",
+          78
+        ]
+      ],
+      "reexport_references": [
+        [
+          "app/repositories/__init__.py",
+          15
+        ]
+      ],
+      "test_references": [],
+      "verification_references": [],
+      "string_references": [
+        [
+          "app/repositories/__init__.py",
+          19
+        ]
+      ],
+      "active_runtime_consumer_count": 0,
+      "replacement_contract": "none",
+      "removal_action": "delete definition and all references existing only to support it"
+    },
+    {
+      "contract_name": "SubmissionRepositories",
+      "contract_kind": "alias",
+      "definition_module": "app.repositories.protocols",
+      "definition_line": 84,
+      "classification": "G",
+      "declared_methods": [],
+      "union_members": [
+        "StudentRepository | EssayRepository | MetricRepository | DiagnosisRepository | FeedbackRepository | ExerciseRepository | LearnerHistoryRepository | LearnerProfileRepository | RevisionRepository | ConfigurationRepository | SystemVersionRepository"
+      ],
+      "import_references": [],
+      "annotation_references": [],
+      "inheritance_references": [],
+      "reexport_references": [],
+      "test_references": [],
+      "verification_references": [],
+      "string_references": [],
+      "active_runtime_consumer_count": 0,
+      "replacement_contract": "none",
+      "removal_action": "delete definition and all references existing only to support it"
+    },
+    {
+      "contract_name": "SubmissionRepository",
+      "contract_kind": "combined_class",
+      "definition_module": "app.services.submission",
+      "definition_line": 78,
+      "classification": "G",
+      "declared_methods": [],
+      "union_members": null,
+      "import_references": [],
+      "annotation_references": [],
+      "inheritance_references": [],
+      "reexport_references": [],
+      "test_references": [
+        [
+          "tests/test_v095f6c_submission_service_narrowing.py",
+          240
+        ],
+        [
+          "tests/test_v095f6c_submission_service_narrowing.py",
+          266
+        ],
+        [
+          "tests/test_v095f6c_submission_service_narrowing.py",
+          268
+        ]
+      ],
+      "verification_references": [
+        [
+          "verification/v0.9.5-e/build_database_facade.py",
+          15
+        ],
+        [
+          "verification/v0.9.5-e/build_prechange_inventory.py",
+          20
+        ],
+        [
+          "verification/v0.9.5-e/capture_prechange_fresh_database.py",
+          173
+        ],
+        [
+          "verification/v0.9.5-e/compare_repository_parity.py",
+          29
+        ],
+        [
+          "verification/v0.9.5-e/compare_repository_parity.py",
+          34
+        ]
+      ],
+      "string_references": [
+        [
+          "tests/test_v095f6c_submission_service_narrowing.py",
+          240
+        ],
+        [
+          "tests/test_v095f6c_submission_service_narrowing.py",
+          266
+        ],
+        [
+          "tests/test_v095f6c_submission_service_narrowing.py",
+          268
+        ],
+        [
+          "verification/v0.9.5-e/build_database_facade.py",
+          15
+        ],
+        [
+          "verification/v0.9.5-e/build_prechange_inventory.py",
+          20
+        ],
+        [
+          "verification/v0.9.5-e/capture_prechange_fresh_database.py",
+          173
+        ],
+        [
+          "verification/v0.9.5-e/compare_repository_parity.py",
+          29
+        ],
+        [
+          "verification/v0.9.5-e/compare_repository_parity.py",
+          34
+        ]
+      ],
+      "active_runtime_consumer_count": 0,
+      "replacement_contract": "none",
+      "removal_action": "delete definition and all references existing only to support it"
+    }
+  ]
+}

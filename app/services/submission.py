@@ -17,14 +17,6 @@ from app.models import (
     PipelineResult,
     ProviderResult,
 )
-from app.repositories import (
-    DiagnosisRepository,
-    EssayRepository,
-    FeedbackRepository,
-    LearnerHistoryRepository,
-    MetricRepository,
-    SystemVersionRepository,
-)
 
 if TYPE_CHECKING:
     from app.services.learner_profile import LearnerProfileService
@@ -73,17 +65,6 @@ class SubmissionCalibrationPort(Protocol):
     ) -> DiagnosticCalibrationResult: ...
 
     def get_diagnostic_calibration(self, essay_id: int) -> DiagnosticCalibrationResult | None: ...
-
-
-class SubmissionRepository(
-    EssayRepository,
-    MetricRepository,
-    DiagnosisRepository,
-    FeedbackRepository,
-    LearnerHistoryRepository,
-    SystemVersionRepository,
-):
-    """Combined structural contract for the atomic submission workflow."""
 
 
 class SubmissionService:
