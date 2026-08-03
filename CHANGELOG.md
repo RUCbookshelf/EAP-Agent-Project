@@ -1,3 +1,30 @@
+## v0.9.5-H2D1-V1 (2026-08-03)
+
+### Changed
+- Workspace-safety closure of the H2D1 verification runs: identified and
+  removed the exact 11 export directories / 22 files (22,943 bytes) that the
+  H2D1 focused and full-core suites generated through the pre-existing
+  research-export tests (`run_export` writing to `research_exports/`).
+  `research_exports/` restored from 798 to the approved pre-H2D1 baseline of
+  776 files with every retained path and SHA-256 unchanged; the root
+  directory and all pre-existing exports were preserved.
+- Ownership was proven per path with exact classification (content signature,
+  fixture match, git-commit-anchored verification window, complete-delta
+  accounting); no test rerun, no production/test change, no export-behavior
+  change; deletion used an exact allowlist manifest with a passing dry run.
+- Added `verification/v0.9.5-h2d1/export_cleanup_before.json`,
+  `export_cleanup_candidates.json`, `export_cleanup_after.json`,
+  `export_cleanup_closure.json`, and `cleanup_research_exports.py`
+  (verification-only tool; not part of application runtime).
+
+### Verified
+- Post-cleanup: 776 files / 388 directories; 1,164 retained entries compared
+  path-by-path and hash-by-hash with zero differences; ambiguous candidates 0;
+  unexpected deletions 0; development database unchanged; ports free.
+- v0.9.5-H2D1 is COMPLETE and fully verified. Research-export verification
+  side effects: CLEANED. Approved pre-H2D1 export baseline restored.
+
+
 ## v0.9.5-H2D1 (2026-08-03)
 
 ### Changed

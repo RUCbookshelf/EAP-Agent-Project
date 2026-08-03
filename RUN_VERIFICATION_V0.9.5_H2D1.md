@@ -1,7 +1,9 @@
 # v0.9.5-H2D1 Verification - Formalize ConfigurationPort as a Structural Protocol
 
 **Status:** **PASS - v0.9.5-H2D1 is COMPLETE and fully verified** (full
-non-live core run: exit code 0, 696 passed, 8 skipped, 2 warnings)
+non-live core run: exit code 0, 696 passed, 8 skipped, 2 warnings;
+workspace-safety closure v0.9.5-H2D1-V1: research-export verification side
+effects CLEANED, approved pre-H2D1 export baseline restored)
 
 ## Scope
 
@@ -149,3 +151,42 @@ contracts **1 -> 0**; runtime-checkable count **36 -> 36** (unchanged).
 `v0.9.5-H2D1 is COMPLETE and fully verified.` (Implementation, focused
 contract suite, exact `run.bat --verify`, and the full non-live core run -
 exit code 0, 696 passed, 8 skipped, 2 warnings - all pass.)
+
+
+## Workspace-safety closure (v0.9.5-H2D1-V1)
+
+The H2D1 verification runs (focused suite and full-core suite) executed the
+pre-existing research-export tests, whose `run_export` calls write real
+export directories under `research_exports/`. This was a verification side
+effect, not a code change; no production or test file was modified.
+
+- Reported pre-H2D1 baseline: **776 files** (388 directories x 2 files).
+- Post-H2D1 verification count: **798 files** (399 directories x 2 files);
+  reported delta **+22 files**.
+- Identified H2D1-generated delta: **exactly 11 top-level export directories /
+  22 files / 22,943 bytes**, all classified **A (proven H2D1 verification
+  output)** with `ownership_confidence: exact` and `ambiguous_candidate_count: 0`.
+- Ownership evidence (>=2 independent types per path, at least one
+  content-based): test-path manifest signature (`application_version 0.8.2`
+  with empty `git_commit`/`database_migration_version`/
+  `active_configuration_version` per the `run_export` metadata contract in
+  app/research/service.py); deterministic fixture match (privacy mode, record
+  counts, and student pseudonyms vs `test_v095f5b_research_service_narrowing.py`,
+  `test_v095g_facade_contraction.py`, `test_research_v082.py`,
+  `test_request_reliability_v093b.py`); manifest `created_at` == directory
+  creation time; creation inside the H2D1 verification window bounded by the
+  authoritative git commit timestamps `79c94bd` (14:03:35 +08:00) and
+  `f73cf24` (14:39:14 +08:00); complete-delta accounting (798 - 22 = 776).
+- Cleanup executed with an exact allowlist manifest (leaf-first, no
+  wildcards, no symlink/reparse/tracked paths, no root deletion, no
+  unlisted path); dry run PASS before deletion; every candidate re-verified
+  (path/type/size/mtime/SHA-256) immediately before deletion.
+- Post-cleanup state: **776 files / 388 directories**; all 1,164 retained
+  entries path-identical and hash-identical to the pre-cleanup snapshot;
+  `research_exports/` root preserved; zero unexpected deletions; every
+  pre-existing export preserved.
+- Evidence artifacts: `verification/v0.9.5-h2d1/export_cleanup_before.json`,
+  `export_cleanup_candidates.json`, `export_cleanup_after.json`,
+  `export_cleanup_closure.json`, `cleanup_research_exports.py`.
+- No tests were rerun; no application process was started; ports 8000/8501
+  free; development database unchanged (SHA-256/size/mtime).

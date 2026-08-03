@@ -1,5 +1,33 @@
 
 
+## 2026-08-03 - v0.9.5-H2D1-V1 Clean up research-export verification side effects
+
+- **Decision**: Remove exactly the export directories/files that the H2D1
+  verification runs generated through the pre-existing research-export tests
+  (focused suite: test_v095f5b and test_v095g router export tests; full-core:
+  additionally test_research_v082 and test_request_reliability_v093b), using
+  an exact allowlist manifest; preserve every pre-existing export.
+- **Rationale**: The H2D1 runs wrote 22 files / 11 directories under
+  `research_exports/` as a test side effect (the tests call `run_export`,
+  which writes to the real export base). The approved pre-H2D1 baseline was
+  776 files; the post-run count was 798 (+22). Ownership was proven per path
+  by content signature (application_version 0.8.2, empty system metadata),
+  deterministic fixture matches (privacy mode, record counts, student
+  pseudonyms), manifest `created_at` == directory creation time, and the
+  verification window bounded by authoritative git commit timestamps
+  (79c94bd -> f73cf24); no path was classified on timestamps or counts alone.
+- **Parity boundary**: No production/test change; no export-behavior change;
+  no tests rerun; deletion allowlisted leaf-first with a passing dry run;
+  post-cleanup 776 files with all retained paths/hashes unchanged; root and
+  every pre-existing export preserved.
+- **Evidence**: `verification/v0.9.5-h2d1/export_cleanup_before.json`,
+  `export_cleanup_candidates.json`, `export_cleanup_after.json`,
+  `export_cleanup_closure.json`, `cleanup_research_exports.py`; development
+  database unchanged (SHA-256/size/mtime); ports free.
+- **Boundary**: H2D2 (API dependency annotations) and H2E (contract freeze)
+  each require separate authorization; none begun.
+
+
 ## 2026-08-03 - v0.9.5-H2D1 Formalize ConfigurationPort as a structural Protocol
 
 - **Decision**: Convert the active `ConfigurationPort` contract in
