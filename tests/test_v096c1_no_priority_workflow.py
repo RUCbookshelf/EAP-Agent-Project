@@ -88,6 +88,7 @@ def _markdown_text(at) -> str:
 
 def _run_harness(**config):
     at = AppTest.from_file(str(HARNESS), default_timeout=90)
+    configured_result = config.pop("submission_result", None)
     for key, value in config.items():
         at.session_state[key] = value
     at.run()
@@ -101,8 +102,13 @@ def _run_harness(**config):
     )
     student_input.set_value("S02").run()
     assert not at.exception, at.exception
-    if "submission_result" not in at.session_state:
-        at.session_state["submission_result"] = json.loads(json.dumps(NO_PRIORITY_RESULT))
+    # Seed the just-submitted result AFTER the learner is stable; the
+    # learner-scoped clearing only removes keys set before the transition.
+    at.session_state["submission_result"] = (
+        configured_result
+        if configured_result is not None
+        else json.loads(json.dumps(NO_PRIORITY_RESULT))
+    )
     at.run()
     assert not at.exception, at.exception
     return at
@@ -212,7 +218,7 @@ def test_flow_c1b_finish_clears_stale_state_and_fresh_writing():
     client = at.session_state["fake_client"]
     assert client.post_count == 0 and client.revision_post_count == 0
     assert "submission_result" not in at.session_state
-    assert at.session_state["no_priority_reviewed"] is True
+    assert at.session_state["no_priority_reviewed"] == 28
     text = _markdown_text(at)
     assert "Writing submitted" not in text
     assert "writing_submit_primary" in [b.key for b in at.button]
@@ -365,3 +371,126 @@ def test_locale_parity_and_new_keys():
     ):
         assert "/" + key in en_keys
         assert en[key] != zh[key]
+# ---------------------------------------------------------------------------
+# C1 follow-up: Home step transition after finishing a no-priority cycle
+# ---------------------------------------------------------------------------
+
+JOURNEY_NO_PRIORITY_28 = {
+    "state": "feedback_no_practice_target",
+    "derived_states": [{"key": "analysis_without_priority", "submission_ids": [28]}],
+    "events": [],
+}
+
+
+def _current_step_label(at) -> str:
+    import re
+
+    text = " ".join(m.value for m in at.markdown)
+    match = re.search(r'<li data-state="current">.*?<strong>([^<]+)</strong>', text)
+    return match.group(1).strip() if match else None
+
+
+def _primary_cta_label(at) -> str:
+    for button in at.button:
+        if button.key == "home_primary_action":
+            return button.label
+    return None
+
+
+def test_home_unresolved_no_priority_step_is_review_feedback():
+    at = _run_harness(
+        submission_result=json.loads(json.dumps(NO_PRIORITY_RESULT)),
+        sidebar_page=t("student_home_title", "en"),
+        harness_journey=json.loads(json.dumps(JOURNEY_NO_PRIORITY_28)),
+        harness_targets=[],
+    )
+    assert _current_step_label(at) == "Review feedback"
+    labels = [b.label for b in at.button]
+    assert "Revise This Draft" in labels and "Finish This Feedback Cycle" in labels
+
+
+def test_home_after_finish_cycle_shows_write_step_and_fresh_action():
+    at = _run_harness(
+        submission_result=json.loads(json.dumps(NO_PRIORITY_RESULT)),
+        sidebar_page=t("student_home_title", "en"),
+        harness_journey=json.loads(json.dumps(JOURNEY_NO_PRIORITY_28)),
+        harness_targets=[],
+    )
+    at.button(key="home_finish_action").click().run()
+    at.session_state["sidebar_page"] = t("student_home_title", "en")
+    at.run()
+    assert not at.exception, at.exception
+    assert at.session_state["no_priority_reviewed"] == 28
+    assert _current_step_label(at) == "Write"
+    assert _primary_cta_label(at) == "Open Writing"
+    assert "No automatic priority selected" not in _markdown_text(at)
+
+
+def test_home_step_override_survives_reruns_and_navigation():
+    at = _run_harness(
+        submission_result=json.loads(json.dumps(NO_PRIORITY_RESULT)),
+        sidebar_page=t("student_feedback_title", "en"),
+        harness_journey=json.loads(json.dumps(JOURNEY_NO_PRIORITY_28)),
+    )
+    at.button(key="feedback_finish_action").click().run()
+    for page_key in ("student_home_title", "student_writing_title", "student_feedback_title"):
+        at.session_state["sidebar_page"] = t(page_key, "en")
+        at.run()
+        assert not at.exception, at.exception
+    at.session_state["sidebar_page"] = t("student_home_title", "en")
+    at.run()
+    assert _current_step_label(at) == "Write"
+    assert _primary_cta_label(at) == "Open Writing"
+
+
+def test_new_unresolved_submission_not_treated_as_completed():
+    # A previous cycle (#28) was finished, but a NEW unresolved no-priority
+    # submission (#29) exists in the session: Home must stay at Review.
+    newer = json.loads(json.dumps(NO_PRIORITY_RESULT))
+    newer["submission_id"] = 29
+    at = _run_harness(
+        submission_result=newer,
+        sidebar_page=t("student_home_title", "en"),
+        harness_journey={
+            "state": "feedback_no_practice_target",
+            "derived_states": [{"key": "analysis_without_priority", "submission_ids": [29]}],
+            "events": [],
+        },
+        harness_targets=[],
+        no_priority_reviewed=28,
+    )
+    assert _current_step_label(at) == "Review feedback"
+    labels = [b.label for b in at.button]
+    assert "Revise This Draft" in labels and "Finish This Feedback Cycle" in labels
+    assert "#29" in _markdown_text(at)
+
+
+def test_home_after_revise_shows_revision_goal_not_write():
+    at = _run_harness(
+        submission_result=json.loads(json.dumps(NO_PRIORITY_RESULT)),
+        sidebar_page=t("student_home_title", "en"),
+        harness_journey=json.loads(json.dumps(JOURNEY_NO_PRIORITY_28)),
+        harness_candidates=[json.loads(json.dumps(CANDIDATE_28))],
+        harness_source_bundle=json.loads(json.dumps(SOURCE_BUNDLE_28)),
+        harness_targets=[],
+    )
+    at.button(key="home_revise_action").click().run()
+    assert not at.exception, at.exception
+    assert "no_priority_reviewed" not in at.session_state
+    at.session_state["sidebar_page"] = t("student_home_title", "en")
+    at.run()
+    assert not at.exception, at.exception
+    # Revise does not finish the cycle: the durable revision goal remains the
+    # current step and the CTA is Revision, not Writing.
+    assert _current_step_label(at) != "Write"
+    assert _primary_cta_label(at) == "Open Revision"
+
+
+def test_latest_no_priority_submission_id_helper():
+    from app.ui.features.student.home import _latest_no_priority_submission_id
+
+    journey = {"derived_states": [{"key": "analysis_without_priority", "submission_ids": [20, 21, 28]}]}
+    assert _latest_no_priority_submission_id(journey) == 28
+    assert _latest_no_priority_submission_id({"derived_states": []}) is None
+    assert _latest_no_priority_submission_id({"derived_states": [{"key": "other", "submission_ids": [1]}]}) is None
+    assert _latest_no_priority_submission_id({"state": "no_submissions"}) is None

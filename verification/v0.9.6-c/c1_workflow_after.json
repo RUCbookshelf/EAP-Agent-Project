@@ -6,9 +6,10 @@
     "kept": "explanatory limitation, submission reference #28",
     "rerun_safety": "buttons only act on click; reruns render state without triggering actions"
   },
+  "follow_up": "C1 follow-up: Home step reset after finishing a no-priority cycle (see c1_followup_state.json)",
   "home": {
-    "after_finish": "returns to the normal durable-state contract (no unresolved block)",
-    "after_revise": "revision-writing step becomes the current goal via the existing revision mode",
+    "after_finish": "returns to the normal durable-state contract (no unresolved block); current step resets to 1 Write with a fresh Open Writing action when the session acknowledgement matches the latest durable no-priority submission (v0.9.6-C1 follow-up)",
+    "after_revise": "revision-writing step becomes the current goal via the existing revision mode (durable contract; not reset to Writing)",
     "unresolved_block": "while submission_result is an unresolved no-priority result: Latest submission #N + 'No automatic priority selected' + 'Review the result and choose whether to revise or finish the cycle' + the two action controls"
   },
   "kind": "c1_workflow_after",
@@ -32,7 +33,7 @@
     "no_auto_focus": "info message when the selected source feedback has no priority; source identity preserved; revision-writing action available without a practice target"
   },
   "session_keys_added": [
-    "no_priority_reviewed",
+    "no_priority_reviewed (finished submission id)",
     "cycle_finished_notice",
     "writing_revision_source_preset",
     "writing_revision_source_select"

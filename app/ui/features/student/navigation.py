@@ -33,15 +33,16 @@ def _navigate_writing_revision(source_submission_id: int, lang: str) -> None:
     st.session_state["sidebar_page"] = t("student_writing_title", lang)
 
 
-def _finish_feedback_cycle(lang: str) -> None:
+def _finish_feedback_cycle(submission_id: int, lang: str) -> None:
     """Acknowledge a no-priority feedback cycle and return to a fresh Writing state.
 
     v0.9.6-C1: clears the stale Writing-submitted success state (session-scoped),
-    records the acknowledgement for the current session, and navigates to a
-    fresh Writing form. Never deletes submissions, never creates revisions or
-    practice targets, and never submits or generates anything.
+    records the acknowledgement for the exact finished submission for the
+    current session, and navigates to a fresh Writing form. Never deletes
+    submissions, never creates revisions or practice targets, and never
+    submits or generates anything.
     """
-    st.session_state["no_priority_reviewed"] = True
+    st.session_state["no_priority_reviewed"] = int(submission_id)
     st.session_state["cycle_finished_notice"] = True
     st.session_state.pop("submission_result", None)
     st.session_state["sidebar_page"] = t("student_writing_title", lang)

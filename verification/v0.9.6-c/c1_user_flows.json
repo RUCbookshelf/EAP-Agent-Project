@@ -12,6 +12,8 @@
   "flow_c1b_finish_cycle": {
     "acknowledgement_persists": true,
     "fresh_writing_form_shown": true,
+    "home_cta_after_finish": "Open Writing",
+    "home_current_step_after_finish": "Write",
     "loop_broken": true,
     "no_practice_target_created": true,
     "no_revision_created": true,

@@ -40,6 +40,22 @@ def _home_action_contract(state: str) -> tuple[int, str, str, str]:
     }.get(state, (0, "student_home_action_continue", "student_writing_title", "student_home_go_writing"))
 
 
+def _latest_no_priority_submission_id(journey: dict) -> int | None:
+    """Latest durable no-priority submission id from the journey state.
+
+    The journey classifier records every submission whose Diagnostic Gate
+    selected no automatic priority under the analysis_without_priority
+    derived state. Used to decide whether the session's finished-cycle
+    acknowledgement still matches the newest no-priority submission.
+    """
+    for derived in journey.get("derived_states") or []:
+        if derived.get("key") == "analysis_without_priority":
+            ids = [int(item) for item in (derived.get("submission_ids") or [])]
+            if ids:
+                return max(ids)
+    return None
+
+
 def render_student_home(api_client: StudentHomeApiPort, lang: str) -> None:
     """Student Home: orient the learner and expose one relevant next action."""
     student_page_intro("student_home_title", "student_home_subtitle", lang)
@@ -74,12 +90,28 @@ def render_student_home(api_client: StudentHomeApiPort, lang: str) -> None:
 
     state = journey.get("state") or "no_submissions"
     step, action_key, target_title_key, button_key = _home_action_contract(state)
-    student_task_steps(workflow, step, lang)
     result = st.session_state.get("submission_result")
     unresolved_no_priority = (
         _writing_saved_for_learner(result, learner_id)
         and "NO_SELECTED_PRIORITY" in (result.get("ui_empty_states") or [])
     )
+    if not unresolved_no_priority:
+        # A finished no-priority cycle (session acknowledgement matching the
+        # latest durable no-priority submission) resets the current step to
+        # Writing (1 Write) and the next action to a fresh Writing action
+        # (v0.9.6-C1 follow-up). A newer unresolved submission never matches.
+        reviewed_id = st.session_state.get("no_priority_reviewed")
+        latest_no_priority = _latest_no_priority_submission_id(journey)
+        if (
+            reviewed_id is not None
+            and latest_no_priority is not None
+            and int(reviewed_id) == latest_no_priority
+        ):
+            step = 0
+            action_key = "student_home_action_continue"
+            target_title_key = "student_writing_title"
+            button_key = "student_home_go_writing"
+    student_task_steps(workflow, step, lang)
     if unresolved_no_priority:
         # An unresolved no-priority result is an explicit decision point
         # (v0.9.6-C1): revise this draft or finish this feedback cycle.
@@ -104,7 +136,7 @@ def render_student_home(api_client: StudentHomeApiPort, lang: str) -> None:
             use_container_width=True,
             key="home_finish_action",
             on_click=_finish_feedback_cycle,
-            args=(lang,),
+            args=(int(result.get("submission_id") or 0), lang),
         )
     else:
         student_action_block("student_home_next_action", action_key, lang)

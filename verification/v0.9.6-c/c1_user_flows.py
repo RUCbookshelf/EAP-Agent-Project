@@ -58,6 +58,20 @@ def markdown_text(at) -> str:
     return " ".join(m.value for m in at.markdown)
 
 
+def _current_step_label(at):
+    import re
+    text = markdown_text(at)
+    match = re.search(r'<li data-state="current">.*?<strong>([^<]+)</strong>', text)
+    return match.group(1).strip() if match else None
+
+
+def _primary_cta_label(at):
+    for button in at.button:
+        if button.key == "home_primary_action":
+            return button.label
+    return None
+
+
 def run_harness(**config):
     at = AppTest.from_file(str(HARNESS), default_timeout=90)
     for key, value in config.items():
@@ -107,7 +121,10 @@ def main() -> int:
     })
 
     # Flow C1-B: finish cycle
-    at = run_harness(sidebar_page=t("student_feedback_title", "en"))
+    at = run_harness(
+    sidebar_page=t("student_feedback_title", "en"),
+    harness_journey={"state": "feedback_no_practice_target", "derived_states": [{"key": "analysis_without_priority", "submission_ids": [28]}], "events": []},
+)
     at.button(key="feedback_finish_action").click().run()
     assert not at.exception, at.exception
     client = at.session_state["fake_client"]
@@ -121,6 +138,11 @@ def main() -> int:
         "no_practice_target_created": client.post_count == 0,
         "loop_broken": True,
     }
+    # Return Home: the completed cycle must reset the current step to Write
+    at.session_state["sidebar_page"] = t("student_home_title", "en")
+    at.run()
+    evidence["flow_c1b_finish_cycle"]["home_current_step_after_finish"] = _current_step_label(at)
+    evidence["flow_c1b_finish_cycle"]["home_cta_after_finish"] = _primary_cta_label(at)
     # Navigate back to Feedback: stale result gone
     at.session_state["sidebar_page"] = t("student_feedback_title", "en")
     at.run()

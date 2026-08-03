@@ -1,0 +1,36 @@
+{
+  "fix": {
+    "files": [
+      "app/ui/features/student/navigation.py",
+      "app/ui/features/student/feedback.py",
+      "app/ui/features/student/home.py"
+    ],
+    "home": "Home computes _latest_no_priority_submission_id(journey) from the durable derived_states (analysis_without_priority.submission_ids, max). When no unresolved submission_result exists and the session acknowledgement equals the latest durable no-priority submission id, Home resets the current step to 1 Write and the primary action to a fresh Writing action (Open Writing). A newer unresolved submission never matches; without exact evidence the durable contract is kept.",
+    "navigation": "_finish_feedback_cycle(submission_id, lang) now records the exact finished submission id in no_priority_reviewed; both Feedback and Home finish buttons pass the submission id"
+  },
+  "focused_result": "92 passed (C1 suite 22 + submission reliability A/B + contract/locale), 0 failed",
+  "focused_tests_added": [
+    "test_home_unresolved_no_priority_step_is_review_feedback",
+    "test_home_after_finish_cycle_shows_write_step_and_fresh_action",
+    "test_home_step_override_survives_reruns_and_navigation",
+    "test_new_unresolved_submission_not_treated_as_completed",
+    "test_home_after_revise_shows_revision_goal_not_write",
+    "test_latest_no_priority_submission_id_helper"
+  ],
+  "kind": "c1_followup_state",
+  "owner_feedback": "Manual acceptance checks 1-7 passed; check 8 failed partially: after Finish This Feedback Cycle, Home still showed '2 Review Feedback' as the current step; expected '1 Write'.",
+  "preserved": [
+    "Revise This Draft behavior",
+    "ordinary priority-selected workflows",
+    "linked-revision and first-draft submission reliability",
+    "Submission #28 and all durable records",
+    "no-priority explanation and actions"
+  ],
+  "reproduction": {
+    "after_fix": "Home current step: Write (step 1); no_priority_reviewed 28; primary CTA Open Writing",
+    "before_fix": "Home current step: Review feedback (step 2); no_priority_reviewed True",
+    "flow": "open no-priority feedback result -> Finish This Feedback Cycle -> fresh Writing -> return Home"
+  },
+  "root_cause": "Home derives its current step and action contract exclusively from the durable journey state (feedback_no_practice_target -> step 2). The C1 finish action recorded a session acknowledgement (no_priority_reviewed) and cleared submission_result, but Home never consulted the acknowledgement for step/CTA derivation, so a completed cycle left Home at the durable feedback step.",
+  "stage": "v0.9.6-C1"
+}

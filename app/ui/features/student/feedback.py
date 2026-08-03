@@ -93,7 +93,7 @@ def render_feedback_content(result: dict, api_client: StudentFeedbackApiPort, la
             use_container_width=True,
             key="feedback_finish_action",
             on_click=_finish_feedback_cycle,
-            args=(lang,),
+            args=(int(result.get("submission_id") or 0), lang),
         )
 
     section_header("student_feedback_evidence", lang=lang)
