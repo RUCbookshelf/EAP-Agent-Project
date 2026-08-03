@@ -1,0 +1,193 @@
+{
+  "api_ready": true,
+  "app_started": false,
+  "collapsed": {
+    "count": 1,
+    "expand_control_selector": "[data-testid=\"stSidebarCollapseButton\"]",
+    "ligature_elements": [
+      {
+        "aria_label": null,
+        "class_list": [
+          "st-emotion-cache-1hyhk8c",
+          "ed4y4ls0"
+        ],
+        "color": "rgb(26, 28, 44)",
+        "cursor": "pointer",
+        "display": "flex",
+        "font_family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Noto Sans\", \"Noto Sans SC\", \"PingFang SC\", \"Microsoft YaHei\", \"Helvetica Neue\", Arial, sans-serif",
+        "font_feature_settings": "normal",
+        "overflow": "visible",
+        "parent": "SPAN.st-emotion-cache-2x5h05.ewh6kot2",
+        "parent_testid": null,
+        "rect": {
+          "h": 24,
+          "w": 24,
+          "x": 242,
+          "y": 16.796875
+        },
+        "role": null,
+        "tag": "SPAN",
+        "text": "keyboard_double_arrow_left",
+        "visible": true
+      }
+    ],
+    "sidebar_state": {
+      "aria_hidden": null,
+      "rect": {
+        "h": 900,
+        "w": 300,
+        "x": 0,
+        "y": 0
+      },
+      "sidebar_present": true
+    }
+  },
+  "expanded": {
+    "collapse_control": {
+      "aria_label": null,
+      "class_list": [
+        "st-emotion-cache-f0z877",
+        "eelgd2m10"
+      ],
+      "color": "rgb(26, 28, 44)",
+      "cursor": "auto",
+      "display": "block",
+      "font_family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Noto Sans\", \"Noto Sans SC\", \"PingFang SC\", \"Microsoft YaHei\", \"Helvetica Neue\", Arial, sans-serif",
+      "font_feature_settings": "normal",
+      "icon": {
+        "class_list": [
+          "st-emotion-cache-2x5h05",
+          "ewh6kot2"
+        ],
+        "display": "flex",
+        "font_family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Noto Sans\", \"Noto Sans SC\", \"PingFang SC\", \"Microsoft YaHei\", \"Helvetica Neue\", Arial, sans-serif",
+        "font_feature_settings": "normal",
+        "rect": {
+          "h": 24,
+          "w": 24,
+          "x": 242,
+          "y": 16.796875
+        },
+        "text": "keyboard_double_arrow_left"
+      },
+      "rect": {
+        "h": 30.40625,
+        "w": 32,
+        "x": 238,
+        "y": 14.796875
+      },
+      "role": null,
+      "tag": "DIV",
+      "text": "keyboard_double_arrow_left",
+      "title": null,
+      "visibility": "hidden"
+    },
+    "collapse_control_selector": "[data-testid=\"stSidebarCollapseButton\"]",
+    "count": 1,
+    "ligature_elements": [
+      {
+        "aria_label": null,
+        "class_list": [
+          "st-emotion-cache-1hyhk8c",
+          "ed4y4ls0"
+        ],
+        "color": "rgb(26, 28, 44)",
+        "cursor": "pointer",
+        "display": "flex",
+        "font_family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Noto Sans\", \"Noto Sans SC\", \"PingFang SC\", \"Microsoft YaHei\", \"Helvetica Neue\", Arial, sans-serif",
+        "font_feature_settings": "normal",
+        "overflow": "visible",
+        "parent": "SPAN.st-emotion-cache-2x5h05.ewh6kot2",
+        "parent_testid": null,
+        "rect": {
+          "h": 24,
+          "w": 24,
+          "x": 242,
+          "y": 16.796875
+        },
+        "role": null,
+        "tag": "SPAN",
+        "text": "keyboard_double_arrow_left",
+        "visible": true
+      }
+    ],
+    "sidebar_and_buttons": {
+      "buttons": [
+        {
+          "aria": "",
+          "testid": "stBaseButton-headerNoPadding",
+          "text": "keyboard_double_arrow_left",
+          "title": null
+        },
+        {
+          "aria": "",
+          "testid": "stBaseButton-header",
+          "text": "Deploy",
+          "title": null
+        },
+        {
+          "aria": "Main menu",
+          "testid": "stMainMenuButton",
+          "text": "",
+          "title": null
+        }
+      ],
+      "sidebar_present": true
+    }
+  },
+  "expanded_again": [
+    {
+      "aria_label": null,
+      "class_list": [
+        "st-emotion-cache-1hyhk8c",
+        "ed4y4ls0"
+      ],
+      "color": "rgb(26, 28, 44)",
+      "cursor": "pointer",
+      "display": "flex",
+      "font_family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Noto Sans\", \"Noto Sans SC\", \"PingFang SC\", \"Microsoft YaHei\", \"Helvetica Neue\", Arial, sans-serif",
+      "font_feature_settings": "normal",
+      "overflow": "visible",
+      "parent": "SPAN.st-emotion-cache-2x5h05.ewh6kot2",
+      "parent_testid": null,
+      "rect": {
+        "h": 24,
+        "w": 24,
+        "x": -268,
+        "y": 16.796875
+      },
+      "role": null,
+      "tag": "SPAN",
+      "text": "keyboard_double_arrow_left",
+      "visible": true
+    },
+    {
+      "aria_label": null,
+      "class_list": [
+        "st-emotion-cache-1hyhk8c",
+        "ed4y4ls0"
+      ],
+      "color": "rgb(26, 28, 44)",
+      "cursor": "pointer",
+      "display": "flex",
+      "font_family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Noto Sans\", \"Noto Sans SC\", \"PingFang SC\", \"Microsoft YaHei\", \"Helvetica Neue\", Arial, sans-serif",
+      "font_feature_settings": "normal",
+      "overflow": "visible",
+      "parent": "SPAN.st-emotion-cache-2x5h05.ewh6kot2",
+      "parent_testid": null,
+      "rect": {
+        "h": 24,
+        "w": 24,
+        "x": 20,
+        "y": 17.984375
+      },
+      "role": null,
+      "tag": "SPAN",
+      "text": "keyboard_double_arrow_right",
+      "visible": true
+    }
+  ],
+  "kind": "c2_sidebar_before",
+  "stage": "v0.9.6-C2",
+  "streamlit_ready": true
+}

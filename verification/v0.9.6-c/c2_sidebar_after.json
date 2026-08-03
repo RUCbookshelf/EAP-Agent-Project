@@ -1,0 +1,334 @@
+{
+  "collapsed": {
+    "button_exists": true,
+    "button_rect": {
+      "h": 28,
+      "w": 28,
+      "x": 240,
+      "y": 13.796875
+    },
+    "control_count": 1,
+    "control_rect": {
+      "h": 32.40625,
+      "w": 32,
+      "x": 238,
+      "y": 13.796875
+    },
+    "control_visible": true,
+    "icon_feature": "\"liga\"",
+    "icon_font_family": "\"Material Symbols Rounded\"",
+    "icon_text": "keyboard_double_arrow_left",
+    "literal_ligature_text_rendered_as_plain_font": false,
+    "sidebar_width": 300
+  },
+  "collapsed_ligatures": [
+    {
+      "button_testid": "stBaseButton-headerNoPadding",
+      "h": 24,
+      "text": "keyboard_double_arrow_left",
+      "w": 24,
+      "x": -268,
+      "y": 15.796875
+    },
+    {
+      "button_testid": "stExpandSidebarButton",
+      "h": 24,
+      "text": "keyboard_double_arrow_right",
+      "w": 24,
+      "x": 20,
+      "y": 17.984375
+    }
+  ],
+  "expanded": {
+    "button_computed": {
+      "display": "inline-flex",
+      "opacity": "1",
+      "pointer": "pointer",
+      "visibility": "hidden"
+    },
+    "button_exists": true,
+    "button_rect": {
+      "h": 28,
+      "w": 28,
+      "x": 240,
+      "y": 13.796875
+    },
+    "control_count": 1,
+    "control_rect": {
+      "h": 32.40625,
+      "w": 32,
+      "x": 238,
+      "y": 13.796875
+    },
+    "control_visible": false,
+    "icon_feature": "\"liga\"",
+    "icon_font_family": "\"Material Symbols Rounded\"",
+    "icon_text": "keyboard_double_arrow_left",
+    "literal_ligature_text_rendered_as_plain_font": false,
+    "px_font_body_check": false,
+    "sidebar_width": 300
+  },
+  "expanded_again": {
+    "button_exists": true,
+    "button_rect": {
+      "h": 28,
+      "w": 28,
+      "x": -270,
+      "y": 13.796875
+    },
+    "control_count": 1,
+    "control_rect": {
+      "h": 32.40625,
+      "w": 32,
+      "x": -272,
+      "y": 13.796875
+    },
+    "control_visible": false,
+    "icon_feature": "\"liga\"",
+    "icon_font_family": "\"Material Symbols Rounded\"",
+    "icon_text": "keyboard_double_arrow_left",
+    "literal_ligature_text_rendered_as_plain_font": false,
+    "sidebar_width": 0
+  },
+  "expanded_ligatures": [
+    {
+      "button_testid": "stBaseButton-headerNoPadding",
+      "h": 24,
+      "text": "keyboard_double_arrow_left",
+      "w": 24,
+      "x": 242,
+      "y": 15.796875
+    }
+  ],
+  "keyboard_collapse": {
+    "button_exists": true,
+    "button_rect": {
+      "h": 28,
+      "w": 28,
+      "x": -270,
+      "y": 13.796875
+    },
+    "control_count": 1,
+    "control_rect": {
+      "h": 32.40625,
+      "w": 32,
+      "x": -272,
+      "y": 13.796875
+    },
+    "control_visible": false,
+    "icon_feature": "\"liga\"",
+    "icon_font_family": "\"Material Symbols Rounded\"",
+    "icon_text": "keyboard_double_arrow_left",
+    "literal_ligature_text_rendered_as_plain_font": false,
+    "sidebar_width": 0
+  },
+  "keyboard_expand": {
+    "button_exists": true,
+    "button_rect": {
+      "h": 28,
+      "w": 28,
+      "x": 240,
+      "y": 13.796875
+    },
+    "control_count": 1,
+    "control_rect": {
+      "h": 32.40625,
+      "w": 32,
+      "x": 238,
+      "y": 13.796875
+    },
+    "control_visible": true,
+    "icon_feature": "\"liga\"",
+    "icon_font_family": "\"Material Symbols Rounded\"",
+    "icon_text": "keyboard_double_arrow_left",
+    "literal_ligature_text_rendered_as_plain_font": false,
+    "sidebar_width": 300
+  },
+  "kind": "c2_sidebar_after",
+  "narrow_viewport_390x844": {
+    "collapsed": {
+      "button_exists": true,
+      "button_rect": {
+        "h": 44,
+        "w": 28,
+        "x": -270,
+        "y": 0
+      },
+      "control_count": 1,
+      "control_rect": {
+        "h": 44,
+        "w": 32,
+        "x": -272,
+        "y": 0
+      },
+      "control_visible": true,
+      "icon_feature": "\"liga\"",
+      "icon_font_family": "\"Material Symbols Rounded\"",
+      "icon_text": "keyboard_double_arrow_left",
+      "literal_ligature_text_rendered_as_plain_font": false,
+      "sidebar_width": 0
+    },
+    "expanded": {
+      "button_exists": true,
+      "button_rect": {
+        "h": 44,
+        "w": 28,
+        "x": -270,
+        "y": -13
+      },
+      "control_count": 1,
+      "control_rect": {
+        "h": 44,
+        "w": 32,
+        "x": -272,
+        "y": -13
+      },
+      "control_visible": true,
+      "icon_feature": "\"liga\"",
+      "icon_font_family": "\"Material Symbols Rounded\"",
+      "icon_text": "keyboard_double_arrow_left",
+      "literal_ligature_text_rendered_as_plain_font": false,
+      "sidebar_width": 0
+    },
+    "expanded_again": {
+      "button_exists": true,
+      "button_rect": {
+        "h": 44,
+        "w": 28,
+        "x": 240,
+        "y": 0
+      },
+      "control_count": 1,
+      "control_rect": {
+        "h": 44,
+        "w": 32,
+        "x": 238,
+        "y": 0
+      },
+      "control_visible": true,
+      "icon_feature": "\"liga\"",
+      "icon_font_family": "\"Material Symbols Rounded\"",
+      "icon_text": "keyboard_double_arrow_left",
+      "literal_ligature_text_rendered_as_plain_font": false,
+      "sidebar_width": 300
+    }
+  },
+  "pages": {
+    "Feedback": {
+      "button_exists": true,
+      "button_rect": {
+        "h": 28,
+        "w": 28,
+        "x": 240,
+        "y": 13.796875
+      },
+      "control_count": 1,
+      "control_rect": {
+        "h": 32.40625,
+        "w": 32,
+        "x": 238,
+        "y": 13.796875
+      },
+      "control_visible": true,
+      "icon_feature": "\"liga\"",
+      "icon_font_family": "\"Material Symbols Rounded\"",
+      "icon_text": "keyboard_double_arrow_left",
+      "literal_ligature_text_rendered_as_plain_font": false,
+      "navigated_to": "Feedback",
+      "sidebar_width": 300
+    },
+    "Home": {
+      "button_exists": true,
+      "button_rect": {
+        "h": 28,
+        "w": 28,
+        "x": 240,
+        "y": 13.796875
+      },
+      "control_count": 1,
+      "control_rect": {
+        "h": 32.40625,
+        "w": 32,
+        "x": 238,
+        "y": 13.796875
+      },
+      "control_visible": true,
+      "icon_feature": "\"liga\"",
+      "icon_font_family": "\"Material Symbols Rounded\"",
+      "icon_text": "keyboard_double_arrow_left",
+      "literal_ligature_text_rendered_as_plain_font": false,
+      "navigated_to": "Home",
+      "sidebar_width": 300
+    },
+    "Practice": {
+      "button_exists": true,
+      "button_rect": {
+        "h": 28,
+        "w": 28,
+        "x": 240,
+        "y": -7.203125
+      },
+      "control_count": 1,
+      "control_rect": {
+        "h": 32.40625,
+        "w": 32,
+        "x": 238,
+        "y": -7.203125
+      },
+      "control_visible": true,
+      "icon_feature": "\"liga\"",
+      "icon_font_family": "\"Material Symbols Rounded\"",
+      "icon_text": "keyboard_double_arrow_left",
+      "literal_ligature_text_rendered_as_plain_font": false,
+      "navigated_to": "Practice",
+      "sidebar_width": 300
+    },
+    "Revision": {
+      "button_exists": true,
+      "button_rect": {
+        "h": 28,
+        "w": 28,
+        "x": 240,
+        "y": 13.796875
+      },
+      "control_count": 1,
+      "control_rect": {
+        "h": 32.40625,
+        "w": 32,
+        "x": 238,
+        "y": 13.796875
+      },
+      "control_visible": true,
+      "icon_feature": "\"liga\"",
+      "icon_font_family": "\"Material Symbols Rounded\"",
+      "icon_text": "keyboard_double_arrow_left",
+      "literal_ligature_text_rendered_as_plain_font": false,
+      "navigated_to": "Revision",
+      "sidebar_width": 300
+    },
+    "Writing": {
+      "button_exists": true,
+      "button_rect": {
+        "h": 28,
+        "w": 28,
+        "x": 240,
+        "y": 13.796875
+      },
+      "control_count": 1,
+      "control_rect": {
+        "h": 32.40625,
+        "w": 32,
+        "x": 238,
+        "y": 13.796875
+      },
+      "control_visible": true,
+      "icon_feature": "\"liga\"",
+      "icon_font_family": "\"Material Symbols Rounded\"",
+      "icon_text": "keyboard_double_arrow_left",
+      "literal_ligature_text_rendered_as_plain_font": false,
+      "navigated_to": "Writing",
+      "sidebar_width": 300
+    }
+  },
+  "stage": "v0.9.6-C2"
+}

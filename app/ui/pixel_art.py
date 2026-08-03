@@ -507,8 +507,19 @@ div[data-testid="stSidebar"] {{
     background-color: var(--px-surface) !important;
     border-right: var(--px-border-thick) !important;
 }}
-div[data-testid="stSidebar"] * {{
+/* Sidebar text keeps the pixel body font, but Streamlit native button
+   content keeps its own fonts (v0.9.6-C2). */
+div[data-testid="stSidebar"] *:not(button *),
+div[data-testid="stSidebar"] button {{
     font-family: var(--px-font-body) !important;
+}}
+/* v0.9.6-C2: restore the Material Symbols icon font (loaded by the
+   Streamlit distribution itself) on the native sidebar collapse/expand
+   control so the ligature renders as the arrow glyph instead of literal
+   keyboard_double_arrow text. Scoped to the documented control testid. */
+div[data-testid="stSidebarCollapseButton"] span {{
+    font-family: "Material Symbols Rounded" !important;
+    font-feature-settings: "liga" !important;
 }}
 [data-testid="stRadioGroup"] label[data-testid="stRadioOption"] {{
     border: var(--px-border-thick) !important;
