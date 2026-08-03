@@ -231,7 +231,7 @@ PORT_METHODS: dict[str, list[str]] = {
     'StudentJourneyApiPort': ['get_journey'],
     'StudentPracticeApiPort': ['create_exercise', 'get_exercise_attempts', 'get_exercise_instances', 'get_practice_targets', 'submit_exercise_attempt'],
     'StudentRevisionApiPort': ['get_practice_targets', 'get_student_revision_candidates', 'get_submission', 'submit_linked_revision'],
-    'StudentWritingApiPort': ['get_student_revision_candidates', 'submit'],
+    'StudentWritingApiPort': ['get_student_revision_candidates', 'get_submission', 'submit'],
 }
 
 CLIENT_ENDPOINT_MAP: dict[str, list[tuple[str, str]]] = {

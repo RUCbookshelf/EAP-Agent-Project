@@ -186,12 +186,18 @@ def test_linked_revision_client_uses_dedicated_long_timeout():
     assert session.calls[0]["method"] == "POST"
 
 
-def test_generic_submit_timeout_unchanged():
+def test_ordinary_profiles_unchanged_and_submit_uses_long_policy():
+    # v0.9.6-B unified policy: first-draft submission moved to the shared
+    # long-running transport; ordinary request profiles are unchanged.
     assert DEFAULT_TIMEOUTS == TimeoutProfile(connect=2.0, read=10.0, write=30.0)
+    read_session = RecordingSession(payload={"submission_id": 1})
+    read_client = WritingFeedbackApiClient("http://x", session=read_session)
+    read_client.get_submission(1)
+    assert read_session.calls[0]["timeout"] == (2.0, 10.0)
     session = RecordingSession(payload={"submission_id": 1})
     client = WritingFeedbackApiClient("http://x", session=session)
     client.submit({"essay_text": "x"})
-    assert session.calls[0]["timeout"] == (2.0, 30.0)
+    assert session.calls[0]["timeout"] == (2.0, 180.0)
 
 
 def test_submit_linked_revision_posts_once_and_never_retries_on_timeout():
@@ -462,15 +468,20 @@ def test_no_duplicate_revision_in_controlled_timeout_case(api_env):
     source_id = int(source["submission_id"])
     holder.delay = 6.0
     # Force a real client timeout with a shortened profile on the same POST
-    # endpoint (the dedicated path uses its fixed 180 s profile, proven by
-    # test_controlled_slow_linked_revision_succeeds_below_new_timeout). The
-    # generic method honors the custom profile and is never auto-retried.
+    # endpoint. Since v0.9.6-B, submit()/submit_linked_revision() always use
+    # the fixed 180 s LONG_SUBMIT_TIMEOUTS (proven by the controlled slow
+    # tests), so the timeout is simulated by invoking the shared transport
+    # with an explicit short test-only profile; the POST is never retried.
     with pytest.raises(ApiClientError) as excinfo:
-        client.submit(submission_payload(
-            "S96DUP",
-            "Parks support health. Cities should protect parks in every neighborhood.",
-            source_id, prompt,
-        ))
+        client._request(
+            "POST", "/api/v1/submissions", operation="submit",
+            json=submission_payload(
+                "S96DUP",
+                "Parks support health. Cities should protect parks in every neighborhood.",
+                source_id, prompt,
+            ),
+            profile=TimeoutProfile(connect=2.0, write=3.0),
+        )
     assert excinfo.value.category == ErrorCategory.REQUEST_TIMEOUT
     holder.delay = 0.0
     deadline = time.monotonic() + 15.0
@@ -542,11 +553,12 @@ def test_locale_new_keys_present_and_parity():
 
 
 def test_original_submit_and_writing_page_unchanged():
-    # Ordinary submissions keep the generic 30 s write timeout.
+    # v0.9.6-B: the writing page still calls the generic client method,
+    # which now uses the shared long-running transport.
     session = RecordingSession(payload={"submission_id": 1})
     client = WritingFeedbackApiClient("http://x", session=session)
     client.submit({"essay_text": "x"})
-    assert session.calls[0]["timeout"] == (2.0, 30.0)
+    assert session.calls[0]["timeout"] == (2.0, 180.0)
     # The writing page still calls the generic client method.
     source = (ROOT / "app/ui/features/student/writing.py").read_text(encoding="utf-8")
     assert source.count("api_client.submit(submission)") == 1

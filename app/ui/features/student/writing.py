@@ -4,8 +4,16 @@ from __future__ import annotations
 
 import streamlit as st
 
+from app.errors import ErrorCategory
 from app.ui.api_client import ApiClientError
 from app.ui.ports.student import StudentWritingApiPort
+from app.ui.features.student.submit_reliability import (
+    consume_pending,
+    enter_pending,
+    release_pending,
+    render_outcome,
+    store_outcome,
+)
 from app.ui.components import (
     error_box,
     field_error,
@@ -26,6 +34,80 @@ from app.ui.features.student.navigation import _navigate_student_page
 from app.ui.features.student.session import _writing_saved_for_learner
 from app.ui.locale import t
 from app.ui.student_context import set_selected_learner, student_id_input
+
+
+def _submission_baseline(api_client: StudentWritingApiPort, learner_id: str, submission: dict) -> str | None:
+    """Newest server submitted_at of the same submission mode before the POST.
+
+    One bounded read; rows are matched by mode: first drafts have
+    revision_of_submission_id NULL; writing-page revisions match the source.
+    A reconciliation candidate with submitted_at greater than this baseline
+    was created by the current submit attempt.
+    """
+    source = submission.get("revision_of_submission_id")
+    try:
+        candidates = api_client.get_student_revision_candidates(learner_id).get("candidates", [])
+    except ApiClientError:
+        return None
+    timestamps = [
+        str(item["submitted_at"])
+        for item in candidates
+        if item.get("submitted_at")
+        and (
+            int(item.get("revision_of_submission_id") or 0) == source
+            if source is not None
+            else item.get("revision_of_submission_id") is None
+        )
+    ]
+    return max(timestamps) if timestamps else None
+
+
+def _reconcile_writing_submission(
+    api_client: StudentWritingApiPort,
+    learner_id: str,
+    submission: dict,
+    baseline: str | None,
+) -> str:
+    """Bounded read-only reconciliation after a writing-page submit timeout.
+
+    Exact one-match rules only: same mode, server submitted_at greater than
+    the pre-submit baseline, exactly one candidate, and a submission bundle
+    whose student and essay text match exactly. Returns CONFIRMED_SUCCESS,
+    STILL_PROCESSING, or UNCONFIRMED. Never POSTs, never recurses; read
+    failures and ambiguous matches degrade to UNCONFIRMED. No essay text is
+    ever persisted here - it is only compared in memory.
+    """
+    source = submission.get("revision_of_submission_id")
+    try:
+        candidates = api_client.get_student_revision_candidates(learner_id).get("candidates", [])
+    except ApiClientError:
+        return "UNCONFIRMED"
+    matches = [
+        item for item in candidates
+        if item.get("submitted_at") is not None
+        and (
+            int(item.get("revision_of_submission_id") or 0) == source
+            if source is not None
+            else item.get("revision_of_submission_id") is None
+        )
+        and (baseline is None or str(item["submitted_at"]) > baseline)
+    ]
+    if len(matches) != 1:
+        return "UNCONFIRMED"
+    try:
+        bundle = api_client.get_submission(int(matches[0]["essay_id"]))
+    except ApiClientError:
+        return "UNCONFIRMED"
+    if not bundle:
+        return "UNCONFIRMED"
+    if bundle.get("student_id") != learner_id:
+        return "UNCONFIRMED"
+    expected_text = submission.get("essay_text")
+    if expected_text is not None and bundle.get("essay_text") != expected_text:
+        return "UNCONFIRMED"
+    if bundle.get("feedback") is not None or bundle.get("success_status") is not None:
+        return "CONFIRMED_SUCCESS"
+    return "STILL_PROCESSING"
 
 
 def render_writing_page(api_client: StudentWritingApiPort, lang: str) -> None:
@@ -49,6 +131,7 @@ def render_writing_page(api_client: StudentWritingApiPort, lang: str) -> None:
 
     saved = st.session_state.get("submission_result")
     if _writing_saved_for_learner(saved, learner_id):
+        release_pending("writing")
         student_context_block(
             [
                 ("student_context_learner", learner_id),
@@ -194,6 +277,12 @@ def render_writing_page(api_client: StudentWritingApiPort, lang: str) -> None:
         st.rerun()
 
     st.session_state.pop("writing_validation_state", None)
+    mode = "FIRST_DRAFT" if revision_of_submission_id is None else "LINKED_REVISION"
+    if consume_pending("writing", mode, lang):
+        # A submit is in flight or its terminal outcome is pending display;
+        # this queued click was consumed without a second POST.
+        return
+
     submission = {
         "student_id": student_id,
         "writing_prompt": writing_prompt,
@@ -213,15 +302,25 @@ def render_writing_page(api_client: StudentWritingApiPort, lang: str) -> None:
         "essay_text": essay_text,
         "revision_of_submission_id": revision_of_submission_id,
     }
+    baseline = _submission_baseline(api_client, learner_id, submission)
+    enter_pending("writing")
     try:
         loading_box("student_writing_submitting", lang)
         result = api_client.submit(submission)
     except ApiClientError as exc:
+        if exc.category == ErrorCategory.REQUEST_TIMEOUT:
+            outcome = _reconcile_writing_submission(api_client, learner_id, submission, baseline)
+            store_outcome("writing", outcome)
+            render_outcome(mode, outcome, lang)
+            return
+        release_pending("writing")
         render_api_error(exc, lang)
         return
     except Exception:
+        release_pending("writing")
         error_box("submission_error", lang)
         return
+    release_pending("writing")
 
     result["ui_submission"] = {
         "student_id": learner_id,

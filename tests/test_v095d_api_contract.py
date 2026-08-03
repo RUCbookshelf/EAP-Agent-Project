@@ -90,10 +90,7 @@ def _client_endpoint_map_from_source() -> dict[str, list[tuple[str, str]]]:
         node for node in tree.body
         if isinstance(node, ast.ClassDef) and node.name == "WritingFeedbackApiClient"
     )
-    mapping: dict[str, list[tuple[str, str]]] = {}
-    for func in client_class.body:
-        if not isinstance(func, ast.FunctionDef) or func.name.startswith("_"):
-            continue
+    def _request_targets(func) -> list[tuple[str, str]]:
         targets = []
         for node in ast.walk(func):
             if (
@@ -113,6 +110,25 @@ def _client_endpoint_map_from_source() -> dict[str, list[tuple[str, str]]]:
                         for part in path_arg.values
                     )
                     targets.append((method_arg.value, path_text))
+        return targets
+
+    helper_targets: dict[str, list[tuple[str, str]]] = {}
+    for func in client_class.body:
+        if isinstance(func, ast.FunctionDef) and func.name.startswith("_"):
+            helper_targets[func.name] = _request_targets(func)
+
+    mapping: dict[str, list[tuple[str, str]]] = {}
+    for func in client_class.body:
+        if not isinstance(func, ast.FunctionDef) or func.name.startswith("_"):
+            continue
+        targets = _request_targets(func)
+        for node in ast.walk(func):
+            if (
+                isinstance(node, ast.Call)
+                and isinstance(node.func, ast.Attribute)
+                and node.func.attr == "_submit_long_running"
+            ):
+                targets.extend(helper_targets.get("_submit_long_running", []))
         if targets:
             mapping[func.name] = targets
     return mapping

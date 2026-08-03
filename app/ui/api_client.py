@@ -207,20 +207,27 @@ class WritingFeedbackApiClient:
 
     # -- submissions / learner model (read-only GETs retryable) ------------
 
-    def submit(self, submission: dict[str, Any]) -> dict[str, Any]:
-        return self._request("POST", "/api/v1/submissions", operation="submit", json=submission)
+    def _submit_long_running(self, submission: dict[str, Any]) -> dict[str, Any]:
+        """Private shared long-running essay-submission transport.
 
-    def submit_linked_revision(self, submission: dict[str, Any]) -> dict[str, Any]:
-        """Submit a linked revision with the dedicated long-operation timeout.
-
-        Same endpoint and payload as submit(); the longer bounded wait covers
-        the full analysis + provider feedback pipeline. POST is never
-        automatically retried (retry applies only to GET requests).
+        One POST to /api/v1/submissions with the dedicated long-operation
+        timeout (LONG_SUBMIT_TIMEOUTS) covering the full analysis + provider
+        feedback pipeline. Never automatically retried (retry applies only
+        to GET requests). Used by both the first-draft submission entry and
+        the linked-revision submission entry.
         """
         return self._request(
             "POST", "/api/v1/submissions", operation="submit",
             json=submission, profile=LONG_SUBMIT_TIMEOUTS,
         )
+
+    def submit(self, submission: dict[str, Any]) -> dict[str, Any]:
+        """Submit a first draft (or writing-page revision) reliably."""
+        return self._submit_long_running(submission)
+
+    def submit_linked_revision(self, submission: dict[str, Any]) -> dict[str, Any]:
+        """Submit a linked revision with the shared reliable transport."""
+        return self._submit_long_running(submission)
 
     def get_submission(self, submission_id: int) -> dict[str, Any]:
         return self._request("GET", f"/api/v1/submissions/{submission_id}", operation="get_submission", retry=True)

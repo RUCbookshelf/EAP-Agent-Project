@@ -27,6 +27,13 @@ from app.ui.components import (
 from app.ui.features.student.formatting import _feedback_category_label
 from app.ui.features.student.navigation import _navigate_student_page
 from app.ui.features.student.session import _writing_saved_for_learner
+from app.ui.features.student.submit_reliability import (
+    consume_pending,
+    enter_pending,
+    release_pending,
+    render_outcome,
+    store_outcome,
+)
 from app.ui.locale import t
 from app.ui.student_context import set_selected_learner, student_id_input
 
@@ -42,16 +49,8 @@ def _revision_saved_for_source(
         source_submission_id is None or saved_source == source_submission_id
     )
 
-# Session-state keys for the bounded linked-revision submit flow (v0.9.6-A).
-_REVISION_PENDING_KEY = "revision_submit_pending"
-_REVISION_OUTCOME_KEY = "revision_submit_outcome"
+# Baseline key for the bounded linked-revision reconciliation (v0.9.6-A).
 _REVISION_BASELINE_KEY = "revision_baseline_latest_submitted_at"
-
-_REVISION_OUTCOME_MESSAGES = {
-    "CONFIRMED_SUCCESS": "student_revision_timeout_confirmed_success",
-    "STILL_PROCESSING": "student_revision_timeout_still_processing",
-    "UNCONFIRMED": "student_revision_timeout_unconfirmed",
-}
 
 
 def _revision_baseline(candidates: list[dict], source_id: int) -> str | None:
@@ -104,17 +103,6 @@ def _reconcile_linked_revision(
     if bundle.get("feedback") is not None or bundle.get("success_status") is not None:
         return "CONFIRMED_SUCCESS"
     return "STILL_PROCESSING"
-
-
-def _render_revision_outcome(state: str, lang: str) -> None:
-    """Render an accurate post-timeout outcome without a blind retry action."""
-    message = _REVISION_OUTCOME_MESSAGES.get(state, "student_revision_timeout_unconfirmed")
-    if state == "CONFIRMED_SUCCESS":
-        success_box(message, lang)
-    elif state == "STILL_PROCESSING":
-        warning_box(message, lang)
-    else:
-        info_box(message, lang)
 
 
 def _revision_status_label(prefix: str, value: str, lang: str) -> str:
@@ -238,8 +226,7 @@ def render_revision_page(api_client: StudentRevisionApiPort, lang: str) -> None:
     student_context_block([("student_context_learner", learner_id)], lang)
     saved = st.session_state.get("submission_result")
     if _revision_saved_for_source(saved, learner_id):
-        st.session_state.pop(_REVISION_PENDING_KEY, None)
-        st.session_state.pop(_REVISION_OUTCOME_KEY, None)
+        release_pending("revision")
         source = saved.get("ui_submission", {}).get("revision_source", {})
         section_header("student_revision_original_context", lang=lang)
         student_context_block(
@@ -378,16 +365,9 @@ def render_revision_page(api_client: StudentRevisionApiPort, lang: str) -> None:
         st.rerun()
 
     st.session_state.pop("revision_validation_state", None)
-    if st.session_state.get(_REVISION_PENDING_KEY):
+    if consume_pending("revision", "LINKED_REVISION", lang):
         # A linked-revision submit is in flight or its terminal outcome is
-        # pending display; consume this click without issuing a second POST.
-        outcome = st.session_state.get(_REVISION_OUTCOME_KEY)
-        if outcome:
-            _render_revision_outcome(outcome, lang)
-        else:
-            info_box("student_revision_submit_pending", lang)
-        st.session_state.pop(_REVISION_PENDING_KEY, None)
-        st.session_state.pop(_REVISION_OUTCOME_KEY, None)
+        # pending display; this queued click was consumed without a second POST.
         return
 
     submission = {
@@ -405,7 +385,7 @@ def render_revision_page(api_client: StudentRevisionApiPort, lang: str) -> None:
         "essay_text": revised_text,
         "revision_of_submission_id": source_id,
     }
-    st.session_state[_REVISION_PENDING_KEY] = True
+    enter_pending("revision")
     try:
         loading_box("student_revision_submitting", lang)
         result = api_client.submit_linked_revision(submission)
@@ -415,17 +395,17 @@ def render_revision_page(api_client: StudentRevisionApiPort, lang: str) -> None:
                 api_client, learner_id, source_id,
                 st.session_state.get(_REVISION_BASELINE_KEY),
             )
-            st.session_state[_REVISION_OUTCOME_KEY] = outcome
-            _render_revision_outcome(outcome, lang)
+            store_outcome("revision", outcome)
+            render_outcome("LINKED_REVISION", outcome, lang)
             return
-        st.session_state.pop(_REVISION_PENDING_KEY, None)
+        release_pending("revision")
         render_api_error(exc, lang)
         return
     except Exception:
-        st.session_state.pop(_REVISION_PENDING_KEY, None)
+        release_pending("revision")
         error_box("submission_error", lang)
         return
-    st.session_state.pop(_REVISION_PENDING_KEY, None)
+    release_pending("revision")
     result["ui_submission"] = {
         "student_id": learner_id,
         "writing_prompt": source.get("writing_prompt", ""),
