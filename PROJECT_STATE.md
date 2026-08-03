@@ -8,6 +8,25 @@
 
 # Project State
 
+## Current v0.9.5-H2E State (architecture freeze)
+
+- Status: **COMPLETE - v0.9.5 architecture optimization is COMPLETE and
+  frozen.** H2D2-V1 full-core closure passed (exit 0, 709 passed, 8
+  skipped, 2 warnings, zero failures/errors); the freeze captures the final
+  source-authoritative inventory and ends generic architecture work.
+- Frozen inventory: Database public methods 2; API path+method pairs 77
+  (73 explicit OpenAPI pairs + 4 auto-HEAD GET entries); frontend client
+  52; locale 520/520; migration 12; tables 33; `config-v0.9.0`;
+  `feedback-prompt-v0.7.1`; persistence contracts 41/41/0; Protocol 41;
+  plain structural 0; runtime-checkable 36; API-owned Ports 10,
+  production bindings 10, unbound 0; ConfigurationPort = typing.Protocol;
+  AnalysisRunReader definitions 1.
+- H1 COMPLETE; H2A COMPLETE; H2B COMPLETE; H2C COMPLETE; H2D1 COMPLETE;
+  H2D2 COMPLETE; H2E COMPLETE.
+- Next stage: **v0.9.6 feature development** (user-visible or
+  research-workflow-visible functional outcome; no generic architecture
+  audit or cleanup).
+
 ## Current v0.9.5-H2D2 State
 
 - Status: **COMPLETE and fully verified** (H2D2-V1 full non-live core

@@ -1,0 +1,117 @@
+{
+  "api_port_bindings": {
+    "api_owned_ports_total": 10,
+    "bound_names": [
+      "AnalysisRunReadPort",
+      "CalfReadPort",
+      "ResearchExportWritePort",
+      "RevisionGroupLookupPort",
+      "StudentLearnerReadPort",
+      "StudentLookupPort",
+      "StudentSubmissionListPort",
+      "SubmissionBundleReadPort",
+      "SubmissionCalibrationReadPort",
+      "SystemMigrationPort"
+    ],
+    "production_bound": 10,
+    "unbound": 0,
+    "unbound_names": []
+  },
+  "closure_commits": {
+    "H2A": "8a01f5b",
+    "H2B": "7974ebc",
+    "H2C": "79c94bd",
+    "H2D1": "e4d8be8",
+    "H2D2": "aa894f1"
+  },
+  "contract_inventory": {
+    "active_persistence_contracts": 41,
+    "basis": "H1 protocol_inventory (55 entries; A=37, B=1, C=4, G=13) + H2A removal of 13 unused + H2C canonicalization of the duplicate _AnalysisRunReader pair (2 inventory entries -> 1 definition) + H2D1 ConfigurationPort Protocol formalization; every transition enforced by the focused F2-H2D2 suite (243 passed, 2 warnings) on isolated DB",
+    "plain_structural_contracts": 0,
+    "runtime_checkable_contracts": 36,
+    "total_persistence_contracts": 41,
+    "typing_protocol_contracts": 41,
+    "unused_legacy_contracts": 0
+  },
+  "final_head_before_h2e_commit": "aa894f1",
+  "frozen_state": {
+    "API_path_method_pairs": {
+      "breakdown": {
+        "auto_head_route_entries": 4,
+        "basis": "H2D2 focused test assertion (FastAPI route table, 243-passed suite) + verification/v0.9.5-h2d2/openapi_before.json (normalized OpenAPI: 52 GET + 21 POST over 68 paths; FastAPI auto-HEAD routes excluded from OpenAPI but carrying GET in the route table, giving 77 GET/POST route entries and 81 total incl. 4 HEAD)",
+        "explicit_openapi_pairs": 73,
+        "fastapi_route_table_get_post_entries": 77,
+        "openapi_get": 52,
+        "openapi_paths": 68,
+        "openapi_post": 21,
+        "total_route_method_entries": 81
+      },
+      "value": 77
+    },
+    "Active_configuration": {
+      "basis": "exact run.bat --verify PASS (H2D2 launcher verification)",
+      "value": "config-v0.9.0"
+    },
+    "Active_feedback_prompt": {
+      "basis": "exact run.bat --verify PASS (H2D2 launcher verification)",
+      "value": "feedback-prompt-v0.7.1"
+    },
+    "Database_public_methods": {
+      "methods": [
+        "connect",
+        "initialize"
+      ],
+      "value": 2
+    },
+    "Frontend_client_public_methods": {
+      "value": 52
+    },
+    "Locale_parity": {
+      "en_leaf_keys": 520,
+      "parity": true,
+      "zh_leaf_keys": 520
+    },
+    "Migration": {
+      "basis": "exact run.bat --verify PASS on fresh isolated DB (H2D2 launcher verification); migrations defined in app/database/migrations.py",
+      "value": 12
+    },
+    "Tables": {
+      "basis": "exact run.bat --verify PASS on fresh isolated DB (H2D2 launcher verification)",
+      "value": 33
+    }
+  },
+  "infrastructure_facts": {
+    "AnalysisRunReader_definition_count": 1,
+    "AnalysisRunReader_definition_files": [
+      "app/infrastructure/sqlite/repositories/contracts.py"
+    ],
+    "ConfigurationPort_kind": [
+      "Protocol"
+    ],
+    "unused_legacy_contract_count": 0
+  },
+  "kind": "architecture_freeze",
+  "stage": "v0.9.5-H2E",
+  "verification_baseline": {
+    "development_database": {
+      "mtime_local": "2026-08-02T11:02:25.887+08:00",
+      "sha256": "340E0F3739FEFFD3DEF87BB6E711CB6F90A8478E7E18D833C715EDCFAB03AFF4",
+      "size_bytes": 8298496
+    },
+    "latest_clean_full_core": {
+      "commit": "aa894f1",
+      "result": "709 passed, 8 skipped, 2 warnings; 0 failed; 0 errors; exit 0",
+      "stage": "v0.9.5-H2D2-V1"
+    },
+    "latest_launcher": {
+      "db": "C:\\Users\\16073\\AppData\\Local\\Temp\\v095h2d2-verify-6631bbdd\\verify.db",
+      "result": "PASS exit 0",
+      "stage": "v0.9.5-H2D2"
+    },
+    "research_export_baseline": {
+      "directories": 388,
+      "files": 776,
+      "guard": "BASELINE OK (H2D2-V1 final check)"
+    }
+  }
+}

@@ -1,5 +1,28 @@
 
 
+## 2026-08-03 - v0.9.5-H2E Freeze the architecture for feature development
+
+- **Decision**: Close the v0.9.5 architecture-optimization program with a
+  documentation-only freeze: capture the final source-authoritative
+  inventory (`verification/v0.9.5-h2e/architecture_freeze.json`), publish
+  the freeze document, update project-state documents, and authorize no
+  further generic architecture stage.
+- **Rationale**: All authorized v0.9.5 stages are complete and verified
+  (H2D2-V1 full-core closure exit 0; launcher PASS; contract and API
+  parity enforced). Generic architecture work has no remaining authorized
+  scope; further structural change must be driven by concrete feature
+  evidence.
+- **Evidence**: final inventory values match the frozen contract/API state
+  (Database 2; API 77; client 52; locale 520/520; migration 12; tables 33;
+  config-v0.9.0; feedback-prompt-v0.7.1; contracts 41/41/0; Protocol 41;
+  runtime-checkable 36; API Ports 10/10/0; ConfigurationPort Protocol;
+  AnalysisRunReader 1); development database unchanged; research-export
+  baseline 776/388. No test was executed during H2E.
+- **Boundary**: v0.9.5 architecture optimization is COMPLETE and frozen; no
+  further generic architecture cleanup is authorized; the next goal must be
+  a v0.9.6 user-visible feature-development unit.
+
+
 ## 2026-08-03 - v0.9.5-H2D2-V1 Close full-core verification
 
 - **Decision**: Execute exactly one fresh full non-live core closure run on

@@ -21,7 +21,9 @@
 | v0.9.5-H2B Rename Active Configuration Repository Contract | completed and verified |
 | v0.9.5-H2C Canonicalize Duplicate AnalysisRunReader Infrastructure Contract | completed and verified |
 | v0.9.5-H2D1 Formalize ConfigurationPort as a Structural Protocol | completed and verified |
-| v0.9.5-H2D2 Bind API Ports to Production Dependency Accessors | implementation and focused verification complete; full-core closure pending |
+| v0.9.5-H2D2 Bind API Ports to Production Dependency Accessors | completed and verified (H2D2-V1 full-core closure: exit 0, 709 passed, 8 skipped, 2 warnings) |
+| v0.9.5-H2D2-V1 Full-Core Verification Closure | completed and verified |
+| v0.9.5-H2E Architecture Freeze | completed - v0.9.5 architecture optimization COMPLETE and frozen |
 
 | v0.9.5-H1 Persistence Protocol Inventory and Consolidation Plan (read-only) | completed |
 | v0.9.5-G Database Facade Contraction | completed and verified |
@@ -29,6 +31,10 @@
 | v0.9.5-F6C SubmissionService Persistence Dependency Narrowing | completed and verified |
 | v0.9.5-F6B AdminReanalysisService Persistence Dependency Narrowing | completed and verified |
 | v0.9.5-F6A RevisionService Runtime Repository Narrowing | completed and verified |
+Next stage: **v0.9.6 user-visible feature development** (the next goal
+must deliver a user-visible or research-workflow-visible functional
+outcome; no further generic architecture audit or cleanup is authorized).
+
 ## v0.9.4 roadmap - 2026-08-01
 
 | Item | Status |

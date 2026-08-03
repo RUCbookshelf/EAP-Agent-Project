@@ -1,6 +1,25 @@
 # Current Task State
 
 **Date:** 2026-08-03
+**Current task:** v0.9.5-H2E Architecture Freeze
+**Status:** completed - v0.9.5 architecture optimization is COMPLETE and
+frozen; repository ready for v0.9.6 user-visible feature development (see
+`docs/development/V0.9.5_H2E_ARCHITECTURE_FREEZE.md`)
+
+- Documentation and evidence only: final architecture inventory captured
+  (`verification/v0.9.5-h2e/architecture_freeze.json`), freeze document
+  created, project-state documents updated; no test executed during H2E;
+  no production/test file changed.
+- Frozen state: Database 2; API 77 (73 explicit OpenAPI pairs + 4
+  auto-HEAD GET entries); client 52; locale 520/520; migration 12; tables
+  33; `config-v0.9.0`; `feedback-prompt-v0.7.1`; contracts 41/41/0;
+  Protocol 41; runtime-checkable 36; API Ports 10/10/0; ConfigurationPort
+  Protocol; AnalysisRunReader definitions 1.
+- H1-H2E all COMPLETE. Next stage: v0.9.6 feature development.
+
+
+
+**Date:** 2026-08-03
 **Current task:** v0.9.5-H2D2-V1 Full-Core Verification Closure
 **Status:** completed - v0.9.5-H2D2 is COMPLETE and fully verified (one fresh
 full non-live core run: exit code 0, 709 passed, 8 skipped, 2 warnings, zero

@@ -1,3 +1,14 @@
+## v0.9.5-H2E (2026-08-03)
+
+### Changed
+- Documentation-only architecture freeze: final architecture inventory
+  (`verification/v0.9.5-h2e/architecture_freeze.json`) and freeze document
+  (`docs/development/V0.9.5_H2E_ARCHITECTURE_FREEZE.md`); project-state
+  documents mark v0.9.5 architecture optimization COMPLETE and frozen, with
+  v0.9.6 user-visible feature development as the next authorized stage. No
+  production or test file changed; no test executed during H2E.
+
+
 ## v0.9.5-H2D2-V1 (2026-08-03)
 
 ### Verified
