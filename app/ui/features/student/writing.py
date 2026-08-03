@@ -114,6 +114,9 @@ def render_writing_page(api_client: StudentWritingApiPort, lang: str) -> None:
     """Student Writing page: one required drafting task and one submit action."""
     student_page_intro("student_writing_title", "student_writing_subtitle", lang)
 
+    if st.session_state.pop("cycle_finished_notice", False):
+        info_box("student_writing_cycle_finished", lang)
+
     student_id = student_id_input(
         "student_id", "writing_student", lang, placeholder_key="student_id_placeholder"
     )
@@ -156,6 +159,12 @@ def render_writing_page(api_client: StudentWritingApiPort, lang: str) -> None:
         )
         return
 
+    preset_source = st.session_state.pop("writing_revision_source_preset", None)
+    if preset_source is not None:
+        # v0.9.6-C1 'Revise This Draft': enter the existing revision mode with
+        # the current submission preserved as the source (no automatic priority).
+        st.session_state["writing_task_relationship"] = t("task_revision_within", lang)
+
     section_header("student_writing_task_section", "student_writing_task_section_help", lang)
     st.radio(
         t("task_relationship", lang),
@@ -191,7 +200,20 @@ def render_writing_page(api_client: StudentWritingApiPort, lang: str) -> None:
         if not labels:
             warning_box("student_writing_no_candidates", lang)
             return
-        selected = st.selectbox(t("student_writing_select_revision", lang), list(labels))
+        if preset_source is not None:
+            preset_label = next(
+                (
+                    label for label, essay_id in labels.items()
+                    if int(essay_id) == int(preset_source)
+                ),
+                None,
+            )
+            if preset_label is not None:
+                st.session_state["writing_revision_source_select"] = preset_label
+        selected = st.selectbox(
+            t("student_writing_select_revision", lang), list(labels),
+            key="writing_revision_source_select",
+        )
         revision_of_submission_id = labels[selected]
         technical_caption(
             f"{t('student_writing_revision_source', lang)}: #{revision_of_submission_id}"

@@ -311,6 +311,11 @@ def render_revision_page(api_client: StudentRevisionApiPort, lang: str) -> None:
         ],
         lang,
     )
+    source_feedback = source.get("feedback") or {}
+    if not source_feedback.get("priority_feedback"):
+        # No-priority sources are valid revision sources (v0.9.6-C1): the
+        # absence of an automatic focus is explained, not fabricated.
+        info_box("student_revision_no_auto_focus", lang)
     st.text_area(
         t("student_revision_original_text", lang),
         value=source.get("essay_text", ""),

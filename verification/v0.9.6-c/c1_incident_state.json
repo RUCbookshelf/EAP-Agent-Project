@@ -1,0 +1,63 @@
+{
+  "baseline_head": "40f5a04",
+  "conclusion": "Submission #28 is a valid no-priority Diagnostic Gate result: complete analysis, diagnosis, feedback with priority_feedback null, no exercises, and no practice target. The UI dead end is a session-state/navigation problem, not a backend data problem.",
+  "development_database": {
+    "fingerprint_after_readonly_inspection": {
+      "mtime_local": "2026-08-03T22:20:34.172+08:00",
+      "sha256": "63046F4D61369F1A49D34ACC9CFD93A327E77276F88F1AEB35E9B5E7E6DEEBA8",
+      "size_bytes": 10313728
+    },
+    "fingerprint_before_readonly_inspection": {
+      "mtime_local": "2026-08-03T22:20:34.172+08:00",
+      "sha256": "63046F4D61369F1A49D34ACC9CFD93A327E77276F88F1AEB35E9B5E7E6DEEBA8",
+      "size_bytes": 10313728
+    },
+    "note": "Current value is the authorized v0.9.6-C incident baseline (changed through legitimate user activity including Submission #28).",
+    "read_only_mode": true,
+    "unchanged": true
+  },
+  "kind": "c1_incident_state",
+  "stage": "v0.9.6-C1",
+  "submission_28": {
+    "analysis_run": "AR000027 (spacy, config-v0.9.0, 22:19:38 +08:00)",
+    "database_mtime_alignment": "feedback record 27 completed 22:20:34 +08:00 == development database mtime",
+    "diagnosis": "diagnosis 27 (prototype-diagnosis-v0.6.1)",
+    "draft_stage": "final draft",
+    "essay_id": 28,
+    "essay_text_length": 1503,
+    "essay_text_sha256_redacted": "9E7A80C670B01482767FE90A0227A79D5C6643F162EFC0502EE170182556FC19",
+    "feedback": {
+      "created_at": "2026-08-03T22:20:34+08:00",
+      "feedback_id": 27,
+      "prompt_version": "feedback-prompt-v0.7.1",
+      "provider": "local-demo",
+      "success_status": "fallback_success"
+    },
+    "feedback_semantics": {
+      "diagnostic_gate_result": "no automatic revision priority selected",
+      "exercises": [],
+      "longitudinal_assessment_status": "provisional_pattern",
+      "positive_finding": {
+        "evidence_quote_present": true,
+        "explanation": "This exact passage provides a neutral text location for formative review; no reliable automatic strength was inferred."
+      },
+      "priority_feedback": null,
+      "revision": {
+        "confidence": "low",
+        "evidence_ids": [
+          "R001",
+          "R002"
+        ]
+      },
+      "uncertainty_note_present": true
+    },
+    "genre": "argumentative essay",
+    "learner_history_count": 1,
+    "metric_results_count": 24,
+    "practice_targets_for_student": [],
+    "student_id": "S02",
+    "submission_type": "linked revision (revision_of_submission_id=26, revision_group_id=RG000005, revision_sequence=4, revision_stage=final_draft)",
+    "submitted_at_local": "2026-08-03T22:19:38+08:00",
+    "writing_prompt": "Should cities add more parks?"
+  }
+}

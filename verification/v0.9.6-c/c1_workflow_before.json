@@ -1,0 +1,42 @@
+{
+  "baseline_head": "40f5a04",
+  "feedback_behavior": {
+    "actions": "single 'Continue writing' button (student_feedback_open_writing)",
+    "no_priority_condition": "not priorities or NO_SELECTED_PRIORITY in ui_empty_states",
+    "selection": "reads st.session_state['submission_result'] only; no durable latest-submission read"
+  },
+  "home_behavior": {
+    "current_contract": "(step 1, student_home_action_revise, student_revision_title, student_home_go_revision)",
+    "issue": "Home does not reflect an unresolved no-priority decision; it has no session-level knowledge of the just-submitted no-priority result and offers no revise-vs-finish choice.",
+    "journey_state_for_S02": "feedback_no_practice_target (durable derivation: feedbacks exist, no practice targets)"
+  },
+  "kind": "c1_workflow_before",
+  "loop": {
+    "cause": "STALE SESSION STATE: the no-priority Feedback branch never clears or supersedes submission_result and provides only one route back to Writing, which re-renders the same saved panel -> infinite Writing -> Feedback loop. No terminal action exists.",
+    "duplicate_heading": "section_header('student_feedback_next') and student_action_block('student_feedback_next', ...) both render 'Suggested Next Step' -> displayed twice.",
+    "entry": "Writing saved state (submission_result in session) -> Review Feedback button",
+    "feedback_no_priority_branch": "empty_state(student_feedback_no_priority_title/desc) + section_header(student_feedback_next) + student_action_block(student_feedback_next, student_feedback_next_continue) -> single 'Continue writing' button to student_writing_title",
+    "strengths_mislabel": "section_header('student_feedback_strengths') renders the backend neutral positive_finding passage ('no reliable automatic strength was inferred') under the heading 'Strengths'.",
+    "writing_after_return": "render_writing_page checks st.session_state['submission_result'] via _writing_saved_for_learner; the stale result is never cleared, so the saved panel (student_writing_saved_title + 'Review Feedback') renders again"
+  },
+  "practice_behavior": {
+    "issue": "generic message does not explain the no-priority reason; message text: 'No active practice target is available. Submit writing and review its feedback first.'",
+    "no_target_branch": "student_action_block(student_practice_current_action, student_practice_no_target_action, state='blocked') + Writing button"
+  },
+  "proven_loop_mechanism": "1) Writing stores submission_result; 2) Feedback no-priority branch renders the same result with a single Continue-Writing button; 3) Writing re-reads submission_result and re-renders the saved panel with Review Feedback; 4) no state transition clears submission_result or records any decision - deterministic two-page loop.",
+  "revision_behavior": {
+    "no_priority_note": "none - the page does not explain an absent automatic focus (no-priority sources are eligible and can be revised)",
+    "source_selection": "candidates from get_student_revision_candidates; source via revision_source_select"
+  },
+  "session_state_keys": {
+    "current_exercise_v2": "cached exercise",
+    "exercise_attempts_v2": "cached attempts",
+    "practice_targets_v2": "cached practice targets",
+    "revision_validation_state": "revision form validation errors",
+    "sidebar_page": "localized page label; set by _navigate_student_page",
+    "submission_result": "written by Writing on success; locked by learner via _writing_saved_for_learner; read by Writing, Feedback, Revision; NEVER cleared by any current action",
+    "writing_task_relationship": "radio value (new independent task vs revision within task)",
+    "writing_validation_state": "form validation errors"
+  },
+  "stage": "v0.9.6-C1"
+}

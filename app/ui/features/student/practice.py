@@ -119,6 +119,10 @@ def render_practice_page(api_client: StudentPracticeApiPort, lang: str) -> None:
 
     if not active_targets:
         student_task_steps(list(steps), 0, lang)
+        if st.session_state.get("no_priority_reviewed"):
+            # A finished no-priority cycle legitimately has no practice
+            # target (v0.9.6-C1): explain the reason instead of implying failure.
+            info_box("student_practice_skipped_no_priority", lang)
         student_action_block(
             "student_practice_current_action",
             "student_practice_no_target_action",

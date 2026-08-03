@@ -20,7 +20,11 @@ from app.ui.components import (
     technical_caption,
 )
 from app.ui.features.student.formatting import _feedback_category_label
-from app.ui.features.student.navigation import _navigate_student_page
+from app.ui.features.student.navigation import (
+    _finish_feedback_cycle,
+    _navigate_student_page,
+    _navigate_writing_revision,
+)
 from app.ui.features.student.session import _writing_saved_for_learner
 from app.ui.locale import t
 from app.ui.student_context import set_selected_learner, student_id_input
@@ -68,18 +72,28 @@ def render_feedback_content(result: dict, api_client: StudentFeedbackApiPort, la
             args=("practice", lang),
         )
     else:
+        # No-priority is a valid, complete workflow branch (v0.9.6-C1):
+        # the user explicitly chooses to revise this draft or to finish the
+        # feedback cycle. Nothing is fabricated, submitted, or generated.
         student_action_block(
-            "student_feedback_next",
-            "student_feedback_next_continue",
+            "student_feedback_choose_action",
+            "student_feedback_choose_action_desc",
             lang,
         )
         st.button(
-            t("student_feedback_open_writing", lang),
+            t("student_revision_revise", lang),
             type="primary",
             use_container_width=True,
-            key="feedback_primary_action",
-            on_click=_navigate_student_page,
-            args=("student_writing_title", lang),
+            key="feedback_revise_action",
+            on_click=_navigate_writing_revision,
+            args=(int(result.get("submission_id") or 0), lang),
+        )
+        st.button(
+            t("student_feedback_finish_cycle", lang),
+            use_container_width=True,
+            key="feedback_finish_action",
+            on_click=_finish_feedback_cycle,
+            args=(lang,),
         )
 
     section_header("student_feedback_evidence", lang=lang)
@@ -98,7 +112,13 @@ def render_feedback_content(result: dict, api_client: StudentFeedbackApiPort, la
     else:
         info_box("student_feedback_no_priority_evidence", lang)
 
-    section_header("student_feedback_strengths", lang=lang)
+    # A positive_finding without a structured diagnosis strength is a neutral
+    # passage, never a claimed Strength (v0.9.6-C1).
+    strengths = (result.get("diagnosis") or {}).get("strengths") or []
+    section_header(
+        "student_feedback_strengths" if strengths else "student_feedback_neutral_passage",
+        lang=lang,
+    )
     positive_finding = feedback.get("positive_finding", {})
     if positive_finding:
         st.write(positive_finding.get("explanation", ""))

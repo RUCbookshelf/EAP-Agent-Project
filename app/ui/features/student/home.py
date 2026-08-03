@@ -16,7 +16,12 @@ from app.ui.components import (
     student_task_steps,
 )
 from app.ui.features.student.formatting import _short_timestamp
-from app.ui.features.student.navigation import _navigate_student_page
+from app.ui.features.student.navigation import (
+    _finish_feedback_cycle,
+    _navigate_student_page,
+    _navigate_writing_revision,
+)
+from app.ui.features.student.session import _writing_saved_for_learner
 from app.ui.locale import t
 from app.ui.student_context import set_selected_learner, student_id_input
 
@@ -70,15 +75,47 @@ def render_student_home(api_client: StudentHomeApiPort, lang: str) -> None:
     state = journey.get("state") or "no_submissions"
     step, action_key, target_title_key, button_key = _home_action_contract(state)
     student_task_steps(workflow, step, lang)
-    student_action_block("student_home_next_action", action_key, lang)
-    st.button(
-        t(button_key, lang),
-        type="primary",
-        use_container_width=True,
-        key="home_primary_action",
-        on_click=_navigate_student_page,
-        args=(target_title_key, lang),
+    result = st.session_state.get("submission_result")
+    unresolved_no_priority = (
+        _writing_saved_for_learner(result, learner_id)
+        and "NO_SELECTED_PRIORITY" in (result.get("ui_empty_states") or [])
     )
+    if unresolved_no_priority:
+        # An unresolved no-priority result is an explicit decision point
+        # (v0.9.6-C1): revise this draft or finish this feedback cycle.
+        student_context_block(
+            [
+                ("student_home_latest_submission", f"#{result.get('submission_id', '?')}"),
+                ("student_home_feedback_result", t("student_home_no_priority_selected", lang)),
+                ("student_home_next_action", t("student_home_review_choose_desc", lang)),
+            ],
+            lang,
+        )
+        st.button(
+            t("student_revision_revise", lang),
+            type="primary",
+            use_container_width=True,
+            key="home_revise_action",
+            on_click=_navigate_writing_revision,
+            args=(int(result.get("submission_id") or 0), lang),
+        )
+        st.button(
+            t("student_feedback_finish_cycle", lang),
+            use_container_width=True,
+            key="home_finish_action",
+            on_click=_finish_feedback_cycle,
+            args=(lang,),
+        )
+    else:
+        student_action_block("student_home_next_action", action_key, lang)
+        st.button(
+            t(button_key, lang),
+            type="primary",
+            use_container_width=True,
+            key="home_primary_action",
+            on_click=_navigate_student_page,
+            args=(target_title_key, lang),
+        )
 
     section_header("student_home_current_task", lang=lang)
     active_targets = [item for item in targets if item.get("status") == "active"]

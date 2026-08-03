@@ -1,0 +1,45 @@
+{
+  "baseline_head": "40f5a04",
+  "durable_state_changes": "none (no schema, migration, table, or backend change)",
+  "feedback": {
+    "headings": "one no-priority result heading; 'Suggested Next Step' exactly once (action block uses 'Choose your next step'); neutral passage heading 'Passage From Your Writing' when the diagnosis has no structured strength (no unsupported Strength label)",
+    "kept": "explanatory limitation, submission reference #28",
+    "rerun_safety": "buttons only act on click; reruns render state without triggering actions"
+  },
+  "home": {
+    "after_finish": "returns to the normal durable-state contract (no unresolved block)",
+    "after_revise": "revision-writing step becomes the current goal via the existing revision mode",
+    "unresolved_block": "while submission_result is an unresolved no-priority result: Latest submission #N + 'No automatic priority selected' + 'Review the result and choose whether to revise or finish the cycle' + the two action controls"
+  },
+  "kind": "c1_workflow_after",
+  "no_priority_branch": {
+    "feedback_actions": [
+      {
+        "label_key": "student_revision_revise",
+        "semantics": "Revise This Draft: preserves the current submission as the revision source, enters the existing Writing revision mode (writing_task_relationship + writing_revision_source_preset), releases the saved-submission panel, no automatic priority fabricated"
+      },
+      {
+        "label_key": "student_feedback_finish_cycle",
+        "semantics": "Finish This Feedback Cycle: acknowledges the reviewed no-priority result (session flag no_priority_reviewed), clears the stale submission_result, navigates to a fresh Writing state; never deletes Submission #28, never creates a revision or practice target"
+      }
+    ],
+    "valid_result": "no-priority remains a valid Diagnostic Gate result (No sufficiently supported automatic revision priority was identified)"
+  },
+  "practice": {
+    "skipped_state": "when no practice target exists after a finished no-priority cycle: reason explained ('No practice target was created because no automatic revision priority was selected'), actionable Writing route; no arbitrary content"
+  },
+  "revision": {
+    "no_auto_focus": "info message when the selected source feedback has no priority; source identity preserved; revision-writing action available without a practice target"
+  },
+  "session_keys_added": [
+    "no_priority_reviewed",
+    "cycle_finished_notice",
+    "writing_revision_source_preset",
+    "writing_revision_source_select"
+  ],
+  "stage": "v0.9.6-C1",
+  "writing": {
+    "after_finish": "fresh form; stale 'Writing submitted' panel and Review Feedback loop absent; cycle-finished acknowledgement notice shown once",
+    "revision_mode": "preset source preserved and pre-selected; no automatic priority required"
+  }
+}

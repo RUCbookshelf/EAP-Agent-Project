@@ -1,0 +1,47 @@
+{
+  "flow_c1a_revise": {
+    "no_priority_fabricated": true,
+    "no_priority_result_shown": true,
+    "post_count_before_revision_form": null,
+    "practice_not_falsely_generated": true,
+    "revision_mode_entered": true,
+    "revision_note_shown": true,
+    "source_preserved": true,
+    "steps": "open no-priority feedback -> click Revise This Draft -> revision mode with source #28"
+  },
+  "flow_c1b_finish_cycle": {
+    "acknowledgement_persists": true,
+    "fresh_writing_form_shown": true,
+    "loop_broken": true,
+    "no_practice_target_created": true,
+    "no_revision_created": true,
+    "old_feedback_result_absent": true,
+    "stale_writing_panel_absent": true,
+    "steps": "open no-priority feedback -> click Finish This Feedback Cycle -> fresh Writing"
+  },
+  "flow_c1c_navigation_stability": {
+    "no_two_page_loop": "each page renders independently with an actionable route",
+    "pages": {
+      "practice": {
+        "has_content": true,
+        "renders": true
+      },
+      "student_feedback_title": {
+        "has_content": true,
+        "renders": true
+      },
+      "student_home_title": {
+        "has_content": true,
+        "renders": true
+      },
+      "student_revision_title": {
+        "has_content": true,
+        "renders": true
+      },
+      "student_writing_title": {
+        "has_content": true,
+        "renders": true
+      }
+    }
+  }
+}
