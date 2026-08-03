@@ -11,7 +11,7 @@ from app.configuration import (
 from app.calf import default_calf_registry
 
 
-class ConfigurationRepository:
+class ConfigurationPort:
     def list_configurations(self): ...
     def get_configuration(self, configuration_id_or_version: str): ...
     def get_active_configuration(self): ...
@@ -22,7 +22,7 @@ class ConfigurationRepository:
 
 
 class ConfigurationService:
-    def __init__(self, repository: ConfigurationRepository, analyzers: AnalyzerRegistry,
+    def __init__(self, repository: ConfigurationPort, analyzers: AnalyzerRegistry,
                  metrics: MetricRegistry) -> None:
         self.repository = repository
         self.registry = ConfigurationRegistry(

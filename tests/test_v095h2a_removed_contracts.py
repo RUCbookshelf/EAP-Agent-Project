@@ -16,6 +16,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 H1_INVENTORY = ROOT / "verification" / "v0.9.5-h1" / "protocol_inventory.json"
 
+# H1-inventory name -> post-H2B active name (v0.9.5-H2B renamed the active
+# local configuration contract; the H1 inventory remains historical evidence).
+H1_RENAMED = {"ConfigurationRepository": "ConfigurationPort"}
+
 REMOVED_NAMES = {
     "StudentRepository",
     "EssayRepository",
@@ -157,7 +161,7 @@ def test_all_h1_active_contracts_remain_defined_with_exact_method_sets():
     active = _active_contracts(inv)
     assert len(active) == 42
     for contract in active:
-        name = contract["contract_name"]
+        name = H1_RENAMED.get(contract["contract_name"], contract["contract_name"])
         module = contract["module"]
         expected = {m["name"] for m in contract["declared_methods"]}
         if contract["contract_kind"] == "alias":
@@ -212,15 +216,17 @@ def test_submission_service_uses_exactly_four_f6c_ports():
 
 
 # ---------------------------------------------------------------------------
-# 6. Active local ConfigurationRepository contract unchanged
+# 6. Active local configuration contract unchanged (renamed to ConfigurationPort
+#    by v0.9.5-H2B; the old active-contract name must be gone)
 # ---------------------------------------------------------------------------
 
-def test_local_configuration_repository_contract_unchanged():
+def test_local_configuration_contract_unchanged_after_h2b_rename():
     source = (ROOT / "app/services/configuration.py").read_text(encoding="utf-8")
     assert "from app.repositories" not in source  # annotation resolves locally
+    assert "ConfigurationRepository" not in source  # old active-contract name gone
     classes = _classdefs(ROOT / "app/services/configuration.py")
-    assert "ConfigurationRepository" in classes
-    assert _method_names(classes["ConfigurationRepository"]) == [
+    assert "ConfigurationPort" in classes
+    assert _method_names(classes["ConfigurationPort"]) == [
         "list_configurations",
         "get_configuration",
         "get_active_configuration",
