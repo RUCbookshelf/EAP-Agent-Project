@@ -4,7 +4,13 @@ from __future__ import annotations
 
 from fastapi import APIRouter, Depends, HTTPException
 
-from app.api.deps import get_repository, get_revisions, require_student
+from app.api.deps import (
+    get_revision_group_lookup,
+    get_revisions,
+    get_student_lookup,
+    get_student_submission_list,
+    require_student,
+)
 from app.api.schemas import RevisionCreateRequest, RevisionGroupResponse
 
 router = APIRouter()
@@ -21,10 +27,11 @@ def revision_candidates(submission_id: int, revisions=Depends(get_revisions)) ->
 @router.get("/api/v1/students/{student_id}/revision-candidates")
 def student_revision_candidates(
     student_id: str,
-    repository=Depends(get_repository),
+    student_lookup=Depends(get_student_lookup),
+    student_submission_list=Depends(get_student_submission_list),
 ) -> dict:
-    require_student(repository, student_id)
-    items = repository.list_student_submissions(student_id)
+    require_student(student_lookup, student_id)
+    items = student_submission_list.list_student_submissions(student_id)
     return {"student_id": student_id, "candidates": list(reversed(items))}
 
 
@@ -74,10 +81,10 @@ def get_revision_trajectory(revision_group_id: str, revisions=Depends(get_revisi
 @router.get("/api/v1/submissions/{submission_id}/revision-analysis")
 def get_submission_revision_analysis(
     submission_id: int,
-    repository=Depends(get_repository),
+    group_lookup=Depends(get_revision_group_lookup),
     revisions=Depends(get_revisions),
 ) -> dict:
-    group = repository.get_revision_group_for_submission(submission_id)
+    group = group_lookup.get_revision_group_for_submission(submission_id)
     if group is None:
         raise HTTPException(404, "Submission is not part of a revision group.")
     history = revisions.history(group.revision_group_id)

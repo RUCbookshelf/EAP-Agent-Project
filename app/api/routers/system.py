@@ -8,9 +8,9 @@ from app.api.deps import (
     get_analyzer,
     get_configurations,
     get_metrics,
-    get_repository,
     get_settings,
     get_submission_service,
+    get_system_migration_reader,
 )
 from app.api.schemas import HealthResponse, VersionResponse
 from app.lifecycle import ServiceState, lifecycle
@@ -68,7 +68,7 @@ def health() -> HealthResponse:
 @router.get("/api/v1/system/version", response_model=VersionResponse)
 def version(
     settings=Depends(get_settings),
-    repository=Depends(get_repository),
+    migration_reader=Depends(get_system_migration_reader),
     analyzer=Depends(get_analyzer),
     metrics=Depends(get_metrics),
     configurations=Depends(get_configurations),
@@ -82,7 +82,7 @@ def version(
         application_version=settings.application_version, api_version=settings.api_version,
         prompt_version=active_configuration.payload.active_prompt_version, schema_version="structured-feedback-v0.7.1",
         analysis_version=settings.analysis_version, diagnosis_version=settings.diagnosis_version,
-        database_migration_version=repository.migration_version(),
+        database_migration_version=migration_reader.migration_version(),
         active_analyzer=getattr(analyzer, "active_analyzer", getattr(analyzer, "analyzer_id", "unknown")),
         nlp_library_version=getattr(getattr(analyzer, "registry", None).get("spacy"), "spacy", None).__version__ if getattr(analyzer, "registry", None) and hasattr(getattr(analyzer, "registry", None).get("spacy"), "spacy") else None,
         nlp_model_name=settings.spacy_model,

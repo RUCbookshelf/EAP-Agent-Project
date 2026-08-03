@@ -14,8 +14,44 @@ def get_settings(request: Request):
     return request.app.state.settings
 
 
-def get_repository(request: Request):
-    return request.app.state.repository
+def get_submission_bundle_reader(request: Request):
+    return request.app.state.submission_bundle_reader
+
+
+def get_student_lookup(request: Request):
+    return request.app.state.student_lookup
+
+
+def get_analysis_runs_reader(request: Request):
+    return request.app.state.analysis_runs_reader
+
+
+def get_calf_reader(request: Request):
+    return request.app.state.calf_reader
+
+
+def get_research_export_writer(request: Request):
+    return request.app.state.research_export_writer
+
+
+def get_student_submission_list(request: Request):
+    return request.app.state.student_submission_list
+
+
+def get_revision_group_lookup(request: Request):
+    return request.app.state.revision_group_lookup
+
+
+def get_student_learner_reader(request: Request):
+    return request.app.state.student_learner_reader
+
+
+def get_submission_calibration_reader(request: Request):
+    return request.app.state.submission_calibration_reader
+
+
+def get_system_migration_reader(request: Request):
+    return request.app.state.system_migration_reader
 
 
 def get_submission_service(request: Request):

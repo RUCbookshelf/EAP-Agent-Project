@@ -109,8 +109,8 @@ def representative_crud(database: Database, settings: Settings) -> dict:
     ).submit(submission, synthetic=True)
     essay_id = result.essay_id
 
-    analysis = database.get_latest_analysis_run(essay_id)
-    units = database.list_analysis_units(essay_id, analysis["analysis_run_id"])
+    analysis = database._analysis_repository.get_latest_analysis_run(essay_id)
+    units = database._calf_repository.list_analysis_units(essay_id, analysis["analysis_run_id"])
     annotation = ErrorAnnotation(
         submission_id=essay_id,
         start_offset=0,
@@ -124,9 +124,9 @@ def representative_crud(database: Database, settings: Settings) -> dict:
         guideline_version="error-guideline-v0.8.0",
         confidence="high",
     )
-    saved_annotations = database.save_error_annotations(essay_id, [annotation])
-    revision_group = database.create_revision_group(essay_id)
-    profile = database.get_latest_learner_profile(submission.student_id)
+    saved_annotations = database._calf_repository.save_error_annotations(essay_id, [annotation])
+    revision_group = database._revision_repository.create_revision_group(essay_id)
+    profile = database._learner_repository.get_latest_learner_profile(submission.student_id)
 
     practice = PracticeService()
     target = practice.create_practice_target(
@@ -137,12 +137,12 @@ def representative_crud(database: Database, settings: Settings) -> dict:
         target_label="Reduce concentrated lexical repetition",
         gate_status="selected",
     )
-    target = database.save_practice_target(target)
-    exercise = database.save_exercise_instance(practice.generate_exercise(target, submission.essay_text))
-    attempt = database.save_exercise_attempt(
+    target = database._practice_repository.save_practice_target(target)
+    exercise = database._practice_repository.save_exercise_instance(practice.generate_exercise(target, submission.essay_text))
+    attempt = database._practice_repository.save_exercise_attempt(
         practice.submit_attempt(exercise["exercise_id"], submission.student_id, "Writers can qualify uncertain claims.", 1)
     )
-    evaluation = database.save_practice_evaluation(practice.evaluate_attempt(attempt, target, submission.essay_text))
+    evaluation = database._practice_repository.save_practice_evaluation(practice.evaluate_attempt(attempt, target, submission.essay_text))
 
     research = ResearchDataService(
         submission_reader=database._submission_repository,
@@ -160,24 +160,24 @@ def representative_crud(database: Database, settings: Settings) -> dict:
         guideline_version="human-review-v0.1",
     ))
 
-    database.record_versions({"v095e_prechange_probe": "769e6d8"})
+    database._system_repository.record_versions({"v095e_prechange_probe": "769e6d8"})
     return {
         "SystemRepository": {
-            "ping": database.ping(),
-            "migration_version": database.migration_version(),
-            "version_record": database.get_system_versions().get("v095e_prechange_probe"),
+            "ping": database._system_repository.ping(),
+            "migration_version": database._system_repository.migration_version(),
+            "version_record": database._system_repository.get_system_versions().get("v095e_prechange_probe"),
         },
         "ConfigurationRepository": {
-            "active_configuration": database.get_active_configuration().version,
+            "active_configuration": database._configuration_repository.get_active_configuration().version,
         },
         "SubmissionRepository": {
             "essay_id": essay_id,
-            "bundle_student_id": database.get_submission_bundle(essay_id)["student_id"],
-            "feedback_id": database.get_feedback_record(essay_id)["feedback_id"],
+            "bundle_student_id": database._submission_repository.get_submission_bundle(essay_id)["student_id"],
+            "feedback_id": database._submission_repository.get_feedback_record(essay_id)["feedback_id"],
         },
         "AnalysisRepository": {
             "analysis_run_id": analysis["analysis_run_id"],
-            "metric_result_count": len(database.get_metric_results(analysis["analysis_run_id"])),
+            "metric_result_count": len(database._analysis_repository.get_metric_results(analysis["analysis_run_id"])),
         },
         "CalfRepository": {
             "analysis_unit_count": len(units),
@@ -188,7 +188,7 @@ def representative_crud(database: Database, settings: Settings) -> dict:
             "members": revision_group.member_submission_ids,
         },
         "LearnerRepository": {
-            "student_id": database.get_student(submission.student_id)["student_id"],
+            "student_id": database._learner_repository.get_student(submission.student_id)["student_id"],
             "snapshot_id": profile.get("snapshot_id") if profile else None,
         },
         "PracticeRepository": {
@@ -199,7 +199,7 @@ def representative_crud(database: Database, settings: Settings) -> dict:
         },
         "ResearchRepository": {
             "review_id": review.review_id,
-            "review_count": len(database.list_human_reviews("diagnosis", "D-PRE")),
+            "review_count": len(database._research_repository.list_human_reviews("diagnosis", "D-PRE")),
         },
     }
 

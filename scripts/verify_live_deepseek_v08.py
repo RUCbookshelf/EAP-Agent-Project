@@ -97,7 +97,7 @@ def run_live_verification() -> dict:
         report_a.update({
             "analysis_version": live_a.analysis.analysis_version,
             "configuration_version": live_a.analysis.configuration_version,
-            "migration_version": deepseek_repo.migration_version(),
+            "migration_version": deepseek_repo._system_repository.migration_version(),
             "mtld_status": _metric(live_a, "mtld")["status"],
             "hdd_status": _metric(live_a, "hdd")["status"],
             "calf_priority_isolation": "passed",

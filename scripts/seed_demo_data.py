@@ -26,7 +26,7 @@ def seed(database_path: Path) -> dict[str, int]:
                 **{key: value for key, value in raw.items() if key != "submitted_at"},
             )
             pipeline.submit(submission, synthetic=True)
-    return pipeline.database.counts()
+    return pipeline.database._system_repository.counts()
 
 
 if __name__ == "__main__":

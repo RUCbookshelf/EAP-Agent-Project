@@ -10,7 +10,7 @@ def main() -> None:
     settings = load_settings()
     repository = Database(settings.database_path)
     repository.initialize()
-    version = repository.migration_version()
+    version = repository._system_repository.migration_version()
     if version != LATEST_MIGRATION_VERSION:
         raise SystemExit(f"Migration stopped at {version}; expected {LATEST_MIGRATION_VERSION}.")
     print(json.dumps({

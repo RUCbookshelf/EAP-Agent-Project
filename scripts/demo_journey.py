@@ -78,7 +78,7 @@ def _manifest_path(repository: Database) -> pathlib.Path:
 
 
 def _ensure_synthetic_student(repository: Database) -> None:
-    if repository.get_student(DEMO_LEARNER) is None:
+    if repository._learner_repository.get_student(DEMO_LEARNER) is None:
         with repository.connect() as conn:
             conn.execute(
                 "INSERT INTO students (student_id, created_at, is_synthetic) VALUES (?, ?, 1)",
@@ -177,17 +177,17 @@ def setup() -> int:
             evidence_ids=getattr(priority, "source_metrics", []) or [],
             gate_status="selected",
         )
-        target = repository.save_practice_target(target)
+        target = repository._practice_repository.save_practice_target(target)
 
         exercise = practice_service.generate_exercise(target, DEMO_ESSAY)
         if exercise.get("status") == "practice_not_available":
             raise RuntimeError(f"Exercise generation unavailable for target code '{target_code}': {exercise.get('reason')}")
-        exercise = repository.save_exercise_instance(exercise)
+        exercise = repository._practice_repository.save_exercise_instance(exercise)
 
         attempt = practice_service.submit_attempt(exercise["exercise_id"], DEMO_LEARNER, DEMO_ATTEMPT, 1)
-        attempt = repository.save_exercise_attempt(attempt)
+        attempt = repository._practice_repository.save_exercise_attempt(attempt)
         evaluation = practice_service.evaluate_attempt(attempt, target, DEMO_ESSAY)
-        evaluation = repository.save_practice_evaluation(evaluation)
+        evaluation = repository._practice_repository.save_practice_evaluation(evaluation)
 
         revised = EssaySubmission(
             student_id=DEMO_LEARNER,
@@ -214,7 +214,7 @@ def setup() -> int:
             revision_group_id=group_id,
             major_rewrite=False,
         )
-        response = repository.save_within_task_response_candidate(response)
+        response = repository._practice_repository.save_within_task_response_candidate(response)
     except Exception as exc:  # noqa: BLE001 - roll back partial demo state
         print(f"FAIL: demo setup error: {type(exc).__name__}: {exc}")
         _cleanup(repository)
@@ -228,7 +228,7 @@ def setup() -> int:
         "created": {
             "student": DEMO_LEARNER,
             "original_essay_id": essay_id,
-            "analysis_run_ids": [r["analysis_run_id"] for r in repository.list_analysis_runs_for_student(DEMO_LEARNER)],
+            "analysis_run_ids": [r["analysis_run_id"] for r in repository._practice_repository.list_analysis_runs_for_student(DEMO_LEARNER)],
             "priority_category": priority.category,
             "practice_target_id": target["practice_target_id"],
             "exercise_id": exercise["exercise_id"],

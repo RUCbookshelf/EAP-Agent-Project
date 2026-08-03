@@ -10,7 +10,9 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from app.api.deps import (
     get_dashboards,
     get_learner_profiles,
-    get_repository,
+    get_student_learner_reader,
+    get_student_lookup,
+    get_student_submission_list,
     require_student,
 )
 from app.api.schemas import (
@@ -24,35 +26,40 @@ from app.core import LearnerProfileSnapshot
 router = APIRouter()
 
 
-def _learner_model_snapshot(student_id: str, repository, learner_profiles) -> LearnerProfileSnapshot:
-    require_student(repository, student_id)
+def _learner_model_snapshot(student_id: str, student_lookup, learner_profiles) -> LearnerProfileSnapshot:
+    require_student(student_lookup, student_id)
     return learner_profiles.latest_or_recalculate(student_id)
 
 
 @router.get("/api/v1/students/{student_id}", response_model=StudentResponse)
-def get_student(student_id: str, repository=Depends(get_repository)) -> StudentResponse:
-    item = require_student(repository, student_id)
+def get_student(student_id: str, student_lookup=Depends(get_student_lookup)) -> StudentResponse:
+    item = require_student(student_lookup, student_id)
     item["is_synthetic"] = bool(item["is_synthetic"])
     return StudentResponse.model_validate(item)
 
 
 @router.get("/api/v1/students/{student_id}/history", response_model=HistoryResponse)
-def get_history(student_id: str, repository=Depends(get_repository)) -> HistoryResponse:
-    require_student(repository, student_id)
+def get_history(
+    student_id: str,
+    student_lookup=Depends(get_student_lookup),
+    student_submission_list=Depends(get_student_submission_list),
+    learner_reader=Depends(get_student_learner_reader),
+) -> HistoryResponse:
+    require_student(student_lookup, student_id)
     return HistoryResponse(
         student_id=student_id,
-        submissions=repository.list_student_submissions(student_id),
-        history_records=repository.list_student_history(student_id),
+        submissions=student_submission_list.list_student_submissions(student_id),
+        history_records=learner_reader.list_student_history(student_id),
     )
 
 
 @router.get("/api/v1/students/{student_id}/profile", response_model=LearnerProfileResponse)
 def get_profile(
     student_id: str,
-    repository=Depends(get_repository),
+    student_lookup=Depends(get_student_lookup),
     learner_profiles=Depends(get_learner_profiles),
 ) -> LearnerProfileResponse:
-    student = require_student(repository, student_id)
+    student = require_student(student_lookup, student_id)
     snapshot = learner_profiles.latest_or_recalculate(student_id)
     return LearnerProfileResponse(
         student_id=student_id, submission_count=int(student["submission_count"]),
@@ -78,10 +85,10 @@ def get_progress(
     end_date: date | None = None,
     comparable_only: bool = True,
     analysis_version: str | None = Query(default=None, max_length=100),
-    repository=Depends(get_repository),
+    student_lookup=Depends(get_student_lookup),
     learner_profiles=Depends(get_learner_profiles),
 ) -> LearnerProfileSnapshot:
-    require_student(repository, student_id)
+    require_student(student_lookup, student_id)
     if start_date and end_date and start_date > end_date:
         raise HTTPException(422, "start_date must not be after end_date.")
     try:
@@ -96,19 +103,19 @@ def get_progress(
 @router.get("/api/v1/students/{student_id}/learner-model")
 def get_learner_model(
     student_id: str,
-    repository=Depends(get_repository),
+    student_lookup=Depends(get_student_lookup),
     learner_profiles=Depends(get_learner_profiles),
 ) -> LearnerProfileSnapshot:
-    return _learner_model_snapshot(student_id, repository, learner_profiles)
+    return _learner_model_snapshot(student_id, student_lookup, learner_profiles)
 
 
 @router.get("/api/v1/students/{student_id}/learner-model/task-clusters")
 def get_task_clusters(
     student_id: str,
-    repository=Depends(get_repository),
+    student_lookup=Depends(get_student_lookup),
     learner_profiles=Depends(get_learner_profiles),
 ) -> dict:
-    snapshot = _learner_model_snapshot(student_id, repository, learner_profiles)
+    snapshot = _learner_model_snapshot(student_id, student_lookup, learner_profiles)
     return {"student_id": student_id, "snapshot_id": snapshot.snapshot_id,
             "task_clusters": snapshot.task_clusters}
 
@@ -116,10 +123,10 @@ def get_task_clusters(
 @router.get("/api/v1/students/{student_id}/learner-model/metric-trajectories")
 def get_metric_trajectories(
     student_id: str,
-    repository=Depends(get_repository),
+    student_lookup=Depends(get_student_lookup),
     learner_profiles=Depends(get_learner_profiles),
 ) -> dict:
-    snapshot = _learner_model_snapshot(student_id, repository, learner_profiles)
+    snapshot = _learner_model_snapshot(student_id, student_lookup, learner_profiles)
     return {"student_id": student_id, "snapshot_id": snapshot.snapshot_id,
             "metric_trajectories": snapshot.metric_trajectories}
 
@@ -127,10 +134,10 @@ def get_metric_trajectories(
 @router.get("/api/v1/students/{student_id}/learner-model/diagnostic-trajectories")
 def get_diagnostic_trajectories(
     student_id: str,
-    repository=Depends(get_repository),
+    student_lookup=Depends(get_student_lookup),
     learner_profiles=Depends(get_learner_profiles),
 ) -> dict:
-    snapshot = _learner_model_snapshot(student_id, repository, learner_profiles)
+    snapshot = _learner_model_snapshot(student_id, student_lookup, learner_profiles)
     return {"student_id": student_id, "snapshot_id": snapshot.snapshot_id,
             "diagnostic_trajectories": snapshot.diagnostic_trajectories}
 
@@ -138,10 +145,10 @@ def get_diagnostic_trajectories(
 @router.get("/api/v1/students/{student_id}/learner-model/learning-targets")
 def get_learning_targets(
     student_id: str,
-    repository=Depends(get_repository),
+    student_lookup=Depends(get_student_lookup),
     learner_profiles=Depends(get_learner_profiles),
 ) -> dict:
-    snapshot = _learner_model_snapshot(student_id, repository, learner_profiles)
+    snapshot = _learner_model_snapshot(student_id, student_lookup, learner_profiles)
     return {"student_id": student_id, "snapshot_id": snapshot.snapshot_id,
             "current_learning_targets": snapshot.current_learning_targets,
             "strength_patterns": snapshot.strength_patterns,
@@ -149,26 +156,35 @@ def get_learning_targets(
 
 
 @router.get("/api/v1/students/{student_id}/learner-model/history-evidence")
-def get_history_evidence(student_id: str, repository=Depends(get_repository)) -> dict:
-    require_student(repository, student_id)
+def get_history_evidence(
+    student_id: str,
+    student_lookup=Depends(get_student_lookup),
+    learner_reader=Depends(get_student_learner_reader),
+) -> dict:
+    require_student(student_lookup, student_id)
     return {"student_id": student_id,
-            "history_evidence": repository.list_history_evidence(student_id)}
+            "history_evidence": learner_reader.list_history_evidence(student_id)}
 
 
 @router.get("/api/v1/students/{student_id}/learner-model/snapshots")
-def list_learner_model_snapshots(student_id: str, repository=Depends(get_repository)) -> dict:
-    require_student(repository, student_id)
-    snapshots = repository.list_learner_profile_snapshots(student_id)
+def list_learner_model_snapshots(
+    student_id: str,
+    student_lookup=Depends(get_student_lookup),
+    learner_reader=Depends(get_student_learner_reader),
+) -> dict:
+    require_student(student_lookup, student_id)
+    snapshots = learner_reader.list_learner_profile_snapshots(student_id)
     return {"student_id": student_id, "snapshots": snapshots, "count": len(snapshots)}
 
 
 @router.get("/api/v1/students/{student_id}/learner-model/snapshots/{snapshot_id}")
 def get_learner_model_snapshot(
     student_id: str, snapshot_id: str,
-    repository=Depends(get_repository),
+    student_lookup=Depends(get_student_lookup),
+    learner_reader=Depends(get_student_learner_reader),
 ) -> dict:
-    require_student(repository, student_id)
-    item = next((snapshot for snapshot in repository.list_learner_profile_snapshots(student_id)
+    require_student(student_lookup, student_id)
+    item = next((snapshot for snapshot in learner_reader.list_learner_profile_snapshots(student_id)
                  if snapshot.get("snapshot_id") == snapshot_id), None)
     if item is None:
         raise HTTPException(404, "Learner profile snapshot not found.")
@@ -178,10 +194,10 @@ def get_learner_model_snapshot(
 @router.post("/api/v1/students/{student_id}/learner-model/preview")
 def preview_learner_model(
     student_id: str, payload: LearnerModelBuildRequest,
-    repository=Depends(get_repository),
+    student_lookup=Depends(get_student_lookup),
     learner_profiles=Depends(get_learner_profiles),
 ) -> LearnerProfileSnapshot:
-    student = require_student(repository, student_id)
+    student = require_student(student_lookup, student_id)
     if int(student["submission_count"]) > payload.max_submissions:
         raise HTTPException(422, "Submission count exceeds the bounded learner-model preview limit.")
     return learner_profiles.recalculate(
@@ -193,10 +209,10 @@ def preview_learner_model(
 @router.post("/api/v1/students/{student_id}/learner-model/rebuild", status_code=201)
 def rebuild_learner_model(
     student_id: str, payload: LearnerModelBuildRequest,
-    repository=Depends(get_repository),
+    student_lookup=Depends(get_student_lookup),
     learner_profiles=Depends(get_learner_profiles),
 ) -> LearnerProfileSnapshot:
-    student = require_student(repository, student_id)
+    student = require_student(student_lookup, student_id)
     if int(student["submission_count"]) > payload.max_submissions:
         raise HTTPException(422, "Submission count exceeds the bounded learner-model rebuild limit.")
     return learner_profiles.recalculate(
@@ -209,10 +225,10 @@ def rebuild_learner_model(
 def get_dashboard(
     student_id: str,
     metric_id: str = Query(default="word_count", max_length=100),
-    repository=Depends(get_repository),
+    student_lookup=Depends(get_student_lookup),
     dashboards=Depends(get_dashboards),
 ) -> dict:
-    require_student(repository, student_id)
+    require_student(student_lookup, student_id)
     try:
         return dashboards.build(student_id, metric_id)
     except (LookupError, ValueError) as exc:

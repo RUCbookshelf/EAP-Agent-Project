@@ -4,7 +4,11 @@ from __future__ import annotations
 
 from fastapi import APIRouter, Depends, HTTPException
 
-from app.api.deps import get_repository, get_submission_service
+from app.api.deps import (
+    get_submission_bundle_reader,
+    get_submission_calibration_reader,
+    get_submission_service,
+)
 from app.api.schemas import (
     SubmissionCreateRequest,
     SubmissionRecordResponse,
@@ -39,18 +43,25 @@ def create_submission(
 
 
 @router.get("/api/v1/submissions/{submission_id}/diagnostic-audit")
-def diagnostic_audit(submission_id: int, repository=Depends(get_repository)) -> dict:
-    if repository.get_submission_bundle(submission_id) is None:
+def diagnostic_audit(
+    submission_id: int,
+    bundle_reader=Depends(get_submission_bundle_reader),
+    calibration_reader=Depends(get_submission_calibration_reader),
+) -> dict:
+    if bundle_reader.get_submission_bundle(submission_id) is None:
         raise HTTPException(404, "Submission not found.")
-    calibration = repository.get_diagnostic_calibration(submission_id)
+    calibration = calibration_reader.get_diagnostic_calibration(submission_id)
     if calibration is None:
         raise HTTPException(404, "No v0.6.1 diagnostic calibration exists for this submission.")
     return calibration.model_dump(mode="json")
 
 
 @router.get("/api/v1/submissions/{submission_id}", response_model=SubmissionRecordResponse)
-def get_submission(submission_id: int, repository=Depends(get_repository)) -> SubmissionRecordResponse:
-    row = repository.get_submission_bundle(submission_id)
+def get_submission(
+    submission_id: int,
+    bundle_reader=Depends(get_submission_bundle_reader),
+) -> SubmissionRecordResponse:
+    row = bundle_reader.get_submission_bundle(submission_id)
     if row is None:
         raise HTTPException(404, "Submission not found.")
     submission_id_value = row.pop("essay_id")

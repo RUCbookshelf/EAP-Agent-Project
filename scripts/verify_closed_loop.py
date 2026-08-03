@@ -49,7 +49,7 @@ def main() -> None:
             "status": second.provider.success_status, "comparable_history_count": second.comparable_history_count,
             "history_summary": second.history_summary,
         },
-        "database_counts": pipeline.database.counts(),
+        "database_counts": pipeline.database._system_repository.counts(),
     }
     print(json.dumps(output, indent=2))
 

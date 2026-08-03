@@ -1,4 +1,4 @@
 from .migrations import LATEST_MIGRATION_VERSION, rollback, upgrade
-from .repository import Database, SQLiteRepository
+from .repository import Database
 
-__all__ = ["Database", "SQLiteRepository", "LATEST_MIGRATION_VERSION", "rollback", "upgrade"]
+__all__ = ["Database", "LATEST_MIGRATION_VERSION", "rollback", "upgrade"]

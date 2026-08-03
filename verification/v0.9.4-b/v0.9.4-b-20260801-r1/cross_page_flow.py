@@ -115,12 +115,12 @@ def learner_summary() -> dict[str, int]:
 
 def persist_authoritative_response_observation() -> dict:
     repository = Database(harness.ISOLATED_DB)
-    essays = repository.list_essays_by_student(STUDENT)
+    essays = repository._practice_repository.list_essays_by_student(STUDENT)
     source = next(item for item in essays if item.get("revision_of_submission_id") is None)
     revised = next(item for item in essays if item.get("revision_of_submission_id") is not None)
-    target = repository.list_practice_targets(STUDENT)[0]
+    target = repository._practice_repository.list_practice_targets(STUDENT)[0]
     group_id = revised.get("revision_group_id")
-    snapshot = repository.get_latest_revision_snapshot(group_id)
+    snapshot = repository._revision_repository.get_latest_revision_snapshot(group_id)
     assert snapshot is not None
     candidate = PracticeService().evaluate_within_task_response(
         STUDENT,
@@ -130,7 +130,7 @@ def persist_authoritative_response_observation() -> dict:
         revision_group_id=group_id,
         major_rewrite=bool(snapshot.get("major_rewrite")),
     )
-    return repository.save_within_task_response_candidate(candidate)
+    return repository._practice_repository.save_within_task_response_candidate(candidate)
 
 
 def api_journey() -> dict:

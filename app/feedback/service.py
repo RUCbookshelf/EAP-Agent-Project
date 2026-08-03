@@ -28,9 +28,9 @@ class FeedbackPipeline:
             )
             router = ProviderRouter(primary, local)
         self.router = router
-        self.history = LearnerHistoryService(self.database)
+        self.history = LearnerHistoryService(self.database._submission_repository)
         self.database.initialize()
-        self.database.record_versions({
+        self.database._system_repository.record_versions({
             "application": settings.application_version, "analysis": settings.analysis_version,
             "diagnosis": settings.diagnosis_version, "prompt": settings.prompt_version,
             "feedback_schema": "structured-feedback-v0.7.1",

@@ -74,7 +74,7 @@ def run_live_verification(database_path: Path) -> dict[str, Any]:
     request_history_count = request_metadata.get("history_evidence_count")
     if request_history_count != len(second.history.history_evidence):
         raise RuntimeError("DeepSeek transport did not record the expected second-request history evidence count")
-    stored = pipeline.database.get_feedback_record(second.essay_id)
+    stored = pipeline.database._submission_repository.get_feedback_record(second.essay_id)
     if not stored or stored["provider_name"] != "deepseek" or stored["validation_status"] != "passed":
         raise RuntimeError("Validated second DeepSeek response was not stored correctly")
 

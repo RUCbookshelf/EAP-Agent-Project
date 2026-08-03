@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from fastapi import APIRouter, Depends, HTTPException
 
-from app.api.deps import get_calf, get_reanalysis, get_repository
+from app.api.deps import get_calf, get_calf_reader, get_reanalysis, get_submission_bundle_reader
 from app.calf import ErrorAnnotation
 
 router = APIRouter()
@@ -55,19 +55,24 @@ def submission_calf(submission_id: int, calf=Depends(get_calf)) -> dict:
 @router.get("/api/v1/submissions/{submission_id}/analysis-units")
 def submission_analysis_units(
     submission_id: int, analysis_run_id: str | None = None,
-    repository=Depends(get_repository),
+    bundle_reader=Depends(get_submission_bundle_reader),
+    calf_reader=Depends(get_calf_reader),
 ) -> dict:
-    if repository.get_submission_bundle(submission_id) is None:
+    if bundle_reader.get_submission_bundle(submission_id) is None:
         raise HTTPException(404, "Submission not found.")
     return {"submission_id": submission_id,
-            "analysis_units": repository.list_analysis_units(submission_id, analysis_run_id)}
+            "analysis_units": calf_reader.list_analysis_units(submission_id, analysis_run_id)}
 
 
 @router.get("/api/v1/submissions/{submission_id}/syntactic-units")
-def submission_syntactic_units(submission_id: int, repository=Depends(get_repository)) -> dict:
-    if repository.get_submission_bundle(submission_id) is None:
+def submission_syntactic_units(
+    submission_id: int,
+    bundle_reader=Depends(get_submission_bundle_reader),
+    calf_reader=Depends(get_calf_reader),
+) -> dict:
+    if bundle_reader.get_submission_bundle(submission_id) is None:
         raise HTTPException(404, "Submission not found.")
-    items = repository.list_analysis_units(submission_id)
+    items = calf_reader.list_analysis_units(submission_id)
     return {"submission_id": submission_id, "syntactic_units": [
         item for item in items if item["unit_id"] in {
             "sentence", "clause_candidate", "t_unit_candidate", "validated_clause", "validated_t_unit"
@@ -76,10 +81,14 @@ def submission_syntactic_units(submission_id: int, repository=Depends(get_reposi
 
 
 @router.get("/api/v1/submissions/{submission_id}/error-annotations")
-def get_error_annotations(submission_id: int, repository=Depends(get_repository)) -> dict:
-    if repository.get_submission_bundle(submission_id) is None:
+def get_error_annotations(
+    submission_id: int,
+    bundle_reader=Depends(get_submission_bundle_reader),
+    calf_reader=Depends(get_calf_reader),
+) -> dict:
+    if bundle_reader.get_submission_bundle(submission_id) is None:
         raise HTTPException(404, "Submission not found.")
-    items = repository.list_error_annotations(submission_id)
+    items = calf_reader.list_error_annotations(submission_id)
     return {"submission_id": submission_id,
             "error_annotations": [item.model_dump(mode="json") for item in items]}
 

@@ -42,9 +42,9 @@ def main() -> None:
     summaries = []
     for student in source["students"]:
         student_id = student["student_id"]
-        if repository.get_student(student_id) is None:
+        if repository._learner_repository.get_student(student_id) is None:
             for index, item in enumerate(student["submissions"]):
-                essay_id = repository.save_essay(EssaySubmission(
+                essay_id = repository._submission_repository.save_essay(EssaySubmission(
                     student_id=student_id,
                     writing_prompt="Should cities protect public parks?",
                     genre=item.get("genre", "argumentative essay"),
@@ -55,11 +55,11 @@ def main() -> None:
                     essay_text="This is repeatable synthetic text for longitudinal prototype verification.",
                     submitted_at=datetime(2026, 1, 1, tzinfo=timezone.utc) + timedelta(days=index * 14),
                 ), synthetic=True)
-                repository.save_analysis(essay_id, AnalysisResult(
+                repository._analysis_repository.save_analysis(essay_id, AnalysisResult(
                     metrics=metrics(item["word_count"]), analysis_version="basic-analyzer-v0.1",
                     limitations="Synthetic prototype metrics.",
                 ))
-                repository.save_diagnosis(essay_id, diagnosis(item["categories"]))
+                repository._analysis_repository.save_diagnosis(essay_id, diagnosis(item["categories"]))
         snapshot = ProgressService(repository).create_snapshot(student_id)
         summaries.append({
             "student_id": student_id, "snapshot_id": snapshot.snapshot_id,

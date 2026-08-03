@@ -12,7 +12,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 PRE = Path(__file__).with_name("prechange_repository_inventory.json")
-OUTPUT = Path(__file__).with_name("postchange_repository_inventory.json")
+OUTPUT = ROOT / "verification" / "v0.9.5-g" / "postchange_facade_inventory.json"
+# v0.9.5-G: output redirected to the G-era artifact so the historical E-era
+# postchange_repository_inventory.json evidence remains unchanged.
 BASELINE = "769e6d8"
 
 OWNER_MODULE = {
@@ -89,6 +91,10 @@ def git_text(path: str) -> str:
 
 def main() -> None:
     pre = json.loads(PRE.read_text(encoding="utf-8"))
+    # v0.9.5-G-era contract: the historical E inventory documents 86 methods;
+    # parity is verified against the evidence-supported retained surface.
+    retained = {"connect", "initialize"}
+    baseline_methods = [row for row in pre["methods"] if row["name"] in retained]
     facade_path = ROOT / "app" / "database" / "repository.py"
     facade_tree = parse(facade_path)
     facade = class_named(facade_tree, "Database")
@@ -105,7 +111,7 @@ def main() -> None:
 
     rows = []
     failures = []
-    for baseline in pre["methods"]:
+    for baseline in baseline_methods:
         name = baseline["name"]
         owner = baseline["owner"]
         facade_node = facade_methods.get(name)

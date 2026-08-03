@@ -117,7 +117,7 @@ def _run_startup(api: FastAPI) -> None:
     try:
         repository = Database(settings.database_path)
         repository.initialize()
-        mv = repository.migration_version()
+        mv = repository._system_repository.migration_version()
         lifecycle.database_status = "connected"
         lifecycle.migration_version = mv
         lifecycle.complete_stage(stage, success=True)
@@ -204,7 +204,7 @@ def _run_startup(api: FastAPI) -> None:
         lifecycle.llm_api_configured = bool(settings.deepseek_api_key) if settings.llm_provider == "deepseek" else False
 
         try:
-            active_cfg = repository.get_active_configuration()
+            active_cfg = repository._configuration_repository.get_active_configuration()
             lifecycle.active_configuration = active_cfg.version
         except RuntimeError:
             lifecycle.active_configuration = None
@@ -244,6 +244,16 @@ def _run_startup(api: FastAPI) -> None:
     api.state.practice_writer = repository._practice_repository
     api.state.practice_student_reader = repository._learner_repository
     api.state.practice_service = PracticeService()
+    api.state.submission_bundle_reader = repository._submission_repository
+    api.state.student_lookup = repository._learner_repository
+    api.state.analysis_runs_reader = repository._analysis_repository
+    api.state.calf_reader = repository._calf_repository
+    api.state.research_export_writer = repository._research_repository
+    api.state.student_submission_list = repository._submission_repository
+    api.state.revision_group_lookup = repository._revision_repository
+    api.state.student_learner_reader = repository._learner_repository
+    api.state.submission_calibration_reader = repository._calf_repository
+    api.state.system_migration_reader = repository._system_repository
     api.state.admin_reanalysis = AdminReanalysisService(
         settings=settings,
         configuration_reader=repository._configuration_repository,
@@ -421,7 +431,7 @@ def _build_full_app(
     lifecycle.application_version = settings.application_version
     lifecycle.prompt_version = settings.prompt_version
     lifecycle.database_status = "connected"
-    lifecycle.migration_version = repository.migration_version()
+    lifecycle.migration_version = repository._system_repository.migration_version()
     _apply_analyzer_lifecycle(settings, analyzer)
     lifecycle.llm_provider = settings.llm_provider
     lifecycle.llm_api_configured = bool(settings.deepseek_api_key) if settings.llm_provider == "deepseek" else False
@@ -448,6 +458,16 @@ def _build_full_app(
     api.state.practice_writer = repository._practice_repository
     api.state.practice_student_reader = repository._learner_repository
     api.state.practice_service = PracticeService()
+    api.state.submission_bundle_reader = repository._submission_repository
+    api.state.student_lookup = repository._learner_repository
+    api.state.analysis_runs_reader = repository._analysis_repository
+    api.state.calf_reader = repository._calf_repository
+    api.state.research_export_writer = repository._research_repository
+    api.state.student_submission_list = repository._submission_repository
+    api.state.revision_group_lookup = repository._revision_repository
+    api.state.student_learner_reader = repository._learner_repository
+    api.state.submission_calibration_reader = repository._calf_repository
+    api.state.system_migration_reader = repository._system_repository
     api.state.admin_reanalysis = AdminReanalysisService(
         settings=settings,
         configuration_reader=repository._configuration_repository,

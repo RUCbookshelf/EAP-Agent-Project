@@ -17,13 +17,13 @@ def audit() -> dict[str, object]:
     database.initialize()
     essay_ids = [int(value.removeprefix("E")) for value in report["submission_ids"]]
     first_id, second_id = essay_ids
-    first_feedback = database.get_feedback_record(first_id)
-    second_feedback = database.get_feedback_record(second_id)
+    first_feedback = database._submission_repository.get_feedback_record(first_id)
+    second_feedback = database._submission_repository.get_feedback_record(second_id)
     first_json = json.loads(first_feedback["feedback_json"])
     second_json = json.loads(second_feedback["feedback_json"])
-    second_history = database.get_history_record(second_id)
+    second_history = database._submission_repository.get_history_record(second_id)
     history_evidence = json.loads(second_history["history_evidence_json"])
-    second_calls = database.get_llm_calls(second_id)
+    second_calls = database._submission_repository.get_llm_calls(second_id)
 
     assert report["status"] == "PASS"
     assert first_feedback["provider_name"] == "deepseek"

@@ -6,7 +6,7 @@ from pathlib import Path
 
 from fastapi import APIRouter, Depends, HTTPException, Request
 
-from app.api.deps import get_repository, get_research
+from app.api.deps import get_research, get_research_export_writer
 from app.research.schemas import ExportJob, HumanReviewCreate, PiiReview
 
 router = APIRouter()
@@ -31,7 +31,7 @@ def research_export_run(
     payload: dict,
     request: Request,
     research_service=Depends(get_research),
-    repository=Depends(get_repository),
+    export_writer=Depends(get_research_export_writer),
 ) -> dict:
     try:
         job = ExportJob(**payload)
@@ -44,9 +44,9 @@ def research_export_run(
         config_version=getattr(request.app.state, "config_version", None),
     )
     # Persist export-job metadata for history/status lookups (append-only; no schema change).
-    if hasattr(repository, "save_export_job"):
+    if hasattr(export_writer, "save_export_job"):
         try:
-            repository.save_export_job({
+            export_writer.save_export_job({
                 "export_id": result.get("export_id"),
                 "filter_spec": job.filter_spec.model_dump(mode="json"),
                 "privacy_mode": job.privacy_mode.value,
