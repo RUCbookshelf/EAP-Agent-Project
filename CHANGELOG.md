@@ -1,4 +1,33 @@
-## v0.9.5-H2A (2026-08-03)
+## v0.9.5-H2B (2026-08-03)
+
+### Changed
+- Renamed the active local configuration contract `ConfigurationRepository` to
+  `ConfigurationPort` in `app/services/configuration.py` (definition +
+  `ConfigurationService.__init__` annotation only). The name now matches the
+  consumer-owned Port convention and removes the last repository-layer naming
+  ambiguity after H2A deleted the stale central `ConfigurationRepository`.
+- No method, signature, return annotation, implementation, repository, SQL,
+  transaction, migration, API, UI, or runtime dependency changed; no
+  compatibility alias or duplicate name remains; the old name is absent from
+  all `app/**` source.
+- Added `tests/test_v095h2b_configuration_contract_rename.py` (6 focused
+  tests) and updated `tests/test_v095h2a_removed_contracts.py` with an
+  H1-inventory rename map so the 42-active-contract preservation proof stays
+  valid; the E-parity allowlist in the H2A isolation runner now covers the
+  H2B-touched file.
+
+### Verified
+- Focused contract suite 203 passed, 2 warnings (isolated DB, local
+  provider); exact `run.bat --verify` PASS (migration 12, 33 tables,
+  `config-v0.9.0`, prompt `feedback-prompt-v0.7.1`, health/docs/Streamlit
+  200); Database public methods 2; API 77; client 52; locale 520/520;
+  development database unchanged (SHA-256/size/mtime).
+- Full non-live core: NOT CLEAN - two attempts each exited 1 with exactly one
+  failure, both instances of the documented pre-existing
+  `test_v095b_router_contract` lifecycle-race flake (pass in isolation;
+  identical failure occurred before H2B). Final full-core closure pending.
+
+
 
 ### Removed
 - Exactly the 13 persistence contracts proven unused by the v0.9.5-H1 audit:

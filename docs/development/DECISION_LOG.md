@@ -1,6 +1,34 @@
 
 
-## 2026-08-03 - v0.9.5-H2A Remove unused legacy persistence contracts
+## 2026-08-03 - v0.9.5-H2B Rename active configuration contract
+
+- **Decision**: Rename the active local configuration contract
+  `ConfigurationRepository` to `ConfigurationPort` (consumer-owned
+  configuration boundary for `ConfigurationService`), updating the
+  definition, the constructor annotation, tests, and documentation; preserve
+  all seven methods, signatures, behavior, the concrete repository, and
+  composition; remove the old name from active source with no compatibility
+  alias.
+- **Rationale**: After H2A removed the stale central `ConfigurationRepository`,
+  the remaining active name still suggested a repository-layer CRUD aggregate.
+  `ConfigurationPort` matches the consumer-owned Port convention
+  (`CalfDataPort`, `ActiveConfigurationPort`, `AdminConfigurationReadPort`)
+  and the F1 audit's proposed name; it communicates the service-facing
+  boundary and eliminates the last same-name ambiguity.
+- **Parity boundary**: Repository implementations, signatures, SQL, DDL,
+  migrations (12), tables (33), transactions, API 77 pairs, client 52,
+  locale 520/520, `config-v0.9.0`, prompt `feedback-prompt-v0.7.1`, Database
+  public methods 2 unchanged; all 42 active persistence contracts valid.
+- **Evidence**: focused 203 passed, 2 warnings; exact `run.bat --verify`
+  PASS; full non-live core ran twice, each exit 1 with exactly one failure -
+  both documented pre-existing `test_v095b_router_contract` lifecycle-race
+  flake instances passing in isolation (identical failure predates H2B);
+  development database unchanged (SHA-256/size/mtime).
+- **Boundary**: full-core verification closure pending; H2C
+  (`_AnalysisRunReader` canonicalization), H2D, H2E each require separate
+  authorization; none begun.
+
+
 
 - **Decision**: Remove exactly the 13 persistence contracts proven unused by
   the H1 audit - the legacy `SubmissionRepository` combined class, the 11

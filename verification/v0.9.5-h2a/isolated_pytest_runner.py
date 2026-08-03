@@ -48,6 +48,7 @@ DEFAULT_TARGETS = [
 
 G_ALLOWLIST = (
     "app/services/calf.py,"
+    "app/services/configuration.py,"
     "app/api/main.py,"
     "app/api/deps.py,"
     "app/api/ports.py,"

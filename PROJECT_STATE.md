@@ -8,7 +8,28 @@
 
 # Project State
 
-## Current v0.9.5-H2A State
+## Current v0.9.5-H2B State
+
+- Status: implementation complete; focused and launcher verification PASS;
+  full-core regression NOT CLEAN - final verification closure PENDING.
+- Renamed the active local configuration contract `ConfigurationRepository`
+  to `ConfigurationPort` (naming-only, `app/services/configuration.py`
+  definition + `ConfigurationService` annotation). Seven methods, signatures,
+  repository implementation, SQL, transactions, API, UI, and runtime behavior
+  unchanged; no alias or duplicate name; old name absent from `app/**`.
+- Verification: focused contract suite 203 passed, 2 warnings; exact
+  `run.bat --verify` PASS; full non-live core ran twice, each with exactly one
+  failure - both documented pre-existing `test_v095b_router_contract`
+  lifecycle-race flake instances that pass in isolation (identical failure
+  occurred before H2B); Database public methods 2; API 77; client 52; locale
+  520/520; migration 12; 33 tables; `config-v0.9.0`;
+  `feedback-prompt-v0.7.1`; development database unchanged
+  (SHA-256/size/mtime).
+- Next: H2C (`_AnalysisRunReader` canonicalization), H2D, H2E each require
+  separate authorization; a full-core closure follow-up (like v0.9.5-H2A-V1)
+  is required before H2B can be declared fully verified.
+
+
 
 - Status: completed and fully verified (full-core closure exit 0); exactly 13 unused persistence contracts
   removed (legacy `SubmissionRepository`, 11 stale central Protocols,
