@@ -2,21 +2,25 @@
 
 **Date:** 2026-08-03
 **Current task:** v0.9.5-H2A Remove Unused Legacy Persistence Contracts
-**Status:** completed and verified (see `RUN_VERIFICATION_V0.9.5_H2A.md`)
+**Status:** completed and fully verified (full-core closure exit 0; see `RUN_VERIFICATION_V0.9.5_H2A.md`)
 
 - Removed exactly the 13 H1-approved unused contracts: legacy
   `SubmissionRepository`, 11 stale central Protocols, and the
   `SubmissionRepositories` alias; obsolete imports, bases, docstrings,
   re-exports, and `__all__` entries removed; `app/repositories` now exports
-  only `RevisionRepository`; zero replacement contracts; 55 -> 42 active
-  contract inventory (H1 artifacts remain historical evidence).
+  only `RevisionRepository`; zero replacement contracts; total
+  persistence-related contracts 55 -> 42, active persistence contracts
+  42 -> 42, unused legacy contracts 13 -> 0 (H1 artifacts remain
+  historical evidence).
 - No active contract, Repository implementation, Service constructor, Router
   dependency, composition path, SQL, transaction, API, schema, provider,
   prompt, UI, or localization change; local 7-method `ConfigurationRepository`
   unchanged (collision resolved via stale central removal).
-- Focused contract suite 197 passed, 2 warnings; full non-live core 662
-  passed + 8 skipped (documented pre-existing `test_v095b_router_contract`
-  lifecycle-race flake passes in isolation); exact `run.bat --verify` PASS
+- Focused contract suite 197 passed, 2 warnings; full non-live core 663
+  passed + 8 skipped, 2 warnings, exit code 0 (closure run; the original H2A
+  full-core run exited 1 on the documented pre-existing
+  `test_v095b_router_contract` lifecycle-race flake, which passes in
+  isolation and in the closure run); exact `run.bat --verify` PASS
   (migration 12, 33 tables, `config-v0.9.0`, prompt
   `feedback-prompt-v0.7.1`, health/docs/Streamlit 200); Database public
   methods 2, API 77, client 52, locale 520/520; development database

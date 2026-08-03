@@ -10,19 +10,23 @@
 
 ## Current v0.9.5-H2A State
 
-- Status: completed and verified; exactly 13 unused persistence contracts
+- Status: completed and fully verified (full-core closure exit 0); exactly 13 unused persistence contracts
   removed (legacy `SubmissionRepository`, 11 stale central Protocols,
   `SubmissionRepositories` union alias) with zero runtime consumers and no
   replacement contracts; obsolete imports, bases, and re-exports removed.
-- Active contract count now 42 (was 55); `app/repositories` exports only
+- Total persistence-related contracts now 42 (was 55); active persistence
+  contracts 42 (unchanged); unused legacy contracts 13 -> 0;
+  `app/repositories` exports only
   `RevisionRepository`; the Configuration same-name collision is resolved by
   stale central-contract removal while the active local 7-method
   `ConfigurationRepository` is unchanged; all F2-G dependency boundaries,
   Repository implementations, SQL, transactions, API, schema, provider,
   prompt, UI, and localization unchanged.
 - Verification: focused contract suite 197 passed, 2 warnings; full non-live
-  core 662 passed + 8 skipped (documented pre-existing
-  `test_v095b_router_contract` flake passes in isolation); exact
+  core 663 passed + 8 skipped, 2 warnings, exit code 0 (closure run; the
+  original run exited 1 on the documented pre-existing
+  `test_v095b_router_contract` lifecycle-race flake, which passes in
+  isolation and in the closure run); exact
   `run.bat --verify` PASS; Database public methods 2; API 77; client 52;
   locale 520/520; migration 12; 33 tables; `config-v0.9.0`;
   `feedback-prompt-v0.7.1`; development database unchanged

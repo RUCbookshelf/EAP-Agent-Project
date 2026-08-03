@@ -22,9 +22,11 @@
   migrations (12), tables (33), transaction boundaries, API 77 pairs, client
   52 methods, locale 520/520, `config-v0.9.0`, prompt
   `feedback-prompt-v0.7.1`, Database public methods 2 unchanged.
-- **Evidence**: focused 197 passed, 2 warnings; full non-live core 662
-  passed + 8 skipped (documented pre-existing `test_v095b_router_contract`
-  lifecycle-race flake passes in isolation); exact `run.bat --verify` PASS;
+- **Evidence**: focused 197 passed, 2 warnings; full non-live core 663
+  passed + 8 skipped, 2 warnings, exit code 0 (closure run; the original
+  run exited 1 on the documented pre-existing `test_v095b_router_contract`
+  lifecycle-race flake, which passes in isolation and in the closure run);
+  exact `run.bat --verify` PASS;
   development database unchanged (SHA-256/size/mtime).
 - **Boundary**: H2B (rename active local `ConfigurationRepository`), H2C
   (`_AnalysisRunReader` canonicalization), H2D (API Port production

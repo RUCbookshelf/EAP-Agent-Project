@@ -1,6 +1,6 @@
 # v0.9.5-H2A Verification - Remove Unused Legacy Persistence Contracts
 
-**Status:** PASS
+**Status:** PASS - v0.9.5-H2A COMPLETE and fully verified (full-core closure run: exit code 0)
 
 ## Scope
 
@@ -13,6 +13,9 @@ Behavior-preserving removal of the 13 persistence contracts proven unused by the
 | Branch / baseline HEAD | `master` / `760193f` (v0.9.5-H1 audit) |
 | H1 evidence | `PROTOCOL_CONSOLIDATION_AUDIT_V0.9.5_H1.md` + `verification/v0.9.5-h1/*` (historical, unchanged) |
 | Persistence contracts before / after | 55 / 42 (13 removed, 0 replacements) |
+| Total persistence-related contracts | 55 -> 42 |
+| Active persistence contracts | 42 -> 42 |
+| Unused legacy contracts | 13 -> 0 |
 | Database public surface | 2 (`connect`, `initialize`) |
 | API contract / frontend client / locale | 77 / 52 / 520:520 |
 | Migration / tables | 12 / 33 |
@@ -63,9 +66,10 @@ Zero-consumer proof (pre-change bounded AST/import scan): active runtime consume
 
 ### Full non-live core regression (fresh isolated database)
 
-- Command: `.venv\Scripts\python.exe verification/v0.9.5-h2a/isolated_pytest_runner.py --full` (`pytest -q --ignore=tests/live tests`).
-- Result: **662 passed, 8 skipped, 2 warnings** in 308.98s.
-- One failure: `tests/test_v095b_router_contract.py::test_business_route_gated_until_ready_while_health_available` - the **documented pre-existing flake** (prod-mode TestClient + background startup thread flips global lifecycle state inside large sets). It passes in isolation (0.52s, verified) and was already recorded in `RUN_VERIFICATION_V0.9.5_G.md`. Not an H2A regression; not repaired (out of scope).
+- Command: `.venv\Scripts\python.exe verification/v0.9.5-h2a/isolated_pytest_runner.py --full` (`pytest -q -p no:cacheprovider --ignore=tests/live tests`).
+- Original H2A full-core run (pre-closure): **exit code 1**; pytest summary `1 failed, 662 passed, 8 skipped, 2 warnings in 308.98s`; the single failure was `tests/test_v095b_router_contract.py::test_business_route_gated_until_ready_while_health_available` (documented pre-existing lifecycle-race flake). That run was NOT clean.
+- H2A-V1 closure run (exactly one fresh run, new isolated database `C:\Users\16073\AppData\Local\Temp\v095h2a-m4olosfq\h2a.db`): **exit code 0**; pytest summary `663 passed, 8 skipped, 2 warnings in 309.25s`; **zero failed, zero errors**, complete non-live core collection, no test excluded, retried, reordered, or weakened; the known lifecycle-race test passed in this run.
+- Conclusion: full-core regression **PASS**; v0.9.5-H2A is COMPLETE and fully verified. The lifecycle-race test remains an intermittent documented pre-existing flake (recorded in `RUN_VERIFICATION_V0.9.5_G.md`); it failed once in the original run, then passed in isolation (0.52s) and in the closure run. Not repaired (out of scope).
 
 ### Launcher verification (separate fresh isolated database)
 
@@ -89,10 +93,10 @@ Zero-consumer proof (pre-change bounded AST/import scan): active runtime consume
 Production: `app/repositories/protocols.py`, `app/repositories/__init__.py`, `app/services/submission.py`.
 Tests: `tests/test_v095h2a_removed_contracts.py` (new).
 Docs: `docs/development/V0.9.5_H2A_SPEC.md`, `RUN_VERIFICATION_V0.9.5_H2A.md`, `CHANGELOG.md`, `PROJECT_STATE.md`, `docs/development/MASTER_ROADMAP.md`, `docs/development/CURRENT_TASK_STATE.md`, `docs/development/DECISION_LOG.md`.
-Verification artifacts: `verification/v0.9.5-h2a/removed_contracts.json`, `remaining_contract_inventory.json`, `isolated_pytest_runner.py`.
+Verification artifacts: `verification/v0.9.5-h2a/removed_contracts.json`, `remaining_contract_inventory.json`, `isolated_pytest_runner.py`, `full_core_closure.json`.
 
 Historical H1 artifacts were not rewritten (55/42/13 counts remain historical evidence).
 
 ## Known limitation
 
-The documented `test_v095b_router_contract` lifecycle-race flake appeared once inside the full suite and passes in isolation (recorded in the G verification report; out of scope for H2A).
+The documented `test_v095b_router_contract` lifecycle-race flake is intermittent: it failed once in the original H2A full-core run (exit 1), then passed in isolation (0.52s) and in the H2A-V1 closure full-core run (exit 0). Recorded in the G verification report; out of scope for H2A; not repaired.
