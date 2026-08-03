@@ -1,5 +1,36 @@
 
 
+## 2026-08-03 - v0.9.5-H2A Remove unused legacy persistence contracts
+
+- **Decision**: Remove exactly the 13 persistence contracts proven unused by
+  the H1 audit - the legacy `SubmissionRepository` combined class, the 11
+  stale central Protocols (`StudentRepository`, `EssayRepository`,
+  `MetricRepository`, `ErrorAnnotationRepository`, `DiagnosisRepository`,
+  `FeedbackRepository`, `ExerciseRepository`, `LearnerHistoryRepository`,
+  `LearnerProfileRepository`, central `ConfigurationRepository`,
+  `SystemVersionRepository`), and the `SubmissionRepositories` union alias -
+  together with their obsolete imports, bases, docstrings, and re-exports.
+  No replacement contract is introduced; the active local 7-method
+  `ConfigurationRepository` is untouched and the same-name collision is
+  resolved only through stale central-contract removal.
+- **Rationale**: H1 proved zero active runtime consumers (no annotations,
+  imports, inheritance, isinstance/issubclass, string annotations, or
+  supported exports) for all 13; F2-G consumer-owned Ports and aggregate
+  Repository composition already replaced every dependency boundary. The
+  removal is behavior-preserving and fully reversible in one revert.
+- **Parity boundary**: Repository implementations, signatures, SQL, DDL,
+  migrations (12), tables (33), transaction boundaries, API 77 pairs, client
+  52 methods, locale 520/520, `config-v0.9.0`, prompt
+  `feedback-prompt-v0.7.1`, Database public methods 2 unchanged.
+- **Evidence**: focused 197 passed, 2 warnings; full non-live core 662
+  passed + 8 skipped (documented pre-existing `test_v095b_router_contract`
+  lifecycle-race flake passes in isolation); exact `run.bat --verify` PASS;
+  development database unchanged (SHA-256/size/mtime).
+- **Boundary**: H2B (rename active local `ConfigurationRepository`), H2C
+  (`_AnalysisRunReader` canonicalization), H2D (API Port production
+  annotations), and H2E (contract freeze) each require separate
+  authorization; none begun.
+
 ## 2026-08-03 - v0.9.5-H1 Persistence protocol inventory and consolidation plan
 
 - **Decision**: Complete a read-only, source-authoritative inventory of every

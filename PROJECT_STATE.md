@@ -8,6 +8,30 @@
 
 # Project State
 
+## Current v0.9.5-H2A State
+
+- Status: completed and verified; exactly 13 unused persistence contracts
+  removed (legacy `SubmissionRepository`, 11 stale central Protocols,
+  `SubmissionRepositories` union alias) with zero runtime consumers and no
+  replacement contracts; obsolete imports, bases, and re-exports removed.
+- Active contract count now 42 (was 55); `app/repositories` exports only
+  `RevisionRepository`; the Configuration same-name collision is resolved by
+  stale central-contract removal while the active local 7-method
+  `ConfigurationRepository` is unchanged; all F2-G dependency boundaries,
+  Repository implementations, SQL, transactions, API, schema, provider,
+  prompt, UI, and localization unchanged.
+- Verification: focused contract suite 197 passed, 2 warnings; full non-live
+  core 662 passed + 8 skipped (documented pre-existing
+  `test_v095b_router_contract` flake passes in isolation); exact
+  `run.bat --verify` PASS; Database public methods 2; API 77; client 52;
+  locale 520/520; migration 12; 33 tables; `config-v0.9.0`;
+  `feedback-prompt-v0.7.1`; development database unchanged
+  (SHA-256/size/mtime).
+- Next: H2B (rename the active local `ConfigurationRepository`), H2C
+  (`_AnalysisRunReader` canonicalization), H2D (API Port production
+  annotations), and H2E (contract freeze) each require separate
+  authorization.
+
 ## Current v0.9.5-H1 State
 
 - Status: completed (read-only source-authoritative audit; evidence and plan

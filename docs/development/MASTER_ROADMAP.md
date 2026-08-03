@@ -17,6 +17,8 @@
 | v0.9.5-F5B ResearchDataService Dependency Narrowing | completed and verified |
 | v0.9.5-F6A0 Revision Repository Capability Completion | completed and verified (F6A prerequisite) |
 | v0.9.5-H1 Persistence Protocol Inventory and Consolidation Plan (read-only) | completed |
+| v0.9.5-H2A Remove Unused Legacy Persistence Contracts | completed and verified |
+| v0.9.5-H1 Persistence Protocol Inventory and Consolidation Plan (read-only) | completed |
 | v0.9.5-G Database Facade Contraction | completed and verified |
 | v0.9.5-F6D Practice Write-Boundary Narrowing | completed and verified |
 | v0.9.5-F6C SubmissionService Persistence Dependency Narrowing | completed and verified |

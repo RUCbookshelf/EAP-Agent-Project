@@ -1,3 +1,43 @@
+## v0.9.5-H2A (2026-08-03)
+
+### Removed
+- Exactly the 13 persistence contracts proven unused by the v0.9.5-H1 audit:
+  the legacy `SubmissionRepository` combined class (`app/services/submission.py`),
+  the 11 stale central Protocols (`StudentRepository`, `EssayRepository`,
+  `MetricRepository`, `ErrorAnnotationRepository`, `DiagnosisRepository`,
+  `FeedbackRepository`, `ExerciseRepository`, `LearnerHistoryRepository`,
+  `LearnerProfileRepository`, central `ConfigurationRepository`,
+  `SystemVersionRepository`), and the `SubmissionRepositories` typing union
+  alias (`app/repositories/protocols.py`), plus their obsolete imports,
+  bases, docstrings, re-exports, and `__all__` entries
+  (`app/repositories/__init__.py` now exports only `RevisionRepository`).
+- No replacement contract was introduced; no active contract (42 A/B/C),
+  Repository implementation, Service constructor, Router dependency,
+  composition path, SQL, transaction, API, schema, prompt, provider, UI, or
+  localization file changed. The Configuration same-name collision is
+  resolved only through stale central-contract removal; the active local
+  7-method `ConfigurationRepository` is untouched.
+
+### Added
+- `tests/test_v095h2a_removed_contracts.py` (10 focused tests: removed names
+  absent, re-exports absent, no source import of a removed name, all 42
+  H1-active contracts defined with exact method sets, concrete Repositories
+  still satisfy active contracts, SubmissionService's four F6C Ports,
+  local ConfigurationRepository unchanged, Practice read/write separation
+  unchanged, API-owned Ports unchanged).
+- `docs/development/V0.9.5_H2A_SPEC.md`, `RUN_VERIFICATION_V0.9.5_H2A.md`,
+  and `verification/v0.9.5-h2a/` artifacts (removal manifest, remaining
+  contract inventory, isolated pytest runner).
+
+### Verified
+- Focused contract suite 197 passed, 2 warnings (isolated DB, local
+  provider); full non-live core 662 passed + 8 skipped with the documented
+  pre-existing `test_v095b_router_contract` lifecycle-race flake (passes in
+  isolation); exact `run.bat --verify` PASS (migration 12, 33 tables,
+  `config-v0.9.0`, prompt `feedback-prompt-v0.7.1`, health/docs/Streamlit
+  200); Database public methods 2; API 77; client 52; locale 520/520;
+  development database unchanged (SHA-256/size/mtime).
+
 ## v0.9.5-H1 (2026-08-03)
 
 ### Added

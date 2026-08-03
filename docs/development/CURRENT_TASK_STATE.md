@@ -1,6 +1,30 @@
 # Current Task State
 
 **Date:** 2026-08-03
+**Current task:** v0.9.5-H2A Remove Unused Legacy Persistence Contracts
+**Status:** completed and verified (see `RUN_VERIFICATION_V0.9.5_H2A.md`)
+
+- Removed exactly the 13 H1-approved unused contracts: legacy
+  `SubmissionRepository`, 11 stale central Protocols, and the
+  `SubmissionRepositories` alias; obsolete imports, bases, docstrings,
+  re-exports, and `__all__` entries removed; `app/repositories` now exports
+  only `RevisionRepository`; zero replacement contracts; 55 -> 42 active
+  contract inventory (H1 artifacts remain historical evidence).
+- No active contract, Repository implementation, Service constructor, Router
+  dependency, composition path, SQL, transaction, API, schema, provider,
+  prompt, UI, or localization change; local 7-method `ConfigurationRepository`
+  unchanged (collision resolved via stale central removal).
+- Focused contract suite 197 passed, 2 warnings; full non-live core 662
+  passed + 8 skipped (documented pre-existing `test_v095b_router_contract`
+  lifecycle-race flake passes in isolation); exact `run.bat --verify` PASS
+  (migration 12, 33 tables, `config-v0.9.0`, prompt
+  `feedback-prompt-v0.7.1`, health/docs/Streamlit 200); Database public
+  methods 2, API 77, client 52, locale 520/520; development database
+  unchanged.
+- Next: H2B-H2E each require separate authorization; H2B (rename active
+  local `ConfigurationRepository`) is the next candidate.
+
+**Date:** 2026-08-03
 **Current task:** v0.9.5-H1 Persistence Protocol Inventory and Consolidation Plan
 **Status:** completed (read-only audit; see `docs/development/PROTOCOL_CONSOLIDATION_AUDIT_V0.9.5_H1.md`)
 
