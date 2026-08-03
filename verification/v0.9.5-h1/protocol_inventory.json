@@ -1,0 +1,5510 @@
+{
+  "stage": "v0.9.5-H1",
+  "generated_at": "2026-08-03T09:49:16+08:00",
+  "baseline": {
+    "branch": "master",
+    "head": "fc2e8e93b06b5a99ab841e115c8e12570f8f67b8",
+    "baseline_note": "v0.9.5-G implementation b165943 / verification fc2e8e9; Database public surface 2 (connect, initialize); API contract 77; frontend client 52; locale 520/520; migration 12; tables 33; config-v0.9.0; feedback-prompt-v0.7.1; full-core baseline 653 passed, 8 skipped (G verification report)."
+  },
+  "contract_count": 55,
+  "contracts": [
+    {
+      "contract_name": "StudentRepository",
+      "contract_kind": "protocol",
+      "module": "app.repositories.protocols",
+      "rel": "app/repositories/protocols.py",
+      "line": 11,
+      "runtime_checkable": false,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "get_student",
+          "signature": "get_student(student_id: str) -> dict[str, Any] | None",
+          "params": [
+            {
+              "name": "student_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "dict[str, Any] | None"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "app.repositories.__init__",
+          "role": "production",
+          "rel": "app/repositories/__init__.py",
+          "evidence": [
+            [
+              "import",
+              "protocols:StudentRepository"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.learner::SQLiteLearnerRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": false,
+      "imported_or_referenced": "production",
+      "instantiated_in_runtime_checks": "none",
+      "overlapping_contracts": [
+        "CalfStudentReadPort",
+        "JourneyStudentReadPort",
+        "StudentLookupPort"
+      ],
+      "ownership_domain": "Learner",
+      "consumer_domain": "Legacy",
+      "classification": "G",
+      "secondary_classification": [],
+      "recommended_disposition": "remove (H2A)",
+      "risk": "low",
+      "notes": "No production or test consumer; only re-export and SubmissionRepositories union."
+    },
+    {
+      "contract_name": "EssayRepository",
+      "contract_kind": "protocol",
+      "module": "app.repositories.protocols",
+      "rel": "app/repositories/protocols.py",
+      "line": 15,
+      "runtime_checkable": false,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "save_essay",
+          "signature": "save_essay(submission: EssaySubmission, synthetic: bool=...) -> int",
+          "params": [
+            {
+              "name": "submission",
+              "kind": "positional",
+              "annotation": "EssaySubmission",
+              "has_default": false
+            },
+            {
+              "name": "synthetic",
+              "kind": "kwonly",
+              "annotation": "bool",
+              "has_default": true
+            }
+          ],
+          "return_annotation": "int"
+        },
+        {
+          "name": "get_submission_bundle",
+          "signature": "get_submission_bundle(essay_id: int) -> dict[str, Any] | None",
+          "params": [
+            {
+              "name": "essay_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "dict[str, Any] | None"
+        },
+        {
+          "name": "list_student_submissions",
+          "signature": "list_student_submissions(student_id: str) -> list[dict[str, Any]]",
+          "params": [
+            {
+              "name": "student_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[dict[str, Any]]"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "app.repositories.__init__",
+          "role": "production",
+          "rel": "app/repositories/__init__.py",
+          "evidence": [
+            [
+              "import",
+              "protocols:EssayRepository"
+            ]
+          ]
+        },
+        {
+          "module": "app.services.submission",
+          "role": "production",
+          "rel": "app/services/submission.py",
+          "evidence": [
+            [
+              "import",
+              "app.repositories:EssayRepository"
+            ],
+            [
+              "base",
+              "78: EssayRepository"
+            ],
+            [
+              "consumer_symbols",
+              "SubmissionRepository@78"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.submission::SQLiteSubmissionRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": false,
+      "imported_or_referenced": "production",
+      "instantiated_in_runtime_checks": "none",
+      "overlapping_contracts": [
+        "AdminSubmissionReadPort",
+        "CalfSubmissionReadPort",
+        "PracticeSubmissionReadPort",
+        "ResearchSubmissionReadPort",
+        "RevisionRepository",
+        "StudentSubmissionListPort",
+        "SubmissionBundleReadPort",
+        "SubmissionDataPort",
+        "_SubmissionBundleReader"
+      ],
+      "ownership_domain": "Submission",
+      "consumer_domain": "Legacy",
+      "classification": "G",
+      "secondary_classification": [],
+      "recommended_disposition": "remove (H2A)",
+      "risk": "low",
+      "notes": "Only base of unused legacy SubmissionRepository."
+    },
+    {
+      "contract_name": "MetricRepository",
+      "contract_kind": "protocol",
+      "module": "app.repositories.protocols",
+      "rel": "app/repositories/protocols.py",
+      "line": 21,
+      "runtime_checkable": false,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "save_analysis",
+          "signature": "save_analysis(essay_id: int, analysis: AnalysisResult) -> None",
+          "params": [
+            {
+              "name": "essay_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            },
+            {
+              "name": "analysis",
+              "kind": "positional",
+              "annotation": "AnalysisResult",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "None"
+        },
+        {
+          "name": "save_analysis_run",
+          "signature": "save_analysis_run(essay_id: int, analysis: AnalysisResult) -> AnalysisResult",
+          "params": [
+            {
+              "name": "essay_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            },
+            {
+              "name": "analysis",
+              "kind": "positional",
+              "annotation": "AnalysisResult",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "AnalysisResult"
+        },
+        {
+          "name": "list_analysis_runs",
+          "signature": "list_analysis_runs(essay_id: int) -> list[dict[str, Any]]",
+          "params": [
+            {
+              "name": "essay_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[dict[str, Any]]"
+        },
+        {
+          "name": "get_latest_analysis_run",
+          "signature": "get_latest_analysis_run(essay_id: int) -> dict[str, Any] | None",
+          "params": [
+            {
+              "name": "essay_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "dict[str, Any] | None"
+        },
+        {
+          "name": "list_analysis_units",
+          "signature": "list_analysis_units(submission_id: int, analysis_run_id: str | None=...) -> list[dict[str, Any]]",
+          "params": [
+            {
+              "name": "submission_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            },
+            {
+              "name": "analysis_run_id",
+              "kind": "positional",
+              "annotation": "str | None",
+              "has_default": true
+            }
+          ],
+          "return_annotation": "list[dict[str, Any]]"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "app.repositories.__init__",
+          "role": "production",
+          "rel": "app/repositories/__init__.py",
+          "evidence": [
+            [
+              "import",
+              "protocols:MetricRepository"
+            ]
+          ]
+        },
+        {
+          "module": "app.services.submission",
+          "role": "production",
+          "rel": "app/services/submission.py",
+          "evidence": [
+            [
+              "import",
+              "app.repositories:MetricRepository"
+            ],
+            [
+              "base",
+              "78: MetricRepository"
+            ],
+            [
+              "consumer_symbols",
+              "SubmissionRepository@78"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.analysis::SQLiteAnalysisRepository",
+        "app.infrastructure.sqlite.repositories.calf::SQLiteCalfRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": false,
+      "imported_or_referenced": "production",
+      "instantiated_in_runtime_checks": "none",
+      "overlapping_contracts": [
+        "AdminAnalysisPort",
+        "AnalysisRunReadPort",
+        "AnalysisRunWritePort",
+        "CalfAnalysisReadPort",
+        "CalfDataPort",
+        "CalfReadPort",
+        "RevisionRepository",
+        "SubmissionAnalysisPort",
+        "_AnalysisRunReader"
+      ],
+      "ownership_domain": "Analysis",
+      "consumer_domain": "Legacy",
+      "classification": "G",
+      "secondary_classification": [
+        "H"
+      ],
+      "recommended_disposition": "remove (H2A)",
+      "risk": "low",
+      "notes": "Declares CALF-owned list_analysis_units (relocated semantics already in CalfDataPort/CalfReadPort); only base of unused legacy SubmissionRepository."
+    },
+    {
+      "contract_name": "ErrorAnnotationRepository",
+      "contract_kind": "protocol",
+      "module": "app.repositories.protocols",
+      "rel": "app/repositories/protocols.py",
+      "line": 29,
+      "runtime_checkable": false,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "save_error_annotations",
+          "signature": "save_error_annotations(submission_id: int, annotations: list[ErrorAnnotation]) -> list[ErrorAnnotation]",
+          "params": [
+            {
+              "name": "submission_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            },
+            {
+              "name": "annotations",
+              "kind": "positional",
+              "annotation": "list[ErrorAnnotation]",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[ErrorAnnotation]"
+        },
+        {
+          "name": "list_error_annotations",
+          "signature": "list_error_annotations(submission_id: int) -> list[ErrorAnnotation]",
+          "params": [
+            {
+              "name": "submission_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[ErrorAnnotation]"
+        }
+      ],
+      "consumer_modules": [],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.calf::SQLiteCalfRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": false,
+      "imported_or_referenced": "none",
+      "instantiated_in_runtime_checks": "none",
+      "overlapping_contracts": [
+        "CalfDataPort",
+        "CalfReadPort"
+      ],
+      "ownership_domain": "CALF",
+      "consumer_domain": "Legacy",
+      "classification": "G",
+      "secondary_classification": [],
+      "recommended_disposition": "remove (H2A)",
+      "risk": "low",
+      "notes": "Zero references anywhere (not re-exported)."
+    },
+    {
+      "contract_name": "DiagnosisRepository",
+      "contract_kind": "protocol",
+      "module": "app.repositories.protocols",
+      "rel": "app/repositories/protocols.py",
+      "line": 34,
+      "runtime_checkable": false,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "save_diagnosis",
+          "signature": "save_diagnosis(essay_id: int, diagnosis: DiagnosisResult) -> None",
+          "params": [
+            {
+              "name": "essay_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            },
+            {
+              "name": "diagnosis",
+              "kind": "positional",
+              "annotation": "DiagnosisResult",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "None"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "app.repositories.__init__",
+          "role": "production",
+          "rel": "app/repositories/__init__.py",
+          "evidence": [
+            [
+              "import",
+              "protocols:DiagnosisRepository"
+            ]
+          ]
+        },
+        {
+          "module": "app.services.submission",
+          "role": "production",
+          "rel": "app/services/submission.py",
+          "evidence": [
+            [
+              "import",
+              "app.repositories:DiagnosisRepository"
+            ],
+            [
+              "base",
+              "78: DiagnosisRepository"
+            ],
+            [
+              "consumer_symbols",
+              "SubmissionRepository@78"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.analysis::SQLiteAnalysisRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": false,
+      "imported_or_referenced": "production",
+      "instantiated_in_runtime_checks": "none",
+      "overlapping_contracts": [
+        "SubmissionAnalysisPort"
+      ],
+      "ownership_domain": "Analysis",
+      "consumer_domain": "Legacy",
+      "classification": "G",
+      "secondary_classification": [],
+      "recommended_disposition": "remove (H2A)",
+      "risk": "low",
+      "notes": "Only base of unused legacy SubmissionRepository."
+    },
+    {
+      "contract_name": "FeedbackRepository",
+      "contract_kind": "protocol",
+      "module": "app.repositories.protocols",
+      "rel": "app/repositories/protocols.py",
+      "line": 38,
+      "runtime_checkable": false,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "save_feedback",
+          "signature": "save_feedback(essay_id: int, result: ProviderResult, analysis_version: str) -> None",
+          "params": [
+            {
+              "name": "essay_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            },
+            {
+              "name": "result",
+              "kind": "positional",
+              "annotation": "ProviderResult",
+              "has_default": false
+            },
+            {
+              "name": "analysis_version",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "None"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "app.repositories.__init__",
+          "role": "production",
+          "rel": "app/repositories/__init__.py",
+          "evidence": [
+            [
+              "import",
+              "protocols:FeedbackRepository"
+            ]
+          ]
+        },
+        {
+          "module": "app.services.submission",
+          "role": "production",
+          "rel": "app/services/submission.py",
+          "evidence": [
+            [
+              "import",
+              "app.repositories:FeedbackRepository"
+            ],
+            [
+              "base",
+              "78: FeedbackRepository"
+            ],
+            [
+              "consumer_symbols",
+              "SubmissionRepository@78"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.submission::SQLiteSubmissionRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": false,
+      "imported_or_referenced": "production",
+      "instantiated_in_runtime_checks": "none",
+      "overlapping_contracts": [
+        "SubmissionDataPort"
+      ],
+      "ownership_domain": "Submission",
+      "consumer_domain": "Legacy",
+      "classification": "G",
+      "secondary_classification": [],
+      "recommended_disposition": "remove (H2A)",
+      "risk": "low",
+      "notes": "Only base of unused legacy SubmissionRepository."
+    },
+    {
+      "contract_name": "ExerciseRepository",
+      "contract_kind": "protocol",
+      "module": "app.repositories.protocols",
+      "rel": "app/repositories/protocols.py",
+      "line": 42,
+      "runtime_checkable": false,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "get_exercises",
+          "signature": "get_exercises(essay_id: int) -> list[dict[str, Any]]",
+          "params": [
+            {
+              "name": "essay_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[dict[str, Any]]"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "app.repositories.__init__",
+          "role": "production",
+          "rel": "app/repositories/__init__.py",
+          "evidence": [
+            [
+              "import",
+              "protocols:ExerciseRepository"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.submission::SQLiteSubmissionRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": false,
+      "imported_or_referenced": "production",
+      "instantiated_in_runtime_checks": "none",
+      "overlapping_contracts": [],
+      "ownership_domain": "Submission",
+      "consumer_domain": "Legacy",
+      "classification": "G",
+      "secondary_classification": [],
+      "recommended_disposition": "remove (H2A)",
+      "risk": "low",
+      "notes": "get_exercises has no production caller; only re-export and union."
+    },
+    {
+      "contract_name": "LearnerHistoryRepository",
+      "contract_kind": "protocol",
+      "module": "app.repositories.protocols",
+      "rel": "app/repositories/protocols.py",
+      "line": 46,
+      "runtime_checkable": false,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "prior_records",
+          "signature": "prior_records(submission: EssaySubmission) -> list[dict[str, Any]]",
+          "params": [
+            {
+              "name": "submission",
+              "kind": "positional",
+              "annotation": "EssaySubmission",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[dict[str, Any]]"
+        },
+        {
+          "name": "save_history",
+          "signature": "save_history(student_id: str, essay_id: int, history: HistoryResult) -> None",
+          "params": [
+            {
+              "name": "student_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            },
+            {
+              "name": "essay_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            },
+            {
+              "name": "history",
+              "kind": "positional",
+              "annotation": "HistoryResult",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "None"
+        },
+        {
+          "name": "list_student_history",
+          "signature": "list_student_history(student_id: str) -> list[dict[str, Any]]",
+          "params": [
+            {
+              "name": "student_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[dict[str, Any]]"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "app.repositories.__init__",
+          "role": "production",
+          "rel": "app/repositories/__init__.py",
+          "evidence": [
+            [
+              "import",
+              "protocols:LearnerHistoryRepository"
+            ]
+          ]
+        },
+        {
+          "module": "app.services.submission",
+          "role": "production",
+          "rel": "app/services/submission.py",
+          "evidence": [
+            [
+              "import",
+              "app.repositories:LearnerHistoryRepository"
+            ],
+            [
+              "base",
+              "78: LearnerHistoryRepository"
+            ],
+            [
+              "consumer_symbols",
+              "SubmissionRepository@78"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.submission::SQLiteSubmissionRepository",
+        "app.infrastructure.sqlite.repositories.learner::SQLiteLearnerRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": false,
+      "imported_or_referenced": "production",
+      "instantiated_in_runtime_checks": "none",
+      "overlapping_contracts": [
+        "PriorRecordsPort",
+        "StudentLearnerReadPort",
+        "SubmissionDataPort"
+      ],
+      "ownership_domain": "Submission+Learner",
+      "consumer_domain": "Legacy",
+      "classification": "G",
+      "secondary_classification": [
+        "H"
+      ],
+      "recommended_disposition": "remove (H2A)",
+      "risk": "low",
+      "notes": "Spans Submission owner (prior_records, save_history) and Learner owner (list_student_history); superseded by PriorRecordsPort/SubmissionDataPort/StudentLearnerReadPort."
+    },
+    {
+      "contract_name": "LearnerProfileRepository",
+      "contract_kind": "protocol",
+      "module": "app.repositories.protocols",
+      "rel": "app/repositories/protocols.py",
+      "line": 52,
+      "runtime_checkable": false,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "get_latest_learner_profile",
+          "signature": "get_latest_learner_profile(student_id: str) -> dict[str, Any] | None",
+          "params": [
+            {
+              "name": "student_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "dict[str, Any] | None"
+        },
+        {
+          "name": "save_learner_profile_snapshot",
+          "signature": "save_learner_profile_snapshot(snapshot: LearnerProfileSnapshot) -> LearnerProfileSnapshot",
+          "params": [
+            {
+              "name": "snapshot",
+              "kind": "positional",
+              "annotation": "LearnerProfileSnapshot",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "LearnerProfileSnapshot"
+        },
+        {
+          "name": "list_learner_profile_snapshots",
+          "signature": "list_learner_profile_snapshots(student_id: str) -> list[dict[str, Any]]",
+          "params": [
+            {
+              "name": "student_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[dict[str, Any]]"
+        },
+        {
+          "name": "list_longitudinal_records",
+          "signature": "list_longitudinal_records(student_id: str) -> list[dict[str, Any]]",
+          "params": [
+            {
+              "name": "student_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[dict[str, Any]]"
+        },
+        {
+          "name": "list_visualization_records",
+          "signature": "list_visualization_records(student_id: str) -> list[dict[str, Any]]",
+          "params": [
+            {
+              "name": "student_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[dict[str, Any]]"
+        },
+        {
+          "name": "list_history_evidence",
+          "signature": "list_history_evidence(student_id: str) -> list[dict[str, Any]]",
+          "params": [
+            {
+              "name": "student_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[dict[str, Any]]"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "app.repositories.__init__",
+          "role": "production",
+          "rel": "app/repositories/__init__.py",
+          "evidence": [
+            [
+              "import",
+              "protocols:LearnerProfileRepository"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.learner::SQLiteLearnerRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": false,
+      "imported_or_referenced": "production",
+      "instantiated_in_runtime_checks": "none",
+      "overlapping_contracts": [
+        "DashboardReadPort",
+        "LearnerProfileReadPort",
+        "LearnerProgressPort",
+        "StudentLearnerReadPort"
+      ],
+      "ownership_domain": "Learner",
+      "consumer_domain": "Legacy",
+      "classification": "G",
+      "secondary_classification": [],
+      "recommended_disposition": "remove (H2A)",
+      "risk": "low",
+      "notes": "Superseded by LearnerProfileReadPort, LearnerProgressPort, DashboardReadPort, StudentLearnerReadPort; only re-export and union."
+    },
+    {
+      "contract_name": "RevisionRepository",
+      "contract_kind": "protocol",
+      "module": "app.repositories.protocols",
+      "rel": "app/repositories/protocols.py",
+      "line": 61,
+      "runtime_checkable": false,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "get_submission_bundle",
+          "signature": "get_submission_bundle(essay_id: int) -> dict[str, Any] | None",
+          "params": [
+            {
+              "name": "essay_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "dict[str, Any] | None"
+        },
+        {
+          "name": "get_latest_analysis_run",
+          "signature": "get_latest_analysis_run(essay_id: int) -> dict[str, Any] | None",
+          "params": [
+            {
+              "name": "essay_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "dict[str, Any] | None"
+        },
+        {
+          "name": "create_revision_group",
+          "signature": "create_revision_group(source_submission_id: int) -> RevisionGroup",
+          "params": [
+            {
+              "name": "source_submission_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "RevisionGroup"
+        },
+        {
+          "name": "link_revision",
+          "signature": "link_revision(source_submission_id: int, target_submission_id: int, revision_group_id: str) -> None",
+          "params": [
+            {
+              "name": "source_submission_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            },
+            {
+              "name": "target_submission_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            },
+            {
+              "name": "revision_group_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "None"
+        },
+        {
+          "name": "get_revision_group",
+          "signature": "get_revision_group(revision_group_id: str) -> RevisionGroup | None",
+          "params": [
+            {
+              "name": "revision_group_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "RevisionGroup | None"
+        },
+        {
+          "name": "get_revision_group_for_submission",
+          "signature": "get_revision_group_for_submission(submission_id: int) -> RevisionGroup | None",
+          "params": [
+            {
+              "name": "submission_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "RevisionGroup | None"
+        },
+        {
+          "name": "list_revision_candidates",
+          "signature": "list_revision_candidates(submission_id: int) -> list[dict[str, Any]]",
+          "params": [
+            {
+              "name": "submission_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[dict[str, Any]]"
+        },
+        {
+          "name": "save_revision_snapshot",
+          "signature": "save_revision_snapshot(snapshot: RevisionSnapshot) -> RevisionSnapshot",
+          "params": [
+            {
+              "name": "snapshot",
+              "kind": "positional",
+              "annotation": "RevisionSnapshot",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "RevisionSnapshot"
+        },
+        {
+          "name": "list_revision_snapshots",
+          "signature": "list_revision_snapshots(revision_group_id: str) -> list[dict[str, Any]]",
+          "params": [
+            {
+              "name": "revision_group_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[dict[str, Any]]"
+        },
+        {
+          "name": "get_latest_revision_snapshot",
+          "signature": "get_latest_revision_snapshot(revision_group_id: str) -> dict[str, Any] | None",
+          "params": [
+            {
+              "name": "revision_group_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "dict[str, Any] | None"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "app.repositories.__init__",
+          "role": "production",
+          "rel": "app/repositories/__init__.py",
+          "evidence": [
+            [
+              "import",
+              "protocols:RevisionRepository"
+            ]
+          ]
+        },
+        {
+          "module": "app.services.admin_reanalysis",
+          "role": "production",
+          "rel": "app/services/admin_reanalysis.py",
+          "evidence": [
+            [
+              "import",
+              "app.repositories:RevisionRepository"
+            ],
+            [
+              "annotation",
+              "68: RevisionRepository"
+            ],
+            [
+              "consumer_symbols",
+              "AdminReanalysisService@58;__init__@59"
+            ]
+          ]
+        },
+        {
+          "module": "app.services.factory",
+          "role": "production",
+          "rel": "app/services/factory.py",
+          "evidence": [
+            [
+              "import",
+              "app.repositories:RevisionRepository"
+            ],
+            [
+              "annotation",
+              "77: RevisionRepository"
+            ],
+            [
+              "consumer_symbols",
+              "build_submission_service@68"
+            ]
+          ]
+        },
+        {
+          "module": "app.services.revision",
+          "role": "production",
+          "rel": "app/services/revision.py",
+          "evidence": [
+            [
+              "import",
+              "app.repositories:RevisionRepository"
+            ],
+            [
+              "annotation",
+              "17: RevisionRepository"
+            ],
+            [
+              "consumer_symbols",
+              "RevisionService@13;__init__@17"
+            ]
+          ]
+        },
+        {
+          "module": "tests.test_v095f6a0_revision_capability_completion",
+          "role": "test",
+          "rel": "tests/test_v095f6a0_revision_capability_completion.py",
+          "evidence": [
+            [
+              "import",
+              "app.repositories.protocols:RevisionRepository"
+            ],
+            [
+              "consumer_symbols",
+              "TestStructuralContract@67;test_revision_repository_protocol_method_set_is_unchanged@68;test_sqlite_revision_repository_structurally_satisfies_protocol@82"
+            ]
+          ]
+        },
+        {
+          "module": "tests.test_v095f6b_admin_reanalysis_narrowing",
+          "role": "test",
+          "rel": "tests/test_v095f6b_admin_reanalysis_narrowing.py",
+          "evidence": [
+            [
+              "import",
+              "app.repositories:RevisionRepository"
+            ],
+            [
+              "consumer_symbols",
+              "TestPortContracts@137;test_concrete_repositories_and_facade_structurally_satisfy_ports@165"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.revision::SQLiteRevisionRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "production",
+      "instantiated_in_runtime_checks": "none",
+      "overlapping_contracts": [
+        "AdminSubmissionReadPort",
+        "CalfAnalysisReadPort",
+        "CalfSubmissionReadPort",
+        "EssayRepository",
+        "MetricRepository",
+        "PracticeSubmissionReadPort",
+        "ResearchSubmissionReadPort",
+        "RevisionGroupLookupPort",
+        "SubmissionBundleReadPort",
+        "SubmissionDataPort",
+        "_AnalysisRunReader",
+        "_SubmissionBundleReader"
+      ],
+      "ownership_domain": "Revision",
+      "consumer_domain": "Service",
+      "classification": "B",
+      "secondary_classification": [],
+      "recommended_disposition": "keep",
+      "risk": "low",
+      "notes": "Active canonical aggregate contract: RevisionService, AdminReanalysisService, build_submission_service; unchanged by F6A0/F6A."
+    },
+    {
+      "contract_name": "ConfigurationRepository",
+      "contract_kind": "protocol",
+      "module": "app.repositories.protocols",
+      "rel": "app/repositories/protocols.py",
+      "line": 74,
+      "runtime_checkable": false,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "ping",
+          "signature": "ping() -> bool",
+          "params": [],
+          "return_annotation": "bool"
+        },
+        {
+          "name": "migration_version",
+          "signature": "migration_version() -> int",
+          "params": [],
+          "return_annotation": "int"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "app.repositories.__init__",
+          "role": "production",
+          "rel": "app/repositories/__init__.py",
+          "evidence": [
+            [
+              "import",
+              "protocols:ConfigurationRepository"
+            ]
+          ]
+        },
+        {
+          "module": "app.services.configuration",
+          "role": "production",
+          "rel": "app/services/configuration.py",
+          "evidence": [
+            [
+              "annotation",
+              "25: ConfigurationRepository"
+            ],
+            [
+              "consumer_symbols",
+              "ConfigurationService@24;__init__@25"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.system::SQLiteSystemRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": false,
+      "imported_or_referenced": "production",
+      "instantiated_in_runtime_checks": "none",
+      "overlapping_contracts": [
+        "SystemMigrationPort"
+      ],
+      "ownership_domain": "System",
+      "consumer_domain": "Legacy",
+      "classification": "G",
+      "secondary_classification": [
+        "H"
+      ],
+      "recommended_disposition": "remove (H2A)",
+      "risk": "low",
+      "notes": "Name collision with authoritative local 7-method ConfigurationRepository (services/configuration.py); no consumer."
+    },
+    {
+      "contract_name": "SystemVersionRepository",
+      "contract_kind": "protocol",
+      "module": "app.repositories.protocols",
+      "rel": "app/repositories/protocols.py",
+      "line": 79,
+      "runtime_checkable": false,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "record_versions",
+          "signature": "record_versions(versions: dict[str, str]) -> None",
+          "params": [
+            {
+              "name": "versions",
+              "kind": "positional",
+              "annotation": "dict[str, str]",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "None"
+        },
+        {
+          "name": "get_system_versions",
+          "signature": "get_system_versions() -> dict[str, str]",
+          "params": [],
+          "return_annotation": "dict[str, str]"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "app.repositories.__init__",
+          "role": "production",
+          "rel": "app/repositories/__init__.py",
+          "evidence": [
+            [
+              "import",
+              "protocols:SystemVersionRepository"
+            ]
+          ]
+        },
+        {
+          "module": "app.services.submission",
+          "role": "production",
+          "rel": "app/services/submission.py",
+          "evidence": [
+            [
+              "import",
+              "app.repositories:SystemVersionRepository"
+            ],
+            [
+              "base",
+              "78: SystemVersionRepository"
+            ],
+            [
+              "consumer_symbols",
+              "SubmissionRepository@78"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.system::SQLiteSystemRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": false,
+      "imported_or_referenced": "production",
+      "instantiated_in_runtime_checks": "none",
+      "overlapping_contracts": [
+        "SubmissionSystemPort"
+      ],
+      "ownership_domain": "System",
+      "consumer_domain": "Legacy",
+      "classification": "G",
+      "secondary_classification": [],
+      "recommended_disposition": "remove (H2A)",
+      "risk": "low",
+      "notes": "Only base of unused legacy SubmissionRepository; get_system_versions has no production caller."
+    },
+    {
+      "contract_name": "SubmissionRepositories",
+      "contract_kind": "alias",
+      "module": "app.repositories.protocols",
+      "rel": "app/repositories/protocols.py",
+      "line": 84,
+      "runtime_checkable": false,
+      "base_classes": [
+        "StudentRepository | EssayRepository | MetricRepository | DiagnosisRepository | FeedbackRepository | ExerciseRepository | LearnerHistoryRepository | LearnerProfileRepository | RevisionRepository | ConfigurationRepository | SystemVersionRepository"
+      ],
+      "declared_methods": [],
+      "consumer_modules": [],
+      "concrete_structural_implementations": [],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": false,
+      "imported_or_referenced": "none",
+      "instantiated_in_runtime_checks": "none",
+      "overlapping_contracts": [],
+      "ownership_domain": "Mixed",
+      "consumer_domain": "Legacy",
+      "classification": "G",
+      "secondary_classification": [],
+      "recommended_disposition": "remove (H2A)",
+      "risk": "low",
+      "notes": "Typing union alias; never imported or exported; definition-only reference."
+    },
+    {
+      "contract_name": "SubmissionBundleReadPort",
+      "contract_kind": "protocol",
+      "module": "app.api.ports",
+      "rel": "app/api/ports.py",
+      "line": 18,
+      "runtime_checkable": true,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "get_submission_bundle",
+          "signature": "get_submission_bundle(essay_id: int) -> dict[str, Any] | None",
+          "params": [
+            {
+              "name": "essay_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "dict[str, Any] | None"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "app.services.reanalysis",
+          "role": "production",
+          "rel": "app/services/reanalysis.py",
+          "evidence": [
+            [
+              "annotation",
+              "29: SubmissionBundleReadPort"
+            ],
+            [
+              "consumer_symbols",
+              "ReanalysisService@24;__init__@27"
+            ]
+          ]
+        },
+        {
+          "module": "tests.test_v095f4_reanalysis_journey_narrowing",
+          "role": "test",
+          "rel": "tests/test_v095f4_reanalysis_journey_narrowing.py",
+          "evidence": [
+            [
+              "import",
+              "app.services.reanalysis:SubmissionBundleReadPort"
+            ],
+            [
+              "runtime_check",
+              "270: SubmissionBundleReadPort"
+            ],
+            [
+              "consumer_symbols",
+              "TestFourPorts@223;test_concrete_repositories_and_facade_structurally_satisfy_ports@263;test_exact_names_methods_and_source_signatures@224"
+            ]
+          ]
+        },
+        {
+          "module": "tests.test_v095g_facade_contraction",
+          "role": "test",
+          "rel": "tests/test_v095g_facade_contraction.py",
+          "evidence": [
+            [
+              "import",
+              "app.api.ports:SubmissionBundleReadPort"
+            ],
+            [
+              "runtime_check",
+              "173: SubmissionBundleReadPort"
+            ],
+            [
+              "consumer_symbols",
+              "TestRouterDependencyElimination@139;test_api_ports_exact_method_sets@150;test_concrete_repositories_satisfy_api_ports@170"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.submission::SQLiteSubmissionRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "production",
+      "instantiated_in_runtime_checks": "tests-only",
+      "overlapping_contracts": [
+        "AdminSubmissionReadPort",
+        "CalfSubmissionReadPort",
+        "EssayRepository",
+        "PracticeSubmissionReadPort",
+        "ResearchSubmissionReadPort",
+        "RevisionRepository",
+        "SubmissionDataPort",
+        "_SubmissionBundleReader"
+      ],
+      "ownership_domain": "Submission",
+      "consumer_domain": "API Router",
+      "classification": "A",
+      "secondary_classification": [],
+      "recommended_disposition": "keep",
+      "risk": "low",
+      "notes": "Runtime path: deps.get_submission_bundle_reader -> app.state.submission_bundle_reader; contract enforced by test_v095g_facade_contraction; no production annotation reference."
+    },
+    {
+      "contract_name": "StudentLookupPort",
+      "contract_kind": "protocol",
+      "module": "app.api.ports",
+      "rel": "app/api/ports.py",
+      "line": 25,
+      "runtime_checkable": true,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "get_student",
+          "signature": "get_student(student_id: str) -> dict[str, Any] | None",
+          "params": [
+            {
+              "name": "student_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "dict[str, Any] | None"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "tests.test_v095g_facade_contraction",
+          "role": "test",
+          "rel": "tests/test_v095g_facade_contraction.py",
+          "evidence": [
+            [
+              "import",
+              "app.api.ports:StudentLookupPort"
+            ],
+            [
+              "runtime_check",
+              "174: StudentLookupPort"
+            ],
+            [
+              "consumer_symbols",
+              "TestRouterDependencyElimination@139;test_api_ports_exact_method_sets@150;test_concrete_repositories_satisfy_api_ports@170"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.learner::SQLiteLearnerRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "tests-only",
+      "instantiated_in_runtime_checks": "tests-only",
+      "overlapping_contracts": [
+        "CalfStudentReadPort",
+        "JourneyStudentReadPort",
+        "StudentRepository"
+      ],
+      "ownership_domain": "Learner",
+      "consumer_domain": "API Router",
+      "classification": "A",
+      "secondary_classification": [],
+      "recommended_disposition": "keep",
+      "risk": "low",
+      "notes": "Runtime path: deps.get_student_lookup -> app.state.student_lookup; require_student helper is untyped."
+    },
+    {
+      "contract_name": "AnalysisRunReadPort",
+      "contract_kind": "protocol",
+      "module": "app.api.ports",
+      "rel": "app/api/ports.py",
+      "line": 32,
+      "runtime_checkable": true,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "list_analysis_runs",
+          "signature": "list_analysis_runs(essay_id: int) -> list[dict[str, Any]]",
+          "params": [
+            {
+              "name": "essay_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[dict[str, Any]]"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "tests.test_v095g_facade_contraction",
+          "role": "test",
+          "rel": "tests/test_v095g_facade_contraction.py",
+          "evidence": [
+            [
+              "import",
+              "app.api.ports:AnalysisRunReadPort"
+            ],
+            [
+              "runtime_check",
+              "175: AnalysisRunReadPort"
+            ],
+            [
+              "consumer_symbols",
+              "TestRouterDependencyElimination@139;test_api_ports_exact_method_sets@150;test_concrete_repositories_satisfy_api_ports@170"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.analysis::SQLiteAnalysisRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "tests-only",
+      "instantiated_in_runtime_checks": "tests-only",
+      "overlapping_contracts": [
+        "MetricRepository"
+      ],
+      "ownership_domain": "Analysis",
+      "consumer_domain": "API Router",
+      "classification": "A",
+      "secondary_classification": [],
+      "recommended_disposition": "keep",
+      "risk": "low",
+      "notes": "Runtime path: deps.get_analysis_runs_reader -> app.state.analysis_runs_reader."
+    },
+    {
+      "contract_name": "CalfReadPort",
+      "contract_kind": "protocol",
+      "module": "app.api.ports",
+      "rel": "app/api/ports.py",
+      "line": 39,
+      "runtime_checkable": true,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "list_analysis_units",
+          "signature": "list_analysis_units(submission_id: int, analysis_run_id: str | None=...) -> list[dict[str, Any]]",
+          "params": [
+            {
+              "name": "submission_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            },
+            {
+              "name": "analysis_run_id",
+              "kind": "positional",
+              "annotation": "str | None",
+              "has_default": true
+            }
+          ],
+          "return_annotation": "list[dict[str, Any]]"
+        },
+        {
+          "name": "list_error_annotations",
+          "signature": "list_error_annotations(submission_id: int) -> list[ErrorAnnotation]",
+          "params": [
+            {
+              "name": "submission_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[ErrorAnnotation]"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "tests.test_v095g_facade_contraction",
+          "role": "test",
+          "rel": "tests/test_v095g_facade_contraction.py",
+          "evidence": [
+            [
+              "import",
+              "app.api.ports:CalfReadPort"
+            ],
+            [
+              "runtime_check",
+              "176: CalfReadPort"
+            ],
+            [
+              "consumer_symbols",
+              "TestRouterDependencyElimination@139;test_api_ports_exact_method_sets@150;test_concrete_repositories_satisfy_api_ports@170"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.calf::SQLiteCalfRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "tests-only",
+      "instantiated_in_runtime_checks": "tests-only",
+      "overlapping_contracts": [
+        "CalfDataPort",
+        "ErrorAnnotationRepository",
+        "MetricRepository"
+      ],
+      "ownership_domain": "CALF",
+      "consumer_domain": "API Router",
+      "classification": "A",
+      "secondary_classification": [],
+      "recommended_disposition": "keep",
+      "risk": "low",
+      "notes": "Runtime path: deps.get_calf_reader -> app.state.calf_reader."
+    },
+    {
+      "contract_name": "ResearchExportWritePort",
+      "contract_kind": "protocol",
+      "module": "app.api.ports",
+      "rel": "app/api/ports.py",
+      "line": 48,
+      "runtime_checkable": true,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "save_export_job",
+          "signature": "save_export_job(job: dict) -> dict",
+          "params": [
+            {
+              "name": "job",
+              "kind": "positional",
+              "annotation": "dict",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "dict"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "tests.test_v095g_facade_contraction",
+          "role": "test",
+          "rel": "tests/test_v095g_facade_contraction.py",
+          "evidence": [
+            [
+              "import",
+              "app.api.ports:ResearchExportWritePort"
+            ],
+            [
+              "runtime_check",
+              "177: ResearchExportWritePort"
+            ],
+            [
+              "consumer_symbols",
+              "TestRouterDependencyElimination@139;test_api_ports_exact_method_sets@150;test_concrete_repositories_satisfy_api_ports@170"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.research::SQLiteResearchRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "tests-only",
+      "instantiated_in_runtime_checks": "tests-only",
+      "overlapping_contracts": [],
+      "ownership_domain": "Research",
+      "consumer_domain": "API Router",
+      "classification": "A",
+      "secondary_classification": [],
+      "recommended_disposition": "keep",
+      "risk": "low",
+      "notes": "Router-owned best-effort save_export_job (research.py:34)."
+    },
+    {
+      "contract_name": "StudentSubmissionListPort",
+      "contract_kind": "protocol",
+      "module": "app.api.ports",
+      "rel": "app/api/ports.py",
+      "line": 55,
+      "runtime_checkable": true,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "list_student_submissions",
+          "signature": "list_student_submissions(student_id: str) -> list[dict[str, Any]]",
+          "params": [
+            {
+              "name": "student_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[dict[str, Any]]"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "tests.test_v095g_facade_contraction",
+          "role": "test",
+          "rel": "tests/test_v095g_facade_contraction.py",
+          "evidence": [
+            [
+              "import",
+              "app.api.ports:StudentSubmissionListPort"
+            ],
+            [
+              "runtime_check",
+              "178: StudentSubmissionListPort"
+            ],
+            [
+              "consumer_symbols",
+              "TestRouterDependencyElimination@139;test_api_ports_exact_method_sets@150;test_concrete_repositories_satisfy_api_ports@170"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.submission::SQLiteSubmissionRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "tests-only",
+      "instantiated_in_runtime_checks": "tests-only",
+      "overlapping_contracts": [
+        "AdminSubmissionReadPort",
+        "CalfSubmissionReadPort",
+        "EssayRepository",
+        "ResearchSubmissionReadPort"
+      ],
+      "ownership_domain": "Submission",
+      "consumer_domain": "API Router",
+      "classification": "A",
+      "secondary_classification": [],
+      "recommended_disposition": "keep",
+      "risk": "low",
+      "notes": "Runtime path: deps.get_student_submission_list -> app.state.student_submission_list."
+    },
+    {
+      "contract_name": "RevisionGroupLookupPort",
+      "contract_kind": "protocol",
+      "module": "app.api.ports",
+      "rel": "app/api/ports.py",
+      "line": 62,
+      "runtime_checkable": true,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "get_revision_group_for_submission",
+          "signature": "get_revision_group_for_submission(submission_id: int) -> RevisionGroup | None",
+          "params": [
+            {
+              "name": "submission_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "RevisionGroup | None"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "tests.test_v095g_facade_contraction",
+          "role": "test",
+          "rel": "tests/test_v095g_facade_contraction.py",
+          "evidence": [
+            [
+              "import",
+              "app.api.ports:RevisionGroupLookupPort"
+            ],
+            [
+              "runtime_check",
+              "179: RevisionGroupLookupPort"
+            ],
+            [
+              "consumer_symbols",
+              "TestRouterDependencyElimination@139;test_api_ports_exact_method_sets@150;test_concrete_repositories_satisfy_api_ports@170"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.revision::SQLiteRevisionRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "tests-only",
+      "instantiated_in_runtime_checks": "tests-only",
+      "overlapping_contracts": [
+        "RevisionRepository"
+      ],
+      "ownership_domain": "Revision",
+      "consumer_domain": "API Router",
+      "classification": "A",
+      "secondary_classification": [],
+      "recommended_disposition": "keep",
+      "risk": "low",
+      "notes": "Runtime path: deps.get_revision_group_lookup -> app.state.revision_group_lookup."
+    },
+    {
+      "contract_name": "StudentLearnerReadPort",
+      "contract_kind": "protocol",
+      "module": "app.api.ports",
+      "rel": "app/api/ports.py",
+      "line": 69,
+      "runtime_checkable": true,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "list_student_history",
+          "signature": "list_student_history(student_id: str) -> list[dict[str, Any]]",
+          "params": [
+            {
+              "name": "student_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[dict[str, Any]]"
+        },
+        {
+          "name": "list_history_evidence",
+          "signature": "list_history_evidence(student_id: str) -> list[dict[str, Any]]",
+          "params": [
+            {
+              "name": "student_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[dict[str, Any]]"
+        },
+        {
+          "name": "list_learner_profile_snapshots",
+          "signature": "list_learner_profile_snapshots(student_id: str) -> list[dict[str, Any]]",
+          "params": [
+            {
+              "name": "student_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[dict[str, Any]]"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "tests.test_v095g_facade_contraction",
+          "role": "test",
+          "rel": "tests/test_v095g_facade_contraction.py",
+          "evidence": [
+            [
+              "import",
+              "app.api.ports:StudentLearnerReadPort"
+            ],
+            [
+              "runtime_check",
+              "180: StudentLearnerReadPort"
+            ],
+            [
+              "consumer_symbols",
+              "TestRouterDependencyElimination@139;test_api_ports_exact_method_sets@150;test_concrete_repositories_satisfy_api_ports@170"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.learner::SQLiteLearnerRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "tests-only",
+      "instantiated_in_runtime_checks": "tests-only",
+      "overlapping_contracts": [
+        "LearnerHistoryRepository",
+        "LearnerProfileReadPort",
+        "LearnerProfileRepository"
+      ],
+      "ownership_domain": "Learner",
+      "consumer_domain": "API Router",
+      "classification": "A",
+      "secondary_classification": [],
+      "recommended_disposition": "keep",
+      "risk": "low",
+      "notes": "Runtime path: deps.get_student_learner_reader -> app.state.student_learner_reader."
+    },
+    {
+      "contract_name": "SubmissionCalibrationReadPort",
+      "contract_kind": "protocol",
+      "module": "app.api.ports",
+      "rel": "app/api/ports.py",
+      "line": 80,
+      "runtime_checkable": true,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "get_diagnostic_calibration",
+          "signature": "get_diagnostic_calibration(essay_id: int) -> DiagnosticCalibrationResult | None",
+          "params": [
+            {
+              "name": "essay_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "DiagnosticCalibrationResult | None"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "tests.test_v095g_facade_contraction",
+          "role": "test",
+          "rel": "tests/test_v095g_facade_contraction.py",
+          "evidence": [
+            [
+              "import",
+              "app.api.ports:SubmissionCalibrationReadPort"
+            ],
+            [
+              "runtime_check",
+              "181: SubmissionCalibrationReadPort"
+            ],
+            [
+              "consumer_symbols",
+              "TestRouterDependencyElimination@139;test_api_ports_exact_method_sets@150;test_concrete_repositories_satisfy_api_ports@170"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.calf::SQLiteCalfRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "tests-only",
+      "instantiated_in_runtime_checks": "tests-only",
+      "overlapping_contracts": [
+        "SubmissionCalibrationPort",
+        "_DiagnosticCalibrationReader"
+      ],
+      "ownership_domain": "CALF",
+      "consumer_domain": "API Router",
+      "classification": "A",
+      "secondary_classification": [],
+      "recommended_disposition": "keep",
+      "risk": "low",
+      "notes": "Runtime path: deps.get_submission_calibration_reader -> app.state.submission_calibration_reader."
+    },
+    {
+      "contract_name": "SystemMigrationPort",
+      "contract_kind": "protocol",
+      "module": "app.api.ports",
+      "rel": "app/api/ports.py",
+      "line": 87,
+      "runtime_checkable": true,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "migration_version",
+          "signature": "migration_version() -> int",
+          "params": [],
+          "return_annotation": "int"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "tests.test_v095g_facade_contraction",
+          "role": "test",
+          "rel": "tests/test_v095g_facade_contraction.py",
+          "evidence": [
+            [
+              "import",
+              "app.api.ports:SystemMigrationPort"
+            ],
+            [
+              "runtime_check",
+              "182: SystemMigrationPort"
+            ],
+            [
+              "consumer_symbols",
+              "TestRouterDependencyElimination@139;test_api_ports_exact_method_sets@150;test_concrete_repositories_satisfy_api_ports@170"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.system::SQLiteSystemRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "tests-only",
+      "instantiated_in_runtime_checks": "tests-only",
+      "overlapping_contracts": [
+        "ConfigurationRepository"
+      ],
+      "ownership_domain": "System",
+      "consumer_domain": "API Router",
+      "classification": "A",
+      "secondary_classification": [],
+      "recommended_disposition": "keep",
+      "risk": "low",
+      "notes": "Runtime path: deps.get_system_migration_reader -> app.state.system_migration_reader."
+    },
+    {
+      "contract_name": "CalfDataPort",
+      "contract_kind": "protocol",
+      "module": "app.services.calf",
+      "rel": "app/services/calf.py",
+      "line": 10,
+      "runtime_checkable": true,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "list_analysis_units",
+          "signature": "list_analysis_units(submission_id: int, analysis_run_id: str | None=...) -> list[dict[str, Any]]",
+          "params": [
+            {
+              "name": "submission_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            },
+            {
+              "name": "analysis_run_id",
+              "kind": "positional",
+              "annotation": "str | None",
+              "has_default": true
+            }
+          ],
+          "return_annotation": "list[dict[str, Any]]"
+        },
+        {
+          "name": "list_error_annotations",
+          "signature": "list_error_annotations(submission_id: int) -> list[ErrorAnnotation]",
+          "params": [
+            {
+              "name": "submission_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[ErrorAnnotation]"
+        },
+        {
+          "name": "save_error_annotations",
+          "signature": "save_error_annotations(submission_id: int, annotations: list[ErrorAnnotation]) -> list[ErrorAnnotation]",
+          "params": [
+            {
+              "name": "submission_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            },
+            {
+              "name": "annotations",
+              "kind": "positional",
+              "annotation": "list[ErrorAnnotation]",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[ErrorAnnotation]"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "tests.test_v095f5a_calf_service_narrowing",
+          "role": "test",
+          "rel": "tests/test_v095f5a_calf_service_narrowing.py",
+          "evidence": [
+            [
+              "import",
+              "app.services.calf:CalfDataPort"
+            ],
+            [
+              "runtime_check",
+              "217: CalfDataPort"
+            ],
+            [
+              "consumer_symbols",
+              "TestFourPorts@174;test_concrete_repositories_and_facade_structurally_satisfy_ports@210;test_exact_names_methods_and_source_signatures@175"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.calf::SQLiteCalfRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "tests-only",
+      "instantiated_in_runtime_checks": "tests-only",
+      "overlapping_contracts": [
+        "CalfReadPort",
+        "ErrorAnnotationRepository",
+        "MetricRepository"
+      ],
+      "ownership_domain": "CALF",
+      "consumer_domain": "Service",
+      "classification": "A",
+      "secondary_classification": [],
+      "recommended_disposition": "keep",
+      "risk": "low",
+      "notes": "Exact CalfService call set."
+    },
+    {
+      "contract_name": "CalfSubmissionReadPort",
+      "contract_kind": "protocol",
+      "module": "app.services.calf",
+      "rel": "app/services/calf.py",
+      "line": 21,
+      "runtime_checkable": true,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "get_submission_bundle",
+          "signature": "get_submission_bundle(essay_id: int) -> dict[str, Any] | None",
+          "params": [
+            {
+              "name": "essay_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "dict[str, Any] | None"
+        },
+        {
+          "name": "list_student_submissions",
+          "signature": "list_student_submissions(student_id: str) -> list[dict[str, Any]]",
+          "params": [
+            {
+              "name": "student_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[dict[str, Any]]"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "tests.test_v095f5a_calf_service_narrowing",
+          "role": "test",
+          "rel": "tests/test_v095f5a_calf_service_narrowing.py",
+          "evidence": [
+            [
+              "import",
+              "app.services.calf:CalfSubmissionReadPort"
+            ],
+            [
+              "runtime_check",
+              "218: CalfSubmissionReadPort"
+            ],
+            [
+              "consumer_symbols",
+              "TestFourPorts@174;test_concrete_repositories_and_facade_structurally_satisfy_ports@210;test_exact_names_methods_and_source_signatures@175"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.submission::SQLiteSubmissionRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "tests-only",
+      "instantiated_in_runtime_checks": "tests-only",
+      "overlapping_contracts": [
+        "AdminSubmissionReadPort",
+        "EssayRepository",
+        "PracticeSubmissionReadPort",
+        "ResearchSubmissionReadPort",
+        "RevisionRepository",
+        "StudentSubmissionListPort",
+        "SubmissionBundleReadPort",
+        "SubmissionDataPort",
+        "_SubmissionBundleReader"
+      ],
+      "ownership_domain": "Submission",
+      "consumer_domain": "Service",
+      "classification": "A",
+      "secondary_classification": [],
+      "recommended_disposition": "keep",
+      "risk": "low",
+      "notes": "Exact CalfService call set; intentional consumer-owned duplication of bundle/student-submission reads."
+    },
+    {
+      "contract_name": "CalfAnalysisReadPort",
+      "contract_kind": "protocol",
+      "module": "app.services.calf",
+      "rel": "app/services/calf.py",
+      "line": 30,
+      "runtime_checkable": true,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "get_latest_analysis_run",
+          "signature": "get_latest_analysis_run(essay_id: int) -> dict[str, Any] | None",
+          "params": [
+            {
+              "name": "essay_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "dict[str, Any] | None"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "tests.test_v095f5a_calf_service_narrowing",
+          "role": "test",
+          "rel": "tests/test_v095f5a_calf_service_narrowing.py",
+          "evidence": [
+            [
+              "import",
+              "app.services.calf:CalfAnalysisReadPort"
+            ],
+            [
+              "runtime_check",
+              "219: CalfAnalysisReadPort"
+            ],
+            [
+              "consumer_symbols",
+              "TestFourPorts@174;test_concrete_repositories_and_facade_structurally_satisfy_ports@210;test_exact_names_methods_and_source_signatures@175"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.analysis::SQLiteAnalysisRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "tests-only",
+      "instantiated_in_runtime_checks": "tests-only",
+      "overlapping_contracts": [
+        "MetricRepository",
+        "RevisionRepository",
+        "_AnalysisRunReader"
+      ],
+      "ownership_domain": "Analysis",
+      "consumer_domain": "Service",
+      "classification": "A",
+      "secondary_classification": [],
+      "recommended_disposition": "keep",
+      "risk": "low",
+      "notes": "Exact CalfService call set; overlaps MetricRepository/RevisionRepository get_latest_analysis_run intentionally."
+    },
+    {
+      "contract_name": "CalfStudentReadPort",
+      "contract_kind": "protocol",
+      "module": "app.services.calf",
+      "rel": "app/services/calf.py",
+      "line": 37,
+      "runtime_checkable": true,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "get_student",
+          "signature": "get_student(student_id: str) -> dict[str, Any] | None",
+          "params": [
+            {
+              "name": "student_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "dict[str, Any] | None"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "tests.test_v095f5a_calf_service_narrowing",
+          "role": "test",
+          "rel": "tests/test_v095f5a_calf_service_narrowing.py",
+          "evidence": [
+            [
+              "import",
+              "app.services.calf:CalfStudentReadPort"
+            ],
+            [
+              "runtime_check",
+              "220: CalfStudentReadPort"
+            ],
+            [
+              "consumer_symbols",
+              "TestFourPorts@174;test_concrete_repositories_and_facade_structurally_satisfy_ports@210;test_exact_names_methods_and_source_signatures@175"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.learner::SQLiteLearnerRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "tests-only",
+      "instantiated_in_runtime_checks": "tests-only",
+      "overlapping_contracts": [
+        "JourneyStudentReadPort",
+        "StudentLookupPort",
+        "StudentRepository"
+      ],
+      "ownership_domain": "Learner",
+      "consumer_domain": "Service",
+      "classification": "A",
+      "secondary_classification": [],
+      "recommended_disposition": "keep",
+      "risk": "low",
+      "notes": "Exact CalfService call set."
+    },
+    {
+      "contract_name": "ResearchSubmissionReadPort",
+      "contract_kind": "protocol",
+      "module": "app.research.service",
+      "rel": "app/research/service.py",
+      "line": 45,
+      "runtime_checkable": true,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "list_all_submissions",
+          "signature": "list_all_submissions()",
+          "params": [],
+          "return_annotation": null
+        },
+        {
+          "name": "list_student_submissions",
+          "signature": "list_student_submissions(student_id: str) -> list[dict[str, Any]]",
+          "params": [
+            {
+              "name": "student_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[dict[str, Any]]"
+        },
+        {
+          "name": "get_submission_bundle",
+          "signature": "get_submission_bundle(essay_id: int) -> dict[str, Any] | None",
+          "params": [
+            {
+              "name": "essay_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "dict[str, Any] | None"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "tests.test_v095f5b_research_service_narrowing",
+          "role": "test",
+          "rel": "tests/test_v095f5b_research_service_narrowing.py",
+          "evidence": [
+            [
+              "import",
+              "app.research.service:ResearchSubmissionReadPort"
+            ],
+            [
+              "runtime_check",
+              "202: ResearchSubmissionReadPort"
+            ],
+            [
+              "consumer_symbols",
+              "TestThreePorts@155;test_concrete_repositories_and_facade_structurally_satisfy_ports@197;test_exact_names_methods_and_source_signatures@156"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.submission::SQLiteSubmissionRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "tests-only",
+      "instantiated_in_runtime_checks": "tests-only",
+      "overlapping_contracts": [
+        "AdminSubmissionReadPort",
+        "CalfSubmissionReadPort",
+        "EssayRepository",
+        "PracticeSubmissionReadPort",
+        "RevisionRepository",
+        "StudentSubmissionListPort",
+        "SubmissionBundleReadPort",
+        "SubmissionDataPort",
+        "_SubmissionBundleReader"
+      ],
+      "ownership_domain": "Submission",
+      "consumer_domain": "Service",
+      "classification": "A",
+      "secondary_classification": [],
+      "recommended_disposition": "keep",
+      "risk": "low",
+      "notes": "Exact ResearchDataService call set."
+    },
+    {
+      "contract_name": "ResearchReviewPort",
+      "contract_kind": "protocol",
+      "module": "app.research.service",
+      "rel": "app/research/service.py",
+      "line": 56,
+      "runtime_checkable": true,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "save_human_review",
+          "signature": "save_human_review(review) -> dict",
+          "params": [
+            {
+              "name": "review",
+              "kind": "positional",
+              "annotation": null,
+              "has_default": false
+            }
+          ],
+          "return_annotation": "dict"
+        },
+        {
+          "name": "list_human_reviews",
+          "signature": "list_human_reviews(target_type: str | None=..., target_id: str | None=...) -> list[dict]",
+          "params": [
+            {
+              "name": "target_type",
+              "kind": "positional",
+              "annotation": "str | None",
+              "has_default": true
+            },
+            {
+              "name": "target_id",
+              "kind": "positional",
+              "annotation": "str | None",
+              "has_default": true
+            }
+          ],
+          "return_annotation": "list[dict]"
+        },
+        {
+          "name": "apply_pii_review",
+          "signature": "apply_pii_review(submission_id: int, reviews: list) -> list[dict]",
+          "params": [
+            {
+              "name": "submission_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            },
+            {
+              "name": "reviews",
+              "kind": "positional",
+              "annotation": "list",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[dict]"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "tests.test_v095f5b_research_service_narrowing",
+          "role": "test",
+          "rel": "tests/test_v095f5b_research_service_narrowing.py",
+          "evidence": [
+            [
+              "import",
+              "app.research.service:ResearchReviewPort"
+            ],
+            [
+              "runtime_check",
+              "203: ResearchReviewPort"
+            ],
+            [
+              "runtime_check",
+              "206: ResearchReviewPort"
+            ],
+            [
+              "consumer_symbols",
+              "TestThreePorts@155;test_concrete_repositories_and_facade_structurally_satisfy_ports@197;test_exact_names_methods_and_source_signatures@156"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.research::SQLiteResearchRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "tests-only",
+      "instantiated_in_runtime_checks": "tests-only",
+      "overlapping_contracts": [],
+      "ownership_domain": "Research",
+      "consumer_domain": "Service",
+      "classification": "A",
+      "secondary_classification": [],
+      "recommended_disposition": "keep",
+      "risk": "low",
+      "notes": "Exact ResearchDataService call set."
+    },
+    {
+      "contract_name": "ResearchExportReadPort",
+      "contract_kind": "protocol",
+      "module": "app.research.service",
+      "rel": "app/research/service.py",
+      "line": 67,
+      "runtime_checkable": true,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "list_export_jobs",
+          "signature": "list_export_jobs() -> list[dict]",
+          "params": [],
+          "return_annotation": "list[dict]"
+        },
+        {
+          "name": "get_export_job",
+          "signature": "get_export_job(export_id: str) -> dict | None",
+          "params": [
+            {
+              "name": "export_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "dict | None"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "tests.test_v095f5b_research_service_narrowing",
+          "role": "test",
+          "rel": "tests/test_v095f5b_research_service_narrowing.py",
+          "evidence": [
+            [
+              "import",
+              "app.research.service:ResearchExportReadPort"
+            ],
+            [
+              "runtime_check",
+              "204: ResearchExportReadPort"
+            ],
+            [
+              "runtime_check",
+              "206: ResearchExportReadPort"
+            ],
+            [
+              "consumer_symbols",
+              "TestThreePorts@155;test_concrete_repositories_and_facade_structurally_satisfy_ports@197;test_exact_names_methods_and_source_signatures@156"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.research::SQLiteResearchRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "tests-only",
+      "instantiated_in_runtime_checks": "tests-only",
+      "overlapping_contracts": [],
+      "ownership_domain": "Research",
+      "consumer_domain": "Service",
+      "classification": "A",
+      "secondary_classification": [],
+      "recommended_disposition": "keep",
+      "risk": "low",
+      "notes": "Exact ResearchDataService call set; save_export_job remains Router-owned (not in this Port)."
+    },
+    {
+      "contract_name": "AdminConfigurationReadPort",
+      "contract_kind": "protocol",
+      "module": "app.services.admin_reanalysis",
+      "rel": "app/services/admin_reanalysis.py",
+      "line": 18,
+      "runtime_checkable": true,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "get_configuration",
+          "signature": "get_configuration(configuration_id_or_version: str) -> ConfigurationVersion | None",
+          "params": [
+            {
+              "name": "configuration_id_or_version",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "ConfigurationVersion | None"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "tests.test_v095f6b_admin_reanalysis_narrowing",
+          "role": "test",
+          "rel": "tests/test_v095f6b_admin_reanalysis_narrowing.py",
+          "evidence": [
+            [
+              "import",
+              "app.services.admin_reanalysis:AdminConfigurationReadPort"
+            ],
+            [
+              "runtime_check",
+              "168: AdminConfigurationReadPort"
+            ],
+            [
+              "consumer_symbols",
+              "TestPortContracts@137;test_concrete_repositories_and_facade_structurally_satisfy_ports@165;test_exact_names_methods_and_source_signatures@138"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.configuration::SQLiteConfigurationRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "tests-only",
+      "instantiated_in_runtime_checks": "tests-only",
+      "overlapping_contracts": [
+        "ConfigurationRepository"
+      ],
+      "ownership_domain": "Configuration",
+      "consumer_domain": "Service",
+      "classification": "A",
+      "secondary_classification": [],
+      "recommended_disposition": "keep",
+      "risk": "low",
+      "notes": "Exact AdminReanalysisService call set."
+    },
+    {
+      "contract_name": "AdminSubmissionReadPort",
+      "contract_kind": "protocol",
+      "module": "app.services.admin_reanalysis",
+      "rel": "app/services/admin_reanalysis.py",
+      "line": 25,
+      "runtime_checkable": true,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "get_submission_bundle",
+          "signature": "get_submission_bundle(essay_id: int) -> dict[str, Any] | None",
+          "params": [
+            {
+              "name": "essay_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "dict[str, Any] | None"
+        },
+        {
+          "name": "list_student_submissions",
+          "signature": "list_student_submissions(student_id: str) -> list[dict[str, Any]]",
+          "params": [
+            {
+              "name": "student_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[dict[str, Any]]"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "tests.test_v095f6b_admin_reanalysis_narrowing",
+          "role": "test",
+          "rel": "tests/test_v095f6b_admin_reanalysis_narrowing.py",
+          "evidence": [
+            [
+              "import",
+              "app.services.admin_reanalysis:AdminSubmissionReadPort"
+            ],
+            [
+              "runtime_check",
+              "169: AdminSubmissionReadPort"
+            ],
+            [
+              "consumer_symbols",
+              "TestPortContracts@137;test_concrete_repositories_and_facade_structurally_satisfy_ports@165;test_exact_names_methods_and_source_signatures@138"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.submission::SQLiteSubmissionRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "tests-only",
+      "instantiated_in_runtime_checks": "tests-only",
+      "overlapping_contracts": [
+        "CalfSubmissionReadPort",
+        "EssayRepository",
+        "PracticeSubmissionReadPort",
+        "ResearchSubmissionReadPort",
+        "RevisionRepository",
+        "StudentSubmissionListPort",
+        "SubmissionBundleReadPort",
+        "SubmissionDataPort",
+        "_SubmissionBundleReader"
+      ],
+      "ownership_domain": "Submission",
+      "consumer_domain": "Service",
+      "classification": "A",
+      "secondary_classification": [],
+      "recommended_disposition": "keep",
+      "risk": "low",
+      "notes": "Exact AdminReanalysisService call set."
+    },
+    {
+      "contract_name": "AdminAnalysisPort",
+      "contract_kind": "protocol",
+      "module": "app.services.admin_reanalysis",
+      "rel": "app/services/admin_reanalysis.py",
+      "line": 34,
+      "runtime_checkable": true,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "get_analysis_run",
+          "signature": "get_analysis_run(analysis_run_id: str) -> dict[str, Any] | None",
+          "params": [
+            {
+              "name": "analysis_run_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "dict[str, Any] | None"
+        },
+        {
+          "name": "save_analysis_run",
+          "signature": "save_analysis_run(essay_id: int, analysis: AnalysisResult) -> AnalysisResult",
+          "params": [
+            {
+              "name": "essay_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            },
+            {
+              "name": "analysis",
+              "kind": "positional",
+              "annotation": "AnalysisResult",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "AnalysisResult"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "tests.test_v095f6b_admin_reanalysis_narrowing",
+          "role": "test",
+          "rel": "tests/test_v095f6b_admin_reanalysis_narrowing.py",
+          "evidence": [
+            [
+              "import",
+              "app.services.admin_reanalysis:AdminAnalysisPort"
+            ],
+            [
+              "runtime_check",
+              "170: AdminAnalysisPort"
+            ],
+            [
+              "consumer_symbols",
+              "TestPortContracts@137;test_concrete_repositories_and_facade_structurally_satisfy_ports@165;test_exact_names_methods_and_source_signatures@138"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.analysis::SQLiteAnalysisRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "tests-only",
+      "instantiated_in_runtime_checks": "tests-only",
+      "overlapping_contracts": [
+        "AnalysisRunWritePort",
+        "MetricRepository",
+        "SubmissionAnalysisPort"
+      ],
+      "ownership_domain": "Analysis",
+      "consumer_domain": "Service",
+      "classification": "A",
+      "secondary_classification": [],
+      "recommended_disposition": "keep",
+      "risk": "low",
+      "notes": "Exact AdminReanalysisService call set; get_analysis_run only here and on the concrete repository."
+    },
+    {
+      "contract_name": "SubmissionSystemPort",
+      "contract_kind": "protocol",
+      "module": "app.services.submission",
+      "rel": "app/services/submission.py",
+      "line": 35,
+      "runtime_checkable": true,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "record_versions",
+          "signature": "record_versions(versions: dict[str, str]) -> None",
+          "params": [
+            {
+              "name": "versions",
+              "kind": "positional",
+              "annotation": "dict[str, str]",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "None"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "app.services.factory",
+          "role": "production",
+          "rel": "app/services/factory.py",
+          "evidence": [
+            [
+              "import",
+              "submission:SubmissionSystemPort"
+            ],
+            [
+              "annotation",
+              "71: SubmissionSystemPort"
+            ],
+            [
+              "consumer_symbols",
+              "build_submission_service@68"
+            ]
+          ]
+        },
+        {
+          "module": "tests.test_v095f6c_submission_service_narrowing",
+          "role": "test",
+          "rel": "tests/test_v095f6c_submission_service_narrowing.py",
+          "evidence": [
+            [
+              "import",
+              "app.services.submission:SubmissionSystemPort"
+            ],
+            [
+              "runtime_check",
+              "177: SubmissionSystemPort"
+            ],
+            [
+              "consumer_symbols",
+              "TestPortContracts@142;test_concrete_repositories_and_facade_structurally_satisfy_ports@174;test_exact_names_methods_and_source_signatures@143;test_no_cross_port_method_and_exact_eleven_method_union@182"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.system::SQLiteSystemRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "production",
+      "instantiated_in_runtime_checks": "tests-only",
+      "overlapping_contracts": [
+        "SystemVersionRepository"
+      ],
+      "ownership_domain": "System",
+      "consumer_domain": "Service",
+      "classification": "A",
+      "secondary_classification": [],
+      "recommended_disposition": "keep",
+      "risk": "low",
+      "notes": "Exact SubmissionService call set."
+    },
+    {
+      "contract_name": "SubmissionDataPort",
+      "contract_kind": "protocol",
+      "module": "app.services.submission",
+      "rel": "app/services/submission.py",
+      "line": 42,
+      "runtime_checkable": true,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "save_essay",
+          "signature": "save_essay(submission: EssaySubmission, synthetic: bool=...) -> int",
+          "params": [
+            {
+              "name": "submission",
+              "kind": "positional",
+              "annotation": "EssaySubmission",
+              "has_default": false
+            },
+            {
+              "name": "synthetic",
+              "kind": "kwonly",
+              "annotation": "bool",
+              "has_default": true
+            }
+          ],
+          "return_annotation": "int"
+        },
+        {
+          "name": "prior_records",
+          "signature": "prior_records(submission: EssaySubmission) -> list[dict[str, Any]]",
+          "params": [
+            {
+              "name": "submission",
+              "kind": "positional",
+              "annotation": "EssaySubmission",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[dict[str, Any]]"
+        },
+        {
+          "name": "get_submission_bundle",
+          "signature": "get_submission_bundle(essay_id: int) -> dict[str, Any] | None",
+          "params": [
+            {
+              "name": "essay_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "dict[str, Any] | None"
+        },
+        {
+          "name": "save_feedback",
+          "signature": "save_feedback(essay_id: int, result: ProviderResult, analysis_version: str) -> None",
+          "params": [
+            {
+              "name": "essay_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            },
+            {
+              "name": "result",
+              "kind": "positional",
+              "annotation": "ProviderResult",
+              "has_default": false
+            },
+            {
+              "name": "analysis_version",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "None"
+        },
+        {
+          "name": "save_history",
+          "signature": "save_history(student_id: str, essay_id: int, history: HistoryResult) -> None",
+          "params": [
+            {
+              "name": "student_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            },
+            {
+              "name": "essay_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            },
+            {
+              "name": "history",
+              "kind": "positional",
+              "annotation": "HistoryResult",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "None"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "app.services.factory",
+          "role": "production",
+          "rel": "app/services/factory.py",
+          "evidence": [
+            [
+              "import",
+              "submission:SubmissionDataPort"
+            ],
+            [
+              "annotation",
+              "72: SubmissionDataPort"
+            ],
+            [
+              "consumer_symbols",
+              "build_submission_service@68"
+            ]
+          ]
+        },
+        {
+          "module": "tests.test_v095f6c_submission_service_narrowing",
+          "role": "test",
+          "rel": "tests/test_v095f6c_submission_service_narrowing.py",
+          "evidence": [
+            [
+              "import",
+              "app.services.submission:SubmissionDataPort"
+            ],
+            [
+              "runtime_check",
+              "178: SubmissionDataPort"
+            ],
+            [
+              "consumer_symbols",
+              "TestPortContracts@142;test_concrete_repositories_and_facade_structurally_satisfy_ports@174;test_exact_names_methods_and_source_signatures@143;test_no_cross_port_method_and_exact_eleven_method_union@182"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.submission::SQLiteSubmissionRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "production",
+      "instantiated_in_runtime_checks": "tests-only",
+      "overlapping_contracts": [
+        "AdminSubmissionReadPort",
+        "CalfSubmissionReadPort",
+        "EssayRepository",
+        "FeedbackRepository",
+        "LearnerHistoryRepository",
+        "PracticeSubmissionReadPort",
+        "PriorRecordsPort",
+        "ResearchSubmissionReadPort",
+        "RevisionRepository",
+        "SubmissionBundleReadPort",
+        "_SubmissionBundleReader"
+      ],
+      "ownership_domain": "Submission",
+      "consumer_domain": "Service",
+      "classification": "A",
+      "secondary_classification": [],
+      "recommended_disposition": "keep",
+      "risk": "low",
+      "notes": "Exact SubmissionService call set; also satisfies LearnerHistoryService(PriorRecordsPort)."
+    },
+    {
+      "contract_name": "SubmissionAnalysisPort",
+      "contract_kind": "protocol",
+      "module": "app.services.submission",
+      "rel": "app/services/submission.py",
+      "line": 57,
+      "runtime_checkable": true,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "save_analysis_run",
+          "signature": "save_analysis_run(essay_id: int, analysis: AnalysisResult) -> AnalysisResult",
+          "params": [
+            {
+              "name": "essay_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            },
+            {
+              "name": "analysis",
+              "kind": "positional",
+              "annotation": "AnalysisResult",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "AnalysisResult"
+        },
+        {
+          "name": "save_analysis",
+          "signature": "save_analysis(essay_id: int, analysis: AnalysisResult) -> None",
+          "params": [
+            {
+              "name": "essay_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            },
+            {
+              "name": "analysis",
+              "kind": "positional",
+              "annotation": "AnalysisResult",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "None"
+        },
+        {
+          "name": "save_diagnosis",
+          "signature": "save_diagnosis(essay_id: int, diagnosis: DiagnosisResult) -> None",
+          "params": [
+            {
+              "name": "essay_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            },
+            {
+              "name": "diagnosis",
+              "kind": "positional",
+              "annotation": "DiagnosisResult",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "None"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "app.services.factory",
+          "role": "production",
+          "rel": "app/services/factory.py",
+          "evidence": [
+            [
+              "import",
+              "submission:SubmissionAnalysisPort"
+            ],
+            [
+              "annotation",
+              "73: SubmissionAnalysisPort"
+            ],
+            [
+              "consumer_symbols",
+              "build_submission_service@68"
+            ]
+          ]
+        },
+        {
+          "module": "tests.test_v095f6c_submission_service_narrowing",
+          "role": "test",
+          "rel": "tests/test_v095f6c_submission_service_narrowing.py",
+          "evidence": [
+            [
+              "import",
+              "app.services.submission:SubmissionAnalysisPort"
+            ],
+            [
+              "runtime_check",
+              "179: SubmissionAnalysisPort"
+            ],
+            [
+              "consumer_symbols",
+              "TestPortContracts@142;test_concrete_repositories_and_facade_structurally_satisfy_ports@174;test_exact_names_methods_and_source_signatures@143;test_no_cross_port_method_and_exact_eleven_method_union@182"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.analysis::SQLiteAnalysisRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "production",
+      "instantiated_in_runtime_checks": "tests-only",
+      "overlapping_contracts": [
+        "AdminAnalysisPort",
+        "AnalysisRunWritePort",
+        "DiagnosisRepository",
+        "MetricRepository"
+      ],
+      "ownership_domain": "Analysis",
+      "consumer_domain": "Service",
+      "classification": "A",
+      "secondary_classification": [],
+      "recommended_disposition": "keep",
+      "risk": "low",
+      "notes": "Exact SubmissionService call set."
+    },
+    {
+      "contract_name": "SubmissionCalibrationPort",
+      "contract_kind": "protocol",
+      "module": "app.services.submission",
+      "rel": "app/services/submission.py",
+      "line": 68,
+      "runtime_checkable": true,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "save_diagnostic_calibration",
+          "signature": "save_diagnostic_calibration(essay_id: int, calibration: DiagnosticCalibrationResult) -> DiagnosticCalibrationResult",
+          "params": [
+            {
+              "name": "essay_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            },
+            {
+              "name": "calibration",
+              "kind": "positional",
+              "annotation": "DiagnosticCalibrationResult",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "DiagnosticCalibrationResult"
+        },
+        {
+          "name": "get_diagnostic_calibration",
+          "signature": "get_diagnostic_calibration(essay_id: int) -> DiagnosticCalibrationResult | None",
+          "params": [
+            {
+              "name": "essay_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "DiagnosticCalibrationResult | None"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "app.services.factory",
+          "role": "production",
+          "rel": "app/services/factory.py",
+          "evidence": [
+            [
+              "import",
+              "submission:SubmissionCalibrationPort"
+            ],
+            [
+              "annotation",
+              "74: SubmissionCalibrationPort"
+            ],
+            [
+              "consumer_symbols",
+              "build_submission_service@68"
+            ]
+          ]
+        },
+        {
+          "module": "tests.test_v095f6c_submission_service_narrowing",
+          "role": "test",
+          "rel": "tests/test_v095f6c_submission_service_narrowing.py",
+          "evidence": [
+            [
+              "import",
+              "app.services.submission:SubmissionCalibrationPort"
+            ],
+            [
+              "runtime_check",
+              "180: SubmissionCalibrationPort"
+            ],
+            [
+              "consumer_symbols",
+              "TestPortContracts@142;test_concrete_repositories_and_facade_structurally_satisfy_ports@174;test_exact_names_methods_and_source_signatures@143;test_no_cross_port_method_and_exact_eleven_method_union@182"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.calf::SQLiteCalfRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "production",
+      "instantiated_in_runtime_checks": "tests-only",
+      "overlapping_contracts": [
+        "SubmissionCalibrationReadPort",
+        "_DiagnosticCalibrationReader"
+      ],
+      "ownership_domain": "CALF",
+      "consumer_domain": "Service",
+      "classification": "A",
+      "secondary_classification": [],
+      "recommended_disposition": "keep",
+      "risk": "low",
+      "notes": "Exact SubmissionService call set; CALF hasattr guards removed in F6C."
+    },
+    {
+      "contract_name": "SubmissionBundleReadPort",
+      "contract_kind": "protocol",
+      "module": "app.services.reanalysis",
+      "rel": "app/services/reanalysis.py",
+      "line": 11,
+      "runtime_checkable": true,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "get_submission_bundle",
+          "signature": "get_submission_bundle(essay_id: int) -> dict[str, Any] | None",
+          "params": [
+            {
+              "name": "essay_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "dict[str, Any] | None"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "tests.test_v095f4_reanalysis_journey_narrowing",
+          "role": "test",
+          "rel": "tests/test_v095f4_reanalysis_journey_narrowing.py",
+          "evidence": [
+            [
+              "import",
+              "app.services.reanalysis:SubmissionBundleReadPort"
+            ],
+            [
+              "runtime_check",
+              "270: SubmissionBundleReadPort"
+            ],
+            [
+              "consumer_symbols",
+              "TestFourPorts@223;test_concrete_repositories_and_facade_structurally_satisfy_ports@263;test_exact_names_methods_and_source_signatures@224"
+            ]
+          ]
+        },
+        {
+          "module": "tests.test_v095g_facade_contraction",
+          "role": "test",
+          "rel": "tests/test_v095g_facade_contraction.py",
+          "evidence": [
+            [
+              "import",
+              "app.api.ports:SubmissionBundleReadPort"
+            ],
+            [
+              "runtime_check",
+              "173: SubmissionBundleReadPort"
+            ],
+            [
+              "consumer_symbols",
+              "TestRouterDependencyElimination@139;test_api_ports_exact_method_sets@150;test_concrete_repositories_satisfy_api_ports@170"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.submission::SQLiteSubmissionRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "tests-only",
+      "instantiated_in_runtime_checks": "tests-only",
+      "overlapping_contracts": [
+        "AdminSubmissionReadPort",
+        "CalfSubmissionReadPort",
+        "EssayRepository",
+        "PracticeSubmissionReadPort",
+        "ResearchSubmissionReadPort",
+        "RevisionRepository",
+        "SubmissionDataPort",
+        "_SubmissionBundleReader"
+      ],
+      "ownership_domain": "Submission",
+      "consumer_domain": "Service",
+      "classification": "A",
+      "secondary_classification": [
+        "E"
+      ],
+      "recommended_disposition": "keep",
+      "risk": "low",
+      "notes": "Same single-method set as API/practice bundle-read Ports; intentional consumer-owned duplication."
+    },
+    {
+      "contract_name": "AnalysisRunWritePort",
+      "contract_kind": "protocol",
+      "module": "app.services.reanalysis",
+      "rel": "app/services/reanalysis.py",
+      "line": 18,
+      "runtime_checkable": true,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "save_analysis_run",
+          "signature": "save_analysis_run(essay_id: int, analysis: AnalysisResult) -> AnalysisResult",
+          "params": [
+            {
+              "name": "essay_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            },
+            {
+              "name": "analysis",
+              "kind": "positional",
+              "annotation": "AnalysisResult",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "AnalysisResult"
+        }
+      ],
+      "consumer_modules": [],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.analysis::SQLiteAnalysisRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "none",
+      "instantiated_in_runtime_checks": "none",
+      "overlapping_contracts": [
+        "AdminAnalysisPort",
+        "MetricRepository",
+        "SubmissionAnalysisPort"
+      ],
+      "ownership_domain": "Analysis",
+      "consumer_domain": "Service",
+      "classification": "A",
+      "secondary_classification": [],
+      "recommended_disposition": "keep",
+      "risk": "low",
+      "notes": "Exact ReanalysisService call set."
+    },
+    {
+      "contract_name": "LearnerProfileReadPort",
+      "contract_kind": "protocol",
+      "module": "app.services.learner_profile",
+      "rel": "app/services/learner_profile.py",
+      "line": 12,
+      "runtime_checkable": true,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "get_latest_learner_profile",
+          "signature": "get_latest_learner_profile(student_id: str) -> dict[str, Any] | None",
+          "params": [
+            {
+              "name": "student_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "dict[str, Any] | None"
+        },
+        {
+          "name": "list_learner_profile_snapshots",
+          "signature": "list_learner_profile_snapshots(student_id: str) -> list[dict[str, Any]]",
+          "params": [
+            {
+              "name": "student_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[dict[str, Any]]"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "app.services.factory",
+          "role": "production",
+          "rel": "app/services/factory.py",
+          "evidence": [
+            [
+              "import",
+              "learner_profile:LearnerProfileReadPort"
+            ],
+            [
+              "annotation",
+              "75: LearnerProgressPort | LearnerProfileReadPort"
+            ],
+            [
+              "consumer_symbols",
+              "build_submission_service@68"
+            ]
+          ]
+        },
+        {
+          "module": "tests.test_v095f3_learner_read_model_narrowing",
+          "role": "test",
+          "rel": "tests/test_v095f3_learner_read_model_narrowing.py",
+          "evidence": [
+            [
+              "import",
+              "app.services.learner_profile:LearnerProfileReadPort"
+            ],
+            [
+              "runtime_check",
+              "160: LearnerProfileReadPort"
+            ],
+            [
+              "consumer_symbols",
+              "test_concrete_repositories_and_facade_structurally_satisfy_ports@155;test_four_ports_have_exact_names_methods_and_source_signatures@131"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.learner::SQLiteLearnerRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "production",
+      "instantiated_in_runtime_checks": "tests-only",
+      "overlapping_contracts": [
+        "LearnerProfileRepository",
+        "StudentLearnerReadPort"
+      ],
+      "ownership_domain": "Learner",
+      "consumer_domain": "Service",
+      "classification": "A",
+      "secondary_classification": [],
+      "recommended_disposition": "keep",
+      "risk": "low",
+      "notes": "Exact LearnerProfileService call set."
+    },
+    {
+      "contract_name": "LearnerProgressPort",
+      "contract_kind": "protocol",
+      "module": "app.services.progress",
+      "rel": "app/services/progress.py",
+      "line": 23,
+      "runtime_checkable": true,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "list_visualization_records",
+          "signature": "list_visualization_records(student_id: str) -> list[dict[str, Any]]",
+          "params": [
+            {
+              "name": "student_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[dict[str, Any]]"
+        },
+        {
+          "name": "save_learner_profile_snapshot",
+          "signature": "save_learner_profile_snapshot(snapshot: LearnerProfileSnapshot) -> LearnerProfileSnapshot",
+          "params": [
+            {
+              "name": "snapshot",
+              "kind": "positional",
+              "annotation": "LearnerProfileSnapshot",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "LearnerProfileSnapshot"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "app.services.factory",
+          "role": "production",
+          "rel": "app/services/factory.py",
+          "evidence": [
+            [
+              "import",
+              "progress:LearnerProgressPort"
+            ],
+            [
+              "annotation",
+              "75: LearnerProgressPort | LearnerProfileReadPort"
+            ],
+            [
+              "consumer_symbols",
+              "build_submission_service@68"
+            ]
+          ]
+        },
+        {
+          "module": "tests.test_v095f3_learner_read_model_narrowing",
+          "role": "test",
+          "rel": "tests/test_v095f3_learner_read_model_narrowing.py",
+          "evidence": [
+            [
+              "import",
+              "app.services.progress:LearnerProgressPort"
+            ],
+            [
+              "runtime_check",
+              "161: LearnerProgressPort"
+            ],
+            [
+              "consumer_symbols",
+              "test_concrete_repositories_and_facade_structurally_satisfy_ports@155;test_four_ports_have_exact_names_methods_and_source_signatures@131"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.learner::SQLiteLearnerRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "production",
+      "instantiated_in_runtime_checks": "tests-only",
+      "overlapping_contracts": [
+        "DashboardReadPort",
+        "LearnerProfileRepository"
+      ],
+      "ownership_domain": "Learner",
+      "consumer_domain": "Service",
+      "classification": "A",
+      "secondary_classification": [],
+      "recommended_disposition": "keep",
+      "risk": "low",
+      "notes": "Exact ProgressService call set."
+    },
+    {
+      "contract_name": "ActiveConfigurationPort",
+      "contract_kind": "protocol",
+      "module": "app.services.progress",
+      "rel": "app/services/progress.py",
+      "line": 31,
+      "runtime_checkable": true,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "get_active_configuration",
+          "signature": "get_active_configuration() -> ConfigurationVersion",
+          "params": [],
+          "return_annotation": "ConfigurationVersion"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "app.services.factory",
+          "role": "production",
+          "rel": "app/services/factory.py",
+          "evidence": [
+            [
+              "import",
+              "progress:ActiveConfigurationPort"
+            ],
+            [
+              "annotation",
+              "76: ActiveConfigurationPort"
+            ],
+            [
+              "consumer_symbols",
+              "build_submission_service@68"
+            ]
+          ]
+        },
+        {
+          "module": "tests.test_v095f3_learner_read_model_narrowing",
+          "role": "test",
+          "rel": "tests/test_v095f3_learner_read_model_narrowing.py",
+          "evidence": [
+            [
+              "import",
+              "app.services.progress:ActiveConfigurationPort"
+            ],
+            [
+              "runtime_check",
+              "162: ActiveConfigurationPort"
+            ],
+            [
+              "consumer_symbols",
+              "test_concrete_repositories_and_facade_structurally_satisfy_ports@155;test_four_ports_have_exact_names_methods_and_source_signatures@131"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.configuration::SQLiteConfigurationRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "production",
+      "instantiated_in_runtime_checks": "tests-only",
+      "overlapping_contracts": [
+        "ConfigurationRepository"
+      ],
+      "ownership_domain": "Configuration",
+      "consumer_domain": "Service",
+      "classification": "A",
+      "secondary_classification": [],
+      "recommended_disposition": "keep",
+      "risk": "low",
+      "notes": "Exact ProgressService call set."
+    },
+    {
+      "contract_name": "DashboardReadPort",
+      "contract_kind": "protocol",
+      "module": "app.services.dashboard",
+      "rel": "app/services/dashboard.py",
+      "line": 11,
+      "runtime_checkable": true,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "list_visualization_records",
+          "signature": "list_visualization_records(student_id: str) -> list[dict[str, Any]]",
+          "params": [
+            {
+              "name": "student_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[dict[str, Any]]"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "tests.test_v095f3_learner_read_model_narrowing",
+          "role": "test",
+          "rel": "tests/test_v095f3_learner_read_model_narrowing.py",
+          "evidence": [
+            [
+              "import",
+              "app.services.dashboard:DashboardReadPort"
+            ],
+            [
+              "runtime_check",
+              "159: DashboardReadPort"
+            ],
+            [
+              "consumer_symbols",
+              "test_concrete_repositories_and_facade_structurally_satisfy_ports@155;test_four_ports_have_exact_names_methods_and_source_signatures@131"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.learner::SQLiteLearnerRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "tests-only",
+      "instantiated_in_runtime_checks": "tests-only",
+      "overlapping_contracts": [
+        "LearnerProfileRepository",
+        "LearnerProgressPort"
+      ],
+      "ownership_domain": "Learner",
+      "consumer_domain": "Service",
+      "classification": "A",
+      "secondary_classification": [
+        "E"
+      ],
+      "recommended_disposition": "keep",
+      "risk": "low",
+      "notes": "One-method read; overlaps LearnerProgressPort/central LearnerProfileRepository list_visualization_records intentionally."
+    },
+    {
+      "contract_name": "PriorRecordsPort",
+      "contract_kind": "protocol",
+      "module": "app.learner.history",
+      "rel": "app/learner/history.py",
+      "line": 22,
+      "runtime_checkable": true,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "prior_records",
+          "signature": "prior_records(submission: EssaySubmission) -> list[dict[str, Any]]",
+          "params": [
+            {
+              "name": "submission",
+              "kind": "positional",
+              "annotation": "EssaySubmission",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[dict[str, Any]]"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "app.learner.__init__",
+          "role": "production",
+          "rel": "app/learner/__init__.py",
+          "evidence": [
+            [
+              "import",
+              "history:PriorRecordsPort"
+            ]
+          ]
+        },
+        {
+          "module": "tests.test_v095f2_service_narrowing",
+          "role": "test",
+          "rel": "tests/test_v095f2_service_narrowing.py",
+          "evidence": [
+            [
+              "import",
+              "app.learner:PriorRecordsPort"
+            ],
+            [
+              "runtime_check",
+              "114: PriorRecordsPort"
+            ],
+            [
+              "runtime_check",
+              "116: PriorRecordsPort"
+            ],
+            [
+              "runtime_check",
+              "176: PriorRecordsPort"
+            ],
+            [
+              "consumer_symbols",
+              "test_facade_and_submission_repository_satisfy_prior_records_port@112;test_learner_history_runtime_object_compatible_through_submission_service@171;test_prior_records_port_declares_exactly_one_method@95"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.submission::SQLiteSubmissionRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "production",
+      "instantiated_in_runtime_checks": "tests-only",
+      "overlapping_contracts": [
+        "LearnerHistoryRepository",
+        "SubmissionDataPort"
+      ],
+      "ownership_domain": "Submission",
+      "consumer_domain": "Service",
+      "classification": "A",
+      "secondary_classification": [
+        "E"
+      ],
+      "recommended_disposition": "keep",
+      "risk": "low",
+      "notes": "One-method read; overlaps LearnerHistoryRepository/SubmissionDataPort prior_records intentionally."
+    },
+    {
+      "contract_name": "JourneyStudentReadPort",
+      "contract_kind": "protocol",
+      "module": "app.journey.service",
+      "rel": "app/journey/service.py",
+      "line": 103,
+      "runtime_checkable": true,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "get_student",
+          "signature": "get_student(student_id: str) -> dict[str, Any] | None",
+          "params": [
+            {
+              "name": "student_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "dict[str, Any] | None"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "tests.test_v095f4_reanalysis_journey_narrowing",
+          "role": "test",
+          "rel": "tests/test_v095f4_reanalysis_journey_narrowing.py",
+          "evidence": [
+            [
+              "import",
+              "app.journey.service:JourneyStudentReadPort"
+            ],
+            [
+              "runtime_check",
+              "272: JourneyStudentReadPort"
+            ],
+            [
+              "consumer_symbols",
+              "TestFourPorts@223;test_concrete_repositories_and_facade_structurally_satisfy_ports@263;test_exact_names_methods_and_source_signatures@224"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.learner::SQLiteLearnerRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "tests-only",
+      "instantiated_in_runtime_checks": "tests-only",
+      "overlapping_contracts": [
+        "CalfStudentReadPort",
+        "StudentLookupPort",
+        "StudentRepository"
+      ],
+      "ownership_domain": "Learner",
+      "consumer_domain": "Service",
+      "classification": "A",
+      "secondary_classification": [
+        "E"
+      ],
+      "recommended_disposition": "keep",
+      "risk": "low",
+      "notes": "One-method read; overlaps StudentLookupPort/CalfStudentReadPort get_student intentionally."
+    },
+    {
+      "contract_name": "JourneyProjectionReadPort",
+      "contract_kind": "protocol",
+      "module": "app.journey.service",
+      "rel": "app/journey/service.py",
+      "line": 110,
+      "runtime_checkable": true,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "list_essays_by_student",
+          "signature": "list_essays_by_student(student_id: str) -> list[dict]",
+          "params": [
+            {
+              "name": "student_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[dict]"
+        },
+        {
+          "name": "list_analysis_runs_for_student",
+          "signature": "list_analysis_runs_for_student(student_id: str) -> list[dict]",
+          "params": [
+            {
+              "name": "student_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[dict]"
+        },
+        {
+          "name": "list_feedback_records_for_student",
+          "signature": "list_feedback_records_for_student(student_id: str) -> list[dict]",
+          "params": [
+            {
+              "name": "student_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[dict]"
+        },
+        {
+          "name": "list_practice_targets",
+          "signature": "list_practice_targets(student_id: str) -> list[dict]",
+          "params": [
+            {
+              "name": "student_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[dict]"
+        },
+        {
+          "name": "list_exercise_attempts_by_student",
+          "signature": "list_exercise_attempts_by_student(student_id: str) -> list[dict]",
+          "params": [
+            {
+              "name": "student_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[dict]"
+        },
+        {
+          "name": "list_practice_evaluations_by_student",
+          "signature": "list_practice_evaluations_by_student(student_id: str) -> list[dict]",
+          "params": [
+            {
+              "name": "student_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[dict]"
+        },
+        {
+          "name": "list_within_task_responses",
+          "signature": "list_within_task_responses(student_id: str) -> list[dict]",
+          "params": [
+            {
+              "name": "student_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[dict]"
+        },
+        {
+          "name": "list_transfer_evidence_candidates",
+          "signature": "list_transfer_evidence_candidates(student_id: str) -> list[dict]",
+          "params": [
+            {
+              "name": "student_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[dict]"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "tests.test_v095f4_reanalysis_journey_narrowing",
+          "role": "test",
+          "rel": "tests/test_v095f4_reanalysis_journey_narrowing.py",
+          "evidence": [
+            [
+              "import",
+              "app.journey.service:JourneyProjectionReadPort"
+            ],
+            [
+              "runtime_check",
+              "273: JourneyProjectionReadPort"
+            ],
+            [
+              "consumer_symbols",
+              "TestFourPorts@223;test_concrete_repositories_and_facade_structurally_satisfy_ports@263;test_exact_names_methods_and_source_signatures@224"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.practice::SQLitePracticeRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "tests-only",
+      "instantiated_in_runtime_checks": "tests-only",
+      "overlapping_contracts": [
+        "PracticeReadPort"
+      ],
+      "ownership_domain": "Practice",
+      "consumer_domain": "Service",
+      "classification": "A",
+      "secondary_classification": [],
+      "recommended_disposition": "keep",
+      "risk": "low",
+      "notes": "Exact JourneyService call set; overlaps PracticeReadPort on list_practice_targets/list_transfer_evidence_candidates intentionally."
+    },
+    {
+      "contract_name": "ConfigurationRepository",
+      "contract_kind": "plain_class",
+      "module": "app.services.configuration",
+      "rel": "app/services/configuration.py",
+      "line": 14,
+      "runtime_checkable": false,
+      "base_classes": [],
+      "declared_methods": [
+        {
+          "name": "list_configurations",
+          "signature": "list_configurations()",
+          "params": [],
+          "return_annotation": null
+        },
+        {
+          "name": "get_configuration",
+          "signature": "get_configuration(configuration_id_or_version: str)",
+          "params": [
+            {
+              "name": "configuration_id_or_version",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": null
+        },
+        {
+          "name": "get_active_configuration",
+          "signature": "get_active_configuration()",
+          "params": [],
+          "return_annotation": null
+        },
+        {
+          "name": "create_configuration",
+          "signature": "create_configuration(request, parent_version)",
+          "params": [
+            {
+              "name": "request",
+              "kind": "positional",
+              "annotation": null,
+              "has_default": false
+            },
+            {
+              "name": "parent_version",
+              "kind": "positional",
+              "annotation": null,
+              "has_default": false
+            }
+          ],
+          "return_annotation": null
+        },
+        {
+          "name": "set_configuration_validation",
+          "signature": "set_configuration_validation(configuration_id, passed, errors, actor)",
+          "params": [
+            {
+              "name": "configuration_id",
+              "kind": "positional",
+              "annotation": null,
+              "has_default": false
+            },
+            {
+              "name": "passed",
+              "kind": "kwonly",
+              "annotation": null,
+              "has_default": false
+            },
+            {
+              "name": "errors",
+              "kind": "kwonly",
+              "annotation": null,
+              "has_default": false
+            },
+            {
+              "name": "actor",
+              "kind": "kwonly",
+              "annotation": null,
+              "has_default": false
+            }
+          ],
+          "return_annotation": null
+        },
+        {
+          "name": "activate_configuration",
+          "signature": "activate_configuration(configuration_id, actor, reason, action=...)",
+          "params": [
+            {
+              "name": "configuration_id",
+              "kind": "positional",
+              "annotation": null,
+              "has_default": false
+            },
+            {
+              "name": "actor",
+              "kind": "kwonly",
+              "annotation": null,
+              "has_default": false
+            },
+            {
+              "name": "reason",
+              "kind": "kwonly",
+              "annotation": null,
+              "has_default": false
+            },
+            {
+              "name": "action",
+              "kind": "kwonly",
+              "annotation": null,
+              "has_default": true
+            }
+          ],
+          "return_annotation": null
+        },
+        {
+          "name": "list_configuration_audit",
+          "signature": "list_configuration_audit(configuration_id=...)",
+          "params": [
+            {
+              "name": "configuration_id",
+              "kind": "positional",
+              "annotation": null,
+              "has_default": true
+            }
+          ],
+          "return_annotation": null
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "app.repositories.__init__",
+          "role": "production",
+          "rel": "app/repositories/__init__.py",
+          "evidence": [
+            [
+              "import",
+              "protocols:ConfigurationRepository"
+            ]
+          ]
+        },
+        {
+          "module": "app.services.configuration",
+          "role": "production",
+          "rel": "app/services/configuration.py",
+          "evidence": [
+            [
+              "definition",
+              "14: class ConfigurationRepository"
+            ],
+            [
+              "annotation",
+              "25: ConfigurationService.__init__(repository: ConfigurationRepository)"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.configuration::SQLiteConfigurationRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "production",
+      "instantiated_in_runtime_checks": "none",
+      "overlapping_contracts": [
+        "ActiveConfigurationPort",
+        "AdminConfigurationReadPort"
+      ],
+      "ownership_domain": "Configuration",
+      "consumer_domain": "Service",
+      "classification": "A",
+      "secondary_classification": [],
+      "recommended_disposition": "keep (H2B rename candidate)",
+      "risk": "low",
+      "notes": "Authoritative 7-method structural contract for ConfigurationService; plain class (not Protocol); name collides with stale central ConfigurationRepository (protocols.py:74)."
+    },
+    {
+      "contract_name": "PracticeSubmissionReadPort",
+      "contract_kind": "protocol",
+      "module": "app.practice.ports",
+      "rel": "app/practice/ports.py",
+      "line": 14,
+      "runtime_checkable": true,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "get_submission_bundle",
+          "signature": "get_submission_bundle(essay_id: int) -> dict[str, Any] | None",
+          "params": [
+            {
+              "name": "essay_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "dict[str, Any] | None"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "tests.test_v095f6d_practice_boundary_narrowing",
+          "role": "test",
+          "rel": "tests/test_v095f6d_practice_boundary_narrowing.py",
+          "evidence": [
+            [
+              "import",
+              "app.practice.ports:PracticeSubmissionReadPort"
+            ],
+            [
+              "runtime_check",
+              "130: PracticeSubmissionReadPort"
+            ],
+            [
+              "consumer_symbols",
+              "TestPortContracts@97;test_concrete_repositories_and_facade_structurally_satisfy_ports@127;test_exact_names_methods_and_source_signatures@98"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.submission::SQLiteSubmissionRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "tests-only",
+      "instantiated_in_runtime_checks": "tests-only",
+      "overlapping_contracts": [
+        "AdminSubmissionReadPort",
+        "CalfSubmissionReadPort",
+        "EssayRepository",
+        "ResearchSubmissionReadPort",
+        "RevisionRepository",
+        "SubmissionBundleReadPort",
+        "SubmissionDataPort",
+        "_SubmissionBundleReader"
+      ],
+      "ownership_domain": "Submission",
+      "consumer_domain": "API Router",
+      "classification": "A",
+      "secondary_classification": [
+        "E"
+      ],
+      "recommended_disposition": "keep",
+      "risk": "low",
+      "notes": "F6D: read/write separation intentional; same single-method set as API/reanalysis bundle-read Ports."
+    },
+    {
+      "contract_name": "PracticeReadPort",
+      "contract_kind": "protocol",
+      "module": "app.practice.ports",
+      "rel": "app/practice/ports.py",
+      "line": 21,
+      "runtime_checkable": true,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "list_practice_targets",
+          "signature": "list_practice_targets(student_id: str) -> list[dict]",
+          "params": [
+            {
+              "name": "student_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[dict]"
+        },
+        {
+          "name": "get_practice_target",
+          "signature": "get_practice_target(pid: str) -> dict | None",
+          "params": [
+            {
+              "name": "pid",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "dict | None"
+        },
+        {
+          "name": "list_exercise_instances",
+          "signature": "list_exercise_instances(practice_target_id=..., student_id=...) -> list[dict]",
+          "params": [
+            {
+              "name": "practice_target_id",
+              "kind": "positional",
+              "annotation": null,
+              "has_default": true
+            },
+            {
+              "name": "student_id",
+              "kind": "positional",
+              "annotation": null,
+              "has_default": true
+            }
+          ],
+          "return_annotation": "list[dict]"
+        },
+        {
+          "name": "get_exercise_instance",
+          "signature": "get_exercise_instance(eid: str) -> dict | None",
+          "params": [
+            {
+              "name": "eid",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "dict | None"
+        },
+        {
+          "name": "list_exercise_attempts",
+          "signature": "list_exercise_attempts(exercise_id: str) -> list[dict]",
+          "params": [
+            {
+              "name": "exercise_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[dict]"
+        },
+        {
+          "name": "list_feedback_engagement_traces",
+          "signature": "list_feedback_engagement_traces(student_id: str) -> list[dict]",
+          "params": [
+            {
+              "name": "student_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[dict]"
+        },
+        {
+          "name": "list_transfer_evidence_candidates",
+          "signature": "list_transfer_evidence_candidates(student_id: str) -> list[dict]",
+          "params": [
+            {
+              "name": "student_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "list[dict]"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "tests.test_v095f6d_practice_boundary_narrowing",
+          "role": "test",
+          "rel": "tests/test_v095f6d_practice_boundary_narrowing.py",
+          "evidence": [
+            [
+              "import",
+              "app.practice.ports:PracticeReadPort"
+            ],
+            [
+              "runtime_check",
+              "131: PracticeReadPort"
+            ],
+            [
+              "consumer_symbols",
+              "TestPortContracts@97;test_concrete_repositories_and_facade_structurally_satisfy_ports@127;test_exact_names_methods_and_source_signatures@98"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.practice::SQLitePracticeRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "tests-only",
+      "instantiated_in_runtime_checks": "tests-only",
+      "overlapping_contracts": [
+        "JourneyProjectionReadPort"
+      ],
+      "ownership_domain": "Practice",
+      "consumer_domain": "API Router",
+      "classification": "A",
+      "secondary_classification": [],
+      "recommended_disposition": "keep",
+      "risk": "low",
+      "notes": "F6D: exact Practice Router read call set."
+    },
+    {
+      "contract_name": "PracticeWritePort",
+      "contract_kind": "protocol",
+      "module": "app.practice.ports",
+      "rel": "app/practice/ports.py",
+      "line": 40,
+      "runtime_checkable": true,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "save_practice_target",
+          "signature": "save_practice_target(target: dict) -> dict",
+          "params": [
+            {
+              "name": "target",
+              "kind": "positional",
+              "annotation": "dict",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "dict"
+        },
+        {
+          "name": "save_exercise_instance",
+          "signature": "save_exercise_instance(instance: dict) -> dict",
+          "params": [
+            {
+              "name": "instance",
+              "kind": "positional",
+              "annotation": "dict",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "dict"
+        },
+        {
+          "name": "save_exercise_attempt",
+          "signature": "save_exercise_attempt(attempt: dict) -> dict",
+          "params": [
+            {
+              "name": "attempt",
+              "kind": "positional",
+              "annotation": "dict",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "dict"
+        },
+        {
+          "name": "save_practice_evaluation",
+          "signature": "save_practice_evaluation(evaluation: dict) -> dict",
+          "params": [
+            {
+              "name": "evaluation",
+              "kind": "positional",
+              "annotation": "dict",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "dict"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "tests.test_v095f6d_practice_boundary_narrowing",
+          "role": "test",
+          "rel": "tests/test_v095f6d_practice_boundary_narrowing.py",
+          "evidence": [
+            [
+              "import",
+              "app.practice.ports:PracticeWritePort"
+            ],
+            [
+              "runtime_check",
+              "132: PracticeWritePort"
+            ],
+            [
+              "consumer_symbols",
+              "TestPortContracts@97;test_concrete_repositories_and_facade_structurally_satisfy_ports@127;test_exact_names_methods_and_source_signatures@98"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.practice::SQLitePracticeRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "tests-only",
+      "instantiated_in_runtime_checks": "tests-only",
+      "overlapping_contracts": [],
+      "ownership_domain": "Practice",
+      "consumer_domain": "API Router",
+      "classification": "A",
+      "secondary_classification": [],
+      "recommended_disposition": "keep",
+      "risk": "low",
+      "notes": "F6D: exact Practice Router write call set; must not be collapsed with PracticeReadPort."
+    },
+    {
+      "contract_name": "_SubmissionBundleReader",
+      "contract_kind": "protocol",
+      "module": "app.infrastructure.sqlite.repositories.revision",
+      "rel": "app/infrastructure/sqlite/repositories/revision.py",
+      "line": 10,
+      "runtime_checkable": false,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "get_submission_bundle",
+          "signature": "get_submission_bundle(essay_id: int) -> dict[str, Any] | None",
+          "params": [
+            {
+              "name": "essay_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "dict[str, Any] | None"
+        }
+      ],
+      "consumer_modules": [],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.submission::SQLiteSubmissionRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "none",
+      "instantiated_in_runtime_checks": "none",
+      "overlapping_contracts": [
+        "AdminSubmissionReadPort",
+        "CalfSubmissionReadPort",
+        "EssayRepository",
+        "PracticeSubmissionReadPort",
+        "ResearchSubmissionReadPort",
+        "RevisionRepository",
+        "SubmissionBundleReadPort",
+        "SubmissionDataPort"
+      ],
+      "ownership_domain": "Submission",
+      "consumer_domain": "Infrastructure",
+      "classification": "C",
+      "secondary_classification": [],
+      "recommended_disposition": "keep",
+      "risk": "low",
+      "notes": "Injected into SQLiteRevisionRepository; same single method as three consumer bundle-read Ports."
+    },
+    {
+      "contract_name": "_AnalysisRunReader",
+      "contract_kind": "protocol",
+      "module": "app.infrastructure.sqlite.repositories.revision",
+      "rel": "app/infrastructure/sqlite/repositories/revision.py",
+      "line": 14,
+      "runtime_checkable": false,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "get_latest_analysis_run",
+          "signature": "get_latest_analysis_run(essay_id: int) -> dict[str, Any] | None",
+          "params": [
+            {
+              "name": "essay_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "dict[str, Any] | None"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "app.infrastructure.sqlite.repositories.learner",
+          "role": "production",
+          "rel": "app/infrastructure/sqlite/repositories/learner.py",
+          "evidence": [
+            [
+              "annotation",
+              "22: _AnalysisRunReader"
+            ],
+            [
+              "consumer_symbols",
+              "SQLiteLearnerRepository@20;__init__@21"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.analysis::SQLiteAnalysisRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "production",
+      "instantiated_in_runtime_checks": "none",
+      "overlapping_contracts": [
+        "CalfAnalysisReadPort",
+        "MetricRepository",
+        "RevisionRepository"
+      ],
+      "ownership_domain": "Analysis",
+      "consumer_domain": "Infrastructure",
+      "classification": "C",
+      "secondary_classification": [
+        "D"
+      ],
+      "recommended_disposition": "keep (H2C canonicalize candidate)",
+      "risk": "low",
+      "notes": "Exact duplicate of learner.py:_AnalysisRunReader; both injected as readers."
+    },
+    {
+      "contract_name": "_AnalysisRunReader",
+      "contract_kind": "protocol",
+      "module": "app.infrastructure.sqlite.repositories.learner",
+      "rel": "app/infrastructure/sqlite/repositories/learner.py",
+      "line": 12,
+      "runtime_checkable": false,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "get_latest_analysis_run",
+          "signature": "get_latest_analysis_run(essay_id: int) -> dict[str, Any] | None",
+          "params": [
+            {
+              "name": "essay_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "dict[str, Any] | None"
+        }
+      ],
+      "consumer_modules": [
+        {
+          "module": "app.infrastructure.sqlite.repositories.revision",
+          "role": "production",
+          "rel": "app/infrastructure/sqlite/repositories/revision.py",
+          "evidence": [
+            [
+              "annotation",
+              "21: _AnalysisRunReader"
+            ],
+            [
+              "consumer_symbols",
+              "SQLiteRevisionRepository@18;__init__@19"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.analysis::SQLiteAnalysisRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "production",
+      "instantiated_in_runtime_checks": "none",
+      "overlapping_contracts": [
+        "CalfAnalysisReadPort",
+        "MetricRepository",
+        "RevisionRepository"
+      ],
+      "ownership_domain": "Analysis",
+      "consumer_domain": "Infrastructure",
+      "classification": "C",
+      "secondary_classification": [
+        "D"
+      ],
+      "recommended_disposition": "keep (H2C canonicalize candidate)",
+      "risk": "low",
+      "notes": "Exact duplicate of revision.py:_AnalysisRunReader."
+    },
+    {
+      "contract_name": "_DiagnosticCalibrationReader",
+      "contract_kind": "protocol",
+      "module": "app.infrastructure.sqlite.repositories.learner",
+      "rel": "app/infrastructure/sqlite/repositories/learner.py",
+      "line": 16,
+      "runtime_checkable": false,
+      "base_classes": [
+        "Protocol"
+      ],
+      "declared_methods": [
+        {
+          "name": "get_diagnostic_calibration",
+          "signature": "get_diagnostic_calibration(essay_id: int) -> DiagnosticCalibrationResult | None",
+          "params": [
+            {
+              "name": "essay_id",
+              "kind": "positional",
+              "annotation": "int",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "DiagnosticCalibrationResult | None"
+        }
+      ],
+      "consumer_modules": [],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.calf::SQLiteCalfRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": true,
+      "imported_or_referenced": "none",
+      "instantiated_in_runtime_checks": "none",
+      "overlapping_contracts": [
+        "SubmissionCalibrationPort",
+        "SubmissionCalibrationReadPort"
+      ],
+      "ownership_domain": "CALF",
+      "consumer_domain": "Infrastructure",
+      "classification": "C",
+      "secondary_classification": [],
+      "recommended_disposition": "keep",
+      "risk": "low",
+      "notes": "Injected into SQLiteLearnerRepository."
+    },
+    {
+      "contract_name": "SubmissionRepository",
+      "contract_kind": "combined_class",
+      "module": "app.services.submission",
+      "rel": "app/services/submission.py",
+      "line": 78,
+      "runtime_checkable": false,
+      "base_classes": [
+        "EssayRepository",
+        "MetricRepository",
+        "DiagnosisRepository",
+        "FeedbackRepository",
+        "LearnerHistoryRepository",
+        "SystemVersionRepository"
+      ],
+      "declared_methods": [],
+      "consumer_modules": [
+        {
+          "module": "app.services.submission",
+          "role": "production",
+          "rel": "app/services/submission.py",
+          "evidence": [
+            [
+              "definition",
+              "78: class SubmissionRepository(EssayRepository, MetricRepository, DiagnosisRepository, FeedbackRepository, LearnerHistoryRepository, SystemVersionRepository)"
+            ]
+          ]
+        }
+      ],
+      "concrete_structural_implementations": [
+        "app.infrastructure.sqlite.repositories.submission::SQLiteSubmissionRepository"
+      ],
+      "database_still_satisfies": false,
+      "satisfaction_intentional": false,
+      "imported_or_referenced": "production",
+      "instantiated_in_runtime_checks": "none",
+      "overlapping_contracts": [],
+      "ownership_domain": "Mixed",
+      "consumer_domain": "Legacy",
+      "classification": "G",
+      "secondary_classification": [
+        "H"
+      ],
+      "recommended_disposition": "remove (H2A)",
+      "risk": "low",
+      "notes": "Empty class inheriting 6 stale central Protocols; no production symbol imports or instantiates it; F6C tests assert its absence from SubmissionService annotations and factory source."
+    }
+  ],
+  "implementations": [
+    {
+      "name": "SQLiteConnectionManager",
+      "module": "app.infrastructure.sqlite.connection",
+      "rel": "app/infrastructure/sqlite/connection.py",
+      "line": 27,
+      "kind": "connection_manager",
+      "methods": [
+        {
+          "name": "__init__",
+          "signature": "__init__(path: str | Path)"
+        },
+        {
+          "name": "connect",
+          "signature": "connect() -> sqlite3.Connection"
+        },
+        {
+          "name": "transaction",
+          "signature": "transaction() -> Iterator[sqlite3.Connection]"
+        }
+      ]
+    },
+    {
+      "name": "SQLiteSystemRepository",
+      "module": "app.infrastructure.sqlite.repositories.system",
+      "rel": "app/infrastructure/sqlite/repositories/system.py",
+      "line": 9,
+      "kind": "concrete_repository",
+      "methods": [
+        {
+          "name": "__init__",
+          "signature": "__init__(connection_manager: SQLiteConnectionManager)"
+        },
+        {
+          "name": "connect",
+          "signature": "connect() -> sqlite3.Connection"
+        },
+        {
+          "name": "initialize",
+          "signature": "initialize() -> None"
+        },
+        {
+          "name": "record_versions",
+          "signature": "record_versions(versions: dict[str, str]) -> None"
+        },
+        {
+          "name": "counts",
+          "signature": "counts() -> dict[str, int]"
+        },
+        {
+          "name": "ping",
+          "signature": "ping() -> bool"
+        },
+        {
+          "name": "migration_version",
+          "signature": "migration_version() -> int"
+        },
+        {
+          "name": "transaction",
+          "signature": "transaction()"
+        },
+        {
+          "name": "get_system_versions",
+          "signature": "get_system_versions() -> dict[str, str]"
+        }
+      ]
+    },
+    {
+      "name": "SQLiteConfigurationRepository",
+      "module": "app.infrastructure.sqlite.repositories.configuration",
+      "rel": "app/infrastructure/sqlite/repositories/configuration.py",
+      "line": 12,
+      "kind": "concrete_repository",
+      "methods": [
+        {
+          "name": "__init__",
+          "signature": "__init__(connection_manager: SQLiteConnectionManager)"
+        },
+        {
+          "name": "_configuration_from_row",
+          "signature": "_configuration_from_row(row: sqlite3.Row) -> ConfigurationVersion"
+        },
+        {
+          "name": "list_configurations",
+          "signature": "list_configurations() -> list[ConfigurationVersion]"
+        },
+        {
+          "name": "get_configuration",
+          "signature": "get_configuration(configuration_id_or_version: str) -> ConfigurationVersion | None"
+        },
+        {
+          "name": "get_active_configuration",
+          "signature": "get_active_configuration() -> ConfigurationVersion"
+        },
+        {
+          "name": "create_configuration",
+          "signature": "create_configuration(request: ConfigurationCreate, parent_version: str | None) -> ConfigurationVersion"
+        },
+        {
+          "name": "set_configuration_validation",
+          "signature": "set_configuration_validation(configuration_id: str, passed: bool, errors: list[str], actor: str) -> ConfigurationVersion"
+        },
+        {
+          "name": "activate_configuration",
+          "signature": "activate_configuration(configuration_id: str, actor: str, reason: str, action: str=...) -> ConfigurationVersion"
+        },
+        {
+          "name": "list_configuration_audit",
+          "signature": "list_configuration_audit(configuration_id: str | None=...) -> list[dict[str, Any]]"
+        },
+        {
+          "name": "_insert_configuration_audit",
+          "signature": "_insert_configuration_audit(connection: sqlite3.Connection, configuration_id: str, action: str, actor: str, reason: str, details: dict[str, Any], created_at: str) -> None"
+        }
+      ]
+    },
+    {
+      "name": "SQLiteAnalysisRepository",
+      "module": "app.infrastructure.sqlite.repositories.analysis",
+      "rel": "app/infrastructure/sqlite/repositories/analysis.py",
+      "line": 10,
+      "kind": "concrete_repository",
+      "methods": [
+        {
+          "name": "__init__",
+          "signature": "__init__(connection_manager: SQLiteConnectionManager)"
+        },
+        {
+          "name": "save_analysis",
+          "signature": "save_analysis(essay_id: int, analysis: AnalysisResult) -> None"
+        },
+        {
+          "name": "save_analysis_run",
+          "signature": "save_analysis_run(essay_id: int, analysis: AnalysisResult) -> AnalysisResult"
+        },
+        {
+          "name": "list_analysis_runs",
+          "signature": "list_analysis_runs(essay_id: int) -> list[dict[str, Any]]"
+        },
+        {
+          "name": "get_latest_analysis_run",
+          "signature": "get_latest_analysis_run(essay_id: int) -> dict[str, Any] | None"
+        },
+        {
+          "name": "get_analysis_run",
+          "signature": "get_analysis_run(analysis_run_id: str) -> dict[str, Any] | None"
+        },
+        {
+          "name": "get_metric_results",
+          "signature": "get_metric_results(analysis_run_id: str) -> list[dict[str, Any]]"
+        },
+        {
+          "name": "get_analysis_artifact",
+          "signature": "get_analysis_artifact(analysis_run_id: str) -> dict[str, Any] | None"
+        },
+        {
+          "name": "save_diagnosis",
+          "signature": "save_diagnosis(essay_id: int, diagnosis: DiagnosisResult) -> None"
+        }
+      ]
+    },
+    {
+      "name": "SQLiteCalfRepository",
+      "module": "app.infrastructure.sqlite.repositories.calf",
+      "rel": "app/infrastructure/sqlite/repositories/calf.py",
+      "line": 11,
+      "kind": "concrete_repository",
+      "methods": [
+        {
+          "name": "__init__",
+          "signature": "__init__(connection_manager: SQLiteConnectionManager)"
+        },
+        {
+          "name": "save_diagnostic_calibration",
+          "signature": "save_diagnostic_calibration(essay_id: int, calibration: DiagnosticCalibrationResult) -> DiagnosticCalibrationResult"
+        },
+        {
+          "name": "get_diagnostic_calibration",
+          "signature": "get_diagnostic_calibration(essay_id: int) -> DiagnosticCalibrationResult | None"
+        },
+        {
+          "name": "list_analysis_units",
+          "signature": "list_analysis_units(submission_id: int, analysis_run_id: str | None=...) -> list[dict[str, Any]]"
+        },
+        {
+          "name": "save_error_annotations",
+          "signature": "save_error_annotations(submission_id: int, annotations: list[ErrorAnnotation]) -> list[ErrorAnnotation]"
+        },
+        {
+          "name": "list_error_annotations",
+          "signature": "list_error_annotations(submission_id: int) -> list[ErrorAnnotation]"
+        }
+      ]
+    },
+    {
+      "name": "SQLiteSubmissionRepository",
+      "module": "app.infrastructure.sqlite.repositories.submission",
+      "rel": "app/infrastructure/sqlite/repositories/submission.py",
+      "line": 11,
+      "kind": "concrete_repository",
+      "methods": [
+        {
+          "name": "__init__",
+          "signature": "__init__(connection_manager: SQLiteConnectionManager, revision_stage_normalizer: Callable[[str], str])"
+        },
+        {
+          "name": "save_essay",
+          "signature": "save_essay(submission: EssaySubmission, synthetic: bool=...) -> int"
+        },
+        {
+          "name": "save_feedback",
+          "signature": "save_feedback(essay_id: int, result: ProviderResult, analysis_version: str) -> None"
+        },
+        {
+          "name": "save_history",
+          "signature": "save_history(student_id: str, essay_id: int, history: HistoryResult) -> None"
+        },
+        {
+          "name": "prior_records",
+          "signature": "prior_records(submission: EssaySubmission) -> list[dict[str, Any]]"
+        },
+        {
+          "name": "get_feedback_record",
+          "signature": "get_feedback_record(essay_id: int) -> dict[str, Any] | None"
+        },
+        {
+          "name": "get_llm_calls",
+          "signature": "get_llm_calls(essay_id: int) -> list[dict[str, Any]]"
+        },
+        {
+          "name": "get_history_record",
+          "signature": "get_history_record(essay_id: int) -> dict[str, Any] | None"
+        },
+        {
+          "name": "list_all_submissions",
+          "signature": "list_all_submissions()"
+        },
+        {
+          "name": "get_submission_bundle",
+          "signature": "get_submission_bundle(essay_id: int) -> dict[str, Any] | None"
+        },
+        {
+          "name": "list_student_submissions",
+          "signature": "list_student_submissions(student_id: str) -> list[dict[str, Any]]"
+        },
+        {
+          "name": "get_exercises",
+          "signature": "get_exercises(essay_id: int) -> list[dict[str, Any]]"
+        }
+      ]
+    },
+    {
+      "name": "SQLiteRevisionRepository",
+      "module": "app.infrastructure.sqlite.repositories.revision",
+      "rel": "app/infrastructure/sqlite/repositories/revision.py",
+      "line": 18,
+      "kind": "concrete_repository",
+      "methods": [
+        {
+          "name": "__init__",
+          "signature": "__init__(connection_manager: SQLiteConnectionManager, submission_reader: _SubmissionBundleReader, analysis_reader: _AnalysisRunReader)"
+        },
+        {
+          "name": "get_submission_bundle",
+          "signature": "get_submission_bundle(essay_id: int) -> dict[str, Any] | None"
+        },
+        {
+          "name": "get_latest_analysis_run",
+          "signature": "get_latest_analysis_run(essay_id: int) -> dict[str, Any] | None"
+        },
+        {
+          "name": "normalize_revision_stage",
+          "signature": "normalize_revision_stage(value: str) -> str"
+        },
+        {
+          "name": "create_revision_group",
+          "signature": "create_revision_group(source_submission_id: int) -> RevisionGroup"
+        },
+        {
+          "name": "link_revision",
+          "signature": "link_revision(source_submission_id: int, target_submission_id: int, revision_group_id: str) -> None"
+        },
+        {
+          "name": "get_revision_group",
+          "signature": "get_revision_group(revision_group_id: str) -> RevisionGroup | None"
+        },
+        {
+          "name": "get_revision_group_for_submission",
+          "signature": "get_revision_group_for_submission(submission_id: int) -> RevisionGroup | None"
+        },
+        {
+          "name": "list_revision_candidates",
+          "signature": "list_revision_candidates(submission_id: int) -> list[dict[str, Any]]"
+        },
+        {
+          "name": "save_revision_snapshot",
+          "signature": "save_revision_snapshot(snapshot: RevisionSnapshot) -> RevisionSnapshot"
+        },
+        {
+          "name": "list_revision_snapshots",
+          "signature": "list_revision_snapshots(revision_group_id: str) -> list[dict[str, Any]]"
+        },
+        {
+          "name": "get_latest_revision_snapshot",
+          "signature": "get_latest_revision_snapshot(revision_group_id: str) -> dict[str, Any] | None"
+        }
+      ]
+    },
+    {
+      "name": "SQLiteLearnerRepository",
+      "module": "app.infrastructure.sqlite.repositories.learner",
+      "rel": "app/infrastructure/sqlite/repositories/learner.py",
+      "line": 20,
+      "kind": "concrete_repository",
+      "methods": [
+        {
+          "name": "__init__",
+          "signature": "__init__(connection_manager: SQLiteConnectionManager, analysis_reader: _AnalysisRunReader, calf_reader: _DiagnosticCalibrationReader, revision_stage_normalizer: Callable[[str], str])"
+        },
+        {
+          "name": "get_student",
+          "signature": "get_student(student_id: str) -> dict[str, Any] | None"
+        },
+        {
+          "name": "list_all_students",
+          "signature": "list_all_students()"
+        },
+        {
+          "name": "list_student_history",
+          "signature": "list_student_history(student_id: str) -> list[dict[str, Any]]"
+        },
+        {
+          "name": "get_latest_learner_profile",
+          "signature": "get_latest_learner_profile(student_id: str) -> dict[str, Any] | None"
+        },
+        {
+          "name": "save_learner_profile_snapshot",
+          "signature": "save_learner_profile_snapshot(snapshot: LearnerProfileSnapshot) -> LearnerProfileSnapshot"
+        },
+        {
+          "name": "list_history_evidence",
+          "signature": "list_history_evidence(student_id: str) -> list[dict[str, Any]]"
+        },
+        {
+          "name": "list_learner_profile_snapshots",
+          "signature": "list_learner_profile_snapshots(student_id: str) -> list[dict[str, Any]]"
+        },
+        {
+          "name": "list_longitudinal_records",
+          "signature": "list_longitudinal_records(student_id: str) -> list[dict[str, Any]]"
+        },
+        {
+          "name": "list_visualization_records",
+          "signature": "list_visualization_records(student_id: str) -> list[dict[str, Any]]"
+        }
+      ]
+    },
+    {
+      "name": "SQLitePracticeRepository",
+      "module": "app.infrastructure.sqlite.repositories.practice",
+      "rel": "app/infrastructure/sqlite/repositories/practice.py",
+      "line": 8,
+      "kind": "concrete_repository",
+      "methods": [
+        {
+          "name": "__init__",
+          "signature": "__init__(connection_manager: SQLiteConnectionManager)"
+        },
+        {
+          "name": "_next_practice_id",
+          "signature": "_next_practice_id(table_prefix: str) -> str"
+        },
+        {
+          "name": "save_practice_target",
+          "signature": "save_practice_target(target: dict) -> dict"
+        },
+        {
+          "name": "list_practice_targets",
+          "signature": "list_practice_targets(student_id: str) -> list[dict]"
+        },
+        {
+          "name": "get_practice_target",
+          "signature": "get_practice_target(pid: str) -> dict | None"
+        },
+        {
+          "name": "save_exercise_instance",
+          "signature": "save_exercise_instance(instance: dict) -> dict"
+        },
+        {
+          "name": "list_exercise_instances",
+          "signature": "list_exercise_instances(practice_target_id=..., student_id=...) -> list[dict]"
+        },
+        {
+          "name": "get_exercise_instance",
+          "signature": "get_exercise_instance(eid: str) -> dict | None"
+        },
+        {
+          "name": "save_exercise_attempt",
+          "signature": "save_exercise_attempt(attempt: dict) -> dict"
+        },
+        {
+          "name": "list_exercise_attempts",
+          "signature": "list_exercise_attempts(exercise_id: str) -> list[dict]"
+        },
+        {
+          "name": "save_practice_evaluation",
+          "signature": "save_practice_evaluation(evaluation: dict) -> dict"
+        },
+        {
+          "name": "list_practice_evaluations",
+          "signature": "list_practice_evaluations(attempt_id=..., practice_target_id=...) -> list[dict]"
+        },
+        {
+          "name": "list_practice_evaluations_by_student",
+          "signature": "list_practice_evaluations_by_student(student_id: str) -> list[dict]"
+        },
+        {
+          "name": "list_essays_by_student",
+          "signature": "list_essays_by_student(student_id: str) -> list[dict]"
+        },
+        {
+          "name": "list_analysis_runs_for_student",
+          "signature": "list_analysis_runs_for_student(student_id: str) -> list[dict]"
+        },
+        {
+          "name": "list_feedback_records_for_student",
+          "signature": "list_feedback_records_for_student(student_id: str) -> list[dict]"
+        },
+        {
+          "name": "list_exercise_attempts_by_student",
+          "signature": "list_exercise_attempts_by_student(student_id: str) -> list[dict]"
+        },
+        {
+          "name": "save_feedback_engagement_trace",
+          "signature": "save_feedback_engagement_trace(trace: dict) -> dict"
+        },
+        {
+          "name": "list_feedback_engagement_traces",
+          "signature": "list_feedback_engagement_traces(student_id: str) -> list[dict]"
+        },
+        {
+          "name": "save_within_task_response_candidate",
+          "signature": "save_within_task_response_candidate(candidate: dict) -> dict"
+        },
+        {
+          "name": "list_within_task_responses",
+          "signature": "list_within_task_responses(student_id: str) -> list[dict]"
+        },
+        {
+          "name": "save_transfer_evidence_candidate",
+          "signature": "save_transfer_evidence_candidate(candidate: dict) -> dict"
+        },
+        {
+          "name": "list_transfer_evidence_candidates",
+          "signature": "list_transfer_evidence_candidates(student_id: str) -> list[dict]"
+        },
+        {
+          "name": "save_practice_state_snapshot",
+          "signature": "save_practice_state_snapshot(snapshot: dict) -> dict"
+        },
+        {
+          "name": "list_practice_state_snapshots",
+          "signature": "list_practice_state_snapshots(student_id: str) -> list[dict]"
+        }
+      ]
+    },
+    {
+      "name": "SQLiteResearchRepository",
+      "module": "app.infrastructure.sqlite.repositories.research",
+      "rel": "app/infrastructure/sqlite/repositories/research.py",
+      "line": 8,
+      "kind": "concrete_repository",
+      "methods": [
+        {
+          "name": "__init__",
+          "signature": "__init__(connection_manager: SQLiteConnectionManager)"
+        },
+        {
+          "name": "_next_research_id",
+          "signature": "_next_research_id(table: str, id_column: str, prefix: str) -> str"
+        },
+        {
+          "name": "save_human_review",
+          "signature": "save_human_review(review) -> dict"
+        },
+        {
+          "name": "list_human_reviews",
+          "signature": "list_human_reviews(target_type: str | None=..., target_id: str | None=...) -> list[dict]"
+        },
+        {
+          "name": "apply_pii_review",
+          "signature": "apply_pii_review(submission_id: int, reviews: list) -> list[dict]"
+        },
+        {
+          "name": "save_export_job",
+          "signature": "save_export_job(job: dict) -> dict"
+        },
+        {
+          "name": "list_export_jobs",
+          "signature": "list_export_jobs() -> list[dict]"
+        },
+        {
+          "name": "get_export_job",
+          "signature": "get_export_job(export_id: str) -> dict | None"
+        }
+      ]
+    },
+    {
+      "name": "Database",
+      "module": "app.database.repository",
+      "rel": "app/database/repository.py",
+      "line": 123,
+      "kind": "facade",
+      "methods": [
+        {
+          "name": "__init__",
+          "signature": "__init__(path: str | Path)"
+        },
+        {
+          "name": "connect",
+          "signature": "connect() -> sqlite3.Connection"
+        },
+        {
+          "name": "initialize",
+          "signature": "initialize() -> None"
+        },
+        {
+          "name": "_add_column_if_missing",
+          "signature": "_add_column_if_missing(connection: sqlite3.Connection, table: str, column: str, definition: str) -> None"
+        },
+        {
+          "name": "_migrate_v0_1_to_v0_1_1",
+          "signature": "_migrate_v0_1_to_v0_1_1(connection: sqlite3.Connection) -> None"
+        }
+      ]
+    }
+  ],
+  "excluded_definitions": [
+    {
+      "name": "AnalyzerProtocol / MetricCalculator / Analyzer / Diagnoser / LLMProvider",
+      "where": "app/analysis/base.py, app/analyzer/base.py, app/diagnosis/base.py, app/llm/base.py",
+      "reason": "Analyzer/provider Protocols unrelated to persistence (spec exclusion)."
+    },
+    {
+      "name": "app/ui/ports/* (12 ApiPorts)",
+      "where": "app/ui/ports/",
+      "reason": "Frontend client contracts (spec exclusion)."
+    },
+    {
+      "name": "Pydantic schemas and domain models",
+      "where": "app/models, app/*/schemas.py",
+      "reason": "Pydantic schemas / pure domain interfaces (spec exclusion)."
+    },
+    {
+      "name": "-冲突-Rain_Win11.py conflict copies",
+      "where": "app/analysis/base-冲突-Rain_Win11.py, app/analyzer/base-冲突-Rain_Win11.py, app/database/migrations-冲突-Rain_Win11.py, app/repositories/protocols-冲突-Rain_Win11.py, app/services/submission-冲突-Rain_Win11.py, app/services/factory-冲突-Rain_Win11.py",
+      "reason": "Git-ignored (*-冲突-*) unimported conflict copies (spec exclusion); names could confuse (contain SubmissionRepository, ConfigurationRepository, AnalyzerProtocol, etc.)."
+    },
+    {
+      "name": "Test stubs named *Repository",
+      "where": "tests/test_v095f3_learner_read_model_narrowing.py (MinimalLearnerProfileRepository, MinimalConfigurationRepository) etc.",
+      "reason": "Test-only stubs, not contracts (recorded as consumers where relevant)."
+    }
+  ],
+  "counts": {
+    "by_kind": {
+      "protocol": 52,
+      "alias": 1,
+      "plain_class": 1,
+      "combined_class": 1
+    },
+    "by_classification": {
+      "G": 13,
+      "B": 1,
+      "A": 37,
+      "C": 4
+    },
+    "active": 42,
+    "unused_candidates": 13
+  }
+}

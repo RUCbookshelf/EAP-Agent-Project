@@ -8,6 +8,34 @@
 
 # Project State
 
+## Current v0.9.5-H1 State
+
+- Status: completed (read-only source-authoritative audit; evidence and plan
+  only - see `docs/development/PROTOCOL_CONSOLIDATION_AUDIT_V0.9.5_H1.md`).
+- Inventory: 55 persistence-related contracts (52 Protocols, 1 typing union
+  alias, 1 plain structural class, 1 legacy combined class); classifications
+  A=37, B=1, C=4, G=13; active=42; unused candidates=13; 3 same-name
+  collisions (`ConfigurationRepository`, `SubmissionBundleReadPort`,
+  `_AnalysisRunReader`); 29 methods declared by more than one contract.
+- Findings: the legacy `SubmissionRepository` (inherits 6 stale central
+  Protocols) has no production consumer and can be removed without
+  replacement; the central `ConfigurationRepository` (ping/migration_version)
+  is stale while the local 7-method `ConfigurationRepository` is the
+  authoritative `ConfigurationService` contract; the ten API-owned Ports are
+  exact but currently referenced only by contract tests (runtime path is
+  `deps.get_*` -> `app.state.*`); Practice read/write separation is
+  intentional; `_AnalysisRunReader` is an exact infra duplicate pair.
+- H2 plan: 5 dependency-ordered units (H2A remove unused legacy contracts ->
+  H2B resolve remaining collision -> H2C canonicalize infra duplicate ->
+  H2D formalize misplaced contracts -> H2E freeze); recommended first unit
+  H2A. H2 is NOT authorized.
+- Verification: focused F2-F6D+G Protocol/Port contract tests 187 passed, 2
+  warnings under isolated DB; all four JSON artifacts parsed and reconciled;
+  no production, test, Repository, SQL, transaction, API, schema, provider,
+  prompt, UI, or localization file changed; development database unchanged
+  (SHA-256/size/mtime).
+- Next: H2 implementation only under separate authorization.
+
 ## Current v0.9.5-G State
 
 - Status: completed and verified; Database facade contraction scope closed;

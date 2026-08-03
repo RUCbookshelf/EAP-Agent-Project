@@ -1,0 +1,557 @@
+{
+  "stage": "v0.9.5-H1",
+  "generated_at": "2026-08-03T09:50:01+08:00",
+  "method_overlap_rows": [
+    {
+      "method_name": "get_active_configuration",
+      "declaring_contracts": [
+        "ActiveConfigurationPort",
+        "ConfigurationRepository"
+      ],
+      "signatures": [
+        "get_active_configuration()",
+        "get_active_configuration() -> ConfigurationVersion"
+      ],
+      "signature_identical": false,
+      "declaration_count": 2,
+      "aggregate_owner": "Configuration",
+      "canonicalization_safe": false,
+      "recommended_canonical_owner": "Configuration; ActiveConfigurationPort + local ConfigurationRepository intentional"
+    },
+    {
+      "method_name": "get_configuration",
+      "declaring_contracts": [
+        "AdminConfigurationReadPort",
+        "ConfigurationRepository"
+      ],
+      "signatures": [
+        "get_configuration(configuration_id_or_version: str)",
+        "get_configuration(configuration_id_or_version: str) -> ConfigurationVersion | None"
+      ],
+      "signature_identical": false,
+      "declaration_count": 2,
+      "aggregate_owner": "Configuration",
+      "canonicalization_safe": false,
+      "recommended_canonical_owner": "Configuration; AdminConfigurationReadPort + local ConfigurationRepository intentional"
+    },
+    {
+      "method_name": "get_diagnostic_calibration",
+      "declaring_contracts": [
+        "SubmissionCalibrationPort",
+        "SubmissionCalibrationReadPort",
+        "_DiagnosticCalibrationReader"
+      ],
+      "signatures": [
+        "get_diagnostic_calibration(essay_id: int) -> DiagnosticCalibrationResult | None"
+      ],
+      "signature_identical": true,
+      "declaration_count": 3,
+      "aggregate_owner": "CALF",
+      "canonicalization_safe": false,
+      "recommended_canonical_owner": "CALF; SubmissionCalibrationPort/SubmissionCalibrationReadPort/_DiagnosticCalibrationReader intentional"
+    },
+    {
+      "method_name": "get_latest_analysis_run",
+      "declaring_contracts": [
+        "CalfAnalysisReadPort",
+        "MetricRepository",
+        "RevisionRepository",
+        "_AnalysisRunReader",
+        "_AnalysisRunReader"
+      ],
+      "signatures": [
+        "get_latest_analysis_run(essay_id: int) -> dict[str, Any] | None"
+      ],
+      "signature_identical": true,
+      "declaration_count": 5,
+      "aggregate_owner": "Analysis",
+      "canonicalization_safe": false,
+      "recommended_canonical_owner": "keep consumer-owned; no canonical owner (5 declarations)"
+    },
+    {
+      "method_name": "get_latest_learner_profile",
+      "declaring_contracts": [
+        "LearnerProfileReadPort",
+        "LearnerProfileRepository"
+      ],
+      "signatures": [
+        "get_latest_learner_profile(student_id: str) -> dict[str, Any] | None"
+      ],
+      "signature_identical": true,
+      "declaration_count": 2,
+      "aggregate_owner": "Learner",
+      "canonicalization_safe": false,
+      "recommended_canonical_owner": "Learner; LearnerProfileReadPort intentional"
+    },
+    {
+      "method_name": "get_revision_group_for_submission",
+      "declaring_contracts": [
+        "RevisionGroupLookupPort",
+        "RevisionRepository"
+      ],
+      "signatures": [
+        "get_revision_group_for_submission(submission_id: int) -> RevisionGroup | None"
+      ],
+      "signature_identical": true,
+      "declaration_count": 2,
+      "aggregate_owner": "Revision",
+      "canonicalization_safe": false,
+      "recommended_canonical_owner": "Revision; RevisionRepository + RevisionGroupLookupPort intentional"
+    },
+    {
+      "method_name": "get_student",
+      "declaring_contracts": [
+        "CalfStudentReadPort",
+        "JourneyStudentReadPort",
+        "StudentLookupPort",
+        "StudentRepository"
+      ],
+      "signatures": [
+        "get_student(student_id: str) -> dict[str, Any] | None"
+      ],
+      "signature_identical": true,
+      "declaration_count": 4,
+      "aggregate_owner": "Learner",
+      "canonicalization_safe": false,
+      "recommended_canonical_owner": "keep consumer-owned; no canonical owner (4 declarations)"
+    },
+    {
+      "method_name": "get_submission_bundle",
+      "declaring_contracts": [
+        "AdminSubmissionReadPort",
+        "CalfSubmissionReadPort",
+        "EssayRepository",
+        "PracticeSubmissionReadPort",
+        "ResearchSubmissionReadPort",
+        "RevisionRepository",
+        "SubmissionBundleReadPort",
+        "SubmissionBundleReadPort",
+        "SubmissionDataPort",
+        "_SubmissionBundleReader"
+      ],
+      "signatures": [
+        "get_submission_bundle(essay_id: int) -> dict[str, Any] | None"
+      ],
+      "signature_identical": true,
+      "declaration_count": 10,
+      "aggregate_owner": "Submission",
+      "canonicalization_safe": false,
+      "recommended_canonical_owner": "keep consumer-owned; no canonical owner (10 declarations, 5 bounded contexts)"
+    },
+    {
+      "method_name": "list_analysis_runs",
+      "declaring_contracts": [
+        "AnalysisRunReadPort",
+        "MetricRepository"
+      ],
+      "signatures": [
+        "list_analysis_runs(essay_id: int) -> list[dict[str, Any]]"
+      ],
+      "signature_identical": true,
+      "declaration_count": 2,
+      "aggregate_owner": "Analysis",
+      "canonicalization_safe": false,
+      "recommended_canonical_owner": "Analysis; AnalysisRunReadPort + stale MetricRepository (removed H2A)"
+    },
+    {
+      "method_name": "list_analysis_units",
+      "declaring_contracts": [
+        "CalfDataPort",
+        "CalfReadPort",
+        "MetricRepository"
+      ],
+      "signatures": [
+        "list_analysis_units(submission_id: int, analysis_run_id: str | None=...) -> list[dict[str, Any]]"
+      ],
+      "signature_identical": true,
+      "declaration_count": 3,
+      "aggregate_owner": "CALF",
+      "canonicalization_safe": false,
+      "recommended_canonical_owner": "CALF-owned canonical owner would be CalfDataPort/CalfReadPort; stale MetricRepository declaration removed in H2A"
+    },
+    {
+      "method_name": "list_error_annotations",
+      "declaring_contracts": [
+        "CalfDataPort",
+        "CalfReadPort",
+        "ErrorAnnotationRepository"
+      ],
+      "signatures": [
+        "list_error_annotations(submission_id: int) -> list[ErrorAnnotation]"
+      ],
+      "signature_identical": true,
+      "declaration_count": 3,
+      "aggregate_owner": "CALF",
+      "canonicalization_safe": false,
+      "recommended_canonical_owner": "CALF; stale ErrorAnnotationRepository removed in H2A"
+    },
+    {
+      "method_name": "list_history_evidence",
+      "declaring_contracts": [
+        "LearnerProfileRepository",
+        "StudentLearnerReadPort"
+      ],
+      "signatures": [
+        "list_history_evidence(student_id: str) -> list[dict[str, Any]]"
+      ],
+      "signature_identical": true,
+      "declaration_count": 2,
+      "aggregate_owner": "Learner",
+      "canonicalization_safe": false,
+      "recommended_canonical_owner": "Learner; StudentLearnerReadPort intentional"
+    },
+    {
+      "method_name": "list_learner_profile_snapshots",
+      "declaring_contracts": [
+        "LearnerProfileReadPort",
+        "LearnerProfileRepository",
+        "StudentLearnerReadPort"
+      ],
+      "signatures": [
+        "list_learner_profile_snapshots(student_id: str) -> list[dict[str, Any]]"
+      ],
+      "signature_identical": true,
+      "declaration_count": 3,
+      "aggregate_owner": "Learner",
+      "canonicalization_safe": false,
+      "recommended_canonical_owner": "Learner; StudentLearnerReadPort/LearnerProfileReadPort intentional"
+    },
+    {
+      "method_name": "list_practice_targets",
+      "declaring_contracts": [
+        "JourneyProjectionReadPort",
+        "PracticeReadPort"
+      ],
+      "signatures": [
+        "list_practice_targets(student_id: str) -> list[dict]"
+      ],
+      "signature_identical": true,
+      "declaration_count": 2,
+      "aggregate_owner": "Practice",
+      "canonicalization_safe": false,
+      "recommended_canonical_owner": "Practice; PracticeReadPort + JourneyProjectionReadPort intentional"
+    },
+    {
+      "method_name": "list_student_history",
+      "declaring_contracts": [
+        "LearnerHistoryRepository",
+        "StudentLearnerReadPort"
+      ],
+      "signatures": [
+        "list_student_history(student_id: str) -> list[dict[str, Any]]"
+      ],
+      "signature_identical": true,
+      "declaration_count": 2,
+      "aggregate_owner": "Learner",
+      "canonicalization_safe": false,
+      "recommended_canonical_owner": "Learner; StudentLearnerReadPort intentional"
+    },
+    {
+      "method_name": "list_student_submissions",
+      "declaring_contracts": [
+        "AdminSubmissionReadPort",
+        "CalfSubmissionReadPort",
+        "EssayRepository",
+        "ResearchSubmissionReadPort",
+        "StudentSubmissionListPort"
+      ],
+      "signatures": [
+        "list_student_submissions(student_id: str) -> list[dict[str, Any]]"
+      ],
+      "signature_identical": true,
+      "declaration_count": 5,
+      "aggregate_owner": "Submission",
+      "canonicalization_safe": false,
+      "recommended_canonical_owner": "keep consumer-owned; no canonical owner"
+    },
+    {
+      "method_name": "list_transfer_evidence_candidates",
+      "declaring_contracts": [
+        "JourneyProjectionReadPort",
+        "PracticeReadPort"
+      ],
+      "signatures": [
+        "list_transfer_evidence_candidates(student_id: str) -> list[dict]"
+      ],
+      "signature_identical": true,
+      "declaration_count": 2,
+      "aggregate_owner": "Practice",
+      "canonicalization_safe": false,
+      "recommended_canonical_owner": "Practice; PracticeReadPort + JourneyProjectionReadPort intentional"
+    },
+    {
+      "method_name": "list_visualization_records",
+      "declaring_contracts": [
+        "DashboardReadPort",
+        "LearnerProfileRepository",
+        "LearnerProgressPort"
+      ],
+      "signatures": [
+        "list_visualization_records(student_id: str) -> list[dict[str, Any]]"
+      ],
+      "signature_identical": true,
+      "declaration_count": 3,
+      "aggregate_owner": "Learner",
+      "canonicalization_safe": false,
+      "recommended_canonical_owner": "Learner; LearnerProgressPort/DashboardReadPort intentional"
+    },
+    {
+      "method_name": "migration_version",
+      "declaring_contracts": [
+        "ConfigurationRepository",
+        "SystemMigrationPort"
+      ],
+      "signatures": [
+        "migration_version() -> int"
+      ],
+      "signature_identical": true,
+      "declaration_count": 2,
+      "aggregate_owner": "System",
+      "canonicalization_safe": false,
+      "recommended_canonical_owner": "System; SystemMigrationPort + stale central ConfigurationRepository (removed H2A)"
+    },
+    {
+      "method_name": "prior_records",
+      "declaring_contracts": [
+        "LearnerHistoryRepository",
+        "PriorRecordsPort",
+        "SubmissionDataPort"
+      ],
+      "signatures": [
+        "prior_records(submission: EssaySubmission) -> list[dict[str, Any]]"
+      ],
+      "signature_identical": true,
+      "declaration_count": 3,
+      "aggregate_owner": "Submission",
+      "canonicalization_safe": false,
+      "recommended_canonical_owner": "Submission-owned; PriorRecordsPort + SubmissionDataPort intentional"
+    },
+    {
+      "method_name": "record_versions",
+      "declaring_contracts": [
+        "SubmissionSystemPort",
+        "SystemVersionRepository"
+      ],
+      "signatures": [
+        "record_versions(versions: dict[str, str]) -> None"
+      ],
+      "signature_identical": true,
+      "declaration_count": 2,
+      "aggregate_owner": "System",
+      "canonicalization_safe": false,
+      "recommended_canonical_owner": "System; SubmissionSystemPort intentional (single consumer)"
+    },
+    {
+      "method_name": "save_analysis",
+      "declaring_contracts": [
+        "MetricRepository",
+        "SubmissionAnalysisPort"
+      ],
+      "signatures": [
+        "save_analysis(essay_id: int, analysis: AnalysisResult) -> None"
+      ],
+      "signature_identical": true,
+      "declaration_count": 2,
+      "aggregate_owner": "Analysis",
+      "canonicalization_safe": false,
+      "recommended_canonical_owner": "Analysis; stale MetricRepository removed in H2A"
+    },
+    {
+      "method_name": "save_analysis_run",
+      "declaring_contracts": [
+        "AdminAnalysisPort",
+        "AnalysisRunWritePort",
+        "MetricRepository",
+        "SubmissionAnalysisPort"
+      ],
+      "signatures": [
+        "save_analysis_run(essay_id: int, analysis: AnalysisResult) -> AnalysisResult"
+      ],
+      "signature_identical": true,
+      "declaration_count": 4,
+      "aggregate_owner": "Analysis",
+      "canonicalization_safe": false,
+      "recommended_canonical_owner": "Analysis; multiple consumer ports intentional (Append-only writer)"
+    },
+    {
+      "method_name": "save_diagnosis",
+      "declaring_contracts": [
+        "DiagnosisRepository",
+        "SubmissionAnalysisPort"
+      ],
+      "signatures": [
+        "save_diagnosis(essay_id: int, diagnosis: DiagnosisResult) -> None"
+      ],
+      "signature_identical": true,
+      "declaration_count": 2,
+      "aggregate_owner": "Analysis",
+      "canonicalization_safe": false,
+      "recommended_canonical_owner": "Analysis; stale MetricRepository removed in H2A"
+    },
+    {
+      "method_name": "save_error_annotations",
+      "declaring_contracts": [
+        "CalfDataPort",
+        "ErrorAnnotationRepository"
+      ],
+      "signatures": [
+        "save_error_annotations(submission_id: int, annotations: list[ErrorAnnotation]) -> list[ErrorAnnotation]"
+      ],
+      "signature_identical": true,
+      "declaration_count": 2,
+      "aggregate_owner": "CALF",
+      "canonicalization_safe": false,
+      "recommended_canonical_owner": "CALF; stale ErrorAnnotationRepository removed in H2A"
+    },
+    {
+      "method_name": "save_essay",
+      "declaring_contracts": [
+        "EssayRepository",
+        "SubmissionDataPort"
+      ],
+      "signatures": [
+        "save_essay(submission: EssaySubmission, synthetic: bool=...) -> int"
+      ],
+      "signature_identical": true,
+      "declaration_count": 2,
+      "aggregate_owner": "Submission",
+      "canonicalization_safe": false,
+      "recommended_canonical_owner": "Submission; stale EssayRepository removed in H2A"
+    },
+    {
+      "method_name": "save_feedback",
+      "declaring_contracts": [
+        "FeedbackRepository",
+        "SubmissionDataPort"
+      ],
+      "signatures": [
+        "save_feedback(essay_id: int, result: ProviderResult, analysis_version: str) -> None"
+      ],
+      "signature_identical": true,
+      "declaration_count": 2,
+      "aggregate_owner": "Submission",
+      "canonicalization_safe": false,
+      "recommended_canonical_owner": "Submission; stale FeedbackRepository removed in H2A"
+    },
+    {
+      "method_name": "save_history",
+      "declaring_contracts": [
+        "LearnerHistoryRepository",
+        "SubmissionDataPort"
+      ],
+      "signatures": [
+        "save_history(student_id: str, essay_id: int, history: HistoryResult) -> None"
+      ],
+      "signature_identical": true,
+      "declaration_count": 2,
+      "aggregate_owner": "Submission",
+      "canonicalization_safe": false,
+      "recommended_canonical_owner": "Submission; SubmissionDataPort intentional"
+    },
+    {
+      "method_name": "save_learner_profile_snapshot",
+      "declaring_contracts": [
+        "LearnerProfileRepository",
+        "LearnerProgressPort"
+      ],
+      "signatures": [
+        "save_learner_profile_snapshot(snapshot: LearnerProfileSnapshot) -> LearnerProfileSnapshot"
+      ],
+      "signature_identical": true,
+      "declaration_count": 2,
+      "aggregate_owner": "Learner",
+      "canonicalization_safe": false,
+      "recommended_canonical_owner": "Learner; LearnerProgressPort intentional"
+    }
+  ],
+  "contract_level_exact_duplicate_groups": [
+    {
+      "method_set": [
+        "get_student"
+      ],
+      "contracts": [
+        "CalfStudentReadPort",
+        "JourneyStudentReadPort",
+        "StudentLookupPort",
+        "StudentRepository"
+      ],
+      "count": 4
+    },
+    {
+      "method_set": [
+        "get_submission_bundle"
+      ],
+      "contracts": [
+        "PracticeSubmissionReadPort",
+        "SubmissionBundleReadPort",
+        "SubmissionBundleReadPort",
+        "_SubmissionBundleReader"
+      ],
+      "count": 4
+    },
+    {
+      "method_set": [
+        "get_latest_analysis_run"
+      ],
+      "contracts": [
+        "CalfAnalysisReadPort",
+        "_AnalysisRunReader",
+        "_AnalysisRunReader"
+      ],
+      "count": 3
+    },
+    {
+      "method_set": [
+        "get_diagnostic_calibration"
+      ],
+      "contracts": [
+        "SubmissionCalibrationReadPort",
+        "_DiagnosticCalibrationReader"
+      ],
+      "count": 2
+    },
+    {
+      "method_set": [
+        "get_submission_bundle",
+        "list_student_submissions"
+      ],
+      "contracts": [
+        "AdminSubmissionReadPort",
+        "CalfSubmissionReadPort"
+      ],
+      "count": 2
+    }
+  ],
+  "name_collisions": [
+    {
+      "name": "ConfigurationRepository",
+      "definitions": [
+        "app.repositories.protocols:74",
+        "app.services.configuration:14"
+      ],
+      "count": 2
+    },
+    {
+      "name": "SubmissionBundleReadPort",
+      "definitions": [
+        "app.api.ports:18",
+        "app.services.reanalysis:11"
+      ],
+      "count": 2
+    },
+    {
+      "name": "_AnalysisRunReader",
+      "definitions": [
+        "app.infrastructure.sqlite.repositories.revision:14",
+        "app.infrastructure.sqlite.repositories.learner:12"
+      ],
+      "count": 2
+    }
+  ],
+  "counts": {
+    "method_names_with_multiple_declarations": 29,
+    "contract_level_exact_duplicate_groups": 5,
+    "name_collisions": 3,
+    "method_names_partial_overlap": 29
+  }
+}

@@ -1,3 +1,27 @@
+## v0.9.5-H1 (2026-08-03)
+
+### Added
+- Read-only persistence-Protocol inventory and consolidation plan: 55
+  contracts inventoried (52 Protocols, 1 union alias, 1 plain structural
+  class, 1 legacy combined class) with consumer and implementation matrices,
+  method-level overlap matrix (29 methods), 3 same-name collisions, and a
+  5-unit H2 implementation plan; artifacts under `verification/v0.9.5-h1/`
+  and `docs/development/PROTOCOL_CONSOLIDATION_AUDIT_V0.9.5_H1.md`.
+- Confirmed the legacy `SubmissionRepository` and 11 stale central Protocols
+  plus the `SubmissionRepositories` alias have no production consumer
+  (H2A removal candidates); confirmed the central `ConfigurationRepository`
+  (ping/migration_version) is stale while the local 7-method contract is
+  authoritative for `ConfigurationService`; confirmed the ten API-owned Ports
+  are exact but test-referenced only; confirmed Practice read/write Ports
+  must stay separate; confirmed `_AnalysisRunReader` is an exact
+  infrastructure duplicate pair.
+
+### Verified
+- Focused F2-F6D+G Protocol/Port contract tests 187 passed, 2 warnings under
+  an isolated temporary database; all JSON artifacts parse and reconcile; no
+  production or test file changed; development database unchanged
+  (SHA-256/size/mtime). H2 implementation remains unauthorized.
+
 ## v0.9.5-G (2026-08-03)
 
 ### Changed

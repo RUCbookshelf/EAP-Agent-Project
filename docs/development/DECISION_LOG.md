@@ -1,5 +1,31 @@
 
 
+## 2026-08-03 - v0.9.5-H1 Persistence protocol inventory and consolidation plan
+
+- **Decision**: Complete a read-only, source-authoritative inventory of every
+  persistence-related Protocol/ABC/structural contract/alias at HEAD
+  `fc2e8e9` and produce an evidence-based, dependency-ordered H2
+  consolidation plan. Do not modify production code, tests, Protocol
+  definitions, Repositories, SQL, transactions, API, schema, provider,
+  prompt, UI, or localization.
+- **Rationale**: After v0.9.5-G, the exact Protocol landscape had never been
+  re-inventoried; F1-era classifications were hypotheses. The audit found 55
+  contracts: 42 active (A/B/C), 13 unused candidates (G). The legacy
+  `SubmissionRepository` combined class and 11 stale central Protocols plus
+  the `SubmissionRepositories` union have no production consumer; the central
+  `ConfigurationRepository` (ping/migration_version) is stale while the local
+  7-method `ConfigurationRepository` is the authoritative
+  `ConfigurationService` contract (name collision); the ten API-owned Ports
+  are exact but referenced only by contract tests; Practice read/write Ports
+  remain intentionally separate; `_AnalysisRunReader` is an exact
+  infrastructure duplicate pair.
+- **Parity boundary**: no production, test, Repository, SQL, transaction,
+  API, schema, prompt, provider, UI, or localization change; development
+  database unchanged; focused F2-F6D+G contract tests 187 passed, 2 warnings
+  under isolated DB.
+- **Boundary**: H2 implementation (recommended first unit H2A: remove the 13
+  unused legacy contracts) may begin only under separate owner authorization.
+
 ## 2026-08-03 - v0.9.5-G Database facade contraction
 
 - **Decision**: Contract the `Database` public facade from 86 methods to the

@@ -1,0 +1,1829 @@
+{
+  "ActiveConfigurationPort@app.services.progress": {
+    "classification": "A",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "progress:ActiveConfigurationPort"
+          ],
+          [
+            "annotation",
+            "76: ActiveConfigurationPort"
+          ],
+          [
+            "consumer_symbols",
+            "build_submission_service@68"
+          ]
+        ],
+        "module": "app.services.factory",
+        "rel": "app/services/factory.py",
+        "role": "production"
+      },
+      {
+        "evidence": [
+          [
+            "import",
+            "app.services.progress:ActiveConfigurationPort"
+          ],
+          [
+            "runtime_check",
+            "162: ActiveConfigurationPort"
+          ],
+          [
+            "consumer_symbols",
+            "test_concrete_repositories_and_facade_structurally_satisfy_ports@155;test_four_ports_have_exact_names_methods_and_source_signatures@131"
+          ]
+        ],
+        "module": "tests.test_v095f3_learner_read_model_narrowing",
+        "rel": "tests/test_v095f3_learner_read_model_narrowing.py",
+        "role": "test"
+      }
+    ],
+    "contract_name": "ActiveConfigurationPort",
+    "imported_or_referenced": "production",
+    "instantiated_in_runtime_checks": "tests-only",
+    "line": 31,
+    "module": "app.services.progress"
+  },
+  "AdminAnalysisPort@app.services.admin_reanalysis": {
+    "classification": "A",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "app.services.admin_reanalysis:AdminAnalysisPort"
+          ],
+          [
+            "runtime_check",
+            "170: AdminAnalysisPort"
+          ],
+          [
+            "consumer_symbols",
+            "TestPortContracts@137;test_concrete_repositories_and_facade_structurally_satisfy_ports@165;test_exact_names_methods_and_source_signatures@138"
+          ]
+        ],
+        "module": "tests.test_v095f6b_admin_reanalysis_narrowing",
+        "rel": "tests/test_v095f6b_admin_reanalysis_narrowing.py",
+        "role": "test"
+      }
+    ],
+    "contract_name": "AdminAnalysisPort",
+    "imported_or_referenced": "tests-only",
+    "instantiated_in_runtime_checks": "tests-only",
+    "line": 34,
+    "module": "app.services.admin_reanalysis"
+  },
+  "AdminConfigurationReadPort@app.services.admin_reanalysis": {
+    "classification": "A",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "app.services.admin_reanalysis:AdminConfigurationReadPort"
+          ],
+          [
+            "runtime_check",
+            "168: AdminConfigurationReadPort"
+          ],
+          [
+            "consumer_symbols",
+            "TestPortContracts@137;test_concrete_repositories_and_facade_structurally_satisfy_ports@165;test_exact_names_methods_and_source_signatures@138"
+          ]
+        ],
+        "module": "tests.test_v095f6b_admin_reanalysis_narrowing",
+        "rel": "tests/test_v095f6b_admin_reanalysis_narrowing.py",
+        "role": "test"
+      }
+    ],
+    "contract_name": "AdminConfigurationReadPort",
+    "imported_or_referenced": "tests-only",
+    "instantiated_in_runtime_checks": "tests-only",
+    "line": 18,
+    "module": "app.services.admin_reanalysis"
+  },
+  "AdminSubmissionReadPort@app.services.admin_reanalysis": {
+    "classification": "A",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "app.services.admin_reanalysis:AdminSubmissionReadPort"
+          ],
+          [
+            "runtime_check",
+            "169: AdminSubmissionReadPort"
+          ],
+          [
+            "consumer_symbols",
+            "TestPortContracts@137;test_concrete_repositories_and_facade_structurally_satisfy_ports@165;test_exact_names_methods_and_source_signatures@138"
+          ]
+        ],
+        "module": "tests.test_v095f6b_admin_reanalysis_narrowing",
+        "rel": "tests/test_v095f6b_admin_reanalysis_narrowing.py",
+        "role": "test"
+      }
+    ],
+    "contract_name": "AdminSubmissionReadPort",
+    "imported_or_referenced": "tests-only",
+    "instantiated_in_runtime_checks": "tests-only",
+    "line": 25,
+    "module": "app.services.admin_reanalysis"
+  },
+  "AnalysisRunReadPort@app.api.ports": {
+    "classification": "A",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "app.api.ports:AnalysisRunReadPort"
+          ],
+          [
+            "runtime_check",
+            "175: AnalysisRunReadPort"
+          ],
+          [
+            "consumer_symbols",
+            "TestRouterDependencyElimination@139;test_api_ports_exact_method_sets@150;test_concrete_repositories_satisfy_api_ports@170"
+          ]
+        ],
+        "module": "tests.test_v095g_facade_contraction",
+        "rel": "tests/test_v095g_facade_contraction.py",
+        "role": "test"
+      }
+    ],
+    "contract_name": "AnalysisRunReadPort",
+    "imported_or_referenced": "tests-only",
+    "instantiated_in_runtime_checks": "tests-only",
+    "line": 32,
+    "module": "app.api.ports"
+  },
+  "AnalysisRunWritePort@app.services.reanalysis": {
+    "classification": "A",
+    "consumers": [],
+    "contract_name": "AnalysisRunWritePort",
+    "imported_or_referenced": "none",
+    "instantiated_in_runtime_checks": "none",
+    "line": 18,
+    "module": "app.services.reanalysis"
+  },
+  "CalfAnalysisReadPort@app.services.calf": {
+    "classification": "A",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "app.services.calf:CalfAnalysisReadPort"
+          ],
+          [
+            "runtime_check",
+            "219: CalfAnalysisReadPort"
+          ],
+          [
+            "consumer_symbols",
+            "TestFourPorts@174;test_concrete_repositories_and_facade_structurally_satisfy_ports@210;test_exact_names_methods_and_source_signatures@175"
+          ]
+        ],
+        "module": "tests.test_v095f5a_calf_service_narrowing",
+        "rel": "tests/test_v095f5a_calf_service_narrowing.py",
+        "role": "test"
+      }
+    ],
+    "contract_name": "CalfAnalysisReadPort",
+    "imported_or_referenced": "tests-only",
+    "instantiated_in_runtime_checks": "tests-only",
+    "line": 30,
+    "module": "app.services.calf"
+  },
+  "CalfDataPort@app.services.calf": {
+    "classification": "A",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "app.services.calf:CalfDataPort"
+          ],
+          [
+            "runtime_check",
+            "217: CalfDataPort"
+          ],
+          [
+            "consumer_symbols",
+            "TestFourPorts@174;test_concrete_repositories_and_facade_structurally_satisfy_ports@210;test_exact_names_methods_and_source_signatures@175"
+          ]
+        ],
+        "module": "tests.test_v095f5a_calf_service_narrowing",
+        "rel": "tests/test_v095f5a_calf_service_narrowing.py",
+        "role": "test"
+      }
+    ],
+    "contract_name": "CalfDataPort",
+    "imported_or_referenced": "tests-only",
+    "instantiated_in_runtime_checks": "tests-only",
+    "line": 10,
+    "module": "app.services.calf"
+  },
+  "CalfReadPort@app.api.ports": {
+    "classification": "A",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "app.api.ports:CalfReadPort"
+          ],
+          [
+            "runtime_check",
+            "176: CalfReadPort"
+          ],
+          [
+            "consumer_symbols",
+            "TestRouterDependencyElimination@139;test_api_ports_exact_method_sets@150;test_concrete_repositories_satisfy_api_ports@170"
+          ]
+        ],
+        "module": "tests.test_v095g_facade_contraction",
+        "rel": "tests/test_v095g_facade_contraction.py",
+        "role": "test"
+      }
+    ],
+    "contract_name": "CalfReadPort",
+    "imported_or_referenced": "tests-only",
+    "instantiated_in_runtime_checks": "tests-only",
+    "line": 39,
+    "module": "app.api.ports"
+  },
+  "CalfStudentReadPort@app.services.calf": {
+    "classification": "A",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "app.services.calf:CalfStudentReadPort"
+          ],
+          [
+            "runtime_check",
+            "220: CalfStudentReadPort"
+          ],
+          [
+            "consumer_symbols",
+            "TestFourPorts@174;test_concrete_repositories_and_facade_structurally_satisfy_ports@210;test_exact_names_methods_and_source_signatures@175"
+          ]
+        ],
+        "module": "tests.test_v095f5a_calf_service_narrowing",
+        "rel": "tests/test_v095f5a_calf_service_narrowing.py",
+        "role": "test"
+      }
+    ],
+    "contract_name": "CalfStudentReadPort",
+    "imported_or_referenced": "tests-only",
+    "instantiated_in_runtime_checks": "tests-only",
+    "line": 37,
+    "module": "app.services.calf"
+  },
+  "CalfSubmissionReadPort@app.services.calf": {
+    "classification": "A",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "app.services.calf:CalfSubmissionReadPort"
+          ],
+          [
+            "runtime_check",
+            "218: CalfSubmissionReadPort"
+          ],
+          [
+            "consumer_symbols",
+            "TestFourPorts@174;test_concrete_repositories_and_facade_structurally_satisfy_ports@210;test_exact_names_methods_and_source_signatures@175"
+          ]
+        ],
+        "module": "tests.test_v095f5a_calf_service_narrowing",
+        "rel": "tests/test_v095f5a_calf_service_narrowing.py",
+        "role": "test"
+      }
+    ],
+    "contract_name": "CalfSubmissionReadPort",
+    "imported_or_referenced": "tests-only",
+    "instantiated_in_runtime_checks": "tests-only",
+    "line": 21,
+    "module": "app.services.calf"
+  },
+  "ConfigurationRepository@app.repositories.protocols": {
+    "classification": "G",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "protocols:ConfigurationRepository"
+          ]
+        ],
+        "module": "app.repositories.__init__",
+        "rel": "app/repositories/__init__.py",
+        "role": "production"
+      },
+      {
+        "evidence": [
+          [
+            "annotation",
+            "25: ConfigurationRepository"
+          ],
+          [
+            "consumer_symbols",
+            "ConfigurationService@24;__init__@25"
+          ]
+        ],
+        "module": "app.services.configuration",
+        "rel": "app/services/configuration.py",
+        "role": "production"
+      }
+    ],
+    "contract_name": "ConfigurationRepository",
+    "imported_or_referenced": "production",
+    "instantiated_in_runtime_checks": "none",
+    "line": 74,
+    "module": "app.repositories.protocols"
+  },
+  "ConfigurationRepository@app.services.configuration": {
+    "classification": "A",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "protocols:ConfigurationRepository"
+          ]
+        ],
+        "module": "app.repositories.__init__",
+        "rel": "app/repositories/__init__.py",
+        "role": "production"
+      },
+      {
+        "evidence": [
+          [
+            "definition",
+            "14: class ConfigurationRepository"
+          ],
+          [
+            "annotation",
+            "25: ConfigurationService.__init__(repository: ConfigurationRepository)"
+          ]
+        ],
+        "module": "app.services.configuration",
+        "rel": "app/services/configuration.py",
+        "role": "production"
+      }
+    ],
+    "contract_name": "ConfigurationRepository",
+    "imported_or_referenced": "production",
+    "instantiated_in_runtime_checks": "none",
+    "line": 14,
+    "module": "app.services.configuration"
+  },
+  "DashboardReadPort@app.services.dashboard": {
+    "classification": "A",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "app.services.dashboard:DashboardReadPort"
+          ],
+          [
+            "runtime_check",
+            "159: DashboardReadPort"
+          ],
+          [
+            "consumer_symbols",
+            "test_concrete_repositories_and_facade_structurally_satisfy_ports@155;test_four_ports_have_exact_names_methods_and_source_signatures@131"
+          ]
+        ],
+        "module": "tests.test_v095f3_learner_read_model_narrowing",
+        "rel": "tests/test_v095f3_learner_read_model_narrowing.py",
+        "role": "test"
+      }
+    ],
+    "contract_name": "DashboardReadPort",
+    "imported_or_referenced": "tests-only",
+    "instantiated_in_runtime_checks": "tests-only",
+    "line": 11,
+    "module": "app.services.dashboard"
+  },
+  "DiagnosisRepository@app.repositories.protocols": {
+    "classification": "G",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "protocols:DiagnosisRepository"
+          ]
+        ],
+        "module": "app.repositories.__init__",
+        "rel": "app/repositories/__init__.py",
+        "role": "production"
+      },
+      {
+        "evidence": [
+          [
+            "import",
+            "app.repositories:DiagnosisRepository"
+          ],
+          [
+            "base",
+            "78: DiagnosisRepository"
+          ],
+          [
+            "consumer_symbols",
+            "SubmissionRepository@78"
+          ]
+        ],
+        "module": "app.services.submission",
+        "rel": "app/services/submission.py",
+        "role": "production"
+      }
+    ],
+    "contract_name": "DiagnosisRepository",
+    "imported_or_referenced": "production",
+    "instantiated_in_runtime_checks": "none",
+    "line": 34,
+    "module": "app.repositories.protocols"
+  },
+  "ErrorAnnotationRepository@app.repositories.protocols": {
+    "classification": "G",
+    "consumers": [],
+    "contract_name": "ErrorAnnotationRepository",
+    "imported_or_referenced": "none",
+    "instantiated_in_runtime_checks": "none",
+    "line": 29,
+    "module": "app.repositories.protocols"
+  },
+  "EssayRepository@app.repositories.protocols": {
+    "classification": "G",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "protocols:EssayRepository"
+          ]
+        ],
+        "module": "app.repositories.__init__",
+        "rel": "app/repositories/__init__.py",
+        "role": "production"
+      },
+      {
+        "evidence": [
+          [
+            "import",
+            "app.repositories:EssayRepository"
+          ],
+          [
+            "base",
+            "78: EssayRepository"
+          ],
+          [
+            "consumer_symbols",
+            "SubmissionRepository@78"
+          ]
+        ],
+        "module": "app.services.submission",
+        "rel": "app/services/submission.py",
+        "role": "production"
+      }
+    ],
+    "contract_name": "EssayRepository",
+    "imported_or_referenced": "production",
+    "instantiated_in_runtime_checks": "none",
+    "line": 15,
+    "module": "app.repositories.protocols"
+  },
+  "ExerciseRepository@app.repositories.protocols": {
+    "classification": "G",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "protocols:ExerciseRepository"
+          ]
+        ],
+        "module": "app.repositories.__init__",
+        "rel": "app/repositories/__init__.py",
+        "role": "production"
+      }
+    ],
+    "contract_name": "ExerciseRepository",
+    "imported_or_referenced": "production",
+    "instantiated_in_runtime_checks": "none",
+    "line": 42,
+    "module": "app.repositories.protocols"
+  },
+  "FeedbackRepository@app.repositories.protocols": {
+    "classification": "G",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "protocols:FeedbackRepository"
+          ]
+        ],
+        "module": "app.repositories.__init__",
+        "rel": "app/repositories/__init__.py",
+        "role": "production"
+      },
+      {
+        "evidence": [
+          [
+            "import",
+            "app.repositories:FeedbackRepository"
+          ],
+          [
+            "base",
+            "78: FeedbackRepository"
+          ],
+          [
+            "consumer_symbols",
+            "SubmissionRepository@78"
+          ]
+        ],
+        "module": "app.services.submission",
+        "rel": "app/services/submission.py",
+        "role": "production"
+      }
+    ],
+    "contract_name": "FeedbackRepository",
+    "imported_or_referenced": "production",
+    "instantiated_in_runtime_checks": "none",
+    "line": 38,
+    "module": "app.repositories.protocols"
+  },
+  "JourneyProjectionReadPort@app.journey.service": {
+    "classification": "A",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "app.journey.service:JourneyProjectionReadPort"
+          ],
+          [
+            "runtime_check",
+            "273: JourneyProjectionReadPort"
+          ],
+          [
+            "consumer_symbols",
+            "TestFourPorts@223;test_concrete_repositories_and_facade_structurally_satisfy_ports@263;test_exact_names_methods_and_source_signatures@224"
+          ]
+        ],
+        "module": "tests.test_v095f4_reanalysis_journey_narrowing",
+        "rel": "tests/test_v095f4_reanalysis_journey_narrowing.py",
+        "role": "test"
+      }
+    ],
+    "contract_name": "JourneyProjectionReadPort",
+    "imported_or_referenced": "tests-only",
+    "instantiated_in_runtime_checks": "tests-only",
+    "line": 110,
+    "module": "app.journey.service"
+  },
+  "JourneyStudentReadPort@app.journey.service": {
+    "classification": "A",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "app.journey.service:JourneyStudentReadPort"
+          ],
+          [
+            "runtime_check",
+            "272: JourneyStudentReadPort"
+          ],
+          [
+            "consumer_symbols",
+            "TestFourPorts@223;test_concrete_repositories_and_facade_structurally_satisfy_ports@263;test_exact_names_methods_and_source_signatures@224"
+          ]
+        ],
+        "module": "tests.test_v095f4_reanalysis_journey_narrowing",
+        "rel": "tests/test_v095f4_reanalysis_journey_narrowing.py",
+        "role": "test"
+      }
+    ],
+    "contract_name": "JourneyStudentReadPort",
+    "imported_or_referenced": "tests-only",
+    "instantiated_in_runtime_checks": "tests-only",
+    "line": 103,
+    "module": "app.journey.service"
+  },
+  "LearnerHistoryRepository@app.repositories.protocols": {
+    "classification": "G",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "protocols:LearnerHistoryRepository"
+          ]
+        ],
+        "module": "app.repositories.__init__",
+        "rel": "app/repositories/__init__.py",
+        "role": "production"
+      },
+      {
+        "evidence": [
+          [
+            "import",
+            "app.repositories:LearnerHistoryRepository"
+          ],
+          [
+            "base",
+            "78: LearnerHistoryRepository"
+          ],
+          [
+            "consumer_symbols",
+            "SubmissionRepository@78"
+          ]
+        ],
+        "module": "app.services.submission",
+        "rel": "app/services/submission.py",
+        "role": "production"
+      }
+    ],
+    "contract_name": "LearnerHistoryRepository",
+    "imported_or_referenced": "production",
+    "instantiated_in_runtime_checks": "none",
+    "line": 46,
+    "module": "app.repositories.protocols"
+  },
+  "LearnerProfileReadPort@app.services.learner_profile": {
+    "classification": "A",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "learner_profile:LearnerProfileReadPort"
+          ],
+          [
+            "annotation",
+            "75: LearnerProgressPort | LearnerProfileReadPort"
+          ],
+          [
+            "consumer_symbols",
+            "build_submission_service@68"
+          ]
+        ],
+        "module": "app.services.factory",
+        "rel": "app/services/factory.py",
+        "role": "production"
+      },
+      {
+        "evidence": [
+          [
+            "import",
+            "app.services.learner_profile:LearnerProfileReadPort"
+          ],
+          [
+            "runtime_check",
+            "160: LearnerProfileReadPort"
+          ],
+          [
+            "consumer_symbols",
+            "test_concrete_repositories_and_facade_structurally_satisfy_ports@155;test_four_ports_have_exact_names_methods_and_source_signatures@131"
+          ]
+        ],
+        "module": "tests.test_v095f3_learner_read_model_narrowing",
+        "rel": "tests/test_v095f3_learner_read_model_narrowing.py",
+        "role": "test"
+      }
+    ],
+    "contract_name": "LearnerProfileReadPort",
+    "imported_or_referenced": "production",
+    "instantiated_in_runtime_checks": "tests-only",
+    "line": 12,
+    "module": "app.services.learner_profile"
+  },
+  "LearnerProfileRepository@app.repositories.protocols": {
+    "classification": "G",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "protocols:LearnerProfileRepository"
+          ]
+        ],
+        "module": "app.repositories.__init__",
+        "rel": "app/repositories/__init__.py",
+        "role": "production"
+      }
+    ],
+    "contract_name": "LearnerProfileRepository",
+    "imported_or_referenced": "production",
+    "instantiated_in_runtime_checks": "none",
+    "line": 52,
+    "module": "app.repositories.protocols"
+  },
+  "LearnerProgressPort@app.services.progress": {
+    "classification": "A",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "progress:LearnerProgressPort"
+          ],
+          [
+            "annotation",
+            "75: LearnerProgressPort | LearnerProfileReadPort"
+          ],
+          [
+            "consumer_symbols",
+            "build_submission_service@68"
+          ]
+        ],
+        "module": "app.services.factory",
+        "rel": "app/services/factory.py",
+        "role": "production"
+      },
+      {
+        "evidence": [
+          [
+            "import",
+            "app.services.progress:LearnerProgressPort"
+          ],
+          [
+            "runtime_check",
+            "161: LearnerProgressPort"
+          ],
+          [
+            "consumer_symbols",
+            "test_concrete_repositories_and_facade_structurally_satisfy_ports@155;test_four_ports_have_exact_names_methods_and_source_signatures@131"
+          ]
+        ],
+        "module": "tests.test_v095f3_learner_read_model_narrowing",
+        "rel": "tests/test_v095f3_learner_read_model_narrowing.py",
+        "role": "test"
+      }
+    ],
+    "contract_name": "LearnerProgressPort",
+    "imported_or_referenced": "production",
+    "instantiated_in_runtime_checks": "tests-only",
+    "line": 23,
+    "module": "app.services.progress"
+  },
+  "MetricRepository@app.repositories.protocols": {
+    "classification": "G",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "protocols:MetricRepository"
+          ]
+        ],
+        "module": "app.repositories.__init__",
+        "rel": "app/repositories/__init__.py",
+        "role": "production"
+      },
+      {
+        "evidence": [
+          [
+            "import",
+            "app.repositories:MetricRepository"
+          ],
+          [
+            "base",
+            "78: MetricRepository"
+          ],
+          [
+            "consumer_symbols",
+            "SubmissionRepository@78"
+          ]
+        ],
+        "module": "app.services.submission",
+        "rel": "app/services/submission.py",
+        "role": "production"
+      }
+    ],
+    "contract_name": "MetricRepository",
+    "imported_or_referenced": "production",
+    "instantiated_in_runtime_checks": "none",
+    "line": 21,
+    "module": "app.repositories.protocols"
+  },
+  "PracticeReadPort@app.practice.ports": {
+    "classification": "A",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "app.practice.ports:PracticeReadPort"
+          ],
+          [
+            "runtime_check",
+            "131: PracticeReadPort"
+          ],
+          [
+            "consumer_symbols",
+            "TestPortContracts@97;test_concrete_repositories_and_facade_structurally_satisfy_ports@127;test_exact_names_methods_and_source_signatures@98"
+          ]
+        ],
+        "module": "tests.test_v095f6d_practice_boundary_narrowing",
+        "rel": "tests/test_v095f6d_practice_boundary_narrowing.py",
+        "role": "test"
+      }
+    ],
+    "contract_name": "PracticeReadPort",
+    "imported_or_referenced": "tests-only",
+    "instantiated_in_runtime_checks": "tests-only",
+    "line": 21,
+    "module": "app.practice.ports"
+  },
+  "PracticeSubmissionReadPort@app.practice.ports": {
+    "classification": "A",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "app.practice.ports:PracticeSubmissionReadPort"
+          ],
+          [
+            "runtime_check",
+            "130: PracticeSubmissionReadPort"
+          ],
+          [
+            "consumer_symbols",
+            "TestPortContracts@97;test_concrete_repositories_and_facade_structurally_satisfy_ports@127;test_exact_names_methods_and_source_signatures@98"
+          ]
+        ],
+        "module": "tests.test_v095f6d_practice_boundary_narrowing",
+        "rel": "tests/test_v095f6d_practice_boundary_narrowing.py",
+        "role": "test"
+      }
+    ],
+    "contract_name": "PracticeSubmissionReadPort",
+    "imported_or_referenced": "tests-only",
+    "instantiated_in_runtime_checks": "tests-only",
+    "line": 14,
+    "module": "app.practice.ports"
+  },
+  "PracticeWritePort@app.practice.ports": {
+    "classification": "A",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "app.practice.ports:PracticeWritePort"
+          ],
+          [
+            "runtime_check",
+            "132: PracticeWritePort"
+          ],
+          [
+            "consumer_symbols",
+            "TestPortContracts@97;test_concrete_repositories_and_facade_structurally_satisfy_ports@127;test_exact_names_methods_and_source_signatures@98"
+          ]
+        ],
+        "module": "tests.test_v095f6d_practice_boundary_narrowing",
+        "rel": "tests/test_v095f6d_practice_boundary_narrowing.py",
+        "role": "test"
+      }
+    ],
+    "contract_name": "PracticeWritePort",
+    "imported_or_referenced": "tests-only",
+    "instantiated_in_runtime_checks": "tests-only",
+    "line": 40,
+    "module": "app.practice.ports"
+  },
+  "PriorRecordsPort@app.learner.history": {
+    "classification": "A",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "history:PriorRecordsPort"
+          ]
+        ],
+        "module": "app.learner.__init__",
+        "rel": "app/learner/__init__.py",
+        "role": "production"
+      },
+      {
+        "evidence": [
+          [
+            "import",
+            "app.learner:PriorRecordsPort"
+          ],
+          [
+            "runtime_check",
+            "114: PriorRecordsPort"
+          ],
+          [
+            "runtime_check",
+            "116: PriorRecordsPort"
+          ],
+          [
+            "runtime_check",
+            "176: PriorRecordsPort"
+          ],
+          [
+            "consumer_symbols",
+            "test_facade_and_submission_repository_satisfy_prior_records_port@112;test_learner_history_runtime_object_compatible_through_submission_service@171;test_prior_records_port_declares_exactly_one_method@95"
+          ]
+        ],
+        "module": "tests.test_v095f2_service_narrowing",
+        "rel": "tests/test_v095f2_service_narrowing.py",
+        "role": "test"
+      }
+    ],
+    "contract_name": "PriorRecordsPort",
+    "imported_or_referenced": "production",
+    "instantiated_in_runtime_checks": "tests-only",
+    "line": 22,
+    "module": "app.learner.history"
+  },
+  "ResearchExportReadPort@app.research.service": {
+    "classification": "A",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "app.research.service:ResearchExportReadPort"
+          ],
+          [
+            "runtime_check",
+            "204: ResearchExportReadPort"
+          ],
+          [
+            "runtime_check",
+            "206: ResearchExportReadPort"
+          ],
+          [
+            "consumer_symbols",
+            "TestThreePorts@155;test_concrete_repositories_and_facade_structurally_satisfy_ports@197;test_exact_names_methods_and_source_signatures@156"
+          ]
+        ],
+        "module": "tests.test_v095f5b_research_service_narrowing",
+        "rel": "tests/test_v095f5b_research_service_narrowing.py",
+        "role": "test"
+      }
+    ],
+    "contract_name": "ResearchExportReadPort",
+    "imported_or_referenced": "tests-only",
+    "instantiated_in_runtime_checks": "tests-only",
+    "line": 67,
+    "module": "app.research.service"
+  },
+  "ResearchExportWritePort@app.api.ports": {
+    "classification": "A",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "app.api.ports:ResearchExportWritePort"
+          ],
+          [
+            "runtime_check",
+            "177: ResearchExportWritePort"
+          ],
+          [
+            "consumer_symbols",
+            "TestRouterDependencyElimination@139;test_api_ports_exact_method_sets@150;test_concrete_repositories_satisfy_api_ports@170"
+          ]
+        ],
+        "module": "tests.test_v095g_facade_contraction",
+        "rel": "tests/test_v095g_facade_contraction.py",
+        "role": "test"
+      }
+    ],
+    "contract_name": "ResearchExportWritePort",
+    "imported_or_referenced": "tests-only",
+    "instantiated_in_runtime_checks": "tests-only",
+    "line": 48,
+    "module": "app.api.ports"
+  },
+  "ResearchReviewPort@app.research.service": {
+    "classification": "A",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "app.research.service:ResearchReviewPort"
+          ],
+          [
+            "runtime_check",
+            "203: ResearchReviewPort"
+          ],
+          [
+            "runtime_check",
+            "206: ResearchReviewPort"
+          ],
+          [
+            "consumer_symbols",
+            "TestThreePorts@155;test_concrete_repositories_and_facade_structurally_satisfy_ports@197;test_exact_names_methods_and_source_signatures@156"
+          ]
+        ],
+        "module": "tests.test_v095f5b_research_service_narrowing",
+        "rel": "tests/test_v095f5b_research_service_narrowing.py",
+        "role": "test"
+      }
+    ],
+    "contract_name": "ResearchReviewPort",
+    "imported_or_referenced": "tests-only",
+    "instantiated_in_runtime_checks": "tests-only",
+    "line": 56,
+    "module": "app.research.service"
+  },
+  "ResearchSubmissionReadPort@app.research.service": {
+    "classification": "A",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "app.research.service:ResearchSubmissionReadPort"
+          ],
+          [
+            "runtime_check",
+            "202: ResearchSubmissionReadPort"
+          ],
+          [
+            "consumer_symbols",
+            "TestThreePorts@155;test_concrete_repositories_and_facade_structurally_satisfy_ports@197;test_exact_names_methods_and_source_signatures@156"
+          ]
+        ],
+        "module": "tests.test_v095f5b_research_service_narrowing",
+        "rel": "tests/test_v095f5b_research_service_narrowing.py",
+        "role": "test"
+      }
+    ],
+    "contract_name": "ResearchSubmissionReadPort",
+    "imported_or_referenced": "tests-only",
+    "instantiated_in_runtime_checks": "tests-only",
+    "line": 45,
+    "module": "app.research.service"
+  },
+  "RevisionGroupLookupPort@app.api.ports": {
+    "classification": "A",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "app.api.ports:RevisionGroupLookupPort"
+          ],
+          [
+            "runtime_check",
+            "179: RevisionGroupLookupPort"
+          ],
+          [
+            "consumer_symbols",
+            "TestRouterDependencyElimination@139;test_api_ports_exact_method_sets@150;test_concrete_repositories_satisfy_api_ports@170"
+          ]
+        ],
+        "module": "tests.test_v095g_facade_contraction",
+        "rel": "tests/test_v095g_facade_contraction.py",
+        "role": "test"
+      }
+    ],
+    "contract_name": "RevisionGroupLookupPort",
+    "imported_or_referenced": "tests-only",
+    "instantiated_in_runtime_checks": "tests-only",
+    "line": 62,
+    "module": "app.api.ports"
+  },
+  "RevisionRepository@app.repositories.protocols": {
+    "classification": "B",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "protocols:RevisionRepository"
+          ]
+        ],
+        "module": "app.repositories.__init__",
+        "rel": "app/repositories/__init__.py",
+        "role": "production"
+      },
+      {
+        "evidence": [
+          [
+            "import",
+            "app.repositories:RevisionRepository"
+          ],
+          [
+            "annotation",
+            "68: RevisionRepository"
+          ],
+          [
+            "consumer_symbols",
+            "AdminReanalysisService@58;__init__@59"
+          ]
+        ],
+        "module": "app.services.admin_reanalysis",
+        "rel": "app/services/admin_reanalysis.py",
+        "role": "production"
+      },
+      {
+        "evidence": [
+          [
+            "import",
+            "app.repositories:RevisionRepository"
+          ],
+          [
+            "annotation",
+            "77: RevisionRepository"
+          ],
+          [
+            "consumer_symbols",
+            "build_submission_service@68"
+          ]
+        ],
+        "module": "app.services.factory",
+        "rel": "app/services/factory.py",
+        "role": "production"
+      },
+      {
+        "evidence": [
+          [
+            "import",
+            "app.repositories:RevisionRepository"
+          ],
+          [
+            "annotation",
+            "17: RevisionRepository"
+          ],
+          [
+            "consumer_symbols",
+            "RevisionService@13;__init__@17"
+          ]
+        ],
+        "module": "app.services.revision",
+        "rel": "app/services/revision.py",
+        "role": "production"
+      },
+      {
+        "evidence": [
+          [
+            "import",
+            "app.repositories.protocols:RevisionRepository"
+          ],
+          [
+            "consumer_symbols",
+            "TestStructuralContract@67;test_revision_repository_protocol_method_set_is_unchanged@68;test_sqlite_revision_repository_structurally_satisfies_protocol@82"
+          ]
+        ],
+        "module": "tests.test_v095f6a0_revision_capability_completion",
+        "rel": "tests/test_v095f6a0_revision_capability_completion.py",
+        "role": "test"
+      },
+      {
+        "evidence": [
+          [
+            "import",
+            "app.repositories:RevisionRepository"
+          ],
+          [
+            "consumer_symbols",
+            "TestPortContracts@137;test_concrete_repositories_and_facade_structurally_satisfy_ports@165"
+          ]
+        ],
+        "module": "tests.test_v095f6b_admin_reanalysis_narrowing",
+        "rel": "tests/test_v095f6b_admin_reanalysis_narrowing.py",
+        "role": "test"
+      }
+    ],
+    "contract_name": "RevisionRepository",
+    "imported_or_referenced": "production",
+    "instantiated_in_runtime_checks": "none",
+    "line": 61,
+    "module": "app.repositories.protocols"
+  },
+  "StudentLearnerReadPort@app.api.ports": {
+    "classification": "A",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "app.api.ports:StudentLearnerReadPort"
+          ],
+          [
+            "runtime_check",
+            "180: StudentLearnerReadPort"
+          ],
+          [
+            "consumer_symbols",
+            "TestRouterDependencyElimination@139;test_api_ports_exact_method_sets@150;test_concrete_repositories_satisfy_api_ports@170"
+          ]
+        ],
+        "module": "tests.test_v095g_facade_contraction",
+        "rel": "tests/test_v095g_facade_contraction.py",
+        "role": "test"
+      }
+    ],
+    "contract_name": "StudentLearnerReadPort",
+    "imported_or_referenced": "tests-only",
+    "instantiated_in_runtime_checks": "tests-only",
+    "line": 69,
+    "module": "app.api.ports"
+  },
+  "StudentLookupPort@app.api.ports": {
+    "classification": "A",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "app.api.ports:StudentLookupPort"
+          ],
+          [
+            "runtime_check",
+            "174: StudentLookupPort"
+          ],
+          [
+            "consumer_symbols",
+            "TestRouterDependencyElimination@139;test_api_ports_exact_method_sets@150;test_concrete_repositories_satisfy_api_ports@170"
+          ]
+        ],
+        "module": "tests.test_v095g_facade_contraction",
+        "rel": "tests/test_v095g_facade_contraction.py",
+        "role": "test"
+      }
+    ],
+    "contract_name": "StudentLookupPort",
+    "imported_or_referenced": "tests-only",
+    "instantiated_in_runtime_checks": "tests-only",
+    "line": 25,
+    "module": "app.api.ports"
+  },
+  "StudentRepository@app.repositories.protocols": {
+    "classification": "G",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "protocols:StudentRepository"
+          ]
+        ],
+        "module": "app.repositories.__init__",
+        "rel": "app/repositories/__init__.py",
+        "role": "production"
+      }
+    ],
+    "contract_name": "StudentRepository",
+    "imported_or_referenced": "production",
+    "instantiated_in_runtime_checks": "none",
+    "line": 11,
+    "module": "app.repositories.protocols"
+  },
+  "StudentSubmissionListPort@app.api.ports": {
+    "classification": "A",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "app.api.ports:StudentSubmissionListPort"
+          ],
+          [
+            "runtime_check",
+            "178: StudentSubmissionListPort"
+          ],
+          [
+            "consumer_symbols",
+            "TestRouterDependencyElimination@139;test_api_ports_exact_method_sets@150;test_concrete_repositories_satisfy_api_ports@170"
+          ]
+        ],
+        "module": "tests.test_v095g_facade_contraction",
+        "rel": "tests/test_v095g_facade_contraction.py",
+        "role": "test"
+      }
+    ],
+    "contract_name": "StudentSubmissionListPort",
+    "imported_or_referenced": "tests-only",
+    "instantiated_in_runtime_checks": "tests-only",
+    "line": 55,
+    "module": "app.api.ports"
+  },
+  "SubmissionAnalysisPort@app.services.submission": {
+    "classification": "A",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "submission:SubmissionAnalysisPort"
+          ],
+          [
+            "annotation",
+            "73: SubmissionAnalysisPort"
+          ],
+          [
+            "consumer_symbols",
+            "build_submission_service@68"
+          ]
+        ],
+        "module": "app.services.factory",
+        "rel": "app/services/factory.py",
+        "role": "production"
+      },
+      {
+        "evidence": [
+          [
+            "import",
+            "app.services.submission:SubmissionAnalysisPort"
+          ],
+          [
+            "runtime_check",
+            "179: SubmissionAnalysisPort"
+          ],
+          [
+            "consumer_symbols",
+            "TestPortContracts@142;test_concrete_repositories_and_facade_structurally_satisfy_ports@174;test_exact_names_methods_and_source_signatures@143;test_no_cross_port_method_and_exact_eleven_method_union@182"
+          ]
+        ],
+        "module": "tests.test_v095f6c_submission_service_narrowing",
+        "rel": "tests/test_v095f6c_submission_service_narrowing.py",
+        "role": "test"
+      }
+    ],
+    "contract_name": "SubmissionAnalysisPort",
+    "imported_or_referenced": "production",
+    "instantiated_in_runtime_checks": "tests-only",
+    "line": 57,
+    "module": "app.services.submission"
+  },
+  "SubmissionBundleReadPort@app.api.ports": {
+    "classification": "A",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "annotation",
+            "29: SubmissionBundleReadPort"
+          ],
+          [
+            "consumer_symbols",
+            "ReanalysisService@24;__init__@27"
+          ]
+        ],
+        "module": "app.services.reanalysis",
+        "rel": "app/services/reanalysis.py",
+        "role": "production"
+      },
+      {
+        "evidence": [
+          [
+            "import",
+            "app.services.reanalysis:SubmissionBundleReadPort"
+          ],
+          [
+            "runtime_check",
+            "270: SubmissionBundleReadPort"
+          ],
+          [
+            "consumer_symbols",
+            "TestFourPorts@223;test_concrete_repositories_and_facade_structurally_satisfy_ports@263;test_exact_names_methods_and_source_signatures@224"
+          ]
+        ],
+        "module": "tests.test_v095f4_reanalysis_journey_narrowing",
+        "rel": "tests/test_v095f4_reanalysis_journey_narrowing.py",
+        "role": "test"
+      },
+      {
+        "evidence": [
+          [
+            "import",
+            "app.api.ports:SubmissionBundleReadPort"
+          ],
+          [
+            "runtime_check",
+            "173: SubmissionBundleReadPort"
+          ],
+          [
+            "consumer_symbols",
+            "TestRouterDependencyElimination@139;test_api_ports_exact_method_sets@150;test_concrete_repositories_satisfy_api_ports@170"
+          ]
+        ],
+        "module": "tests.test_v095g_facade_contraction",
+        "rel": "tests/test_v095g_facade_contraction.py",
+        "role": "test"
+      }
+    ],
+    "contract_name": "SubmissionBundleReadPort",
+    "imported_or_referenced": "production",
+    "instantiated_in_runtime_checks": "tests-only",
+    "line": 18,
+    "module": "app.api.ports"
+  },
+  "SubmissionBundleReadPort@app.services.reanalysis": {
+    "classification": "A",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "app.services.reanalysis:SubmissionBundleReadPort"
+          ],
+          [
+            "runtime_check",
+            "270: SubmissionBundleReadPort"
+          ],
+          [
+            "consumer_symbols",
+            "TestFourPorts@223;test_concrete_repositories_and_facade_structurally_satisfy_ports@263;test_exact_names_methods_and_source_signatures@224"
+          ]
+        ],
+        "module": "tests.test_v095f4_reanalysis_journey_narrowing",
+        "rel": "tests/test_v095f4_reanalysis_journey_narrowing.py",
+        "role": "test"
+      },
+      {
+        "evidence": [
+          [
+            "import",
+            "app.api.ports:SubmissionBundleReadPort"
+          ],
+          [
+            "runtime_check",
+            "173: SubmissionBundleReadPort"
+          ],
+          [
+            "consumer_symbols",
+            "TestRouterDependencyElimination@139;test_api_ports_exact_method_sets@150;test_concrete_repositories_satisfy_api_ports@170"
+          ]
+        ],
+        "module": "tests.test_v095g_facade_contraction",
+        "rel": "tests/test_v095g_facade_contraction.py",
+        "role": "test"
+      }
+    ],
+    "contract_name": "SubmissionBundleReadPort",
+    "imported_or_referenced": "tests-only",
+    "instantiated_in_runtime_checks": "tests-only",
+    "line": 11,
+    "module": "app.services.reanalysis"
+  },
+  "SubmissionCalibrationPort@app.services.submission": {
+    "classification": "A",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "submission:SubmissionCalibrationPort"
+          ],
+          [
+            "annotation",
+            "74: SubmissionCalibrationPort"
+          ],
+          [
+            "consumer_symbols",
+            "build_submission_service@68"
+          ]
+        ],
+        "module": "app.services.factory",
+        "rel": "app/services/factory.py",
+        "role": "production"
+      },
+      {
+        "evidence": [
+          [
+            "import",
+            "app.services.submission:SubmissionCalibrationPort"
+          ],
+          [
+            "runtime_check",
+            "180: SubmissionCalibrationPort"
+          ],
+          [
+            "consumer_symbols",
+            "TestPortContracts@142;test_concrete_repositories_and_facade_structurally_satisfy_ports@174;test_exact_names_methods_and_source_signatures@143;test_no_cross_port_method_and_exact_eleven_method_union@182"
+          ]
+        ],
+        "module": "tests.test_v095f6c_submission_service_narrowing",
+        "rel": "tests/test_v095f6c_submission_service_narrowing.py",
+        "role": "test"
+      }
+    ],
+    "contract_name": "SubmissionCalibrationPort",
+    "imported_or_referenced": "production",
+    "instantiated_in_runtime_checks": "tests-only",
+    "line": 68,
+    "module": "app.services.submission"
+  },
+  "SubmissionCalibrationReadPort@app.api.ports": {
+    "classification": "A",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "app.api.ports:SubmissionCalibrationReadPort"
+          ],
+          [
+            "runtime_check",
+            "181: SubmissionCalibrationReadPort"
+          ],
+          [
+            "consumer_symbols",
+            "TestRouterDependencyElimination@139;test_api_ports_exact_method_sets@150;test_concrete_repositories_satisfy_api_ports@170"
+          ]
+        ],
+        "module": "tests.test_v095g_facade_contraction",
+        "rel": "tests/test_v095g_facade_contraction.py",
+        "role": "test"
+      }
+    ],
+    "contract_name": "SubmissionCalibrationReadPort",
+    "imported_or_referenced": "tests-only",
+    "instantiated_in_runtime_checks": "tests-only",
+    "line": 80,
+    "module": "app.api.ports"
+  },
+  "SubmissionDataPort@app.services.submission": {
+    "classification": "A",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "submission:SubmissionDataPort"
+          ],
+          [
+            "annotation",
+            "72: SubmissionDataPort"
+          ],
+          [
+            "consumer_symbols",
+            "build_submission_service@68"
+          ]
+        ],
+        "module": "app.services.factory",
+        "rel": "app/services/factory.py",
+        "role": "production"
+      },
+      {
+        "evidence": [
+          [
+            "import",
+            "app.services.submission:SubmissionDataPort"
+          ],
+          [
+            "runtime_check",
+            "178: SubmissionDataPort"
+          ],
+          [
+            "consumer_symbols",
+            "TestPortContracts@142;test_concrete_repositories_and_facade_structurally_satisfy_ports@174;test_exact_names_methods_and_source_signatures@143;test_no_cross_port_method_and_exact_eleven_method_union@182"
+          ]
+        ],
+        "module": "tests.test_v095f6c_submission_service_narrowing",
+        "rel": "tests/test_v095f6c_submission_service_narrowing.py",
+        "role": "test"
+      }
+    ],
+    "contract_name": "SubmissionDataPort",
+    "imported_or_referenced": "production",
+    "instantiated_in_runtime_checks": "tests-only",
+    "line": 42,
+    "module": "app.services.submission"
+  },
+  "SubmissionRepositories@app.repositories.protocols": {
+    "classification": "G",
+    "consumers": [],
+    "contract_name": "SubmissionRepositories",
+    "imported_or_referenced": "none",
+    "instantiated_in_runtime_checks": "none",
+    "line": 84,
+    "module": "app.repositories.protocols"
+  },
+  "SubmissionRepository@app.services.submission": {
+    "classification": "G",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "definition",
+            "78: class SubmissionRepository(EssayRepository, MetricRepository, DiagnosisRepository, FeedbackRepository, LearnerHistoryRepository, SystemVersionRepository)"
+          ]
+        ],
+        "module": "app.services.submission",
+        "rel": "app/services/submission.py",
+        "role": "production"
+      }
+    ],
+    "contract_name": "SubmissionRepository",
+    "imported_or_referenced": "production",
+    "instantiated_in_runtime_checks": "none",
+    "line": 78,
+    "module": "app.services.submission"
+  },
+  "SubmissionSystemPort@app.services.submission": {
+    "classification": "A",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "submission:SubmissionSystemPort"
+          ],
+          [
+            "annotation",
+            "71: SubmissionSystemPort"
+          ],
+          [
+            "consumer_symbols",
+            "build_submission_service@68"
+          ]
+        ],
+        "module": "app.services.factory",
+        "rel": "app/services/factory.py",
+        "role": "production"
+      },
+      {
+        "evidence": [
+          [
+            "import",
+            "app.services.submission:SubmissionSystemPort"
+          ],
+          [
+            "runtime_check",
+            "177: SubmissionSystemPort"
+          ],
+          [
+            "consumer_symbols",
+            "TestPortContracts@142;test_concrete_repositories_and_facade_structurally_satisfy_ports@174;test_exact_names_methods_and_source_signatures@143;test_no_cross_port_method_and_exact_eleven_method_union@182"
+          ]
+        ],
+        "module": "tests.test_v095f6c_submission_service_narrowing",
+        "rel": "tests/test_v095f6c_submission_service_narrowing.py",
+        "role": "test"
+      }
+    ],
+    "contract_name": "SubmissionSystemPort",
+    "imported_or_referenced": "production",
+    "instantiated_in_runtime_checks": "tests-only",
+    "line": 35,
+    "module": "app.services.submission"
+  },
+  "SystemMigrationPort@app.api.ports": {
+    "classification": "A",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "app.api.ports:SystemMigrationPort"
+          ],
+          [
+            "runtime_check",
+            "182: SystemMigrationPort"
+          ],
+          [
+            "consumer_symbols",
+            "TestRouterDependencyElimination@139;test_api_ports_exact_method_sets@150;test_concrete_repositories_satisfy_api_ports@170"
+          ]
+        ],
+        "module": "tests.test_v095g_facade_contraction",
+        "rel": "tests/test_v095g_facade_contraction.py",
+        "role": "test"
+      }
+    ],
+    "contract_name": "SystemMigrationPort",
+    "imported_or_referenced": "tests-only",
+    "instantiated_in_runtime_checks": "tests-only",
+    "line": 87,
+    "module": "app.api.ports"
+  },
+  "SystemVersionRepository@app.repositories.protocols": {
+    "classification": "G",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "import",
+            "protocols:SystemVersionRepository"
+          ]
+        ],
+        "module": "app.repositories.__init__",
+        "rel": "app/repositories/__init__.py",
+        "role": "production"
+      },
+      {
+        "evidence": [
+          [
+            "import",
+            "app.repositories:SystemVersionRepository"
+          ],
+          [
+            "base",
+            "78: SystemVersionRepository"
+          ],
+          [
+            "consumer_symbols",
+            "SubmissionRepository@78"
+          ]
+        ],
+        "module": "app.services.submission",
+        "rel": "app/services/submission.py",
+        "role": "production"
+      }
+    ],
+    "contract_name": "SystemVersionRepository",
+    "imported_or_referenced": "production",
+    "instantiated_in_runtime_checks": "none",
+    "line": 79,
+    "module": "app.repositories.protocols"
+  },
+  "_AnalysisRunReader@app.infrastructure.sqlite.repositories.learner": {
+    "classification": "C",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "annotation",
+            "21: _AnalysisRunReader"
+          ],
+          [
+            "consumer_symbols",
+            "SQLiteRevisionRepository@18;__init__@19"
+          ]
+        ],
+        "module": "app.infrastructure.sqlite.repositories.revision",
+        "rel": "app/infrastructure/sqlite/repositories/revision.py",
+        "role": "production"
+      }
+    ],
+    "contract_name": "_AnalysisRunReader",
+    "imported_or_referenced": "production",
+    "instantiated_in_runtime_checks": "none",
+    "line": 12,
+    "module": "app.infrastructure.sqlite.repositories.learner"
+  },
+  "_AnalysisRunReader@app.infrastructure.sqlite.repositories.revision": {
+    "classification": "C",
+    "consumers": [
+      {
+        "evidence": [
+          [
+            "annotation",
+            "22: _AnalysisRunReader"
+          ],
+          [
+            "consumer_symbols",
+            "SQLiteLearnerRepository@20;__init__@21"
+          ]
+        ],
+        "module": "app.infrastructure.sqlite.repositories.learner",
+        "rel": "app/infrastructure/sqlite/repositories/learner.py",
+        "role": "production"
+      }
+    ],
+    "contract_name": "_AnalysisRunReader",
+    "imported_or_referenced": "production",
+    "instantiated_in_runtime_checks": "none",
+    "line": 14,
+    "module": "app.infrastructure.sqlite.repositories.revision"
+  },
+  "_DiagnosticCalibrationReader@app.infrastructure.sqlite.repositories.learner": {
+    "classification": "C",
+    "consumers": [],
+    "contract_name": "_DiagnosticCalibrationReader",
+    "imported_or_referenced": "none",
+    "instantiated_in_runtime_checks": "none",
+    "line": 16,
+    "module": "app.infrastructure.sqlite.repositories.learner"
+  },
+  "_SubmissionBundleReader@app.infrastructure.sqlite.repositories.revision": {
+    "classification": "C",
+    "consumers": [],
+    "contract_name": "_SubmissionBundleReader",
+    "imported_or_referenced": "none",
+    "instantiated_in_runtime_checks": "none",
+    "line": 10,
+    "module": "app.infrastructure.sqlite.repositories.revision"
+  }
+}

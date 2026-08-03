@@ -1,0 +1,243 @@
+{
+  "stage": "v0.9.5-H1",
+  "generated_at": "2026-08-03T09:50:01+08:00",
+  "principle": "A Port belongs to the consumer that requires the capability. Identical signatures do not justify shared Protocols unless same abstraction + same ownership meaning + same change cadence + no import-direction violation + no unused-method coupling + no bounded-context coupling + no runtime behavior change.",
+  "units": [
+    {
+      "unit_id": "H2A",
+      "goal": "Remove proven-unused legacy contracts: legacy SubmissionRepository combined class, 11 stale central Protocols, and the SubmissionRepositories union alias.",
+      "included_contracts": [
+        "SubmissionRepository (app.services.submission)",
+        "StudentRepository",
+        "EssayRepository",
+        "MetricRepository",
+        "ErrorAnnotationRepository",
+        "DiagnosisRepository",
+        "FeedbackRepository",
+        "ExerciseRepository",
+        "LearnerHistoryRepository",
+        "LearnerProfileRepository",
+        "ConfigurationRepository (central, app.repositories.protocols)",
+        "SystemVersionRepository",
+        "SubmissionRepositories alias"
+      ],
+      "excluded_contracts": [
+        "RevisionRepository (active central aggregate contract; unchanged)",
+        "local ConfigurationRepository (services.configuration; authoritative)",
+        "all consumer-owned Ports, API Ports, Practice Ports, infrastructure readers"
+      ],
+      "files": [
+        "app/services/submission.py (remove class + 6 imports)",
+        "app/repositories/protocols.py (remove 11 classes + alias)",
+        "app/repositories/__init__.py (remove re-exports)",
+        "new focused H2A contract test"
+      ],
+      "consumer_migrations": [
+        "None in production: no production symbol imports or instantiates any removed contract (evidence: AST+text scan; only self-references, re-exports, union, and F6C negative assertions)"
+      ],
+      "import_changes": [
+        "app/services/submission.py drops from app.repositories import (DiagnosisRepository, EssayRepository, FeedbackRepository, LearnerHistoryRepository, MetricRepository, SystemVersionRepository)",
+        "app/repositories/__init__.py drops 11 re-exports; app/repositories/protocols.py drops 11 classes + alias"
+      ],
+      "runtime_risks": [
+        "None: no runtime isinstance/issubclass/annotation reference in production; tests only assert absence; historical verification scripts reference these names only as strings in E-era JSON builders"
+      ],
+      "test_plan": [
+        "New test: assert removed names absent from app.repositories exports and app/services/submission.py source; run F2-F6D contract suite + focused contract tests"
+      ],
+      "stop_conditions": [
+        "Any production import of a removed name is found",
+        "Any test positively imports a removed name",
+        "Runtime behavior change observed"
+      ],
+      "commit_boundary": "one refactor commit + one test commit",
+      "rank": {
+        "risk": "low",
+        "blast_radius": "low",
+        "consumers": 0,
+        "import_direction_complexity": "none",
+        "runtime_check_impact": "none",
+        "test_coverage": "existing F6C negative assertions + new focused test",
+        "architectural_value": "removes 13 dead contracts and resolves the ConfigurationRepository name collision"
+      }
+    },
+    {
+      "unit_id": "H2B",
+      "goal": "Resolve remaining naming collision: rename the authoritative local ConfigurationRepository (app/services/configuration.py) to a consumer-owned ConfigurationPort name so no persistence contract named ConfigurationRepository remains ambiguous.",
+      "included_contracts": [
+        "ConfigurationRepository (local, services.configuration)"
+      ],
+      "excluded_contracts": [
+        "central ConfigurationRepository (removed in H2A)",
+        "ActiveConfigurationPort",
+        "AdminConfigurationReadPort"
+      ],
+      "files": [
+        "app/services/configuration.py",
+        "app/api/main.py (two construction call sites use the type only indirectly; constructor annotation update)",
+        "new focused contract test"
+      ],
+      "consumer_migrations": [
+        "ConfigurationService.__init__ annotation only; construction sites pass SQLiteConfigurationRepository unchanged"
+      ],
+      "import_changes": [
+        "None (the class is module-local; no external import)"
+      ],
+      "runtime_risks": [
+        "None: annotation-only rename; construction unchanged"
+      ],
+      "test_plan": [
+        "New test asserting the renamed contract is used by ConfigurationService and no ConfigurationRepository name remains in app.repositories"
+      ],
+      "stop_conditions": [
+        "Any runtime isinstance/issubclass on the local class",
+        "Construction-site behavior change"
+      ],
+      "commit_boundary": "one refactor commit + one test commit",
+      "rank": {
+        "risk": "low",
+        "blast_radius": "low",
+        "consumers": 1,
+        "import_direction_complexity": "none",
+        "runtime_check_impact": "none",
+        "test_coverage": "focused",
+        "architectural_value": "removes the last same-name collision"
+      }
+    },
+    {
+      "unit_id": "H2C",
+      "goal": "Canonicalize the exact infrastructure-internal duplicate _AnalysisRunReader (revision.py and learner.py) into one shared infrastructure reader definition; keep all three consumer-owned get_submission_bundle Ports separate (intentional bounded-context duplication).",
+      "included_contracts": [
+        "_AnalysisRunReader (revision.py)",
+        "_AnalysisRunReader (learner.py)"
+      ],
+      "excluded_contracts": [
+        "_SubmissionBundleReader",
+        "_DiagnosticCalibrationReader",
+        "SubmissionBundleReadPort (api)",
+        "SubmissionBundleReadPort (reanalysis)",
+        "PracticeSubmissionReadPort",
+        "CalfSubmissionReadPort",
+        "AdminSubmissionReadPort",
+        "ResearchSubmissionReadPort"
+      ],
+      "files": [
+        "one shared infrastructure readers module (e.g., app/infrastructure/sqlite/repositories/_readers.py)",
+        "revision.py + learner.py import the shared reader",
+        "new focused contract test"
+      ],
+      "consumer_migrations": [
+        "SQLiteRevisionRepository and SQLiteLearnerRepository constructor annotations"
+      ],
+      "import_changes": [
+        "revision.py and learner.py import the shared reader instead of defining it"
+      ],
+      "runtime_risks": [
+        "None: identical signature; reader injection unchanged; no new connection/transaction behavior"
+      ],
+      "test_plan": [
+        "Focused test asserting one definition location and unchanged constructor signatures"
+      ],
+      "stop_conditions": [
+        "Signature divergence",
+        "Any behavioral change in reader delegation"
+      ],
+      "commit_boundary": "one refactor commit + one test commit",
+      "rank": {
+        "risk": "low",
+        "blast_radius": "very low (2 infra modules)",
+        "consumers": 2,
+        "import_direction_complexity": "infra -> infra (allowed)",
+        "runtime_check_impact": "none",
+        "test_coverage": "focused",
+        "architectural_value": "removes one exact duplicate definition"
+      }
+    },
+    {
+      "unit_id": "H2D",
+      "goal": "Relocate/formalize misplaced active contracts: convert the local plain-class ConfigurationRepository to a @runtime_checkable Protocol (if H2B rename is taken) and optionally annotate API dependency helpers with the ten API-owned Ports (deps.py return annotations) so API Ports are referenced in production, not only in tests.",
+      "included_contracts": [
+        "ConfigurationRepository (local, services.configuration)",
+        "10 API-owned Ports (app/api/ports.py)"
+      ],
+      "excluded_contracts": [
+        "all service-owned Ports (correct locations)",
+        "Practice Ports (correct locations)"
+      ],
+      "files": [
+        "app/services/configuration.py",
+        "app/api/deps.py (annotations only)",
+        "new focused contract test"
+      ],
+      "consumer_migrations": [
+        "ConfigurationService annotation",
+        "deps helpers gain return annotations (no runtime change)"
+      ],
+      "import_changes": [
+        "deps.py imports app.api.ports; services/configuration.py keeps module-local contract"
+      ],
+      "runtime_risks": [
+        "None: annotations only; no isinstance added in production"
+      ],
+      "test_plan": [
+        "Focused test asserting production annotation references exist and signatures still match"
+      ],
+      "stop_conditions": [
+        "Any runtime behavior change",
+        "Import cycle creation"
+      ],
+      "commit_boundary": "one refactor commit + one test commit",
+      "rank": {
+        "risk": "low",
+        "blast_radius": "low",
+        "consumers": 11,
+        "import_direction_complexity": "api -> api (allowed)",
+        "runtime_check_impact": "none",
+        "test_coverage": "focused",
+        "architectural_value": "makes API Ports production-referenced contracts"
+      }
+    },
+    {
+      "unit_id": "H2E",
+      "goal": "Final contract freeze and documentation: record the post-H2 contract set, update contract tests, and freeze the inventory.",
+      "included_contracts": [
+        "all remaining active contracts"
+      ],
+      "excluded_contracts": [
+        "none"
+      ],
+      "files": [
+        "verification/v0.9.5-h1 artifacts refresh or successor inventory",
+        "docs updates"
+      ],
+      "consumer_migrations": [
+        "none"
+      ],
+      "import_changes": [
+        "none"
+      ],
+      "runtime_risks": [
+        "none"
+      ],
+      "test_plan": [
+        "Full F2-F6D contract suite + frozen-contract checks"
+      ],
+      "stop_conditions": [
+        "Any contract drift"
+      ],
+      "commit_boundary": "one docs commit",
+      "rank": {
+        "risk": "low",
+        "blast_radius": "documentation",
+        "consumers": 0,
+        "import_direction_complexity": "none",
+        "runtime_check_impact": "none",
+        "test_coverage": "full contract suite",
+        "architectural_value": "freezes the canonical contract landscape"
+      }
+    }
+  ],
+  "recommended_first_unit": "H2A",
+  "recommended_first_unit_rationale": "Independently executable; zero production consumers; no runtime behavior change; bounded file set (3 production files + 1 test); resolves the ConfigurationRepository name collision as a side effect; reversible in one implementation commit; does not touch Repository implementations, SQL, transactions, API contracts, or any active contract.",
+  "authorization_note": "H2 must not begin without separate owner authorization. This plan is evidence and planning only."
+}

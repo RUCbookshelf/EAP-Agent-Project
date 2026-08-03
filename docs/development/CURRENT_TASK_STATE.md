@@ -1,6 +1,30 @@
 # Current Task State
 
 **Date:** 2026-08-03
+**Current task:** v0.9.5-H1 Persistence Protocol Inventory and Consolidation Plan
+**Status:** completed (read-only audit; see `docs/development/PROTOCOL_CONSOLIDATION_AUDIT_V0.9.5_H1.md`)
+
+- Inventoried 55 persistence-related contracts at HEAD `fc2e8e9` (52
+  Protocols, `SubmissionRepositories` union alias, local plain-class
+  `ConfigurationRepository`, legacy combined-class `SubmissionRepository`);
+  A=37, B=1, C=4, G=13; active=42, unused candidates=13; 3 same-name
+  collisions; 29 methods with >1 declaration; method-level overlap matrix,
+  consumer matrix, and 5-unit H2 plan produced as JSON artifacts under
+  `verification/v0.9.5-h1/`.
+- Legacy `SubmissionRepository` confirmed removable without replacement
+  (zero production consumers); central `ConfigurationRepository`
+  (ping/migration_version) confirmed stale with the local 7-method contract
+  authoritative for `ConfigurationService`; API-owned Ports exact but
+  test-referenced only; Practice read/write separation intentional;
+  `_AnalysisRunReader` exact infra duplicate pair.
+- Focused F2-F6D+G contract tests: 187 passed, 2 warnings (isolated
+  temporary database; `SERVICE_API_DIFF_ALLOWLIST` G-era value); development
+  database unchanged (SHA-256/size/mtime); no production or test file
+  modified.
+- Next: recommended H2A (remove 13 unused legacy contracts) may begin only
+  under separate authorization.
+
+**Date:** 2026-08-03
 **Current task:** v0.9.5-G Database Facade Contraction
 **Status:** completed and verified (see `RUN_VERIFICATION_V0.9.5_G.md`)
 
