@@ -1,3 +1,39 @@
+## v0.9.5-H2D1 (2026-08-03)
+
+### Changed
+- Formalized the active `ConfigurationPort` contract in
+  `app/services/configuration.py` from a plain structural class to a
+  structural `typing.Protocol` (same name, same module, same seven methods,
+  not `@runtime_checkable`). Production diff is two lines only: the
+  `from typing import Protocol` import and the `(Protocol)` base class.
+- Zero runtime behavior change: `ConfigurationService` still resolves its
+  `repository` annotation to `ConfigurationPort`; `SQLiteConfigurationRepository`
+  still structurally satisfies all seven methods without explicit inheritance;
+  application composition, configuration workflows, SQL, transactions, API,
+  UI, and localization unchanged. Contract-kind transition: typing.Protocol
+  40 -> 41, plain structural 1 -> 0; total/active contracts remain 41;
+  runtime-checkable count unchanged (36).
+- Added `tests/test_v095h2d1_configuration_port_protocol.py` (13 focused
+  tests): Protocol representation, no alias/instantiation/subclass/runtime
+  check, signature parity vs the before-state artifact, structural
+  satisfaction by deterministic signature inspection, configuration runtime
+  flows, and application construction with the same facade-owned Repository.
+  Before/after evidence: `verification/v0.9.5-h2d1/configuration_port_before.json`
+  and `configuration_port_after.json`.
+
+### Verified
+- Focused F2-H2D1 contract suite 230 passed, 2 warnings (isolated DB, local
+  provider); exact `run.bat --verify` PASS (migration 12, 33 tables,
+  `config-v0.9.0`, prompt `feedback-prompt-v0.7.1`, health/docs/Streamlit
+  200); Database public methods 2; API 77; client 52; locale 520/520;
+  development database unchanged (SHA-256/size/mtime).
+- Full non-live core: **PASS** - one fresh run, exit code 0,
+  **696 passed, 8 skipped, 2 warnings** (683 H2C baseline + 13 new H2D1
+  tests); zero failed, zero errors, complete collection; the documented
+  `test_v095b_router_contract` lifecycle-race flake did not occur. v0.9.5-H2D1
+  is COMPLETE and fully verified.
+
+
 ## v0.9.5-H2C (2026-08-03)
 
 ### Changed

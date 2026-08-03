@@ -1,6 +1,28 @@
 # Current Task State
 
 **Date:** 2026-08-03
+**Current task:** v0.9.5-H2D1 Formalize ConfigurationPort as a Structural Protocol
+**Status:** completed and fully verified (full-core exit 0; see `RUN_VERIFICATION_V0.9.5_H2D1.md`)
+
+- Formalized the active `ConfigurationPort` contract
+  (`app/services/configuration.py`) from a plain structural class to a
+  structural `typing.Protocol` (same name/module; seven methods preserved;
+  not `@runtime_checkable`; no alias; no instantiation/subclass/runtime-check
+  dependency).
+- Focused contract suite 230 passed, 2 warnings; exact `run.bat --verify`
+  PASS (migration 12, 33 tables, `config-v0.9.0`, prompt
+  `feedback-prompt-v0.7.1`, health/docs/Streamlit 200); Database public
+  methods 2, API 77, client 52, locale 520/520; development database
+  unchanged.
+- Full non-live core: one fresh run, exit code 0, **696 passed, 8 skipped,
+  2 warnings** (683 H2C baseline + 13 new H2D1 tests); zero failed, zero
+  errors; the documented `test_v095b_router_contract` lifecycle-race flake
+  did not occur.
+- Next: H2D2 and H2E each under separate authorization.
+
+
+
+**Date:** 2026-08-03
 **Current task:** v0.9.5-H2C Canonicalize Duplicate `_AnalysisRunReader` Infrastructure Contract
 **Status:** completed and fully verified (full-core exit 0; see `RUN_VERIFICATION_V0.9.5_H2C.md`)
 

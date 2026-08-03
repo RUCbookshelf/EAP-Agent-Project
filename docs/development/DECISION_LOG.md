@@ -1,5 +1,35 @@
 
 
+## 2026-08-03 - v0.9.5-H2D1 Formalize ConfigurationPort as a structural Protocol
+
+- **Decision**: Convert the active `ConfigurationPort` contract in
+  `app/services/configuration.py` from a plain structural class to a
+  structural `typing.Protocol` (same name, same module, same seven methods,
+  not `@runtime_checkable`), with the smallest source change possible
+  (typing import + `(Protocol)` base class).
+- **Rationale**: `ConfigurationPort` is used exclusively as a type contract
+  (sole production consumer is the `ConfigurationService.__init__`
+  annotation); it is never instantiated, inherited, or checked at runtime, so
+  the structural-Protocol form is the accurate representation of its role
+  without any behavioral risk. `@runtime_checkable` was not added because no
+  supported runtime `isinstance`/`issubclass` path exists for this contract.
+- **Parity boundary**: Seven method names, parameter names/kinds/order,
+  defaults, and return annotations unchanged; `ConfigurationService`
+  annotation resolves to `ConfigurationPort`; `SQLiteConfigurationRepository`
+  structurally satisfies the Protocol without explicit inheritance;
+  composition, SQL, DDL, migrations (12), tables (33), transactions, API
+  (77), client (52), locale (520/520), `config-v0.9.0`, prompt
+  `feedback-prompt-v0.7.1`, Database public methods 2 unchanged; contract
+  kinds typing.Protocol 40 -> 41 and plain structural 1 -> 0; total/active
+  contracts 41 -> 41; runtime-checkable count unchanged (36).
+- **Evidence**: focused F2-H2D1 contract suite 230 passed, 2 warnings; exact
+  `run.bat --verify` PASS; full non-live core run **exit code 0, 696 passed,
+  8 skipped, 2 warnings**; development database unchanged
+  (SHA-256/size/mtime).
+- **Boundary**: H2D2 (API dependency annotations) and H2E (contract freeze)
+  each require separate authorization; none begun.
+
+
 ## 2026-08-03 - v0.9.5-H2C Canonicalize duplicate `_AnalysisRunReader` contract
 
 - **Decision**: Replace the two exact infrastructure-local duplicate

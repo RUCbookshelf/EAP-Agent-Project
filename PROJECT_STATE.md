@@ -8,6 +8,28 @@
 
 # Project State
 
+## Current v0.9.5-H2D1 State
+
+- Status: **COMPLETE and fully verified** (full non-live core run: exit code
+  0, 696 passed, 8 skipped, 2 warnings).
+- Formalized the active `ConfigurationPort` contract
+  (`app/services/configuration.py`) from a plain structural class to a
+  structural `typing.Protocol` (same name/module; seven methods, signatures,
+  and behavior unchanged; not `@runtime_checkable`; no alias).
+- Zero runtime behavior change: `ConfigurationService` annotation resolves to
+  `ConfigurationPort`; `SQLiteConfigurationRepository` structurally satisfies
+  the Protocol without explicit inheritance; application composition,
+  configuration workflows, SQL, transactions, API, UI unchanged.
+  Contract-kind transition: typing.Protocol 40 -> 41; plain structural
+  1 -> 0; total/active contracts 41 -> 41; runtime-checkable 36 -> 36.
+- Verification: focused contract suite 230 passed, 2 warnings; exact
+  `run.bat --verify` PASS; full non-live core run **exit code 0, 696 passed,
+  8 skipped, 2 warnings**; Database public methods 2; API 77; client 52;
+  locale 520/520; migration 12; 33 tables; `config-v0.9.0`;
+  `feedback-prompt-v0.7.1`; development database unchanged
+  (SHA-256/size/mtime).
+- Next: H2D2 and H2E each require separate authorization.
+
 ## Current v0.9.5-H2C State
 
 - Status: **COMPLETE and fully verified** (full non-live core run: exit code
