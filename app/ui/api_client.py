@@ -28,6 +28,12 @@ class TimeoutProfile:
 # Long-read profile for operations that legitimately reconstruct a large
 # learner model or run an export.
 LONG_READ_TIMEOUTS = TimeoutProfile(connect=2.0, read=60.0, write=30.0)
+# Long-submit profile for the linked-revision submit path only: the backend
+# runs the full analysis + provider feedback pipeline (measured provider calls
+# of 30-38 s in the v0.9.6-A incident), so this path uses a dedicated bounded
+# 180 s wait instead of the generic 30 s write timeout. Ordinary requests and
+# every other submit path keep DEFAULT_TIMEOUTS.
+LONG_SUBMIT_TIMEOUTS = TimeoutProfile(connect=2.0, read=180.0, write=180.0)
 LIFECYCLE_TIMEOUTS = TimeoutProfile(connect=2.0, read=5.0, write=10.0)
 DEFAULT_TIMEOUTS = TimeoutProfile()
 
@@ -203,6 +209,18 @@ class WritingFeedbackApiClient:
 
     def submit(self, submission: dict[str, Any]) -> dict[str, Any]:
         return self._request("POST", "/api/v1/submissions", operation="submit", json=submission)
+
+    def submit_linked_revision(self, submission: dict[str, Any]) -> dict[str, Any]:
+        """Submit a linked revision with the dedicated long-operation timeout.
+
+        Same endpoint and payload as submit(); the longer bounded wait covers
+        the full analysis + provider feedback pipeline. POST is never
+        automatically retried (retry applies only to GET requests).
+        """
+        return self._request(
+            "POST", "/api/v1/submissions", operation="submit",
+            json=submission, profile=LONG_SUBMIT_TIMEOUTS,
+        )
 
     def get_submission(self, submission_id: int) -> dict[str, Any]:
         return self._request("GET", f"/api/v1/submissions/{submission_id}", operation="get_submission", retry=True)

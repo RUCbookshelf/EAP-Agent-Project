@@ -168,6 +168,7 @@ CLIENT_METHOD_CLASSIFICATION: dict[str, str] = {
     'rollback_configuration': 'B',
     'run_reanalysis': 'B',
     'submit': 'A',
+    'submit_linked_revision': 'A',
     'submit_exercise_attempt': 'A',
     'validate_configuration': 'B',
 }
@@ -229,7 +230,7 @@ PORT_METHODS: dict[str, list[str]] = {
     'StudentHomeApiPort': ['get_journey', 'get_practice_targets'],
     'StudentJourneyApiPort': ['get_journey'],
     'StudentPracticeApiPort': ['create_exercise', 'get_exercise_attempts', 'get_exercise_instances', 'get_practice_targets', 'submit_exercise_attempt'],
-    'StudentRevisionApiPort': ['get_practice_targets', 'get_student_revision_candidates', 'get_submission', 'submit'],
+    'StudentRevisionApiPort': ['get_practice_targets', 'get_student_revision_candidates', 'get_submission', 'submit_linked_revision'],
     'StudentWritingApiPort': ['get_student_revision_candidates', 'submit'],
 }
 
@@ -283,6 +284,7 @@ CLIENT_ENDPOINT_MAP: dict[str, list[tuple[str, str]]] = {
     'rollback_configuration': [('POST', '/api/v1/admin/configurations/{}/rollback')],
     'run_reanalysis': [('POST', '/api/v1/admin/reanalysis/run')],
     'submit': [('POST', '/api/v1/submissions')],
+    'submit_linked_revision': [('POST', '/api/v1/submissions')],
     'submit_exercise_attempt': [('POST', '/api/v1/exercises/{}/attempts')],
     'validate_configuration': [('POST', '/api/v1/admin/configurations/{}/validate')],
 }
