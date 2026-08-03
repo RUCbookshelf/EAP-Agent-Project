@@ -1,6 +1,31 @@
 # Current Task State
 
 **Date:** 2026-08-03
+**Current task:** v0.9.5-H2D2 Bind API Ports to Production Dependency Accessors
+**Status:** implementation and focused verification complete; final full-core closure pending (see `RUN_VERIFICATION_V0.9.5_H2D2.md`)
+
+- Bound the ten v0.9.5-G API-owned Ports as exact production return
+  annotations on the ten matching `app/api/deps.py` accessors (type-only);
+  all annotations resolve at runtime; all ten facade-owned repositories
+  structurally satisfy their Ports; accessor bodies, Routers, `Depends(...)`,
+  app-state, composition, Port definitions, OpenAPI, and dependency graph
+  unchanged.
+- Focused contract suite 243 passed, 2 warnings; OpenAPI/dependency-graph
+  parity 0 differences; exact `run.bat --verify` PASS; contract counts frozen
+  (41/41/0; Protocol 41; runtime-checkable 36); API Ports with production
+  references 0 -> 10.
+- Full non-live core: **NOT CLEAN** - one fresh run exited 1 with
+  `test_v095b_router_contract.py::test_live_and_ready_unchanged` (documented
+  pre-existing lifecycle-race flake; passes in isolation 1 passed/2.03s);
+  708 passed, 8 skipped otherwise. Per stage spec the full-core is not called
+  clean; final verification pending.
+- Research-export baseline restored to 776 files / 388 dirs after every
+  write-capable layer; development database unchanged.
+- Next: H2E (contract freeze) under separate authorization.
+
+
+
+**Date:** 2026-08-03
 **Current task:** v0.9.5-H2D1-V1 Research Export Verification Cleanup Closure
 **Status:** completed - v0.9.5-H2D1 is COMPLETE and fully verified; research-export verification side effects CLEANED; approved pre-H2D1 export baseline restored (see `RUN_VERIFICATION_V0.9.5_H2D1.md`)
 

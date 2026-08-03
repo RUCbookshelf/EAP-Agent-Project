@@ -21,6 +21,7 @@
 | v0.9.5-H2B Rename Active Configuration Repository Contract | completed and verified |
 | v0.9.5-H2C Canonicalize Duplicate AnalysisRunReader Infrastructure Contract | completed and verified |
 | v0.9.5-H2D1 Formalize ConfigurationPort as a Structural Protocol | completed and verified |
+| v0.9.5-H2D2 Bind API Ports to Production Dependency Accessors | implementation and focused verification complete; full-core closure pending |
 
 | v0.9.5-H1 Persistence Protocol Inventory and Consolidation Plan (read-only) | completed |
 | v0.9.5-G Database Facade Contraction | completed and verified |

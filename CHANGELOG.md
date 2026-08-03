@@ -1,3 +1,43 @@
+## v0.9.5-H2D2 (2026-08-03)
+
+### Changed
+- Bound the ten v0.9.5-G API-owned persistence Ports to their matching
+  dependency accessors in `app/api/deps.py` as exact production return
+  annotations (`SubmissionBundleReadPort`, `StudentLookupPort`,
+  `AnalysisRunReadPort`, `CalfReadPort`, `ResearchExportWritePort`,
+  `StudentSubmissionListPort`, `RevisionGroupLookupPort`,
+  `StudentLearnerReadPort`, `SubmissionCalibrationReadPort`,
+  `SystemMigrationPort`). Type-only change: one import block + ten return
+  annotations; no accessor body, parameter, Router, `Depends(...)`, app-state
+  attribute, composition, or Port definition changed.
+- All ten annotations resolve at runtime (`typing.get_type_hints`) to the
+  exact Port classes; every assigned facade-owned repository structurally
+  satisfies its Port (deterministic signature comparison); object identity
+  through both application-construction paths unchanged. Production reference
+  transition: API Ports with production references 0 -> 10.
+- Added `tests/test_v095h2d2_api_dependency_bindings.py` (13 focused tests)
+  and before/after evidence (`api_port_bindings_*`, `openapi_*`,
+  `dependency_graph_*`, `research_exports_baseline/final`,
+  `test_export_deltas.json`, `export_workspace_guard.py`).
+
+### Verified
+- Focused F2-H2D2 contract suite 243 passed, 2 warnings (isolated DB, local
+  provider); OpenAPI and FastAPI dependency-graph parity: **0 differences**
+  (77 path+method pairs, 108 `Depends` sites unchanged); exact
+  `run.bat --verify` PASS (migration 12, 33 tables, `config-v0.9.0`, prompt
+  `feedback-prompt-v0.7.1`, health/docs/Streamlit 200); Database public
+  methods 2; API 77; client 52; locale 520/520; contract counts frozen
+  (41/41/0; Protocol 41; runtime-checkable 36); research_export baseline
+  restored to 776 files / 388 dirs after every layer; development database
+  unchanged (SHA-256/size/mtime).
+- Full non-live core: **NOT CLEAN (documented pre-existing flake)** - one
+  fresh run, exit code 1, `1 failed, 708 passed, 8 skipped, 2 warnings`;
+  failure `test_v095b_router_contract.py::test_live_and_ready_unchanged`
+  (lifecycle-race flake, passes in isolation 1 passed/2.03s; identical
+  signature recorded since the G closure). Per stage spec the full-core is not
+  called clean; final H2D2 verification remains pending; H2E not begun.
+
+
 ## v0.9.5-H2D1-V1 (2026-08-03)
 
 ### Changed

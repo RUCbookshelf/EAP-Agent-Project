@@ -1,5 +1,33 @@
 
 
+## 2026-08-03 - v0.9.5-H2D2 Bind API Ports to production dependency accessors
+
+- **Decision**: Add the exact ten API-owned persistence Ports
+  (app/api/ports.py) as production return annotations on the ten matching
+  dependency accessors in app/api/deps.py (one-to-one mapping), with direct
+  resolvable imports and no other change.
+- **Rationale**: The ten Ports existed only in tests and audit artifacts; the
+  runtime wiring (app.state attributes assigned by both construction paths
+  and consumed through `Depends(get_*)` in the Routers) was already exact.
+  Binding the Ports as accessor return annotations makes them production type
+  boundaries with zero runtime effect and no Router/composition change.
+- **Parity boundary**: Accessor bodies/parameters, app-state attributes,
+  Routers, `Depends(...)` (108 sites), OpenAPI (77 path+method pairs, 0
+  semantic differences), Port definitions, contract counts (41/41/0;
+  Protocol 41; runtime-checkable 36), Database public methods 2, API 77,
+  client 52, locale 520/520, migration 12, tables 33, `config-v0.9.0`,
+  prompt `feedback-prompt-v0.7.1` unchanged; API Ports with production
+  references 0 -> 10.
+- **Evidence**: focused F2-H2D2 suite 243 passed, 2 warnings; OpenAPI and
+  dependency-graph parity 0 differences; exact `run.bat --verify` PASS; full
+  non-live core one run exit 1 with the documented pre-existing
+  `test_v095b_router_contract` lifecycle-race flake (passes in isolation;
+  not called clean); research-export baseline restored to 776 files / 388
+  dirs after every layer; development database unchanged.
+- **Boundary**: H2E (final contract freeze) requires separate authorization;
+  not begun.
+
+
 ## 2026-08-03 - v0.9.5-H2D1-V1 Clean up research-export verification side effects
 
 - **Decision**: Remove exactly the export directories/files that the H2D1
