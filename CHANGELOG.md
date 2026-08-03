@@ -1,3 +1,42 @@
+## v0.9.5-H2C (2026-08-03)
+
+### Changed
+- Canonicalized the exact duplicate infrastructure reader pair
+  `_AnalysisRunReader` (app/infrastructure/sqlite/repositories/revision.py:14
+  and learner.py:12) into one shared infrastructure-owned `AnalysisRunReader`
+  Protocol in the new module
+  `app/infrastructure/sqlite/repositories/contracts.py`; both consumers
+  (`SQLiteRevisionRepository`, `SQLiteLearnerRepository`) now import the
+  canonical contract and use it for the existing `analysis_reader` constructor
+  annotation only. Both former local definitions are removed; no compatibility
+  alias exists; `_AnalysisRunReader` is absent from all `app/**` source.
+- Zero runtime behavior change: constructor parameter names/order/defaults,
+  stored collaborator attributes, concrete Repository identity, connection
+  manager, SQL, query order, result ordering, missing-record behavior,
+  exceptions, transactions, composition, Services, Routers, APIs, and UI
+  unchanged. Active persistence contracts reduced by exactly one (42 -> 41);
+  unused legacy contracts remain 0.
+- Added `tests/test_v095h2c_analysis_run_reader_contract.py` (14 focused
+  tests) and mapped the two historical `_AnalysisRunReader` H1-inventory
+  entries to the canonical contract in
+  `tests/test_v095h2a_removed_contracts.py` (historical H1/H2A/H2B artifacts
+  untouched). Before/after evidence:
+  `verification/v0.9.5-h2c/reader_contract_before.json` and
+  `reader_contract_after.json`.
+
+### Verified
+- Focused F2-H2C contract suite 217 passed, 2 warnings (isolated DB, local
+  provider); exact `run.bat --verify` PASS (migration 12, 33 tables,
+  `config-v0.9.0`, prompt `feedback-prompt-v0.7.1`, health/docs/Streamlit
+  200); Database public methods 2; API 77; client 52; locale 520/520;
+  development database unchanged (SHA-256/size/mtime).
+- Full non-live core: **PASS** - one fresh run, exit code 0,
+  **683 passed, 8 skipped, 2 warnings** (669 H2B baseline + 14 new H2C
+  tests); zero failed, zero errors, complete collection; the documented
+  `test_v095b_router_contract` lifecycle-race flake did not occur. v0.9.5-H2C
+  is COMPLETE and fully verified.
+
+
 ## v0.9.5-H2B (2026-08-03)
 
 ### Changed

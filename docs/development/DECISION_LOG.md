@@ -1,5 +1,40 @@
 
 
+## 2026-08-03 - v0.9.5-H2C Canonicalize duplicate `_AnalysisRunReader` contract
+
+- **Decision**: Replace the two exact infrastructure-local duplicate
+  `_AnalysisRunReader` Protocol definitions (revision.py:14, learner.py:12)
+  with one shared infrastructure-owned `AnalysisRunReader` contract in the new
+  module `app/infrastructure/sqlite/repositories/contracts.py`; migrate the
+  two direct consumers (`SQLiteRevisionRepository`,
+  `SQLiteLearnerRepository`) to import the canonical contract for the existing
+  `analysis_reader` constructor annotation only; remove both local definitions
+  with no compatibility alias.
+- **Rationale**: Both definitions were exact semantic and signature duplicates
+  (plain Protocol, single method
+  `get_latest_analysis_run(essay_id: int) -> dict[str, Any] | None`), same
+  Analysis-owned capability, same intended concrete satisfier
+  (`SQLiteAnalysisRepository`), same facade-owned injected instance, and no
+  runtime checks; H1 classified the pair as the only exact infrastructure
+  duplicate. The leading underscore was dropped because the contract is
+  intentionally imported by more than one infrastructure module; the module
+  stays inside the SQLite repository package (infra -> infra import, no cycle)
+  and independent of concrete implementations.
+- **Parity boundary**: Repository constructors (parameter names/order/defaults
+  and stored attributes), concrete Repository identity, connection-manager
+  identity, SQL, DDL, migrations (12), tables (33), transactions, Services,
+  Routers, APIs (77), client (52), locale (520/520), `config-v0.9.0`, prompt
+  `feedback-prompt-v0.7.1`, Database public methods 2 unchanged; active
+  persistence contracts 42 -> 41; unused legacy 0 -> 0. `_SubmissionBundleReader`
+  and `_DiagnosticCalibrationReader` remain single-definition module-local
+  readers (not consolidated).
+- **Evidence**: focused F2-H2C contract suite 217 passed, 2 warnings; exact
+  `run.bat --verify` PASS; full non-live core run **exit code 0, 683 passed,
+  8 skipped, 2 warnings**; development database unchanged
+  (SHA-256/size/mtime).
+- **Boundary**: H2D and H2E each require separate authorization; none begun.
+
+
 ## 2026-08-03 - v0.9.5-H2B Rename active configuration contract
 
 - **Decision**: Rename the active local configuration contract

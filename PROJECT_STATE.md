@@ -8,6 +8,30 @@
 
 # Project State
 
+## Current v0.9.5-H2C State
+
+- Status: **COMPLETE and fully verified** (full non-live core run: exit code
+  0, 683 passed, 8 skipped, 2 warnings).
+- Canonicalized the exact duplicate infrastructure reader pair
+  `_AnalysisRunReader` (revision.py:14, learner.py:12) into one shared
+  infrastructure-owned `AnalysisRunReader` Protocol in the new module
+  `app/infrastructure/sqlite/repositories/contracts.py`; both consumers
+  (`SQLiteRevisionRepository`, `SQLiteLearnerRepository`) use the canonical
+  contract for the existing `analysis_reader` constructor annotation only.
+  Both former local definitions removed; no alias; old name absent from
+  `app/**`.
+- Zero runtime behavior change: constructor parameter names/order/defaults,
+  stored attributes, concrete Repository identity, connection manager, SQL,
+  transactions, composition, Services, Routers, APIs, and UI unchanged.
+  Active persistence contracts 42 -> 41; unused legacy 0 -> 0.
+- Verification: focused contract suite 217 passed, 2 warnings; exact
+  `run.bat --verify` PASS; full non-live core run **exit code 0, 683 passed,
+  8 skipped, 2 warnings**; Database public methods 2; API 77; client 52;
+  locale 520/520; migration 12; 33 tables; `config-v0.9.0`;
+  `feedback-prompt-v0.7.1`; development database unchanged
+  (SHA-256/size/mtime).
+- Next: H2D and H2E each require separate authorization.
+
 ## Current v0.9.5-H2B State
 
 - Status: **COMPLETE and fully verified** (v0.9.5-H2B-V1 closure full-core run:

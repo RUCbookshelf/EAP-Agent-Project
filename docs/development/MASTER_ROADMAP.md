@@ -19,6 +19,7 @@
 | v0.9.5-H1 Persistence Protocol Inventory and Consolidation Plan (read-only) | completed |
 | v0.9.5-H2A Remove Unused Legacy Persistence Contracts | completed and verified |
 | v0.9.5-H2B Rename Active Configuration Repository Contract | completed and verified |
+| v0.9.5-H2C Canonicalize Duplicate AnalysisRunReader Infrastructure Contract | completed and verified |
 
 | v0.9.5-H1 Persistence Protocol Inventory and Consolidation Plan (read-only) | completed |
 | v0.9.5-G Database Facade Contraction | completed and verified |

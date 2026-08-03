@@ -1,6 +1,30 @@
 # Current Task State
 
 **Date:** 2026-08-03
+**Current task:** v0.9.5-H2C Canonicalize Duplicate `_AnalysisRunReader` Infrastructure Contract
+**Status:** completed and fully verified (full-core exit 0; see `RUN_VERIFICATION_V0.9.5_H2C.md`)
+
+- Canonicalized the exact duplicate infrastructure reader pair
+  `_AnalysisRunReader` (revision.py:14, learner.py:12) into one shared
+  `AnalysisRunReader` Protocol in
+  `app/infrastructure/sqlite/repositories/contracts.py`; both consumers use
+  it for the existing `analysis_reader` annotation only; both former local
+  definitions removed; no alias; `_AnalysisRunReader` absent from `app/**`;
+  H2A/H2B diffs and all other active contracts intact.
+- Focused contract suite 217 passed, 2 warnings; exact `run.bat --verify`
+  PASS (migration 12, 33 tables, `config-v0.9.0`, prompt
+  `feedback-prompt-v0.7.1`, health/docs/Streamlit 200); Database public
+  methods 2, API 77, client 52, locale 520/520; development database
+  unchanged.
+- Full non-live core: one fresh run, exit code 0, **683 passed, 8 skipped,
+  2 warnings** (669 H2B baseline + 14 new H2C tests); zero failed, zero
+  errors; the documented `test_v095b_router_contract` lifecycle-race flake
+  did not occur.
+- Next: H2D and H2E each under separate authorization.
+
+
+
+**Date:** 2026-08-03
 **Current task:** v0.9.5-H2B Rename Active Configuration Repository Contract
 **Status:** completed and fully verified (full-core closure exit 0; see `RUN_VERIFICATION_V0.9.5_H2B.md`)
 
