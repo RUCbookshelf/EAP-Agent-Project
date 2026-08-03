@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import replace
+from typing import Protocol
 
 from app.analysis import AnalyzerRegistry, MetricRegistry
 from app.config import Settings
@@ -11,7 +12,7 @@ from app.configuration import (
 from app.calf import default_calf_registry
 
 
-class ConfigurationPort:
+class ConfigurationPort(Protocol):
     def list_configurations(self): ...
     def get_configuration(self, configuration_id_or_version: str): ...
     def get_active_configuration(self): ...

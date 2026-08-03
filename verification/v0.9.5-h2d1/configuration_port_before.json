@@ -1,0 +1,576 @@
+{
+  "stage": "v0.9.5-H2D1",
+  "mode": "before",
+  "definition": {
+    "name": "ConfigurationPort",
+    "module": "app.services.configuration",
+    "rel": "app/services/configuration.py",
+    "line": 14,
+    "bases": [],
+    "decorators": [],
+    "kind": "plain_class",
+    "is_protocol": false,
+    "runtime_checkable": false,
+    "methods": [
+      {
+        "name": "list_configurations",
+        "position": 15,
+        "signature": "list_configurations(self)",
+        "params": [
+          {
+            "name": "self",
+            "kind": "positional",
+            "annotation": null,
+            "has_default": false,
+            "default": null
+          }
+        ],
+        "return_annotation": null,
+        "body_form": "ellipsis-only"
+      },
+      {
+        "name": "get_configuration",
+        "position": 16,
+        "signature": "get_configuration(self, configuration_id_or_version: str)",
+        "params": [
+          {
+            "name": "self",
+            "kind": "positional",
+            "annotation": null,
+            "has_default": false,
+            "default": null
+          },
+          {
+            "name": "configuration_id_or_version",
+            "kind": "positional",
+            "annotation": "str",
+            "has_default": false,
+            "default": null
+          }
+        ],
+        "return_annotation": null,
+        "body_form": "ellipsis-only"
+      },
+      {
+        "name": "get_active_configuration",
+        "position": 17,
+        "signature": "get_active_configuration(self)",
+        "params": [
+          {
+            "name": "self",
+            "kind": "positional",
+            "annotation": null,
+            "has_default": false,
+            "default": null
+          }
+        ],
+        "return_annotation": null,
+        "body_form": "ellipsis-only"
+      },
+      {
+        "name": "create_configuration",
+        "position": 18,
+        "signature": "create_configuration(self, request, parent_version)",
+        "params": [
+          {
+            "name": "self",
+            "kind": "positional",
+            "annotation": null,
+            "has_default": false,
+            "default": null
+          },
+          {
+            "name": "request",
+            "kind": "positional",
+            "annotation": null,
+            "has_default": false,
+            "default": null
+          },
+          {
+            "name": "parent_version",
+            "kind": "positional",
+            "annotation": null,
+            "has_default": false,
+            "default": null
+          }
+        ],
+        "return_annotation": null,
+        "body_form": "ellipsis-only"
+      },
+      {
+        "name": "set_configuration_validation",
+        "position": 19,
+        "signature": "set_configuration_validation(self, configuration_id, *, passed, errors, actor)",
+        "params": [
+          {
+            "name": "self",
+            "kind": "positional",
+            "annotation": null,
+            "has_default": false,
+            "default": null
+          },
+          {
+            "name": "configuration_id",
+            "kind": "positional",
+            "annotation": null,
+            "has_default": false,
+            "default": null
+          },
+          {
+            "name": "passed",
+            "kind": "kwonly",
+            "annotation": null,
+            "has_default": false,
+            "default": null
+          },
+          {
+            "name": "errors",
+            "kind": "kwonly",
+            "annotation": null,
+            "has_default": false,
+            "default": null
+          },
+          {
+            "name": "actor",
+            "kind": "kwonly",
+            "annotation": null,
+            "has_default": false,
+            "default": null
+          }
+        ],
+        "return_annotation": null,
+        "body_form": "ellipsis-only"
+      },
+      {
+        "name": "activate_configuration",
+        "position": 20,
+        "signature": "activate_configuration(self, configuration_id, *, actor, reason, action='activate')",
+        "params": [
+          {
+            "name": "self",
+            "kind": "positional",
+            "annotation": null,
+            "has_default": false,
+            "default": null
+          },
+          {
+            "name": "configuration_id",
+            "kind": "positional",
+            "annotation": null,
+            "has_default": false,
+            "default": null
+          },
+          {
+            "name": "actor",
+            "kind": "kwonly",
+            "annotation": null,
+            "has_default": false,
+            "default": null
+          },
+          {
+            "name": "reason",
+            "kind": "kwonly",
+            "annotation": null,
+            "has_default": false,
+            "default": null
+          },
+          {
+            "name": "action",
+            "kind": "kwonly",
+            "annotation": null,
+            "has_default": true,
+            "default": "'activate'"
+          }
+        ],
+        "return_annotation": null,
+        "body_form": "ellipsis-only"
+      },
+      {
+        "name": "list_configuration_audit",
+        "position": 21,
+        "signature": "list_configuration_audit(self, configuration_id=None)",
+        "params": [
+          {
+            "name": "self",
+            "kind": "positional",
+            "annotation": null,
+            "has_default": false,
+            "default": null
+          },
+          {
+            "name": "configuration_id",
+            "kind": "positional",
+            "annotation": null,
+            "has_default": true,
+            "default": "None"
+          }
+        ],
+        "return_annotation": null,
+        "body_form": "ellipsis-only"
+      }
+    ],
+    "method_order": [
+      "list_configurations",
+      "get_configuration",
+      "get_active_configuration",
+      "create_configuration",
+      "set_configuration_validation",
+      "activate_configuration",
+      "list_configuration_audit"
+    ],
+    "has_constructor": false
+  },
+  "consumer": {
+    "class": "ConfigurationService",
+    "init_line": 25,
+    "parameters": [
+      {
+        "name": "self",
+        "annotation": null,
+        "has_default": false
+      },
+      {
+        "name": "repository",
+        "annotation": "ConfigurationPort",
+        "has_default": false
+      },
+      {
+        "name": "analyzers",
+        "annotation": "AnalyzerRegistry",
+        "has_default": false
+      },
+      {
+        "name": "metrics",
+        "annotation": "MetricRegistry",
+        "has_default": false
+      }
+    ],
+    "repository_parameter": {
+      "name": "repository",
+      "annotation": "ConfigurationPort",
+      "has_default": false
+    }
+  },
+  "intended_concrete_satisfier": {
+    "module": "app.infrastructure.sqlite.repositories.configuration",
+    "class": "SQLiteConfigurationRepository",
+    "methods": [
+      {
+        "name": "list_configurations",
+        "position": 30,
+        "signature": "list_configurations(self) -> list[ConfigurationVersion]",
+        "params": [
+          {
+            "name": "self",
+            "kind": "positional",
+            "annotation": null,
+            "has_default": false,
+            "default": null
+          }
+        ],
+        "return_annotation": "list[ConfigurationVersion]",
+        "body_form": "other"
+      },
+      {
+        "name": "get_configuration",
+        "position": 37,
+        "signature": "get_configuration(self, configuration_id_or_version: str) -> ConfigurationVersion | None",
+        "params": [
+          {
+            "name": "self",
+            "kind": "positional",
+            "annotation": null,
+            "has_default": false,
+            "default": null
+          },
+          {
+            "name": "configuration_id_or_version",
+            "kind": "positional",
+            "annotation": "str",
+            "has_default": false,
+            "default": null
+          }
+        ],
+        "return_annotation": "ConfigurationVersion | None",
+        "body_form": "other"
+      },
+      {
+        "name": "get_active_configuration",
+        "position": 45,
+        "signature": "get_active_configuration(self) -> ConfigurationVersion",
+        "params": [
+          {
+            "name": "self",
+            "kind": "positional",
+            "annotation": null,
+            "has_default": false,
+            "default": null
+          }
+        ],
+        "return_annotation": "ConfigurationVersion",
+        "body_form": "other"
+      },
+      {
+        "name": "create_configuration",
+        "position": 54,
+        "signature": "create_configuration(self, request: ConfigurationCreate, parent_version: str | None) -> ConfigurationVersion",
+        "params": [
+          {
+            "name": "self",
+            "kind": "positional",
+            "annotation": null,
+            "has_default": false,
+            "default": null
+          },
+          {
+            "name": "request",
+            "kind": "positional",
+            "annotation": "ConfigurationCreate",
+            "has_default": false,
+            "default": null
+          },
+          {
+            "name": "parent_version",
+            "kind": "positional",
+            "annotation": "str | None",
+            "has_default": false,
+            "default": null
+          }
+        ],
+        "return_annotation": "ConfigurationVersion",
+        "body_form": "other"
+      },
+      {
+        "name": "set_configuration_validation",
+        "position": 90,
+        "signature": "set_configuration_validation(self, configuration_id: str, *, passed: bool, errors: list[str], actor: str) -> ConfigurationVersion",
+        "params": [
+          {
+            "name": "self",
+            "kind": "positional",
+            "annotation": null,
+            "has_default": false,
+            "default": null
+          },
+          {
+            "name": "configuration_id",
+            "kind": "positional",
+            "annotation": "str",
+            "has_default": false,
+            "default": null
+          },
+          {
+            "name": "passed",
+            "kind": "kwonly",
+            "annotation": "bool",
+            "has_default": false,
+            "default": null
+          },
+          {
+            "name": "errors",
+            "kind": "kwonly",
+            "annotation": "list[str]",
+            "has_default": false,
+            "default": null
+          },
+          {
+            "name": "actor",
+            "kind": "kwonly",
+            "annotation": "str",
+            "has_default": false,
+            "default": null
+          }
+        ],
+        "return_annotation": "ConfigurationVersion",
+        "body_form": "other"
+      },
+      {
+        "name": "activate_configuration",
+        "position": 110,
+        "signature": "activate_configuration(self, configuration_id: str, *, actor: str, reason: str, action: str='activate') -> ConfigurationVersion",
+        "params": [
+          {
+            "name": "self",
+            "kind": "positional",
+            "annotation": null,
+            "has_default": false,
+            "default": null
+          },
+          {
+            "name": "configuration_id",
+            "kind": "positional",
+            "annotation": "str",
+            "has_default": false,
+            "default": null
+          },
+          {
+            "name": "actor",
+            "kind": "kwonly",
+            "annotation": "str",
+            "has_default": false,
+            "default": null
+          },
+          {
+            "name": "reason",
+            "kind": "kwonly",
+            "annotation": "str",
+            "has_default": false,
+            "default": null
+          },
+          {
+            "name": "action",
+            "kind": "kwonly",
+            "annotation": "str",
+            "has_default": true,
+            "default": "'activate'"
+          }
+        ],
+        "return_annotation": "ConfigurationVersion",
+        "body_form": "other"
+      },
+      {
+        "name": "list_configuration_audit",
+        "position": 136,
+        "signature": "list_configuration_audit(self, configuration_id: str | None=None) -> list[dict[str, Any]]",
+        "params": [
+          {
+            "name": "self",
+            "kind": "positional",
+            "annotation": null,
+            "has_default": false,
+            "default": null
+          },
+          {
+            "name": "configuration_id",
+            "kind": "positional",
+            "annotation": "str | None",
+            "has_default": true,
+            "default": "None"
+          }
+        ],
+        "return_annotation": "list[dict[str, Any]]",
+        "body_form": "other"
+      }
+    ]
+  },
+  "instantiation_sites": [],
+  "subclass_sites": [],
+  "runtime_check_sites": [],
+  "references": [
+    {
+      "rel": "app/services/configuration.py",
+      "line": 14,
+      "text": "class ConfigurationPort:"
+    },
+    {
+      "rel": "app/services/configuration.py",
+      "line": 25,
+      "text": "def __init__(self, repository: ConfigurationPort, analyzers: AnalyzerRegistry,"
+    },
+    {
+      "rel": "tests/test_v095h2a_removed_contracts.py",
+      "line": 27,
+      "text": "H1_RENAMED = {\"ConfigurationRepository\": \"ConfigurationPort\"}"
+    },
+    {
+      "rel": "tests/test_v095h2a_removed_contracts.py",
+      "line": 240,
+      "text": "# 6. Active local configuration contract unchanged (renamed to ConfigurationPort"
+    },
+    {
+      "rel": "tests/test_v095h2a_removed_contracts.py",
+      "line": 249,
+      "text": "assert \"ConfigurationPort\" in classes"
+    },
+    {
+      "rel": "tests/test_v095h2a_removed_contracts.py",
+      "line": 250,
+      "text": "assert _method_names(classes[\"ConfigurationPort\"]) == ["
+    },
+    {
+      "rel": "tests/test_v095h2b_configuration_contract_rename.py",
+      "line": 2,
+      "text": "ConfigurationRepository -> ConfigurationPort."
+    },
+    {
+      "rel": "tests/test_v095h2b_configuration_contract_rename.py",
+      "line": 5,
+      "text": "consumer-owned ConfigurationPort exists with exactly the seven preserved"
+    },
+    {
+      "rel": "tests/test_v095h2b_configuration_contract_rename.py",
+      "line": 24,
+      "text": "from app.services.configuration import ConfigurationPort, ConfigurationService"
+    },
+    {
+      "rel": "tests/test_v095h2b_configuration_contract_rename.py",
+      "line": 67,
+      "text": "assert \"ConfigurationPort\" in classes"
+    },
+    {
+      "rel": "tests/test_v095h2b_configuration_contract_rename.py",
+      "line": 68,
+      "text": "assert _method_names(classes[\"ConfigurationPort\"]) == EXPECTED_METHODS"
+    },
+    {
+      "rel": "tests/test_v095h2b_configuration_contract_rename.py",
+      "line": 74,
+      "text": "assert \"ConfigurationPort\" in annotation"
+    },
+    {
+      "rel": "tests/test_v095h2b_configuration_contract_rename.py",
+      "line": 86,
+      "text": "assert classes.get(\"ConfigurationPort\") is not None"
+    },
+    {
+      "rel": "tests/test_v095h2b_configuration_contract_rename.py",
+      "line": 88,
+      "text": "assert \"ConfigurationPort\" not in classes, path"
+    },
+    {
+      "rel": "tests/test_v095h2b_configuration_contract_rename.py",
+      "line": 90,
+      "text": "assert ConfigurationPort.__name__ == \"ConfigurationPort\""
+    },
+    {
+      "rel": "tests/test_v095h2b_configuration_contract_rename.py",
+      "line": 96,
+      "text": "stub_params = list(inspect.signature(getattr(ConfigurationPort, method)).parameters)"
+    },
+    {
+      "rel": "tests/test_v095h2c_analysis_run_reader_contract.py",
+      "line": 233,
+      "text": "name = \"ConfigurationPort\" if contract[\"contract_name\"] == \"ConfigurationRepository\" else contract[\"contract_name\"]"
+    },
+    {
+      "rel": "tests/test_v095h2c_analysis_run_reader_contract.py",
+      "line": 248,
+      "text": "name = \"ConfigurationPort\" if contract[\"contract_name\"] == \"ConfigurationRepository\" else contract[\"contract_name\"]"
+    },
+    {
+      "rel": "tests/test_v095h2c_analysis_run_reader_contract.py",
+      "line": 263,
+      "text": "assert \"ConfigurationPort\" in configuration_classes"
+    },
+    {
+      "rel": "tests/test_v095h2c_analysis_run_reader_contract.py",
+      "line": 264,
+      "text": "assert _method_names(configuration_classes[\"ConfigurationPort\"]) == ["
+    }
+  ],
+  "contract_kind_counts": {
+    "protocol": 40,
+    "plain_class": 1,
+    "total": 41
+  },
+  "runtime_checkable_count": 36,
+  "expected_after": {
+    "kind": "protocol",
+    "is_protocol": true,
+    "runtime_checkable": false,
+    "instantiation_sites": 0,
+    "runtime_check_sites": 0,
+    "protocol_count": 41,
+    "plain_class_count": 0
+  }
+}
