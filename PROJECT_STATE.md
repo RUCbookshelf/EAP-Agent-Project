@@ -1,4 +1,22 @@
 # Project State
+## Current v0.9.6-D0 State
+
+- Status: BLOCKED at the live-provider preflight (classification D0-E);
+  audit-only; no production code changed (see
+  RUN_VERIFICATION_V0.9.6_D0.md and
+  docs/development/BLOCKER_REPORT_V0.9.6_D0.md).
+- Real provider (DeepSeek deepseek-v4-pro) failed the bounded preflight
+  on both approved attempts (truncated JSON, then 30 s timeout); fallback
+  results recorded but not counted as live-provider success. Corpus,
+  repeatability, and downstream phases not run.
+- Non-provider pipeline verified on an isolated audit database
+  (spacy-analyzer-v0.8.0; Diagnostic Gate selected lexical_repetition
+  D001, 0.6649, verified).
+- Targeted verification: 155 passed, exit 0. Development database and
+  research exports (776/388) unchanged.
+- Recommended next stage (separately approved): v0.9.6-DP0 Production
+  Provider Reliability. v0.9.6-D1 remains not started.
+
 
 # Project State
 

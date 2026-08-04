@@ -1,0 +1,78 @@
+{
+  "audit_stage": "v0.9.6-D0",
+  "phase": "Phase 2 - Audit corpus creation (raw text fixture)",
+  "privacy_note": "All five essays are newly authored synthetic audit essays for this audit. They contain no real student content and no private data. This file is the only local raw-text fixture; the final report does not reproduce essay text.",
+  "corpus": [
+    {
+      "case_id": "D0-01",
+      "student_id": "AUDIT-D0-01",
+      "genre": "argumentative essay",
+      "draft_stage": "first draft",
+      "timed": false,
+      "tool_use": "none",
+      "writing_prompt": "Some people say that learning a second language should be compulsory for all students, while others say it should be optional. Discuss both views and give your own opinion.",
+      "intended_dominant_issue": "lexical repetition (repeated adverb 'really' with a local cluster)",
+      "expected_priority_family": "lexical_repetition",
+      "acceptable_alternative_families": ["no-priority (gate-conservative)"],
+      "disallowed_interpretations": ["priority with fabricated evidence", "priority family unrelated to the repeated lemma"],
+      "essay_text": "Learning a second language is a question that many schools discuss, and whether it should be compulsory for every student is not easy to answer. Both sides have reasonable points, but I believe that schools should require at least one second language for all students.\n\nOn the one hand, some people think that making a second language compulsory puts too much pressure on students. They say that not every learner is talented at languages, and that some students need more time for mathematics, science, or art. When learners struggle with a subject they will rarely use, school can become a source of stress instead of a place of growth. For these reasons, some parents argue that children should choose their own subjects.\n\nOn the other hand, the benefits of a second language are really clear. A second language is really useful and really practical for work and travel, and people who speak another language are really welcome in many companies. In my city, businesses now need workers who can talk with foreign customers, and bilingual employees often receive better opportunities. It is also interesting to read books or watch films in the original language, because you understand the culture in a deeper way. Learning a language also trains the brain, and studies show that bilingual people switch between tasks more quickly. When I started learning English, I found it really hard at first, but after two years I could talk with tourists and make friends online. That experience changed my view, and I think every young person should have the same chance.\n\nIn conclusion, although compulsory language learning is not perfect, its advantages are stronger than its disadvantages. Schools should keep foreign languages as a required subject and offer extra support to students who find it difficult."
+    },
+    {
+      "case_id": "D0-02",
+      "student_id": "AUDIT-D0-02",
+      "genre": "argumentative essay",
+      "draft_stage": "first draft",
+      "timed": false,
+      "tool_use": "none",
+      "writing_prompt": "Public transport systems in many cities need more investment. Do you agree that governments should spend more on buses and trains?",
+      "intended_dominant_issue": "cohesion gap at paragraph boundaries (few explicit connectives; two function categories only)",
+      "expected_priority_family": "connective_use",
+      "acceptable_alternative_families": ["no-priority (gate-conservative)"],
+      "disallowed_interpretations": ["fabricated boundary quote", "lexical priority without a dominant repeated-word problem"],
+      "essay_text": "Governments should spend more money on buses and trains, and I agree with this idea because public transport helps the whole city.\n\nCars give people freedom to travel at any time. Roads are full of cars in the morning and evening, and traffic jams make people late for work. When many people use buses and trains instead of cars, there are fewer cars on the road, and traffic becomes lighter. This is a simple reason to invest in public transport, and it also saves time for everyone.\n\nPublic transport is also better for the environment. Buses and trains carry many passengers at the same time, and they use less energy than cars. In my city, the air is cleaner on days when the metro runs well. Clean air is important for children and old people, and cities with good transport systems are healthier places to live.\n\nThere is also an economic reason. A good transport network connects workers with jobs in different parts of the city. People who cannot afford a car can still travel to work, and companies can find workers from a larger area. When transport is cheap and reliable, the whole economy benefits because more people can work and shop in the city center.\n\nSome people worry that building new lines costs a lot of money. This is true, and the cost can be very high. Still, the money is spent once, and the benefits last for many years. In the long run, the city saves money because fewer people depend on cars, and the government spends less on new roads and parking spaces.\n\nFor these reasons, I believe that governments should invest more in public transport. The investment is large, and the gains for traffic, health, and work are larger."
+    },
+    {
+      "case_id": "D0-03",
+      "student_id": "AUDIT-D0-03",
+      "genre": "argumentative essay",
+      "draft_stage": "first draft",
+      "timed": false,
+      "tool_use": "none",
+      "writing_prompt": "University education is expensive, and many students finish their studies with large debts. Should university education be free for everyone?",
+      "intended_dominant_issue": "sentence clarity (multiple very long sentences)",
+      "expected_priority_family": "sentence_structure_candidate",
+      "pre_registered_expectation": "no-priority: the production gate always monitors sentence_structure_candidate because the raw diagnoser assigns low confidence to every long-sentence candidate. This case is a deliberate probe of whether a source-supported family can produce a priority.",
+      "acceptable_alternative_families": ["no-priority"],
+      "disallowed_interpretations": ["a different-family priority whose evidence is unrelated to the long sentences"],
+      "essay_text": "University education has become expensive in many countries, and the question of whether it should be free for everyone is one that governments are discussing with increasing urgency because the cost of higher education affects not only individual students but also the future prosperity of entire societies.\n\nThere are strong reasons to make universities accessible to all. When students from poor families can study without paying, they gain a chance to change their lives through knowledge and skills instead of being limited by the income of their parents. Society also receives more doctors, engineers, and teachers, and these professionals improve the lives of everyone in the long term.\n\nThere are also serious problems with completely free universities. If institutions are free, governments must pay for everything, and this money has to come from taxes, which means that every citizen, including people who never attended university, contributes to the education of others. Critics also argue that study without fees can reduce the value of a degree because students may not work as hard when they do not pay for their own studies, although this claim is not supported by clear evidence.\n\nIn my opinion, the best solution is a middle path. Governments should pay for students from low-income families and provide low-interest loans for everyone else, and in this way the system can be fair without placing an impossible burden on the national budget.\n\nTo conclude, free university education is an attractive idea with real benefits, but it also creates serious financial problems, so governments should think carefully about how to design a system that is both fair and sustainable."
+    },
+    {
+      "case_id": "D0-04",
+      "student_id": "AUDIT-D0-04",
+      "genre": "argumentative essay",
+      "draft_stage": "first draft",
+      "timed": false,
+      "tool_use": "none",
+      "writing_prompt": "Many teenagers take part-time jobs during the school year. Is this a good idea?",
+      "intended_dominant_issue": "lexical repetition (repeated noun 'money' concentrated in one paragraph with a local cluster)",
+      "expected_priority_family": "lexical_repetition",
+      "acceptable_alternative_families": ["no-priority (gate-conservative)"],
+      "disallowed_interpretations": ["priority with fabricated evidence"],
+      "essay_text": "Many teenagers in my country take part-time jobs while they are still at school, and parents often discuss whether this is a good idea. In my opinion, a part-time job is good for teenagers when it does not take too much time away from study.\n\nHaving a job teaches young people how to handle money in a real way. Teenagers earn money, spend money, and save money according to their own plans, and these small decisions build habits that stay with them for life. For example, a student who earns money from a weekend job learns to put money aside for things he wants, and he becomes careful about wasting money on unnecessary items. When I was sixteen, I worked in a small restaurant, and my monthly income was small, but I learned to plan my spending before I spent any money. That experience taught me more about money than any classroom lesson, and I still use the same method today.\n\nOf course, schoolwork must come first. Students who work too many hours arrive at school tired, and their grades can fall quickly. Parents should set a clear limit, for example two evenings or one weekend day, so that the job stays a useful activity instead of a heavy burden.\n\nThere are also social benefits. Working with other people teaches teenagers to be punctual and responsible, and customers often praise young workers for their politeness. These qualities are useful in every future job, and they are rarely learned from textbooks.\n\nIn conclusion, part-time jobs are valuable for teenagers when they are balanced with study. The lessons about planning and responsibility are real, and with clear limits from parents, the experience is mostly positive."
+    },
+    {
+      "case_id": "D0-05",
+      "student_id": "AUDIT-D0-05",
+      "genre": "argumentative essay",
+      "draft_stage": "first draft",
+      "timed": false,
+      "tool_use": "none",
+      "writing_prompt": "Some people think that children should start learning English at a very young age. Others believe that early instruction is not necessary. Discuss both views and give your own opinion.",
+      "intended_dominant_issue": "none - comparatively coherent and developed control essay",
+      "expected_priority_family": "either a justified supported-family priority or a legitimate no-priority",
+      "acceptable_alternative_families": ["any supported family with valid evidence", "no-priority"],
+      "disallowed_interpretations": ["no-priority treated as the only acceptable outcome", "fabricated evidence"],
+      "essay_text": "The age at which children begin to learn a foreign language is a question that many parents face, and there are good arguments on both sides. After considering the evidence from my own experience, I believe that starting early is usually beneficial, but schools and families must do it in a sensible way.\n\nSupporters of early language learning point out that young children absorb sounds and patterns more naturally than adults do. A five-year-old who hears English songs and stories every day often develops a pleasant accent and uses new words without fear of making mistakes. Over time, these early foundations make later grammar and reading easier, because the child already knows how the language sounds.\n\nCritics respond that starting early is not a guarantee of success. What matters most is the quality of instruction and the amount of real communication, and these factors are often weak in preschool settings. A teenager who studies English seriously for three years can easily surpass a child who had only playful exposure, so the starting age alone does not determine the outcome.\n\nIn my view, the two positions can be combined. Parents who want their children to start early should choose programs that emphasize songs, conversation, and stories rather than written drills, and they should keep expectations realistic. Schools, in turn, should provide continuous support so that early exposure is followed by structured learning in primary school.\n\nTo sum up, early instruction offers genuine advantages in pronunciation and confidence, but it must be sustained with good teaching. When this happens, starting young is a wise choice for most children."
+    }
+  ]
+}

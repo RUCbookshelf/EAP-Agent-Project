@@ -1,0 +1,20 @@
+{
+  "audit_stage": "v0.9.6-D0",
+  "phase": "Research-export delta check",
+  "baseline": {
+    "file_count": 776,
+    "directory_count": 388,
+    "manifest": "verification/v0.9.6-d0/research_exports_baseline.json"
+  },
+  "current": {
+    "file_count": 776,
+    "directory_count": 388
+  },
+  "delta": {
+    "missing_files": 0,
+    "changed_files": 0,
+    "added_files": 0,
+    "directory_delta": 0
+  },
+  "conclusion": "No research-export file was modified, deleted, or added during the audit. No audit-generated exports exist, so no cleanup allowlist is needed."
+}

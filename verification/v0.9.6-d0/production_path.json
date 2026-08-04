@@ -1,0 +1,100 @@
+{
+  "audit_stage": "v0.9.6-D0",
+  "phase": "Phase 0 - Production-path trace (source inspection)",
+  "recorded_at_local": "2026-08-04T12:35:00+08:00",
+  "head": "8896828",
+  "flow": [
+    "Student View (Streamlit app/ui/features/student/writing.py) -> Writing submission",
+    "POST /api/v1/submissions (app/api/routers/submissions.py -> SubmissionService.submit)",
+    "save_essay (auto-creates student row in isolated DB)",
+    "SpacyAnalyzer.analyze (active spacy-analyzer-v0.8.0; BasicAnalyzer fallback only if spaCy unavailable)",
+    "append_product_fluency_metric (CALF v0.8)",
+    "save_analysis_run + save_analysis",
+    "NlpHeuristicDiagnoser.diagnose (prototype-diagnosis-v0.6.1 raw signals)",
+    "DiagnosticCalibrationService.calibrate (Diagnostic Gate diagnostic-gate-v0.6.1)",
+    "selected_priorities -> diagnosis (max 2, score >= 0.52, evidence verified, confidence rules)",
+    "LearnerHistoryService.summarize + LearnerProfileService.recalculate",
+    "ProviderRouter.generate (DeepSeek primary; LocalDemoProvider fallback)",
+    "FeedbackReliabilityService.repair + FeedbackValidator.validate",
+    "save_feedback (feedback_records append-only; exercises; llm_call_records)",
+    "Feedback page -> Revision page -> Practice page (read paths consume persisted records)"
+  ],
+  "active_provider": "deepseek",
+  "provider_model_identifier": "deepseek-v4-pro",
+  "provider_credentials_configured": true,
+  "provider_transport": "DeepSeekProvider (app/llm/deepseek.py) OpenAI-compatible chat completions, JSON response_format",
+  "provider_timeout_seconds": 30.0,
+  "provider_max_tokens": 1800,
+  "provider_temperature": 0.2,
+  "provider_retry_behavior": {
+    "max_attempts": 2,
+    "when": "configured primary only",
+    "retry_trigger": "FeedbackValidationError or ProviderOutputError on attempt 0",
+    "retry_action": "one prompt-builder correction bundle",
+    "request_failure_retry": false
+  },
+  "fallback_provider": "LocalDemoProvider (app/llm/local_demo.py)",
+  "fallback_activation_conditions": [
+    "primary raises FeedbackValidationError after the correction attempt",
+    "primary raises ProviderOutputError after the correction attempt",
+    "primary raises any exception on the first request (no retry for request failures)"
+  ],
+  "fallback_result_semantics": "success_status=fallback_success, provider_name=local, feedback_provider_status.fallback_used=true",
+  "priority_producing_component": "Primary LLM provider output parsed as StructuredFeedback.priority_feedback, constrained by system prompt feedback-prompt-v0.7.1; selection basis is the Diagnostic Gate (calibration selected_priorities) passed into the prompt payload",
+  "priority_confidence_support_requirements": {
+    "gate": "diagnostic-gate-v0.6.1",
+    "priority_score_threshold": 0.52,
+    "max_selected_priorities": 2,
+    "evidence_relevance": "evidence_relevance_status must be verified",
+    "confidence": "signal confidence must not be low",
+    "metric_confidence": "must not be low/insufficient/not_applicable",
+    "prompt_rule": "zero or one priority_feedback item is valid; never padded to two"
+  },
+  "evidence_source_requirements": {
+    "gate": "EvidenceRelevanceValidator.assess_signal against analysis artifacts; evidence_quote_candidates carried on DiagnosisSignal",
+    "prompt": "Every evidence_quote must be one contiguous character-for-character substring of submission.essay_text and relevant to the current diagnosis"
+  },
+  "priority_fields_consumed_by_feedback_page": [
+    "feedback_result.feedback.priority_feedback[].category (localized label)",
+    "priority_feedback[].explanation",
+    "priority_feedback[].revision_guidance",
+    "priority_feedback[].evidence_quote"
+  ],
+  "priority_fields_consumed_by_revision_page": [
+    "submission bundle feedback.priority_feedback (presence gate for no-priority info box)",
+    "practice_targets matching source_submission_id (target_label as feedback focus)",
+    "within_task_revision_trajectory.previous_selected_priorities[].category and .revision_guidance (after a linked revision)",
+    "source submission essay_text/writing_prompt/draft_stage"
+  ],
+  "priority_fields_consumed_by_practice_page": [
+    "GET /api/v1/students/{student_id}/practice-targets -> practice_targets[].target_code, target_label, source_submission_id, status",
+    "practice_targets[].practice_target_id -> exercise instances and attempts"
+  ],
+  "practice_target_creation_paths": {
+    "endpoint": "POST /api/v1/practice-targets exists (app/api/routers/practice.py)",
+    "production_auto_creation": "NOT FOUND - no UI page, service, or submission-path component calls create_practice_target; journey classifier treats feedback-without-target as legitimate derived state 'feedback_no_practice_target'",
+    "source_files_checked": [
+      "app/ui/features/student/{home,writing,feedback,practice,revision,journey}.py",
+      "app/ui/api_client.py",
+      "app/services/submission.py",
+      "app/journey/service.py",
+      "app/practice/service.py",
+      "app/api/routers/practice.py"
+    ]
+  },
+  "journey_state_contract": {
+    "priority_without_target": "feedback_no_practice_target (Home contract: next action is revise)",
+    "no_priority": "analysis_without_priority",
+    "target_without_attempt": "target_no_attempt",
+    "source": "app/journey/service.py:_classify_state and app/ui/features/student/home.py:_home_action_contract"
+  },
+  "active_configuration": {
+    "version": "config-v0.9.0",
+    "schema_version": "configuration-schema-v0.9.0",
+    "active_prompt_version": "feedback-prompt-v0.7.1",
+    "diagnostic_priority_threshold": 0.52,
+    "diagnostic_max_selected_priorities": 2,
+    "source": "runtime GET /api/v1/admin/configurations; migration 12 seeds config-v0.9.0 active on fresh databases"
+  },
+  "development_database_rule": "Not opened unless exact source/configuration inspection requires a non-content metadata value; any access read-only, fingerprinted before/after, no essay-text extraction."
+}

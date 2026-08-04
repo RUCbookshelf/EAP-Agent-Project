@@ -1,4 +1,27 @@
 # Current Task State
+**Date:** 2026-08-04
+**Current task:** v0.9.6-D0 Priority Path Production Validity Audit
+**Status:** BLOCKED at the live-provider preflight (classification D0-E); audit-only, no production code changed (see RUN_VERIFICATION_V0.9.6_D0.md and BLOCKER_REPORT_V0.9.6_D0.md)
+
+- The configured real provider (DeepSeek deepseek-v4-pro) failed the
+  bounded preflight: both approved attempts returned truncated JSON on
+  attempt 0 and timed out at the frozen 30 s transport timeout on the
+  correction attempt; both fell back to LocalDemo. Fallback is not counted
+  as live-provider success.
+- The non-provider production pipeline worked under the isolated audit
+  database: spacy-analyzer-v0.8.0, 24 metric results, Diagnostic Gate
+  selected lexical_repetition (D001, 0.6649, verified) on both attempts.
+- Protocol and corpus were preregistered and frozen before any live
+  submission (five newly authored synthetic essays, four issue-targeted +
+  one control).
+- Targeted verification: 155 passed, 0 failed, 0 errors, exit 0.
+  Development database unchanged (hash/size/mtime); research exports
+  unchanged (776/388, zero delta); no production source changed.
+- Primary classification: D0-E. Recommended next stage (separately
+  approved): v0.9.6-DP0 Production Provider Reliability. Do not begin
+  v0.9.6-D1 or any priority-generation/downstream repair stage.
+- Next: owner decision gate at the blocker report.
+
 
 
 

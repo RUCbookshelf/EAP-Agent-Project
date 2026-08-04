@@ -1,3 +1,27 @@
+## 2026-08-04 - v0.9.6-D0 Priority Path Production Validity Audit (audit-only)
+
+- **Decision**: Execute the approved diagnostic D0 audit (Questions A/B:
+  generation validity and downstream consumability) with a preregistered
+  protocol, a frozen five-essay corpus, a fresh isolated audit database,
+  and the current production configuration and prompt, without modifying
+  any production behavior. On the bounded live-provider preflight failure,
+  stop per the preregistered stop condition and classify D0-E.
+- **Rationale**: The configured real provider (DeepSeek deepseek-v4-pro)
+  failed both bounded preflight attempts (attempt 0 truncated/incomplete
+  JSON; attempt 1 TimeoutError at the frozen 30 s transport timeout), and
+  both results fell back to LocalDemo. Fallback cannot serve as
+  production-validity evidence, so corpus/repeatability/downstream phases
+  were not run. The non-provider pipeline was healthy in the isolated
+  database (spacy-analyzer-v0.8.0; gate selected lexical_repetition D001
+  at 0.6649, evidence verified).
+- **Evidence**: preflight_result.json (2 records), provider_call_summary.json,
+  database_safety.json, research_exports_deltas.json/final; targeted
+  verification 155 passed, exit 0; development database unchanged; research
+  exports unchanged (776/388); no production source changed.
+- **Boundary**: no production change; no threshold/prompt/routing change; no
+  corpus execution on fallback evidence; no downstream or controlled-
+  comparison phase; v0.9.6-D1 and v0.9.6-DP not started. Recommended next
+  stage (separately approved): v0.9.6-DP0 Production Provider Reliability.
 
 
 

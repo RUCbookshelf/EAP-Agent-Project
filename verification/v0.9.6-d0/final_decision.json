@@ -1,0 +1,38 @@
+{
+  "audit_stage": "v0.9.6-D0",
+  "phase": "Phase 6 - Evidence classification and decision",
+  "head": "8896828",
+  "primary_classification": "D0-E",
+  "classification_label": "Provider path unreliable",
+  "classification_basis": [
+    "the configured real provider repeatedly fails (both bounded preflight attempts)",
+    "fallback dominates the audit (2 of 2 preflight submissions used fallback)",
+    "provider output cannot be parsed reliably (truncated/incomplete JSON on both attempt-0 calls)",
+    "production validity cannot be assessed without relying on fallback"
+  ],
+  "success_metrics": {
+    "live_provider_success_count": 0,
+    "fallback_count": 2,
+    "provider_failure_count": 2,
+    "issue_targeted_essay_count_submitted": 1,
+    "issue_targeted_essay_count": 4,
+    "valid_priority_count_live_provider": 0,
+    "valid_priority_count_fallback": 1,
+    "no_priority_count": 0,
+    "invalid_priority_count": 0,
+    "evidence_exact_match_count": 1,
+    "evidence_source_faithful_count": 1,
+    "fabricated_evidence_count": 0,
+    "repeatability_classification": "NOT_ASSESSABLE",
+    "downstream_consumability_classification": "NOT_ASSESSABLE",
+    "controlled_comparison": "NOT_RUN"
+  },
+  "evidence_notes": [
+    "The Diagnostic Gate and analysis pipeline worked under the isolated audit database: spacy-analyzer-v0.8.0 produced 24 metric results; the gate selected a lexical_repetition priority (D001, score 0.6649, evidence verified) in both preflight submissions.",
+    "The fallback-generated priority was source-faithful (evidence_quote exact substring match) but is NOT evidence of live-provider priority generation.",
+    "Both DeepSeek failures are documented in provider_call_summary.json; no production configuration, timeout, token budget, prompt, or routing was changed."
+  ],
+  "recommended_next_stage": "v0.9.6-DP0 - Production Provider Reliability (investigate the evidence chain first; do not lower thresholds automatically)",
+  "do_not_start": ["v0.9.6-D1", "v0.9.6-DP", "v0.9.6-DE", "v0.9.6-D1 downstream repair"],
+  "stop_condition_hit": "the real provider fails the bounded preflight"
+}

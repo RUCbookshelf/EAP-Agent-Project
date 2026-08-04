@@ -1,0 +1,9 @@
+{
+  "audit_stage": "v0.9.6-D0",
+  "phase": "Research-export final state",
+  "final_file_count": 776,
+  "final_directory_count": 388,
+  "final_state_equals_baseline": true,
+  "baseline_manifest": "verification/v0.9.6-d0/research_exports_baseline.json",
+  "note": "All 776 baseline paths and hashes re-verified identical at audit close."
+}

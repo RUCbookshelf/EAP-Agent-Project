@@ -1,0 +1,237 @@
+{
+  "audit_stage": "v0.9.6-D0",
+  "phase": "Phase 1 - Audit protocol preregistration",
+  "recorded_at_local": "2026-08-04T12:40:00+08:00",
+  "head": "8896828",
+  "questions": {
+    "A": "Can the current real production pipeline naturally produce a valid, evidence-supported revision priority from realistic student writing?",
+    "B": "When a valid priority is naturally produced, can the existing Feedback, Revision, and Practice pages consume the same priority consistently?"
+  },
+  "audit_only": true,
+  "no_production_changes": true,
+  "supported_writing_genre": "argumentative essay",
+  "supported_task_type": "Untimed opinion/argumentative essay responding to a single writing prompt (draft_stage='first draft', tool_use='none', timed=false)",
+  "expected_essay_length_range_words": [250, 450],
+  "supported_priority_taxonomy": {
+    "raw_improvement_taxonomy_from_source": [
+      "lexical_repetition",
+      "connective_use",
+      "sentence_structure_candidate",
+      "input_quality"
+    ],
+    "gate_admissible_generated_families": ["lexical_repetition", "connective_use"],
+    "finding_reference": "verification/v0.9.6-d0/taxonomy_finding.json",
+    "rule": "No priority dimension is invented beyond the source-supported taxonomy; the corpus families are chosen only from this taxonomy."
+  },
+  "evidence_validity_criteria": [
+    "evidence_quote is a contiguous character-for-character substring of the frozen essay text (whitespace-normalized comparison per production validator plus raw exact check)",
+    "evidence_quote is present in the source passage cited",
+    "evidence belongs to the correct passage attribution",
+    "priority and evidence are semantically consistent",
+    "explanation is essay-specific, not generic advice",
+    "no unsupported strength/weakness or proficiency/longitudinal claim",
+    "no internal diagnostic text shown as student feedback",
+    "priority object contains every field required downstream (diagnosis_id, category, evidence_quote, explanation, revision_guidance)"
+  ],
+  "priority_validity_criteria": [
+    "produced naturally by the current production pipeline (no forced priority, no lowered threshold, no prompt change, no manual DB insert, no monkeypatch)",
+    "belongs to the current supported priority taxonomy",
+    "satisfies the current Diagnostic Gate (gate-selected diagnosis; priority_feedback diagnosis_id in selected priorities)",
+    "identifies a clear revision target",
+    "evidence traceable to the submitted essay",
+    "quoted evidence exact or source-faithful",
+    "explanation semantically related to the evidence",
+    "no unsupported proficiency or longitudinal conclusions",
+    "Feedback, Revision, and Practice receive a consistent priority identity"
+  ],
+  "evidence_invalid_examples": [
+    "fabricated quotation",
+    "quotation absent from essay",
+    "wrong passage attribution",
+    "priority/evidence semantic mismatch",
+    "generic advice with no essay-specific evidence",
+    "unsupported strength or weakness claim",
+    "internal diagnostic text shown as student feedback",
+    "priority object missing fields required downstream"
+  ],
+  "repeatability_criteria": {
+    "exact_wording_not_required": true,
+    "meaningfully_stable_when": [
+      "same broad priority family selected",
+      "or closely related supported priority selected with evidence from the same underlying writing problem",
+      "no contradictory priority generated",
+      "evidence remains source-faithful"
+    ],
+    "record_rule": "Record exact output differences without forcing exact equality; classification per case: STABLE, BROADLY_STABLE, UNSTABLE, NOT_ASSESSABLE"
+  },
+  "downstream_consumability_criteria": {
+    "feedback": [
+      "correct submission opens",
+      "generated priority visible",
+      "evidence visible and source-faithful",
+      "explanation matches the priority",
+      "no duplicate heading",
+      "no internal fallback or diagnostic text presented improperly"
+    ],
+    "revision": [
+      "correct source submission selected",
+      "same priority identity or family displayed",
+      "revision focus matches Feedback",
+      "evidence/source linkage intact",
+      "existing supported revision action offered",
+      "no new priority silently substituted"
+    ],
+    "practice": [
+      "page receives a practice target when the current design says one should exist",
+      "target derived from the same priority",
+      "exercise not arbitrary or unrelated",
+      "missing mappings reported accurately",
+      "no fake practice target generated"
+    ],
+    "classification": ["CONSUMABLE", "PARTIALLY_CONSUMABLE", "NOT_CONSUMABLE", "NOT_ASSESSABLE"],
+    "pre_registered_observation": "Source inspection finds no production component that creates practice targets from generated priorities; journey classifier treats feedback-without-target as legitimate state 'feedback_no_practice_target'. The production-path practice check will record the true normal-flow behavior. A separate preregistered controlled comparison (below) isolates whether the Practice page could consume a correctly structured priority-derived target."
+  },
+  "live_provider_success_criteria": [
+    "configured real provider completes the request",
+    "returns parseable production result (StructuredFeedback schema-valid)",
+    "result passes FeedbackValidator",
+    "no fallback used"
+  ],
+  "fallback_classification": {
+    "label": "FALLBACK_RESULT",
+    "rule": "Fallback-generated priorities are evaluated separately and never reported as proof that the real provider naturally generated a priority.",
+    "success_status_values": ["fallback_success"],
+    "provider": "local-demo"
+  },
+  "case_classifications": [
+    "LIVE_PROVIDER_SUCCESS",
+    "LIVE_PROVIDER_SUCCESS_NO_PRIORITY",
+    "LIVE_PROVIDER_INVALID_RESULT",
+    "FALLBACK_RESULT",
+    "PROVIDER_FAILURE",
+    "PIPELINE_FAILURE"
+  ],
+  "maximum_submissions": 8,
+  "allocation": {
+    "frozen_corpus": 5,
+    "repeat_submissions": 2,
+    "reserved": 1,
+    "preflight_note": "The Phase 3 preflight is corpus case D0-01 and counts within the five corpus submissions when successful."
+  },
+  "stop_conditions": [
+    "production provider cannot be identified",
+    "real provider credentials unavailable",
+    "live-provider execution prohibited by the environment",
+    "real provider fails the bounded preflight",
+    "only fallback results obtainable",
+    "current supported task or genre cannot be determined",
+    "audit would require modifying Diagnostic Gate or prompt logic",
+    "audit would require inserting priorities manually",
+    "eight-submission limit would be exceeded",
+    "development database changes unexpectedly",
+    "baseline research-export file changes",
+    "production source changes become necessary",
+    "private user data would need to be exposed"
+  ],
+  "final_decision_categories": {
+    "D0-A": "Production priority path valid",
+    "D0-B": "Priority generation insufficient",
+    "D0-C": "Priority evidence invalid",
+    "D0-D": "Downstream consumption broken",
+    "D0-E": "Provider path unreliable",
+    "D0-F": "Audit blocked"
+  },
+  "d0a_requirements": [
+    "real provider succeeds on the corpus",
+    "at least 3 of the 4 issue-targeted essays naturally produce valid priorities",
+    "all selected-priority evidence source-faithful",
+    "no fabricated evidence",
+    "at least one valid priority consumable by Feedback and Revision",
+    "Practice either consumes the priority correctly or any limitation is clearly isolated and non-blocking for entering D1",
+    "repeatability at least broadly stable for assessed cases"
+  ],
+  "controlled_comparison": {
+    "trigger_conditions": [
+      "live provider produces no valid priorities",
+      "live priority object is malformed",
+      "downstream consumability cannot otherwise be isolated"
+    ],
+    "method": "One single non-production case using the existing LocalDemoProvider (fake/local analyzer) on a fresh separate temporary database, clearly marked CONTROLLED_NON_PRODUCTION; practice target created only via the existing public POST /api/v1/practice-targets using the fake-generated priority identity; no production source modification.",
+    "allowed_use": "Answer only: would the current downstream workflow consume a correctly structured priority object if one were supplied?",
+    "not_used_for": "production-generation conclusions",
+    "artifact": "verification/v0.9.6-d0/controlled_comparison.json"
+  },
+  "corpus_plan": {
+    "count": 5,
+    "issue_targeted": [
+      {
+        "case_id": "D0-01",
+        "dominant_issue": "lexical repetition (one repeated content lemma with a local cluster)",
+        "expected_priority_family": "lexical_repetition",
+        "acceptable_alternatives": ["no-priority (gate-conservative)"],
+        "disallowed": ["priority with fabricated evidence", "unrelated family with mismatched evidence"],
+        "role": "preflight case (Phase 3) and corpus case"
+      },
+      {
+        "case_id": "D0-02",
+        "dominant_issue": "cohesion gap at paragraph boundary (few explicit connectives)",
+        "expected_priority_family": "connective_use",
+        "acceptable_alternatives": ["no-priority (gate-conservative)"],
+        "disallowed": ["fabricated boundary quote", "lexical priority without dominant lexical problem"]
+      },
+      {
+        "case_id": "D0-03",
+        "dominant_issue": "sentence clarity (multiple very long sentences)",
+        "expected_priority_family": "sentence_structure_candidate",
+        "pre_registered_expectation": "no-priority; source gate always monitors this family (low confidence). The case is a deliberate probe of whether the production pipeline can generate a priority for a source-supported family.",
+        "acceptable_alternatives": ["no-priority"],
+        "disallowed": ["a different family priority with evidence unrelated to the long sentences"]
+      },
+      {
+        "case_id": "D0-04",
+        "dominant_issue": "lexical repetition (a different repeated content lemma)",
+        "expected_priority_family": "lexical_repetition",
+        "acceptable_alternatives": ["no-priority (gate-conservative)"],
+        "disallowed": ["priority with fabricated evidence"]
+      }
+    ],
+    "control": {
+      "case_id": "D0-05",
+      "dominant_issue": "none - comparatively coherent and developed strong control essay",
+      "eligible_outcomes": ["justified priority (any supported family, must satisfy all validity criteria)", "legitimate no-priority"],
+      "disallowed": ["no-priority defined as the only acceptable outcome"]
+    },
+    "essay_requirements": [
+      "newly authored for this audit",
+      "no copyrighted published text reproduced",
+      "plausible real student writing",
+      "one intentionally dominant problem for issue-targeted essays",
+      "not artificially corrupted in every sentence",
+      "enough content for the normal analysis pipeline",
+      "some competent passages alongside the target problem",
+      "no labels such as 'this essay has an organization problem'",
+      "not written using hidden Diagnostic Gate thresholds"
+    ],
+    "freeze_rules": [
+      "save the five essays in a redacted audit corpus artifact before live submission",
+      "compute SHA-256 per essay",
+      "record intended dominant issue, expected family, acceptable alternatives, disallowed interpretations",
+      "freeze the corpus",
+      "never edit essays after seeing provider results"
+    ],
+    "student_ids": ["AUDIT-D0-01", "AUDIT-D0-02", "AUDIT-D0-03", "AUDIT-D0-04", "AUDIT-D0-05"],
+    "student_id_rule": "created only in the isolated audit database through the normal submission API"
+  },
+  "repeat_selection_rule": [
+    "one case that generated the clearest valid priority",
+    "one case representing a different supported priority family when available"
+  ],
+  "data_handling": [
+    "all audit submissions use a fresh isolated database (never data/writing_feedback.db)",
+    "development database fingerprinted before and after each execution layer",
+    "no real student essays, names, or private data",
+    "no API keys, tokens, or complete environment values recorded",
+    "audit essays synthetic and project-local",
+    "full essay text never included in JSON evidence artifacts; only hashes, lengths, and evidence quotes in downstream records"
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "audit_stage": "v0.9.6-D0",
+  "phase": "Phase 2 - Audit corpus freeze",
+  "frozen_at_local": "2026-08-04T13:05:00+08:00",
+  "freeze_rule": "The five essays are frozen before any live submission. No essay may be edited after provider results are seen.",
+  "raw_text_fixture": "verification/v0.9.6-d0/audit_corpus_essays.json",
+  "privacy": "This manifest contains hashes, lengths, and labels only; full essay text lives only in the local fixture.",
+  "genre": "argumentative essay",
+  "draft_stage": "first draft",
+  "timed": false,
+  "tool_use": "none",
+  "cases": [
+    {
+      "case_id": "D0-01",
+      "student_id": "AUDIT-D0-01",
+      "sha256": "F683F4C899BD0E2E146E9085D890CD8D1B2D659EF2083A0B087B1F816E410773",
+      "word_count": 297,
+      "char_count": 1805,
+      "intended_dominant_issue": "lexical_repetition (repeated adverb 'really' with local cluster)",
+      "expected_priority_family": "lexical_repetition",
+      "acceptable_alternative_families": ["no-priority"],
+      "disallowed_interpretations": ["fabricated evidence", "unrelated family"],
+      "role": "preflight case and corpus case"
+    },
+    {
+      "case_id": "D0-02",
+      "student_id": "AUDIT-D0-02",
+      "sha256": "40A93EB7A698C92641CB4332C4D605FF6F246341A8D08F457E805557E1ADE0A3",
+      "word_count": 294,
+      "char_count": 1654,
+      "intended_dominant_issue": "connective_use (paragraph-boundary cohesion gap; addition+cause functions only)",
+      "expected_priority_family": "connective_use",
+      "acceptable_alternative_families": ["no-priority"],
+      "disallowed_interpretations": ["fabricated boundary quote", "lexical priority without dominant repetition"]
+    },
+    {
+      "case_id": "D0-03",
+      "student_id": "AUDIT-D0-03",
+      "sha256": "E774C4F33113CD968A9E261F7012B368DD26ADDAAE7E3114D2CA30C91736C432",
+      "word_count": 269,
+      "char_count": 1692,
+      "intended_dominant_issue": "sentence_structure_candidate (multiple very long sentences)",
+      "expected_priority_family": "sentence_structure_candidate",
+      "pre_registered_expectation": "no-priority; the production gate always monitors this family (raw diagnoser low confidence). Probe case.",
+      "acceptable_alternative_families": ["no-priority"],
+      "disallowed_interpretations": ["different-family priority unrelated to long sentences"]
+    },
+    {
+      "case_id": "D0-04",
+      "student_id": "AUDIT-D0-04",
+      "sha256": "DD96EBBE276C98CD4300702CB4F9F9EF65A8C5D390389426AB035FAD2A9898D4",
+      "word_count": 283,
+      "char_count": 1646,
+      "intended_dominant_issue": "lexical_repetition (repeated noun 'money' concentrated in one paragraph)",
+      "expected_priority_family": "lexical_repetition",
+      "acceptable_alternative_families": ["no-priority"],
+      "disallowed_interpretations": ["fabricated evidence"]
+    },
+    {
+      "case_id": "D0-05",
+      "student_id": "AUDIT-D0-05",
+      "sha256": "B5F1A9FBB908F4CD4BB674534F8285C52DB96FC3A6EE4EF174A2BBA6485B1BFE",
+      "word_count": 266,
+      "char_count": 1664,
+      "intended_dominant_issue": "none - comparatively strong control",
+      "expected_priority_family": "justified supported priority OR legitimate no-priority",
+      "acceptable_alternative_families": ["any supported family", "no-priority"],
+      "disallowed_interpretations": ["no-priority as the only acceptable outcome"]
+    }
+  ],
+  "submission_envelope": {
+    "api": "POST /api/v1/submissions",
+    "fields": {
+      "student_id": "AUDIT-D0-0X",
+      "writing_prompt": "per-case frozen prompt",
+      "genre": "argumentative essay",
+      "draft_stage": "first draft",
+      "timed": false,
+      "time_limit_minutes": null,
+      "tool_use": "none",
+      "essay_text": "per-case frozen essay text"
+    }
+  }
+}

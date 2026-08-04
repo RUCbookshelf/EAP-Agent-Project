@@ -1,0 +1,61 @@
+{
+  "audit_stage": "v0.9.6-D0",
+  "phase": "Phase 3 - Live-provider preflight provider call summary",
+  "head": "8896828",
+  "provider": "deepseek",
+  "provider_model": "deepseek-v4-pro",
+  "credentials_configured": true,
+  "transport": "DeepSeekProvider chat completions, JSON response_format, timeout=30.0s, max_tokens=1800, temperature=0.2",
+  "router_retry_policy": "max_attempts=2 when configured (one correction attempt after validation failure); no retry on request failure",
+  "attempts": [
+    {
+      "submission_id": 1,
+      "case_id": "D0-01",
+      "student_id": "AUDIT-D0-01",
+      "kind": "preflight",
+      "request_duration_seconds": 57.84,
+      "attempt_0": {
+        "outcome": "ProviderOutputError",
+        "reason": "DeepSeek output failed StructuredFeedback validation: response: Invalid JSON: EOF while parsing a string at line 3 column 81 [json_invalid]",
+        "classification": "response_validation_failed (truncated/incomplete JSON output)"
+      },
+      "attempt_1_correction": {
+        "outcome": "RuntimeError",
+        "reason": "DeepSeek request failed: TimeoutError (30s transport timeout)",
+        "classification": "request_failed (timeout)"
+      },
+      "fallback_used": true,
+      "fallback_provider": "local-demo",
+      "fallback_success_status": "fallback_success"
+    },
+    {
+      "submission_id": 2,
+      "case_id": "D0-01",
+      "student_id": "AUDIT-D0-01P2",
+      "kind": "preflight_retry (single permitted recovery attempt)",
+      "request_duration_seconds": 57.75,
+      "attempt_0": {
+        "outcome": "ProviderOutputError",
+        "reason": "DeepSeek output failed StructuredFeedback validation: response: Invalid JSON: EOF while parsing a value at line 41 column 21 [json_invalid]",
+        "classification": "response_validation_failed (truncated/incomplete JSON output)"
+      },
+      "attempt_1_correction": {
+        "outcome": "RuntimeError",
+        "reason": "DeepSeek request failed: TimeoutError (30s transport timeout)",
+        "classification": "request_failed (timeout)"
+      },
+      "fallback_used": true,
+      "fallback_provider": "local-demo",
+      "fallback_success_status": "fallback_success"
+    }
+  ],
+  "findings": [
+    "The configured real provider repeatedly fails to complete the structured feedback response under the current frozen production configuration.",
+    "Attempt 0 in both submissions produced truncated/incomplete JSON (different truncation points), consistent with the provider output exceeding the frozen llm_max_tokens=1800 output budget or being cut off mid-response.",
+    "Attempt 1 (router correction attempt) timed out at the frozen 30s transport timeout in both submissions.",
+    "Both submissions therefore fell back to local-demo; the fallback result is NOT counted as live-provider success.",
+    "No token or cost metadata is recorded; the provider does not expose it safely through the current transport, and cost estimation is prohibited."
+  ],
+  "bounded_preflight_outcome": "FAILED - the real provider did not complete a parseable production result in either the preflight or the single permitted recovery attempt.",
+  "conclusion": "The audit stops here per the preregistered stop condition 'the real provider fails the bounded preflight'. No corpus execution, repeats, downstream checks, or controlled comparison are run, because production-path validity cannot be assessed without relying on fallback."
+}

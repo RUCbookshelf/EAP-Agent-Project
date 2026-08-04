@@ -1,0 +1,17 @@
+{
+  "submissions": [
+    {
+      "kind": "preflight",
+      "case_id": "D0-01",
+      "student_id": "AUDIT-D0-01",
+      "submission_id": 1
+    },
+    {
+      "kind": "preflight_retry",
+      "case_id": "D0-01",
+      "student_id": "AUDIT-D0-01P2",
+      "submission_id": 2
+    }
+  ],
+  "count": 2
+}

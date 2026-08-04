@@ -1,0 +1,31 @@
+{
+  "audit_stage": "v0.9.6-D0",
+  "phase": "Phase 0 - production-path source finding",
+  "finding": "Supported raw improvement taxonomy vs gate-admissible priority families",
+  "raw_improvement_taxonomy": [
+    "lexical_repetition",
+    "connective_use",
+    "sentence_structure_candidate",
+    "input_quality"
+  ],
+  "gate_admission_rule": {
+    "evidence_relevance_status": "verified",
+    "signal_confidence": "must not be low",
+    "metric_confidence": "must not be low/insufficient/not_applicable",
+    "priority_score": ">= 0.52 (diagnostic_priority_threshold)"
+  },
+  "raw_diagnoser_confidences": {
+    "lexical_repetition": "medium when local_cluster_detected, else low (low -> monitored)",
+    "connective_use": "medium when specific boundary exists, else low",
+    "sentence_structure_candidate": "always low -> always monitored; cannot be selected as a student-facing priority",
+    "input_quality": "flag confidence (medium/high); flags input problems, not a realistic target issue"
+  },
+  "consequence": "With the current production gate, generated priority families are effectively limited to lexical_repetition and connective_use. sentence_structure_candidate and input_quality cannot produce a student-facing priority without a production change (which D0 must not make).",
+  "sources": [
+    "app/diagnosis/nlp_heuristic.py (signal confidence assignments)",
+    "app/calibration/service.py (low-confidence signals are monitored, never selected)",
+    "app/calibration/evidence.py (evidence relevance rules)",
+    "app/feedback/validation.py (priority_feedback must reference gate-selected diagnosis ids)"
+  ],
+  "audit_use": "Corpus families preregistered around the gate-admissible families; sentence_structure_candidate is included as a preregistered probe with expected no-priority outcome."
+}

@@ -1,0 +1,175 @@
+{
+  "audit_stage": "v0.9.6-D0",
+  "records": [
+    {
+      "kind": "preflight",
+      "case_id": "D0-01",
+      "student_id": "AUDIT-D0-01",
+      "essay_sha256": "f683f4c899bd0e2e146e9085d890cd8d1b2d659ef2083a0b087b1f816e410773",
+      "essay_word_count": 297,
+      "submission_id": 1,
+      "request_duration_seconds": 57.84,
+      "provider": {
+        "provider_name": "local-demo",
+        "model_name": "heuristic-template-v0.1.1",
+        "success_status": "fallback_success",
+        "validation_status": "passed",
+        "retry_count": 1,
+        "fallback_reason": "ProviderOutputError: DeepSeek output failed StructuredFeedback validation: response: Invalid JSON: EOF while parsing a string at line 3 column 81 [json_invalid] | RuntimeError: DeepSeek request failed: TimeoutError",
+        "provider_status": {
+          "status": "response_validation_failed",
+          "request_status": "failed",
+          "fallback_used": true,
+          "fallback_reason_code": "correction_failed",
+          "server_repair_used": false,
+          "server_repair_fields": [],
+          "retry_count": 1
+        }
+      },
+      "analysis": {
+        "analysis_run_id": "AR000001",
+        "analyzer_id": "spacy",
+        "analyzer_version": "spacy-analyzer-v0.8.0",
+        "fallback_used": false,
+        "configuration_version": "config-v0.9.0",
+        "metric_result_count": 24
+      },
+      "diagnostic_gate": {
+        "selected_priorities": [
+          {
+            "diagnosis_id": "D001",
+            "category": "lexical_repetition",
+            "confidence": "medium",
+            "priority_score": 0.6649,
+            "evidence_relevance_status": "verified"
+          }
+        ],
+        "monitored_count": 8,
+        "suppressed_count": 1
+      },
+      "priority_result": {
+        "selected": true,
+        "count": 1,
+        "items": [
+          {
+            "diagnosis_id": "D001",
+            "category": "lexical_repetition",
+            "evidence_quote": "On the other hand, the benefits of a second language are really clear.",
+            "explanation": "This lemma pattern may be worth monitoring or locally revising if the evidence is concentrated and replaceable.",
+            "revision_guidance": "Underline repeated content words and replace only those whose alternatives preserve the intended meaning."
+          }
+        ]
+      },
+      "evidence_checks": [
+        {
+          "diagnosis_id": "D001",
+          "category": "lexical_repetition",
+          "quote_sha256": "63983ce9248cb3ff43d48af50e999e04ffe325f7283efab57e929342a947e7d7",
+          "exact_substring_match": true,
+          "normalized_match": true
+        }
+      ],
+      "feedback_status": {
+        "prompt_version": "feedback-prompt-v0.7.1",
+        "schema_version": "structured-feedback-v0.7.1",
+        "exercise_count": 2,
+        "ui_empty_states": [
+          "INSUFFICIENT_CROSS_TASK_HISTORY"
+        ]
+      },
+      "history": {
+        "comparability_status": "insufficient_history",
+        "comparable_count": 0
+      },
+      "longitudinal_assessment": {
+        "status": "unavailable",
+        "comparable_task_count": 1
+      }
+    },
+    {
+      "kind": "preflight_retry",
+      "case_id": "D0-01",
+      "student_id": "AUDIT-D0-01P2",
+      "essay_sha256": "f683f4c899bd0e2e146e9085d890cd8d1b2d659ef2083a0b087b1f816e410773",
+      "essay_word_count": 297,
+      "submission_id": 2,
+      "request_duration_seconds": 57.75,
+      "provider": {
+        "provider_name": "local-demo",
+        "model_name": "heuristic-template-v0.1.1",
+        "success_status": "fallback_success",
+        "validation_status": "passed",
+        "retry_count": 1,
+        "fallback_reason": "ProviderOutputError: DeepSeek output failed StructuredFeedback validation: response: Invalid JSON: EOF while parsing a value at line 41 column 21 [json_invalid] | RuntimeError: DeepSeek request failed: TimeoutError",
+        "provider_status": {
+          "status": "response_validation_failed",
+          "request_status": "failed",
+          "fallback_used": true,
+          "fallback_reason_code": "correction_failed",
+          "server_repair_used": false,
+          "server_repair_fields": [],
+          "retry_count": 1
+        }
+      },
+      "analysis": {
+        "analysis_run_id": "AR000002",
+        "analyzer_id": "spacy",
+        "analyzer_version": "spacy-analyzer-v0.8.0",
+        "fallback_used": false,
+        "configuration_version": "config-v0.9.0",
+        "metric_result_count": 24
+      },
+      "diagnostic_gate": {
+        "selected_priorities": [
+          {
+            "diagnosis_id": "D001",
+            "category": "lexical_repetition",
+            "confidence": "medium",
+            "priority_score": 0.6649,
+            "evidence_relevance_status": "verified"
+          }
+        ],
+        "monitored_count": 8,
+        "suppressed_count": 1
+      },
+      "priority_result": {
+        "selected": true,
+        "count": 1,
+        "items": [
+          {
+            "diagnosis_id": "D001",
+            "category": "lexical_repetition",
+            "evidence_quote": "On the other hand, the benefits of a second language are really clear.",
+            "explanation": "This lemma pattern may be worth monitoring or locally revising if the evidence is concentrated and replaceable.",
+            "revision_guidance": "Underline repeated content words and replace only those whose alternatives preserve the intended meaning."
+          }
+        ]
+      },
+      "evidence_checks": [
+        {
+          "diagnosis_id": "D001",
+          "category": "lexical_repetition",
+          "quote_sha256": "63983ce9248cb3ff43d48af50e999e04ffe325f7283efab57e929342a947e7d7",
+          "exact_substring_match": true,
+          "normalized_match": true
+        }
+      ],
+      "feedback_status": {
+        "prompt_version": "feedback-prompt-v0.7.1",
+        "schema_version": "structured-feedback-v0.7.1",
+        "exercise_count": 2,
+        "ui_empty_states": [
+          "INSUFFICIENT_CROSS_TASK_HISTORY"
+        ]
+      },
+      "history": {
+        "comparability_status": "insufficient_history",
+        "comparable_count": 0
+      },
+      "longitudinal_assessment": {
+        "status": "unavailable",
+        "comparable_task_count": 1
+      }
+    }
+  ]
+}

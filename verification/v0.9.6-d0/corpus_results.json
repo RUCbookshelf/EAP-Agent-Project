@@ -1,0 +1,8 @@
+{
+  "audit_stage": "v0.9.6-D0",
+  "phase": "Phase 4 - Production-path corpus execution",
+  "status": "NOT_EXECUTED",
+  "reason": "The audit stopped at the Phase 3 preflight blocker. The configured real provider failed the bounded preflight (two attempts, both fallback). Per the preregistered protocol, corpus execution must not run on fallback evidence.",
+  "corpus_submission_count": 0,
+  "records": []
+}

@@ -1,0 +1,7 @@
+{
+  "audit_stage": "v0.9.6-D0",
+  "phase": "Phase 5 - Downstream consumability check",
+  "status": "NOT_RUN",
+  "reason": "The audit stopped at the Phase 3 preflight blocker; no naturally generated real-provider priority exists to consume, so Home/Feedback/Revision/Practice consumability could not be assessed under approved real-provider conditions.",
+  "records": []
+}

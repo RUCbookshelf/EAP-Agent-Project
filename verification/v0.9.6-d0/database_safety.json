@@ -1,0 +1,49 @@
+{
+  "audit_stage": "v0.9.6-D0",
+  "phase": "Database safety layer",
+  "development_database": {
+    "path": "data/writing_feedback.db",
+    "phase0_baseline": {
+      "sha256": "FA2DE352AACED75325B4DE49E5276A1A7FD58C881F54614C104B131CF0CE6FC5",
+      "size_bytes": 14151680,
+      "mtime_local": "2026-08-04T11:38:18"
+    },
+    "after_preflight_layer": {
+      "sha256": "FA2DE352AACED75325B4DE49E5276A1A7FD58C881F54614C104B131CF0CE6FC5",
+      "size_bytes": 14151680,
+      "mtime_local": "2026-08-04T11:38:18"
+    },
+    "after_targeted_tests": {
+      "sha256": "FA2DE352AACED75325B4DE49E5276A1A7FD58C881F54614C104B131CF0CE6FC5",
+      "size_bytes": 14151680,
+      "mtime_local": "2026-08-04T11:38:18"
+    },
+    "unchanged": true,
+    "access_note": "Never opened by the audit; fingerprinted by file hash only."
+  },
+  "isolated_audit_database": {
+    "path": "C:\\tmp\\v096d0\\audit.db",
+    "created_via": "DATABASE_URL override on the audit API process; migrations applied by normal startup",
+    "pre_submission": {
+      "sha256": "1ABAB1870A82544942FB9C197BF074B8FE3516173A6207EEDFA7B729E2FB6567",
+      "size_bytes": 368640,
+      "mtime_local": "2026-08-04T12:33:25"
+    },
+    "after_preflight_submission_1": {
+      "sha256": "A9DB2F2DA18D2D890B3A97C479ED9CB7EA92336086EB2088BC43DBFCDD723E10",
+      "size_bytes": 1093632,
+      "mtime_local": "2026-08-04T12:34:56"
+    },
+    "after_preflight_submission_2": {
+      "sha256": "CC546023451377EEDB7938D351C9FEADF32C23354CE13981EFA1BBBDC24AC6E3",
+      "size_bytes": 1728512,
+      "mtime_local": "2026-08-04T12:37:13"
+    },
+    "submission_count": 2,
+    "content_rule": "Contains only the two audit preflight submissions (synthetic essays, AUDIT-D0-01 and AUDIT-D0-01P2). Never committed; located outside the repository."
+  },
+  "test_database": {
+    "path": "C:\\tmp\\v096d0\\tests.db",
+    "note": "Targeted pytest run used DATABASE_URL override; the file is outside the repository and never committed."
+  }
+}

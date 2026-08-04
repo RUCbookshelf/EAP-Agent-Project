@@ -1,0 +1,100 @@
+{
+  "audit_stage": "v0.9.6-D0",
+  "phase": "Phase 0 - Baseline and production-path inspection",
+  "recorded_at_local": "2026-08-04T12:30:00+08:00",
+  "branch": "master",
+  "head": "8896828",
+  "head_subject": "test(v0.9.6-c): close no-priority and sidebar repairs",
+  "git_status_short": [
+    " M AGENTS.md",
+    " M RUN_VERIFICATION_V0.7.md",
+    " M RUN_VERIFICATION_V0.8.2.md",
+    "?? .claude/",
+    "?? ARCHITECTURE_COUPLING_AUDIT_V0.9.5_A.md",
+    "?? CLAUDE.md",
+    "?? data/demo_journey_manifest.json"
+  ],
+  "recent_commits": [
+    "8896828 test(v0.9.6-c): close no-priority and sidebar repairs",
+    "df84f71 fix(v0.9.6-c2): restore native icon rendering",
+    "2e34d58 fix(v0.9.6-c2): correct sidebar icon state rendering",
+    "d2c28fe fix(v0.9.6-c2): restore sidebar collapse control",
+    "41ad11f fix(v0.9.6-c1): reset home step after finishing no-priority cycle",
+    "c7c7222 fix(v0.9.6-c1): complete no-priority feedback workflow",
+    "40f5a04 test(v0.9.6-b): verify first draft timeout recovery",
+    "9f2b0a1 fix(v0.9.6-b): unify reliable essay submission",
+    "cb3870c test(v0.9.6-a): verify linked revision timeout recovery",
+    "b75d9bf fix(v0.9.6-a): make linked revision submission reliable",
+    "a5459e3 docs(v0.9.5-h2e): freeze architecture for feature development",
+    "aa894f1 test(v0.9.5-h2d2): close full-core verification"
+  ],
+  "running_processes": {
+    "api_port_8000_pid": 23752,
+    "streamlit_port_8501_pid": 33048,
+    "api_process_path": "C:\\Users\\16073\\AppData\\Roaming\\uv\\python\\cpython-3.11.15-windows-x86_64-none\\python.exe",
+    "streamlit_process_path": "A:\\EAP Agent Project\\writing-feedback-mvp\\.venv\\Scripts\\python.exe",
+    "started_at_local": "2026-08-04T11:38:16",
+    "other_repo_python_pids": [22300, 24136, 24280, 26572],
+    "other_unrelated_python_pids": [6120, 10604, 28508, 28900],
+    "note": "Pre-existing development API and Streamlit instances; the audit will not modify or stop them."
+  },
+  "ports": {
+    "8000": {"address": "127.0.0.1", "state": "LISTENING", "pid": 23752},
+    "8501": {"address": "0.0.0.0", "state": "LISTENING", "pid": 33048},
+    "8501_established_browser_connection": true
+  },
+  "development_database": {
+    "path": "data/writing_feedback.db",
+    "sha256": "FA2DE352AACED75325B4DE49E5276A1A7FD58C881F54614C104B131CF0CE6FC5",
+    "size_bytes": 14151680,
+    "mtime_local": "2026-08-04T11:38:18",
+    "rule": "Read-only for the entire audit; all audit submissions use a fresh isolated database."
+  },
+  "research_exports": {
+    "file_count": 776,
+    "directory_count": 388,
+    "baseline_manifest": "verification/v0.9.6-d0/research_exports_baseline.json",
+    "note": "All 776 file hashes recorded in the manifest; exports directory is gitignored."
+  },
+  "preserved_user_owned_paths": [
+    "AGENTS.md",
+    "RUN_VERIFICATION_V0.7.md",
+    "RUN_VERIFICATION_V0.8.2.md",
+    ".claude/",
+    "ARCHITECTURE_COUPLING_AUDIT_V0.9.5_A.md",
+    "CLAUDE.md",
+    "data/demo_journey_manifest.json",
+    "data/writing_feedback.db",
+    "database backups",
+    "all 776 approved research export files"
+  ],
+  "runtime_confirmed_versions": {
+    "application_version": "0.8.0",
+    "api_version": "v1",
+    "database_migration_version": 12,
+    "active_configuration_version": "config-v0.9.0",
+    "active_configuration_id": "CFG000007",
+    "active_feedback_prompt": "feedback-prompt-v0.7.1",
+    "feedback_schema": "structured-feedback-v0.7.1",
+    "provider": "deepseek",
+    "provider_model": "deepseek-v4-pro",
+    "provider_credentials_configured": true,
+    "active_analyzer": "spacy",
+    "active_analyzer_version": "spacy-analyzer-v0.8.0",
+    "nlp_model": "en_core_web_sm",
+    "nlp_model_version": "3.8.0",
+    "analyzer_fallback_active": false,
+    "diagnosis_version": "prototype-diagnosis-v0.6.1",
+    "diagnostic_calibration_version": "diagnostic-calibration-v0.6.1",
+    "lifecycle_state": "ready",
+    "source": "GET /api/v1/system/health, /api/v1/system/version, /api/v1/admin/configurations (public read-only endpoints)"
+  },
+  "environment": {
+    "env_file_present": true,
+    "llm_provider_env_set": true,
+    "deepseek_api_key_configured": true,
+    "deepseek_api_key_value": "[REDACTED - never recorded]",
+    "database_url_env_set": true,
+    "note": "Complete environment-variable values are never recorded per audit rules."
+  }
+}
