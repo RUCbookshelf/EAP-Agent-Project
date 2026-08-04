@@ -1,0 +1,42 @@
+{
+  "audit_stage": "v0.9.6-D0-R",
+  "phase": "Phase 6 - product transition record",
+  "v096_stabilization": "CLOSED",
+  "next_product_stage": "v0.9.7-A - Priority-Guided Learning Cycle Completion",
+  "planned_sequence": [
+    "v0.9.7-A - Priority-Guided Learning Cycle Completion",
+    "v0.9.7-B - Practice Target Generation and Practice Workflow",
+    "v0.9.7-C - Student Journey Functional Completion",
+    "v0.9.7-D - Student UI/UX Redesign and Visual Polish",
+    "v0.9.7-E - Responsive, Mobile, and Accessibility Refinement"
+  ],
+  "finding_mapping": [
+    {
+      "finding": "priority generation coverage (taxonomy limited to lexical_repetition / connective_use; sentence_structure_candidate not selectable)",
+      "target": "v0.9.7-A or later evidence-driven priority expansion"
+    },
+    {
+      "finding": "missing priority-to-Practice mapping (no production auto-creation of practice targets)",
+      "target": "v0.9.7-B"
+    },
+    {
+      "finding": "incomplete cycle states (e.g., revision-focus display on fresh source; Practice-only-after-target journey states)",
+      "target": "v0.9.7-C"
+    },
+    {
+      "finding": "student-facing presentation and layout findings (none blocker-grade in D0-R)",
+      "target": "v0.9.7-D"
+    },
+    {
+      "finding": "mobile/accessibility refinements (desktop and 390x844 journeys both worked; polish items)",
+      "target": "v0.9.7-E"
+    }
+  ],
+  "non_blocking_findings": [
+    "Revision page does not re-display the selected priority family on the fresh-source view (displayed via practice target or post-revision trajectory)",
+    "no automatic practice-target creation from generated priorities; Practice page accurately reports missing-target state",
+    "Feedback page is session-scoped: a returning browser session shows 'No feedback in this session' until a new draft is submitted in-session (documented design)"
+  ],
+  "blocker_grade_findings": [],
+  "rule": "non-blocking findings must not generate additional v0.9.6 stabilization stages"
+}

@@ -1,3 +1,33 @@
+## 2026-08-04 - v0.9.6-D0-R Frozen Priority Path Production Validity Audit
+
+- **Decision**: Resume the frozen D0 audit from its preregistered stop point
+  with the repaired real DeepSeek provider: submit the five frozen corpus
+  essays through the normal production path, assess evidence integrity,
+  repeatability, and downstream consumption, classify the findings, close
+  v0.9.6 stabilization, and route non-blocking findings into v0.9.7.
+- **Rationale**: The DP0 provider repair (thinking disabled + metadata
+  capture) closed the original D0-E blocker. All five corpus hashes
+  revalidated; the only app change since preregistration is the approved
+  provider repair. Live results: 7/7 provider successes with zero
+  corrections/fallback/timeouts; three expected priorities (D0-01/D0-04
+  lexical_repetition D001, D0-02 connective_use D001), the preregistered
+  D0-03 no-priority probe, and a legitimate D0-05 no-priority control.
+  Evidence integrity clean (0 fabricated); repeatability STABLE; Feedback
+  and Home consumable; Revision and Practice partially consumable with
+  accurate state reporting and no blocker-grade defect.
+- **Evidence**: verification/v0.9.6-d0-r/ artifacts (protocol revalidation,
+  corpus hash revalidation, provider call budget, corpus results, provider
+  metadata, evidence integrity, repeatability, downstream consumability,
+  UI journey observations, feedback render check, targeted verification,
+  product transition, final decision). Targeted verification 131 passed,
+  exit 0; full core not rerun (824/8/0/0 preserved); dev DB byte-identical;
+  exports 776/388.
+- **Boundary**: audit-only; no production change; no full-core/launcher
+  rerun; no additional live provider calls beyond the approved budget; no
+  D0-R blocker; v0.9.6 stabilization CLOSED. Primary classification D0-R-C.
+  Next: v0.9.7-A (Priority-Guided Learning Cycle Completion) and
+  v0.9.7-B (Practice Target Generation and Practice Workflow); no
+  additional v0.9.6 stabilization stage.
 ## 2026-08-04 - v0.9.6-DP0-V2 Verification Safety Incident Closure
 
 - **Decision**: Formally classify and close the development-database

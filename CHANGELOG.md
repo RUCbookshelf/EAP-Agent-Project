@@ -1,3 +1,28 @@
+## v0.9.6-D0-R (2026-08-04)
+
+### Audit (no production code change)
+- Resumed the frozen priority-path production validity audit with the
+  repaired real DeepSeek provider: all five frozen corpus essays submitted
+  through the normal production path on a fresh isolated audit database
+  (7 submissions, 7 provider attempts; budget 9/12).
+- Live provider: 7/7 successes, finish_reason=stop on every call, 0
+  corrections, 0 fallback, 0 timeouts, 0 truncation; D0-01 and D0-04
+  selected lexical_repetition D001, D0-02 selected connective_use D001,
+  D0-03 produced its preregistered no-priority probe result, D0-05 a
+  legitimate no-priority control result.
+- Evidence integrity: 3/3 source-faithful, 0 fabricated, 0 semantic
+  mismatch, 0 missing fields. Repeatability: STABLE for both repeats
+  (same family, same diagnosis, byte-identical evidence quote).
+- Downstream: Feedback and Home CONSUMABLE; Revision PARTIALLY_CONSUMABLE
+  (priority family not re-displayed on the fresh-source view); Practice
+  PARTIALLY_CONSUMABLE (accurate missing-target state; no automatic
+  practice-target creation - pre-registered capability gap). Desktop and
+  390x844 mobile browser journeys passed.
+- Classification: D0-R-C (downstream capability incomplete but
+  non-blocking); v0.9.6 stabilization CLOSED; next stages v0.9.7-A and
+  v0.9.7-B. Full core and launcher not rerun (824/8/0/0 preserved);
+  targeted verification 131 passed, exit 0; dev DB byte-identical;
+  exports 776/388.
 ## v0.9.6-DP0-V2 (2026-08-04)
 
 ### Changed

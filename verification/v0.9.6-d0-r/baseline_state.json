@@ -1,0 +1,75 @@
+﻿{
+    "audit_stage":  "v0.9.6-D0-R",
+    "phase":  "Phase 0 - baseline",
+    "recorded_at_local":  "2026-08-04T17:05:05+08:00",
+    "branch":  "master",
+    "head":  "cd62a828f1051a5437b755f318d938991eb5fa69",
+    "head_short":  "cd62a82",
+    "git_status_short":  [
+                             " M AGENTS.md",
+                             " M RUN_VERIFICATION_V0.7.md",
+                             " M RUN_VERIFICATION_V0.8.2.md",
+                             "?? .claude/",
+                             "?? ARCHITECTURE_COUPLING_AUDIT_V0.9.5_A.md",
+                             "?? CLAUDE.md",
+                             "?? data/demo_journey_manifest.json"
+                         ],
+    "recent_commits":  [
+                           "cd62a82 docs(v0.9.6-dp0-v2): close verification safety incident",
+                           "c2d316b fix(v0.9.6-dp0-v2): guard launcher verification database isolation",
+                           "19bb340 test(v0.9.6-dp0-v1): close full-core verification",
+                           "dcc34a2 test(v0.9.6-dp0): verify production provider reliability",
+                           "3ee3d1f fix(v0.9.6-dp0): include response id in provider call logs"
+                       ],
+    "development_database":  {
+                                 "path":  "data/writing_feedback.db",
+                                 "sha256":  "F78A6CEA9C1AE5A5920A2E8943C1B092F9CCF34821568C6812C51A56CD858662",
+                                 "size_bytes":  14352384,
+                                 "baseline":  "F78A6CEA9C1AE5A5920A2E8943C1B092F9CCF34821568C6812C51A56CD858662 (adopted in DP0-V2)",
+                                 "mtime_local":  "2026-08-04T15:04:53"
+                             },
+    "research_exports":  {
+                             "file_count":  776,
+                             "directory_count":  388,
+                             "manifest":  "verification/v0.9.6-d0-r/research_exports_baseline.json"
+                         },
+    "processes_and_ports":  {
+                                "port_8501":  "no listener",
+                                "note":  "no application processes running at baseline",
+                                "port_8000":  "no listener",
+                                "port_8001":  "no listener"
+                            },
+    "frozen_invariants":  {
+                              "active_configuration":  "config-v0.9.0",
+                              "api_path_method_pairs":  77,
+                              "initial_output_budget":  1800,
+                              "active_feedback_prompt":  "feedback-prompt-v0.7.1",
+                              "locale_parity":  "540/540",
+                              "frontend_client_public_methods":  53,
+                              "migration":  12,
+                              "tables":  33,
+                              "correction_output_budget":  3600,
+                              "deepseek_thinking":  "explicitly disabled on the structured-feedback path",
+                              "database_public_methods":  2,
+                              "active_provider_model":  "deepseek-v4-pro",
+                              "deepseek_timeout":  30,
+                              "submission_timeout":  180
+                          },
+    "launcher_isolation_guard":  {
+                                     "status":  "active",
+                                     "commit":  "c2d316b",
+                                     "note":  "run.bat --verify auto-provisions a temporary database; not used by this audit (audit uses its own isolated API/database)"
+                                 },
+    "preserved_user_owned_paths":  [
+                                       "AGENTS.md",
+                                       "RUN_VERIFICATION_V0.7.md",
+                                       "RUN_VERIFICATION_V0.8.2.md",
+                                       ".claude/",
+                                       "ARCHITECTURE_COUPLING_AUDIT_V0.9.5_A.md",
+                                       "CLAUDE.md",
+                                       "data/demo_journey_manifest.json",
+                                       "data/writing_feedback.db",
+                                       "database backups",
+                                       "all 776 approved research export files"
+                                   ]
+}

@@ -42,6 +42,7 @@
 | v0.9.6-DP0 Production Provider Reliability | COMPLETE and verified (DP0-A diagnosis owner-accepted; live 4 consecutive deepseek-v4-pro successes, 0 corrections/fallback/timeouts; focused 101+103+24 passed; full core 821 passed/8 skipped with 3 isolated-classified anomalies; launcher PASS; exports 776/388) |
 | v0.9.6-DP0-V1 Full-Core Verification Closure | COMPLETE and fully verified (canonical environment frozen; full non-live core 824 passed/8 skipped/0 failed/0 errors, exit 0, run once; launcher PASS exit 0; exports 776/388) |
 | v0.9.6-DP0-V2 Verification Safety Incident Closure | COMPLETE and fully verified (incident V2-DB-A closed; current DB adopted as new baseline; launcher verification isolation guard; guard tests 22 passed + contract tests 31 passed; launcher PASS exit 0; exports 776/388; full core preserved, not rerun) |
+| v0.9.6-D0-R Frozen Priority Path Production Validity Audit | COMPLETE - classification D0-R-C (downstream capability incomplete but non-blocking); v0.9.6 stabilization CLOSED; 7/7 live provider successes, 3 valid priorities + 2 valid no-priorities, 0 fabricated evidence, repeatability STABLE, targeted 131 passed; next v0.9.7-A/B |
 
 Next stage: **v0.9.6 user-visible feature development** (v0.9.6-C is
 complete; the next goal must deliver a user-visible or
@@ -61,6 +62,17 @@ v0.9.6-D0-R goal that resumes the frozen priority-path production validity audit
 closed (V2-DB-A; current development database adopted as the new baseline)
 and launcher verification isolation is hardened. v0.9.6-DP0 is formally and
 finally closed.
+
+**v0.9.6-D0-R (2026-08-04):** the frozen priority-path production validity
+audit is COMPLETE with classification D0-R-C. The repaired real provider
+generated valid, source-faithful priorities for all targeted cases
+(lexical_repetition and connective_use), the preregistered
+sentence-structure probe produced its expected no-priority result, evidence
+integrity was clean, repeatability was STABLE, and Feedback/Home consumed
+priorities correctly. Revision and Practice are partially consumable
+(priority-family display on fresh source and automatic practice-target
+creation are v0.9.7 feature items). v0.9.6 stabilization is CLOSED. Next
+approved planning stage: v0.9.7-A; v0.9.7 implementation is not started.
 
 ## v0.9.6 -> v0.9.7 transition (2026-08-04)
 

@@ -1,0 +1,14 @@
+﻿{
+    "audit_stage":  "v0.9.6-D0-R",
+    "phase":  "Phase 7 - database safety (final)",
+    "development_database":  {
+                                 "path":  "data/writing_feedback.db",
+                                 "sha256":  "F78A6CEA9C1AE5A5920A2E8943C1B092F9CCF34821568C6812C51A56CD858662",
+                                 "size_bytes":  14352384,
+                                 "mtime_local":  "2026-08-04 15:04:53"
+                             },
+    "baseline_identical":  true,
+    "checked":  "before and after every execution layer (baseline, corpus execution, repeatability, downstream probes, UI journey, render check)",
+    "audit_database":  "C:\\tmp\\v096d0r\\audit.db (fresh isolated; 7 audit submissions; never committed)",
+    "note":  "the adopted F78A6CEA... development-database baseline remained byte-identical throughout D0-R"
+}

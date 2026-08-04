@@ -1,0 +1,49 @@
+{
+  "audit_stage": "v0.9.6-D0-R",
+  "phase": "Phase 4 - repeatability assessment",
+  "rule": "Repeat 1 = clearest valid selected-priority case; Repeat 2 = valid case from a different priority family",
+  "cases": [
+    {
+      "repeat_id": "Repeat 1",
+      "case_id": "D0-01",
+      "student_id": "AUDIT-D0R-R1",
+      "submission_id": 6,
+      "primary_submission_id": 1,
+      "provider": "deepseek/deepseek-v4-pro",
+      "classification": "LIVE_PROVIDER_SUCCESS",
+      "priority_outcome": "selected",
+      "family": "lexical_repetition",
+      "diagnosis_id": "D001",
+      "evidence_quote_sha256": "794AC46784667FF34EB3E1B80716F830DD3C3B36C0CD8D8BD9319F7BA87576CD",
+      "evidence_identical_to_primary": true,
+      "explanation_wording": "differs in minor phrasing; same meaning and target issue",
+      "revision_guidance_wording": "differs in minor phrasing; same concrete suggestions",
+      "finish_reason": "stop",
+      "completion_tokens": 681,
+      "duration_ms": 16360,
+      "classification_label": "STABLE"
+    },
+    {
+      "repeat_id": "Repeat 2",
+      "case_id": "D0-02",
+      "student_id": "AUDIT-D0R-R2",
+      "submission_id": 7,
+      "primary_submission_id": 2,
+      "provider": "deepseek/deepseek-v4-pro",
+      "classification": "LIVE_PROVIDER_SUCCESS",
+      "priority_outcome": "selected",
+      "family": "connective_use",
+      "diagnosis_id": "D001",
+      "evidence_quote_sha256": "C90474AB41C7270231D58DF4F316A52CD9C99267675E70CDB4171A9031EF585C",
+      "evidence_identical_to_primary": true,
+      "explanation_wording": "differs in minor phrasing; same meaning and target issue",
+      "revision_guidance_wording": "differs in minor phrasing; same concrete suggestions",
+      "finish_reason": "stop",
+      "completion_tokens": 921,
+      "duration_ms": 14375,
+      "classification_label": "STABLE"
+    }
+  ],
+  "overall": "STABLE - both repeats selected the same priority family with the same diagnosis ID and a byte-identical evidence quote; no contradictory priority; no fabricated evidence; exact wording equality not required",
+  "note": "evidence quote byte-identity verified via SHA-256 from the local payload cache"
+}

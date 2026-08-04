@@ -1,0 +1,33 @@
+﻿{
+    "audit_stage":  "v0.9.6-D0-R",
+    "phase":  "Phase 0 - provider state",
+    "active_provider":  "deepseek",
+    "provider_model":  "deepseek-v4-pro",
+    "credentials_configured":  true,
+    "thinking_mode":  "explicitly disabled on the structured-feedback path (thinking={\"type\":\"disabled\"} in app/llm/deepseek.py payload)",
+    "provider_timeout_seconds":  30,
+    "provider_retry":  {
+                           "request_failure_retry":  false,
+                           "retry_action":  "one prompt-builder correction bundle (3600-token budget)",
+                           "max_attempts":  2,
+                           "retry_trigger":  "FeedbackValidationError or ProviderOutputError on attempt 0"
+                       },
+    "initial_output_budget":  1800,
+    "correction_output_budget":  3600,
+    "max_output_cap":  8192,
+    "fallback_provider":  "LocalDemoProvider (app/llm/local_demo.py)",
+    "fallback_activation":  [
+                                "primary raises FeedbackValidationError after correction",
+                                "primary raises ProviderOutputError after correction",
+                                "primary raises any exception on the first request"
+                            ],
+    "response_format":  "json_object",
+    "temperature":  0.2,
+    "provider_log_line":  "writing_feedback.provider provider_call provider=... model=... duration_ms=... response_id=... finish_reason=... max_tokens=... content_length=... json_parse=... schema_validation=... prompt_tokens=... completion_tokens=... reasoning_tokens=... total_tokens=... classification=... error_class=...",
+    "dp0_repair_evidence":  [
+                                "verification/v0.9.6-dp0/live_provider_results.json",
+                                "verification/v0.9.6-dp0-v1/launcher_result.json",
+                                "verification/v0.9.6-dp0-v2/launcher_result.json"
+                            ],
+    "note":  "4 consecutive DP0 live successes (D0-01/D0-02/D0-05 x2), finish_reason=stop, 0 corrections, 0 fallback, max call 21.7s"
+}

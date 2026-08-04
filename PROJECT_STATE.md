@@ -1,3 +1,22 @@
+## Current v0.9.6-D0-R State
+
+- Status: COMPLETE - primary classification D0-R-C (downstream capability
+  incomplete but non-blocking). v0.9.6 stabilization is CLOSED.
+- Audit: five frozen corpus cases + two byte-identical repeats submitted
+  through the repaired real DeepSeek production path (7 submissions, 7
+  provider attempts; 7/7 live successes, 0 corrections, 0 fallback, 0
+  timeout, finish_reason=stop everywhere). D0-01/D0-04 lexical_repetition
+  D001, D0-02 connective_use D001, D0-03 preregistered no-priority probe,
+  D0-05 legitimate no-priority control.
+- Evidence integrity clean (3/3 source-faithful, 0 fabricated); repeatability
+  STABLE; Feedback/Home CONSUMABLE, Revision/Practice PARTIALLY_CONSUMABLE
+  (priority-family display on fresh source + automatic practice-target
+  creation are v0.9.7 feature items). Targeted verification 131 passed,
+  exit 0; full core not rerun (824/8/0/0 preserved).
+- Development database byte-identical to the adopted F78A6CEA... baseline;
+  research exports 776/388 zero delta.
+- Next: v0.9.7-A Priority-Guided Learning Cycle Completion (then
+  v0.9.7-B Practice Target Generation and Practice Workflow).
 ## Current v0.9.6-DP0-V2 State
 
 - Status: COMPLETE - verification safety incident formally closed.

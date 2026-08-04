@@ -1,0 +1,57 @@
+﻿{
+    "audit_stage":  "v0.9.6-D0-R",
+    "phase":  "Phase 1 - protocol revalidation",
+    "original_protocol":  "verification/v0.9.6-d0/audit_protocol.json",
+    "original_head":  "8896828",
+    "current_head":  "cd62a82",
+    "checks":  [
+                   {
+                       "item":  "supported genre",
+                       "result":  "unchanged - argumentative essay",
+                       "evidence":  "app/api/schemas.py SubmissionCreateRequest + audit_protocol.json"
+                   },
+                   {
+                       "item":  "supported task type",
+                       "result":  "unchanged - untimed opinion/argumentative essay, first draft, tool_use none",
+                       "evidence":  "app/models/schemas.py EssaySubmission + audit_protocol.json"
+                   },
+                   {
+                       "item":  "priority taxonomy",
+                       "result":  "unchanged - lexical_repetition, connective_use, sentence_structure_candidate, input_quality raw taxonomy; gate-admissible generated families lexical_repetition and connective_use",
+                       "evidence":  "verification/v0.9.6-d0/taxonomy_finding.json + git diff 8896828..HEAD shows no diagnosis/calibration changes"
+                   },
+                   {
+                       "item":  "Diagnostic Gate",
+                       "result":  "unchanged - diagnostic-gate-v0.6.1, priority threshold 0.52, max 2 selected",
+                       "evidence":  "app/calibration/schemas.py + no source change since 8896828"
+                   },
+                   {
+                       "item":  "evidence-validity rules",
+                       "result":  "unchanged",
+                       "evidence":  "app/feedback/validation.py + no source change since 8896828"
+                   },
+                   {
+                       "item":  "StructuredFeedback schema",
+                       "result":  "unchanged - FeedbackItem(diagnosis_id, category, evidence_quote, explanation, revision_guidance)",
+                       "evidence":  "app/models/schemas.py + no source change since 8896828"
+                   },
+                   {
+                       "item":  "Feedback read path",
+                       "result":  "unchanged",
+                       "evidence":  "no source change since 8896828"
+                   },
+                   {
+                       "item":  "Revision read path",
+                       "result":  "unchanged",
+                       "evidence":  "no source change since 8896828"
+                   },
+                   {
+                       "item":  "Practice read path",
+                       "result":  "unchanged",
+                       "evidence":  "no source change since 8896828"
+                   }
+               ],
+    "git_evidence":  "git diff 8896828..HEAD -- app migrations tests/contracts -\u003e only app/llm/deepseek.py changed (151 insertions, 4 deletions): the approved DP0 provider repair",
+    "conclusion":  "original D0 protocol remains applicable; no material audit-semantic change",
+    "applicable":  true
+}

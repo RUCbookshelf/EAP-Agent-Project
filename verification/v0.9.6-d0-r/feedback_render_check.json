@@ -1,0 +1,22 @@
+{
+  "audit_stage": "v0.9.6-D0-R",
+  "phase": "Phase 5 - Feedback page render check (production renderer, real response payload)",
+  "student": "AUDIT-D0R-01",
+  "submission_id": 1,
+  "method": "AppTest render of streamlit_app.py with the real cached POST /api/v1/submissions response seeded as submission_result (same shape the Writing page stores); no writes, no new submission",
+  "checks": {
+    "priority_category_visible": true,
+    "explanation_visible": true,
+    "revision_guidance_visible": true,
+    "evidence_section_visible": true,
+    "evidence_quote_visible": true,
+    "no_fallback_label": true,
+    "no_internal_diagnostic_text": true,
+    "no_duplicate_priority_heading": true,
+    "submission_reference_visible": true,
+    "app_rendered_without_exception": true
+  },
+  "buttons_present": [
+    "Open Practice"
+  ]
+}

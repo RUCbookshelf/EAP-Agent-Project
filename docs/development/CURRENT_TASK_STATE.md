@@ -1,4 +1,28 @@
 **Date:** 2026-08-04
+**Current task:** v0.9.6-D0-R Frozen Priority Path Production Validity Audit
+**Status:** COMPLETE - primary classification D0-R-C (downstream capability
+incomplete but non-blocking); v0.9.6 stabilization CLOSED (see
+RUN_VERIFICATION_V0.9.6_D0_R.md and verification/v0.9.6-d0-r/)
+
+- Resumed from the original D0 stop point with the repaired real DeepSeek
+  provider: all five frozen corpus essays submitted through the normal
+  production path on a fresh isolated audit database plus two byte-identical
+  repeats (7 submissions / 7 provider attempts, budget 9/12).
+- Live provider 7/7 successes, 0 corrections, 0 fallback, 0 timeout, 0
+  truncation, finish_reason=stop on every call. D0-01/D0-04 selected
+  lexical_repetition D001; D0-02 selected connective_use D001; D0-03
+  preregistered no-priority probe met; D0-05 legitimate no-priority control.
+- Evidence integrity 3/3 source-faithful, 0 fabricated, 0 semantic mismatch;
+  repeatability STABLE (byte-identical evidence quotes); Feedback/Home
+  CONSUMABLE; Revision and Practice PARTIALLY_CONSUMABLE with accurate
+  state reporting (no automatic practice-target creation - v0.9.7-B item).
+- Targeted verification 131 passed, exit 0; full core not rerun (824/8/0/0
+  preserved); launcher not rerun; dev DB byte-identical (F78A6CEA...);
+  exports 776/388 zero delta.
+- Next: v0.9.7-A Priority-Guided Learning Cycle Completion (approved
+  planning stage; not started). Do not create additional v0.9.6
+  stabilization stages for non-blocking findings.
+**Date:** 2026-08-04
 **Current task:** v0.9.6-DP0-V2 Verification Safety Incident Closure
 **Status:** COMPLETE - incident closed; launcher verification isolation
 hardened; v0.9.6-DP0 formally and finally closed (see

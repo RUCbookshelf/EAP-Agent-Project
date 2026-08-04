@@ -1,0 +1,53 @@
+{
+  "audit_stage": "v0.9.6-D0-R",
+  "phase": "Phase 6 - final classification",
+  "head": "cd62a82",
+  "primary_classification": "D0-R-C",
+  "classification_label": "Downstream capability incomplete but non-blocking",
+  "classification_basis": [
+    "real provider reliable: 7/7 live provider successes (5 corpus + 2 repeats); 7 provider attempts; 0 corrections; 0 fallback; 0 timeouts; 0 truncation; finish_reason=stop on every call",
+    "generation valid: D0-01 lexical_repetition D001 (gate 0.6649), D0-02 connective_use D001 (gate 0.645), D0-04 lexical_repetition D001 (gate 0.6899), D0-03 preregistered no-priority (sentence_structure_candidate monitored only), D0-05 legitimate no-priority for the strong control",
+    "evidence integrity clean: 3/3 source-faithful (raw exact for 2, whitespace-normalized for the boundary-spanning D0-02 quote), 0 fabricated, 0 semantic mismatch, 0 missing fields, 0 linkage failures",
+    "repeatability STABLE for both assessed repeats (same family, same diagnosis, byte-identical evidence quote)",
+    "Feedback consumable (real response renders fully; API record complete); Revision consumable with partial focus display; Practice partial because no production component auto-creates practice targets (pre-registered capability gap, accurately reported)",
+    "no blocker-grade defect: no data loss, no wrong linkage, no fabricated evidence, no user trap"
+  ],
+  "success_metrics": {
+    "production_submission_count": 7,
+    "provider_attempt_count": 7,
+    "live_provider_success_count": 7,
+    "correction_attempt_count": 0,
+    "fallback_count": 0,
+    "provider_failure_count": 0,
+    "issue_targeted_essay_count": 4,
+    "valid_priority_count": 3,
+    "valid_no_priority_count": 2,
+    "invalid_priority_count": 0,
+    "exact_or_source_faithful_evidence_count": 3,
+    "fabricated_evidence_count": 0,
+    "semantic_mismatch_count": 0,
+    "missing_field_count": 0,
+    "repeatability_classification": "STABLE (2/2 cases)",
+    "downstream_consumability_classification": "PARTIALLY_CONSUMABLE (Feedback CONSUMABLE; Revision PARTIALLY_CONSUMABLE; Practice PARTIALLY_CONSUMABLE; Home/Journey CONSUMABLE)",
+    "generation_classification": "GENERATION_VALID"
+  },
+  "case_classifications": {
+    "D0-01": "LIVE_PROVIDER_SUCCESS (lexical_repetition D001)",
+    "D0-02": "LIVE_PROVIDER_SUCCESS (connective_use D001)",
+    "D0-03": "LIVE_PROVIDER_SUCCESS_NO_PRIORITY (preregistered probe expectation met)",
+    "D0-04": "LIVE_PROVIDER_SUCCESS (lexical_repetition D001)",
+    "D0-05": "LIVE_PROVIDER_SUCCESS_NO_PRIORITY (legitimate control outcome)",
+    "Repeat 1 (D0-01)": "LIVE_PROVIDER_SUCCESS - STABLE",
+    "Repeat 2 (D0-02)": "LIVE_PROVIDER_SUCCESS - STABLE"
+  },
+  "recommended_next_stages": [
+    "v0.9.7-A - Priority-Guided Learning Cycle Completion",
+    "v0.9.7-B - Practice Target Generation and Practice Workflow"
+  ],
+  "do_not_start": [
+    "additional v0.9.6 stabilization stages",
+    "another generic architecture audit",
+    "v0.9.7 implementation inside this goal"
+  ],
+  "v096_stabilization_status": "CLOSED"
+}

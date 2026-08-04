@@ -1,0 +1,26 @@
+﻿{
+    "audit_stage":  "v0.9.6-D0-R",
+    "phase":  "Phase 7 - targeted verification",
+    "command":  "pytest -q -p no:cacheprovider tests\\test_v096dp0_v2_launcher_isolation.py tests\\test_v096dp0_provider.py tests\\test_feedback_schema.py tests\\test_feedback_validation.py tests\\test_diagnostic_calibration_v061.py tests\\test_practice_v09.py tests\\test_revision_v05.py",
+    "environment":  [
+                        "PYTHONUTF8=1",
+                        "LLM_PROVIDER=local",
+                        "PYTHON_DOTENV_DISABLED=1",
+                        "DATABASE_PATH=C:\\tmp\\v096d0r\\tests.db (fresh isolated)",
+                        "DATABASE_URL absent"
+                    ],
+    "result":  {
+                   "passed":  131,
+                   "exit_code":  0,
+                   "failed":  0,
+                   "errors":  0,
+                   "skipped":  0,
+                   "duration_seconds":  35.67
+               },
+    "full_core_rerun":  false,
+    "preserved_full_core_result":  "824 passed, 8 skipped, 0 failed, 0 errors, exit code 0 (DP0-V1, not rerun)",
+    "launcher_rerun":  false,
+    "live_provider_matrix":  "no additional live provider calls beyond the approved D0-R submissions (7 submissions, 7 provider attempts)",
+    "browser_checks":  "ui_journey.py desktop + 390x844 mobile (both passed); feedback render check passed",
+    "scope_note":  "audit-driver live runs + focused suites only; full core and launcher intentionally not rerun"
+}

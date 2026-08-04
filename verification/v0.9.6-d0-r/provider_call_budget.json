@@ -1,0 +1,27 @@
+﻿{
+    "audit_stage":  "v0.9.6-D0-R",
+    "phase":  "Phase 1 - live-provider call budget",
+    "production_submission_budget":  9,
+    "allocation":  {
+                       "repeatability":  2,
+                       "primary_corpus":  5,
+                       "reserved_recovery":  2
+                   },
+    "provider_attempt_budget":  12,
+    "counts":  {
+                   "provider_attempts_used":  0,
+                   "production_submissions_used":  0
+               },
+    "historical_exclusions":  [
+                                  "two original D0 fallback preflight submissions (historical; not D0-R corpus results)",
+                                  "DP0 provider-validation submissions (historical reliability evidence)"
+                              ],
+    "rules":  [
+                  "no hidden retries",
+                  "no parallel paid calls",
+                  "no automatic resubmission after client timeout",
+                  "use the v0.9.6-A/B reconciliation mechanism",
+                  "record the count after every provider attempt",
+                  "stop before exceeding the budget"
+              ]
+}

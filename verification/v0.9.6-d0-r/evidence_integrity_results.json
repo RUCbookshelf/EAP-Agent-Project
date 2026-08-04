@@ -1,0 +1,140 @@
+{
+  "audit_stage": "v0.9.6-D0-R",
+  "phase": "Phase 3 - evidence integrity assessment",
+  "method": "independent raw exact + normalized quote checks against the frozen essay; gate linkage; field presence; heuristic fabrication/claim/diagnostic-wording scans; semantic alignment judged per item (recorded below)",
+  "cases": [
+    {
+      "case_id": "D0-01",
+      "submission_id": 1,
+      "student_id": "AUDIT-D0R-01",
+      "essay_sha256": "F683F4C899BD0E2E146E9085D890CD8D1B2D659EF2083A0B087B1F816E410773",
+      "priority_count": 1,
+      "items": [
+        {
+          "diagnosis_id": "D001",
+          "category": "lexical_repetition",
+          "evidence_quote_sha256": "794AC46784667FF34EB3E1B80716F830DD3C3B36C0CD8D8BD9319F7BA87576CD",
+          "evidence_quote_length": 152,
+          "raw_exact_match": true,
+          "normalized_match": true,
+          "passage_paragraph_index": 2,
+          "gate_diagnosis_linkage": true,
+          "gate_category_consistency": true,
+          "missing_required_fields": [],
+          "fabricated_quote": false,
+          "internal_diagnostic_wording_hits": [],
+          "unsupported_claim_pattern_hits": []
+        }
+      ],
+      "manual_judgment": {
+        "semantic_alignment": "VALID",
+        "rationale": "explanation identifies the repeated adverb 'really' (3 occurrences in the quoted sentence), matches the gate-selected lexical_repetition diagnosis D001, and gives essay-specific revision guidance (replace with more specific intensifiers).",
+        "passage_attribution": "paragraph 2 (benefits paragraph) - exact raw match",
+        "revision_guidance_relevant": true,
+        "fabrication": false
+      }
+    },
+    {
+      "case_id": "D0-02",
+      "submission_id": 2,
+      "student_id": "AUDIT-D0R-02",
+      "essay_sha256": "40A93EB7A698C92641CB4332C4D605FF6F246341A8D08F457E805557E1ADE0A3",
+      "priority_count": 1,
+      "items": [
+        {
+          "diagnosis_id": "D001",
+          "category": "connective_use",
+          "evidence_quote_sha256": "C90474AB41C7270231D58DF4F316A52CD9C99267675E70CDB4171A9031EF585C",
+          "evidence_quote_length": 181,
+          "raw_exact_match": false,
+          "normalized_match": true,
+          "passage_paragraph_index": "boundary_0_to_1",
+          "gate_diagnosis_linkage": true,
+          "gate_category_consistency": true,
+          "missing_required_fields": [],
+          "fabricated_quote": false,
+          "internal_diagnostic_wording_hits": [],
+          "unsupported_claim_pattern_hits": [],
+          "raw_mismatch_cause": "extra newline characters at the paragraph boundary (whitespace-only difference)"
+        }
+      ],
+      "manual_judgment": {
+        "semantic_alignment": "VALID",
+        "rationale": "explanation identifies the missing linking phrase at the introduction-to-first-body paragraph boundary, matches gate-selected connective_use D001, and gives concrete transition examples. The quote spans the boundary with extra blank-line whitespace; normalized comparison passes (production validator rule) - source-faithful.",
+        "passage_attribution": "paragraph boundary 0 -> 1 (intro to first body paragraph) - spans boundary, normalized match",
+        "revision_guidance_relevant": true,
+        "fabrication": false,
+        "whitespace_note": "raw exact comparison fails only because the quote renders the boundary with extra newline characters; the production validator's whitespace-normalized comparison passes."
+      }
+    },
+    {
+      "case_id": "D0-03",
+      "submission_id": 3,
+      "student_id": "AUDIT-D0R-03",
+      "essay_sha256": "E774C4F33113CD968A9E261F7012B368DD26ADDAAE7E3114D2CA30C91736C432",
+      "priority_count": 0,
+      "items": []
+    },
+    {
+      "case_id": "D0-04",
+      "submission_id": 4,
+      "student_id": "AUDIT-D0R-04",
+      "essay_sha256": "DD96EBBE276C98CD4300702CB4F9F9EF65A8C5D390389426AB035FAD2A9898D4",
+      "priority_count": 1,
+      "items": [
+        {
+          "diagnosis_id": "D001",
+          "category": "lexical_repetition",
+          "evidence_quote_sha256": "E13AE0F63E6A1241D9F9A284F2000A6D8DEBB1B9A02264CD7DE1245F380AAB27",
+          "evidence_quote_length": 148,
+          "raw_exact_match": true,
+          "normalized_match": true,
+          "passage_paragraph_index": 1,
+          "gate_diagnosis_linkage": true,
+          "gate_category_consistency": true,
+          "missing_required_fields": [],
+          "fabricated_quote": false,
+          "internal_diagnostic_wording_hits": [],
+          "unsupported_claim_pattern_hits": [
+            {
+              "pattern": "\\byour (writing|level|ability|proficiency)\\b",
+              "classification": "false_positive_benign_advice"
+            }
+          ]
+        }
+      ],
+      "manual_judgment": {
+        "semantic_alignment": "VALID",
+        "rationale": "explanation identifies the repeated noun 'money' (3 occurrences in the quoted sentence within the local cluster), matches gate-selected lexical_repetition D001, and gives specific synonym/rephrase guidance.",
+        "passage_attribution": "paragraph 1 - exact raw match",
+        "revision_guidance_relevant": true,
+        "fabrication": false,
+        "claim_pattern_note": "the 'your writing' pattern hit is benign advice phrasing ('can make your writing sound repetitive'), not a proficiency/ability/longitudinal claim."
+      }
+    },
+    {
+      "case_id": "D0-05",
+      "submission_id": 5,
+      "student_id": "AUDIT-D0R-05",
+      "essay_sha256": "B5F1A9FBB908F4CD4BB674534F8285C52DB96FC3A6EE4EF174A2BBA6485B1BFE",
+      "priority_count": 0,
+      "items": []
+    }
+  ],
+  "totals": {
+    "priorities_assessed": 3,
+    "raw_exact_match_count": 2,
+    "normalized_match_count": 3,
+    "fabricated_quote_count": 0,
+    "semantic_mismatch_count": 0,
+    "missing_field_count": 0,
+    "linkage_failure_count": 0,
+    "internal_diagnostic_wording_count": 0,
+    "unsupported_claim_pattern_count": 0,
+    "exact_or_source_faithful_count": 3,
+    "valid_priority_count": 3,
+    "invalid_priority_count": 0,
+    "fabricated_evidence_count": 0
+  },
+  "fabricated_evidence_is_blocker": true
+}

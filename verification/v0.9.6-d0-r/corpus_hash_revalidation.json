@@ -1,0 +1,43 @@
+{
+  "audit_stage": "v0.9.6-D0-R",
+  "phase": "Phase 1 - corpus hash revalidation",
+  "fixture": "verification/v0.9.6-d0/audit_corpus_essays.json",
+  "all_hashes_match": true,
+  "cases": [
+    {
+      "case_id": "D0-01",
+      "computed_sha256": "F683F4C899BD0E2E146E9085D890CD8D1B2D659EF2083A0B087B1F816E410773",
+      "frozen_manifest_sha256": "F683F4C899BD0E2E146E9085D890CD8D1B2D659EF2083A0B087B1F816E410773",
+      "match": true,
+      "char_count": 1805
+    },
+    {
+      "case_id": "D0-02",
+      "computed_sha256": "40A93EB7A698C92641CB4332C4D605FF6F246341A8D08F457E805557E1ADE0A3",
+      "frozen_manifest_sha256": "40A93EB7A698C92641CB4332C4D605FF6F246341A8D08F457E805557E1ADE0A3",
+      "match": true,
+      "char_count": 1654
+    },
+    {
+      "case_id": "D0-03",
+      "computed_sha256": "E774C4F33113CD968A9E261F7012B368DD26ADDAAE7E3114D2CA30C91736C432",
+      "frozen_manifest_sha256": "E774C4F33113CD968A9E261F7012B368DD26ADDAAE7E3114D2CA30C91736C432",
+      "match": true,
+      "char_count": 1692
+    },
+    {
+      "case_id": "D0-04",
+      "computed_sha256": "DD96EBBE276C98CD4300702CB4F9F9EF65A8C5D390389426AB035FAD2A9898D4",
+      "frozen_manifest_sha256": "DD96EBBE276C98CD4300702CB4F9F9EF65A8C5D390389426AB035FAD2A9898D4",
+      "match": true,
+      "char_count": 1646
+    },
+    {
+      "case_id": "D0-05",
+      "computed_sha256": "B5F1A9FBB908F4CD4BB674534F8285C52DB96FC3A6EE4EF174A2BBA6485B1BFE",
+      "frozen_manifest_sha256": "B5F1A9FBB908F4CD4BB674534F8285C52DB96FC3A6EE4EF174A2BBA6485B1BFE",
+      "match": true,
+      "char_count": 1664
+    }
+  ]
+}

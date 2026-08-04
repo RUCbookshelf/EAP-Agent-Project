@@ -1,0 +1,173 @@
+{
+  "audit_stage": "v0.9.6-D0-R",
+  "records": [
+    {
+      "case_id": "D0-01",
+      "submission_id": 1,
+      "provider_calls": [
+        {
+          "provider": "deepseek",
+          "model": "deepseek-v4-pro",
+          "messages_count": "2",
+          "duration_ms": "10359.0",
+          "response_id": "31cc372c-2059-4027-a1b9-fb821e0621bc",
+          "finish_reason": "stop",
+          "max_tokens": "1800",
+          "content_length": "3014",
+          "json_parse": "success",
+          "schema_validation": "passed",
+          "prompt_tokens": "15680",
+          "completion_tokens": "666",
+          "reasoning_tokens": "None",
+          "total_tokens": "16346",
+          "classification": "provider_success",
+          "error_class": "None"
+        }
+      ]
+    },
+    {
+      "case_id": "D0-02",
+      "submission_id": 2,
+      "provider_calls": [
+        {
+          "provider": "deepseek",
+          "model": "deepseek-v4-pro",
+          "messages_count": "2",
+          "duration_ms": "16766.0",
+          "response_id": "64270a6d-7ae8-4e58-8466-e9c4e2c02993",
+          "finish_reason": "stop",
+          "max_tokens": "1800",
+          "content_length": "4525",
+          "json_parse": "success",
+          "schema_validation": "passed",
+          "prompt_tokens": "16678",
+          "completion_tokens": "1011",
+          "reasoning_tokens": "None",
+          "total_tokens": "17689",
+          "classification": "provider_success",
+          "error_class": "None"
+        }
+      ]
+    },
+    {
+      "case_id": "D0-03",
+      "submission_id": 3,
+      "provider_calls": [
+        {
+          "provider": "deepseek",
+          "model": "deepseek-v4-pro",
+          "messages_count": "2",
+          "duration_ms": "7063.0",
+          "response_id": "965a8482-965a-4934-8ab4-adfa275de580",
+          "finish_reason": "stop",
+          "max_tokens": "1800",
+          "content_length": "2239",
+          "json_parse": "success",
+          "schema_validation": "passed",
+          "prompt_tokens": "9550",
+          "completion_tokens": "447",
+          "reasoning_tokens": "None",
+          "total_tokens": "9997",
+          "classification": "provider_success",
+          "error_class": "None"
+        }
+      ]
+    },
+    {
+      "case_id": "D0-04",
+      "submission_id": 4,
+      "provider_calls": [
+        {
+          "provider": "deepseek",
+          "model": "deepseek-v4-pro",
+          "messages_count": "2",
+          "duration_ms": "9875.0",
+          "response_id": "c817a5e8-0bda-40df-bb3f-75f3c8dafecf",
+          "finish_reason": "stop",
+          "max_tokens": "1800",
+          "content_length": "2868",
+          "json_parse": "success",
+          "schema_validation": "passed",
+          "prompt_tokens": "16040",
+          "completion_tokens": "654",
+          "reasoning_tokens": "None",
+          "total_tokens": "16694",
+          "classification": "provider_success",
+          "error_class": "None"
+        }
+      ]
+    },
+    {
+      "case_id": "D0-05",
+      "submission_id": 5,
+      "provider_calls": [
+        {
+          "provider": "deepseek",
+          "model": "deepseek-v4-pro",
+          "messages_count": "2",
+          "duration_ms": "6844.0",
+          "response_id": "d7bae8db-2081-41b2-8726-2588d066d05e",
+          "finish_reason": "stop",
+          "max_tokens": "1800",
+          "content_length": "1847",
+          "json_parse": "success",
+          "schema_validation": "passed",
+          "prompt_tokens": "8891",
+          "completion_tokens": "380",
+          "reasoning_tokens": "None",
+          "total_tokens": "9271",
+          "classification": "provider_success",
+          "error_class": "None"
+        }
+      ]
+    },
+    {
+      "case_id": "D0-01",
+      "submission_id": 6,
+      "provider_calls": [
+        {
+          "provider": "deepseek",
+          "model": "deepseek-v4-pro",
+          "messages_count": "2",
+          "duration_ms": "16360.0",
+          "response_id": "ea16f0d5-5c0c-4f1c-a33b-0677410f5128",
+          "finish_reason": "stop",
+          "max_tokens": "1800",
+          "content_length": "3092",
+          "json_parse": "success",
+          "schema_validation": "passed",
+          "prompt_tokens": "15680",
+          "completion_tokens": "681",
+          "reasoning_tokens": "None",
+          "total_tokens": "16361",
+          "classification": "provider_success",
+          "error_class": "None"
+        }
+      ]
+    },
+    {
+      "case_id": "D0-02",
+      "submission_id": 7,
+      "provider_calls": [
+        {
+          "provider": "deepseek",
+          "model": "deepseek-v4-pro",
+          "messages_count": "2",
+          "duration_ms": "14375.0",
+          "response_id": "9e9a4dd1-a772-44aa-a274-907ad8111250",
+          "finish_reason": "stop",
+          "max_tokens": "1800",
+          "content_length": "4183",
+          "json_parse": "success",
+          "schema_validation": "passed",
+          "prompt_tokens": "16678",
+          "completion_tokens": "921",
+          "reasoning_tokens": "None",
+          "total_tokens": "17599",
+          "classification": "provider_success",
+          "error_class": "None"
+        }
+      ]
+    }
+  ]
+}
