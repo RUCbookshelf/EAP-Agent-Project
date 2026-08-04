@@ -2,7 +2,7 @@
 
 | Item | Status |
 |---|---|
-| v0.9.7-A Priority-Guided Learning Cycle Completion | COMPLETE and verified (focused 14 passed; affected regression 293 passed; full non-live core 860 passed / 8 skipped / exit 0; `run.bat --verify` PASS; rendered matrix en desktop + zh mobile full cycles PASS; evidence verification/v0.9.7-a/v0.9.7-a-20260804-r1/) |
+| v0.9.7-A Priority-Guided Learning Cycle Completion | COMPLETE and verified (focused 14 passed; affected regression 293 passed; full non-live core 860 passed / 8 skipped / exit 0; `run.bat --verify` PASS; rendered matrix all four locale/viewport combinations PASS; evidence verification/v0.9.7-a/v0.9.7-a-20260804-r1/) |
 | v0.9.7-B Practice Target Generation and Practice Workflow | not started |
 | v0.9.7-C Student Journey Functional Completion | not started |
 | v0.9.7-D Student UI/UX Redesign and Visual Polish | not started |
@@ -13,7 +13,9 @@ verified. Revision now consumes the Feedback priority as an active task,
 submission produces an explicit completion state with safe end-of-cycle and
 existing-Practice continuation, and re-entry never treats a saved revision as
 unsubmitted. Automatic Priority-to-Practice target generation remains a
-v0.9.7-B item. Stop before v0.9.7-B.
+v0.9.7-B item. All 15 acceptance criteria are satisfied; closure HEAD
+`209a8a8` (five focused commits). v0.9.7-A is complete, verified, and
+closed. Stop before v0.9.7-B.
 
 # Master roadmap
 

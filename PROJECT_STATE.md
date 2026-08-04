@@ -1,6 +1,11 @@
 ## Current v0.9.7-A State
 
-- Status: COMPLETE - Priority-Guided Learning Cycle Completion verified.
+- Status: COMPLETE - v0.9.7-A is complete, verified, and closed; all 15
+  acceptance criteria satisfied.
+- Closure HEAD: `209a8a8` (five focused commits: `aa7fa30` implementation,
+  `7084046` focused testing, `8437d47` rendered verification, `1738006`
+  evidence cleanup, `209a8a8` closure documentation; details in
+  RUN_VERIFICATION_V0.9.7_A.md).
 - Cycle: Writing -> Feedback -> select/confirm the naturally generated
   priority -> priority-guided Revision -> submit -> explicit completion
   state -> safe end of cycle (Home) or continue to the existing Practice
@@ -13,8 +18,9 @@
   never treats a saved revision as unsubmitted.
 - Verification: focused 14 passed; affected regression 293 passed; full
   non-live core 860 passed / 8 skipped / exit 0; `run.bat --verify` PASS;
-  browser matrix en 1280x900 + zh_CN 390x844 full cycles PASS (0 console/
-  page errors, 0 remote requests, 2/1/1/1 persisted records per learner).
+  rendered matrix all four locale/viewport combinations (en/zh x
+  1280x900/390x844) full cycles PASS (0 console/page errors, 0 remote
+  requests, 2/1/1/1 persisted records per learner).
 - Evidence: verification/v0.9.7-a/v0.9.7-a-20260804-r1/ and
   RUN_VERIFICATION_V0.9.7_A.md.
 - Next: v0.9.7-B Practice Target Generation and Practice Workflow (not

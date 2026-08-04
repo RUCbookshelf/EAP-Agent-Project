@@ -1,6 +1,7 @@
 **Date:** 2026-08-04
 **Current task:** v0.9.7-A Priority-Guided Learning Cycle Completion
-**Status:** COMPLETE - all acceptance criteria satisfied (see
+**Status:** COMPLETE - v0.9.7-A is closed; all 15 acceptance criteria
+satisfied; closure HEAD `209a8a8` (five focused commits; see
 RUN_VERIFICATION_V0.9.7_A.md and verification/v0.9.7-a/v0.9.7-a-20260804-r1/)
 
 - The priority-guided revision cycle is complete: Feedback transfers the
@@ -17,8 +18,8 @@ RUN_VERIFICATION_V0.9.7_A.md and verification/v0.9.7-a/v0.9.7-a-20260804-r1/)
   parity 555/555.
 - Verification: focused 14 passed; affected regression 293 passed; full
   non-live core 860 passed / 8 skipped / exit 0; `run.bat --verify` PASS;
-  rendered-page matrix (en 1280x900, zh_CN 390x844 full production-path
-  cycles) PASS with 0 console/page errors and 0 remote requests.
+  rendered-page matrix (all four locale/viewport combinations) PASS with
+  0 console/page errors and 0 remote requests.
 - Next: v0.9.7-B Practice Target Generation and Practice Workflow (not
   started). Do not begin v0.9.7-B or later stages in this phase.
 **Date:** 2026-08-04

@@ -2,8 +2,10 @@
 
 **Date:** 2026-08-04
 **Run ID:** `v0.9.7-a-20260804-r1`
-**Status:** COMPLETE - all acceptance criteria satisfied (see matrix below)
-**Implementation + verification commits:** this phase's focused commit
+**Status:** COMPLETE - v0.9.7-A is complete, verified, and closed; all 15
+acceptance criteria satisfied; next planned phase v0.9.7-B (not started)
+**Closure HEAD:** `209a8a8` (five focused v0.9.7-A commits; see the Final
+branch/HEAD/commit history section)
 
 ## Baseline
 
@@ -123,10 +125,10 @@ re-entry -> Finish cycle -> Home.
 | 8 | No implied auto Priority-to-Practice | PASS | Old copy removed; practice note asserted in tests + browser |
 | 9 | Refresh/rerun/locale/clicks safe | PASS | AppTest rerun/locale tests; browser reload re-entry; 555/555 parity |
 | 10 | No cross-student/essay/feedback/priority associations | PASS | Server guards unchanged (v0.9.6-A suite green); page-level learner guards + preset validation |
-| 11 | Baseline behavior intact | PASS | Full core 859/8 exit 0; affected regressions green; run.bat --verify PASS |
+| 11 | Baseline behavior intact | PASS | Full core 860/8 exit 0; affected regressions green; run.bat --verify PASS |
 | 12 | Automated + rendered verification passes | PASS | See above |
 | 13 | User-owned files unchanged | PASS | Final `git status` (see below) |
-| 14 | `detect_changes` review | PASS | GitNexus detect_changes: 8 changed files; changed symbols limited to feedback/revision renderers (+ docs/tests/locales); risk medium, no unexpected flows |
+| 14 | `detect_changes` review | PASS | GitNexus detect_changes (final, `41a5ca2..HEAD`): 20 changed files; changed symbols limited to feedback/revision renderers and test/verification harnesses; risk medium; no unexpected flows |
 | 15 | Reproducible evidence | PASS | file:line, test counts, logs, screenshots, evidence JSON |
 
 ## Known limitations
@@ -147,7 +149,10 @@ re-entry -> Finish cycle -> Home.
 
 ## Final Git state
 
-- Focused commit(s) for this phase contain only: app UI changes, locales,
+- v0.9.7-A is complete, verified, and closed. All 15 v0.9.7-A acceptance
+  criteria are satisfied. The next planned phase is v0.9.7-B; no v0.9.7-B
+  implementation has started.
+- Focused commits for this phase contain only: app UI changes, locales,
   new tests, phase docs, and verification evidence. Pre-existing user-owned
   modifications and untracked files remain uncommitted and unchanged.
 - `git status --short` at closure reports the preserved user-owned entries
@@ -182,12 +187,22 @@ re-entry -> Finish cycle -> Home.
 ## Final branch, HEAD, and commit history (SPEC deliverable 13)
 
 - Branch: `master`.
-- Phase HEAD: `1738006`; pre-phase baseline HEAD: `41a5ca2`.
-- Commits: `aa7fa30` feat(v0.9.7-a): complete priority-guided learning cycle;
-  `7084046` test(v0.9.7-a): cover input preservation after submit failure;
-  `8437d47` test(v0.9.7-a): extend rendered matrix to all four locale/viewport
-  combinations; `1738006` chore(v0.9.7-a): keep probe screenshot out of
-  version control.
+- v0.9.7-A implementation and verification closure HEAD: `209a8a8`; pre-phase
+  baseline HEAD: `41a5ca2`; `1738006` was an earlier phase HEAD within the
+  five focused commits (recorded chronologically below).
+- The five original v0.9.7-A focused commits, in chronological order:
+  1. `aa7fa30` feat(v0.9.7-a): complete priority-guided learning cycle
+     - purpose: implementation;
+  2. `7084046` test(v0.9.7-a): cover input preservation after submit failure
+     - purpose: focused testing;
+  3. `8437d47` test(v0.9.7-a): extend rendered matrix to all four
+     locale/viewport combinations
+     - purpose: rendered verification;
+  4. `1738006` chore(v0.9.7-a): keep probe screenshot out of version control
+     - purpose: evidence cleanup;
+  5. `209a8a8` docs(v0.9.7-a): complete final deliverable sections in
+     verification report
+     - purpose: closure documentation.
 - Final `git status --short` reports only the preserved pre-existing
   user-owned entries (modified `AGENTS.md`, `RUN_VERIFICATION_V0.7.md`,
   `RUN_VERIFICATION_V0.8.2.md`; untracked `.claude/`, `CLAUDE.md`,

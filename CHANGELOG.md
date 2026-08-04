@@ -25,9 +25,11 @@
   prompt change. Locale parity 555/555.
 - Verification: focused 14 passed; affected regression 293 passed; full
   non-live core 860 passed / 8 skipped / exit 0; `run.bat --verify` PASS;
-  rendered-page matrix (en 1280x900 + zh_CN 390x844 full cycles) passed
+  rendered-page matrix (all four locale/viewport combinations) passed
   with 0 console/page errors and 0 remote requests; evidence under
   verification/v0.9.7-a/v0.9.7-a-20260804-r1/.
+- Status: COMPLETE and verified - v0.9.7-A is closed; all 15 acceptance
+  criteria satisfied; closure HEAD `209a8a8` (five focused commits).
 - Next: v0.9.7-B Practice Target Generation and Practice Workflow (not
   started).
 
