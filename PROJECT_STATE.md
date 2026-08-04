@@ -11,8 +11,8 @@
   or prompt change. Active-priority context is read from the persisted
   source feedback; re-entry after refresh shows the completed state and
   never treats a saved revision as unsubmitted.
-- Verification: focused 13 passed; affected regression 292 passed; full
-  non-live core 859 passed / 8 skipped / exit 0; `run.bat --verify` PASS;
+- Verification: focused 14 passed; affected regression 293 passed; full
+  non-live core 860 passed / 8 skipped / exit 0; `run.bat --verify` PASS;
   browser matrix en 1280x900 + zh_CN 390x844 full cycles PASS (0 console/
   page errors, 0 remote requests, 2/1/1/1 persisted records per learner).
 - Evidence: verification/v0.9.7-a/v0.9.7-a-20260804-r1/ and

@@ -52,20 +52,20 @@
 
 ## Automated verification (exact commands)
 
-1. New focused suite (13 tests):
+1. New focused suite (14 tests):
    `pytest -q -p no:cacheprovider tests\test_v097a_priority_revision_cycle.py`
-   -> 13 passed, exit 0.
+   -> 14 passed, exit 0.
 2. Affected regression (16 suites incl. v0.9.6-C1 no-priority workflow,
    v0.9.6-A linked revision, v0.9.4-B student experience, sidebar, revision,
    practice, UI boundary/parity/port contracts, hybrid components, design
-   tokens): 292 passed (13 new + 279 regression), exit 0.
+   tokens): 293 passed (14 new + 279 regression), exit 0.
 3. Full non-live core (canonical DP0-V1 environment: `PYTHONUTF8=1`,
    `PYTHON_DOTENV_DISABLED=1`, `LLM_PROVIDER=local`, fresh isolated
    `DATABASE_PATH`, `SERVICE_API_DIFF_ALLOWLIST` 26-entry, `DATABASE_URL`
    removed; `--ignore=tests/live`):
    `pytest -q -p no:cacheprovider --ignore=tests/live tests`
-   -> 859 passed, 8 skipped, 0 failed, exit 0 (baseline 824/8 preserved;
-   +35 = 13 new v0.9.7-A tests and other accumulated regression tests).
+   -> 860 passed, 8 skipped, 0 failed, exit 0 (baseline 824/8 preserved;
+   +36 = 14 new v0.9.7-A tests and other accumulated regression tests).
 4. `run.bat --verify` (exact command, twice): exit 0 both times; launcher
    guard auto-provisioned a temporary isolated database
    (`C:\Users\16073\AppData\Local\Temp\wfm-verify-*.db`), health/docs/

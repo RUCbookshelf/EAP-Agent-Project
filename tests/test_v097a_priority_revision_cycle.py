@@ -296,6 +296,28 @@ def test_revision_submit_empty_text_validation():
     assert at.session_state["fake_client"].revision_post_count == 0
 
 
+def test_revision_submit_failure_preserves_input():
+    at = _run_harness(
+        sidebar_page=t("student_revision_title", "en"),
+        harness_candidates=[SOURCE_CANDIDATE],
+        harness_source_bundle=SOURCE_BUNDLE,
+        revision_source_preset=28,
+        harness_fail_submit=True,
+    )
+    at.text_area(key="revision_text_input").set_value(
+        "Cities should expand parks because they support public health."
+    ).run()
+    assert not at.exception, at.exception
+    at.button(key="revision_submit_primary").click().run()
+    assert not at.exception, at.exception
+    assert at.session_state["fake_client"].revision_post_count == 1
+    assert t("submission_error", "en") in _markdown_text(at)
+    assert (
+        at.text_area(key="revision_text_input").value
+        == "Cities should expand parks because they support public health."
+    )
+
+
 def test_revision_reentry_shows_completed_state():
     # Newest-first candidate order mirrors list(reversed(items)) on the server.
     at = _run_harness(

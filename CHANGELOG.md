@@ -23,8 +23,8 @@
   behavior covered by tests.
 - UI + session-state only; no migration, schema, API, domain, service, or
   prompt change. Locale parity 555/555.
-- Verification: focused 13 passed; affected regression 292 passed; full
-  non-live core 859 passed / 8 skipped / exit 0; `run.bat --verify` PASS;
+- Verification: focused 14 passed; affected regression 293 passed; full
+  non-live core 860 passed / 8 skipped / exit 0; `run.bat --verify` PASS;
   rendered-page matrix (en 1280x900 + zh_CN 390x844 full cycles) passed
   with 0 console/page errors and 0 remote requests; evidence under
   verification/v0.9.7-a/v0.9.7-a-20260804-r1/.
