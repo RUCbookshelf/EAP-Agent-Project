@@ -1,3 +1,30 @@
+**Date:** 2026-08-04
+**Current task:** v0.9.6-DP0-V2 Verification Safety Incident Closure
+**Status:** COMPLETE - incident closed; launcher verification isolation
+hardened; v0.9.6-DP0 formally and finally closed (see
+RUN_VERIFICATION_V0.9.6_DP0.md V2 section and verification/v0.9.6-dp0-v2/)
+
+- Incident: the invalid first launcher attempt (DATABASE_PATH-only, no
+  process DATABASE_URL; .env supplies DATABASE_URL=sqlite:///data/
+  writing_feedback.db) changed the development-database byte fingerprint
+  62615C6C... -> F78A6CEA...; read-only audit proved only the routine
+  system_versions.recorded_at refresh changed (integrity ok, 0 FK
+  violations, migration 12, 33 tables, config-v0.9.0 active, all
+  user/domain counts consistent). Classification V2-DB-A; current database
+  retained and adopted as the new baseline; no backup restored.
+- Guard: run.bat --verify delegates to scripts/verify_launcher.py before
+  any migration/API startup; explicit unsafe DATABASE_URL refuses before
+  startup; no DATABASE_URL auto-provisions a fresh temporary database
+  (removed after verification); DATABASE_PATH-only can never fall back to
+  the development database; normal non-verify behavior unchanged.
+- Verification: guard tests 22 passed; database/migration/config contract
+  tests 31 passed; negative DATABASE_PATH-only probe safely auto-isolated;
+  exact cmd /c "run.bat --verify" PASS exit 0 (auto-provisioned temp DB,
+  200/200/200, migration 12, 33 tables, config-v0.9.0,
+  feedback-prompt-v0.7.1); full core NOT rerun (accepted 824/8/0/0
+  preserved); no live provider call; exports 776/388 zero delta.
+- Next: v0.9.6-D0-R resume the frozen priority path audit (separately
+  approved). v0.9.6-D1 not started.
 # Current Task State
 **Date:** 2026-08-04
 **Current task:** v0.9.6-DP0-V1 Full-Core Verification Closure
@@ -12,8 +39,10 @@
   G_ALLOWLIST unchanged.
 - Final full non-live core (exactly once): 824 passed, 8 skipped, 0 failed,
   0 errors, exit 0. Launcher PASS exit 0 (isolated DB, 200/200/200).
-- Safety: exports 776/388 restored; dev DB logically unchanged (byte-level
-  incident recorded in dev_db_incident.json).
+- Safety: exports 776/388 restored; dev DB byte fingerprint changed during
+  the invalid first launcher attempt (62615C6C... -> F78A6CEA...; only the
+  routine system_versions.recorded_at refresh detected; closed in
+  v0.9.6-DP0-V2 with the current database adopted as the new baseline).
 - v0.9.6-DP0 formally closed. Next: owner decision for v0.9.6-D0-R (resume
   the frozen priority path audit). v0.9.6-D1 not started.
 

@@ -41,6 +41,7 @@
 | v0.9.6-D0 Priority Path Production Validity Audit | BLOCKED at live-provider preflight (classification D0-E, audit-only); targeted verification 155 passed; recommended next: v0.9.6-DP0 Production Provider Reliability (separately approved) |
 | v0.9.6-DP0 Production Provider Reliability | COMPLETE and verified (DP0-A diagnosis owner-accepted; live 4 consecutive deepseek-v4-pro successes, 0 corrections/fallback/timeouts; focused 101+103+24 passed; full core 821 passed/8 skipped with 3 isolated-classified anomalies; launcher PASS; exports 776/388) |
 | v0.9.6-DP0-V1 Full-Core Verification Closure | COMPLETE and fully verified (canonical environment frozen; full non-live core 824 passed/8 skipped/0 failed/0 errors, exit 0, run once; launcher PASS exit 0; exports 776/388) |
+| v0.9.6-DP0-V2 Verification Safety Incident Closure | COMPLETE and fully verified (incident V2-DB-A closed; current DB adopted as new baseline; launcher verification isolation guard; guard tests 22 passed + contract tests 31 passed; launcher PASS exit 0; exports 776/388; full core preserved, not rerun) |
 
 Next stage: **v0.9.6 user-visible feature development** (v0.9.6-C is
 complete; the next goal must deliver a user-visible or
@@ -55,6 +56,42 @@ priority-generation/downstream repair stages remain not started.
 
 **v0.9.6-DP0 (2026-08-04):** provider reliability is repaired and verified. The recommended next stage is a separately approved
 v0.9.6-D0-R goal that resumes the frozen priority-path production validity audit; v0.9.6-D1 remains not started.
+
+**v0.9.6-DP0-V2 (2026-08-04):** the verification safety incident is formally
+closed (V2-DB-A; current development database adopted as the new baseline)
+and launcher verification isolation is hardened. v0.9.6-DP0 is formally and
+finally closed.
+
+## v0.9.6 -> v0.9.7 transition (2026-08-04)
+
+The stabilization cycle ends with DP0-V2. The only remaining mandatory
+pre-feature task is the frozen-corpus audit; after it, the project moves into
+v0.9.7 feature development. Only blocker-grade defects (reproducible
+data-loss, security, startup, submission, or core-path issues) may interrupt
+this transition; non-blocking limitations move to the v0.9.7 feature
+roadmap.
+
+```text
+v0.9.6-DP0-V2  Verification safety incident closure
+      |
+      v
+v0.9.6-D0-R  Final frozen-corpus production-validity audit
+      |
+      v
+v0.9.7-A  Priority-Guided Learning Cycle Completion
+      |
+      v
+v0.9.7-B  Practice Target Generation and Practice Workflow
+      |
+      v
+v0.9.7-C  Student Journey Functional Completion
+      |
+      v
+v0.9.7-D  Student UI/UX Redesign and Visual Polish
+      |
+      v
+v0.9.7-E  Responsive, Mobile, and Accessibility Refinement
+```
 
 ## v0.9.4 roadmap - 2026-08-01
 

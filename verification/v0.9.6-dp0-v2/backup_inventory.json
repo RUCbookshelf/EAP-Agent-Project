@@ -1,0 +1,103 @@
+﻿{
+    "audit_stage":  "v0.9.6-DP0-V2",
+    "phase":  "Phase 1 - backup inventory",
+    "policy":  "backups inspected read-only as comparison evidence only; no backup restored or copied over the development database",
+    "current_development_database":  {
+                                         "fingerprint":  "F78A6CEA9C1AE5A5920A2E8943C1B092F9CCF34821568C6812C51A56CD858662",
+                                         "essays":  28,
+                                         "students":  4
+                                     },
+    "backups":  [
+                    {
+                        "path":  "data\\writing_feedback_pre_audit_backup.db",
+                        "mtime_local":  "2026-07-31T15:44:45",
+                        "size_bytes":  4829184,
+                        "sha256":  "433CDA02681C399E90E51058C0C150EFED09CC42B7213EFE55B2BC95CC52B7C4",
+                        "migration":  12,
+                        "table_count":  33,
+                        "essay_count":  9,
+                        "student_count":  3,
+                        "integrity_check":  "ok",
+                        "predates_incident":  true,
+                        "may_omit_legitimate_activity":  true,
+                        "provenance":  "project-local named backup files in data/",
+                        "note":  "comparison evidence only; never restored"
+                    },
+                    {
+                        "path":  "data\\writing_feedback.pre-v0.9.5b-cleanup-20260802-081311.db",
+                        "mtime_local":  "2026-08-02T08:11:49",
+                        "size_bytes":  8298496,
+                        "sha256":  "4E1C83CA3D0D2FC989BC358AC35500CFE3E9CB0269733AD40C52CA57BD70EDE2",
+                        "migration":  12,
+                        "table_count":  33,
+                        "essay_count":  19,
+                        "student_count":  6,
+                        "integrity_check":  "ok",
+                        "predates_incident":  true,
+                        "may_omit_legitimate_activity":  true,
+                        "provenance":  "project-local named backup files in data/",
+                        "note":  "comparison evidence only; never restored"
+                    },
+                    {
+                        "path":  "data\\writing_feedback.pre-v0.9.3c-20260801-115213.db",
+                        "mtime_local":  "2026-08-01T11:52:13",
+                        "size_bytes":  7262208,
+                        "sha256":  "DD86186FF836A13E048F8BA5D6910D773C0145B461FC3FA5A2FCB3362BC4E633",
+                        "migration":  12,
+                        "table_count":  33,
+                        "essay_count":  13,
+                        "student_count":  3,
+                        "integrity_check":  "ok",
+                        "predates_incident":  true,
+                        "may_omit_legitimate_activity":  true,
+                        "provenance":  "project-local named backup files in data/",
+                        "note":  "comparison evidence only; never restored"
+                    },
+                    {
+                        "path":  "data\\writing_feedback.pre-v0.9.3c-20260801-115333.db",
+                        "mtime_local":  "2026-08-01T11:53:33",
+                        "size_bytes":  7413760,
+                        "sha256":  "30E7F4353ED7F49A9641F5A4D0F8B5FF4D0B5B61745C108E93ADE3ADCE3B2CEC",
+                        "migration":  12,
+                        "table_count":  33,
+                        "essay_count":  14,
+                        "student_count":  4,
+                        "integrity_check":  "ok",
+                        "predates_incident":  true,
+                        "may_omit_legitimate_activity":  true,
+                        "provenance":  "project-local named backup files in data/",
+                        "note":  "comparison evidence only; never restored"
+                    },
+                    {
+                        "path":  "data\\writing_feedback.pre-v0.9.3c-20260801-115607.db",
+                        "mtime_local":  "2026-08-01T11:56:07",
+                        "size_bytes":  7598080,
+                        "sha256":  "A43728068BDF5A528F62CC4BF7E0B86921C0ECC379CAAD2118971402548B7D71",
+                        "migration":  12,
+                        "table_count":  33,
+                        "essay_count":  15,
+                        "student_count":  4,
+                        "integrity_check":  "ok",
+                        "predates_incident":  true,
+                        "may_omit_legitimate_activity":  true,
+                        "provenance":  "project-local named backup files in data/",
+                        "note":  "comparison evidence only; never restored"
+                    },
+                    {
+                        "path":  "data\\writing_feedback.pre-v0.9.3c-20260801-120153.db",
+                        "mtime_local":  "2026-08-01T12:01:53",
+                        "size_bytes":  8011776,
+                        "sha256":  "7FA3B62ACB99598CF63352FDE0E5AC5053F05F92FE31FF9A6047CD6D75F2E656",
+                        "migration":  12,
+                        "table_count":  33,
+                        "essay_count":  13,
+                        "student_count":  3,
+                        "integrity_check":  "ok",
+                        "predates_incident":  true,
+                        "may_omit_legitimate_activity":  true,
+                        "provenance":  "project-local named backup files in data/",
+                        "note":  "comparison evidence only; never restored"
+                    }
+                ],
+    "conclusion":  "all backups predate the incident and omit legitimate post-backup user activity (9-19 essays vs 28 current); none can prove pre-incident byte state and restoring any of them would discard legitimate activity"
+}

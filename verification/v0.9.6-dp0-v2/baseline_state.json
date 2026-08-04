@@ -1,0 +1,75 @@
+﻿{
+    "audit_stage":  "v0.9.6-DP0-V2",
+    "phase":  "Phase 0 - baseline",
+    "recorded_at_local":  "2026-08-04T15:53:45+08:00",
+    "branch":  "master",
+    "head":  "19bb3400d37e647fce52d0d90f725dcf1f9ce392",
+    "head_short":  "19bb340",
+    "git_status_short":  [
+                             " M AGENTS.md",
+                             " M RUN_VERIFICATION_V0.7.md",
+                             " M RUN_VERIFICATION_V0.8.2.md",
+                             "?? .claude/",
+                             "?? ARCHITECTURE_COUPLING_AUDIT_V0.9.5_A.md",
+                             "?? CLAUDE.md",
+                             "?? data/demo_journey_manifest.json"
+                         ],
+    "recent_commits":  [
+                           "19bb340 test(v0.9.6-dp0-v1): close full-core verification",
+                           "dcc34a2 test(v0.9.6-dp0): verify production provider reliability",
+                           "3ee3d1f fix(v0.9.6-dp0): include response id in provider call logs",
+                           "ac6a569 fix(v0.9.6-dp0): stabilize DeepSeek structured feedback",
+                           "eec7197 docs(v0.9.6-dp0a): diagnose DeepSeek structured-output failures",
+                           "01f6f11 docs(v0.9.6-d0): audit production priority path validity"
+                       ],
+    "python":  {
+                   "version":  "3.11.15",
+                   "venv":  "A:\\EAP Agent Project\\writing-feedback-mvp\\.venv"
+               },
+    "processes_and_ports":  {
+                                "port_8501":  "no listener",
+                                "note":  "no application or browser processes running at baseline",
+                                "port_8000":  "no listener",
+                                "port_8001":  "no listener"
+                            },
+    "development_database":  {
+                                 "path":  "data/writing_feedback.db",
+                                 "sha256":  "F78A6CEA9C1AE5A5920A2E8943C1B092F9CCF34821568C6812C51A56CD858662",
+                                 "note":  "incident fingerprint; adopted baseline pending Phase 2 decision",
+                                 "size_bytes":  14352384,
+                                 "mtime_local":  "2026-08-04T15:04:53"
+                             },
+    "research_exports":  {
+                             "v1_comparison":  "0 mismatches, 0 missing, 0 extras",
+                             "baseline_manifest":  "verification/v0.9.6-dp0-v2/research_exports_baseline.json",
+                             "file_count":  776,
+                             "directory_count":  388
+                         },
+    "frozen_invariants":  {
+                              "active_configuration":  "config-v0.9.0",
+                              "api_path_method_pairs":  77,
+                              "active_feedback_prompt":  "feedback-prompt-v0.7.1",
+                              "locale_parity":  "540/540",
+                              "frontend_client_public_methods":  53,
+                              "migration":  12,
+                              "tables":  33,
+                              "deepseek_max_tokens":  "1800 initial / 3600 correction",
+                              "deepseek_thinking":  "explicitly disabled on the structured-feedback path",
+                              "database_public_methods":  2,
+                              "active_provider_model":  "deepseek-v4-pro",
+                              "deepseek_timeout":  30,
+                              "submission_timeout":  180
+                          },
+    "preserved_user_owned_paths":  [
+                                       "AGENTS.md",
+                                       "RUN_VERIFICATION_V0.7.md",
+                                       "RUN_VERIFICATION_V0.8.2.md",
+                                       ".claude/",
+                                       "ARCHITECTURE_COUPLING_AUDIT_V0.9.5_A.md",
+                                       "CLAUDE.md",
+                                       "data/demo_journey_manifest.json",
+                                       "data/writing_feedback.db",
+                                       "database backups",
+                                       "all 776 approved research export files"
+                                   ]
+}

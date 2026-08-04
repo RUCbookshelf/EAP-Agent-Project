@@ -1,3 +1,28 @@
+## Current v0.9.6-DP0-V2 State
+
+- Status: COMPLETE - verification safety incident formally closed.
+- Incident: the invalid first launcher attempt (DATABASE_PATH-only, no
+  process DATABASE_URL; .env supplies DATABASE_URL=sqlite:///data/
+  writing_feedback.db) caused a byte-level development-database change
+  62615C6C... -> F78A6CEA... with only the routine system_versions.
+  recorded_at refresh detected. Read-only audit: integrity ok, 0 FK
+  violations, migration 12, 33 tables, config-v0.9.0 active, all
+  user/domain row counts consistent. Classification V2-DB-A; current
+  database retained and formally adopted as the new baseline; no backup
+  restored.
+- Guard: run.bat --verify delegates to scripts/verify_launcher.py before
+  any migration/API startup; explicit unsafe DATABASE_URL refuses before
+  startup; no DATABASE_URL auto-provisions a fresh temporary database and
+  removes it after verification; DATABASE_PATH-only can never fall back to
+  the development database; normal non-verify behavior unchanged.
+- Verification: guard tests 22 passed, database/migration/config contract
+  tests 31 passed (exit 0); negative DATABASE_PATH-only probe safely
+  auto-isolated; exact cmd /c "run.bat --verify" PASS exit 0
+  (auto-provisioned temp DB, 200/200/200, migration 12, 33 tables,
+  config-v0.9.0, feedback-prompt-v0.7.1); full core NOT rerun (accepted
+  824/8/0/0 preserved); no live provider call; exports 776/388.
+- v0.9.6-DP0 formally and finally closed. Next: v0.9.6-D0-R resume the
+  frozen priority path audit, then the v0.9.7 feature transition.
 # Project State
 ## Current v0.9.6-DP0-V1 State
 
@@ -6,9 +31,10 @@
   0 errors, exit 0 (run exactly once); un.bat --verify PASS, exit 0.
 - Canonical environment sourced from verification/v0.9.5-h2a/
   isolated_pytest_runner.py (SERVICE_API_DIFF_ALLOWLIST unchanged).
-- Research exports 776/388; development database logically unchanged
-  (byte-fingerprint incident from an invalid launcher attempt recorded in
-  verification/v0.9.6-dp0-v1/dev_db_incident.json).
+- Research exports 776/388; development database byte fingerprint changed
+  during the invalid first launcher attempt (62615C6C... -> F78A6CEA...;
+  only the routine system_versions.recorded_at refresh detected; closed in
+  v0.9.6-DP0-V2 with the current database adopted as the new baseline).
 - v0.9.6-DP0 is formally closed. Recommended next stage (separately
   approved): v0.9.6-D0-R resume the frozen priority path audit.
 

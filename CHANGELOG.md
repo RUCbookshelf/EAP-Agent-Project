@@ -1,3 +1,36 @@
+## v0.9.6-DP0-V2 (2026-08-04)
+
+### Changed
+- run.bat --verify now delegates to scripts/verify_launcher.py before any
+  migration or API startup. DATABASE_URL set in the process environment is
+  validated (empty or resolving to data/writing_feedback.db or any database
+  inside data/ refuses before startup); DATABASE_URL not set auto-provisions
+  a fresh temporary database outside the repository and removes it after
+  verification. A DATABASE_PATH-only environment can no longer silently fall
+  back to the development database. Normal non-verify launcher behavior is
+  unchanged.
+- New focused launcher-isolation tests: tests/test_v096dp0_v2_launcher_isolation.py.
+
+### Verified
+- Incident closure: invalid first launcher attempt caused a byte-level
+  development-database change (62615C6C... -> F78A6CEA...) with only the
+  routine system_versions.recorded_at refresh detected; read-only audit
+  proved no user/domain-data, schema, migration, or configuration
+  discrepancy; classification V2-DB-A; current database retained and
+  formally adopted as the new baseline; no backup restored.
+- Focused guard tests 22 passed, exit 0; database/migration/config contract
+  tests 31 passed, exit 0.
+- Negative DATABASE_PATH-only probe: safely auto-isolated, PASS exit 0,
+  development database byte-identical.
+- Exact launcher: cmd /c "run.bat --verify" PASS, exit 0 (auto-provisioned
+  temporary database; migration 12, 33 tables, config-v0.9.0,
+  feedback-prompt-v0.7.1, health/docs/streamlit 200/200/200; temporary
+  database removed; no test-owned process/port remains; development
+  database byte-identical).
+- Full non-live core NOT rerun; accepted DP0-V1 result preserved (824
+  passed, 8 skipped, 0 failed, 0 errors, exit 0). No live provider call.
+- Research exports 776 files / 388 dirs, zero delta. v0.9.6-DP0 formally and
+  finally closed. Next: v0.9.6-D0-R, then v0.9.7 feature transition.
 ## v0.9.6-DP0-V1 (2026-08-04)
 
 ### Verified
@@ -15,8 +48,11 @@
 - Exact launcher: cmd /c "run.bat --verify" PASS, exit 0 (health/docs/
   streamlit 200/200/200; isolated database).
 - Research exports returned to 776 files / 388 dirs; development database
-  logically unchanged (recorded byte-fingerprint incident documented in
-  verification/v0.9.6-dp0-v1/dev_db_incident.json).
+  byte fingerprint changed during the invalid first launcher attempt
+  (62615C6C... -> F78A6CEA...; only the routine system_versions.recorded_at
+  refresh detected) - incident documented in
+  verification/v0.9.6-dp0-v1/dev_db_incident.json and closed in
+  v0.9.6-DP0-V2.
 ## v0.9.6-DP0 (2026-08-04)
 
 ### Changed

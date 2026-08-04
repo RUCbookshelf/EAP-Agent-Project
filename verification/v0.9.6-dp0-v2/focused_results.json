@@ -1,0 +1,29 @@
+﻿{
+    "audit_stage":  "v0.9.6-DP0-V2",
+    "phase":  "Phase 5 - focused verification",
+    "runs":  [
+                 {
+                     "suite":  "launcher-isolation guard tests (new: tests/test_v096dp0_v2_launcher_isolation.py)",
+                     "command":  "python -m pytest -q -p no:cacheprovider tests\\test_v096dp0_v2_launcher_isolation.py",
+                     "passed":  22,
+                     "skipped":  0,
+                     "failed":  0,
+                     "errors":  0,
+                     "exit_code":  0
+                 },
+                 {
+                     "suite":  "database, migration, and configuration contract tests (existing: test_database, test_migrations_v02, test_v095h2b_configuration_contract_rename, test_v06_configuration_dashboard)",
+                     "command":  "python -m pytest -q -p no:cacheprovider tests\\test_database.py tests\\test_migrations_v02.py tests\\test_v095h2b_configuration_contract_rename.py tests\\test_v06_configuration_dashboard.py",
+                     "passed":  31,
+                     "skipped":  0,
+                     "failed":  0,
+                     "errors":  0,
+                     "exit_code":  0
+                 }
+             ],
+    "combined":  "53 passed, 0 failed, 0 errors, exit code 0 (two groups)",
+    "full_core_rerun":  false,
+    "preserved_full_core_result":  "824 passed, 8 skipped, 0 failed, 0 errors, exit code 0 (DP0-V1, not rerun)",
+    "live_provider_calls_made":  false,
+    "isolation":  "fresh isolated temporary databases; development database never opened for writing"
+}

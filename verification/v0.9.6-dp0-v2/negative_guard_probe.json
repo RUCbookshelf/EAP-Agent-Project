@@ -1,0 +1,27 @@
+﻿{
+    "audit_stage":  "v0.9.6-DP0-V2",
+    "phase":  "Phase 5 - negative guard probe",
+    "incident_condition":  "the mistaken DATABASE_PATH-only condition that caused the incident: DATABASE_PATH set to the development database path, no DATABASE_URL in the process environment, repository .env present (which itself contains DATABASE_URL=sqlite:///data/writing_feedback.db)",
+    "command":  "python -m scripts.verify_launcher",
+    "result":  [
+                   "PROBE_EXIT=0",
+                   "isolation_mode=auto_provision",
+                   "effective_database_path=C:\\Users\\16073\\AppData\\Local\\Temp\\wfm-verify-20260804T160619-32728.db",
+                   "migrate exit 0",
+                   "initialize exit 0",
+                   "smoke_stack exit 0",
+                   "health/docs/streamlit 200/200/200"
+               ],
+    "behavior":  "verification safely auto-isolated to a fresh temporary database outside the repository",
+    "development_database":  {
+                                 "mtime_after":  "2026-08-04 15:04:53",
+                                 "after_sha256":  "F78A6CEA9C1AE5A5920A2E8943C1B092F9CCF34821568C6812C51A56CD858662",
+                                 "mtime_before":  "2026-08-04 15:04:53",
+                                 "before_sha256":  "F78A6CEA9C1AE5A5920A2E8943C1B092F9CCF34821568C6812C51A56CD858662",
+                                 "byte_identical":  true
+                             },
+    "no_write_capable_process_against_dev_db":  true,
+    "temporary_database_removed":  true,
+    "test_owned_processes_remaining":  false,
+    "test_owned_ports_remaining":  false
+}

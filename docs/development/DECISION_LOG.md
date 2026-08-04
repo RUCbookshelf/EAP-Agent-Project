@@ -1,3 +1,40 @@
+## 2026-08-04 - v0.9.6-DP0-V2 Verification Safety Incident Closure
+
+- **Decision**: Formally classify and close the development-database
+  verification-safety incident (V2-DB-A - metadata-only write), adopt the
+  current development-database fingerprint F78A6CEA... as the new safety
+  baseline, and harden launcher verification isolation so the incident class
+  cannot recur. Do not restore a backup, do not rerun the full core, do not
+  make live provider calls, do not resume D0-R or begin v0.9.7.
+- **Rationale**: The invalid first launcher attempt (DATABASE_PATH-only, no
+  process DATABASE_URL; .env supplies DATABASE_URL=sqlite:///data/
+  writing_feedback.db) changed the development-database byte fingerprint
+  (62615C6C... -> F78A6CEA...). Read-only audit proved integrity ok, 0 FK
+  violations, migration 12, 33 tables, config-v0.9.0 active, and consistent
+  user/domain data; the only detected row-level change was the routine
+  system_versions.recorded_at refresh. The launcher contract was unenforced:
+  nothing validated the effective database target before the write-capable
+  steps ran.
+- **Change set**: run.bat --verify now delegates to scripts/verify_launcher.py
+  before any migration/API startup; explicit DATABASE_URL is validated
+  (unsafe/empty refuses before startup); absent DATABASE_URL auto-provisions
+  a fresh temporary database outside the repository and removes it after
+  verification. New focused tests (22) cover the isolation contract. No
+  application production behavior, schema, or migration changed.
+- **Evidence**: verification/v0.9.6-dp0-v2/ artifacts (baseline,
+  incident_evidence, database_integrity_audit, database_logical_comparison,
+  backup_inventory, database_baseline_decision, launcher_database_resolution,
+  launcher_contract_decision, focused_results, negative_guard_probe,
+  launcher_result, database_safety, research_exports_*, feature_transition_plan).
+  Guard tests 22 passed; database/migration/config contract tests 31 passed;
+  negative DATABASE_PATH-only probe auto-isolated safely; exact
+  cmd /c "run.bat --verify" PASS exit 0 (200/200/200, auto-provisioned temp
+  DB, migration 12, 33 tables, config-v0.9.0, feedback-prompt-v0.7.1);
+  development database byte-identical throughout; exports 776/388.
+- **Boundary**: full core not rerun (accepted 824/8/0/0 preserved); no live
+  provider call; no production behavior change; no D0-R/D1/v0.9.7 start.
+  v0.9.6-DP0 formally and finally closed. Next: v0.9.6-D0-R, then the
+  v0.9.7 feature transition.
 ## 2026-08-04 - v0.9.6-DP0-V1 Full-Core Verification Closure
 
 - **Decision**: Close v0.9.6-DP0 formally with a verification-only stage:
@@ -15,9 +52,12 @@
   environment, parity decision, readiness results, full-core result, launcher
   result, export deltas, final decision). A recorded incident: the first
   launcher attempt used the wrong isolation variable and touched the
-  development database file bytes; read-only inspection proved zero logical
-  change and the corrected launcher run used an isolated database
-  (dev_db_incident.json).
+  development database file bytes; read-only inspection found no
+  user/domain-data, schema, migration, or configuration discrepancy beyond
+  the routine system_versions.recorded_at refresh, and the corrected
+  launcher run used an isolated database (dev_db_incident.json; formally
+  closed in v0.9.6-DP0-V2 with the current database adopted as the new
+  baseline).
 - **Boundary**: no production behavior change; no allowlist change; no test
   change; no D0-R/D1 start. Recommended next stage: v0.9.6-D0-R resume the
   frozen priority path audit.

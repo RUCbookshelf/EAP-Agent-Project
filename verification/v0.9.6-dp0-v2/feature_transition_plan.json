@@ -1,0 +1,38 @@
+﻿{
+    "audit_stage":  "v0.9.6-DP0-V2",
+    "phase":  "Phase 7 - safety closure and transition planning",
+    "final_v096_task":  {
+                            "rules":  [
+                                          "reuse the already frozen five-case corpus",
+                                          "continue from the original D0 protocol",
+                                          "use the repaired real DeepSeek provider",
+                                          "remain audit-focused",
+                                          "avoid rewriting or tuning the frozen essays",
+                                          "avoid opening another generic reliability or architecture stage",
+                                          "determine priority generation validity and downstream consumability"
+                                      ],
+                            "name":  "Resume the Frozen Priority Path Production Validity Audit",
+                            "stage":  "v0.9.6-D0-R"
+                        },
+    "first_v097_product_stage":  {
+                                     "name":  "Priority-Guided Learning Cycle Completion",
+                                     "stage":  "v0.9.7-A"
+                                 },
+    "subsequent_v097_product_stages":  [
+                                           "v0.9.7-B: priority-to-Practice target creation",
+                                           "v0.9.7-C: Revision and Practice functional completion",
+                                           "v0.9.7-D: student journey state completion",
+                                           "v0.9.7-E: priority taxonomy expansion as an evidence-driven feature",
+                                           "v0.9.7-F: student UI/UX redesign and visual polish",
+                                           "v0.9.7-G: responsive/mobile refinement",
+                                           "v0.9.7-H: accessibility and interaction consistency"
+                                       ],
+    "transition_rules":  [
+                             "do not reopen architecture-freeze work",
+                             "do not create more verification stages for harmless warnings",
+                             "do not block feature work on pre-existing non-reproducible flakes; record such issues in a known-issues ledger",
+                             "only reproducible data-loss, security, startup, submission, or core-path blockers may interrupt the transition"
+                         ],
+    "implemented_here":  false,
+    "note":  "these stages are recorded for the transition only; none are implemented inside DP0-V2"
+}

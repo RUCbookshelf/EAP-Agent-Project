@@ -1,0 +1,19 @@
+﻿{
+    "audit_stage":  "v0.9.6-DP0-V2",
+    "phase":  "Phase 6 - database safety",
+    "development_database":  {
+                                 "size_before":  14352384,
+                                 "size_after":  14352384,
+                                 "sha256_after":  "F78A6CEA9C1AE5A5920A2E8943C1B092F9CCF34821568C6812C51A56CD858662",
+                                 "mtime_before":  "2026-08-04 15:04:53",
+                                 "all_three_identical":  true,
+                                 "mtime_after":  "2026-08-04 15:04:53",
+                                 "sha256_before":  "F78A6CEA9C1AE5A5920A2E8943C1B092F9CCF34821568C6812C51A56CD858662",
+                                 "path":  "data/writing_feedback.db"
+                             },
+    "isolated_databases":  [
+                               "auto-provisioned per run under the system temporary directory",
+                               "all removed after each run"
+                           ],
+    "note":  "the newly adopted V2 baseline fingerprint remained byte-identical through every valid V2 verification layer"
+}

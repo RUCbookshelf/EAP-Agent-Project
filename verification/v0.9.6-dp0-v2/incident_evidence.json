@@ -1,0 +1,23 @@
+﻿{
+    "audit_stage":  "v0.9.6-DP0-V2",
+    "phase":  "Phase 0 - incident evidence preservation",
+    "incident":  "development-database file fingerprint changed during the invalid DP0-V1 launcher attempt",
+    "old_fingerprint":  {
+                            "size_bytes":  14352384,
+                            "sha256":  "62615C6C6ED65323FFA52E22ABBE2FEEF61E02C88DF8143B7872E86C67251810",
+                            "mtime_local":  "2026-08-04T12:54:07"
+                        },
+    "current_fingerprint":  {
+                                "size_bytes":  14352384,
+                                "sha256":  "F78A6CEA9C1AE5A5920A2E8943C1B092F9CCF34821568C6812C51A56CD858662",
+                                "mtime_local":  "2026-08-04T15:04:53"
+                            },
+    "what_happened":  "first launcher execution used DATABASE_PATH (pytest-runner contract) instead of DATABASE_URL (launcher contract); run.bat steps 5/7, 6/7, and smoke-stack API startup resolved to data/writing_feedback.db",
+    "effect":  "byte-level fingerprint change plus routine system_versions.recorded_at refresh (07:04:53 UTC = 15:04:53 local)",
+    "source_authoritative_evidence":  [
+                                          "verification/v0.9.6-dp0-v1/dev_db_incident.json",
+                                          "verification/v0.9.6-dp0-v1/database_safety.json",
+                                          "verification/v0.9.6-dp0-v1/launcher_result.json"
+                                      ],
+    "phase0_confirmation":  "confirmed live: SHA-256 F78A6CEA9C1AE5A5920A2E8943C1B092F9CCF34821568C6812C51A56CD858662, size 14352384, mtime 2026-08-04 15:04:53 local"
+}

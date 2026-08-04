@@ -1,0 +1,56 @@
+﻿{
+    "audit_stage":  "v0.9.6-DP0-V2",
+    "phase":  "Phase 3 - launcher database resolution trace",
+    "command":  "cmd /c \"run.bat --verify\"",
+    "resolution_chain":  [
+                             {
+                                 "step":  "run.bat [1/7]-[4/7]",
+                                 "action":  "set PYTHONUTF8=1, locate venv python, ensure deps and NLP resources, check .env presence",
+                                 "database_access":  "none"
+                             },
+                             {
+                                 "step":  "app/config/settings.py load_settings",
+                                 "action":  "load_dotenv(.env, override=False) then database_url = os.getenv(DATABASE_URL); value = strip sqlite:/// prefix, else os.getenv(DATABASE_PATH, \"data/writing_feedback.db\"); resolve against PROJECT_ROOT",
+                                 "database_access":  "resolution only"
+                             },
+                             {
+                                 "step":  "run.bat [5/7] scripts.migrate_database (pre-guard layout)",
+                                 "action":  "load_settings() -\u003e Database(settings.database_path).initialize() (write-capable: migrations/version metadata)",
+                                 "database_access":  "writes to the resolved database"
+                             },
+                             {
+                                 "step":  "run.bat [6/7] scripts.initialize_project (pre-guard layout)",
+                                 "action":  "load_settings() -\u003e Database(settings.database_path).initialize() + system-version metadata refresh",
+                                 "database_access":  "writes to the resolved database"
+                             },
+                             {
+                                 "step":  "run.bat [7/7] scripts.smoke_stack (pre-guard layout, only for --verify)",
+                                 "action":  "load_settings() then start_api/start_streamlit with env copy",
+                                 "database_access":  "API startup opens the resolved database"
+                             }
+                         ],
+    "enabling_facts":  [
+                           "repository .env contains DATABASE_URL=sqlite:///data/writing_feedback.db (the development database)",
+                           "when the process environment has no DATABASE_URL, load_dotenv injects the .env DATABASE_URL, so the effective target is the development database",
+                           "the incident attempt supplied the pytest-contract DATABASE_PATH instead of the launcher-contract DATABASE_URL; the app never consulted DATABASE_PATH because .env already provided DATABASE_URL",
+                           "no launcher component validated the effective database target before the write-capable steps ran"
+                       ],
+    "root_cause":  "the launcher contract required an explicit isolated DATABASE_URL in the process environment, but nothing enforced it: with DATABASE_URL absent, .env (DATABASE_URL=sqlite:///data/writing_feedback.db) silently selected the development database, and run.bat ran migrate/initialize/smoke-stack against it before any verification logic",
+    "why_not_rejected":  [
+                             "missing process-environment DATABASE_URL: load_settings accepts the .env value and never errors",
+                             "DATABASE_PATH-only isolation: DATABASE_PATH is ignored once .env DATABASE_URL exists, so the wrong-variable mistake silently selected the development database",
+                             "resolution to data/writing_feedback.db: no code path checked the resolved target",
+                             "database path inside the protected development-data location: no check existed"
+                         ],
+    "incident_effect":  "steps 5/7, 6/7 and smoke-stack API startup opened data/writing_feedback.db during the invalid attempt; routine system_versions.recorded_at refresh; byte fingerprint changed 62615C6C... to F78A6CEA...",
+    "evidence_files":  [
+                           "run.bat",
+                           "app/config/settings.py",
+                           ".env (key presence only)",
+                           "scripts/migrate_database.py",
+                           "scripts/initialize_project.py",
+                           "scripts/smoke_stack.py",
+                           "scripts/service_processes.py",
+                           "verification/v0.9.6-dp0-v1/dev_db_incident.json"
+                       ]
+}

@@ -1,0 +1,22 @@
+﻿{
+    "audit_stage":  "v0.9.6-DP0-V2",
+    "phase":  "Phase 3 - launcher isolation contract decision",
+    "pytest_isolation_contract":  "DATABASE_URL absent from the environment; DATABASE_PATH points to an isolated database outside the repository",
+    "launcher_isolation_contract":  "DATABASE_URL points to an isolated database outside the repository; DATABASE_PATH alone does not safely isolate every launcher process because .env may already supply DATABASE_URL",
+    "guard_preference":  "first preference: --verify automatically creates and uses a fresh temporary DATABASE_URL and removes it after verification",
+    "final_design":  [
+                         "new scripts/verify_launcher.py runs before any migration/API startup",
+                         "if DATABASE_URL is set in the process environment: effective target is validated via load_settings; empty or resolving to the development database / any database inside data/ refuses before startup",
+                         "if DATABASE_URL is not set in the process environment: a fresh temporary database is auto-provisioned outside the repository, DATABASE_URL is set for all verification subprocesses, and the temporary database is removed in a finally block",
+                         "a DATABASE_PATH-only environment can never silently fall back to the development database during verification",
+                         "normal non-verify launcher behavior remains unchanged"
+                     ],
+    "guard_rules_met":  [
+                            "resolve the effective database target before any write-capable action",
+                            "effective database can never be data/writing_feedback.db, an equivalent resolved path, a database inside data/, or a silent fallback to the development database",
+                            "DATABASE_PATH-only environment cannot fall back to the development database",
+                            "unsafe explicit resolution fails before any database connection or write",
+                            "failure output explains the isolation contract without exposing secrets",
+                            "normal non-verify launcher behavior unchanged"
+                        ]
+}

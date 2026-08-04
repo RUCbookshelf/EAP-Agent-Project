@@ -1,0 +1,117 @@
+﻿{
+    "audit_stage":  "v0.9.6-DP0-V2",
+    "phase":  "Phase 1 - development-database logical comparison",
+    "method":  "read-only SQLite URI mode (mode=ro); no writes; no essay-text extraction; row-level evidence reduced to SHA-256 hashes",
+    "comparison_source":  "verification/v0.9.6-dp0-v1/dev_db_incident.json logical_integrity_verification result plus documented v0.9.6-C-era development state (28 essays, Submission #28)",
+    "checks":  [
+                   {
+                       "check":  "user_version",
+                       "expected":  12,
+                       "actual":  12,
+                       "match":  true
+                   },
+                   {
+                       "check":  "table_count",
+                       "expected":  33,
+                       "actual":  33,
+                       "match":  true
+                   },
+                   {
+                       "check":  "schema_migrations",
+                       "expected":  "1..12",
+                       "actual":  "1,2,3,4,5,6,7,8,9,10,11,12",
+                       "match":  true
+                   },
+                   {
+                       "check":  "configuration_versions",
+                       "expected":  "CFG000001..CFG000007 with config-v0.9.0 active",
+                       "actual":  "CFG000001..CFG000007 with config-v0.9.0 active",
+                       "match":  true
+                   },
+                   {
+                       "check":  "students row count",
+                       "expected":  4,
+                       "actual":  4,
+                       "match":  true
+                   },
+                   {
+                       "check":  "essays row count",
+                       "expected":  28,
+                       "actual":  28,
+                       "match":  true
+                   },
+                   {
+                       "check":  "feedback_records row count",
+                       "expected":  28,
+                       "actual":  28,
+                       "match":  true
+                   },
+                   {
+                       "check":  "diagnoses row count",
+                       "expected":  28,
+                       "actual":  28,
+                       "match":  true
+                   },
+                   {
+                       "check":  "metrics row count",
+                       "expected":  28,
+                       "actual":  28,
+                       "match":  true
+                   },
+                   {
+                       "check":  "learner_history row count",
+                       "expected":  28,
+                       "actual":  28,
+                       "match":  true
+                   },
+                   {
+                       "check":  "analysis_runs row count",
+                       "expected":  28,
+                       "actual":  28,
+                       "match":  true
+                   },
+                   {
+                       "check":  "llm_call_records row count",
+                       "expected":  48,
+                       "actual":  48,
+                       "match":  true
+                   },
+                   {
+                       "check":  "practice_targets row count",
+                       "expected":  1,
+                       "actual":  1,
+                       "match":  true
+                   },
+                   {
+                       "check":  "exercise_instances row count",
+                       "expected":  1,
+                       "actual":  1,
+                       "match":  true
+                   },
+                   {
+                       "check":  "system_versions row count",
+                       "expected":  14,
+                       "actual":  14,
+                       "match":  true
+                   },
+                   {
+                       "check":  "system_versions values",
+                       "expected":  "constant version values; only recorded_at changed to 07:04:53 UTC",
+                       "actual":  "14 rows, version values constant; recorded_at 2026-08-04 07:04:53 UTC (= 15:04:53 local, incident mtime)",
+                       "match":  true
+                   }
+               ],
+    "integrity_check":  "ok",
+    "quick_check":  "ok",
+    "foreign_key_violations":  0,
+    "essay_text_extracted":  false,
+    "user_domain_change_detected":  false,
+    "schema_change_detected":  false,
+    "migration_change_detected":  false,
+    "configuration_change_detected":  false,
+    "only_detected_difference":  "system_versions.recorded_at routine timestamp refresh (standard API-startup version-metadata write)",
+    "conclusion":  "no user/domain-data, schema, migration, or active-configuration discrepancy detected; the only detectable difference is the routine system_versions timestamp refresh",
+    "new_baseline_hashes_recorded":  {
+                                         "user_domain_pk_and_all_column_sha256":  "{\"students\":{\"row_count\":4,\"primary_keys\":[\"student_id\"],\"pk_sha256\":\"3d47a7078814ffa3369b7763aeafb2186e21d6a7a68b8dfe160a4d1c0588aef1\",\"all_columns_sha256\":\"3d47a7078814ffa3369b7763aeafb2186e21d6a7a68b8dfe160a4d1c0588aef1\"},\"essays\":{\"row_count\":28,\"primary_keys\":[\"essay_id\"],\"pk_sha256\":\"26db64d8795c335c7e4c92dbe1e4d2c37369041b9e586201dfc089983d8347a7\",\"all_columns_sha256\":\"26db64d8795c335c7e4c92dbe1e4d2c37369041b9e586201dfc089983d8347a7\"},\"feedback_records\":{\"row_count\":28,\"primary_keys\":[\"feedback_id\"],\"pk_sha256\":\"7ae87283b51e8b983c30ff92cb0c35f705dc520b786f681ef5e147d25a3b6377\",\"all_columns_sha256\":\"7ae87283b51e8b983c30ff92cb0c35f705dc520b786f681ef5e147d25a3b6377\"},\"diagnoses\":{\"row_count\":28,\"primary_keys\":[\"diagnosis_id\"],\"pk_sha256\":\"3c8974c4ef768989b94cfa2d6e365f29185c79aab43e4ac3c03e9c1337f058ab\",\"all_columns_sha256\":\"3c8974c4ef768989b94cfa2d6e365f29185c79aab43e4ac3c03e9c1337f058ab\"},\"metrics\":{\"row_count\":28,\"primary_keys\":[\"metric_id\"],\"pk_sha256\":\"333968d2c96480686b4792ff30a066f1399ba69df07db2aa557884fabdf96601\",\"all_columns_sha256\":\"333968d2c96480686b4792ff30a066f1399ba69df07db2aa557884fabdf96601\"},\"learner_history\":{\"row_count\":28,\"primary_keys\":[\"history_id\"],\"pk_sha256\":\"470de7fa5223f486b1624ef05e3e7d167b030542453dc6d59bc673a5e19cff40\",\"all_columns_sha256\":\"470de7fa5223f486b1624ef05e3e7d167b030542453dc6d59bc673a5e19cff40\"},\"analysis_runs\":{\"row_count\":28,\"primary_keys\":[\"analysis_run_row_id\"],\"pk_sha256\":\"8b6d781be1612c5bce72c6f1f085aeb872982a8f40e7f1309e55922618b03e9e\",\"all_columns_sha256\":\"8b6d781be1612c5bce72c6f1f085aeb872982a8f40e7f1309e55922618b03e9e\"},\"llm_call_records\":{\"row_count\":48,\"primary_keys\":[\"call_id\"],\"pk_sha256\":\"1f826ff141a2f1fc082918dae30c9780ba36ee2884dcc9e1b9678b302c1696df\",\"all_columns_sha256\":\"1f826ff141a2f1fc082918dae30c9780ba36ee2884dcc9e1b9678b302c1696df\"},\"practice_targets\":{\"row_count\":1,\"primary_keys\":[\"practice_target_id\"],\"pk_sha256\":\"35af05d1805cefb173338d772069526e2bf0bf4291301c10af0e61804e65ba99\",\"all_columns_sha256\":\"35af05d1805cefb173338d772069526e2bf0bf4291301c10af0e61804e65ba99\"},\"exercise_instances\":{\"row_count\":1,\"primary_keys\":[\"exercise_id\"],\"pk_sha256\":\"396cf818e12902779c29a98a054910e00ce129978c43f560b8afbd562cdc738d\",\"all_columns_sha256\":\"396cf818e12902779c29a98a054910e00ce129978c43f560b8afbd562cdc738d\"}}"
+                                     }
+}

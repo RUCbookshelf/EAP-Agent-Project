@@ -1,0 +1,33 @@
+﻿{
+    "audit_stage":  "v0.9.6-DP0-V2",
+    "phase":  "Phase 2 - new baseline decision",
+    "classification":  "V2-DB-A",
+    "classification_label":  "Metadata-only write; current DB safe to retain",
+    "criteria_met":  [
+                         "SQLite integrity_check = ok",
+                         "foreign_key_check = no violations",
+                         "schema and migrations correct (12 migrations, 33 tables, user_version 12)",
+                         "active configuration correct (config-v0.9.0, CFG000007)",
+                         "all user/domain-data comparisons consistent (28 essays, 4 students, documented row counts)",
+                         "only detected difference = routine system_versions.recorded_at refresh"
+                     ],
+    "old_fingerprint":  {
+                            "size_bytes":  14352384,
+                            "sha256":  "62615C6C6ED65323FFA52E22ABBE2FEEF61E02C88DF8143B7872E86C67251810",
+                            "mtime_local":  "2026-08-04T12:54:07"
+                        },
+    "adopted_fingerprint":  {
+                                "size_bytes":  14352384,
+                                "sha256":  "F78A6CEA9C1AE5A5920A2E8943C1B092F9CCF34821568C6812C51A56CD858662",
+                                "mtime_local":  "2026-08-04T15:04:53"
+                            },
+    "decision":  "retain the current development database; do not restore any backup",
+    "baseline_adoption":  "owner-authorized baseline adoption following a metadata-only verification incident; the current fingerprint is the new development-database safety baseline for all subsequent stages",
+    "restored_backup":  false,
+    "evidence_files":  [
+                           "verification/v0.9.6-dp0-v2/database_integrity_audit.json",
+                           "verification/v0.9.6-dp0-v2/database_logical_comparison.json",
+                           "verification/v0.9.6-dp0-v2/backup_inventory.json",
+                           "verification/v0.9.6-dp0-v1/dev_db_incident.json"
+                       ]
+}

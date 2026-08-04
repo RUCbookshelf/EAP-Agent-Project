@@ -1,0 +1,365 @@
+﻿{
+    "path":  "A:\\EAP Agent Project\\writing-feedback-mvp\\data\\writing_feedback.db",
+    "user_version":  12,
+    "schema":  {
+                   "table_count":  33,
+                   "tables":  [
+                                  "analysis_artifacts",
+                                  "analysis_runs",
+                                  "analysis_units",
+                                  "configuration_audit",
+                                  "configuration_versions",
+                                  "diagnoses",
+                                  "diagnostic_calibrations",
+                                  "error_annotations",
+                                  "essays",
+                                  "exercise_attempts",
+                                  "exercise_instances",
+                                  "exercises",
+                                  "export_jobs",
+                                  "feedback_engagement_traces",
+                                  "feedback_records",
+                                  "history_evidence_registry",
+                                  "human_reviews",
+                                  "learner_history",
+                                  "learner_profile_snapshots",
+                                  "llm_call_records",
+                                  "metric_results",
+                                  "metrics",
+                                  "pii_candidates",
+                                  "practice_evaluations",
+                                  "practice_state_snapshots",
+                                  "practice_targets",
+                                  "revision_groups",
+                                  "revision_snapshots",
+                                  "schema_migrations",
+                                  "students",
+                                  "system_versions",
+                                  "transfer_evidence_candidates",
+                                  "within_task_response_candidates"
+                              ],
+                   "schema_sha256":  "1c18ce50571ad25e41e7b61fe09f4e3ec61ac45d96165a896dc5717303a72317",
+                   "indexes":  [
+                                   {
+                                       "name":  "idx_analysis_artifacts_run",
+                                       "table":  "analysis_artifacts"
+                                   },
+                                   {
+                                       "name":  "idx_analysis_runs_essay_created",
+                                       "table":  "analysis_runs"
+                                   },
+                                   {
+                                       "name":  "idx_analysis_units_submission_run",
+                                       "table":  "analysis_units"
+                                   },
+                                   {
+                                       "name":  "idx_configuration_audit_config",
+                                       "table":  "configuration_audit"
+                                   },
+                                   {
+                                       "name":  "idx_configuration_one_active",
+                                       "table":  "configuration_versions"
+                                   },
+                                   {
+                                       "name":  "idx_diagnostic_calibration_essay",
+                                       "table":  "diagnostic_calibrations"
+                                   },
+                                   {
+                                       "name":  "idx_error_annotations_submission",
+                                       "table":  "error_annotations"
+                                   },
+                                   {
+                                       "name":  "idx_essays_revision_group",
+                                       "table":  "essays"
+                                   },
+                                   {
+                                       "name":  "idx_essays_student_submitted",
+                                       "table":  "essays"
+                                   },
+                                   {
+                                       "name":  "idx_feedback_records_essay",
+                                       "table":  "feedback_records"
+                                   },
+                                   {
+                                       "name":  "idx_history_evidence_student",
+                                       "table":  "history_evidence_registry"
+                                   },
+                                   {
+                                       "name":  "idx_hr_target",
+                                       "table":  "human_reviews"
+                                   },
+                                   {
+                                       "name":  "idx_metric_results_run_metric",
+                                       "table":  "metric_results"
+                                   },
+                                   {
+                                       "name":  "idx_pii_sub",
+                                       "table":  "pii_candidates"
+                                   },
+                                   {
+                                       "name":  "idx_profile_student_created",
+                                       "table":  "learner_profile_snapshots"
+                                   },
+                                   {
+                                       "name":  "idx_revision_groups_student",
+                                       "table":  "revision_groups"
+                                   },
+                                   {
+                                       "name":  "idx_revision_snapshots_group",
+                                       "table":  "revision_snapshots"
+                                   }
+                               ],
+                   "triggers":  [
+
+                                ]
+               },
+    "schema_migrations":  [
+                              1,
+                              2,
+                              3,
+                              4,
+                              5,
+                              6,
+                              7,
+                              8,
+                              9,
+                              10,
+                              11,
+                              12
+                          ],
+    "configuration_versions":  [
+                                   {
+                                       "version":  "config-v0.6.1",
+                                       "status":  "inactive",
+                                       "activated_at":  "2026-07-29T00:00:00+00:00"
+                                   },
+                                   {
+                                       "version":  "config-v0.6.2",
+                                       "status":  "inactive",
+                                       "activated_at":  "2026-07-29T12:00:00+00:00"
+                                   },
+                                   {
+                                       "version":  "config-v0.7.0",
+                                       "status":  "inactive",
+                                       "activated_at":  "2026-07-30T12:00:00+00:00"
+                                   },
+                                   {
+                                       "version":  "config-v0.7.1",
+                                       "status":  "inactive",
+                                       "activated_at":  "2026-07-30T16:00:00+00:00"
+                                   },
+                                   {
+                                       "version":  "config-v0.8.0",
+                                       "status":  "inactive",
+                                       "activated_at":  "2026-07-30T18:00:00+00:00"
+                                   },
+                                   {
+                                       "version":  "config-v0.8.2",
+                                       "status":  "inactive",
+                                       "activated_at":  "2026-07-30T20:00:00+00:00"
+                                   },
+                                   {
+                                       "version":  "config-v0.9.0",
+                                       "status":  "active",
+                                       "activated_at":  "2026-07-30T22:00:00+00:00"
+                                   }
+                               ],
+    "system_versions":  {
+                            "row_count":  14,
+                            "rows":  [
+                                         {
+                                             "component":  "analysis",
+                                             "version":  "spacy-analyzer-v0.8.0",
+                                             "recorded_at":  "2026-08-04 07:04:53"
+                                         },
+                                         {
+                                             "component":  "analysis_unit_registry",
+                                             "version":  "analysis-unit-registry-v0.8.0",
+                                             "recorded_at":  "2026-08-04 07:04:53"
+                                         },
+                                         {
+                                             "component":  "api",
+                                             "version":  "v1",
+                                             "recorded_at":  "2026-08-04 07:04:53"
+                                         },
+                                         {
+                                             "component":  "application",
+                                             "version":  "0.8.0",
+                                             "recorded_at":  "2026-08-04 07:04:53"
+                                         },
+                                         {
+                                             "component":  "calf_construct_registry",
+                                             "version":  "calf-construct-registry-v0.8.0",
+                                             "recorded_at":  "2026-08-04 07:04:53"
+                                         },
+                                         {
+                                             "component":  "calf_measurement_specification",
+                                             "version":  "calf-measurement-specification-v0.8.0",
+                                             "recorded_at":  "2026-08-04 07:04:53"
+                                         },
+                                         {
+                                             "component":  "configuration",
+                                             "version":  "configuration-schema-v0.8.0",
+                                             "recorded_at":  "2026-08-04 07:04:53"
+                                         },
+                                         {
+                                             "component":  "diagnosis",
+                                             "version":  "prototype-diagnosis-v0.6.1",
+                                             "recorded_at":  "2026-08-04 07:04:53"
+                                         },
+                                         {
+                                             "component":  "diagnostic_calibration",
+                                             "version":  "diagnostic-calibration-v0.6.1",
+                                             "recorded_at":  "2026-08-04 07:04:53"
+                                         },
+                                         {
+                                             "component":  "feedback_schema",
+                                             "version":  "structured-feedback-v0.7.1",
+                                             "recorded_at":  "2026-08-04 07:04:53"
+                                         },
+                                         {
+                                             "component":  "learner_model",
+                                             "version":  "learner-profile-v0.7.0",
+                                             "recorded_at":  "2026-08-04 07:04:53"
+                                         },
+                                         {
+                                             "component":  "metric_registry",
+                                             "version":  "metric-registry-v0.8.0",
+                                             "recorded_at":  "2026-08-04 07:04:53"
+                                         },
+                                         {
+                                             "component":  "revision",
+                                             "version":  "revision-analysis-v0.5.0",
+                                             "recorded_at":  "2026-08-04 07:04:53"
+                                         },
+                                         {
+                                             "component":  "visualization",
+                                             "version":  "progress-visualization-data-v0.6.0",
+                                             "recorded_at":  "2026-08-04 07:04:53"
+                                         }
+                                     ],
+                            "sha256_including_recorded_at":  "f9570e5038179c03e4d6ce0f650de76aaec8cb1c853afe0e454ada4cfb569c68"
+                        },
+    "row_counts":  {
+                       "analysis_artifacts":  28,
+                       "analysis_runs":  28,
+                       "analysis_units":  1074,
+                       "configuration_audit":  7,
+                       "configuration_versions":  7,
+                       "diagnoses":  28,
+                       "diagnostic_calibrations":  28,
+                       "error_annotations":  0,
+                       "essays":  28,
+                       "exercise_attempts":  1,
+                       "exercise_instances":  1,
+                       "exercises":  6,
+                       "export_jobs":  1,
+                       "feedback_engagement_traces":  0,
+                       "feedback_records":  28,
+                       "history_evidence_registry":  2,
+                       "human_reviews":  6,
+                       "learner_history":  28,
+                       "learner_profile_snapshots":  28,
+                       "llm_call_records":  48,
+                       "metric_results":  636,
+                       "metrics":  28,
+                       "pii_candidates":  0,
+                       "practice_evaluations":  1,
+                       "practice_state_snapshots":  0,
+                       "practice_targets":  1,
+                       "revision_groups":  5,
+                       "revision_snapshots":  16,
+                       "schema_migrations":  12,
+                       "students":  4,
+                       "system_versions":  14,
+                       "transfer_evidence_candidates":  0,
+                       "within_task_response_candidates":  1
+                   },
+    "user_domain_tables":  {
+                               "students":  {
+                                                "row_count":  4,
+                                                "primary_keys":  [
+                                                                     "student_id"
+                                                                 ],
+                                                "pk_sha256":  "3d47a7078814ffa3369b7763aeafb2186e21d6a7a68b8dfe160a4d1c0588aef1",
+                                                "all_columns_sha256":  "3d47a7078814ffa3369b7763aeafb2186e21d6a7a68b8dfe160a4d1c0588aef1"
+                                            },
+                               "essays":  {
+                                              "row_count":  28,
+                                              "primary_keys":  [
+                                                                   "essay_id"
+                                                               ],
+                                              "pk_sha256":  "26db64d8795c335c7e4c92dbe1e4d2c37369041b9e586201dfc089983d8347a7",
+                                              "all_columns_sha256":  "26db64d8795c335c7e4c92dbe1e4d2c37369041b9e586201dfc089983d8347a7"
+                                          },
+                               "feedback_records":  {
+                                                        "row_count":  28,
+                                                        "primary_keys":  [
+                                                                             "feedback_id"
+                                                                         ],
+                                                        "pk_sha256":  "7ae87283b51e8b983c30ff92cb0c35f705dc520b786f681ef5e147d25a3b6377",
+                                                        "all_columns_sha256":  "7ae87283b51e8b983c30ff92cb0c35f705dc520b786f681ef5e147d25a3b6377"
+                                                    },
+                               "diagnoses":  {
+                                                 "row_count":  28,
+                                                 "primary_keys":  [
+                                                                      "diagnosis_id"
+                                                                  ],
+                                                 "pk_sha256":  "3c8974c4ef768989b94cfa2d6e365f29185c79aab43e4ac3c03e9c1337f058ab",
+                                                 "all_columns_sha256":  "3c8974c4ef768989b94cfa2d6e365f29185c79aab43e4ac3c03e9c1337f058ab"
+                                             },
+                               "metrics":  {
+                                               "row_count":  28,
+                                               "primary_keys":  [
+                                                                    "metric_id"
+                                                                ],
+                                               "pk_sha256":  "333968d2c96480686b4792ff30a066f1399ba69df07db2aa557884fabdf96601",
+                                               "all_columns_sha256":  "333968d2c96480686b4792ff30a066f1399ba69df07db2aa557884fabdf96601"
+                                           },
+                               "learner_history":  {
+                                                       "row_count":  28,
+                                                       "primary_keys":  [
+                                                                            "history_id"
+                                                                        ],
+                                                       "pk_sha256":  "470de7fa5223f486b1624ef05e3e7d167b030542453dc6d59bc673a5e19cff40",
+                                                       "all_columns_sha256":  "470de7fa5223f486b1624ef05e3e7d167b030542453dc6d59bc673a5e19cff40"
+                                                   },
+                               "analysis_runs":  {
+                                                     "row_count":  28,
+                                                     "primary_keys":  [
+                                                                          "analysis_run_row_id"
+                                                                      ],
+                                                     "pk_sha256":  "8b6d781be1612c5bce72c6f1f085aeb872982a8f40e7f1309e55922618b03e9e",
+                                                     "all_columns_sha256":  "8b6d781be1612c5bce72c6f1f085aeb872982a8f40e7f1309e55922618b03e9e"
+                                                 },
+                               "llm_call_records":  {
+                                                        "row_count":  48,
+                                                        "primary_keys":  [
+                                                                             "call_id"
+                                                                         ],
+                                                        "pk_sha256":  "1f826ff141a2f1fc082918dae30c9780ba36ee2884dcc9e1b9678b302c1696df",
+                                                        "all_columns_sha256":  "1f826ff141a2f1fc082918dae30c9780ba36ee2884dcc9e1b9678b302c1696df"
+                                                    },
+                               "practice_targets":  {
+                                                        "row_count":  1,
+                                                        "primary_keys":  [
+                                                                             "practice_target_id"
+                                                                         ],
+                                                        "pk_sha256":  "35af05d1805cefb173338d772069526e2bf0bf4291301c10af0e61804e65ba99",
+                                                        "all_columns_sha256":  "35af05d1805cefb173338d772069526e2bf0bf4291301c10af0e61804e65ba99"
+                                                    },
+                               "exercise_instances":  {
+                                                          "row_count":  1,
+                                                          "primary_keys":  [
+                                                                               "exercise_id"
+                                                                           ],
+                                                          "pk_sha256":  "396cf818e12902779c29a98a054910e00ce129978c43f560b8afbd562cdc738d",
+                                                          "all_columns_sha256":  "396cf818e12902779c29a98a054910e00ce129978c43f560b8afbd562cdc738d"
+                                                      }
+                           },
+    "integrity_check":  "ok",
+    "quick_check":  "ok",
+    "foreign_key_violations":  [
+
+                               ]
+}

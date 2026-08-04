@@ -1,0 +1,28 @@
+﻿{
+    "audit_stage":  "v0.9.6-DP0-V2",
+    "phase":  "Phase 6 - one isolated launcher verification",
+    "command":  "cmd /c \"run.bat --verify\"",
+    "run_count":  "exactly once in DP0-V2",
+    "environment":  "no DATABASE_URL, no DATABASE_PATH, no WRITING_FEEDBACK_ENV_FILE, no LLM_PROVIDER, no PYTHON_DOTENV_DISABLED overrides; repository .env present",
+    "result":  {
+                   "isolation_mode":  "auto_provision",
+                   "migration_version":  12,
+                   "database_table_count":  33,
+                   "effective_database_path":  "C:\\Users\\16073\\AppData\\Local\\Temp\\wfm-verify-20260804T160720-3344.db",
+                   "health":  200,
+                   "active_configuration":  "config-v0.9.0",
+                   "status":  "PASS",
+                   "streamlit":  200,
+                   "exit_code":  0,
+                   "prompt_version":  "feedback-prompt-v0.7.1",
+                   "docs":  200
+               },
+    "requirements":  {
+                         "no_test_owned_process_remains":  true,
+                         "no_test_owned_port_remains":  true,
+                         "temporary_database_removed":  true,
+                         "fresh_isolated_database":  true,
+                         "development_database_not_opened_for_writing":  true
+                     },
+    "evidence_log":  "C:\\tmp\\v096dp0v2\\launcher_run_v2.log"
+}

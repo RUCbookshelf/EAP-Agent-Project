@@ -129,7 +129,7 @@ Final full non-live core (exactly once):
 824 passed, 8 skipped, 0 failed, 0 errors, exit 0 (566.22s)
 `
 
-Launcher (exactly once with the isolated-DB contract
+Launcher (protocol run, isolated-DB contract
 DATABASE_URL=sqlite:///C:/tmp/v096dp0/v1-launcher.db):
 
 `	ext
@@ -137,10 +137,68 @@ cmd /c "run.bat --verify" -> PASS, exit 0; health/docs/streamlit 200/200/200
 `
 
 Safety: research exports 776 files / 388 dirs (16 test-generated files
-removed via exact allowlist); development database logically unchanged -
-see dev_db_incident.json for the recorded byte-fingerprint incident during an
-invalid first launcher attempt (operator env error; read-only verification
-proved zero logical change; corrected launcher run used the isolated DB and
-the fingerprint is stable).
+removed via exact allowlist); development database byte fingerprint changed
+during the invalid first launcher attempt (62615C6C... -> F78A6CEA...; only
+the routine system_versions.recorded_at refresh detected) - see
+dev_db_incident.json and the V2 closure below; the corrected launcher run
+used an isolated DB and the V2 baseline fingerprint is stable.
 
 DP0-V1 closure status: **COMPLETE and fully verified**.
+
+## v0.9.6-DP0-V2 closure (2026-08-04) - Verification safety incident closure
+
+### Incident (accurate record)
+
+The first DP0-V1 launcher attempt supplied the pytest-contract
+DATABASE_PATH instead of the launcher-contract DATABASE_URL. The repository
+.env contains DATABASE_URL=sqlite:///data/writing_feedback.db, so with no
+process-level DATABASE_URL the application silently selected the development
+database, and run.bat [5/7], [6/7], and the smoke-stack API startup opened
+it. The development-database byte fingerprint changed:
+62615C6C6ED65323FFA52E22ABBE2FEEF61E02C88DF8143B7872E86C67251810 (mtime
+2026-08-04 12:54:07) -> F78A6CEA9C1AE5A5920A2E8943C1B092F9CCF34821568C6812C51A56CD858662
+(mtime 2026-08-04 15:04:53; size unchanged at 14,352,384 bytes). The only
+detected row-level change was the routine system_versions.recorded_at
+refresh (07:04:53 UTC). Read-only verification proved no user/domain-data,
+schema, migration, or active-configuration discrepancy.
+
+### Classification and baseline adoption
+
+V2-DB-A (metadata-only write): the current database was retained, no backup
+was restored, and F78A6CEA... was formally adopted as the new
+development-database safety baseline (owner-authorized baseline adoption
+following a metadata-only verification incident).
+
+### Launcher isolation guard
+
+- run.bat --verify now delegates to scripts/verify_launcher.py BEFORE any
+  migration or API startup.
+- DATABASE_URL set in the process environment is validated; empty values and
+  targets resolving to data/writing_feedback.db or any database inside the
+  repository data/ directory refuse before startup.
+- DATABASE_URL not set in the process environment: a fresh temporary
+  database is auto-provisioned outside the repository, used for
+  migrate/initialize/smoke-stack, and removed after the run. A
+  DATABASE_PATH-only environment can no longer silently fall back to the
+  development database.
+- Normal non-verify launcher behavior is unchanged.
+
+### V2 verification (focused only; full core NOT rerun)
+
+- Launcher-isolation guard tests (tests/test_v096dp0_v2_launcher_isolation.py):
+  22 passed, exit 0.
+- Database, migration, and configuration contract tests: 31 passed, exit 0.
+- Negative probe (DATABASE_PATH = development database path, no
+  DATABASE_URL): verification safely auto-isolated; PASS, exit 0;
+  development database byte-identical.
+- cmd /c "run.bat --verify" (exactly once, no overrides): PASS, exit 0;
+  auto-provisioned temporary database; migration 12, tables 33,
+  config-v0.9.0, prompt feedback-prompt-v0.7.1, health/docs/streamlit
+  200/200/200; temporary database removed; no test-owned process or port
+  remains; development database byte-identical (F78A6CEA...).
+- Research exports: 776 files / 388 dirs, zero delta.
+- Preserved full-core result: 824 passed, 8 skipped, 0 failed, 0 errors,
+  exit 0 (DP0-V1; NOT rerun in V2).
+- No live provider call was made in V2.
+
+v0.9.6-DP0 is formally and finally closed. Proceed to v0.9.6-D0-R.
