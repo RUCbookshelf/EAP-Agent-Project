@@ -1,0 +1,21 @@
+{
+  "audit_stage": "v0.9.6-DP0-V1",
+  "phase": "Phase 4 - exact launcher verification",
+  "command": "cmd /c \"run.bat --verify\"",
+  "environment": "DATABASE_URL=sqlite:///C:/tmp/v096dp0/v1-launcher.db (fresh isolated database; established launcher isolation contract)",
+  "run_count": "protocol run: exactly once (see dev_db_incident.json for the preceding invalid-protocol attempt)",
+  "result": {
+    "exit_code": 0,
+    "status": "PASS",
+    "migration_version": 12,
+    "database_path": "C:\\tmp\\v096dp0\\v1-launcher.db",
+    "active_configuration": "config-v0.9.0",
+    "prompt_version": "feedback-prompt-v0.7.1",
+    "provider": "deepseek / deepseek-v4-pro configured",
+    "health": 200,
+    "docs": 200,
+    "streamlit": 200,
+    "ports_used": [8000, 8501],
+    "temporary_database": "C:\\tmp\\v096dp0\\v1-launcher.db (removed after evidence capture)"
+  }
+}

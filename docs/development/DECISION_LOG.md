@@ -1,3 +1,26 @@
+## 2026-08-04 - v0.9.6-DP0-V1 Full-Core Verification Closure
+
+- **Decision**: Close v0.9.6-DP0 formally with a verification-only stage:
+  establish the canonical full-core environment from the source-authoritative
+  runner, prove the three prior failure conditions cleared, run the complete
+  non-live core exactly once, run the exact launcher once, and commit one
+  closure commit. No production or test change.
+- **Rationale**: The provider repair had passed live acceptance, but the
+  prior full-core single run was not green (parity test without the
+  documented SERVICE_API_DIFF_ALLOWLIST env; documented lifecycle flake;
+  transient Chromium launch timeout). All three pass in the canonical
+  environment; the final core is green (824/8/0/0, exit 0) and the launcher
+  passes (exit 0, 200/200/200).
+- **Evidence**: verification/v0.9.6-dp0-v1/ artifacts (baseline, canonical
+  environment, parity decision, readiness results, full-core result, launcher
+  result, export deltas, final decision). A recorded incident: the first
+  launcher attempt used the wrong isolation variable and touched the
+  development database file bytes; read-only inspection proved zero logical
+  change and the corrected launcher run used an isolated database
+  (dev_db_incident.json).
+- **Boundary**: no production behavior change; no allowlist change; no test
+  change; no D0-R/D1 start. Recommended next stage: v0.9.6-D0-R resume the
+  frozen priority path audit.
 ## 2026-08-04 - v0.9.6-DP0 Production Provider Reliability (DP0-A + DP0-B)
 
 - **Decision**: Repair the real DeepSeek structured-feedback path that

@@ -1,0 +1,42 @@
+{
+  "audit_stage": "v0.9.6-DP0-V1",
+  "phase": "Phase 2 - Chromium readiness",
+  "prior_error_node": "tests/test_v096c2_sidebar_control.py::test_browser_expanded_normal_left_visible_without_hover",
+  "prior_error_type": "playwright TimeoutError: BrowserType.launch: Timeout 180000ms exceeded (launch stage; process pid started but never became ready during the long suite run)",
+  "browser_inventory": {
+    "framework": "playwright 1.61.0",
+    "executable": "C:\\Users\\16073\\AppData\\Local\\ms-playwright\\chromium-1228\\chrome-win64\\chrome.exe",
+    "headless_shell": "C:\\Users\\16073\\AppData\\Local\\ms-playwright\\chromium_headless_shell-1228\\chrome-headless-shell-win64\\chrome-headless-shell.exe",
+    "headless_shell_present": true,
+    "version": "149.0.7827.55",
+    "headless_flags": "tests launch headless=True",
+    "profile_cache": "playwright default temporary profiles (playwright_chromiumdev_profile-* under %TEMP%), fresh per launch",
+    "launch_timeout": 180000,
+    "test_timeout": "pytest default",
+    "stale_processes_before": "none",
+    "stale_profiles_before": "none detected",
+    "port_conflicts": "none"
+  },
+  "checks": [
+    {
+      "check": "minimal browser launch/close probe through the same framework",
+      "result": "PASS (chromium 149.0.7827.55 launched and closed headlessly)"
+    },
+    {
+      "check": "one isolated run of the exact previously failing test",
+      "command": "pytest -q -p no:cacheprovider tests/test_v096c2_sidebar_control.py::test_browser_expanded_normal_left_visible_without_hover",
+      "result": "1 passed, exit 0"
+    },
+    {
+      "check": "one small focused UI subset (sidebar-control module)",
+      "command": "pytest -q -p no:cacheprovider tests/test_v096c2_sidebar_control.py",
+      "result": "18 passed, exit 0"
+    }
+  ],
+  "post_run_cleanup": {
+    "test_owned_browser_processes": "none remaining",
+    "test_owned_profiles": "playwright cleans its temp profiles",
+    "ports": "none remaining"
+  },
+  "conclusion": "Chromium launches reliably under the source-authoritative environment. No blocker."
+}

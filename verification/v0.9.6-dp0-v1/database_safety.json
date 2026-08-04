@@ -1,0 +1,41 @@
+{
+  "audit_stage": "v0.9.6-DP0-V1",
+  "development_database": {
+    "path": "data/writing_feedback.db",
+    "phase0_baseline": {
+      "sha256": "62615C6C6ED65323FFA52E22ABBE2FEEF61E02C88DF8143B7872E86C67251810",
+      "size_bytes": 14352384,
+      "mtime_local": "2026-08-04T12:54:07"
+    },
+    "after_targeted_readiness_and_full_core": {
+      "sha256": "62615C6C6ED65323FFA52E22ABBE2FEEF61E02C88DF8143B7872E86C67251810",
+      "size_bytes": 14352384,
+      "mtime_local": "2026-08-04T12:54:07"
+    },
+    "after_invalid_launcher_attempt_incident": {
+      "sha256": "F78A6CEA9C1AE5A5920A2E8943C1B092F9CCF34821568C6812C51A56CD858662",
+      "size_bytes": 14352384,
+      "mtime_local": "2026-08-04T15:04:53",
+      "note": "byte-level change only; logical content verified unchanged (see dev_db_incident.json)"
+    },
+    "after_corrected_launcher_run": {
+      "sha256": "F78A6CEA9C1AE5A5920A2E8943C1B092F9CCF34821568C6812C51A56CD858662",
+      "size_bytes": 14352384,
+      "mtime_local": "2026-08-04T15:04:53",
+      "stable": true
+    },
+    "logical_integrity": "verified read-only: user_version 12, 33 tables, schema_migrations 1-12, config-v0.9.0 active, 28 essays (v0.9.6-C-era count), no rows added/altered beyond the routine system_versions timestamp refresh",
+    "incident_reference": "verification/v0.9.6-dp0-v1/dev_db_incident.json"
+  },
+  "isolated_databases": {
+    "targeted": "C:\\tmp\\v096dp0\\v1-targeted.db (removed)",
+    "full_core": "C:\\tmp\\v096dp0\\v1-core.db (removed)",
+    "launcher": "C:\\tmp\\v096dp0\\v1-launcher.db (removed after evidence capture)",
+    "note": "all outside the repository; never committed; removed after the stage"
+  },
+  "research_exports": {
+    "baseline": {"file_count": 776, "directory_count": 388},
+    "final": {"file_count": 776, "directory_count": 388},
+    "cleanup": "16 test-generated files (8 export dirs) removed via exact allowlist after the full core"
+  }
+}

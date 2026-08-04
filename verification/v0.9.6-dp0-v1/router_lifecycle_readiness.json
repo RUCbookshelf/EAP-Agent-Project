@@ -1,0 +1,35 @@
+{
+  "audit_stage": "v0.9.6-DP0-V1",
+  "phase": "Phase 2 - router lifecycle readiness",
+  "prior_failure_node": "tests/test_v095b_router_contract.py::test_business_route_gated_until_ready_while_health_available",
+  "prior_failure_type": "AttributeError (KeyError 'submission_bundle_reader' on app.state during a readiness-gated request while the module-level lifecycle state was STARTING)",
+  "known_documentation": "documented pre-existing lifecycle-race flake (shared module-level lifecycle state); recorded in v0.9.5-H2D2 verification notes",
+  "resources_used_by_test": {
+    "servers": "none (TestClient without lifespan)",
+    "ports": "none",
+    "temporary_databases": "tmp_path fixture",
+    "dependency_overrides": "none",
+    "global_caches": "module-level app.lifecycle ServiceState (shared across tests)",
+    "cleanup": "TestClient context closes the app; lifecycle state transitions are test-managed"
+  },
+  "checks": [
+    {
+      "check": "one isolated run of the exact lifecycle test in the canonical environment",
+      "command": "pytest -q -p no:cacheprovider tests/test_v095b_router_contract.py::test_business_route_gated_until_ready_while_health_available",
+      "result": "1 passed, exit 0"
+    },
+    {
+      "check": "one focused ordered subset: module predecessors + lifecycle test + successors",
+      "command": "pytest -q -p no:cacheprovider tests/test_v095b_router_contract.py",
+      "result": "10 passed, exit 0"
+    }
+  ],
+  "post_run_verification": {
+    "test_owned_servers": "none",
+    "test_owned_ports": "none",
+    "event_loop_or_thread_leaks": "none reported",
+    "temporary_databases": "pytest tmp dirs cleaned; no repo writes",
+    "development_database_unchanged": true
+  },
+  "conclusion": "The prior lifecycle failure does not reproduce in the canonical environment (isolated or ordered subset). No blocker."
+}

@@ -1,0 +1,33 @@
+{
+  "audit_stage": "v0.9.6-DP0-V1",
+  "phase": "Phase 1 - canonical full-core environment",
+  "source_authority": "verification/v0.9.5-h2a/isolated_pytest_runner.py (the latest established isolated pytest runner; F2..H2A lineage) and RUN_VERIFICATION_V0.9.5_F2.md (SERVICE_API_DIFF_ALLOWLIST documentation)",
+  "environment_inventory": {
+    "required_environment_variables": [
+      {"name": "PYTHONUTF8", "value": "1", "purpose": "UTF-8 console/stdout"},
+      {"name": "PYTHON_DOTENV_DISABLED", "value": "1", "purpose": "established runner isolation marker (dotenv still loads .env; DATABASE_PATH resolution empirically verified)"},
+      {"name": "DATABASE_PATH", "value": "<fresh isolated db path>", "purpose": "database override; runner contract removes DATABASE_URL and sets DATABASE_PATH"},
+      {"name": "LLM_PROVIDER", "value": "local", "purpose": "non-live provider mode; prevents accidental live provider calls"},
+      {"name": "SERVICE_API_DIFF_ALLOWLIST", "value": "<26-entry G/H2 accumulated allowlist from verification/v0.9.5-h2a/isolated_pytest_runner.py G_ALLOWLIST>", "purpose": "API/service parity contract for the parity script's git-diff guard"}
+    ],
+    "optional_environment_variables": [],
+    "variables_forbidden_in_non_live_core": [
+      "WRITING_FEEDBACK_ENV_FILE must not point to a live provider configuration? No - it is simply not set; the runner contract does not set it",
+      "no explicit forbidden list exists beyond live-test exclusion and DATABASE_URL removal per runner contract"
+    ],
+    "database_override": "DATABASE_PATH (fresh isolated path); DATABASE_URL removed from the environment per runner contract; empirical check: load_settings resolves to DATABASE_PATH (verified 2026-08-04)",
+    "dotenv_policy": "load_dotenv(override=False) runs from PROJECT_ROOT/.env; process env wins",
+    "provider_mode": "local (LLM_PROVIDER=local)",
+    "live_test_exclusion": "--ignore=tests/live",
+    "api_service_parity_allowlist_source": "G_ALLOWLIST constant in verification/v0.9.5-h2a/isolated_pytest_runner.py (26 entries)",
+    "browser_executable": "C:\\Users\\16073\\AppData\\Local\\ms-playwright\\chromium-1228\\chrome-win64\\chrome.exe (and chromium_headless_shell-1228 headless shell, present)",
+    "browser_headless_policy": "tests launch headless=True",
+    "browser_profile_cache": "playwright default temporary profiles (playwright_chromiumdev_profile-* under %TEMP%), fresh per launch",
+    "test_timeout_policy": "pytest default; browser launch timeout 180000ms (source-authoritative in test fixture; not increased)",
+    "research_export_guard": "baseline manifest verification/v0.9.6-dp0-v1/research_exports_baseline.json + exact-additions cleanup after each export-capable layer"
+  },
+  "empirical_validation": {
+    "load_settings_database_path": "resolves to DATABASE_PATH with DATABASE_URL absent (verified via venv python, 2026-08-04)",
+    "chromium_launch_probe": "PASS (headless launch/close, version 149.0.7827.55)"
+  }
+}

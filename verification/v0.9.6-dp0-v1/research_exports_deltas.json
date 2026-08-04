@@ -1,0 +1,27 @@
+{
+  "audit_stage": "v0.9.6-DP0-V1",
+  "baseline": {"file_count": 776, "directory_count": 388},
+  "layers": [
+    {
+      "layer": "targeted readiness suites",
+      "additions": 0,
+      "note": "no export-capable tests generated files"
+    },
+    {
+      "layer": "final full non-live core",
+      "additions": 16,
+      "note": "8 export directories (export_20260804T0655*/0657*); all identified, allowlisted, and removed"
+    },
+    {
+      "layer": "launcher verification",
+      "additions": 0
+    }
+  ],
+  "cleanup": {
+    "deleted_files": 16,
+    "deleted_directories": 8,
+    "verification": "every candidate re-checked against the baseline manifest before deletion; no baseline file deleted or changed"
+  },
+  "final": {"file_count": 776, "directory_count": 388},
+  "conclusion": "Research exports returned exactly to baseline."
+}

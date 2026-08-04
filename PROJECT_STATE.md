@@ -1,4 +1,17 @@
 # Project State
+## Current v0.9.6-DP0-V1 State
+
+- Status: COMPLETE - formal full-core regression closure for v0.9.6-DP0
+  (verification-only). Full non-live core 824 passed, 8 skipped, 0 failed,
+  0 errors, exit 0 (run exactly once); un.bat --verify PASS, exit 0.
+- Canonical environment sourced from verification/v0.9.5-h2a/
+  isolated_pytest_runner.py (SERVICE_API_DIFF_ALLOWLIST unchanged).
+- Research exports 776/388; development database logically unchanged
+  (byte-fingerprint incident from an invalid launcher attempt recorded in
+  verification/v0.9.6-dp0-v1/dev_db_incident.json).
+- v0.9.6-DP0 is formally closed. Recommended next stage (separately
+  approved): v0.9.6-D0-R resume the frozen priority path audit.
+
 ## Current v0.9.6-DP0 State
 
 - Status: COMPLETE - production provider reliability repaired and verified.

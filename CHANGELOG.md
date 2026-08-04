@@ -1,3 +1,22 @@
+## v0.9.6-DP0-V1 (2026-08-04)
+
+### Verified
+- Full-core regression closure for v0.9.6-DP0 (verification-only stage; no
+  production or test change).
+- Canonical environment established from the source-authoritative isolated
+  pytest runner (LLM_PROVIDER=local, fresh isolated DATABASE_PATH,
+  SERVICE_API_DIFF_ALLOWLIST = existing 26-entry G_ALLOWLIST, live tests
+  excluded).
+- Prior non-green run classified: parity test (missing documented allowlist
+  env), documented router-contract lifecycle flake, transient Chromium
+  launch timeout - each passes in isolation.
+- Final complete non-live core (exactly once): 824 passed, 8 skipped,
+  0 failed, 0 errors, exit 0.
+- Exact launcher: cmd /c "run.bat --verify" PASS, exit 0 (health/docs/
+  streamlit 200/200/200; isolated database).
+- Research exports returned to 776 files / 388 dirs; development database
+  logically unchanged (recorded byte-fingerprint incident documented in
+  verification/v0.9.6-dp0-v1/dev_db_incident.json).
 ## v0.9.6-DP0 (2026-08-04)
 
 ### Changed

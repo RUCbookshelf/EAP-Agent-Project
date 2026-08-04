@@ -1,0 +1,52 @@
+{
+  "audit_stage": "v0.9.6-DP0-V1",
+  "phase": "Phase 0 - prior full-core failure evidence",
+  "source_evidence": [
+    "verification/v0.9.6-dp0/regression_results.json (committed at dcc34a2)",
+    "the tool-captured output of the original full-core run (not persisted to a file; reconstructed facts below from the committed artifact and the run transcript)"
+  ],
+  "prior_run": {
+    "command": "pytest -q -p no:cacheprovider --ignore=tests/live tests",
+    "working_directory": "A:\\EAP Agent Project\\writing-feedback-mvp",
+    "environment_variables_explicitly_supplied": ["PYTHONUTF8=1", "DATABASE_URL=sqlite:///C:/tmp/v096dp0/core.db", "WRITING_FEEDBACK_ENV_FILE=<repo>/.env"],
+    "environment_variables_absent": ["SERVICE_API_DIFF_ALLOWLIST"],
+    "pytest_exit_code": 1,
+    "counts": {"passed": 821, "skipped": 8, "failed": 2, "errors": 1},
+    "failed_node_ids": [
+      "tests/test_v095e_repository_modularization.py::test_static_owner_sql_dependency_and_ddl_parity_contract",
+      "tests/test_v095b_router_contract.py::test_business_route_gated_until_ready_while_health_available"
+    ],
+    "error_node_id": [
+      "tests/test_v096c2_sidebar_control.py::test_browser_expanded_normal_left_visible_without_hover"
+    ],
+    "failure_1_parity": {
+      "type": "AssertionError",
+      "trace_summary": "compare_repository_parity.py exited 1; service_api_domain_diff listed 25 app/services|journey|practice|research|api files against baseline 769e6d8",
+      "root_cause": "the documented SERVICE_API_DIFF_ALLOWLIST environment variable was not supplied to the run"
+    },
+    "failure_2_router_lifecycle": {
+      "type": "AttributeError (KeyError 'submission_bundle_reader' on app.state during readiness-gated request)",
+      "node": "tests/test_v095b_router_contract.py::test_business_route_gated_until_ready_while_health_available",
+      "root_cause": "documented pre-existing lifecycle-race flake (shared module-level lifecycle state); passes in isolation"
+    },
+    "error_1_chromium": {
+      "type": "playwright TimeoutError: BrowserType.launch: Timeout 180000ms exceeded",
+      "node": "tests/test_v096c2_sidebar_control.py::test_browser_expanded_normal_left_visible_without_hover",
+      "launch_command": "chromium_headless_shell-1228 chrome-headless-shell.exe --headless ...",
+      "root_cause": "transient browser launch timeout during the long suite run; passes in isolation"
+    },
+    "browser_launch_timeout": 180000,
+    "research_export_additions": "16 files in 8 directories (export_20260804T05*/060*) - removed after the run via the exact allowlist",
+    "post_run_cleanup": "research exports restored to 776 files / 388 directories before DP0-B closure"
+  },
+  "classification": {
+    "parity": "runner/operator protocol omission (documented env absent)",
+    "router_lifecycle": "documented pre-existing flake (passed in isolation)",
+    "chromium": "transient environment failure (passed in isolation)"
+  },
+  "isolation_evidence_recorded_at_the_time": [
+    "parity test passes with the documented accumulated allowlist (4 passed, exit 0)",
+    "router lifecycle test passes in isolation",
+    "sidebar browser test passes in isolation"
+  ]
+}

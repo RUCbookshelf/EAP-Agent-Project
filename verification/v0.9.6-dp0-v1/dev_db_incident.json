@@ -1,0 +1,35 @@
+{
+  "audit_stage": "v0.9.6-DP0-V1",
+  "incident": "development-database file fingerprint changed during an invalid launcher attempt",
+  "severity": "recorded; no logical content change",
+  "what_happened": {
+    "attempt": "the first launcher execution used DATABASE_PATH (the pytest-runner isolation contract) instead of DATABASE_URL (the established launcher isolation contract)",
+    "effect": "run.bat [5/7] and [6/7] plus the smoke-stack API startup resolved to the development database (data/writing_feedback.db)",
+    "launcher_result_still": "PASS, exit 0 (health/docs/streamlit 200/200/200) - functional pass, but with the wrong database isolation"
+  },
+  "root_cause": "operator environment error: the launcher contract in this repository's established verification history sets DATABASE_URL (used in the DP0-B launcher run and prior stages), while DATABASE_PATH is the isolated pytest-runner contract; the wrong variable was supplied",
+  "fingerprint_impact": {
+    "dp0_v1_baseline_before_incident": {"sha256": "62615C6C6ED65323FFA52E22ABBE2FEEF61E02C88DF8143B7872E86C67251810", "size": 14352384, "mtime": "2026-08-04T12:54:07"},
+    "after_incident": {"sha256": "F78A6CEA9C1AE5A5920A2E8943C1B092F9CCF34821568C6812C51A56CD858662", "size": 14352384, "mtime": "2026-08-04T15:04:53"}
+  },
+  "logical_integrity_verification": {
+    "method": "read-only sqlite3 inspection of the current file",
+    "result": {
+      "user_version": 12,
+      "tables": 33,
+      "schema_migrations": [1,2,3,4,5,6,7,8,9,10,11,12],
+      "configuration_versions": "CFG000001..CFG000007 with config-v0.9.0 active",
+      "row_counts": {"students": 4, "essays": 28, "feedback_records": 28, "diagnoses": 28, "metrics": 28, "learner_history": 28, "analysis_runs": 28, "llm_call_records": 48, "practice_targets": 1, "exercise_instances": 1},
+      "essays_note": "28 essays matches the documented v0.9.6-C-era development state (Submission #28); no audit submission ever touched this database",
+      "system_versions": "all 14 expected rows present with the constant version values; only the recorded_at timestamp changed (07:04:53 UTC) - the standard API-startup version-metadata refresh"
+    },
+    "conclusion": "zero logical change: no rows added/removed/altered beyond the routine system_versions timestamp refresh; schema, migrations, configuration, and all user data intact"
+  },
+  "resolution": {
+    "corrected_launcher_run": "executed exactly once with DATABASE_URL=sqlite:///C:/tmp/v096dp0/v1-launcher.db; PASS exit 0; output confirmed the isolated database path",
+    "fingerprint_stability": "verified unchanged after the corrected run (F78A6CEA...)",
+    "temp_database_removed": true,
+    "closure_claim": "the development database was not modified by any valid DP0-V1 verification layer; the fingerprint change occurred only in the documented invalid-protocol attempt and is byte-level only with proven logical integrity"
+  },
+  "lessons_for_report": "the final report and documentation disclose the before/after fingerprints and this incident explicitly rather than claiming byte-identical fingerprints"
+}

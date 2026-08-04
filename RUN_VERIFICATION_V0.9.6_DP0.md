@@ -92,3 +92,55 @@ Provider reliability acceptance: **met** (3+ consecutive initial-attempt
 live successes with zero corrections, zero fallback, zero truncation, zero
 timeout). Recommended next stage: **v0.9.6-D0-R** (resume the frozen priority
 path audit).
+
+
+## v0.9.6-DP0-V1 closure (2026-08-04)
+
+The original DP0 full-core run was NOT accepted for formal closure:
+
+`	ext
+821 passed, 8 skipped, 2 failed, 1 error, exit 1
+- tests/test_v095e_repository_modularization.py::test_static_owner_sql_dependency_and_ddl_parity_contract
+  (runner omitted the documented SERVICE_API_DIFF_ALLOWLIST env; passes with it)
+- tests/test_v095b_router_contract.py::test_business_route_gated_until_ready_while_health_available
+  (documented pre-existing lifecycle flake; passes in isolation)
+- tests/test_v096c2_sidebar_control.py::test_browser_expanded_normal_left_visible_without_hover
+  (transient Chromium launch timeout; passes in isolation)
+`
+
+Canonical full-core environment (source authority:
+verification/v0.9.5-h2a/isolated_pytest_runner.py):
+
+`	ext
+PYTHONUTF8=1, PYTHON_DOTENV_DISABLED=1, LLM_PROVIDER=local,
+DATABASE_PATH=<fresh isolated db>, SERVICE_API_DIFF_ALLOWLIST=<26-entry
+G_ALLOWLIST copied verbatim from the runner>, DATABASE_URL absent
+pytest -q -p no:cacheprovider --ignore=tests/live tests
+`
+
+Readiness (all pass, run once each): parity test 1 passed; router lifecycle
+isolated 1 passed; router contract module 10 passed; Chromium launch probe
+PASS; prior Chromium test 1 passed; C2 module 18 passed; combined targeted
+readiness 101 passed, exit 0.
+
+Final full non-live core (exactly once):
+
+`	ext
+824 passed, 8 skipped, 0 failed, 0 errors, exit 0 (566.22s)
+`
+
+Launcher (exactly once with the isolated-DB contract
+DATABASE_URL=sqlite:///C:/tmp/v096dp0/v1-launcher.db):
+
+`	ext
+cmd /c "run.bat --verify" -> PASS, exit 0; health/docs/streamlit 200/200/200
+`
+
+Safety: research exports 776 files / 388 dirs (16 test-generated files
+removed via exact allowlist); development database logically unchanged -
+see dev_db_incident.json for the recorded byte-fingerprint incident during an
+invalid first launcher attempt (operator env error; read-only verification
+proved zero logical change; corrected launcher run used the isolated DB and
+the fingerprint is stable).
+
+DP0-V1 closure status: **COMPLETE and fully verified**.

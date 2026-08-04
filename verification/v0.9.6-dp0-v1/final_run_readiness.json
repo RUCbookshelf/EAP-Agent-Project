@@ -1,0 +1,24 @@
+{
+  "audit_stage": "v0.9.6-DP0-V1",
+  "phase": "Final-run readiness gate",
+  "canonical_command_frozen": true,
+  "canonical_command": "pytest -q -p no:cacheprovider --ignore=tests/live tests (see canonical_full_core_command.txt)",
+  "canonical_environment_frozen": true,
+  "service_api_diff_allowlist_source_resolved": "G_ALLOWLIST in verification/v0.9.5-h2a/isolated_pytest_runner.py (26 entries; no change)",
+  "checks": {
+    "parity_test_passed": true,
+    "router_lifecycle_isolated_passed": true,
+    "router_lifecycle_ordered_subset_passed": true,
+    "chromium_launch_probe_passed": true,
+    "chromium_isolated_test_passed": true,
+    "chromium_subset_passed": true,
+    "combined_targeted_readiness_passed": true,
+    "development_database_unchanged": true,
+    "research_exports_restored_to_baseline": true,
+    "no_test_owned_process_remains": true,
+    "no_test_owned_port_remains": true,
+    "no_unresolved_temporary_database_remains": true,
+    "no_production_source_changed": true
+  },
+  "decision": "PROCEED - the complete non-live core suite may run exactly once."
+}

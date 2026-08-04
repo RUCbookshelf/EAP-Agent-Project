@@ -40,6 +40,7 @@
 | v0.9.6-C No-Priority Workflow Completion and Sidebar Control Repair | completed and fully verified (C1/C2 owner-accepted; full core 809 passed / 8 skipped, launcher PASS) |
 | v0.9.6-D0 Priority Path Production Validity Audit | BLOCKED at live-provider preflight (classification D0-E, audit-only); targeted verification 155 passed; recommended next: v0.9.6-DP0 Production Provider Reliability (separately approved) |
 | v0.9.6-DP0 Production Provider Reliability | COMPLETE and verified (DP0-A diagnosis owner-accepted; live 4 consecutive deepseek-v4-pro successes, 0 corrections/fallback/timeouts; focused 101+103+24 passed; full core 821 passed/8 skipped with 3 isolated-classified anomalies; launcher PASS; exports 776/388) |
+| v0.9.6-DP0-V1 Full-Core Verification Closure | COMPLETE and fully verified (canonical environment frozen; full non-live core 824 passed/8 skipped/0 failed/0 errors, exit 0, run once; launcher PASS exit 0; exports 776/388) |
 
 Next stage: **v0.9.6 user-visible feature development** (v0.9.6-C is
 complete; the next goal must deliver a user-visible or

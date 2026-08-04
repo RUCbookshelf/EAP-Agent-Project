@@ -1,0 +1,81 @@
+{
+  "audit_stage": "v0.9.6-DP0-V1",
+  "phase": "Phase 0 - baseline",
+  "recorded_at_local": "2026-08-04T15:20:00+08:00",
+  "branch": "master",
+  "head": "dcc34a2ea823c1a499d8de90ea82e8f527858d77",
+  "head_short": "dcc34a2",
+  "git_status_short": [
+    " M AGENTS.md",
+    " M RUN_VERIFICATION_V0.7.md",
+    " M RUN_VERIFICATION_V0.8.2.md",
+    "?? .claude/",
+    "?? ARCHITECTURE_COUPLING_AUDIT_V0.9.5_A.md",
+    "?? CLAUDE.md",
+    "?? data/demo_journey_manifest.json"
+  ],
+  "recent_commits": [
+    "dcc34a2 test(v0.9.6-dp0): verify production provider reliability",
+    "3ee3d1f fix(v0.9.6-dp0): include response id in provider call logs",
+    "ac6a569 fix(v0.9.6-dp0): stabilize DeepSeek structured feedback",
+    "eec7197 docs(v0.9.6-dp0a): diagnose DeepSeek structured-output failures",
+    "01f6f11 docs(v0.9.6-d0): audit production priority path validity"
+  ],
+  "python": {
+    "version": "3.11.15",
+    "venv": "A:\\EAP Agent Project\\writing-feedback-mvp\\.venv",
+    "pytest": "9.1.1",
+    "playwright": "1.61.0"
+  },
+  "browser": {
+    "executable": "C:\\Users\\16073\\AppData\\Local\\ms-playwright\\chromium-1228\\chrome-win64\\chrome.exe",
+    "headless_shell": "C:\\Users\\16073\\AppData\\Local\\ms-playwright\\chromium_headless_shell-1228\\chrome-headless-shell-win64\\chrome-headless-shell.exe",
+    "headless_shell_present": true,
+    "version": "149.0.7827.55",
+    "launch_probe": "PASS (headless launch/close succeeded)"
+  },
+  "processes_and_ports": {
+    "port_8000": "no listener",
+    "port_8501": "no listener",
+    "chromium_processes": "none",
+    "note": "No application or browser processes running at baseline."
+  },
+  "development_database": {
+    "path": "data/writing_feedback.db",
+    "sha256": "62615C6C6ED65323FFA52E22ABBE2FEEF61E02C88DF8143B7872E86C67251810",
+    "size_bytes": 14352384,
+    "mtime_local": "2026-08-04T12:54:07"
+  },
+  "research_exports": {
+    "file_count": 776,
+    "directory_count": 388,
+    "baseline_manifest": "verification/v0.9.6-dp0-v1/research_exports_baseline.json"
+  },
+  "frozen_invariants": {
+    "api_path_method_pairs": 77,
+    "database_public_methods": 2,
+    "frontend_client_public_methods": 53,
+    "locale_parity": "540/540",
+    "migration": 12,
+    "tables": 33,
+    "active_configuration": "config-v0.9.0",
+    "active_feedback_prompt": "feedback-prompt-v0.7.1",
+    "active_provider_model": "deepseek-v4-pro",
+    "deepseek_thinking": "explicitly disabled on the structured-feedback path",
+    "deepseek_max_tokens": "1800 initial / 3600 correction",
+    "deepseek_timeout": 30,
+    "submission_timeout": 180
+  },
+  "preserved_user_owned_paths": [
+    "AGENTS.md",
+    "RUN_VERIFICATION_V0.7.md",
+    "RUN_VERIFICATION_V0.8.2.md",
+    ".claude/",
+    "ARCHITECTURE_COUPLING_AUDIT_V0.9.5_A.md",
+    "CLAUDE.md",
+    "data/demo_journey_manifest.json",
+    "data/writing_feedback.db",
+    "database backups",
+    "all 776 approved research export files"
+  ]
+}

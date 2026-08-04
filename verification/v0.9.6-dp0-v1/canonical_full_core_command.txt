@@ -1,0 +1,28 @@
+Canonical full non-live core command (DP0-V1)
+=============================================
+
+Working directory:
+  A:\EAP Agent Project\writing-feedback-mvp
+
+Environment (set in the shell before the command; DATABASE_URL must be
+removed from the environment):
+
+  PYTHONUTF8=1
+  PYTHON_DOTENV_DISABLED=1
+  LLM_PROVIDER=local
+  DATABASE_PATH=C:\tmp\v096dp0\v1-core.db
+  SERVICE_API_DIFF_ALLOWLIST=app/services/calf.py,app/services/configuration.py,app/api/main.py,app/api/deps.py,app/api/ports.py,app/api/routers/journey.py,app/api/routers/analysis.py,app/api/routers/calf.py,app/api/routers/research.py,app/api/routers/revisions.py,app/api/routers/students.py,app/api/routers/submissions.py,app/api/routers/system.py,app/services/progress.py,app/services/learner_profile.py,app/services/dashboard.py,app/services/factory.py,app/services/reanalysis.py,app/journey/service.py,app/research/service.py,app/services/revision.py,app/services/admin_reanalysis.py,app/services/submission.py,app/practice/ports.py,app/practice/service.py,app/api/routers/practice.py
+
+The allowlist value above is copied verbatim from the source-authoritative
+G_ALLOWLIST constant in verification/v0.9.5-h2a/isolated_pytest_runner.py.
+
+Command:
+
+  pytest -q -p no:cacheprovider --ignore=tests/live tests
+
+Full command line (venv python):
+
+  A:\EAP Agent Project\writing-feedback-mvp\.venv\Scripts\python.exe -m pytest -q -p no:cacheprovider --ignore=tests/live tests
+
+The database path must be a fresh file (created by the suite); it must be
+removed after the run. The full core runs exactly once in DP0-V1.

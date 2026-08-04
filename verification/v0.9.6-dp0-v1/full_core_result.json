@@ -1,0 +1,27 @@
+{
+  "audit_stage": "v0.9.6-DP0-V1",
+  "phase": "Phase 3 - complete non-live core",
+  "command": "pytest -q -p no:cacheprovider --ignore=tests/live tests",
+  "working_directory": "A:\\EAP Agent Project\\writing-feedback-mvp",
+  "environment": "canonical DP0-V1 environment (PYTHONUTF8=1, PYTHON_DOTENV_DISABLED=1, LLM_PROVIDER=local, DATABASE_PATH=C:\\tmp\\v096dp0\\v1-core.db fresh, SERVICE_API_DIFF_ALLOWLIST=26-entry G_ALLOWLIST; DATABASE_URL absent)",
+  "started_at_local": "2026-08-04T14:52:42",
+  "ended_at_local": "2026-08-04T15:02:09",
+  "duration_seconds": 566.22,
+  "run_count": "exactly once",
+  "result": {
+    "passed": 824,
+    "skipped": 8,
+    "failed": 0,
+    "errors": 0,
+    "exit_code": 0,
+    "warnings": "4 pre-existing deprecation warnings"
+  },
+  "skipped_reasons": "8 skips (documented conditional skips; identical to prior runs)",
+  "generated_export_paths": "16 files in 8 directories (export_20260804T0655*/0657*); removed via the exact allowlist after the run",
+  "output_artifact": "verification/v0.9.6-dp0-v1/full_core_output.txt",
+  "acceptance": {
+    "0_failed": true,
+    "0_errors": true,
+    "exit_code_0": true
+  }
+}

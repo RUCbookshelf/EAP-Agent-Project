@@ -1,5 +1,23 @@
 # Current Task State
 **Date:** 2026-08-04
+**Current task:** v0.9.6-DP0-V1 Full-Core Verification Closure
+**Status:** COMPLETE - formal DP0 regression closure achieved (see RUN_VERIFICATION_V0.9.6_DP0.md closure section and verification/v0.9.6-dp0-v1/)
+
+- The prior DP0 full-core run (821 passed/8 skipped/2 failed/1 error, exit 1)
+  was not accepted; failures classified: parity test without the documented
+  SERVICE_API_DIFF_ALLOWLIST env, documented router-contract lifecycle
+  flake, transient Chromium launch timeout - each passes in isolation.
+- Canonical environment frozen from the source-authoritative runner
+  (v0.9.5-h2a): LLM_PROVIDER=local, fresh DATABASE_PATH, 26-entry
+  G_ALLOWLIST unchanged.
+- Final full non-live core (exactly once): 824 passed, 8 skipped, 0 failed,
+  0 errors, exit 0. Launcher PASS exit 0 (isolated DB, 200/200/200).
+- Safety: exports 776/388 restored; dev DB logically unchanged (byte-level
+  incident recorded in dev_db_incident.json).
+- v0.9.6-DP0 formally closed. Next: owner decision for v0.9.6-D0-R (resume
+  the frozen priority path audit). v0.9.6-D1 not started.
+
+**Date:** 2026-08-04
 **Current task:** v0.9.6-DP0 Production Provider Reliability
 **Status:** COMPLETE - DP0-A diagnosis owner-accepted; DP0-B repair and
 verification closed (see RUN_VERIFICATION_V0.9.6_DP0.md and

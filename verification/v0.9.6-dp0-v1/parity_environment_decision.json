@@ -1,0 +1,33 @@
+{
+  "audit_stage": "v0.9.6-DP0-V1",
+  "phase": "Phase 1 - SERVICE_API_DIFF_ALLOWLIST decision",
+  "references_located": [
+    {"path": "verification/v0.9.5-e/compare_repository_parity.py", "role": "reader of SERVICE_API_DIFF_ALLOWLIST (default: unset = exact v0.9.5-E behavior; entries subtracted from the git-diff guard)"},
+    {"path": "verification/v0.9.5-g/isolated_pytest_runner.py", "role": "G-era runner; G_ALLOWLIST (25 entries) loaded into env"},
+    {"path": "verification/v0.9.5-h2a/isolated_pytest_runner.py", "role": "latest established runner; G_ALLOWLIST (26 entries incl. app/services/configuration.py) loaded into env"},
+    {"path": "RUN_VERIFICATION_V0.9.5_F2.md", "role": "documents SERVICE_API_DIFF_ALLOWLIST as the explicit parity guard allowlist (F2 value: app/api/main.py)"},
+    {"path": "docs/development/CURRENT_TASK_STATE.md", "role": "records 'SERVICE_API_DIFF_ALLOWLIST G-era value' used by H2-era verification runs"},
+    {"path": "verification/v0.9.6-dp0/regression_results.json", "role": "records the prior full-core run without the allowlist"}
+  ],
+  "answers": {
+    "1_exact_value_expected": "the 26-entry accumulated F2..H2A allowlist (G_ALLOWLIST in verification/v0.9.5-h2a/isolated_pytest_runner.py)",
+    "2_where_defined": "G_ALLOWLIST constant, verification/v0.9.5-h2a/isolated_pytest_runner.py",
+    "3_formal_parity_test_contract": "yes - the parity script reads it and the parity test asserts zero service/api diff under it",
+    "4_normally_loaded_by_a_verification_runner": "yes - every F2..H2A isolated runner sets SERVICE_API_DIFF_ALLOWLIST=G_ALLOWLIST",
+    "5_why_previous_full_core_did_not_receive_it": "operator error - the previous full-core run invoked pytest directly and supplied only PYTHONUTF8/DATABASE_URL/WRITING_FEEDBACK_ENV_FILE, omitting the runner env contract",
+    "6_omission_classification": "operator error (runner/documentation contract existed and was not followed by the direct command)"
+  },
+  "decision": {
+    "use_only_existing_source_authoritative_allowlist": true,
+    "no_allowlist_entry_added_or_broadened": true,
+    "no_parity_test_expectation_changed": true,
+    "no_test_skipped_or_weakened": true,
+    "canonical_runner_change_needed": false,
+    "rationale": "The established runner already loads the required existing environment contract; the canonical command now reproduces that contract. No verification-infrastructure file change is required."
+  },
+  "blocker_conditions_checked": [
+    "source-authoritative value exists: yes (G_ALLOWLIST)",
+    "no broadening required: yes",
+    "no undocumented value invented: the canonical command copies G_ALLOWLIST verbatim"
+  ]
+}
