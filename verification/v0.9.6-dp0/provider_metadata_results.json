@@ -1,0 +1,96 @@
+{
+  "audit_stage": "v0.9.6-DP0-B",
+  "stage": "Live provider metadata results (redacted)",
+  "note": "Raw responses are not stored; only sanitized metadata. Reasoning content is never stored.",
+  "cases": [
+    {
+      "case_id": "D0-01",
+      "submission_id": 1,
+      "provider_call": {
+        "provider": "deepseek",
+        "model": "deepseek-v4-pro",
+        "finish_reason": "stop",
+        "max_tokens": 1800,
+        "completion_tokens": 813,
+        "reasoning_tokens": 0,
+        "total_tokens": 16493,
+        "content_length": 3712,
+        "duration_ms": 15281.0,
+        "json_parse": "success",
+        "schema_validation": "passed",
+        "headroom_pct": 54.8,
+        "priority_result_observational": "lexical_repetition selected"
+      }
+    },
+    {
+      "case_id": "D0-02",
+      "submission_id": 2,
+      "provider_call": {
+        "provider": "deepseek",
+        "model": "deepseek-v4-pro",
+        "finish_reason": "stop",
+        "max_tokens": 1800,
+        "completion_tokens": 995,
+        "reasoning_tokens": 0,
+        "total_tokens": 17673,
+        "content_length": 4516,
+        "duration_ms": 21672.0,
+        "json_parse": "success",
+        "schema_validation": "passed",
+        "headroom_pct": 44.7,
+        "priority_result_observational": "connective_use selected"
+      }
+    },
+    {
+      "case_id": "D0-05",
+      "submission_id": 3,
+      "provider_call": {
+        "provider": "deepseek",
+        "model": "deepseek-v4-pro",
+        "finish_reason": "stop",
+        "max_tokens": 1800,
+        "completion_tokens": 201,
+        "reasoning_tokens": 0,
+        "total_tokens": 9092,
+        "content_length": 984,
+        "duration_ms": 4390.0,
+        "json_parse": "success",
+        "schema_validation": "passed",
+        "headroom_pct": 88.8,
+        "priority_result_observational": "no priority (control)"
+      }
+    },
+    {
+      "case_id": "D0-01 (supplementary metadata run)",
+      "submission_id": 4,
+      "provider_call": {
+        "provider": "deepseek",
+        "model": "deepseek-v4-pro",
+        "response_id": "65e6aea5-d04c-4eab-b203-eab4e315162b",
+        "finish_reason": "stop",
+        "max_tokens": 1800,
+        "completion_tokens": 850,
+        "reasoning_tokens": 0,
+        "total_tokens": 16989,
+        "content_length": 3796,
+        "duration_ms": 12969.0,
+        "json_parse": "success",
+        "schema_validation": "passed",
+        "headroom_pct": 52.8,
+        "validation_status": "passed_with_server_repair (longitudinal wording repair; initial-attempt success, no correction)",
+        "priority_result_observational": "lexical_repetition selected"
+      }
+    }
+  ],
+  "summary": {
+    "finish_reason": "stop on all 4 live provider calls",
+    "timeouts": 0,
+    "truncations": 0,
+    "json_parse_failures": 0,
+    "schema_validation_failures": 0,
+    "correction_attempts": 0,
+    "fallbacks": 0,
+    "all_durations_below_30s": true,
+    "all_completions_below_1800": true
+  }
+}

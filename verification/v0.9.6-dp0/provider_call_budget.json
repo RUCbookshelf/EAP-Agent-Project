@@ -1,21 +1,25 @@
 {
-  "direct_diagnostic_calls": 2,
+  "audit_stage": "v0.9.6-DP0",
+  "budget": {
+    "max_direct_diagnostic_calls": 3,
+    "max_production_submissions": 5,
+    "max_total_provider_api_attempts": 12
+  },
+  "usage": {
+    "direct_diagnostic_calls_used": 2,
+    "direct_diagnostic_calls_remaining": 1,
+    "production_submissions_used": 4,
+    "production_submissions_remaining": 1,
+    "provider_api_attempts_used": 6,
+    "provider_api_attempts_remaining": 6
+  },
   "calls": [
-    {
-      "probe": "A",
-      "model": "deepseek-v4-pro",
-      "http_status": 200,
-      "finish_reason": "length",
-      "json_parse_status": "success",
-      "duration_seconds": 27.05
-    },
-    {
-      "probe": "B",
-      "model": "deepseek-v4-pro",
-      "http_status": 200,
-      "finish_reason": "stop",
-      "json_parse_status": "success",
-      "duration_seconds": 10.85
-    }
-  ]
+    {"kind": "diagnostic_probe_A", "model": "deepseek-v4-pro", "finish_reason": "length", "outcome": "truncated (metadata captured)"},
+    {"kind": "diagnostic_probe_B", "model": "deepseek-v4-pro", "finish_reason": "stop", "outcome": "complete"},
+    {"kind": "live_submission_1", "case": "D0-01", "model": "deepseek-v4-pro", "finish_reason": "stop", "outcome": "success"},
+    {"kind": "live_submission_2", "case": "D0-02", "model": "deepseek-v4-pro", "finish_reason": "stop", "outcome": "success"},
+    {"kind": "live_submission_3", "case": "D0-05", "model": "deepseek-v4-pro", "finish_reason": "stop", "outcome": "success"},
+    {"kind": "live_submission_4_supplementary", "case": "D0-01", "model": "deepseek-v4-pro", "finish_reason": "stop", "outcome": "success"}
+  ],
+  "accounting_note": "Each live submission used exactly one provider attempt (initial success; zero corrections). Correction attempts and fallback are recorded separately as 0. Total provider attempts 6 of 12; no parallel calls."
 }

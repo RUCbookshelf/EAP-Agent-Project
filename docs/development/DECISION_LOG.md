@@ -1,3 +1,35 @@
+## 2026-08-04 - v0.9.6-DP0 Production Provider Reliability (DP0-A + DP0-B)
+
+- **Decision**: Repair the real DeepSeek structured-feedback path that
+  blocked v0.9.6-D0. DP0-A diagnosed the root cause with bounded direct
+  probes (official docs + frozen-essay metadata capture) and stopped at
+  Gate-1 for owner acceptance. The owner accepted the change set and
+  directed that the 30-second provider timeout be kept for the first
+  post-fix verification sequence.
+- **Rationale**: Proven failure chain - deepseek-v4-pro defaults to
+  thinking mode; reasoning tokens consumed 1300 of 1800 output tokens
+  (finish_reason=length, completion_tokens=1800 in Probe A); JSON
+  truncation failed StructuredFeedback validation; the thinking-mode
+  correction attempt exceeded the 30s timeout (D0 evidence); fallback
+  followed. Probe B with thinking disabled restored complete output in
+  10.85s with 764 tokens.
+- **Change set**: 	hinking={"type":"disabled"} on the DeepSeek
+  structured-feedback path; sanitized metadata capture (response id,
+  returned model, finish reason, token usage, content length, duration,
+  parse/validation status); provider_output_truncated and
+  provider_json_invalid classifications. Unchanged: model
+  deepseek-v4-pro, feedback-prompt-v0.7.1, config-v0.9.0, schema, gate,
+  max tokens, correction/fallback policy, 30s timeout, 180s client
+  boundary; no migration.
+- **Evidence**: live 4 consecutive successes (D0-01/D0-02/D0-05) with
+  finish_reason=stop, 0 corrections, 0 fallback, max call 21.7s; focused
+  101 + 103 + 24 passed; full core single attempt 821 passed/8 skipped
+  with 3 isolated-classified anomalies (documented allowlist env,
+  documented lifecycle flake, transient browser launch); launcher PASS;
+  development database unchanged; exports 776/388.
+- **Boundary**: no threshold/prompt/schema/gate change; no corpus audit
+  resume; no D1; provider budget 6 of 12 attempts used. Recommended next
+  stage: v0.9.6-D0-R resume the frozen priority path audit.
 ## 2026-08-04 - v0.9.6-D0 Priority Path Production Validity Audit (audit-only)
 
 - **Decision**: Execute the approved diagnostic D0 audit (Questions A/B:

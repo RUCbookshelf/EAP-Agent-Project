@@ -1,0 +1,21 @@
+{
+  "submissions": [
+    {
+      "case_id": "D0-01",
+      "submission_id": 1
+    },
+    {
+      "case_id": "D0-02",
+      "submission_id": 2
+    },
+    {
+      "case_id": "D0-05",
+      "submission_id": 3
+    },
+    {
+      "case_id": "D0-01",
+      "submission_id": 4
+    }
+  ],
+  "count": 4
+}

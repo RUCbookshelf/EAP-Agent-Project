@@ -1,0 +1,7 @@
+{
+  "audit_stage": "v0.9.6-DP0-B",
+  "final_file_count": 776,
+  "final_directory_count": 388,
+  "final_state_equals_baseline": true,
+  "baseline_manifest": "verification/v0.9.6-dp0/research_exports_baseline.json"
+}

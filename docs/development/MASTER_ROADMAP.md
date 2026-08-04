@@ -39,6 +39,7 @@
 | v0.9.6-B First Draft and Unified Submission Reliability | completed and verified (shared long-submit transport, pending guard, no duplicate POST, exact first-draft reconciliation; full core 760 passed / 8 skipped, launcher PASS) |
 | v0.9.6-C No-Priority Workflow Completion and Sidebar Control Repair | completed and fully verified (C1/C2 owner-accepted; full core 809 passed / 8 skipped, launcher PASS) |
 | v0.9.6-D0 Priority Path Production Validity Audit | BLOCKED at live-provider preflight (classification D0-E, audit-only); targeted verification 155 passed; recommended next: v0.9.6-DP0 Production Provider Reliability (separately approved) |
+| v0.9.6-DP0 Production Provider Reliability | COMPLETE and verified (DP0-A diagnosis owner-accepted; live 4 consecutive deepseek-v4-pro successes, 0 corrections/fallback/timeouts; focused 101+103+24 passed; full core 821 passed/8 skipped with 3 isolated-classified anomalies; launcher PASS; exports 776/388) |
 
 Next stage: **v0.9.6 user-visible feature development** (v0.9.6-C is
 complete; the next goal must deliver a user-visible or
@@ -50,6 +51,9 @@ stopped at its preregistered preflight blocker (D0-E - provider path
 unreliable). The evidence-based next stage is a separately approved
 v0.9.6-DP0 Production Provider Reliability goal; v0.9.6-D1 and all
 priority-generation/downstream repair stages remain not started.
+
+**v0.9.6-DP0 (2026-08-04):** provider reliability is repaired and verified. The recommended next stage is a separately approved
+v0.9.6-D0-R goal that resumes the frozen priority-path production validity audit; v0.9.6-D1 remains not started.
 
 ## v0.9.4 roadmap - 2026-08-01
 

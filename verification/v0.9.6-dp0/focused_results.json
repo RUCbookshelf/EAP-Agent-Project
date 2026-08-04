@@ -1,0 +1,28 @@
+{
+  "audit_stage": "v0.9.6-DP0-B",
+  "stage": "Focused tests (owner-approved test list)",
+  "runs": [
+    {
+      "command": "pytest -q -p no:cacheprovider tests/test_v096dp0_provider.py tests/test_providers.py tests/test_router_retry.py tests/test_v06_configuration_dashboard.py tests/test_v095h2d1_configuration_port_protocol.py tests/test_feedback_validation.py tests/test_feedback_schema.py tests/test_diagnostic_calibration_v061.py tests/test_diagnosis.py",
+      "result": "101 passed, 0 failed, 0 errors, exit 0",
+      "database": "isolated C:/tmp/v096dp0/tests.db"
+    },
+    {
+      "command": "pytest -q -p no:cacheprovider tests/test_v095f6c_submission_service_narrowing.py tests/test_v096a_linked_revision_submission.py tests/test_v096b_first_draft_submission.py tests/test_v095b_router_contract.py tests/test_v095d_api_contract.py tests/test_api_v02.py",
+      "result": "103 passed, 0 failed, 0 errors, exit 0",
+      "database": "isolated C:/tmp/v096dp0/tests.db"
+    },
+    {
+      "command": "pytest -q -p no:cacheprovider tests/test_v096dp0_provider.py tests/test_providers.py tests/test_router_retry.py (after response-id log fix)",
+      "result": "24 passed, 0 failed, 0 errors, exit 0",
+      "database": "isolated C:/tmp/v096dp0/tests.db"
+    }
+  ],
+  "coverage_notes": [
+    "Owner test-list items 1-5, 7-13, 15-18, 23-25 are covered by tests/test_v096dp0_provider.py and the existing provider/config/gate suites.",
+    "Item 6 (ordinary non-provider timeouts unchanged): LONG_SUBMIT_TIMEOUTS read/write asserted 180; DEFAULT_TIMEOUTS unchanged (client default read 10s asserted).",
+    "Item 14 (reasoning content neither logged nor stored): asserted metadata/log containment.",
+    "Item 19-22 (fallback semantics and bounded attempts): asserted via router tests.",
+    "Item 24-25 (existing provider-router tests and StructuredFeedback validation unchanged): covered by rerunning the existing suites."
+  ]
+}

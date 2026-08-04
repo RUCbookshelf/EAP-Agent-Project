@@ -1,0 +1,267 @@
+{
+  "audit_stage": "v0.9.6-DP0-B",
+  "records": [
+    {
+      "case_id": "D0-01",
+      "student_id": "AUDIT-DP0-01",
+      "essay_sha256": "F683F4C899BD0E2E146E9085D890CD8D1B2D659EF2083A0B087B1F816E410773",
+      "submission_id": 1,
+      "request_duration_seconds": 15.51,
+      "provider": {
+        "provider_name": "deepseek",
+        "model_name": "deepseek-v4-pro",
+        "success_status": "success",
+        "validation_status": "passed",
+        "retry_count": 0,
+        "fallback_reason": null,
+        "provider_status": {
+          "status": "external_success",
+          "request_status": "succeeded",
+          "correction_attempted": false,
+          "correction_validation_status": "not_run",
+          "fallback_used": false,
+          "retry_count": 0
+        }
+      },
+      "provider_calls": [
+        {
+          "provider": "deepseek",
+          "model": "deepseek-v4-pro",
+          "messages_count": "2",
+          "duration_ms": "15281.0",
+          "response_id": "None",
+          "finish_reason": "stop",
+          "max_tokens": "1800",
+          "content_length": "3712",
+          "json_parse": "success",
+          "schema_validation": "passed",
+          "prompt_tokens": "15680",
+          "completion_tokens": "813",
+          "reasoning_tokens": "None",
+          "total_tokens": "16493",
+          "classification": "provider_success",
+          "error_class": "None"
+        }
+      ],
+      "analysis": {
+        "analyzer_version": "spacy-analyzer-v0.8.0",
+        "metric_result_count": 24
+      },
+      "priority_result_observational": {
+        "selected": true,
+        "count": 1,
+        "families": [
+          "lexical_repetition"
+        ]
+      },
+      "feedback_status": {
+        "prompt_version": "feedback-prompt-v0.7.1",
+        "schema_version": "structured-feedback-v0.7.1",
+        "exercise_count": 2,
+        "ui_empty_states": [
+          "INSUFFICIENT_CROSS_TASK_HISTORY"
+        ]
+      },
+      "longitudinal_assessment": {
+        "status": "unavailable",
+        "comparable_task_count": 1
+      }
+    },
+    {
+      "case_id": "D0-02",
+      "student_id": "AUDIT-DP0-02",
+      "essay_sha256": "40A93EB7A698C92641CB4332C4D605FF6F246341A8D08F457E805557E1ADE0A3",
+      "submission_id": 2,
+      "request_duration_seconds": 21.84,
+      "provider": {
+        "provider_name": "deepseek",
+        "model_name": "deepseek-v4-pro",
+        "success_status": "success",
+        "validation_status": "passed",
+        "retry_count": 0,
+        "fallback_reason": null,
+        "provider_status": {
+          "status": "external_success",
+          "request_status": "succeeded",
+          "correction_attempted": false,
+          "correction_validation_status": "not_run",
+          "fallback_used": false,
+          "retry_count": 0
+        }
+      },
+      "provider_calls": [
+        {
+          "provider": "deepseek",
+          "model": "deepseek-v4-pro",
+          "messages_count": "2",
+          "duration_ms": "21672.0",
+          "response_id": "None",
+          "finish_reason": "stop",
+          "max_tokens": "1800",
+          "content_length": "4516",
+          "json_parse": "success",
+          "schema_validation": "passed",
+          "prompt_tokens": "16678",
+          "completion_tokens": "995",
+          "reasoning_tokens": "None",
+          "total_tokens": "17673",
+          "classification": "provider_success",
+          "error_class": "None"
+        }
+      ],
+      "analysis": {
+        "analyzer_version": "spacy-analyzer-v0.8.0",
+        "metric_result_count": 24
+      },
+      "priority_result_observational": {
+        "selected": true,
+        "count": 1,
+        "families": [
+          "connective_use"
+        ]
+      },
+      "feedback_status": {
+        "prompt_version": "feedback-prompt-v0.7.1",
+        "schema_version": "structured-feedback-v0.7.1",
+        "exercise_count": 2,
+        "ui_empty_states": [
+          "INSUFFICIENT_CROSS_TASK_HISTORY"
+        ]
+      },
+      "longitudinal_assessment": {
+        "status": "unavailable",
+        "comparable_task_count": 1
+      }
+    },
+    {
+      "case_id": "D0-05",
+      "student_id": "AUDIT-DP0-05",
+      "essay_sha256": "B5F1A9FBB908F4CD4BB674534F8285C52DB96FC3A6EE4EF174A2BBA6485B1BFE",
+      "submission_id": 3,
+      "request_duration_seconds": 4.54,
+      "provider": {
+        "provider_name": "deepseek",
+        "model_name": "deepseek-v4-pro",
+        "success_status": "success",
+        "validation_status": "passed",
+        "retry_count": 0,
+        "fallback_reason": null,
+        "provider_status": {
+          "status": "external_success",
+          "request_status": "succeeded",
+          "correction_attempted": false,
+          "correction_validation_status": "not_run",
+          "fallback_used": false,
+          "retry_count": 0
+        }
+      },
+      "provider_calls": [
+        {
+          "provider": "deepseek",
+          "model": "deepseek-v4-pro",
+          "messages_count": "2",
+          "duration_ms": "4390.0",
+          "response_id": "None",
+          "finish_reason": "stop",
+          "max_tokens": "1800",
+          "content_length": "984",
+          "json_parse": "success",
+          "schema_validation": "passed",
+          "prompt_tokens": "8891",
+          "completion_tokens": "201",
+          "reasoning_tokens": "None",
+          "total_tokens": "9092",
+          "classification": "provider_success",
+          "error_class": "None"
+        }
+      ],
+      "analysis": {
+        "analyzer_version": "spacy-analyzer-v0.8.0",
+        "metric_result_count": 24
+      },
+      "priority_result_observational": {
+        "selected": false,
+        "count": 0,
+        "families": []
+      },
+      "feedback_status": {
+        "prompt_version": "feedback-prompt-v0.7.1",
+        "schema_version": "structured-feedback-v0.7.1",
+        "exercise_count": 0,
+        "ui_empty_states": [
+          "NO_SELECTED_PRIORITY",
+          "NO_TARGETED_PRACTICE",
+          "INSUFFICIENT_CROSS_TASK_HISTORY"
+        ]
+      },
+      "longitudinal_assessment": {
+        "status": "unavailable",
+        "comparable_task_count": 1
+      }
+    },
+    {
+      "case_id": "D0-01",
+      "student_id": "AUDIT-DP0-01",
+      "essay_sha256": "F683F4C899BD0E2E146E9085D890CD8D1B2D659EF2083A0B087B1F816E410773",
+      "submission_id": 4,
+      "request_duration_seconds": 13.17,
+      "provider": {
+        "provider_name": "deepseek",
+        "model_name": "deepseek-v4-pro",
+        "success_status": "success",
+        "validation_status": "passed_with_server_repair",
+        "retry_count": 0,
+        "fallback_reason": null,
+        "provider_status": {
+          "status": "external_success_with_server_repair",
+          "request_status": "succeeded",
+          "correction_attempted": false,
+          "correction_validation_status": "not_run",
+          "fallback_used": false,
+          "retry_count": 0
+        }
+      },
+      "provider_calls": [
+        {
+          "provider": "deepseek",
+          "model": "deepseek-v4-pro",
+          "messages_count": "2",
+          "duration_ms": "12969.0",
+          "response_id": "65e6aea5-d04c-4eab-b203-eab4e315162b",
+          "finish_reason": "stop",
+          "max_tokens": "1800",
+          "content_length": "3796",
+          "json_parse": "success",
+          "schema_validation": "passed",
+          "prompt_tokens": "16139",
+          "completion_tokens": "850",
+          "reasoning_tokens": "None",
+          "total_tokens": "16989",
+          "classification": "provider_success",
+          "error_class": "None"
+        }
+      ],
+      "analysis": {
+        "analyzer_version": "spacy-analyzer-v0.8.0",
+        "metric_result_count": 24
+      },
+      "priority_result_observational": {
+        "selected": true,
+        "count": 1,
+        "families": [
+          "lexical_repetition"
+        ]
+      },
+      "feedback_status": {
+        "prompt_version": "feedback-prompt-v0.7.1",
+        "schema_version": "structured-feedback-v0.7.1",
+        "exercise_count": 2,
+        "ui_empty_states": []
+      },
+      "longitudinal_assessment": {
+        "status": "pairwise_only",
+        "comparable_task_count": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "audit_stage": "v0.9.6-DP0-B",
+  "decision": "PROVIDER RELIABILITY ACCEPTED",
+  "acceptance_evidence": {
+    "live_sequence": [
+      "D0-01 submission 1: deepseek/deepseek-v4-pro, success, finish_reason=stop, parse success, validation passed, 0 corrections, 0 fallback, 813/1800 tokens, 15.5s e2e",
+      "D0-02 submission 2: deepseek/deepseek-v4-pro, success, finish_reason=stop, parse success, validation passed, 0 corrections, 0 fallback, 995/1800 tokens, 21.8s e2e",
+      "D0-05 submission 3: deepseek/deepseek-v4-pro, success, finish_reason=stop, parse success, validation passed, 0 corrections, 0 fallback, 201/1800 tokens, 4.5s e2e",
+      "supplementary D0-01 submission 4: success, finish_reason=stop, response id captured in the provider log, 850/1800 tokens, 13.2s e2e"
+    ],
+    "all_acceptance_criteria_met": [
+      "provider=deepseek and model=deepseek-v4-pro on every submission",
+      "initial-attempt success with zero correction attempts",
+      "finish_reason=stop on every provider call",
+      "valid complete JSON and StructuredFeedback validation success",
+      "zero fallback, zero timeout, zero truncation",
+      "every submission completed inside the 180-second boundary (max 21.8s)",
+      "30-second provider timeout proven sufficient (max provider call 21.7s); no timeout increase applied"
+    ]
+  },
+  "outcome_counts": {
+    "diagnostic_provider_calls": 2,
+    "production_submissions": 4,
+    "total_provider_attempts": 6,
+    "live_success_count": 4,
+    "initial_attempt_success_count": 4,
+    "correction_attempt_count": 0,
+    "fallback_count": 0,
+    "timeout_count": 0,
+    "truncated_output_count": 0,
+    "json_parse_failure_count": 0,
+    "schema_validation_failure_count": 0
+  },
+  "verification_evidence": {
+    "focused_tests": "101 + 103 + 24 passed (all exit 0)",
+    "full_core_single_attempt": "821 passed, 8 skipped; 3 anomalous items each proven in isolation (documented allowlist env, documented lifecycle flake, transient browser launch); no DP0-B regression",
+    "launcher": "PASS, exit 0",
+    "development_database": "unchanged (62615C6C...)",
+    "research_exports": "776 files / 388 dirs, zero final delta"
+  },
+  "full_core_caveat": "The single full-core attempt did not exit 0 because the runner command omitted the documented SERVICE_API_DIFF_ALLOWLIST env and two known environment/documented items occurred; each item passes in isolation and none is related to the DP0-B change. Per the DP0-B protocol the full core was not automatically rerun. The owner may authorize one clean full-core re-run with the documented env if an unblemished exit-0 record is required.",
+  "recommended_next_stage": "v0.9.6-D0-R - Resume the Frozen Priority Path Production Validity Audit (frozen corpus preserved; provider path now live-verified)",
+  "do_not_start": ["v0.9.6-D1 within this goal", "corpus audit inside this goal"]
+}

@@ -1,5 +1,31 @@
 # Current Task State
 **Date:** 2026-08-04
+**Current task:** v0.9.6-DP0 Production Provider Reliability
+**Status:** COMPLETE - DP0-A diagnosis owner-accepted; DP0-B repair and
+verification closed (see RUN_VERIFICATION_V0.9.6_DP0.md and
+docs/development/V0.9.6_DP0_PROVIDER_RELIABILITY.md)
+
+- Root cause (proven): deepseek-v4-pro defaults to thinking mode; the
+  request omitted the toggle; reasoning consumed 72% of the 1800-token
+  output budget, truncating JSON (inish_reason=length) and timing out
+  the correction attempt at 30s; LocalDemo fallback followed.
+- Fix (owner-approved change set): 	hinking={"type":"disabled"} on the
+  structured-feedback path; sanitized provider metadata capture; explicit
+  provider_output_truncated / provider_json_invalid classifications.
+  Timeout kept at 30s; model, prompt, schema, gate, max tokens, fallback,
+  and the 180s client timeout unchanged.
+- Live: 4 consecutive normal production submissions (frozen D0-01/D0-02/
+  D0-05) - deepseek/deepseek-v4-pro, finish_reason=stop, 0 corrections,
+  0 fallback, 0 timeout, 0 truncation; max provider call 21.7s.
+- Verification: 101 + 103 + 24 focused/regression passed; full core single
+  attempt 821 passed, 8 skipped (3 anomalies isolated-classified, none
+  DP0-B-related, not rerun per protocol); un.bat --verify PASS.
+- Safety: development database unchanged; research exports 776/388; call
+  budget 6 of 12 attempts used; D0 workspace preserved.
+- Next: owner decision gate on the DP0-B report; recommended next stage
+  v0.9.6-D0-R (resume the frozen priority path audit). v0.9.6-D1 not started.
+
+**Date:** 2026-08-04
 **Current task:** v0.9.6-D0 Priority Path Production Validity Audit
 **Status:** BLOCKED at the live-provider preflight (classification D0-E); audit-only, no production code changed (see RUN_VERIFICATION_V0.9.6_D0.md and BLOCKER_REPORT_V0.9.6_D0.md)
 

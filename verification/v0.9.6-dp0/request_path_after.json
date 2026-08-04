@@ -1,0 +1,48 @@
+{
+  "audit_stage": "v0.9.6-DP0-B",
+  "stage": "Request path after the accepted repair",
+  "commits": ["ac6a569 fix(v0.9.6-dp0): stabilize DeepSeek structured feedback", "3ee3d1f fix(v0.9.6-dp0): include response id in provider call logs"],
+  "request_properties_after": {
+    "model": "deepseek-v4-pro",
+    "base_url": "https://api.deepseek.com",
+    "response_format": {"type": "json_object"},
+    "thinking": {"type": "disabled"},
+    "temperature": 0.2,
+    "max_tokens_initial": 1800,
+    "max_tokens_correction": 3600,
+    "timeout_seconds": 30.0,
+    "prompt_version": "feedback-prompt-v0.7.1",
+    "schema": "structured-feedback-v0.7.1 (unchanged)"
+  },
+  "provider_metadata_captured": [
+    "response id",
+    "returned model",
+    "finish reason",
+    "usage: prompt/completion/total/reasoning tokens",
+    "requested max tokens",
+    "content length",
+    "request duration (ms)",
+    "JSON parse status",
+    "schema-validation status",
+    "classification code",
+    "messages count (attempt shape)",
+    "correction-attempt count and fallback status remain on FeedbackProviderStatus/LLMCallAudit"
+  ],
+  "classifications_introduced": {
+    "provider_output_truncated": "finish_reason=length",
+    "provider_json_invalid": "malformed JSON before schema validation",
+    "provider_schema_invalid": "StructuredFeedback validation failure",
+    "provider_success": "complete parseable schema-valid feedback"
+  },
+  "unchanged": [
+    "model deepseek-v4-pro",
+    "feedback-prompt-v0.7.1",
+    "StructuredFeedback schema",
+    "Diagnostic Gate thresholds and priority rules",
+    "max-token behavior",
+    "correction and fallback policy",
+    "180-second frontend long-submission timeout",
+    "30-second provider timeout (kept per owner decision)",
+    "no migration; no API/schema change"
+  ]
+}

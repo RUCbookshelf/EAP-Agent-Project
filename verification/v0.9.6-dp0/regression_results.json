@@ -1,0 +1,45 @@
+{
+  "audit_stage": "v0.9.6-DP0-B",
+  "stage": "Regression verification",
+  "full_core": {
+    "command": "pytest -q -p no:cacheprovider --ignore=tests/live tests",
+    "database": "isolated C:/tmp/v096dp0/core.db",
+    "single_attempt_result": "821 passed, 8 skipped, 2 failed, 1 error, exit 1",
+    "failures_classified": [
+      {
+        "test": "test_v095e_repository_modularization.py::test_static_owner_sql_dependency_and_ddl_parity_contract",
+        "classification": "RUNNER PROTOCOL OMISSION - the documented G/H-era SERVICE_API_DIFF_ALLOWLIST env var was not set in the full-core command",
+        "isolation_evidence": "passes with the documented accumulated allowlist: 4 passed, exit 0",
+        "relation_to_dp0b_change": "none (scans app/services|journey|practice|research|api vs baseline 769e6d8; DP0-B changed app/llm/deepseek.py only)"
+      },
+      {
+        "test": "test_v095b_router_contract.py::test_business_route_gated_until_ready_while_health_available",
+        "classification": "DOCUMENTED PRE-EXISTING lifecycle-race flake (shared module-level lifecycle state; recorded in v0.9.5-H2D2 documentation)",
+        "isolation_evidence": "passes in isolation",
+        "relation_to_dp0b_change": "none"
+      },
+      {
+        "test": "test_v096c2_sidebar_control.py::test_browser_expanded_normal_left_visible_without_hover",
+        "classification": "TRANSIENT browser-launch timeout during the long suite run",
+        "isolation_evidence": "passes in isolation (chromium headless launches successfully)",
+        "relation_to_dp0b_change": "none"
+      }
+    ],
+    "note": "Per DP0-B section 28, the full core was run exactly once and was not automatically rerun. All three anomalous items pass in isolation; none is caused by the DP0-B change."
+  },
+  "launcher": {
+    "command": "cmd /c \"run.bat --verify\"",
+    "database": "isolated C:/tmp/v096dp0/launcher.db",
+    "result": "PASS, exit 0 (migration 12, 33 tables, config-v0.9.0, feedback-prompt-v0.7.1, deepseek configured, health/docs/streamlit 200)"
+  },
+  "invariant_counts": {
+    "api_path_method_pairs": "77 (unchanged; no router/API change)",
+    "database_public_methods": 2,
+    "frontend_client_public_methods": 53,
+    "locale_parity": "540/540 (no locale change)",
+    "migration": 12,
+    "tables": 33,
+    "active_configuration": "config-v0.9.0",
+    "active_prompt": "feedback-prompt-v0.7.1"
+  }
+}

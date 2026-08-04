@@ -1,4 +1,22 @@
 # Project State
+## Current v0.9.6-DP0 State
+
+- Status: COMPLETE - production provider reliability repaired and verified.
+  DP0-A diagnosis owner-accepted (thinking-mode root cause); DP0-B applied
+  	hinking={"type":"disabled"} on the DeepSeek structured-feedback path,
+  sanitized provider metadata capture, and explicit truncation/invalid-JSON
+  classification. Model, prompt, schema, gate, timeout (30s), and the 180s
+  client boundary unchanged.
+- Live: 4 consecutive normal submissions (frozen D0-01/D0-02/D0-05)
+  succeeded through deepseek-v4-pro with inish_reason=stop, zero
+  corrections/fallback/timeouts; max provider call 21.7s.
+- Focused/regression: 101 + 103 + 24 passed; full core single attempt
+  821 passed, 8 skipped with 3 isolated-classified anomalies (documented
+  allowlist env, documented flake, transient browser); launcher PASS.
+- Development database and research exports (776/388) unchanged.
+- Recommended next stage (separately approved): v0.9.6-D0-R resume the
+  frozen priority path audit. v0.9.6-D1 remains not started.
+
 ## Current v0.9.6-D0 State
 
 - Status: BLOCKED at the live-provider preflight (classification D0-E);

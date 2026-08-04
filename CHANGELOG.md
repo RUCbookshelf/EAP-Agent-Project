@@ -1,3 +1,42 @@
+## v0.9.6-DP0 (2026-08-04)
+
+### Changed
+- DeepSeek structured-feedback requests now explicitly send
+  	hinking={"type": "disabled"} (provider default is enabled). Root cause
+  (DP0-A, owner-accepted): thinking mode consumed 1300 of the 1800-token
+  output budget, truncated the JSON (inish_reason=length), and pushed the
+  correction attempt past the 30-second timeout, causing LocalDemo fallback
+  on every live attempt.
+- Sanitized provider metadata capture: response id, returned model, finish
+  reason, prompt/completion/total/reasoning tokens, requested max tokens,
+  content length, duration, JSON parse status, and schema-validation status
+  in provider logs and in-memory metadata.
+- inish_reason=length is classified as provider_output_truncated;
+  malformed JSON is classified as provider_json_invalid before schema
+  validation. Truncated/invalid JSON continues to be rejected; no bracket
+  repair, no validation weakening.
+- Model deepseek-v4-pro, eedback-prompt-v0.7.1, config-v0.9.0, the
+  StructuredFeedback schema, Diagnostic Gate rules, max-token behavior, the
+  correction/fallback policy, the 30-second provider timeout (owner
+  decision), and the 180-second frontend submission timeout are unchanged.
+
+### Verified
+- Live acceptance: four consecutive normal production submissions (frozen
+  D0-01, D0-02, D0-05) - deepseek/deepseek-v4-pro, inish_reason=stop,
+  parse + schema validation passed, 0 corrections, 0 fallback, 0 timeouts,
+  0 truncation; max provider call 21.7s; max end-to-end 21.8s (boundary
+  180s).
+- Focused: DP0-B provider tests + existing provider/config/gate/validation
+  suites 101 passed; submission-service + v0.9.6-A/B reliability + API
+  contract suites 103 passed; provider suites 24 passed (all exit 0).
+- Full non-live core (single attempt): 821 passed, 8 skipped; 3 anomalous
+  items each proven in isolation (documented allowlist env, documented
+  lifecycle flake, transient browser launch); not automatically rerun per
+  protocol.
+- Exact cmd /c "run.bat --verify" PASS (migration 12, 33 tables,
+  config-v0.9.0, eedback-prompt-v0.7.1, health/docs/streamlit 200).
+- Development database unchanged; research exports returned to 776/388;
+  provider attempt budget 6 of 12 used.
 
 ## v0.9.6-C (2026-08-04)
 
