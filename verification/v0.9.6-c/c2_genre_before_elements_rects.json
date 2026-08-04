@@ -1,0 +1,50 @@
+{
+  "genre_selectbox": {
+    "height": 68,
+    "width": 560,
+    "x": 510,
+    "y": 416.09375
+  },
+  "timing": {
+    "chevron": {
+      "height": 16,
+      "width": 16,
+      "x": 527,
+      "y": 516.078125
+    },
+    "chevron_font": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Noto Sans\", \"Noto Sans SC\", \"PingFang SC\", \"Microsoft YaHei\", \"Helvetica Neue\", Arial, sans-serif",
+    "expander": {
+      "height": 48,
+      "width": 560,
+      "x": 510,
+      "y": 500.09375
+    },
+    "summary": {
+      "height": 38,
+      "width": 550,
+      "x": 515,
+      "y": 505.09375
+    }
+  },
+  "tools": {
+    "chevron": {
+      "height": 16,
+      "width": 16,
+      "x": 527,
+      "y": 580.078125
+    },
+    "chevron_font": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Noto Sans\", \"Noto Sans SC\", \"PingFang SC\", \"Microsoft YaHei\", \"Helvetica Neue\", Arial, sans-serif",
+    "expander": {
+      "height": 48,
+      "width": 560,
+      "x": 510,
+      "y": 564.09375
+    },
+    "summary": {
+      "height": 38,
+      "width": 550,
+      "x": 515,
+      "y": 569.09375
+    }
+  }
+}

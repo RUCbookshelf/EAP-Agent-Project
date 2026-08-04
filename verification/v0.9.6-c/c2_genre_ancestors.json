@@ -1,0 +1,127 @@
+{
+  "broken_spans": [
+    {
+      "chain": [
+        {
+          "class_": "st-emotion-cache-1hyhk8c ed4y4ls0",
+          "tag": "SPAN",
+          "testid": "stIconMaterial"
+        },
+        {
+          "class_": "st-emotion-cache-2x5h05 ewh6kot2",
+          "tag": "SPAN",
+          "testid": null
+        },
+        {
+          "class_": "st-emotion-cache-4pj9uz ewrlt5x15",
+          "tag": "BUTTON",
+          "testid": "stBaseButton-headerNoPadding"
+        },
+        {
+          "class_": "st-emotion-cache-43bwry eelgd2m10",
+          "tag": "DIV",
+          "testid": "stSidebarCollapseButton"
+        },
+        {
+          "class_": "st-emotion-cache-10p9htt eelgd2m4",
+          "tag": "DIV",
+          "testid": "stSidebarHeader"
+        },
+        {
+          "class_": "st-emotion-cache-1csi29a eelgd2m2",
+          "tag": "DIV",
+          "testid": "stSidebarContent"
+        }
+      ],
+      "class": "st-emotion-cache-1hyhk8c ed4y4ls0",
+      "text": "keyboard_double_arrow_left"
+    },
+    {
+      "chain": [
+        {
+          "class_": "st-emotion-cache-1dkvzay ed4y4ls0",
+          "tag": "SPAN",
+          "testid": "stIconMaterial"
+        },
+        {
+          "class_": "st-emotion-cache-28gi3v ewh6kot2",
+          "tag": "SPAN",
+          "testid": null
+        },
+        {
+          "class_": "st-emotion-cache-nwb5ao e1wbovuq2",
+          "tag": "SPAN",
+          "testid": null
+        },
+        {
+          "class_": "st-emotion-cache-1a4uztj e1wbovuq4",
+          "tag": "SUMMARY",
+          "testid": null
+        },
+        {
+          "class_": "st-emotion-cache-13ifme6 e1wbovuq1",
+          "tag": "DETAILS",
+          "testid": null
+        },
+        {
+          "class_": "stExpander st-emotion-cache-8atqhb e1wbovuq0",
+          "tag": "DIV",
+          "testid": "stExpander"
+        }
+      ],
+      "class": "st-emotion-cache-1dkvzay ed4y4ls0",
+      "text": "keyboard_arrow_right"
+    },
+    {
+      "chain": [
+        {
+          "class_": "st-emotion-cache-1dkvzay ed4y4ls0",
+          "tag": "SPAN",
+          "testid": "stIconMaterial"
+        },
+        {
+          "class_": "st-emotion-cache-28gi3v ewh6kot2",
+          "tag": "SPAN",
+          "testid": null
+        },
+        {
+          "class_": "st-emotion-cache-nwb5ao e1wbovuq2",
+          "tag": "SPAN",
+          "testid": null
+        },
+        {
+          "class_": "st-emotion-cache-1a4uztj e1wbovuq4",
+          "tag": "SUMMARY",
+          "testid": null
+        },
+        {
+          "class_": "st-emotion-cache-13ifme6 e1wbovuq1",
+          "tag": "DETAILS",
+          "testid": null
+        },
+        {
+          "class_": "stExpander st-emotion-cache-8atqhb e1wbovuq0",
+          "tag": "DIV",
+          "testid": "stExpander"
+        }
+      ],
+      "class": "st-emotion-cache-1dkvzay ed4y4ls0",
+      "text": "keyboard_arrow_right"
+    }
+  ],
+  "genre_arrow": {
+    "has_svg": 1,
+    "spans": [
+      {
+        "class": "",
+        "text": "Genre"
+      }
+    ],
+    "svg_count": 1
+  },
+  "icon_class_rules": [
+    ".st-emotion-cache-1hyhk8c { display: inline-flex; -webkit-box-align: center; align-items: center; -webkit-box-pack: center; justify-content: center; color: rgba(26, 28, 44, 0.6); font-size: 1.5rem; width: 1.5rem; height: 1.5rem; user-select: none; font-family: \"Material Symbols Rounded\"; font-weight: 400; font-style: normal; line-height: 1; letter-spacing: normal; text-transform: none; white-space: nowrap; overflow-wrap: normal; direction: ltr; -webkit-font-smoothing: antialiased; }",
+    ".st-emotion-cache-1dkvzay { display: inline-flex; -webkit-box-align: center; align-items: center; -webkit-box-pack: center; justify-content: center; color: inherit; font-size: 1rem; width: 1rem; height: 1rem; user-select: none; font-family: \"Material Symbols Rounded\"; font-weight: 400; font-style: normal; line-height: 1; letter-spacing: normal; text-transform: none; white-space: nowrap; overflow-wrap: normal; direction: ltr; -webkit-font-smoothing: antialiased; }",
+    "div[data-testid=\"stSidebarCollapseButton\"] span, button[data-testid=\"stExpandSidebarButton\"] span { font-family: \"Material Symbols Rounded\" !important; font-feature-settings: \"liga\" !important; }"
+  ]
+}

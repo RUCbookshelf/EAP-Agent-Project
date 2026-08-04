@@ -1,0 +1,162 @@
+{
+  "genre_selectbox": {
+    "after_ink": {
+      "bbox": [
+        1,
+        7,
+        546,
+        56
+      ],
+      "h": 49,
+      "ink_pixels": 460,
+      "w": 545
+    },
+    "after_size": [
+      560,
+      69
+    ],
+    "before_ink": {
+      "bbox": [
+        1,
+        7,
+        546,
+        56
+      ],
+      "h": 49,
+      "ink_pixels": 460,
+      "w": 545
+    },
+    "before_size": [
+      560,
+      69
+    ],
+    "diff_pct": 0.0,
+    "diff_pixels": 0,
+    "name": "genre_selectbox",
+    "overlay": "c2_genre_diff_genre_selectbox.png"
+  },
+  "timing": {
+    "after_ink": {
+      "bbox": [
+        0,
+        0,
+        560,
+        48
+      ],
+      "h": 48,
+      "ink_pixels": 5096,
+      "w": 560
+    },
+    "after_size": [
+      560,
+      49
+    ],
+    "before_ink": {
+      "bbox": [
+        0,
+        0,
+        560,
+        48
+      ],
+      "h": 48,
+      "ink_pixels": 5297,
+      "w": 560
+    },
+    "before_size": [
+      560,
+      49
+    ],
+    "chevron_after_ink": {
+      "bbox": [
+        6,
+        5,
+        10,
+        13
+      ],
+      "h": 8,
+      "ink_pixels": 14,
+      "w": 4
+    },
+    "chevron_before_ink": {
+      "bbox": [
+        5,
+        7,
+        16,
+        15
+      ],
+      "h": 8,
+      "ink_pixels": 33,
+      "w": 11
+    },
+    "chevron_local": [
+      17,
+      15.98
+    ],
+    "diff_pct": 0.798,
+    "diff_pixels": 219,
+    "name": "timing",
+    "overlay": "c2_genre_diff_timing_expander.png"
+  },
+  "tools": {
+    "after_ink": {
+      "bbox": [
+        0,
+        0,
+        560,
+        48
+      ],
+      "h": 48,
+      "ink_pixels": 4980,
+      "w": 560
+    },
+    "after_size": [
+      560,
+      49
+    ],
+    "before_ink": {
+      "bbox": [
+        0,
+        0,
+        560,
+        48
+      ],
+      "h": 48,
+      "ink_pixels": 5183,
+      "w": 560
+    },
+    "before_size": [
+      560,
+      49
+    ],
+    "chevron_after_ink": {
+      "bbox": [
+        6,
+        5,
+        10,
+        13
+      ],
+      "h": 8,
+      "ink_pixels": 14,
+      "w": 4
+    },
+    "chevron_before_ink": {
+      "bbox": [
+        5,
+        7,
+        16,
+        15
+      ],
+      "h": 8,
+      "ink_pixels": 33,
+      "w": 11
+    },
+    "chevron_local": [
+      17,
+      15.98
+    ],
+    "diff_pct": 0.805,
+    "diff_pixels": 221,
+    "name": "tools",
+    "overlay": "c2_genre_diff_tools_expander.png"
+  }
+}

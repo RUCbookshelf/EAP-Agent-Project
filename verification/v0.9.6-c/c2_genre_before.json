@@ -1,0 +1,133 @@
+{
+  "Timed writing": {
+    "icons": [],
+    "widget_html": null,
+    "widget_testid": null
+  },
+  "Tool use": {
+    "icons": [],
+    "widget_html": null,
+    "widget_testid": null
+  },
+  "genre_selectbox_arrow": {
+    "has_svg": true,
+    "rect": {
+      "h": 68,
+      "w": 560,
+      "x": 510,
+      "y": 1328.09375
+    },
+    "span_count": 1,
+    "span_texts": [
+      "Genre"
+    ],
+    "svg_outer": "<svg viewBox=\"0 0 24 24\" height=\"1.25rem\" width=\"1.25rem\" aria-hidden=\"true\" focusable=\"false\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\" class=\"st-emotion-cache-1eamic5 ex0cdmw0\"><path fi"
+  },
+  "kind": "c2_genre_before",
+  "stIconMaterial_rules": [],
+  "stage": "v0.9.6-C2",
+  "writing_page_ligature_elements": [
+    {
+      "classes": [
+        "st-emotion-cache-1hyhk8c",
+        "ed4y4ls0"
+      ],
+      "color": "rgb(26, 28, 44)",
+      "display": "flex",
+      "font_family": "\"Material Symbols Rounded\"",
+      "font_feature": "\"liga\"",
+      "font_size": "24px",
+      "font_style": "normal",
+      "font_variation": "normal",
+      "font_weight": "400",
+      "letter_spacing": "normal",
+      "line_height": "38.4px",
+      "opacity": "1",
+      "overflow": "visible",
+      "owning_widget_class": "st-emotion-cache-1hyhk8c ed4y4ls0",
+      "owning_widget_testid": "stIconMaterial",
+      "pseudo_after_content": "none",
+      "pseudo_before_content": "none",
+      "rect": {
+        "h": 24,
+        "w": 24,
+        "x": 242,
+        "y": 15.796875
+      },
+      "tag": "SPAN",
+      "testid": "stIconMaterial",
+      "text": "keyboard_double_arrow_left",
+      "text_transform": "none",
+      "visibility": "visible",
+      "white_space": "nowrap"
+    },
+    {
+      "classes": [
+        "st-emotion-cache-1dkvzay",
+        "ed4y4ls0"
+      ],
+      "color": "rgb(26, 28, 44)",
+      "display": "flex",
+      "font_family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Noto Sans\", \"Noto Sans SC\", \"PingFang SC\", \"Microsoft YaHei\", \"Helvetica Neue\", Arial, sans-serif",
+      "font_feature": "normal",
+      "font_size": "16px",
+      "font_style": "normal",
+      "font_variation": "normal",
+      "font_weight": "400",
+      "letter_spacing": "normal",
+      "line_height": "25.6px",
+      "opacity": "1",
+      "overflow": "visible",
+      "owning_widget_class": "st-emotion-cache-1dkvzay ed4y4ls0",
+      "owning_widget_testid": "stIconMaterial",
+      "pseudo_after_content": "none",
+      "pseudo_before_content": "none",
+      "rect": {
+        "h": 16,
+        "w": 16,
+        "x": 527,
+        "y": 1428.078125
+      },
+      "tag": "SPAN",
+      "testid": "stIconMaterial",
+      "text": "keyboard_arrow_right",
+      "text_transform": "none",
+      "visibility": "visible",
+      "white_space": "nowrap"
+    },
+    {
+      "classes": [
+        "st-emotion-cache-1dkvzay",
+        "ed4y4ls0"
+      ],
+      "color": "rgb(26, 28, 44)",
+      "display": "flex",
+      "font_family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Noto Sans\", \"Noto Sans SC\", \"PingFang SC\", \"Microsoft YaHei\", \"Helvetica Neue\", Arial, sans-serif",
+      "font_feature": "normal",
+      "font_size": "16px",
+      "font_style": "normal",
+      "font_variation": "normal",
+      "font_weight": "400",
+      "letter_spacing": "normal",
+      "line_height": "25.6px",
+      "opacity": "1",
+      "overflow": "visible",
+      "owning_widget_class": "st-emotion-cache-1dkvzay ed4y4ls0",
+      "owning_widget_testid": "stIconMaterial",
+      "pseudo_after_content": "none",
+      "pseudo_before_content": "none",
+      "rect": {
+        "h": 16,
+        "w": 16,
+        "x": 527,
+        "y": 1492.078125
+      },
+      "tag": "SPAN",
+      "testid": "stIconMaterial",
+      "text": "keyboard_arrow_right",
+      "text_transform": "none",
+      "visibility": "visible",
+      "white_space": "nowrap"
+    }
+  ]
+}

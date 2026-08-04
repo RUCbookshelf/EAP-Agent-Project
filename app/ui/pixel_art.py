@@ -322,9 +322,11 @@ def build_pixel_css() -> str:
 }}
 
 /* ── Typography roles ──────────────────────────────────────────────── */
-/* Body prose, navigation, forms, feedback, evidence, Chinese text: sans */
-.stApp p, .stApp li, .stApp label, .stApp caption, .stApp span,
-.stApp div, .stApp a {{
+/* Body prose, navigation, forms, feedback, evidence, Chinese text: sans.
+   Native Streamlit icon spans (stable testid stIconMaterial) are excluded
+   so Material Symbols ligatures keep the icon font (v0.9.6-C2). */
+.stApp p, .stApp li, .stApp label, .stApp caption,
+.stApp span:not([data-testid="stIconMaterial"]), .stApp div, .stApp a {{
     font-family: var(--px-font-body);
     color: var(--px-text);
     line-height: var(--px-line-height-body);
