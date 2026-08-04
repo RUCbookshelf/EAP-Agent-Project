@@ -130,7 +130,9 @@ class DeepSeekProvider(LLMProvider):
                 response_data, choice, usage, output_budget, content, duration_ms,
                 parse_status, "not_run", parse_error,
             )
-            self._log_call(duration_ms=duration_ms, finish_reason=finish_reason,
+            self._log_call(duration_ms=duration_ms,
+                           response_id=self.last_request_metadata.get("response_id"),
+                           finish_reason=finish_reason,
                            max_tokens=output_budget, content_length=len(content),
                            parse_status=parse_status, schema_status="not_run", usage=usage,
                            classification="provider_json_invalid")
@@ -145,7 +147,9 @@ class DeepSeekProvider(LLMProvider):
                 response_data, choice, usage, output_budget, content, duration_ms,
                 parse_status, "not_run", parse_error,
             )
-            self._log_call(duration_ms=duration_ms, finish_reason=finish_reason,
+            self._log_call(duration_ms=duration_ms,
+                           response_id=self.last_request_metadata.get("response_id"),
+                           finish_reason=finish_reason,
                            max_tokens=output_budget, content_length=len(content),
                            parse_status=parse_status, schema_status="not_run", usage=usage,
                            classification="provider_output_truncated")
@@ -161,7 +165,9 @@ class DeepSeekProvider(LLMProvider):
                 response_data, choice, usage, output_budget, content, duration_ms,
                 parse_status, "failed", parse_error,
             )
-            self._log_call(duration_ms=duration_ms, finish_reason=finish_reason,
+            self._log_call(duration_ms=duration_ms,
+                           response_id=self.last_request_metadata.get("response_id"),
+                           finish_reason=finish_reason,
                            max_tokens=output_budget, content_length=len(content),
                            parse_status=parse_status, schema_status="failed", usage=usage,
                            classification="provider_schema_invalid")
@@ -173,7 +179,9 @@ class DeepSeekProvider(LLMProvider):
                 response_data, choice, usage, output_budget, content, duration_ms,
                 parse_status, "failed", parse_error,
             )
-            self._log_call(duration_ms=duration_ms, finish_reason=finish_reason,
+            self._log_call(duration_ms=duration_ms,
+                           response_id=self.last_request_metadata.get("response_id"),
+                           finish_reason=finish_reason,
                            max_tokens=output_budget, content_length=len(content),
                            parse_status=parse_status, schema_status="failed", usage=usage,
                            classification="provider_json_invalid")
@@ -184,7 +192,9 @@ class DeepSeekProvider(LLMProvider):
             response_data, choice, usage, output_budget, content, duration_ms,
             parse_status, "passed", parse_error,
         )
-        self._log_call(duration_ms=duration_ms, finish_reason=finish_reason,
+        self._log_call(duration_ms=duration_ms,
+                       response_id=self.last_request_metadata.get("response_id"),
+                       finish_reason=finish_reason,
                        max_tokens=output_budget, content_length=len(content),
                        parse_status=parse_status, schema_status="passed", usage=usage,
                        classification="provider_success")

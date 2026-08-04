@@ -286,3 +286,16 @@ def test_submission_timeouts_remain_180_seconds():
     client = WritingFeedbackApiClient("http://127.0.0.1:1")
     assert client.timeouts is not None
     assert client.timeouts.read == 10.0
+
+def test_provider_log_line_includes_response_id(monkeypatch, prompt_bundle):
+    expected = LocalDemoProvider().generate(prompt_bundle.messages, temperature=0.2)
+    captured = {}
+    monkeypatch.setattr(
+        "app.llm.deepseek.urlopen",
+        _fake_urlopen([_envelope(expected.model_dump_json(), response_id="resp-7777")], captured),
+    )
+    records, handler = _capture_provider_logs()
+    provider = DeepSeekProvider("test-secret", "https://api.example", "deepseek-v4-pro")
+    provider.generate(prompt_bundle.messages, temperature=0.2)
+    PROVIDER_LOGGER.removeHandler(handler)
+    assert any("resp-7777" in line for line in records)
