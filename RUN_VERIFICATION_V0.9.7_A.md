@@ -87,8 +87,13 @@ re-entry -> Finish cycle -> Home.
 | Combination | Feedback priority | Revision priority task | Completion state | Practice entry (accurate no-target) | Re-entry (no form) | Home after finish |
 |---|---|---|---|---|---|---|
 | en 1280x900 | PASS | PASS | PASS | PASS | PASS | PASS |
+| zh_CN 1280x900 | PASS | PASS | PASS | PASS | PASS | PASS |
+| en 390x844 | PASS | PASS | PASS | PASS | PASS | PASS |
 | zh_CN 390x844 | PASS | PASS | PASS | PASS | PASS | PASS |
 
+- Research smoke (established v0.9.4-B subset): Overview, Data, System Audit
+  x English desktop / Chinese mobile = 6/6 renders PASS, 0 exceptions,
+  0 overflow, 0 raw keys, 0 console/page errors, 0 remote requests.
 - Persisted after each cycle (direct SQLite evidence): essays 2,
   linked revisions 1, revision groups 1, revision snapshots 1.
 - Zero-write renders: priority task render and empty-text validation added
@@ -98,7 +103,7 @@ re-entry -> Finish cycle -> Home.
 - No horizontal overflow, no raw locale keys, main content width 720px;
   mobile primary controls measured >= 44px; mobile sidebar closed before
   each interaction (Streamlit 1.60 header-expand helper).
-- Screenshots (12 meaningful): `verification/v0.9.7-a/v0.9.7-a-20260804-r1/screenshots/`
+- Screenshots (24 meaningful, 6 states x 4 combinations): `verification/v0.9.7-a/v0.9.7-a-20260804-r1/screenshots/`
   (feedback priority, revision priority task, revision completed, practice
   no-target, re-entry completed, home after finish x en desktop/zh mobile).
 - Evidence JSON: `rendered_page_matrix_evidence.json`; run logs under

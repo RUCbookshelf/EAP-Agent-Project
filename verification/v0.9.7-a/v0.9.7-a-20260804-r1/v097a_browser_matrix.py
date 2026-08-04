@@ -308,6 +308,44 @@ def run_cycle(
     return result, unexpected_console, page_errors, remote_requests
 
 
+
+def research_smoke(browser, tag: str) -> dict:
+    """Established Research smoke subset: Overview, Data, System Audit.
+
+    Mirrors the v0.9.4-B established smoke (3 pages x English desktop /
+    Chinese mobile = 6 renders); Research code is untouched in v0.9.7-A and
+    this confirms no regression in the running stack.
+    """
+    result: dict[str, object] = {}
+    pages = (
+        ("research_overview_title", "research_overview_title"),
+        ("nav_research_data", "nav_research_data"),
+        ("research_audit_title", "research_audit_title"),
+    )
+    for lang, viewport in (("en", {"width": 1280, "height": 900}),
+                           ("zh_CN", {"width": 390, "height": 844})):
+        context = browser.new_context(viewport=viewport)
+        page = context.new_page()
+        console_errors, page_errors, remote_requests = observe(page)
+        page.goto(harness.UI, timeout=30_000, wait_until="networkidle")
+        assert harness.wait_stable(page)
+        if lang == "zh_CN":
+            assert harness.select_locale(page, lang)
+        assert harness.select_role(page, "research", lang)
+        for key, h2 in pages:
+            assert harness.select_page(page, t(key, lang), t(h2, lang))
+            h = health(page, (key,))
+            assert h["exceptions"] == 0 and not h["overflow"], (key, h)
+            assert not h["raw_keys"]
+            result[f"{lang}_{viewport['width']}x{viewport['height']}_{key}"] = h
+        unexpected = [item for item in console_errors if not harness.is_allowed_console(item)]
+        assert not unexpected, unexpected
+        assert not page_errors, page_errors
+        assert not remote_requests, remote_requests
+        context.close()
+    return result
+
+
 def main() -> int:
     harness.prepare_isolated_db()
     api = streamlit = None
@@ -320,16 +358,26 @@ def main() -> int:
                 en_desktop, c1, e1, r1 = run_cycle(
                     browser, "V097A-P1", "en", {"width": 1280, "height": 900}, "en_1280x900"
                 )
-                zh_mobile, c2, e2, r2 = run_cycle(
-                    browser, "V097A-P2", "zh_CN", {"width": 390, "height": 844}, "zh_390x844"
+                zh_desktop, c2, e2, r2 = run_cycle(
+                    browser, "V097A-P2", "zh_CN", {"width": 1280, "height": 900}, "zh_1280x900"
                 )
+                en_mobile, c3, e3, r3 = run_cycle(
+                    browser, "V097A-P3", "en", {"width": 390, "height": 844}, "en_390x844"
+                )
+                zh_mobile, c4, e4, r4 = run_cycle(
+                    browser, "V097A-P4", "zh_CN", {"width": 390, "height": 844}, "zh_390x844"
+                )
+                research = research_smoke(browser, "research")
             finally:
                 browser.close()
             evidence["en_1280x900"] = en_desktop
+            evidence["zh_1280x900"] = zh_desktop
+            evidence["en_390x844"] = en_mobile
             evidence["zh_390x844"] = zh_mobile
-            evidence["console_errors"] = c1 + c2
-            evidence["page_errors"] = e1 + e2
-            evidence["remote_requests"] = r1 + r2
+            evidence["research_smoke"] = research
+            evidence["console_errors"] = c1 + c2 + c3 + c4
+            evidence["page_errors"] = e1 + e2 + e3 + e4
+            evidence["remote_requests"] = r1 + r2 + r3 + r4
     finally:
         harness.stop_stack(api, streamlit)
 
@@ -340,7 +388,7 @@ def main() -> int:
     assert not evidence["console_errors"], evidence["console_errors"]
     assert not evidence["page_errors"], evidence["page_errors"]
     assert not evidence["remote_requests"], evidence["remote_requests"]
-    for combo in ("en_1280x900", "zh_390x844"):
+    for combo in ("en_1280x900", "zh_1280x900", "en_390x844", "zh_390x844"):
         assert evidence[combo]["revision_completed"]["persisted"] == {
             "essays": 2, "linked_revisions": 1, "revision_groups": 1,
             "revision_snapshots": 1,

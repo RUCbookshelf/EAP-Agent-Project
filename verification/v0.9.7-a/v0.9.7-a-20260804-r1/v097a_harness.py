@@ -30,7 +30,7 @@ RUN_DIR = _base.RUN_DIR
 ISOLATED_DB = _base.ISOLATED_DB
 LOG_DIR = _base.LOG_DIR
 
-STUDENTS = ("V097A-P1", "V097A-P2")
+STUDENTS = ("V097A-P1", "V097A-P2", "V097A-P3", "V097A-P4")
 
 
 def prepare_isolated_db() -> pathlib.Path:

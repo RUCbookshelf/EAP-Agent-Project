@@ -71,6 +71,148 @@
       "screenshot": "verification\\v0.9.7-a\\v0.9.7-a-20260804-r1\\screenshots\\en_1280x900_home_after_finish.png"
     }
   },
+  "zh_1280x900": {
+    "combination": "zh_CN 1280x900",
+    "feedback_priority": {
+      "health": {
+        "exceptions": 0,
+        "overflow": false,
+        "raw_keys": [],
+        "main_max_width": "720px"
+      },
+      "priority_visible": true,
+      "screenshot": "verification\\v0.9.7-a\\v0.9.7-a-20260804-r1\\screenshots\\zh_1280x900_feedback_priority.png"
+    },
+    "revision_priority_task": {
+      "health": {
+        "exceptions": 0,
+        "overflow": false,
+        "raw_keys": [],
+        "main_max_width": "720px"
+      },
+      "screenshot": "verification\\v0.9.7-a\\v0.9.7-a-20260804-r1\\screenshots\\zh_1280x900_revision_priority_task.png"
+    },
+    "empty_validation_zero_write": true,
+    "revision_completed": {
+      "health": {
+        "exceptions": 0,
+        "overflow": false,
+        "raw_keys": [],
+        "main_max_width": "720px"
+      },
+      "primary_size": {
+        "width": 560,
+        "height": 40
+      },
+      "persisted": {
+        "essays": 2,
+        "linked_revisions": 1,
+        "revision_groups": 1,
+        "revision_snapshots": 1
+      },
+      "screenshot": "verification\\v0.9.7-a\\v0.9.7-a-20260804-r1\\screenshots\\zh_1280x900_revision_completed.png"
+    },
+    "practice_entry": {
+      "health": {
+        "exceptions": 0,
+        "overflow": false,
+        "raw_keys": [],
+        "main_max_width": "720px"
+      },
+      "screenshot": "verification\\v0.9.7-a\\v0.9.7-a-20260804-r1\\screenshots\\zh_1280x900_practice_no_target.png"
+    },
+    "reentry": {
+      "health": {
+        "exceptions": 0,
+        "overflow": false,
+        "raw_keys": [],
+        "main_max_width": "720px"
+      },
+      "no_form": true,
+      "persisted_stable": true,
+      "screenshot": "verification\\v0.9.7-a\\v0.9.7-a-20260804-r1\\screenshots\\zh_1280x900_reentry_completed.png"
+    },
+    "end_cycle_home": {
+      "health": {
+        "exceptions": 0,
+        "overflow": false,
+        "raw_keys": [],
+        "main_max_width": "720px"
+      },
+      "screenshot": "verification\\v0.9.7-a\\v0.9.7-a-20260804-r1\\screenshots\\zh_1280x900_home_after_finish.png"
+    }
+  },
+  "en_390x844": {
+    "combination": "en 390x844",
+    "feedback_priority": {
+      "health": {
+        "exceptions": 0,
+        "overflow": false,
+        "raw_keys": [],
+        "main_max_width": "720px"
+      },
+      "priority_visible": true,
+      "screenshot": "verification\\v0.9.7-a\\v0.9.7-a-20260804-r1\\screenshots\\en_390x844_feedback_priority.png"
+    },
+    "revision_priority_task": {
+      "health": {
+        "exceptions": 0,
+        "overflow": false,
+        "raw_keys": [],
+        "main_max_width": "720px"
+      },
+      "screenshot": "verification\\v0.9.7-a\\v0.9.7-a-20260804-r1\\screenshots\\en_390x844_revision_priority_task.png"
+    },
+    "empty_validation_zero_write": true,
+    "revision_completed": {
+      "health": {
+        "exceptions": 0,
+        "overflow": false,
+        "raw_keys": [],
+        "main_max_width": "720px"
+      },
+      "primary_size": {
+        "width": 358,
+        "height": 44
+      },
+      "persisted": {
+        "essays": 2,
+        "linked_revisions": 1,
+        "revision_groups": 1,
+        "revision_snapshots": 1
+      },
+      "screenshot": "verification\\v0.9.7-a\\v0.9.7-a-20260804-r1\\screenshots\\en_390x844_revision_completed.png"
+    },
+    "practice_entry": {
+      "health": {
+        "exceptions": 0,
+        "overflow": false,
+        "raw_keys": [],
+        "main_max_width": "720px"
+      },
+      "screenshot": "verification\\v0.9.7-a\\v0.9.7-a-20260804-r1\\screenshots\\en_390x844_practice_no_target.png"
+    },
+    "reentry": {
+      "health": {
+        "exceptions": 0,
+        "overflow": false,
+        "raw_keys": [],
+        "main_max_width": "720px"
+      },
+      "no_form": true,
+      "persisted_stable": true,
+      "screenshot": "verification\\v0.9.7-a\\v0.9.7-a-20260804-r1\\screenshots\\en_390x844_reentry_completed.png"
+    },
+    "end_cycle_home": {
+      "health": {
+        "exceptions": 0,
+        "overflow": false,
+        "raw_keys": [],
+        "main_max_width": "720px"
+      },
+      "screenshot": "verification\\v0.9.7-a\\v0.9.7-a-20260804-r1\\screenshots\\en_390x844_home_after_finish.png"
+    }
+  },
   "zh_390x844": {
     "combination": "zh_CN 390x844",
     "feedback_priority": {
@@ -140,6 +282,44 @@
         "main_max_width": "720px"
       },
       "screenshot": "verification\\v0.9.7-a\\v0.9.7-a-20260804-r1\\screenshots\\zh_390x844_home_after_finish.png"
+    }
+  },
+  "research_smoke": {
+    "en_1280x900_research_overview_title": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "main_max_width": "none"
+    },
+    "en_1280x900_nav_research_data": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "main_max_width": "none"
+    },
+    "en_1280x900_research_audit_title": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "main_max_width": "none"
+    },
+    "zh_CN_390x844_research_overview_title": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "main_max_width": "none"
+    },
+    "zh_CN_390x844_nav_research_data": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "main_max_width": "none"
+    },
+    "zh_CN_390x844_research_audit_title": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "main_max_width": "none"
     }
   },
   "console_errors": [],
