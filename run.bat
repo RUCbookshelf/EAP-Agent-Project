@@ -50,6 +50,14 @@ if not exist "%ENV_CHECK_FILE%" (
     echo INFO: Environment file found. Configuration values will be loaded by the application.
 )
 
+if /I "%~1"=="--verify" (
+    echo [5/5] Running isolated FastAPI, docs, and Streamlit startup verification...
+    "%VENV_PYTHON%" -m scripts.verify_launcher
+    if errorlevel 1 goto :start_failed
+    echo run.bat verification completed successfully.
+    exit /b 0
+)
+
 echo [5/7] Applying versioned database migrations...
 "%VENV_PYTHON%" -m scripts.migrate_database
 if errorlevel 1 goto :migration_failed
@@ -60,14 +68,6 @@ if errorlevel 1 goto :initialize_failed
 
 if /I "%~1"=="--install-only" (
     echo Installation and initialization verification completed successfully.
-    exit /b 0
-)
-
-if /I "%~1"=="--verify" (
-    echo [7/7] Running bounded FastAPI, docs, and Streamlit startup verification...
-    "%VENV_PYTHON%" -m scripts.smoke_stack --python "%VENV_PYTHON%"
-    if errorlevel 1 goto :start_failed
-    echo run.bat verification completed successfully.
     exit /b 0
 )
 
