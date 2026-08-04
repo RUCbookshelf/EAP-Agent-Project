@@ -152,3 +152,61 @@ re-entry -> Finish cycle -> Home.
   modifications and untracked files remain uncommitted and unchanged.
 - `git status --short` at closure reports the preserved user-owned entries
   separately from the committed project changes.
+
+## Before -> after workflow comparison (SPEC deliverable 2)
+
+| Step | Before v0.9.7-A | After v0.9.7-A |
+|---|---|---|
+| Feedback with priority | Priority cards + single "Open Practice" action (Practice reported no target); misleading "use the selected priority on Practice" copy | Priority cards + primary "Open Revision" (transfers the source) + secondary "Open Practice" with the accurate no-auto-target note |
+| Enter Revision (fresh source) | Source selectable; priority not displayed (D0-R finding); only practice-target label when one existed | Active priority task card (label, reason, evidence quote, direction) + revision instruction; one-active-priority selector when several exist; safe fallback for missing/invalid data |
+| Revision submission | One linked-revision POST with pending guard; success state showed source context + observation + single "Open Learning Journey" button | Same guarded POST; completion state adds priority-addressed block, record reference, "step complete", Finish This Revision Cycle (-> Home), Open Practice (accurate note), Open Learning Journey |
+| Re-entry after refresh | Form reappeared for the source; revision could be treated as unsubmitted; duplicate risk | Selecting the source renders the completed state (no form); no uncontrolled duplicate from the page |
+| End of cycle | No explicit end action | "Finish This Revision Cycle" acknowledges and clears the session cycle, returns Home; journey-derived next steps remain |
+| Practice continuation | Navigated with implied target | Accurate continuation: existing Practice entry point, explicit statement that targets are not auto-created (v0.9.7-B) |
+
+## State association model (SPEC deliverable 5)
+
+- Essay: `essays` row (`student_id`, `revision_of_submission_id`, `revision_group_id`).
+- Feedback + priority: `feedback_records.feedback_json.priority_feedback` per essay (authoritative, persisted; the Revision page reads it through the submission bundle).
+- Diagnosis: `diagnoses.diagnosis_json.improvement_priorities` (gate-selected priorities).
+- Revision: new essay row linked via `revision_of_submission_id` + `revision_groups`/`revision_snapshots`; the addressed priority is derived from the source's persisted feedback and the submission response trajectory.
+- Session: only references (`revision_source_preset`, `revision_priority_selection` = {submission_id, index}) are carried between pages; every render revalidates them against the persisted records, so no second copy of priority content exists and cross-student/essay mismatches degrade safely (server `validate_relationship` also rejects cross-student links).
+
+## Deferred work intentionally outside v0.9.7-A (SPEC deliverables 1, 11)
+
+- v0.9.7-B: automatic Priority-to-Practice target generation and Practice workflow completion.
+- v0.9.7-C: Student Journey functional completion; v0.9.7-D/E: UI/UX and responsive/accessibility refinement.
+- Feedback page session-scoping of the just-submitted result (documented by design in D0-R) remains unchanged.
+- The newest-candidate default in the Revision source selectbox keeps the revised draft selected on re-entry; the source's completed state is one selection away (documented, not a defect).
+
+## Final branch, HEAD, and commit history (SPEC deliverable 13)
+
+- Branch: `master`.
+- Phase HEAD: `1738006`; pre-phase baseline HEAD: `41a5ca2`.
+- Commits: `aa7fa30` feat(v0.9.7-a): complete priority-guided learning cycle;
+  `7084046` test(v0.9.7-a): cover input preservation after submit failure;
+  `8437d47` test(v0.9.7-a): extend rendered matrix to all four locale/viewport
+  combinations; `1738006` chore(v0.9.7-a): keep probe screenshot out of
+  version control.
+- Final `git status --short` reports only the preserved pre-existing
+  user-owned entries (modified `AGENTS.md`, `RUN_VERIFICATION_V0.7.md`,
+  `RUN_VERIFICATION_V0.8.2.md`; untracked `.claude/`, `CLAUDE.md`,
+  `ARCHITECTURE_COUPLING_AUDIT_V0.9.5_A.md`, `data/demo_journey_manifest.json`)
+  plus the gitignored run `logs/` directory; none of the phase commits
+  touched user-owned files.
+
+## Modified files and purpose (SPEC deliverable 3)
+
+- `app/ui/features/student/navigation.py`: Feedback->Revision transfer and
+  end-of-cycle helpers.
+- `app/ui/features/student/feedback.py`: priority-branch actions and copy.
+- `app/ui/features/student/revision.py`: priority task context, selection,
+  re-entry completed state, completion next steps.
+- `locales/en.json`, `locales/zh_CN.json`: 15 new keys (parity 555/555).
+- `tests/harness_v097a_student.py`, `tests/test_v097a_priority_revision_cycle.py`:
+  14 page/state-layer tests.
+- `docs/development/V0.9.7_A_SPEC.md`, `V0.9.7_A_WORKFLOW_AUDIT.md`,
+  `CURRENT_TASK_STATE.md`, `MASTER_ROADMAP.md`; `RUN_VERIFICATION_V0.9.7_A.md`;
+  `CHANGELOG.md`, `PROJECT_STATE.md`.
+- `verification/v0.9.7-a/v0.9.7-a-20260804-r1/`: browser matrix script,
+  harness extension, evidence JSON, full-core log, 24 screenshots.
