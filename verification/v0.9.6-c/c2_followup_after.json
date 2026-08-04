@@ -1,0 +1,104 @@
+{
+  "collapsed_hover_right": {
+    "display": "flex",
+    "icon_feature": "\"liga\"",
+    "icon_font": "\"Material Symbols Rounded\"",
+    "icon_rect": {
+      "h": 24,
+      "w": 24,
+      "x": 20,
+      "y": 17.984375
+    },
+    "icon_text": "keyboard_double_arrow_right",
+    "opacity": "1",
+    "rect": {
+      "h": 28,
+      "w": 28,
+      "x": 18,
+      "y": 15.984375
+    },
+    "visibility": "visible"
+  },
+  "collapsed_normal_right": {
+    "display": "flex",
+    "icon_feature": "\"liga\"",
+    "icon_font": "\"Material Symbols Rounded\"",
+    "icon_rect": {
+      "h": 24,
+      "w": 24,
+      "x": 20,
+      "y": 17.984375
+    },
+    "icon_text": "keyboard_double_arrow_right",
+    "opacity": "1",
+    "rect": {
+      "h": 28,
+      "w": 28,
+      "x": 18,
+      "y": 15.984375
+    },
+    "visibility": "visible"
+  },
+  "expanded_hover_left": {
+    "display": "inline-flex",
+    "icon_feature": "\"liga\"",
+    "icon_font": "\"Material Symbols Rounded\"",
+    "icon_rect": {
+      "h": 24,
+      "w": 24,
+      "x": 242,
+      "y": 15.796875
+    },
+    "icon_text": "keyboard_double_arrow_left",
+    "opacity": "1",
+    "rect": {
+      "h": 28,
+      "w": 28,
+      "x": 240,
+      "y": 13.796875
+    },
+    "visibility": "visible"
+  },
+  "expanded_normal_left": {
+    "display": "inline-flex",
+    "icon_feature": "\"liga\"",
+    "icon_font": "\"Material Symbols Rounded\"",
+    "icon_rect": {
+      "h": 24,
+      "w": 24,
+      "x": 242,
+      "y": 15.796875
+    },
+    "icon_text": "keyboard_double_arrow_left",
+    "opacity": "1",
+    "rect": {
+      "h": 28,
+      "w": 28,
+      "x": 240,
+      "y": 13.796875
+    },
+    "visibility": "visible"
+  },
+  "kind": "c2_followup_after",
+  "narrow_expanded_left": {
+    "display": "inline-flex",
+    "icon_feature": "\"liga\"",
+    "icon_font": "\"Material Symbols Rounded\"",
+    "icon_rect": {
+      "h": 24,
+      "w": 24,
+      "x": 242,
+      "y": 18
+    },
+    "icon_text": "keyboard_double_arrow_left",
+    "opacity": "1",
+    "rect": {
+      "h": 44,
+      "w": 28,
+      "x": 240,
+      "y": 8
+    },
+    "visibility": "visible"
+  },
+  "stage": "v0.9.6-C2"
+}

@@ -514,12 +514,21 @@ div[data-testid="stSidebar"] button {{
     font-family: var(--px-font-body) !important;
 }}
 /* v0.9.6-C2: restore the Material Symbols icon font (loaded by the
-   Streamlit distribution itself) on the native sidebar collapse/expand
-   control so the ligature renders as the arrow glyph instead of literal
-   keyboard_double_arrow text. Scoped to the documented control testid. */
-div[data-testid="stSidebarCollapseButton"] span {{
+   Streamlit distribution itself) on both native sidebar controls so the
+   ligatures render as arrow glyphs instead of literal keyboard_double_arrow
+   text. Scoped to the documented control testids. */
+div[data-testid="stSidebarCollapseButton"] span,
+button[data-testid="stExpandSidebarButton"] span {{
     font-family: "Material Symbols Rounded" !important;
     font-feature-settings: "liga" !important;
+}}
+/* v0.9.6-C2 follow-up: Streamlit hides the sidebar collapse control until
+   hover (stock visibility rule). The arrows must be visible before hover
+   in both states, so the two native controls are pinned visible. */
+div[data-testid="stSidebarCollapseButton"],
+button[data-testid="stExpandSidebarButton"] {{
+    visibility: visible !important;
+    opacity: 1 !important;
 }}
 [data-testid="stRadioGroup"] label[data-testid="stRadioOption"] {{
     border: var(--px-border-thick) !important;

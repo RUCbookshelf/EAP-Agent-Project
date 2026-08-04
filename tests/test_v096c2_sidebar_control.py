@@ -40,8 +40,15 @@ def test_sidebar_font_rule_narrowed_to_exclude_button_content():
     assert NARROWED_RULE in PIXEL_CSS
 
 
+def test_sidebar_controls_pinned_visible_before_hover():
+    assert 'div[data-testid="stSidebarCollapseButton"],' in PIXEL_CSS
+    assert 'button[data-testid="stExpandSidebarButton"] {' in PIXEL_CSS
+    assert "visibility: visible !important" in PIXEL_CSS
+
+
 def test_icon_font_restoration_rule_present_and_no_hiding_tricks():
     assert RESTORATION_RULE in PIXEL_CSS
+    assert 'button[data-testid="stExpandSidebarButton"] span' in PIXEL_CSS
     assert 'font-family: "Material Symbols Rounded" !important' in PIXEL_CSS
     assert 'font-feature-settings: "liga" !important' in PIXEL_CSS
     for banned in BANNED_FIXES:
@@ -215,11 +222,7 @@ def test_browser_collapsed_to_expanded_mouse(page):
 
 
 def test_browser_keyboard_activation(page):
-    # Streamlit reveals the native collapse button while the sidebar is
-    # hovered (the button starts visibility:hidden). Reveal it the same way
-    # a user does, assert the reveal, then drive it with the keyboard.
-    page.locator('[data-testid="stSidebar"]').hover()
-    page.wait_for_timeout(500)
+    # The native controls are now visible before hover (C2 follow-up).
     revealed = page.evaluate(
         """() => {
             const btn = document.querySelector('[data-testid="stSidebarCollapseButton"] button');
@@ -233,6 +236,25 @@ def test_browser_keyboard_activation(page):
     page.keyboard.press("Enter")
     page.wait_for_timeout(1500)
     assert _sidebar_width(page) == 0
+    # focus-visible preserves the icon font while focused
+    focused_font = page.evaluate(
+        """() => {
+            const icon = document.querySelector('[data-testid="stSidebarCollapseButton"] span[data-testid="stIconMaterial"]');
+            return icon ? getComputedStyle(icon).fontFamily : null;
+        }"""
+    )
+    assert "Material Symbols Rounded" in (focused_font or "")
+    page.evaluate(
+        """() => {
+            const spans = Array.from(document.querySelectorAll('span'));
+            const el = spans.find(s => (s.textContent || '').includes('keyboard_double_arrow_right'));
+            const btn = el ? el.closest('button') : null;
+            if (btn) btn.focus();
+        }"""
+    )
+    page.keyboard.press("Enter")
+    page.wait_for_timeout(1500)
+    assert _sidebar_width(page) == 300
     page.evaluate(
         """() => {
             const spans = Array.from(document.querySelectorAll('span'));
@@ -283,3 +305,84 @@ def test_browser_narrow_viewport_toggle(page):
     _click_expand(page)
     assert _sidebar_width(page) == 300
     assert "Material Symbols Rounded" in (_icon_font(page) or "")
+def test_browser_expanded_normal_left_visible_without_hover(page):
+    # No hover performed: the left arrow must be visible with the icon font.
+    info = page.evaluate(
+        """() => {
+            const btn = document.querySelector('[data-testid="stSidebarCollapseButton"] button');
+            const icon = document.querySelector('[data-testid="stSidebarCollapseButton"] span[data-testid="stIconMaterial"]');
+            return {
+                visibility: btn ? getComputedStyle(btn).visibility : null,
+                opacity: btn ? getComputedStyle(btn).opacity : null,
+                font: icon ? getComputedStyle(icon).fontFamily : null,
+            };
+        }"""
+    )
+    assert info["visibility"] == "visible"
+    assert info["opacity"] == "1"
+    assert "Material Symbols Rounded" in (info["font"] or "")
+
+
+def test_browser_expanded_hover_keeps_icon_font(page):
+    page.locator('[data-testid="stSidebar"]').hover()
+    page.wait_for_timeout(500)
+    font = page.evaluate(
+        """() => {
+            const icon = document.querySelector('[data-testid="stSidebarCollapseButton"] span[data-testid="stIconMaterial"]');
+            return icon ? getComputedStyle(icon).fontFamily : null;
+        }"""
+    )
+    assert "Material Symbols Rounded" in (font or "")
+
+
+def test_browser_collapsed_normal_right_visible_without_hover(page):
+    _collapse_with_button(page)
+    assert _sidebar_width(page) == 0
+    info = page.evaluate(
+        """() => {
+            const btn = document.querySelector('button[data-testid="stExpandSidebarButton"]');
+            const icon = btn ? btn.querySelector('span[data-testid="stIconMaterial"]') : null;
+            return {
+                visibility: btn ? getComputedStyle(btn).visibility : null,
+                opacity: btn ? getComputedStyle(btn).opacity : null,
+                font: icon ? getComputedStyle(icon).fontFamily : null,
+                text: icon ? (icon.textContent || '').trim() : null,
+            };
+        }"""
+    )
+    assert info["visibility"] == "visible"
+    assert info["opacity"] == "1"
+    assert "Material Symbols Rounded" in (info["font"] or "")
+    assert "keyboard_double_arrow_right" in (info["text"] or "")
+
+
+def test_browser_collapsed_hover_keeps_icon_font(page):
+    _collapse_with_button(page)
+    try:
+        page.locator('button[data-testid="stExpandSidebarButton"]').hover(timeout=3000)
+    except Exception:
+        pass
+    page.wait_for_timeout(500)
+    font = page.evaluate(
+        """() => {
+            const icon = document.querySelector('button[data-testid="stExpandSidebarButton"] span[data-testid="stIconMaterial"]');
+            return icon ? getComputedStyle(icon).fontFamily : null;
+        }"""
+    )
+    assert "Material Symbols Rounded" in (font or "")
+
+
+def test_browser_keyboard_space_operates(page):
+    _collapse_with_button(page)
+    assert _sidebar_width(page) == 0
+    page.evaluate(
+        """() => {
+            const spans = Array.from(document.querySelectorAll('span'));
+            const el = spans.find(s => (s.textContent || '').includes('keyboard_double_arrow_right'));
+            const btn = el ? el.closest('button') : null;
+            if (btn) btn.focus();
+        }"""
+    )
+    page.keyboard.press("Space")
+    page.wait_for_timeout(1500)
+    assert _sidebar_width(page) == 300
