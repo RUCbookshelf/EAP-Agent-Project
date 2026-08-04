@@ -1,5 +1,34 @@
 
 
+
+
+## 2026-08-04 - v0.9.6-C Complete the no-priority workflow and repair native icon rendering
+
+- **Decision**: Close the no-priority feedback workflow dead end with two
+  explicit user choices (`Revise This Draft` into the existing
+  revision-writing mode with the correct source; `Finish This Feedback
+  Cycle` with a session acknowledgement for the exact submission) and
+  repair native Streamlit icon rendering with one common CSS correction
+  (exclude `stIconMaterial` spans from the pixel body-font rule) plus
+  visible-before-hover pinning of the two native sidebar controls.
+- **Rationale**: Read-only inspection and rendered-DOM evidence proved the
+  loop was a stale Writing-submitted session state with no terminal
+  action and no Home acknowledgement, and the icon defect was the same
+  broad font-selector override of Streamlit's Material Symbols spans
+  (sidebar arrows and Writing Genre expander chevrons), not per-control
+  causes. C1 and C2 were manually accepted by the owner at their gates.
+- **Evidence**: C1 focused 20 passed; C2 focused 29 passed; student-page
+  suites 52 passed, 3 skipped; A/B reliability 51 passed; UI client/
+  locale contracts 36 passed; full core 809 passed, 8 skipped, exit 0;
+  launcher PASS (migration 12, 33 tables, `config-v0.9.0`,
+  `feedback-prompt-v0.7.1`, health/docs/Streamlit 200); API 77 pairs
+  unchanged; Database methods 2; client 53; locale 540/540 (12 approved
+  C1 keys); exports restored to 776/388; development database unchanged.
+- **Boundary**: no migration, table, schema, Diagnostic Gate threshold,
+  backend production change, fabricated priority/strength, sidebar
+  replacement, or generic workflow framework; no C3 feature work; one
+  stale v0.9.4-B test assertion aligned to the accepted C1 behavior.
+
 ## 2026-08-03 - v0.9.6-B Unify reliable essay submission for first drafts
 
 - **Decision**: Extend the v0.9.6-A reliability policy to first drafts

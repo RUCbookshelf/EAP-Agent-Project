@@ -1,3 +1,37 @@
+
+## v0.9.6-C (2026-08-04)
+
+### Changed
+- No-priority feedback workflow completion (C1, owner-accepted): Feedback
+  shows one no-priority heading, exactly one `Suggested Next Step`, the
+  neutral `Passage From Your Writing` section (never an unsupported
+  Strength), and two explicit actions - `Revise This Draft` (existing
+  revision-writing mode, correct source submission, no fabricated
+  priority) and `Finish This Feedback Cycle` (session acknowledgement for
+  the exact submission, stale Writing-submitted panel cleared, Home and
+  Writing return to a fresh `1 Write` state). Revision and Practice
+  explain the absent automatic focus/target and stay actionable.
+- Native icon rendering repair (C2, owner-accepted): the pixel-art base
+  typography rule now excludes Streamlit native icon spans
+  (`.stApp span:not([data-testid="stIconMaterial"])`), restoring Material
+  Symbols Rounded ligature rendering on the sidebar collapse/expand
+  arrows and the Writing-page Genre expander chevrons (Timing, Tools
+  Used); the two native sidebar controls are pinned visible before hover.
+  No replacement controls or hiding tricks.
+- Locale: 12 new C1 keys in en.json and zh_CN.json (parity 540/540).
+- Tests: one stale v0.9.4-B ordering assertion aligned to the accepted C1
+  conditional strength/neutral-passage section.
+
+### Verified
+- C1 focused 20 passed; C2 focused 29 passed; student-page suite 52
+  passed, 3 skipped; A/B reliability 51 passed; UI client/locale
+  contracts 36 passed; full non-live core 809 passed, 8 skipped, 0
+  failed, exit 0; exact `cmd /c "run.bat --verify"` PASS (migration 12,
+  33 tables, `config-v0.9.0`, `feedback-prompt-v0.7.1`,
+  health/docs/Streamlit 200); API 77 pairs unchanged; Database public
+  methods 2; client 53; research exports restored to 776 files / 388
+  dirs; development database unchanged.
+
 ## v0.9.6-B (2026-08-03)
 
 ### Changed

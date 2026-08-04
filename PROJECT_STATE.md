@@ -8,6 +8,36 @@
 
 # Project State
 
+## Current v0.9.6-C State (no-priority workflow completion and sidebar/icon repair)
+
+- Status: **COMPLETE and fully verified** (C1 and C2 owner-accepted; full
+  non-live core exit 0, 809 passed, 8 skipped; launcher PASS; see
+  `RUN_VERIFICATION_V0.9.6_C.md`).
+- C1: the no-priority Diagnostic Gate result is now a complete actionable
+  branch (Submission #28 / learner S02). Root cause of the old
+  Writing<->Feedback loop: stale Writing-submitted session state with no
+  terminal action, no Feedback actions for no-priority results, and no
+  Home acknowledgement for a finished cycle. Fix: `Revise This Draft`
+  (existing revision-writing mode, correct source, no fabricated
+  priority) and `Finish This Feedback Cycle` (session acknowledgement
+  `no_priority_reviewed` = exact submission id; stale panel cleared;
+  Home/Writing return to `1 Write`); Revision/Practice explain the absent
+  focus/target and stay actionable; neutral `Passage From Your Writing`
+  section replaces any unsupported Strength.
+- C2: sidebar collapse/expand arrows and the Writing-page Genre expander
+  chevrons (Timing, Tools Used) render with Material Symbols Rounded
+  again. Root cause: the pixel-art base typography rule overrode
+  Streamlit native `stIconMaterial` spans, plus Streamlit stock
+  hover-only sidebar visibility. Fix: common exclusion of native icon
+  spans from the base rule and visible-before-hover pinning of the two
+  native sidebar controls.
+- Contracts: API 77 pairs unchanged; Database public methods 2; frontend
+  client 53; locale parity 540/540 (12 approved C1 keys added); migration
+  12; tables 33; `config-v0.9.0`; `feedback-prompt-v0.7.1`; development
+  database unchanged; research exports restored to 776 files / 388 dirs.
+- Next: continue v0.9.6 user-visible feature development under a new
+  owner-authorized goal.
+
 ## Current v0.9.6-B State (first draft and unified submission reliability)
 
 - Status: **COMPLETE and fully verified** (full non-live core exit 0,

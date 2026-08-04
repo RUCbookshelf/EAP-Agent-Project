@@ -1,5 +1,37 @@
 # Current Task State
 
+
+
+**Date:** 2026-08-04
+**Current task:** v0.9.6-C No-Priority Workflow Completion and Sidebar
+Control Repair
+**Status:** completed and fully verified - C1 and C2 were manually accepted
+by the owner; C3 ran the combined closure (see
+`RUN_VERIFICATION_V0.9.6_C.md`)
+
+- C1 incident (Submission #28, learner S02): no-priority Feedback was a
+  dead end; the loop cause was stale Writing-submitted session state with
+  no terminal action, no Feedback actions, and no Home acknowledgement
+  for a finished cycle. Fix: `Revise This Draft` / `Finish This Feedback
+  Cycle` actions, session acknowledgement for the exact submission, fresh
+  `1 Write` Home/Writing state, actionable Revision/Practice no-priority
+  states, neutral passage section (no unsupported Strength), 12 new
+  locale keys (540/540).
+- C2: the pixel-art base typography rule overrode Streamlit native
+  `stIconMaterial` spans (sidebar arrows and the Writing-page Genre
+  expander chevrons); fixed with a common exclusion plus visible-before-
+  hover pinning of the two native sidebar controls. Browser-verified in
+  all states and viewports.
+- Verification: C1 focused 20 passed; C2 focused 29 passed; student-page
+  suites 52 passed, 3 skipped; A/B reliability 51 passed; UI client/
+  locale contracts 36 passed; full non-live core 809 passed, 8 skipped,
+  exit 0; `run.bat --verify` PASS; API 77 pairs unchanged; Database
+  public methods 2; client 53; development database unchanged; research
+  exports restored to 776/388.
+- Next: continue v0.9.6 user-visible feature development under a new
+  owner-authorized goal.
+
+
 **Date:** 2026-08-03
 **Current task:** v0.9.6-B First Draft and Unified Submission Reliability
 **Status:** completed and fully verified (see `RUN_VERIFICATION_V0.9.6_B.md`)

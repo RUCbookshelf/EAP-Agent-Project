@@ -137,7 +137,7 @@ def test_feedback_content_orders_priority_before_action_and_evidence():
     priority = source.index('section_header("student_feedback_priorities"')
     action = source.index('section_header("student_feedback_next"')
     evidence = source.index('section_header("student_feedback_evidence"')
-    strengths = source.index('section_header("student_feedback_strengths"')
+    strengths = source.index('"student_feedback_strengths" if strengths else "student_feedback_neutral_passage"')
     assert priority < action < evidence < strengths
     assert "provider_name" not in source
     assert "provider_label" not in source
