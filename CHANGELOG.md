@@ -1,3 +1,36 @@
+## v0.9.7-A (2026-08-04)
+
+### Priority-Guided Learning Cycle Completion (feature stage)
+
+- Completed the Feedback-priority -> Revision -> submission -> completion
+  cycle: the Feedback page now offers a primary "Open Revision" action that
+  transfers the source draft into Revision, with an accurate secondary
+  "Open Practice" continuation (practice targets are never auto-created from
+  a priority in this version).
+- The Revision page now displays the active priority task from the persisted
+  source feedback (category, explanation, evidence quote, revision
+  direction, revision instruction), supports one-active-priority selection
+  when several exist (session-carried, revalidated, safe fallback), and
+  consumes the Feedback preset after validating it against the learner's
+  candidates.
+- Submission completion state: explicit "revision saved" + priority
+  addressed + record reference + clear next steps (Finish This Revision
+  Cycle -> Home; Open Practice with the accurate no-auto-target note; Open
+  Learning Journey).
+- Re-entry safety: a saved revision of the selected source renders a
+  completed state instead of a blank form (never treated as unsubmitted; no
+  uncontrolled duplicate from the page); refresh/rerun/locale-switch
+  behavior covered by tests.
+- UI + session-state only; no migration, schema, API, domain, service, or
+  prompt change. Locale parity 555/555.
+- Verification: focused 13 passed; affected regression 292 passed; full
+  non-live core 859 passed / 8 skipped / exit 0; `run.bat --verify` PASS;
+  rendered-page matrix (en 1280x900 + zh_CN 390x844 full cycles) passed
+  with 0 console/page errors and 0 remote requests; evidence under
+  verification/v0.9.7-a/v0.9.7-a-20260804-r1/.
+- Next: v0.9.7-B Practice Target Generation and Practice Workflow (not
+  started).
+
 ## v0.9.6-D0-R (2026-08-04)
 
 ### Audit (no production code change)

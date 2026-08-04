@@ -1,0 +1,139 @@
+"""v0.9.7-A extension of the stable v0.9.4-A browser harness.
+
+Reuses the v0.9.4-A stack controller and semantic browser helpers; points the
+isolated database and logs at this run directory and seeds the two synthetic
+v0.9.7-A learners used by the rendered-page matrix.
+"""
+from __future__ import annotations
+
+import pathlib
+import sqlite3
+import sys
+
+HERE = pathlib.Path(__file__).resolve().parent
+PROJECT_ROOT = HERE.parents[2]
+BASE_HARNESS_DIR = PROJECT_ROOT / "verification/v0.9.4-a/v0.9.4-a-20260801-r1"
+sys.path.insert(0, str(BASE_HARNESS_DIR))
+
+sys.path.insert(0, str(PROJECT_ROOT))
+
+from app.ui.locale import t  # noqa: E402
+
+import v094a_harness as _base  # noqa: E402
+from v094a_harness import *  # noqa: E402,F403
+
+_base.RUN_DIR = HERE
+_base.ISOLATED_DB = HERE / "isolated" / "writing_feedback_v097a.db"
+_base.LOG_DIR = HERE / "logs"
+
+RUN_DIR = _base.RUN_DIR
+ISOLATED_DB = _base.ISOLATED_DB
+LOG_DIR = _base.LOG_DIR
+
+STUDENTS = ("V097A-P1", "V097A-P2")
+
+
+def prepare_isolated_db() -> pathlib.Path:
+    path = _base.prepare_isolated_db()
+    with sqlite3.connect(path) as con:
+        for student_id in STUDENTS:
+            con.execute(
+                "INSERT OR IGNORE INTO students (student_id, created_at, is_synthetic) "
+                "VALUES (?, '2026-08-04T00:00:00+00:00', 1)",
+                (student_id,),
+            )
+        con.commit()
+    return path
+
+
+
+def close_sidebar(page) -> None:
+    """Close Streamlit 1.60's unlabeled mobile sidebar control reliably.
+
+    Mirrors the v0.9.4-B override: the base helper alone can leave the mobile
+    sidebar expanded and intercepting pointer events.
+    """
+    if page.viewport_size and page.viewport_size["width"] >= 700:
+        return
+    _base.close_sidebar(page)
+    sidebar = page.locator('[data-testid="stSidebar"]')
+    if sidebar.count() == 0 or sidebar.first.get_attribute("aria-expanded") != "true":
+        return
+    control = sidebar.locator('[data-testid="stBaseButton-headerNoPadding"]').first
+    if control.count() and "keyboard_double_arrow_left" in control.inner_text():
+        control.click(timeout=4_000)
+        page.wait_for_timeout(500)
+    if sidebar.first.get_attribute("aria-expanded") == "true":
+        page.keyboard.press("Escape")
+        page.wait_for_timeout(500)
+    if sidebar.first.get_attribute("aria-expanded") == "true":
+        raise RuntimeError("Mobile sidebar remained open after the v0.9.7-A close helper")
+
+
+
+def open_sidebar(page) -> None:
+    """Open the mobile sidebar, including the Streamlit 1.60 header expand.
+
+    The base helper's selectors can be absent after the overlay is closed;
+    the header button carrying the keyboard_double_arrow_right icon is the
+    reliable expand control in this Streamlit version (DOM probe evidence).
+    """
+    if page.viewport_size and page.viewport_size["width"] >= 700:
+        return
+    sidebar = page.locator('[data-testid="stSidebar"]')
+    if sidebar.count() and sidebar.first.get_attribute("aria-expanded") == "true":
+        return
+    _base.open_sidebar(page)
+    if sidebar.count() and sidebar.first.get_attribute("aria-expanded") == "true":
+        return
+    expand = page.locator(
+        '[data-testid="stHeader"] button:has-text("keyboard_double_arrow_right")'
+    )
+    if expand.count():
+        expand.first.click(timeout=4_000)
+        page.wait_for_timeout(900)
+    if sidebar.count() and sidebar.first.get_attribute("aria-expanded") != "true":
+        raise RuntimeError("Mobile sidebar failed to open via the v0.9.7-A helper")
+
+
+def click_label(page, label: str, timeout: int = 12_000) -> None:
+    open_sidebar(page)
+    loc = page.locator(f"label:has-text('{label}')").last
+    loc.wait_for(state="visible", timeout=timeout)
+    loc.click(timeout=timeout)
+
+
+def select_page(page, label: str, expected_h2: str, *, attempts: int = 3) -> bool:
+    for _ in range(attempts):
+        click_label(page, label)
+        wait_stable(page, timeout=15)
+        close_sidebar(page)
+        if any(expected_h2 in h for h in current_h2(page)):
+            return True
+    return False
+
+
+def open_page(page, title_key: str, lang: str) -> None:
+    assert select_page(page, t(title_key, lang), t(title_key, lang))
+    close_sidebar(page)
+
+
+def learner_counts(student_id: str) -> dict[str, int]:
+    with sqlite3.connect(ISOLATED_DB) as con:
+        return {
+            "essays": int(con.execute(
+                "SELECT COUNT(*) FROM essays WHERE student_id=?", (student_id,)
+            ).fetchone()[0]),
+            "linked_revisions": int(con.execute(
+                "SELECT COUNT(*) FROM essays WHERE student_id=? "
+                "AND revision_of_submission_id IS NOT NULL", (student_id,)
+            ).fetchone()[0]),
+            "revision_groups": int(con.execute(
+                "SELECT COUNT(DISTINCT revision_group_id) FROM essays "
+                "WHERE student_id=? AND revision_group_id IS NOT NULL", (student_id,)
+            ).fetchone()[0]),
+            "revision_snapshots": int(con.execute(
+                "SELECT COUNT(*) FROM revision_snapshots rs JOIN essays e "
+                "ON e.essay_id=rs.target_submission_id WHERE e.student_id=?", (student_id,)
+            ).fetchone()[0]),
+        }

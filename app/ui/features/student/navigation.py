@@ -46,3 +46,32 @@ def _finish_feedback_cycle(submission_id: int, lang: str) -> None:
     st.session_state["cycle_finished_notice"] = True
     st.session_state.pop("submission_result", None)
     st.session_state["sidebar_page"] = t("student_writing_title", lang)
+
+
+def _navigate_priority_revision(source_submission_id: int, lang: str) -> None:
+    """Enter the Revision page with a specific source draft as the priority-guided task.
+
+    v0.9.7-A: carries only the source reference in session state; the active
+    priority itself is always re-read from the source's persisted structured
+    feedback by the Revision page. The in-session feedback result is preserved
+    so Feedback can still render when the student returns. The preset is
+    validated against the current learner's candidates on the Revision page.
+    """
+    st.session_state["revision_source_preset"] = int(source_submission_id)
+    st.session_state.pop("revision_priority_selection", None)
+    st.session_state["sidebar_page"] = t("student_revision_title", lang)
+
+
+def _finish_revision_cycle(lang: str) -> None:
+    """Acknowledge a finished priority-guided revision cycle and return to Home.
+
+    v0.9.7-A: clears the session-scoped saved panel and revision presets so a
+    later re-entry is never mistaken for an unsubmitted revision. Never
+    deletes submissions, never resubmits, and never generates anything; Home
+    derives the next step from the durable journey state.
+    """
+    st.session_state["revision_cycle_finished"] = True
+    st.session_state.pop("submission_result", None)
+    st.session_state.pop("revision_source_preset", None)
+    st.session_state.pop("revision_priority_selection", None)
+    st.session_state["sidebar_page"] = t("student_home_title", lang)

@@ -538,5 +538,20 @@
   "student_journey_limit_exercise_attempted": "存在作答记录，但它不能证明掌握。",
   "student_journey_limit_practice_evaluation_recorded": "评价只属于可观察的任务证据，不能证明学习。",
   "student_journey_limit_within_task_response_observed": "修订回应只是候选观察，不能证明反馈导致了变化。",
-  "student_journey_limit_later_task_evidence": "一次后续观察不能证明稳定迁移或因果关系。"
+  "student_journey_limit_later_task_evidence": "一次后续观察不能证明稳定迁移或因果关系。",
+  "student_feedback_open_revision": "打开修订",
+  "student_feedback_practice_note": "练习活动仅对已存在的练习目标可用；本版本不会根据你的优先级自动创建练习目标。",
+  "student_revision_priority_task": "你的修订优先级",
+  "student_revision_priority_label": "优先级",
+  "student_revision_priority_reason": "选择该优先级的原因",
+  "student_revision_priority_direction": "建议的修订方向",
+  "student_revision_select_priority": "你想解决哪个优先级？",
+  "student_revision_selection_reset": "之前选择的优先级对此草稿不再可用，现显示第一个优先级。",
+  "student_revision_instruction": "请围绕上面的优先级修改你的草稿，然后提交修订。",
+  "student_revision_priority_addressed": "已处理的优先级",
+  "student_revision_step_complete": "此优先级引导的修订步骤已完成。",
+  "student_revision_finish_cycle": "完成本轮修订",
+  "student_revision_open_practice": "打开练习",
+  "student_revision_practice_note": "练习活动使用已有的练习目标。本版本不会根据你的优先级自动创建练习目标。",
+  "student_revision_already_submitted_title": "此草稿已提交过修订"
 }

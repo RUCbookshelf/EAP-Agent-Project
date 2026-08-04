@@ -1,4 +1,27 @@
 **Date:** 2026-08-04
+**Current task:** v0.9.7-A Priority-Guided Learning Cycle Completion
+**Status:** COMPLETE - all acceptance criteria satisfied (see
+RUN_VERIFICATION_V0.9.7_A.md and verification/v0.9.7-a/v0.9.7-a-20260804-r1/)
+
+- The priority-guided revision cycle is complete: Feedback transfers the
+  naturally generated priority into Revision (Open Revision primary action),
+  Revision displays the active priority task from the persisted source
+  feedback (with one-active-priority selection when several exist), the
+  student submits one linked revision, and an explicit completion state
+  provides the priority addressed, the record reference, and clear next
+  steps (Finish This Revision Cycle -> Home; Open Practice with the accurate
+  no-auto-target note; Open Learning Journey).
+- Re-entry after refresh shows the completed state for a source that already
+  has a revision (no blank form, no uncontrolled duplicate). UI + session
+  state only: no migration/schema/API/domain/service/prompt change; locale
+  parity 555/555.
+- Verification: focused 13 passed; affected regression 292 passed; full
+  non-live core 859 passed / 8 skipped / exit 0; `run.bat --verify` PASS;
+  rendered-page matrix (en 1280x900, zh_CN 390x844 full production-path
+  cycles) PASS with 0 console/page errors and 0 remote requests.
+- Next: v0.9.7-B Practice Target Generation and Practice Workflow (not
+  started). Do not begin v0.9.7-B or later stages in this phase.
+**Date:** 2026-08-04
 **Current task:** v0.9.6-D0-R Frozen Priority Path Production Validity Audit
 **Status:** COMPLETE - primary classification D0-R-C (downstream capability
 incomplete but non-blocking); v0.9.6 stabilization CLOSED (see
@@ -90,7 +113,8 @@ docs/development/V0.9.6_DP0_PROVIDER_RELIABILITY.md)
   0 fallback, 0 timeout, 0 truncation; max provider call 21.7s.
 - Verification: 101 + 103 + 24 focused/regression passed; full core single
   attempt 821 passed, 8 skipped (3 anomalies isolated-classified, none
-  DP0-B-related, not rerun per protocol); un.bat --verify PASS.
+  DP0-B-related, not rerun per protocol); 
+un.bat --verify PASS.
 - Safety: development database unchanged; research exports 776/388; call
   budget 6 of 12 attempts used; D0 workspace preserved.
 - Next: owner decision gate on the DP0-B report; recommended next stage

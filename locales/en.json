@@ -538,5 +538,20 @@
   "student_journey_limit_exercise_attempted": "An attempt record exists; it does not demonstrate mastery.",
   "student_journey_limit_practice_evaluation_recorded": "Evaluation is observable task evidence only; it does not prove learning.",
   "student_journey_limit_within_task_response_observed": "A revision response is a candidate observation, not proof that feedback caused the change.",
-  "student_journey_limit_later_task_evidence": "One later observation is not proof of stable transfer or causation."
+  "student_journey_limit_later_task_evidence": "One later observation is not proof of stable transfer or causation.",
+  "student_feedback_open_revision": "Open Revision",
+  "student_feedback_practice_note": "Practice activities are available only for existing practice targets; this version does not create one automatically from your priority.",
+  "student_revision_priority_task": "Your Revision Priority",
+  "student_revision_priority_label": "Priority",
+  "student_revision_priority_reason": "Why this priority was selected",
+  "student_revision_priority_direction": "Recommended revision direction",
+  "student_revision_select_priority": "Which priority do you want to address?",
+  "student_revision_selection_reset": "The previously selected priority is no longer available for this draft; the first priority is shown.",
+  "student_revision_instruction": "Rewrite your draft to address the priority above, then submit your revision.",
+  "student_revision_priority_addressed": "Priority addressed",
+  "student_revision_step_complete": "This priority-guided revision step is complete.",
+  "student_revision_finish_cycle": "Finish This Revision Cycle",
+  "student_revision_open_practice": "Open Practice",
+  "student_revision_practice_note": "Practice activities use existing practice targets. This version does not automatically create a practice target from your priority.",
+  "student_revision_already_submitted_title": "This draft has already been revised"
 }

@@ -22,6 +22,7 @@ from app.ui.components import (
 from app.ui.features.student.formatting import _feedback_category_label
 from app.ui.features.student.navigation import (
     _finish_feedback_cycle,
+    _navigate_priority_revision,
     _navigate_student_page,
     _navigate_writing_revision,
 )
@@ -60,17 +61,25 @@ def render_feedback_content(result: dict, api_client: StudentFeedbackApiPort, la
     if has_priority:
         student_action_block(
             "student_feedback_next",
-            "student_feedback_next_practice",
+            "student_feedback_next_revise",
             lang,
         )
         st.button(
-            t("student_feedback_open_practice", lang),
+            t("student_feedback_open_revision", lang),
             type="primary",
             use_container_width=True,
             key="feedback_primary_action",
+            on_click=_navigate_priority_revision,
+            args=(int(result.get("submission_id") or 0), lang),
+        )
+        st.button(
+            t("student_feedback_open_practice", lang),
+            use_container_width=True,
+            key="feedback_practice_action",
             on_click=_navigate_student_page,
             args=("practice", lang),
         )
+        info_box("student_feedback_practice_note", lang)
     else:
         # No-priority is a valid, complete workflow branch (v0.9.6-C1):
         # the user explicitly chooses to revise this draft or to finish the

@@ -25,7 +25,10 @@ from app.ui.components import (
     warning_box,
 )
 from app.ui.features.student.formatting import _feedback_category_label
-from app.ui.features.student.navigation import _navigate_student_page
+from app.ui.features.student.navigation import (
+    _finish_revision_cycle,
+    _navigate_student_page,
+)
 from app.ui.features.student.session import _writing_saved_for_learner
 from app.ui.features.student.submit_reliability import (
     consume_pending,
@@ -48,6 +51,154 @@ def _revision_saved_for_source(
     return saved_source is not None and (
         source_submission_id is None or saved_source == source_submission_id
     )
+
+def _source_priorities(source: dict) -> list[dict]:
+    """Validated priority items from the persisted structured feedback.
+
+    The bundle feedback is authoritative; malformed or missing priority items
+    are dropped, never inferred (v0.9.7-A).
+    """
+    feedback = source.get("feedback") or {}
+    raw_items = feedback.get("priority_feedback")
+    if not isinstance(raw_items, list):
+        return []
+    items = []
+    for item in raw_items:
+        if not isinstance(item, dict):
+            continue
+        if all(
+            isinstance(item.get(field), str) and item.get(field)
+            for field in ("category", "explanation", "revision_guidance")
+        ):
+            items.append(item)
+    return items
+
+
+def _latest_revision_of_source(candidates: list[dict], source_id: int) -> dict | None:
+    """Newest candidate that is a saved revision of `source_id`, or None."""
+    matches = [
+        item for item in candidates
+        if int(item.get("revision_of_submission_id") or 0) == source_id
+    ]
+    if not matches:
+        return None
+    return max(
+        matches,
+        key=lambda item: (
+            str(item.get("submitted_at") or ""),
+            int(item.get("essay_id") or 0),
+        ),
+    )
+
+
+def _priority_selection(priorities: list[dict], source_id: int) -> tuple[int, bool]:
+    """Revalidate the in-session active-priority selection for this source.
+
+    Returns (index, reset) where reset is True when a stored selection existed
+    but was invalid for the current source and the first priority was restored.
+    """
+    stored = st.session_state.get("revision_priority_selection")
+    if isinstance(stored, dict) and stored.get("submission_id") == source_id:
+        index = stored.get("index")
+        if isinstance(index, int) and 0 <= index < len(priorities):
+            return index, False
+        return 0, True
+    return 0, False
+
+
+def _render_priority_card(item: dict, lang: str, *, instruction: bool = True) -> None:
+    """Render one active-priority task card from persisted feedback fields."""
+    section_header("student_revision_priority_task", lang=lang)
+    student_context_block(
+        [
+            (
+                "student_revision_priority_label",
+                _feedback_category_label(item.get("category", ""), lang),
+            ),
+            ("student_revision_priority_reason", item.get("explanation", "")),
+            ("student_revision_priority_direction", item.get("revision_guidance", "")),
+        ],
+        lang,
+    )
+    if item.get("evidence_quote"):
+        section_header("student_feedback_evidence", lang=lang)
+        evidence_quote(item["evidence_quote"], lang)
+    if instruction:
+        info_box("student_revision_instruction", lang)
+
+
+def _render_priority_task(priorities: list[dict], source_id: int, lang: str) -> None:
+    """Render the active-priority selection (when needed) and task card."""
+    index, reset = _priority_selection(priorities, source_id)
+    if reset:
+        st.session_state.pop(f"revision_priority_select_{source_id}", None)
+    if len(priorities) > 1:
+        index = st.radio(
+            t("student_revision_select_priority", lang),
+            list(range(len(priorities))),
+            index=index,
+            key=f"revision_priority_select_{source_id}",
+            format_func=lambda i: _feedback_category_label(
+                priorities[i].get("category", ""), lang
+            ),
+        )
+    st.session_state["revision_priority_selection"] = {
+        "submission_id": source_id,
+        "index": int(index),
+    }
+    if reset:
+        info_box("student_revision_selection_reset", lang)
+    _render_priority_card(priorities[int(index)], lang)
+
+
+def _render_priority_addressed(priorities: list[dict], index: int, lang: str) -> None:
+    """Completion confirmation of the priority addressed by a saved revision."""
+    item = None
+    if priorities and 0 <= index < len(priorities):
+        item = priorities[index]
+    elif priorities:
+        item = priorities[0]
+    if item is None:
+        return
+    section_header("student_revision_priority_addressed", lang=lang)
+    student_context_block(
+        [
+            (
+                "student_revision_priority_label",
+                _feedback_category_label(item.get("category", ""), lang),
+            ),
+            ("student_revision_priority_direction", item.get("revision_guidance", "")),
+        ],
+        lang,
+    )
+
+
+def _render_revision_next_steps(lang: str) -> None:
+    """Clear completion next-step actions for a finished revision cycle."""
+    st.button(
+        t("student_revision_finish_cycle", lang),
+        type="primary",
+        use_container_width=True,
+        key="revision_finish_cycle",
+        on_click=_finish_revision_cycle,
+        args=(lang,),
+    )
+    st.button(
+        t("student_revision_open_practice", lang),
+        use_container_width=True,
+        key="revision_open_practice",
+        on_click=_navigate_student_page,
+        args=("practice", lang),
+    )
+    info_box("student_revision_practice_note", lang)
+    st.button(
+        t("student_revision_open_journey", lang),
+        use_container_width=True,
+        key="revision_primary_action",
+        on_click=_navigate_student_page,
+        args=("learning_journey", lang),
+    )
+
 
 # Baseline key for the bounded linked-revision reconciliation (v0.9.6-A).
 _REVISION_BASELINE_KEY = "revision_baseline_latest_submitted_at"
@@ -241,24 +392,24 @@ def render_revision_page(api_client: StudentRevisionApiPort, lang: str) -> None:
         success_box("student_revision_saved_title", lang)
         student_action_block(
             "student_revision_saved_title",
-            "student_revision_saved_desc",
+            "student_revision_step_complete",
             lang,
             state="complete",
         )
+        addressed = (saved.get("within_task_revision_trajectory") or {}).get(
+            "previous_selected_priorities"
+        ) or []
+        addressed_index = int(
+            (saved.get("ui_submission") or {}).get("revision_priority_index") or 0
+        )
+        _render_priority_addressed(addressed, addressed_index, lang)
         technical_caption(
             f"{t('student_revision_source_reference', lang)}: "
             f"#{saved.get('ui_submission', {}).get('revision_of_submission_id', '?')} · "
             f"{t('student_revision_saved_reference', lang)}: #{saved.get('submission_id', '?')}"
         )
         _render_revision_observation(saved, lang)
-        st.button(
-            t("student_revision_open_journey", lang),
-            type="primary",
-            use_container_width=True,
-            key="revision_primary_action",
-            on_click=_navigate_student_page,
-            args=("learning_journey", lang),
-        )
+        _render_revision_next_steps(lang)
         return
 
     try:
@@ -290,8 +441,19 @@ def render_revision_page(api_client: StudentRevisionApiPort, lang: str) -> None:
         f"{item.get('writing_prompt', '')[:80]} · {item.get('draft_stage', '')} · #{item.get('essay_id', '?')}": item
         for item in candidates
     }
+    preset_source = st.session_state.pop("revision_source_preset", None)
+    preset_index = next(
+        (
+            index for index, item in enumerate(candidates)
+            if int(item.get("essay_id") or 0) == preset_source
+        ),
+        None,
+    )
     selected_label = st.selectbox(
-        t("student_revision_select_source", lang), list(labels), key="revision_source_select"
+        t("student_revision_select_source", lang),
+        list(labels),
+        index=preset_index if preset_index is not None else 0,
+        key="revision_source_select",
     )
     selected = labels[selected_label]
     source_id = int(selected["essay_id"])
@@ -311,8 +473,9 @@ def render_revision_page(api_client: StudentRevisionApiPort, lang: str) -> None:
         ],
         lang,
     )
-    source_feedback = source.get("feedback") or {}
-    if not source_feedback.get("priority_feedback"):
+    priorities = _source_priorities(source)
+    existing_revision = _latest_revision_of_source(candidates, source_id)
+    if not priorities:
         # No-priority sources are valid revision sources (v0.9.6-C1): the
         # absence of an automatic focus is explained, not fabricated.
         info_box("student_revision_no_auto_focus", lang)
@@ -336,6 +499,31 @@ def render_revision_page(api_client: StudentRevisionApiPort, lang: str) -> None:
     else:
         info_box("student_revision_no_target_context", lang)
     technical_caption(f"{t('student_revision_source_reference', lang)}: #{source_id}")
+
+    if existing_revision is not None:
+        # v0.9.7-A: a saved revision is never treated as unsubmitted on
+        # re-entry; show the completed state instead of a blank form so no
+        # uncontrolled duplicate revision can be created from this page.
+        success_box("student_revision_already_submitted_title", lang)
+        student_action_block(
+            "student_revision_already_submitted_title",
+            "student_revision_step_complete",
+            lang,
+            state="complete",
+        )
+        _render_priority_addressed(
+            priorities, _priority_selection(priorities, source_id)[0], lang
+        )
+        technical_caption(
+            f"{t('student_revision_saved_reference', lang)}: "
+            f"#{existing_revision.get('essay_id', '?')}"
+        )
+        _render_revision_next_steps(lang)
+        limitation_notice("student_revision_boundary", lang)
+        return
+
+    if priorities:
+        _render_priority_task(priorities, source_id, lang)
 
     validation_state = st.session_state.get("revision_validation_state") or {}
     invalid = (
@@ -417,6 +605,9 @@ def render_revision_page(api_client: StudentRevisionApiPort, lang: str) -> None:
         "genre": source.get("genre", "argumentative essay"),
         "draft_stage": "revised draft",
         "revision_of_submission_id": source_id,
+        "revision_priority_index": int(
+            (st.session_state.get("revision_priority_selection") or {}).get("index", 0)
+        ),
         "revision_source": {
             "writing_prompt": source.get("writing_prompt", ""),
             "draft_stage": source.get("draft_stage", ""),

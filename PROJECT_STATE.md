@@ -1,3 +1,25 @@
+## Current v0.9.7-A State
+
+- Status: COMPLETE - Priority-Guided Learning Cycle Completion verified.
+- Cycle: Writing -> Feedback -> select/confirm the naturally generated
+  priority -> priority-guided Revision -> submit -> explicit completion
+  state -> safe end of cycle (Home) or continue to the existing Practice
+  entry point (accurate no-target message; no automatic practice-target
+  generation - v0.9.7-B item).
+- Implementation: UI + session state only (Feedback/Revision/Navigation
+  features + 15 locale keys); no migration, schema, API, domain, service,
+  or prompt change. Active-priority context is read from the persisted
+  source feedback; re-entry after refresh shows the completed state and
+  never treats a saved revision as unsubmitted.
+- Verification: focused 13 passed; affected regression 292 passed; full
+  non-live core 859 passed / 8 skipped / exit 0; `run.bat --verify` PASS;
+  browser matrix en 1280x900 + zh_CN 390x844 full cycles PASS (0 console/
+  page errors, 0 remote requests, 2/1/1/1 persisted records per learner).
+- Evidence: verification/v0.9.7-a/v0.9.7-a-20260804-r1/ and
+  RUN_VERIFICATION_V0.9.7_A.md.
+- Next: v0.9.7-B Practice Target Generation and Practice Workflow (not
+  started).
+
 ## Current v0.9.6-D0-R State
 
 - Status: COMPLETE - primary classification D0-R-C (downstream capability
@@ -47,7 +69,8 @@
 
 - Status: COMPLETE - formal full-core regression closure for v0.9.6-DP0
   (verification-only). Full non-live core 824 passed, 8 skipped, 0 failed,
-  0 errors, exit 0 (run exactly once); un.bat --verify PASS, exit 0.
+  0 errors, exit 0 (run exactly once); 
+un.bat --verify PASS, exit 0.
 - Canonical environment sourced from verification/v0.9.5-h2a/
   isolated_pytest_runner.py (SERVICE_API_DIFF_ALLOWLIST unchanged).
 - Research exports 776/388; development database byte fingerprint changed
