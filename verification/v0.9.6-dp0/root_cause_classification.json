@@ -1,0 +1,100 @@
+{
+  "audit_stage": "v0.9.6-DP0",
+  "stage": "DP0-A - root-cause classification (evidence-based)",
+  "head": "01f6f11",
+  "evidence_sources": [
+    "D0 committed artifacts: verification/v0.9.6-d0/provider_call_summary.json, preflight_result.json",
+    "official DeepSeek API docs (retrieved 2026-08-04): Chat Completions API, Models & Pricing, Thinking Mode guide, JSON Output guide",
+    "diagnostic probes A and B (frozen D0-01 essay, real credentials, direct calls)"
+  ],
+  "proven_failure_chain": {
+    "1": "deepseek-v4-pro defaults to thinking mode (official docs: thinking default enabled) and the current production request omits the thinking toggle, so every structured-feedback request runs in thinking mode.",
+    "2": "In thinking mode the model first generates reasoning tokens; Probe A measured 1300 reasoning tokens of the 1800-token output budget (72%).",
+    "3": "The output budget (max_tokens=1800) is therefore exhausted before the JSON content is complete: Probe A returned finish_reason=length with completion_tokens exactly 1800.",
+    "4": "Incomplete JSON then fails StructuredFeedback parsing (D0: 'Invalid JSON: EOF while parsing'), triggering the router correction attempt.",
+    "5": "The correction attempt runs in the same thinking mode against a slightly larger prompt and a doubled budget; D0 measured a 30-second transport timeout on both correction attempts (initial attempt itself takes ~27s in thinking mode).",
+    "6": "ProviderRouter falls back to LocalDemo after the failed correction attempt (fallback_success)."
+  },
+  "factor_classifications": {
+    "thinking_mode_default": {
+      "classification": "PROVEN_PRIMARY",
+      "evidence": [
+        "official docs: thinking default enabled; current payload omits the toggle",
+        "Probe A (thinking on): finish_reason=length, 1300/1800 reasoning tokens, 27.05s",
+        "Probe B (thinking disabled, everything else identical): finish_reason=stop, 764/1800 completion tokens, 0 reasoning tokens, 10.85s, complete JSON"
+      ]
+    },
+    "output_token_budget": {
+      "classification": "PROVEN_CONTRIBUTING",
+      "evidence": [
+        "Probe A: completion_tokens=1800=requested max_tokens with finish_reason=length (official truncation signal)",
+        "Probe B shows 764 tokens suffice when thinking is disabled, so the 1800 budget is adequate only in non-thinking mode",
+        "Per DP0-A classification rules, finish_reason=length plus usage reaching the configured limit proves budget involvement in the truncation mechanism"
+      ]
+    },
+    "transport_timeout": {
+      "classification": "PROVEN_CONTRIBUTING",
+      "evidence": [
+        "D0: both correction attempts timed out at the 30s limit",
+        "Probe A initial attempt took 27.05s under thinking mode - within 30s but with no headroom; correction attempts add input and output",
+        "Probe B took 10.85s, showing the timeout problem disappears when thinking is disabled"
+      ]
+    },
+    "json_mode_request_compliance": {
+      "classification": "RULED_OUT",
+      "evidence": [
+        "Request sends response_format={\"type\":\"json_object\"}",
+        "System prompt explicitly instructs one JSON object matching required_schema (official JSON Output requirement)",
+        "Probe B proves the identical request shape produces valid complete JSON in non-thinking mode"
+      ]
+    },
+    "correction_prompt_size": {
+      "classification": "RULED_OUT",
+      "evidence": [
+        "Correction request total is ~54,950 chars vs initial ~54,446 chars (+~1%)",
+        "D0 correction timeouts are explained by thinking-mode latency, not prompt size"
+      ]
+    },
+    "sdk_compatibility": {
+      "classification": "RULED_OUT",
+      "evidence": [
+        "Transport is stdlib urllib; no SDK version compatibility applies",
+        "Direct probes returned HTTP 200 with valid response envelopes"
+      ]
+    },
+    "provider_service_interruption": {
+      "classification": "RULED_OUT",
+      "evidence": [
+        "Probes A and B both returned HTTP 200 with consistent system fingerprints",
+        "Failures track request settings, not service availability"
+      ]
+    },
+    "schema_complexity": {
+      "classification": "NOT_ASSESSABLE as an independent factor",
+      "evidence": [
+        "The full StructuredFeedback JSON schema is embedded in the user payload (prompt_tokens 14,949)",
+        "Probe B produced a complete JSON object with 764 tokens, so the schema is output-producible",
+        "No isolated schema-size factor test was run; not needed because thinking-mode disable restores completion"
+      ]
+    },
+    "application_parser_behavior": {
+      "classification": "RULED_OUT",
+      "evidence": [
+        "json.loads and StructuredFeedback.model_validate_json correctly reject genuinely truncated content (D0)",
+        "The same parser accepts complete content (fallback path and probe B JSON parse success)",
+        "No parser bug reproduces on complete input"
+      ]
+    }
+  },
+  "primary_root_cause": "DeepSeek thinking mode runs by default (official default enabled) and the production request never disables it; reasoning tokens consume 72% of the 1800-token output budget, producing finish_reason=length truncation that fails StructuredFeedback validation, and thinking-mode latency pushes the correction attempt past the 30-second transport timeout.",
+  "answers": {
+    "A_initial_json_cut_off_by_max_tokens": "YES - PROVEN (finish_reason=length, completion_tokens=1800)",
+    "B_unintentional_thinking_mode": "YES - PROVEN (default enabled; toggle omitted; Probe B restores completion)",
+    "C_metadata_not_retained": "YES - PROVEN (adapter discards id/model/finish_reason/usage/fingerprint)",
+    "D_30s_timeout_too_short": "YES for thinking-mode requests - PROVEN CONTRIBUTING (27.05s initial; correction timed out at 30s in D0)",
+    "E_correction_attempt_slower": "NO - RULED_OUT (correction prompt is ~1% larger; slowness comes from thinking mode)",
+    "F_json_mode_request_compliance": "COMPLIANT - RULED_OUT as a failure cause",
+    "G_minimal_change_3_consecutive_successes": "DP0-B acceptance criterion; not assessed in DP0-A"
+  },
+  "probe_b_validation_note": "Probe B proves complete JSON generation (finish_reason=stop, parse success). Full StructuredFeedback schema validation of live output is an explicit DP0-B acceptance criterion and was not asserted in DP0-A."
+}

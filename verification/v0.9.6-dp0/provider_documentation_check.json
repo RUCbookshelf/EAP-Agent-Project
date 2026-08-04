@@ -1,0 +1,60 @@
+{
+  "audit_stage": "v0.9.6-DP0",
+  "stage": "DP0-A Phase 2 - official provider documentation check",
+  "retrieval_date": "2026-08-04",
+  "sources_consulted": [
+    {"title": "DeepSeek API Docs - Chat Completions API", "url": "https://api-docs.deepseek.com/api/create-chat-completion", "retrieved": true},
+    {"title": "DeepSeek API Docs - Models & Pricing", "url": "https://api-docs.deepseek.com/quick_start/pricing", "retrieved": true},
+    {"title": "DeepSeek API Docs - Thinking Mode guide", "url": "https://api-docs.deepseek.com/guides/thinking_mode", "retrieved": true},
+    {"title": "DeepSeek API Docs - JSON Output guide", "url": "https://api-docs.deepseek.com/guides/json_mode", "retrieved": true}
+  ],
+  "summary": "Official documentation consulted directly (no third-party sources). Web search was unavailable, so the official pages were fetched directly.",
+  "findings": {
+    "supported_models": {
+      "statement": "Chat Completions model field accepts [deepseek-v4-flash, deepseek-v4-pro]; OpenAI-format base URL https://api.deepseek.com",
+      "current_model_deepseek_v4_pro": "SUPPORTED (model version DeepSeek-V4-Pro)"
+    },
+    "thinking_mode": {
+      "statement": "thinking object controls the switch; type enabled|disabled; DEFAULT VALUE IS enabled. Thinking effort default is high; deepseek-v4-pro currently supports effort high and max only.",
+      "disable_syntax": {"thinking": {"type": "disabled"}},
+      "current_request_omits_thinking": true,
+      "conclusion": "The current production request runs in thinking mode by default (provider-defaulted), because the payload never sends the thinking toggle."
+    },
+    "json_output": {
+      "statement": "response_format {\"type\":\"json_object\"} guarantees the generated message is valid JSON; the model must ALSO be instructed to produce JSON in the system or user message.",
+      "current_request_compliant": true,
+      "instruction_present": "system prompt: 'Return exactly one JSON object matching required_schema and no markdown'",
+      "caveat": "The guarantee applies to a complete generation; content cut off at the token limit (finish_reason=length) is partial and can be invalid JSON."
+    },
+    "finish_reason_length": {
+      "statement": "Official docs: 'the message content may be partially cut off if finish_reason=\"length\", which indicates the generation exceeded max_tokens or the conversation exceeded the max context length.'",
+      "finish_reason_values": ["stop", "length", "content_filter", "tool_calls"],
+      "conclusion": "finish_reason=length is the documented truncation signal."
+    },
+    "token_usage": {
+      "statement": "usage object: completion_tokens, prompt_tokens (= cache_hit + cache_miss), total_tokens, completion_tokens_details.reasoning_tokens (reasoning output tokens).",
+      "current_adapter_captures": "none of these fields"
+    },
+    "max_output": {
+      "statement": "max_tokens is the maximum number of tokens generated; total input+generated tokens are limited by the model context length (deepseek-v4-pro context 1M; max output maximum 384K per Models & Pricing).",
+      "current_request_max_tokens": 1800,
+      "conclusion": "1800 is far below the model maximum; any length truncation at 1800 is a request-level budget artifact, not a model cap."
+    },
+    "timeout_and_retry_guidance": {
+      "statement": "No explicit client-timeout value is mandated in the consulted pages; rate limits and error codes are documented separately (concurrency 500 for deepseek-v4-pro).",
+      "current_request_timeout": 30.0
+    },
+    "sdk_compatibility": {
+      "statement": "The application uses stdlib urllib (no OpenAI/DeepSeek SDK), so SDK-version compatibility does not apply; the transport only needs correct HTTP JSON semantics, which the official OpenAI-format endpoint provides."
+    }
+  },
+  "answers_to_dp0_questions": {
+    "A_initial_json_cut_off_by_max_tokens": "PLAUSIBLE - to be proven by probe finish_reason/usage",
+    "B_unintentional_thinking_mode": "PROVEN AT REQUEST LEVEL - thinking defaults to enabled and the current payload omits the toggle; contribution to failure to be proven by Probe B",
+    "C_metadata_not_retained": "PROVEN - adapter discards id/model/finish_reason/usage/system_fingerprint",
+    "D_timeout_too_short": "TO BE ASSESSED - probe durations",
+    "E_correction_attempt_slower": "TO BE ASSESSED - correction prompt adds a third message and validation-failure text; output budget doubles to 3600",
+    "F_json_mode_request_compliance": "COMPLIANT - response_format json_object plus explicit JSON instruction",
+    "G_minimal_change_yields_3_consecutive_successes": "DP0-B acceptance criterion; not assessed in DP0-A"
+  }
+}

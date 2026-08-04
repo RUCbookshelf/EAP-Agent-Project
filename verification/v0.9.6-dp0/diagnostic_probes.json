@@ -1,0 +1,111 @@
+{
+  "probes": [
+    {
+      "thinking": null,
+      "max_tokens": 1800,
+      "timeout": 30.0,
+      "request_body_chars": 59182,
+      "http_status": 200,
+      "duration_seconds": 27.05,
+      "response_id": "2da8e609-2ca5-4dfa-b854-6952e831cfa5",
+      "returned_model": "deepseek-v4-pro",
+      "finish_reason": "length",
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "usage": {
+        "prompt_tokens": 14949,
+        "completion_tokens": 1800,
+        "total_tokens": 16749,
+        "prompt_tokens_details": {
+          "cached_tokens": 768
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1300
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 14181
+      },
+      "json_parse_status": "success",
+      "content_length": 9296,
+      "content_sha256": "688fd6c463374246572d711ba80cc36ea070b98c4fe53711ca67d0c8a496ab09",
+      "message_content_length": 2150,
+      "message_content_sha256": "924d8d358575f1e73db189e7fbdbf0522b425e894c11458d8ab5cc186f2d17ac",
+      "has_reasoning_content": true,
+      "reasoning_content_length": 6334,
+      "probe": "A",
+      "probe_label": "current production settings (metadata capture)",
+      "essay_sha256": "F683F4C899BD0E2E146E9085D890CD8D1B2D659EF2083A0B087B1F816E410773",
+      "model": "deepseek-v4-pro",
+      "prompt_version": "feedback-prompt-v0.7.1",
+      "rendered_prompt_hash": "6b4dddfd88fb0ba9ee7ffb5143d948b74d6ef536741d894010ae2f9f7c6e4718",
+      "system_prompt_chars": 1859,
+      "user_prompt_chars": 52587,
+      "total_request_chars": 54446,
+      "gate_selected_priorities": [
+        {
+          "diagnosis_id": "D001",
+          "category": "lexical_repetition",
+          "confidence": "medium",
+          "priority_score": 0.6649
+        }
+      ],
+      "payload_deltas_vs_production": [
+        "learner_profile_snapshot is None in the probe (production computes a first-submission snapshot); learner_model_context is therefore None",
+        "longitudinal_facts.comparable_task_count is 0 in the probe (production records 1 for the current submission)",
+        "status/longitudinal semantics otherwise identical (unavailable)"
+      ]
+    },
+    {
+      "thinking": {
+        "type": "disabled"
+      },
+      "max_tokens": 1800,
+      "timeout": 30.0,
+      "request_body_chars": 59216,
+      "http_status": 200,
+      "duration_seconds": 10.85,
+      "response_id": "0cda7404-5d8f-4ab8-9ebe-bcf66156b902",
+      "returned_model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "usage": {
+        "prompt_tokens": 14949,
+        "completion_tokens": 764,
+        "total_tokens": 15713,
+        "prompt_tokens_details": {
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 14181
+      },
+      "json_parse_status": "success",
+      "content_length": 4232,
+      "content_sha256": "f8895bd0b9bea4a01bec86edb3066f86183aaf995116e5ed9a33229026388f12",
+      "message_content_length": 3581,
+      "message_content_sha256": "01b8fc34b602848a4a1c09c2af862c32c5656fd7f6aaafea7b6a68a7a4601b96",
+      "has_reasoning_content": false,
+      "reasoning_content_length": 0,
+      "probe": "B",
+      "probe_label": "one-factor: explicitly disable thinking",
+      "essay_sha256": "F683F4C899BD0E2E146E9085D890CD8D1B2D659EF2083A0B087B1F816E410773",
+      "model": "deepseek-v4-pro",
+      "prompt_version": "feedback-prompt-v0.7.1",
+      "rendered_prompt_hash": "549a545a7bd2c771cb04474d693f686cf77ed668726102872f0cba8df45f05fe",
+      "system_prompt_chars": 1859,
+      "user_prompt_chars": 52587,
+      "total_request_chars": 54446,
+      "gate_selected_priorities": [
+        {
+          "diagnosis_id": "D001",
+          "category": "lexical_repetition",
+          "confidence": "medium",
+          "priority_score": 0.6649
+        }
+      ],
+      "payload_deltas_vs_production": [
+        "learner_profile_snapshot is None in the probe (production computes a first-submission snapshot); learner_model_context is therefore None",
+        "longitudinal_facts.comparable_task_count is 0 in the probe (production records 1 for the current submission)",
+        "status/longitudinal semantics otherwise identical (unavailable)"
+      ]
+    }
+  ]
+}

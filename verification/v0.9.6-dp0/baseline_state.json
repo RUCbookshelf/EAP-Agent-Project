@@ -1,0 +1,88 @@
+{
+  "audit_stage": "v0.9.6-DP0",
+  "stage": "DP0-A - Phase 0 baseline and safety",
+  "recorded_at_local": "2026-08-04T13:30:00+08:00",
+  "branch": "master",
+  "head": "01f6f11963e1c76fc7e9369a435ee5e6e8db04d1",
+  "head_short": "01f6f11",
+  "head_subject": "docs(v0.9.6-d0): audit production priority path validity",
+  "d0_baseline_commit": "8896828",
+  "git_status_short": [
+    " M AGENTS.md",
+    " M RUN_VERIFICATION_V0.7.md",
+    " M RUN_VERIFICATION_V0.8.2.md",
+    "?? .claude/",
+    "?? ARCHITECTURE_COUPLING_AUDIT_V0.9.5_A.md",
+    "?? CLAUDE.md",
+    "?? data/demo_journey_manifest.json"
+  ],
+  "recent_commits": [
+    "01f6f11 docs(v0.9.6-d0): audit production priority path validity",
+    "8896828 test(v0.9.6-c): close no-priority and sidebar repairs",
+    "df84f71 fix(v0.9.6-c2): restore native icon rendering",
+    "2e34d58 fix(v0.9.6-c2): correct sidebar icon state rendering",
+    "d2c28fe fix(v0.9.6-c2): restore sidebar collapse control"
+  ],
+  "processes_and_ports": {
+    "port_8000": "no listener (previous dev API instance stopped after D0)",
+    "port_8501": "no listener (previous dev Streamlit instance stopped after D0)",
+    "notes": [
+      "Two python processes from the code-review-graph tool were running (PIDs 26180, 30788); they are unrelated to the application.",
+      "A local HTTP proxy listens on 127.0.0.1:7890-7892 (PID 15932); environment-level networking context for provider calls."
+    ]
+  },
+  "development_database": {
+    "path": "data/writing_feedback.db",
+    "sha256": "62615C6C6ED65323FFA52E22ABBE2FEEF61E02C88DF8143B7872E86C67251810",
+    "size_bytes": 14352384,
+    "mtime_local": "2026-08-04T12:54:07",
+    "note": "Fingerprint changed from the D0 baseline (FA2DE352...FC5) through legitimate user activity after D0. This new value is the DP0 safety baseline; the audit must not change it."
+  },
+  "research_exports": {
+    "file_count": 776,
+    "directory_count": 388,
+    "baseline_manifest": "verification/v0.9.6-dp0/research_exports_baseline.json"
+  },
+  "active_configuration": {
+    "version": "config-v0.9.0",
+    "active_prompt_version": "feedback-prompt-v0.7.1",
+    "migration": 12,
+    "source": "D0 runtime verification and migration seeds; no configuration change is authorized in DP0-A"
+  },
+  "provider": {
+    "provider": "deepseek",
+    "model": "deepseek-v4-pro",
+    "base_url": "https://api.deepseek.com",
+    "credentials_configured": true,
+    "credentials_value": "[REDACTED]"
+  },
+  "installed_provider_sdk": {
+    "transport": "stdlib urllib (app/llm/deepseek.py); no OpenAI/DeepSeek SDK installed",
+    "requirements": [
+      "streamlit==1.60.0",
+      "fastapi==0.135.2",
+      "uvicorn==0.41.0",
+      "httpx==0.28.1",
+      "pydantic==2.13.4",
+      "python-dotenv==1.2.2",
+      "pytest==9.1.1",
+      "spacy==3.8.7",
+      "playwright==1.61.0 (test-only)"
+    ],
+    "note": "requests is used only by the frontend API client and is present transitively; the provider path itself uses only the standard library."
+  },
+  "preserved_user_owned_paths": [
+    "AGENTS.md",
+    "RUN_VERIFICATION_V0.7.md",
+    "RUN_VERIFICATION_V0.8.2.md",
+    ".claude/",
+    "ARCHITECTURE_COUPLING_AUDIT_V0.9.5_A.md",
+    "CLAUDE.md",
+    "data/demo_journey_manifest.json",
+    "data/writing_feedback.db",
+    "database backups",
+    "all 776 approved research export files",
+    "verification/v0.9.6-d0/** (frozen D0 evidence, preserved until DP0 closes)"
+  ],
+  "isolated_workspace": "C:\\tmp\\v096dp0 (fresh; D0 database C:\\tmp\\v096d0 preserved untouched)"
+}

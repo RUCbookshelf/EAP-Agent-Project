@@ -1,0 +1,21 @@
+{
+  "direct_diagnostic_calls": 2,
+  "calls": [
+    {
+      "probe": "A",
+      "model": "deepseek-v4-pro",
+      "http_status": 200,
+      "finish_reason": "length",
+      "json_parse_status": "success",
+      "duration_seconds": 27.05
+    },
+    {
+      "probe": "B",
+      "model": "deepseek-v4-pro",
+      "http_status": 200,
+      "finish_reason": "stop",
+      "json_parse_status": "success",
+      "duration_seconds": 10.85
+    }
+  ]
+}

@@ -1,0 +1,108 @@
+{
+  "audit_stage": "v0.9.6-DP0",
+  "stage": "DP0-A - proposed repair plan (Gate-1 deliverable; NOT implemented)",
+  "head": "01f6f11",
+  "status": "proposal only - requires explicit owner acceptance before DP0-B",
+  "primary_root_cause": "DeepSeek thinking mode runs by default; the current request omits the toggle, reasoning tokens consume 72% of the 1800-token output budget, JSON truncates (finish_reason=length), and thinking-mode latency pushes the correction attempt past the 30s timeout.",
+  "proposed_changes": [
+    {
+      "file": "app/llm/deepseek.py",
+      "change": "Add thinking={\"type\": \"disabled\"} to the structured-feedback request payload",
+      "old_value": "thinking parameter absent (provider default: enabled)",
+      "new_value": "payload[\"thinking\"] = {\"type\": \"disabled\"}",
+      "why": "PROVEN_PRIMARY: Probe B with this single change returned finish_reason=stop in 10.85s with 764 completion tokens and zero reasoning tokens; Probe A without it truncated at 1800 tokens (1300 reasoning).",
+      "scope": "applies only to this provider adapter, which serves only the structured-feedback path; no global thinking policy change; no reasoning content exposed or stored"
+    },
+    {
+      "file": "app/llm/deepseek.py",
+      "change": "Capture response metadata and classify truncation",
+      "old_value": "response id, returned model, finish_reason, usage, content length discarded before parsing",
+      "new_value": "Retain response id, returned model, finish_reason, usage (prompt/completion/total/reasoning), content length, and duration in last_request_metadata; raise ProviderOutputError with reason_code provider_output_truncated when finish_reason=length; emit a sanitized structured log line per call (no credentials, essay, prompt, or reasoning content)",
+      "why": "Answers DP0-A question C; enables the DP0-B acceptance evidence (finish_reason, token headroom) without any database migration or schema change"
+    },
+    {
+      "file": "app/config/settings.py",
+      "change": "Add provider-specific structured-feedback timeout as configuration",
+      "old_value": "timeout hardcoded at 30.0s (constructor default; factory passes nothing)",
+      "new_value": "settings field deepseek_timeout: float = 60.0 (env DEEPSEEK_TIMEOUT); factory passes it to DeepSeekProvider",
+      "why": "D0 correction attempts timed out at 30s; Probe A initial attempt took 27.05s under thinking mode. 60s is the smallest evidence-supported value with real headroom (Probe B: 10.85s), stays within the 30-90s policy bound, and keeps two attempts at <=120s < 150s.",
+      "scope": "provider-specific and configuration-driven; frontend timeouts, health checks, and other provider timeouts unchanged"
+    },
+    {
+      "file": "app/services/factory.py",
+      "change": "Pass settings.deepseek_timeout into DeepSeekProvider",
+      "old_value": "DeepSeekProvider(api_key, base_url, model, max_tokens=...); timeout default 30.0",
+      "new_value": "DeepSeekProvider(api_key, base_url, model, timeout=settings.deepseek_timeout, max_tokens=settings.llm_max_tokens)",
+      "why": "Wires the configuration value into the transport"
+    }
+  ],
+  "unchanged_by_proposal": {
+    "model": "deepseek-v4-pro (unchanged)",
+    "max_tokens": "1800 (unchanged - Probe B used 764 tokens; 1800 provides 135% headroom; DP0-B records per-case remaining headroom and may only raise to the smallest evidence-supported value within 4096 if headroom <20%)",
+    "active_feedback_prompt": "feedback-prompt-v0.7.1 (unchanged)",
+    "active_configuration_version": "config-v0.9.0 (unchanged - no ConfigurationPayload field changes; timeout lives in Settings/env)",
+    "StructuredFeedback_schema": "unchanged",
+    "DiagnosticGate": "unchanged",
+    "router_retry_policy": "unchanged (one correction attempt; request failures not retried; fallback preserved)",
+    "submission_client_timeout": "180s (unchanged)",
+    "database_schema": "unchanged (no migration)",
+    "api_schemas": "unchanged"
+  },
+  "expected_impact": {
+    "initial_attempt_latency": "~11s (Probe B) vs 27s (Probe A thinking)",
+    "correction_attempt_latency": "well under 30s with thinking disabled; total two-attempt budget <=120s",
+    "completion_tokens": "~764 (Probe B) vs 1800 hard stop (Probe A): ~58% fewer output tokens; cost reduction direction only, exact cost not estimated",
+    "headroom": ">=100% on the frozen D0-01 case (764 of 1800)"
+  },
+  "time_budgets": {
+    "per_call_timeout": 60.0,
+    "policy_bounds": "timeout min 30 / max 90; max_tokens max 4096",
+    "two_attempt_budget_max": 120.0,
+    "required_two_attempt_bound": "below 150 seconds",
+    "submission_client_timeout": 180.0,
+    "interaction": "end-to-end submission = analysis (~seconds) + provider (<=120s) + persistence; remains below 180s"
+  },
+  "observability_additions": [
+    "last_request_metadata: response_id, returned_model, finish_reason, usage tokens, content length, duration",
+    "sanitized structured log line per provider call (attempt index, duration, finish_reason, token counts, parse status, validation status, classification code)",
+    "ProviderOutputError reason_code provider_output_truncated for finish_reason=length"
+  ],
+  "tests_to_add_dp0b": [
+    "effective model remains deepseek-v4-pro",
+    "current official JSON response format is sent",
+    "effective thinking mode matches the accepted decision (disabled)",
+    "output budget matches the accepted evidence-based value",
+    "provider timeout matches the accepted evidence-based value",
+    "ordinary non-provider timeouts remain unchanged",
+    "finish_reason=stop accepted; finish_reason=length classified as truncation",
+    "incomplete JSON rejected; truncated JSON not bracket-repaired",
+    "missing required fields remain invalid",
+    "token usage recorded when returned; response id and returned model recorded",
+    "reasoning content neither logged nor stored",
+    "secret and essay redaction pass",
+    "initial-attempt success produces no correction attempt",
+    "one correctable validation failure permits one correction attempt",
+    "request failure follows the approved retry policy",
+    "fallback remains available after genuine provider failure and is never reported as live-provider success",
+    "total attempt budget bounded; provider call count bounded",
+    "first-draft and linked-revision submission timeouts remain 180 seconds",
+    "existing provider-router tests remain compatible",
+    "existing StructuredFeedback validation remains unchanged"
+  ],
+  "live_verification_matrix_dp0b": {
+    "cases": ["D0-01", "D0-02", "D0-05"],
+    "conditions": [
+      "fresh isolated database; normal application startup; current production configuration plus the accepted repair; real DeepSeek credentials",
+      "normal POST /api/v1/submissions; no monkeypatch; no fake provider; no manual database inserts",
+      "frozen essay hashes verified before each submission",
+      "required per case: provider=deepseek, model=deepseek-v4-pro, live success, fallback_used=false, initial attempt success, correction count 0, finish_reason=stop, JSON parse success, StructuredFeedback validation success, feedback persistence success, HTTP success, duration records, token usage, requested max_tokens, remaining headroom, schema version, priority/no-priority observational only"
+    ],
+    "success_threshold": "3 consecutive normal production submissions, 3 live DeepSeek successes, 0 fallback, 0 parse failures, 0 schema failures, 0 timeouts, 0 correction attempts, all within 180s, no finish_reason=length, no silent repair"
+  },
+  "failure_classifications_for_dp0b": ["DP0-B1 output truncated", "DP0-B2 provider too slow", "DP0-B3 JSON mode non-compliant", "DP0-B4 schema unstable", "DP0-B5 service instability", "DP0-B6 SDK/transport incompatibility", "DP0-B7 call budget exhausted"],
+  "commits_planned_dp0b": [
+    "fix(v0.9.6-dp0): stabilize DeepSeek structured feedback",
+    "test(v0.9.6-dp0): verify production provider reliability"
+  ],
+  "gate_requirement": "Do not implement any of the above until the owner explicitly accepts the DP0-B change set (Gate-1)."
+}

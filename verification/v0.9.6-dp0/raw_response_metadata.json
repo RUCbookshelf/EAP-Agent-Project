@@ -1,0 +1,71 @@
+{
+  "audit_stage": "v0.9.6-DP0",
+  "stage": "DP0-A Phase 3 - raw response metadata (redacted)",
+  "essay": "D0-01 frozen (SHA-256 verified before every probe)",
+  "note": "No raw response content is stored; only hashes, lengths, statuses, and metadata. reasoning content is never stored.",
+  "probes": [
+    {
+      "probe": "A",
+      "label": "current production request settings (thinking omitted)",
+      "provider_call_sequence": 1,
+      "http_status": 200,
+      "duration_seconds": 27.05,
+      "response_id": "2da8e609-2ca5-4dfa-b854-6952e831cfa5",
+      "returned_model": "deepseek-v4-pro",
+      "finish_reason": "length",
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "usage": {
+        "prompt_tokens": 14949,
+        "completion_tokens": 1800,
+        "total_tokens": 16749,
+        "reasoning_tokens": 1300,
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 14181
+      },
+      "content_length": 9296,
+      "content_sha256": "688fd6c463374246572d711ba80cc36ea070b98c4fe53711ca67d0c8a496ab09",
+      "message_content_length": 2150,
+      "has_reasoning_content": true,
+      "reasoning_content_length": 6334,
+      "json_parse_status": "success (this run; D0 runs were cut mid-string)",
+      "classification": "completion_tokens exactly 1800 = requested max_tokens; finish_reason=length; 72% of the output budget consumed by reasoning tokens"
+    },
+    {
+      "probe": "B",
+      "label": "single factor change: thinking={\"type\":\"disabled\"}",
+      "provider_call_sequence": 2,
+      "http_status": 200,
+      "duration_seconds": 10.85,
+      "response_id": "0cda7404-5d8f-4ab8-9ebe-bcf66156b902",
+      "returned_model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "usage": {
+        "prompt_tokens": 14949,
+        "completion_tokens": 764,
+        "total_tokens": 15713,
+        "reasoning_tokens": 0,
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 14181
+      },
+      "content_length": 4232,
+      "content_sha256": "f8895bd0b9bea4a01bec86edb3066f86183aaf995116e5ed9a33229026388f12",
+      "message_content_length": 3581,
+      "has_reasoning_content": false,
+      "reasoning_content_length": 0,
+      "json_parse_status": "success",
+      "classification": "complete generation (stop), 764 completion tokens, 0 reasoning tokens, 60% faster"
+    }
+  ],
+  "correction_prompt_inventory": {
+    "provider_call_used": false,
+    "messages_count": 3,
+    "system_chars": 1859,
+    "user_chars": 52587,
+    "correction_message_chars_with_sample_failure": 504,
+    "correction_message_max_chars_with_full_failure_text": 1235,
+    "total_request_chars_with_sample_failure": 54950,
+    "initial_total_request_chars": 54446,
+    "conclusion": "The correction request is only ~1% larger than the initial request; prompt size is not the dominant cause of the D0 correction-attempt timeout."
+  }
+}

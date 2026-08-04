@@ -1,0 +1,35 @@
+{
+  "audit_stage": "v0.9.6-DP0",
+  "stage": "DP0-A - database and export safety",
+  "development_database": {
+    "path": "data/writing_feedback.db",
+    "dp0_baseline": {
+      "sha256": "62615C6C6ED65323FFA52E22ABBE2FEEF61E02C88DF8143B7872E86C67251810",
+      "size_bytes": 14352384,
+      "mtime_local": "2026-08-04T12:54:07"
+    },
+    "after_dp0a_probes_and_tests": {
+      "sha256": "62615C6C6ED65323FFA52E22ABBE2FEEF61E02C88DF8143B7872E86C67251810",
+      "size_bytes": 14352384,
+      "mtime_local": "2026-08-04T12:54:07"
+    },
+    "unchanged": true,
+    "access_note": "Never opened by DP0-A; fingerprinted by file hash only. The fingerprint differs from the D0 baseline through legitimate user activity after D0 (recorded in baseline_state.json)."
+  },
+  "diagnostic_probe_database_usage": {
+    "database_inserts": 0,
+    "database_opens": 0,
+    "note": "The DP0-A diagnostic driver performs no database operations; probes are direct provider calls with in-process prompt reconstruction."
+  },
+  "test_database": {
+    "path": "C:\\tmp\\v096dp0\\tests.db",
+    "note": "Targeted pytest runs used DATABASE_URL override; file outside the repository and never committed."
+  },
+  "research_exports": {
+    "baseline": {"file_count": 776, "directory_count": 388},
+    "after_dp0a": {"file_count": 776, "directory_count": 388},
+    "delta": {"missing": 0, "changed": 0, "added": 0},
+    "baseline_manifest": "verification/v0.9.6-dp0/research_exports_baseline.json"
+  },
+  "d0_workspace": "C:\\tmp\\v096d0 preserved untouched (retention decision: keep until DP0 final evidence is safely committed; revisit at DP0 close)"
+}

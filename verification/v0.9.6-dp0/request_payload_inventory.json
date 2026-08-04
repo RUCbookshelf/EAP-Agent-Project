@@ -1,0 +1,57 @@
+{
+  "audit_stage": "v0.9.6-DP0",
+  "stage": "DP0-A Phase 1 - request payload inventory (current production request)",
+  "request_properties": {
+    "model": "deepseek-v4-pro",
+    "base_url": "https://api.deepseek.com",
+    "endpoint": "https://api.deepseek.com/chat/completions",
+    "stream": "not set (provider default; effectively false)",
+    "response_format": {"type": "json_object"},
+    "thinking_setting": "ABSENT from payload - neither explicitly enabled nor explicitly disabled; effective behavior depends on provider default (to be determined)",
+    "reasoning_effort": "ABSENT",
+    "temperature": 0.2,
+    "max_tokens_initial": 1800,
+    "max_tokens_correction": 3600,
+    "timeout_seconds": 30.0,
+    "messages_count_initial": 2,
+    "messages_count_correction": 3,
+    "system_prompt_characters": 1859,
+    "system_prompt_sha256": "1E429DC4547C96107FF2D2ED324C2D5277F280004D2DAFF2CD52EDBF2296FD59",
+    "user_prompt_characters": "recorded per probe (contains the frozen essay and calibration payload; full content never committed)",
+    "total_request_characters": "recorded per probe",
+    "word_json_explicitly_present": true,
+    "output_example_present": false,
+    "full_json_schema_present": true,
+    "schema_source": "payload['required_schema'] = StructuredFeedback.model_json_schema() (PromptBuilder.build, v0.7.1 branch)"
+  },
+  "user_payload_structure_v071": {
+    "submission": ["essay_text", "writing_prompt", "genre", "draft_stage", "timed", "time_limit_minutes", "tool_use", "submitted_at"],
+    "metrics": "list[name,value] selected for the diagnosis signal source metrics",
+    "diagnoses": "calibrated DiagnosisResult.all_signals (selected priorities + verified strengths)",
+    "diagnostic_calibration": "v0.6.1 screened gate payload",
+    "analysis_evidence": "selected_metric_results + input_quality + run metadata",
+    "learner_model_context": "screened learner profile (targets, trajectories, history, sufficiency, limitations)",
+    "learner_history": "screened history evidence by allowed ids",
+    "longitudinal_facts": "authoritative LongitudinalAssessment",
+    "revision_snapshot": "only when a linked revision exists",
+    "required_schema": "StructuredFeedback JSON schema"
+  },
+  "system_prompt_rules_relevant_to_output": [
+    "Return exactly one JSON object matching required_schema and no markdown",
+    "Zero or one priority is valid; never pad to two",
+    "Every evidence_quote must be one contiguous character-for-character substring of submission.essay_text",
+    "Exercises may target current selected priorities only and must obey confidence limits",
+    "Copy longitudinal_facts without alteration",
+    "State uncertainty and prototype limitations plainly"
+  ],
+  "correction_prompt_properties": {
+    "builder": "PromptBuilder.correction (app/prompts/builder.py)",
+    "structure": "original messages + one user correction message",
+    "correction_message": "Contains longitudinal repair instructions (when longitudinal fields failed), the instruction to return a corrected JSON object only, 'use only supplied ids', 'every evidence_quote must be copied character-for-character as one contiguous substring', and the validation failure text (first 800 chars)",
+    "contains_validation_failure_text": true,
+    "includes_malformed_response_copy": false,
+    "output_budget_correction": 3600,
+    "character_count": "recorded per probe"
+  },
+  "observability_gap": "The current adapter cannot answer the DP0-A questions A-F from its own records: it discards finish_reason, usage, response id, returned model, and raw content length before parsing."
+}
