@@ -4616,6 +4616,31 @@
             }
           ],
           "return_annotation": "dict"
+        },
+        {
+          "name": "update_practice_target_status",
+          "signature": "update_practice_target_status(practice_target_id: str, status: str, updated_at: str) -> dict | None",
+          "params": [
+            {
+              "name": "practice_target_id",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            },
+            {
+              "name": "status",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            },
+            {
+              "name": "updated_at",
+              "kind": "positional",
+              "annotation": "str",
+              "has_default": false
+            }
+          ],
+          "return_annotation": "dict | None"
         }
       ],
       "consumer_modules": [
