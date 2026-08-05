@@ -52,11 +52,15 @@ class FakeClient:
     def __init__(self):
         self.post_count = 0
         self.revision_post_count = 0
+        self.target_create_count = 0
+        self.attempt_post_count = 0
         self.journey = dict(
             st.session_state.get("harness_journey")
             or {"state": "feedback_no_practice_target", "events": []}
         )
         self.targets = list(st.session_state.get("harness_targets") or [])
+        self.exercises = list(st.session_state.get("harness_exercises") or [])
+        self.attempts = list(st.session_state.get("harness_attempts") or [])
         self.candidates = list(st.session_state.get("harness_candidates") or [])
         self.source_bundle = dict(st.session_state.get("harness_source_bundle") or {})
         self.submit_response = dict(st.session_state.get("harness_submit_response") or {})
@@ -107,14 +111,53 @@ class FakeClient:
     def create_exercise(self, practice_target_id, payload):
         return {"status": "practice_not_available"}
 
+    def create_practice_target(self, payload):
+        self.target_create_count += 1
+        response = st.session_state.get("harness_target_create_response")
+        if response is not None:
+            return dict(response)
+        return {"status": "practice_not_available", "reason": "harness default"}
+
+    def get_practice_target_context(self, student_id, practice_target_id):
+        response = st.session_state.get("harness_target_context")
+        if response is not None:
+            return dict(response)
+        return {
+            "context_status": "legacy",
+            "practice_target_id": practice_target_id,
+            "student_id": student_id,
+            "source_submission_id": 0,
+            "source_priority_id": None,
+            "target_code": "lexical_repetition_local",
+            "target_label": "Label",
+            "status": "active",
+            "priority_context": None,
+            "source_writing_text": "",
+        }
+
     def get_exercise_attempts(self, exercise_id):
-        return []
+        return list(self.attempts)
 
     def get_exercise_instances(self, practice_target_id):
-        return []
+        return list(self.exercises)
 
     def submit_exercise_attempt(self, exercise_id, payload):
-        return {}
+        self.attempt_post_count += 1
+        response = st.session_state.get("harness_attempt_response")
+        if response is not None:
+            attempt = dict(response)
+        else:
+            attempt = {
+            "attempt_id": "EA000001",
+            "exercise_id": exercise_id,
+            "student_id": payload.get("student_id", ""),
+            "attempt_number": 1,
+            "response_text": payload.get("response_text", ""),
+            "status": "submitted",
+            "evaluation": None,
+            }
+        self.attempts.append(attempt)
+        return attempt
 
 
 if "fake_client" not in st.session_state:

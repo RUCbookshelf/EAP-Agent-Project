@@ -28,6 +28,7 @@ from typing import Any
 
 from app.practice.mapping import (
     PriorityMappingError,
+    PriorityPracticeMappingService,
     PriorityTargetContract,
     diagnosis_contains_id,
 )
@@ -145,6 +146,28 @@ class PracticeTargetCreationService:
         if target.get("status") == "practice_not_available":
             return target
         return self._practice_writer.save_practice_target(target)
+
+    def create_or_reuse_from_intent(
+        self,
+        *,
+        student_id: str,
+        source_submission_id: int,
+        priority_index: int,
+    ) -> dict[str, Any]:
+        """Explicit user-triggered entry (WU4): resolve the persisted priority
+        from its reference components and create-or-reuse its target.
+
+        The UI carries only ``(source_submission_id, priority_index)``; the
+        stable reference is assembled server-side from the authoritative
+        bundle and every WU2 relationship check still applies.
+        """
+        mapper = PriorityPracticeMappingService(self._submission_reader)
+        contract = mapper.resolve_target_contract_by_components(
+            student_id=student_id,
+            source_submission_id=source_submission_id,
+            priority_index=priority_index,
+        )
+        return self.create_or_reuse_priority_target(contract)
 
     def _find_by_key(
         self,

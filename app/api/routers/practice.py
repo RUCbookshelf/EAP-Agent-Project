@@ -14,6 +14,7 @@ from app.api.deps import (
     require_student,
 )
 from app.practice.mapping import PriorityMappingError, PriorityPracticeMappingService
+from app.practice.task_context import PracticeTaskContextService
 
 router = APIRouter()
 
@@ -71,6 +72,28 @@ def get_practice_targets(student_id: str,
     return practice_reader.list_practice_targets(student_id)
 
 
+@router.get("/api/v1/students/{student_id}/practice-targets/{practice_target_id}/context")
+def get_practice_target_context(
+    student_id: str,
+    practice_target_id: str,
+    student_reader=Depends(get_practice_student_reader),
+    practice_reader=Depends(get_practice_reader),
+    practice_submission_reader=Depends(get_practice_submission_reader),
+) -> dict:
+    """Learner-owned, read-only focused task context for one target."""
+    require_student(student_reader, student_id)
+    service = PracticeTaskContextService(practice_submission_reader, practice_reader)
+    try:
+        return service.resolve_target_context(
+            student_id=student_id, practice_target_id=practice_target_id)
+    except PriorityMappingError as exc:
+        status = _STATUS_BY_MAPPING_KIND.get(exc.kind, 422)
+        raise HTTPException(
+            status,
+            "The practice target context could not be resolved.",
+        ) from exc
+
+
 @router.post("/api/v1/practice-targets")
 def create_practice_target(payload: dict,
                            target_creation_service=Depends(get_practice_target_creation_service),
@@ -80,6 +103,12 @@ def create_practice_target(payload: dict,
         if source_priority_id is not None:
             contract = _resolve_priority_contract(payload, practice_submission_reader)
             return target_creation_service.create_or_reuse_priority_target(contract)
+        if payload.get("priority_index") is not None:
+            return target_creation_service.create_or_reuse_from_intent(
+                student_id=payload.get("student_id", ""),
+                source_submission_id=payload.get("source_submission_id", 0),
+                priority_index=payload.get("priority_index"),
+            )
         return target_creation_service.create_legacy_target(
             student_id=payload.get("student_id", ""),
             source_submission_id=payload.get("source_submission_id", 0),
@@ -126,9 +155,16 @@ def submit_exercise_attempt(exercise_id: str, payload: dict,
     existing = practice_reader.get_exercise_instance(exercise_id)
     if existing is None:
         raise HTTPException(404, "Exercise instance not found.")
+    target = practice_reader.get_practice_target(existing.get("practice_target_id", ""))
+    if target is None:
+        raise HTTPException(404, "Practice target not found.")
+    student_id = payload.get("student_id", "")
+    if existing.get("student_id") != student_id or target.get("student_id") != student_id:
+        raise HTTPException(
+            403, "The attempt learner does not own the exercise target.")
     attempts = practice_reader.list_exercise_attempts(exercise_id)
     next_num = len(attempts) + 1
-    attempt = practice_service.submit_attempt(exercise_id, payload.get("student_id", ""), payload.get("response_text", ""), next_num)
+    attempt = practice_service.submit_attempt(exercise_id, student_id, payload.get("response_text", ""), next_num)
     if attempt.get("status") != "invalid_input":
         attempt = practice_writer.save_exercise_attempt(attempt)
         # Conservative rule-based evaluation, persisted with the attempt.

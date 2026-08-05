@@ -27,6 +27,7 @@ from app.ui.components import (
 from app.ui.features.student.formatting import _feedback_category_label
 from app.ui.features.student.navigation import (
     _finish_revision_cycle,
+    _navigate_priority_practice,
     _navigate_student_page,
 )
 from app.ui.features.student.session import _writing_saved_for_learner
@@ -173,8 +174,13 @@ def _render_priority_addressed(priorities: list[dict], index: int, lang: str) ->
     )
 
 
-def _render_revision_next_steps(lang: str) -> None:
-    """Clear completion next-step actions for a finished revision cycle."""
+def _render_revision_next_steps(lang: str, source_submission_id: int, priority_index: int) -> None:
+    """Clear completion next-step actions for a finished revision cycle.
+
+    The Open Practice action carries the addressed priority as an explicit
+    intent (source submission + zero-based priority index) so the Practice
+    page opens the exact priority-derived target (v0.9.7-B WU4).
+    """
     st.button(
         t("student_revision_finish_cycle", lang),
         type="primary",
@@ -187,8 +193,8 @@ def _render_revision_next_steps(lang: str) -> None:
         t("student_revision_open_practice", lang),
         use_container_width=True,
         key="revision_open_practice",
-        on_click=_navigate_student_page,
-        args=("practice", lang),
+        on_click=_navigate_priority_practice,
+        args=(int(source_submission_id), int(priority_index), lang),
     )
     info_box("student_revision_practice_note", lang)
     st.button(
@@ -402,6 +408,9 @@ def render_revision_page(api_client: StudentRevisionApiPort, lang: str) -> None:
         addressed_index = int(
             (saved.get("ui_submission") or {}).get("revision_priority_index") or 0
         )
+        addressed_source = int(
+            (saved.get("ui_submission") or {}).get("revision_of_submission_id") or 0
+        )
         _render_priority_addressed(addressed, addressed_index, lang)
         technical_caption(
             f"{t('student_revision_source_reference', lang)}: "
@@ -409,7 +418,7 @@ def render_revision_page(api_client: StudentRevisionApiPort, lang: str) -> None:
             f"{t('student_revision_saved_reference', lang)}: #{saved.get('submission_id', '?')}"
         )
         _render_revision_observation(saved, lang)
-        _render_revision_next_steps(lang)
+        _render_revision_next_steps(lang, addressed_source, addressed_index)
         return
 
     try:
@@ -518,7 +527,9 @@ def render_revision_page(api_client: StudentRevisionApiPort, lang: str) -> None:
             f"{t('student_revision_saved_reference', lang)}: "
             f"#{existing_revision.get('essay_id', '?')}"
         )
-        _render_revision_next_steps(lang)
+        _render_revision_next_steps(
+            lang, source_id, _priority_selection(priorities, source_id)[0]
+        )
         limitation_notice("student_revision_boundary", lang)
         return
 

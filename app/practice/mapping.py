@@ -215,6 +215,12 @@ def build_target_contract(
     """
     if not isinstance(bundle, dict):
         raise PriorityMappingError("source_not_found", "Source submission bundle is missing.")
+    if isinstance(priority_index, bool) or not isinstance(priority_index, int):
+        raise PriorityMappingError(
+            "invalid_reference", "priority_index must be a non-negative integer.")
+    if priority_index < 0:
+        raise PriorityMappingError(
+            "invalid_reference", "priority_index must be a non-negative integer.")
     if bundle.get("student_id") != student_id:
         raise PriorityMappingError(
             "cross_student",
@@ -335,5 +341,40 @@ class PriorityPracticeMappingService:
             bundle,
             student_id=student_id,
             feedback_id=feedback_id,
+            priority_index=priority_index,
+        )
+
+    def resolve_target_contract_by_components(
+        self,
+        *,
+        student_id: str,
+        source_submission_id: int,
+        priority_index: int,
+    ) -> PriorityTargetContract:
+        """Resolve one persisted priority from its reference components.
+
+        Used by the WU4 explicit entry transfer: the Student UI carries only
+        ``(source_submission_id, priority_index)``; the persisted feedback
+        record id is resolved from the authoritative bundle and the stable
+        reference is assembled here (never in UI code).
+        """
+        bundle = self._submission_reader.get_submission_bundle(source_submission_id)
+        if bundle is None:
+            raise PriorityMappingError("source_not_found", "Source submission not found.")
+        if bundle.get("student_id") != student_id:
+            raise PriorityMappingError(
+                "cross_student",
+                "Source submission does not belong to the requested learner.",
+            )
+        feedback_id = bundle.get("feedback_id")
+        if feedback_id is None:
+            raise PriorityMappingError(
+                "source_not_found",
+                "No persisted feedback record exists for the source submission.",
+            )
+        return build_target_contract(
+            bundle,
+            student_id=student_id,
+            feedback_id=int(feedback_id),
             priority_index=priority_index,
         )

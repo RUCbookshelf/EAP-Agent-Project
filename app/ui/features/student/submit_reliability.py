@@ -30,6 +30,12 @@ _OUTCOME_MESSAGES = {
         "UNCONFIRMED": "student_revision_timeout_unconfirmed",
         "PENDING": "student_revision_submit_pending",
     },
+    "PRACTICE_ATTEMPT": {
+        "CONFIRMED_SUCCESS": "student_practice_submit_pending",
+        "STILL_PROCESSING": "student_practice_submit_pending",
+        "UNCONFIRMED": "student_practice_submit_pending",
+        "PENDING": "student_practice_submit_pending",
+    },
 }
 
 

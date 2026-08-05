@@ -23,6 +23,7 @@ from app.ui.features.student.formatting import _feedback_category_label
 from app.ui.features.student.navigation import (
     _finish_feedback_cycle,
     _navigate_priority_revision,
+    _navigate_priority_practice,
     _navigate_student_page,
     _navigate_writing_revision,
 )
@@ -42,13 +43,20 @@ def render_feedback_content(result: dict, api_client: StudentFeedbackApiPort, la
 
     section_header("student_feedback_priorities", lang=lang)
     if has_priority:
-        for item in priorities[:2]:
+        for index, item in enumerate(priorities[:2]):
             feedback_priority_card(
                 category=_feedback_category_label(item.get("category", ""), lang),
                 evidence_quote_text="",
                 explanation=item.get("explanation", ""),
                 revision_guidance=item.get("revision_guidance", ""),
                 lang=lang,
+            )
+            st.button(
+                t("student_feedback_practice_priority", lang),
+                use_container_width=True,
+                key=f"feedback_practice_priority_{index}",
+                on_click=_navigate_priority_practice,
+                args=(int(result.get("submission_id") or 0), index, lang),
             )
     else:
         empty_state(
@@ -71,13 +79,6 @@ def render_feedback_content(result: dict, api_client: StudentFeedbackApiPort, la
             key="feedback_primary_action",
             on_click=_navigate_priority_revision,
             args=(int(result.get("submission_id") or 0), lang),
-        )
-        st.button(
-            t("student_feedback_open_practice", lang),
-            use_container_width=True,
-            key="feedback_practice_action",
-            on_click=_navigate_student_page,
-            args=("practice", lang),
         )
         info_box("student_feedback_practice_note", lang)
     else:

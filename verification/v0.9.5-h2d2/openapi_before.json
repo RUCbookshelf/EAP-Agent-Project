@@ -7775,6 +7775,57 @@
           "summary": "Get Practice Targets"
         }
       },
+      "/api/v1/students/{student_id}/practice-targets/{practice_target_id}/context": {
+        "get": {
+          "description": "Learner-owned, read-only focused task context for one target.",
+          "operationId": "get_practice_target_context_api_v1_students__student_id__practice_targets__practice_target_id__context_get",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "student_id",
+              "required": true,
+              "schema": {
+                "title": "Student Id",
+                "type": "string"
+              }
+            },
+            {
+              "in": "path",
+              "name": "practice_target_id",
+              "required": true,
+              "schema": {
+                "title": "Practice Target Id",
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "additionalProperties": true,
+                    "title": "Response Get Practice Target Context Api V1 Students  Student Id  Practice Targets  Practice Target Id  Context Get",
+                    "type": "object"
+                  }
+                }
+              },
+              "description": "Successful Response"
+            },
+            "422": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/HTTPValidationError"
+                  }
+                }
+              },
+              "description": "Validation Error"
+            }
+          },
+          "summary": "Get Practice Target Context"
+        }
+      },
       "/api/v1/students/{student_id}/profile": {
         "get": {
           "operationId": "get_profile_api_v1_students__student_id__profile_get",

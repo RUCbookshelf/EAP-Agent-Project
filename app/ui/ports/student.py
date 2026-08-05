@@ -29,6 +29,10 @@ class StudentFeedbackApiPort(Protocol):
 
 
 class StudentPracticeApiPort(Protocol):
+    def create_practice_target(
+        self, payload: dict[str, Any]
+    ) -> dict[str, Any]: ...
+
     def create_exercise(
         self, practice_target_id: str, payload: dict[str, Any]
     ) -> dict[str, Any]: ...
@@ -40,6 +44,10 @@ class StudentPracticeApiPort(Protocol):
     ) -> list[dict[str, Any]]: ...
 
     def get_practice_targets(self, student_id: str) -> list[dict[str, Any]]: ...
+
+    def get_practice_target_context(
+        self, student_id: str, practice_target_id: str
+    ) -> dict[str, Any]: ...
 
     def submit_exercise_attempt(
         self, exercise_id: str, payload: dict[str, Any]

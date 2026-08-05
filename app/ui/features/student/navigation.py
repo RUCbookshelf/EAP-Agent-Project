@@ -62,6 +62,22 @@ def _navigate_priority_revision(source_submission_id: int, lang: str) -> None:
     st.session_state["sidebar_page"] = t("student_revision_title", lang)
 
 
+def _navigate_priority_practice(source_submission_id: int, priority_index: int, lang: str) -> None:
+    """Transfer an explicit Priority-to-Practice intent (v0.9.7-B WU4).
+
+    Carries only persisted-reference components in session state: the source
+    submission id and the zero-based priority index. The Practice page
+    revalidates them against persisted records through the server before any
+    target creation or reuse; no priority content is copied into session
+    state.
+    """
+    st.session_state["practice_source_submission_id"] = int(source_submission_id)
+    st.session_state["practice_priority_index"] = int(priority_index)
+    st.session_state.pop("practice_target_preset", None)
+    st.session_state.pop("practice_intent_invalid", None)
+    st.session_state["sidebar_page"] = t("practice", lang)
+
+
 def _finish_revision_cycle(lang: str) -> None:
     """Acknowledge a finished priority-guided revision cycle and return to Home.
 

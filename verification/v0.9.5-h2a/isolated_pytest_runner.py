@@ -75,6 +75,7 @@ G_ALLOWLIST = (
     "app/practice/mapping.py,"
     "app/practice/schemas.py,"
     "app/practice/target_creation.py,"
+    "app/practice/task_context.py,"
     "app/api/routers/practice.py"
 )
 
