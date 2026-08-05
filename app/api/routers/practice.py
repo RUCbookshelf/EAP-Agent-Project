@@ -16,6 +16,55 @@ from app.api.deps import (
 router = APIRouter()
 
 
+_STATUS_BY_MAPPING_KIND = {
+    "invalid_reference": 422,
+    "cross_student": 403,
+    "source_not_found": 404,
+    "malformed_priority": 422,
+    "unresolved_priority": 422,
+    "unsupported_category": 422,
+}
+
+
+def _resolve_priority_contract(payload: dict, submission_reader) -> dict:
+    """Resolve and validate the persisted priority referenced by the payload.
+
+    Priority-derived requests must not supply authoritative priority content:
+    every target field is loaded from persistence and client-supplied values
+    that conflict with the resolved contract are rejected.
+    """
+    from app.practice.mapping import (
+        PriorityMappingError,
+        PriorityPracticeMappingService,
+    )
+
+    mapper = PriorityPracticeMappingService(submission_reader)
+    try:
+        contract = mapper.resolve_target_contract(
+            student_id=payload.get("student_id", ""),
+            source_submission_id=payload.get("source_submission_id", 0),
+            source_priority_id=payload.get("source_priority_id"),
+        )
+    except PriorityMappingError as exc:
+        status = _STATUS_BY_MAPPING_KIND.get(exc.kind, 422)
+        raise HTTPException(
+            status,
+            "The priority reference could not be resolved to a valid practice target.",
+        ) from exc
+    for key, authoritative in (
+        ("target_code", contract.target_code),
+        ("target_label", contract.target_label),
+    ):
+        supplied = payload.get(key)
+        if supplied is not None and supplied != authoritative:
+            raise HTTPException(
+                422, f"{key} conflicts with the resolved priority.")
+    supplied_evidence = payload.get("evidence_ids")
+    if supplied_evidence is not None and supplied_evidence != contract.evidence_ids:
+        raise HTTPException(422, "evidence_ids conflict with the resolved priority.")
+    return contract
+
+
 @router.get("/api/v1/students/{student_id}/practice-targets")
 def get_practice_targets(student_id: str,
                          student_reader=Depends(get_practice_student_reader),
@@ -27,16 +76,33 @@ def get_practice_targets(student_id: str,
 @router.post("/api/v1/practice-targets")
 def create_practice_target(payload: dict,
                            practice_writer=Depends(get_practice_writer),
-                           practice_service=Depends(get_practice_service)) -> dict:
+                           practice_service=Depends(get_practice_service),
+                           practice_submission_reader=Depends(get_practice_submission_reader)) -> dict:
     svc = practice_service
-    target = svc.create_practice_target(
-        student_id=payload.get("student_id", ""),
-        source_submission_id=payload.get("source_submission_id", 0),
-        source_diagnosis_id=payload.get("source_diagnosis_id", ""),
-        target_code=payload.get("target_code", ""),
-        target_label=payload.get("target_label", ""),
-        gate_status=payload.get("gate_status", "selected"),
-    )
+    source_priority_id = payload.get("source_priority_id")
+    if source_priority_id is not None:
+        contract = _resolve_priority_contract(payload, practice_submission_reader)
+        target = svc.create_practice_target(
+            student_id=contract.student_id,
+            source_submission_id=contract.source_submission_id,
+            source_diagnosis_id=contract.source_diagnosis_id,
+            target_code=contract.target_code,
+            target_label=contract.target_label,
+            source_priority_id=contract.source_priority_id,
+            evidence_ids=contract.evidence_ids,
+            gate_status=contract.diagnostic_gate_status,
+        )
+    else:
+        target = svc.create_practice_target(
+            student_id=payload.get("student_id", ""),
+            source_submission_id=payload.get("source_submission_id", 0),
+            source_diagnosis_id=payload.get("source_diagnosis_id", ""),
+            target_code=payload.get("target_code", ""),
+            target_label=payload.get("target_label", ""),
+            source_priority_id=None,
+            evidence_ids=payload.get("evidence_ids") or [],
+            gate_status=payload.get("gate_status", "selected"),
+        )
     if target.get("status") != "practice_not_available":
         target = practice_writer.save_practice_target(target)
     return target

@@ -34,6 +34,7 @@ from app.config import load_settings  # noqa: E402
 from app.database import Database  # noqa: E402
 from app.journey.service import JourneyService  # noqa: E402
 from app.models import EssaySubmission  # noqa: E402
+from app.practice.mapping import TARGET_CODE_MAP  # noqa: E402
 from app.practice.service import PracticeService  # noqa: E402
 from app.services import build_submission_service  # noqa: E402
 
@@ -55,12 +56,6 @@ DEMO_ATTEMPT = (
     "Communities may plant trees and reduce waste. Schools can encourage public transport "
     "and teach children about nature, so everyone can value clean air."
 )
-# Diagnosis category -> supported practice target code.
-TARGET_CODE_MAP = {
-    "lexical_repetition": "lexical_repetition_local",
-    "connective_use": "connective_overuse",
-    "sentence_length_pattern": "long_sentence",
-}
 
 
 def _repository() -> Database:
