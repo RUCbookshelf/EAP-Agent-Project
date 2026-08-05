@@ -1,0 +1,67 @@
+{
+  "run_id": "v0.9.7-c-wu3-20260805-r1",
+  "en_1280x900": {
+    "combination": "en 1280x900",
+    "actions": {
+      "open_revision_present": true,
+      "open_practice_present": true,
+      "mobile_sizing_ok": "desktop"
+    },
+    "action_navigation": {
+      "open_practice_reached_target": true
+    },
+    "reload_reentry": {
+      "grouped_view_persists": true
+    },
+    "journey_reads_zero_writes": true
+  },
+  "zh_1280x900": {
+    "combination": "zh_CN 1280x900",
+    "actions": {
+      "open_revision_present": true,
+      "open_practice_present": true,
+      "mobile_sizing_ok": "desktop"
+    },
+    "action_navigation": {
+      "open_practice_reached_target": true
+    },
+    "reload_reentry": {
+      "grouped_view_persists": true
+    },
+    "journey_reads_zero_writes": true
+  },
+  "en_390x844": {
+    "combination": "en 390x844",
+    "actions": {
+      "open_revision_present": true,
+      "open_practice_present": true,
+      "mobile_sizing_ok": true
+    },
+    "action_navigation": {
+      "open_practice_reached_target": true
+    },
+    "reload_reentry": {
+      "grouped_view_persists": true
+    },
+    "journey_reads_zero_writes": true
+  },
+  "zh_390x844": {
+    "combination": "zh_CN 390x844",
+    "actions": {
+      "open_revision_present": true,
+      "open_practice_present": true,
+      "mobile_sizing_ok": true
+    },
+    "action_navigation": {
+      "open_practice_reached_target": true
+    },
+    "reload_reentry": {
+      "grouped_view_persists": true
+    },
+    "journey_reads_zero_writes": true
+  },
+  "console_errors": [],
+  "page_errors": [],
+  "remote_requests": [],
+  "ports_cleaned": true
+}
