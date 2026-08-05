@@ -3,7 +3,7 @@
 | Item | Status |
 |---|---|
 | v0.9.7-A Priority-Guided Learning Cycle Completion | COMPLETE and verified (focused 14 passed; affected regression 293 passed; full non-live core 860 passed / 8 skipped / exit 0; `run.bat --verify` PASS; rendered matrix all four locale/viewport combinations PASS; evidence verification/v0.9.7-a/v0.9.7-a-20260804-r1/) |
-| v0.9.7-B Practice Target Generation and Practice Workflow | not started |
+| v0.9.7-B Practice Target Generation and Practice Workflow | WU1 audit + protocol freeze COMPLETE (V0.9.7_B_PRACTICE_WORKFLOW_AUDIT.md, V0.9.7_B_SPEC.md); WU2 priority-to-practice mapping + provenance COMPLETE (RUN_VERIFICATION_V0.9.7_B_WU2.md; focused 76 passed; affected 408 passed; full non-live core 936 passed / 8 skipped / exit 0; `run.bat --verify` PASS); WU3 (idempotent creation/reuse) next; v0.9.7-B overall NOT complete |
 | v0.9.7-C Student Journey Functional Completion | not started |
 | v0.9.7-D Student UI/UX Redesign and Visual Polish | not started |
 | v0.9.7-E Responsive, Mobile, and Accessibility Refinement | not started |
@@ -16,6 +16,19 @@ unsubmitted. Automatic Priority-to-Practice target generation remains a
 v0.9.7-B item. All 15 acceptance criteria are satisfied; closure HEAD
 `209a8a8` (five focused commits). v0.9.7-A is complete, verified, and
 closed. Stop before v0.9.7-B.
+
+**v0.9.7-B WU1-WU2 (2026-08-05):** WU1 froze the practice-workflow audit and
+specification (docs/development/V0.9.7_B_PRACTICE_WORKFLOW_AUDIT.md,
+V0.9.7_B_SPEC.md; HEAD `7fdf875`). WU2 implemented the production
+priority-to-practice mapping and provenance contract: one persisted Feedback
+priority resolves into a validated Practice-target creation payload with a
+stable `PRIO-{feedback_id}-{priority_index}` reference, the production
+category map (demo now imports it), `source_priority_id`/`evidence_ids`
+forwarding through the API, and ownership/source validation before any
+priority-derived write (see RUN_VERIFICATION_V0.9.7_B_WU2.md). No schema or
+migration change; no UI automatic target creation; no idempotency/completion.
+WU3 (idempotent target creation and reuse) is the next planned work unit;
+v0.9.7-B as a whole is not yet complete. Do not begin v0.9.7-C.
 
 # Master roadmap
 

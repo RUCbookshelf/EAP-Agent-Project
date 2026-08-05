@@ -1,3 +1,30 @@
+## Current v0.9.7-B WU2 State
+
+- Status: WU1 (audit + protocol freeze) COMPLETE; WU2 (Priority-to-Practice
+  mapping and provenance) COMPLETE - all 24 WU2 acceptance criteria
+  satisfied; WU3 (idempotent target creation and reuse) is the next planned
+  work unit; v0.9.7-B as a whole is NOT complete.
+- Governing protocol: docs/development/V0.9.7_B_PRACTICE_WORKFLOW_AUDIT.md +
+  docs/development/V0.9.7_B_SPEC.md (frozen at HEAD `7fdf875`).
+- Mapping contract: one persisted Feedback priority
+  (`feedback_records.feedback_json.priority_feedback[index]`) resolves to a
+  validated Practice-target creation payload; stable zero-based reference
+  `PRIO-{feedback_id}-{priority_index}`; production category map
+  (lexical_repetition/connective_use/sentence_length_pattern -> the three
+  supported exercise codes); `evidence_ids = [str(feedback_id)]`;
+  unmapped/malformed/stale/cross-* relationships fail safely with no write.
+- API: `POST /api/v1/practice-targets` now forwards
+  `source_priority_id`/`evidence_ids` and validates priority-derived
+  requests before persistence (403/404/422 per the canonical error
+  taxonomy); no new endpoint; no Student UI automatic target creation.
+- Implementation surface: new `app/practice/mapping.py`; router forwarding
+  + validation; demo script imports the production map; 76 new focused
+  tests; no migration, no locale change (555/555), no Journey change.
+- Verification: focused 76 passed; affected regression 408 passed; full
+  non-live core 936 passed / 8 skipped / exit 0; `run.bat --verify` PASS;
+  demo smoke PASS; evidence RUN_VERIFICATION_V0.9.7_B_WU2.md.
+- Next: v0.9.7-B WU3. Do not begin WU4-WU6 or v0.9.7-C in this stage.
+
 ## Current v0.9.7-A State
 
 - Status: COMPLETE - v0.9.7-A is complete, verified, and closed; all 15

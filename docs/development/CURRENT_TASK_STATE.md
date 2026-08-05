@@ -1,4 +1,32 @@
 **Date:** 2026-08-04
+**Current task:** v0.9.7-B Work Unit 2 - Priority-to-Practice Mapping and
+Provenance
+**Status:** COMPLETE - all 24 WU2 acceptance criteria satisfied; WU3
+(idempotent target creation and reuse) is the next planned work unit;
+v0.9.7-B as a whole is NOT complete (see RUN_VERIFICATION_V0.9.7_B_WU2.md).
+
+- WU1 (audit + protocol freeze) is complete: docs/development/
+  V0.9.7_B_PRACTICE_WORKFLOW_AUDIT.md and V0.9.7_B_SPEC.md at HEAD `7fdf875`.
+- WU2 implemented the production mapping + provenance contract: stable
+  zero-based priority reference `PRIO-{feedback_id}-{priority_index}`,
+  production category map (lexical_repetition -> lexical_repetition_local,
+  connective_use -> connective_overuse, sentence_length_pattern ->
+  long_sentence; demo script imports the production map), validated
+  `PriorityTargetContract`, `source_priority_id`/`evidence_ids` forwarded
+  through the API and persisted, and ownership/source validation before any
+  priority-derived write (cross-student 403; missing source 404; malformed/
+  stale/fabricated/unsupported/conflicting 422; zero writes on failure).
+- No schema or migration change (evidence-based); no Student UI automatic
+  target creation; no idempotency, completion, or Journey change; locale
+  parity 555/555.
+- Verification: focused 76 passed; affected regression 408 passed; full
+  non-live core 936 passed / 8 skipped / exit 0 (one pre-existing readiness-
+  gate timing flake documented in the report; clean on identical-env re-run);
+  `run.bat --verify` PASS; demo smoke PASS on an isolated DB.
+- Next: v0.9.7-B WU3 (idempotent target creation and reuse). Do not begin
+  WU4-WU6 or v0.9.7-C in this stage.
+
+**Date:** 2026-08-04
 **Current task:** v0.9.7-A Priority-Guided Learning Cycle Completion
 **Status:** COMPLETE - v0.9.7-A is closed; all 15 acceptance criteria
 satisfied; closure HEAD `209a8a8` (five focused commits; see
