@@ -147,7 +147,8 @@ class JourneyCycle(BaseModel):
     practice_cycles: list[JourneyPracticeCycle] = []
     current_state: str
     chronology: list[dict[str, Any]] = []
-    # Populated by WU2 (safe Journey actions); empty in WU1.
+    # Safe Journey actions (WU2): descriptors with stable references only;
+    # the destination pages validate learner ownership before rendering.
     available_actions: list[dict[str, Any]] = []
     limitations: list[str] = []
 
@@ -499,6 +500,8 @@ def build_cycles(
             practice_cycles=practice_cycles,
             current_state=current_state,
             chronology=chronology,
+            available_actions=_cycle_actions(root_view, revisions, stages,
+                                             practice_cycles),
             limitations=limitations,
         ))
 
@@ -556,6 +559,11 @@ def build_cycles(
             practice_cycles=unlinked_cycles,
             current_state=current_state,
             chronology=[],
+            available_actions=[
+                {"action": "open_practice",
+                 "practice_target_id": pc.practice_target_id}
+                for pc in unlinked_cycles
+            ],
             limitations=[
                 "Practice target source submissions could not be resolved "
                 "from the persisted records; these activities are shown "
@@ -563,6 +571,45 @@ def build_cycles(
         ))
 
     return [cycle.model_dump(mode="json") for cycle in cycles]
+
+
+def _cycle_actions(
+    root: JourneySubmissionView | None,
+    revisions: list[JourneySubmissionView],
+    stages: list[JourneyFeedbackStage],
+    practice_cycles: list[JourneyPracticeCycle],
+) -> list[dict[str, Any]]:
+    """Explicit Journey actions with stable references only.
+
+    - ``open_revision`` is exposed per submission that has a persisted
+      feedback record (the Revision page resolves candidates from the
+      persisted submission bundle; without feedback there is no reliable
+      destination, so no action is fabricated).
+    - ``open_practice`` is exposed per Practice target (the Practice page
+      opens any learner-owned target, active or completed, by id).
+    - Feedback is NOT exposed: the Feedback page is session-scoped by
+      design (v0.9.6-C1/v0.9.7-A), so no reliable destination exists from
+      a fresh Journey entry.
+    """
+    feedback_submission_ids = {stage.submission_id for stage in stages}
+    actions: list[dict[str, Any]] = []
+    if root is not None and root.submission_id in feedback_submission_ids:
+        actions.append({
+            "action": "open_revision",
+            "submission_id": root.submission_id,
+        })
+    for revision in revisions:
+        if revision.submission_id in feedback_submission_ids:
+            actions.append({
+                "action": "open_revision",
+                "submission_id": revision.submission_id,
+            })
+    for practice in practice_cycles:
+        actions.append({
+            "action": "open_practice",
+            "practice_target_id": practice.practice_target_id,
+        })
+    return actions
 
 
 def _event_belongs(

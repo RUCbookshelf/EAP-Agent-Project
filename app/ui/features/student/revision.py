@@ -458,6 +458,11 @@ def render_revision_page(api_client: StudentRevisionApiPort, lang: str) -> None:
         ),
         None,
     )
+    if preset_source is not None and preset_index is None:
+        # A Journey/FB transfer reference that no longer resolves must
+        # fail safely: show an honest note instead of silently opening
+        # another source (v0.9.7-C WU2).
+        st.session_state["revision_preset_invalid"] = True
     selected_label = st.selectbox(
         t("student_revision_select_source", lang),
         list(labels),
@@ -465,6 +470,8 @@ def render_revision_page(api_client: StudentRevisionApiPort, lang: str) -> None:
         key="revision_source_select",
     )
     selected = labels[selected_label]
+    if st.session_state.pop("revision_preset_invalid", None):
+        warning_box("student_revision_preset_invalid", lang)
     source_id = int(selected["essay_id"])
     st.session_state[_REVISION_BASELINE_KEY] = _revision_baseline(candidates, source_id)
     try:

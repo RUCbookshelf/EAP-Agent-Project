@@ -78,6 +78,36 @@ def _navigate_priority_practice(source_submission_id: int, priority_index: int, 
     st.session_state["sidebar_page"] = t("practice", lang)
 
 
+def _navigate_journey_revision(source_submission_id: int, lang: str) -> None:
+    """Open the Revision page for one persisted source (v0.9.7-C WU2).
+
+    Journey navigation carries only the stable submission reference; the
+    Revision page re-reads the source from persistence and validates the
+    reference against the current learner's candidates. A stale or
+    cross-learner reference renders an honest note instead of silently
+    opening another record. Navigation never writes and never creates a
+    revision.
+    """
+    st.session_state["revision_source_preset"] = int(source_submission_id)
+    st.session_state["sidebar_page"] = t("student_revision_title", lang)
+
+
+def _navigate_journey_practice(practice_target_id: str, lang: str) -> None:
+    """Open an existing learner-owned Practice target (v0.9.7-C WU2).
+
+    Journey navigation carries only the stable target reference; the
+    Practice page validates it against the learner's persisted targets
+    (active or completed) and renders the saved state. A stale or
+    cross-learner reference renders an honest note. Navigation never
+    creates a target, exercise, attempt, or evaluation.
+    """
+    st.session_state["practice_target_preset"] = str(practice_target_id)
+    st.session_state.pop("practice_source_submission_id", None)
+    st.session_state.pop("practice_priority_index", None)
+    st.session_state.pop("practice_intent_invalid", None)
+    st.session_state["sidebar_page"] = t("practice", lang)
+
+
 def _finish_revision_cycle(lang: str) -> None:
     """Acknowledge a finished priority-guided revision cycle and return to Home.
 

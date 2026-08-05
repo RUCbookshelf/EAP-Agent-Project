@@ -183,8 +183,19 @@ def _selected_target(targets: list[dict], learner_id: str) -> dict | None:
     """
     preset = st.session_state.pop("practice_target_preset", None)
     if preset:
+        matched = any(
+            item.get("practice_target_id") == preset
+            and item.get("student_id") == learner_id
+            for item in targets
+        )
+        if not matched:
+            # A Journey preset that no longer resolves must fail safely:
+            # show an honest note instead of silently switching to another
+            # target (v0.9.7-C WU2).
+            st.session_state["practice_preset_invalid"] = True
         for item in targets:
-            if item.get("practice_target_id") == preset:
+            if (item.get("practice_target_id") == preset
+                    and item.get("student_id") == learner_id):
                 _remember_selection(learner_id, item)
                 return item
     previous = st.session_state.get("practice_selected_target_v2")
@@ -276,6 +287,8 @@ def render_practice_page(api_client: StudentPracticeApiPort, lang: str) -> None:
         with st.spinner(t("practice_loading", lang)):
             targets = api_client.get_practice_targets(learner_id)
             selected = _selected_target(targets, learner_id)
+            if st.session_state.pop("practice_preset_invalid", None):
+                warning_box("student_practice_preset_invalid", lang)
             context = None
             exercise = None
             attempts: list[dict] = []
