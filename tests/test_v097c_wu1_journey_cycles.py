@@ -223,7 +223,14 @@ class TestCycleGrouping:
         assert cycle["revisions"][0]["revision_of_submission_id"] == records["essay_id"]
         assert len(cycle["practice_cycles"]) == 1
         assert cycle["current_state"] == "completed"
-        assert cycle["available_actions"] == []
+        # WU2 populates the safe action descriptors (stable references).
+        assert {"action": "open_revision",
+                "submission_id": records["essay_id"]} in cycle["available_actions"]
+        assert {"action": "open_revision",
+                "submission_id": records["revision_id"]} in cycle["available_actions"]
+        assert {"action": "open_practice",
+                "practice_target_id": records["target"]["practice_target_id"]} in \
+            cycle["available_actions"]
 
     def test_independent_essays_remain_separate(self, client):
         _submit_essay(client, "W1-SEP", REPETITION_ESSAY)
