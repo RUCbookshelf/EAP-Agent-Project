@@ -171,6 +171,7 @@ class FeedbackEngagementTrace(BaseModel):
     status: TraceStatus = TraceStatus.TARGET_IDENTIFIED
     confidence: str = "limited"
     limitations: list[str] = Field(default_factory=list)
+    created_at: str = Field(default_factory=lambda: utc_now().isoformat())
 
 
 class WithinTaskResponseCandidate(BaseModel):
