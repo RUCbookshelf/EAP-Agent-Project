@@ -28,7 +28,8 @@
     "page_errors": [],
     "remote_requests": [],
     "screenshot": "verification\\v0.9.7-d\\v0.9.7-d-20260805-r1\\screenshots\\en_1280x900_journey_design_system.png",
-    "bottom_screenshot": "verification\\v0.9.7-d\\v0.9.7-d-20260805-r1\\screenshots\\en_1280x900_journey_bottom.png"
+    "bottom_screenshot": "verification\\v0.9.7-d\\v0.9.7-d-20260805-r1\\screenshots\\en_1280x900_journey_bottom.png",
+    "mid_screenshot": "verification\\v0.9.7-d\\v0.9.7-d-20260805-r1\\screenshots\\en_1280x900_journey_mid.png"
   },
   "zh_desktop": {
     "combination": "zh_CN 1280x900",
@@ -50,7 +51,8 @@
     "page_errors": [],
     "remote_requests": [],
     "screenshot": "verification\\v0.9.7-d\\v0.9.7-d-20260805-r1\\screenshots\\zh_1280x900_journey_design_system.png",
-    "bottom_screenshot": "verification\\v0.9.7-d\\v0.9.7-d-20260805-r1\\screenshots\\zh_1280x900_journey_bottom.png"
+    "bottom_screenshot": "verification\\v0.9.7-d\\v0.9.7-d-20260805-r1\\screenshots\\zh_1280x900_journey_bottom.png",
+    "mid_screenshot": "verification\\v0.9.7-d\\v0.9.7-d-20260805-r1\\screenshots\\zh_1280x900_journey_mid.png"
   },
   "en_mobile": {
     "combination": "en 390x844",
@@ -72,7 +74,8 @@
     "page_errors": [],
     "remote_requests": [],
     "screenshot": "verification\\v0.9.7-d\\v0.9.7-d-20260805-r1\\screenshots\\en_390x844_journey_design_system.png",
-    "bottom_screenshot": "verification\\v0.9.7-d\\v0.9.7-d-20260805-r1\\screenshots\\en_390x844_journey_bottom.png"
+    "bottom_screenshot": "verification\\v0.9.7-d\\v0.9.7-d-20260805-r1\\screenshots\\en_390x844_journey_bottom.png",
+    "mid_screenshot": "verification\\v0.9.7-d\\v0.9.7-d-20260805-r1\\screenshots\\en_390x844_journey_mid.png"
   },
   "zh_mobile": {
     "combination": "zh_CN 390x844",
@@ -94,7 +97,8 @@
     "page_errors": [],
     "remote_requests": [],
     "screenshot": "verification\\v0.9.7-d\\v0.9.7-d-20260805-r1\\screenshots\\zh_390x844_journey_design_system.png",
-    "bottom_screenshot": "verification\\v0.9.7-d\\v0.9.7-d-20260805-r1\\screenshots\\zh_390x844_journey_bottom.png"
+    "bottom_screenshot": "verification\\v0.9.7-d\\v0.9.7-d-20260805-r1\\screenshots\\zh_390x844_journey_bottom.png",
+    "mid_screenshot": "verification\\v0.9.7-d\\v0.9.7-d-20260805-r1\\screenshots\\zh_390x844_journey_mid.png"
   },
   "journey_reads_zero_writes": true
 }

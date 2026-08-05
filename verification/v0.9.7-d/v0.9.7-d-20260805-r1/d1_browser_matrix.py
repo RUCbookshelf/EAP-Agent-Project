@@ -235,6 +235,58 @@ def run(browser, student_id: str, lang: str, viewport: dict, tag: str) -> dict:
     )
     assert badge is not None, badge
     assert badge["color"] == "rgb(20, 83, 45)", badge
+    # RC2-01: the primary CTA label renders white (inherits the button's
+    # own token color), not ink from the global body-color rule.
+    primary_label = page.evaluate(
+        """() => {
+            const btn = document.querySelector(
+                '[data-testid="stBaseButton-primary"]');
+            if (!btn) return {error: "no button"};
+            const label = btn.querySelector('span, p');
+            if (!label) return {error: "no label"};
+            const matches = [];
+            for (const sheet of document.styleSheets) {
+                let rules;
+                try { rules = sheet.cssRules; } catch { continue; }
+                for (const rule of rules) {
+                    if (rule.selectorText && label.matches(rule.selectorText)
+                            && rule.style.color) {
+                        matches.push(rule.selectorText + " -> " + rule.style.color);
+                    }
+                }
+            }
+            return {
+                buttonColor: getComputedStyle(btn).color,
+                labelColor: getComputedStyle(label).color,
+                matches: matches,
+            };
+        }"""
+    )
+    assert primary_label is not None, primary_label
+    assert primary_label["buttonColor"] == "rgb(255, 255, 255)", primary_label
+    assert primary_label["labelColor"] == "rgb(255, 255, 255)", primary_label
+    # RC2-03: unavailable/legacy notices keep their dashed border channel.
+    dashed = page.evaluate(
+        """() => {
+            const el = document.querySelector('.px-notice-dashed');
+            if (!el) return null;
+            const s = getComputedStyle(el);
+            return [s.borderTopStyle, s.borderTopWidth];
+        }"""
+    )
+    assert dashed is not None, dashed
+    assert dashed[0] == "dashed" and dashed[1] == "2px", dashed
+    # RC2-07: the page-title rule is present on the rendered title.
+    heading_rule = page.evaluate(
+        """() => {
+            const el = document.querySelector('h2.px-page-heading');
+            const s = getComputedStyle(el);
+            return [s.borderBottomStyle, s.borderBottomWidth];
+        }"""
+    )
+    expected_rule = "4px" if viewport["width"] >= 700 else "2px"
+    assert heading_rule[0] == "solid", heading_rule
+    assert heading_rule[1] == expected_rule, heading_rule
     column = page.evaluate(
         """() => {
             const el = document.querySelector(
@@ -319,6 +371,21 @@ def run(browser, student_id: str, lang: str, viewport: dict, tag: str) -> dict:
     page.screenshot(path=str(bottom_shot))
     assert bottom_shot.read_bytes() != shot.read_bytes(), \
         "bottom capture identical to top"
+    # RC2-10: a mid-scroll capture evidences two-card cycle separation.
+    mid_scrolled = page.evaluate(
+        """() => {
+            const scroller = document.querySelector('[data-testid="stMain"]');
+            if (!scroller) return 0;
+            scroller.scrollTop = Math.round(scroller.scrollHeight * 0.45);
+            return scroller.scrollTop;
+        }"""
+    )
+    assert mid_scrolled > 0, mid_scrolled
+    page.wait_for_timeout(400)
+    mid_shot = SCREENSHOTS / f"{tag}_journey_mid.png"
+    page.screenshot(path=str(mid_shot))
+    assert mid_shot.read_bytes() not in (
+        shot.read_bytes(), bottom_shot.read_bytes()), "mid capture duplicate"
     page.evaluate(
         """
         () => {
@@ -349,6 +416,7 @@ def run(browser, student_id: str, lang: str, viewport: dict, tag: str) -> dict:
         "remote_requests": remote_requests,
         "screenshot": str(shot.relative_to(PROJECT_ROOT)),
         "bottom_screenshot": str(bottom_shot.relative_to(PROJECT_ROOT)),
+        "mid_screenshot": str(mid_shot.relative_to(PROJECT_ROOT)),
     }
     context.close()
     return result

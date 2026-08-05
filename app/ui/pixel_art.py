@@ -486,6 +486,21 @@ button[kind="secondary"]:disabled {{
     box-shadow: none !important;
 }}
 
+/* v0.9.7-D (RC2-01): Streamlit wraps button labels in child spans/p
+   matched by the global body-color rule, and `inherit` would take the
+   ink color of the intermediate wrappers - so the label is pinned to the
+   button's own token color directly. */
+[data-testid="stBaseButton-primary"] span,
+[data-testid="stBaseButton-primary"] p {{
+    color: var(--px-action-text) !important;
+}}
+[data-testid="stBaseButton-secondary"] span,
+[data-testid="stBaseButton-secondary"] p,
+[data-testid="stDownloadButton"] span,
+[data-testid="stDownloadButton"] p {{
+    color: var(--px-text) !important;
+}}
+
 /* Visible keyboard focus (3px blue, 2px offset) */
 [data-testid^="stBaseButton"]:focus-visible,
 [data-testid="stDownloadButton"]:focus-visible,
@@ -846,8 +861,8 @@ button.px-btn-destructive {{
 }}
 
 .px-divider {{
-    border: none;
-    border-top: var(--px-border-thick);
+    border: none !important;
+    border-top: var(--px-border-thin) !important;
     margin: var(--px-space-4) 0;
 }}
 
@@ -966,14 +981,16 @@ div.px-notice-limitation {{
 }}
 
 div.px-notice-dashed {{
-    border: var(--px-border-thin) dashed;
+    border: var(--px-border-thin);
+    border-style: dashed;
     border-color: var(--px-status-accent-neutral);
     background: var(--px-status-neutral);
     color: var(--px-status-on-neutral);
 }}
 
 div.px-empty {{
-    border: var(--px-border-thin) dashed;
+    border: var(--px-border-thin);
+    border-style: dashed;
     border-color: var(--px-border-subtle);
     padding: var(--px-space-6) var(--px-space-4);
     text-align: center;
@@ -1157,7 +1174,7 @@ div.px-field-error {{
     border: var(--px-border-thin);
     border-left: var(--px-border-thick);
     background: var(--px-white);
-    color: var(--px-status-error);
+    color: var(--px-status-on-error);
     border-left-color: var(--px-status-accent-error);
     padding: var(--px-space-2) var(--px-space-3);
     margin-bottom: var(--px-space-3);

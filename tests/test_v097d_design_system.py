@@ -211,6 +211,18 @@ class TestDesignTokens:
         assert ".px-notice-dashed" in css
         assert ".px-status-badge[data-state=\"success\"]" in css
 
+    def test_r2_gate_fixes_present(self):
+        css = pa.PIXEL_CSS + pa.PIXEL_COMPONENT_CSS
+        # RC2-01: button labels are pinned to the button's own token color.
+        assert "stBaseButton-primary\"] span" in css
+        assert "color: var(--px-action-text) !important" in css
+        assert "color: var(--px-text) !important" in css
+        # RC2-02: field errors use the error label ink, not the tint.
+        assert "div.px-field-error" in css
+        assert "color: var(--px-status-on-error)" in css
+        # RC2-03: dashed recipes declare border-style separately.
+        assert "border-style: dashed" in css
+
     def test_no_remote_resources(self):
         css = pa.PIXEL_CSS + pa.PIXEL_COMPONENT_CSS
         assert "url(" not in css

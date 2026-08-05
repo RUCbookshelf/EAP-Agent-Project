@@ -247,7 +247,7 @@ def neutral_box(text: str, lang: str = "en", *, dashed: bool = False) -> None:
         cls = "px-notice px-notice-dashed"
     st.markdown(
         f'<div class="{cls}" data-testid="px-notice">'
-        f'{icon("info", size=18, label=t("notice_info_icon", lang))}{display}</div>',
+        f'{icon("info", size=20, label=t("notice_info_icon", lang))}{display}</div>',
         unsafe_allow_html=True,
     )
 
@@ -272,7 +272,7 @@ def notice(
     }.get(state, "px-notice-info")
     st.markdown(
         f'<div class="px-notice {variant}" data-testid="px-notice">'
-        f'{icon(icon_name, size=18, label=t(icon_label_key, lang))}{display}</div>',
+        f'{icon(icon_name, size=20, label=t(icon_label_key, lang))}{display}</div>',
         unsafe_allow_html=True,
     )
 
