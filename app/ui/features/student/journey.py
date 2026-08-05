@@ -10,8 +10,11 @@ from app.ui.components import (
     empty_state,
     info_box,
     limitation_notice,
+    loading_box,
+    neutral_box,
     render_api_error,
     section_header,
+    status_badge_html,
     student_action_block,
     student_context_block,
     student_page_intro,
@@ -130,28 +133,60 @@ def _state_label(state: str, lang: str) -> str:
     return state.replace("_", " ").title()
 
 
+def _journey_badge_html(state: str, lang: str) -> str:
+    """Quiet state badge for a journey state (icon + localized label)."""
+    label = _state_label(state, lang)
+    state_family, icon_name = {
+        "completed": ("success", "check"),
+        "submitted": ("success", "check"),
+        "revision_submitted": ("success", "check"),
+        "feedback_available": ("success", "check"),
+        "analyzed": ("info", "info"),
+        "available": ("info", "arrow_right"),
+        "attempted": ("info", "clock"),
+        "evaluation_available": ("info", "check"),
+        "feedback_without_priority": ("neutral", "info"),
+        "insufficient_evidence": ("neutral", "info"),
+        "evaluation_unavailable": ("neutral", "clock"),
+        "unavailable": ("neutral", "info"),
+        "legacy": ("neutral", "info"),
+        "unlinked": ("neutral", "info"),
+        "unresolved": ("neutral", "info"),
+    }.get(state, ("neutral", "info"))
+    return status_badge_html(
+        " " + label, lang, state=state_family, icon_name=icon_name
+    )
+
+
 def _render_submission_block(
     submission: dict, cycle: dict, lang: str, *, original: bool
 ) -> None:
     """One original/revision submission with its honest state and safe
-    action (v0.9.7-C WU3)."""
+    action (v0.9.7-C WU3; v0.9.7-D stage-item surface)."""
+    import html as _html
+
+    submission_id = submission.get("submission_id", "")
     label_key = (
         "student_journey_original_writing" if original
         else "student_journey_revised_draft"
     )
-    student_context_block([
-        (label_key, f"#{submission.get('submission_id', '')}"),
-        ("student_journey_state",
-         _state_label(str(submission.get("writing_state", "")), lang)),
-    ], lang)
-    if not original and submission.get("revision_of_submission_id"):
-        technical_caption(
-            f"{t('student_journey_revision_of', lang)}: "
-            f"#{submission.get('revision_of_submission_id')}")
-    if submission.get("writing_state") == "feedback_without_priority":
-        info_box("journey_event_feedback_without_priority_desc", lang)
-    elif submission.get("writing_state") == "insufficient_evidence":
-        info_box("journey_event_insufficient_evidence_desc", lang)
+    state = str(submission.get("writing_state", ""))
+    with st.container(border=True, key=f"journey_stage_submission_{submission_id}"):
+        st.markdown(
+            f'<div class="px-stage-head" data-testid="px-stage-item">'
+            f'<span class="px-card-title">{_html.escape(t(label_key, lang))} '
+            f'<span class="px-mono" data-testid="px-mono">#{submission_id}</span></span>'
+            f'{_journey_badge_html(state, lang)}</div>',
+            unsafe_allow_html=True,
+        )
+        if not original and submission.get("revision_of_submission_id"):
+            technical_caption(
+                f"{t('student_journey_revision_of', lang)}: "
+                f"#{submission.get('revision_of_submission_id')}")
+        if state == "feedback_without_priority":
+            neutral_box("journey_event_feedback_without_priority_desc", lang)
+        elif state == "insufficient_evidence":
+            neutral_box("journey_event_insufficient_evidence_desc", lang)
     for action in cycle.get("available_actions", []):
         if (action.get("action") == "open_revision"
                 and int(action.get("submission_id") or 0)
@@ -167,25 +202,50 @@ def _render_submission_block(
 
 def _render_feedback_stage(stage: dict, lang: str) -> None:
     """One persisted feedback stage with its priority count."""
-    student_context_block([
-        ("student_journey_feedback", f"#{stage.get('feedback_id', '')}"),
-        ("student_journey_priority_count", int(stage.get("priority_count") or 0)),
-    ], lang)
+    import html as _html
+
+    state = str(stage.get("writing_state") or "feedback_available")
+    with st.container(border=True, key=f"journey_stage_feedback_{stage.get('feedback_id', '')}"):
+        st.markdown(
+            f'<div class="px-stage-head" data-testid="px-stage-item">'
+            f'<span class="px-card-title">{_html.escape(t("student_journey_feedback", lang))} '
+            f'<span class="px-mono" data-testid="px-mono">#{stage.get("feedback_id", "")}</span></span>'
+            f'{_journey_badge_html(state, lang)}</div>',
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            f'<div class="px-stage-meta" data-testid="px-stage-meta">'
+            f'{_html.escape(str(t("student_journey_priority_count", lang)))}: '
+            f'{int(stage.get("priority_count") or 0)}</div>',
+            unsafe_allow_html=True,
+        )
     for priority in stage.get("priorities", []):
         category = priority.get("category") or ""
         if category:
-            info_box(" " + t(f"student_feedback_category_{category}", lang), lang)
+            technical_caption(
+                f"{t('student_journey_priority_reference', lang)}: "
+                f"{t(f'student_feedback_category_{category}', lang)}"
+            )
 
 
 def _render_practice_cycle(practice: dict, lang: str) -> None:
     """One Practice activity with honest state, provenance, saved records,
-    completion wording, and its safe action (v0.9.7-C WU3)."""
-    student_context_block([
-        ("student_practice_focus",
-         practice.get("target_label") or practice.get("target_code") or ""),
-        ("student_journey_state",
-         _state_label(str(practice.get("activity_state", "")), lang)),
-    ], lang)
+    completion wording, and its safe action (v0.9.7-C WU3; v0.9.7-D
+    practice state panel)."""
+    import html as _html
+
+    activity_state = practice.get("activity_state", "")
+    target_label = practice.get("target_label") or practice.get("target_code") or ""
+    with st.container(
+        border=True,
+        key=f"journey_stage_practice_{practice.get('practice_target_id', '')}",
+    ):
+        st.markdown(
+            f'<div class="px-stage-head" data-testid="px-stage-item">'
+            f'<span class="px-card-title">{_html.escape(str(target_label))}</span>'
+            f'{_journey_badge_html(str(activity_state), lang)}</div>',
+            unsafe_allow_html=True,
+        )
     provenance = practice.get("priority_provenance") or {}
     provenance_status = provenance.get("status")
     if provenance_status == "valid":
@@ -198,64 +258,73 @@ def _render_practice_cycle(practice: dict, lang: str) -> None:
             f"{provenance.get('reference', '')}"
             + (f" · {category_label}" if category_label else ""))
     elif provenance_status == "legacy":
-        info_box("student_journey_practice_legacy", lang)
+        neutral_box("student_journey_practice_legacy", lang, dashed=True)
     elif provenance_status == "unresolved":
-        info_box("student_journey_practice_provenance_unresolved", lang)
+        neutral_box("student_journey_practice_provenance_unresolved", lang, dashed=True)
     attempt = practice.get("attempt")
     if attempt:
         technical_caption(
             f"{t('student_practice_attempt_reference', lang)}: "
             f"#{attempt.get('attempt_id', '')}")
-    activity_state = practice.get("activity_state", "")
     if activity_state == "completed":
         success_box("student_practice_completed_title", lang)
         if practice.get("evaluation"):
             info_box("student_practice_completed_saved", lang)
         else:
             info_box("student_practice_attempt_saved", lang)
-            warning_box("student_practice_evaluation_unavailable", lang)
+            neutral_box("student_practice_evaluation_unavailable", lang, dashed=True)
     elif activity_state == "evaluation_available":
         info_box("student_practice_attempt_saved", lang)
         info_box("journey_event_practice_evaluation_recorded", lang)
     elif activity_state in ("evaluation_unavailable", "attempted"):
         info_box("student_practice_attempt_saved", lang)
         if activity_state == "evaluation_unavailable":
-            warning_box("student_practice_evaluation_unavailable", lang)
+            neutral_box("student_practice_evaluation_unavailable", lang, dashed=True)
 
 
 def _render_cycle(cycle: dict, lang: str) -> None:
     """One learner-owned writing cycle with its stages and activities."""
-    section_header("student_journey_cycle_title", lang=lang)
-    technical_caption(f"{cycle.get('cycle_id', '')}")
-    student_context_block([
-        ("student_journey_cycle_state",
-         _state_label(str(cycle.get("current_state", "")), lang)),
-    ], lang)
-    if cycle.get("relationship_status") == "unlinked":
-        warning_box("student_journey_cycle_unlinked", lang)
-    root = cycle.get("root_submission")
-    if root is not None:
-        _render_submission_block(root, cycle, lang, original=True)
-    for revision in cycle.get("revisions", []):
-        _render_submission_block(revision, cycle, lang, original=False)
-    for stage in cycle.get("feedback_stages", []):
-        _render_feedback_stage(stage, lang)
-    for practice in cycle.get("practice_cycles", []):
-        section_header("student_journey_practice_activity", lang=lang)
-        _render_practice_cycle(practice, lang)
-        for action in cycle.get("available_actions", []):
-            if (action.get("action") == "open_practice"
-                    and action.get("practice_target_id")
-                    == practice.get("practice_target_id")):
-                st.button(
-                    t("student_journey_action_open_practice", lang),
-                    use_container_width=True,
-                    key=f"journey_action_practice_{practice.get('practice_target_id')}",
-                    on_click=_navigate_journey_practice,
-                    args=(str(practice.get("practice_target_id") or ""), lang),
-                )
-    for limitation in cycle.get("limitations", []):
-        limitation_notice(" " + limitation, lang)
+    import html as _html
+
+    cycle_id = cycle.get("cycle_id", "")
+    with st.container(border=True, key=f"journey_cycle_{cycle_id}"):
+        st.markdown(
+            f'<div class="px-cycle-head" data-testid="px-cycle-head">'
+            f'<span class="px-card-title">{_html.escape(t("student_journey_cycle_title", lang))}</span>'
+            f'<span class="px-mono" data-testid="px-mono">{_html.escape(str(cycle_id))}</span>'
+            f'{_journey_badge_html(str(cycle.get("current_state", "")), lang)}</div>',
+            unsafe_allow_html=True,
+        )
+        if cycle.get("relationship_status") == "unlinked":
+            warning_box("student_journey_cycle_unlinked", lang)
+        root = cycle.get("root_submission")
+        if root is not None:
+            _render_submission_block(root, cycle, lang, original=True)
+        for revision in cycle.get("revisions", []):
+            _render_submission_block(revision, cycle, lang, original=False)
+        for stage in cycle.get("feedback_stages", []):
+            _render_feedback_stage(stage, lang)
+        for practice in cycle.get("practice_cycles", []):
+            st.markdown(
+                f'<div class="px-stage-head" data-testid="px-stage-group">'
+                f'<span class="px-card-title">{_html.escape(t("student_journey_practice_activity", lang))}</span>'
+                f'</div>',
+                unsafe_allow_html=True,
+            )
+            _render_practice_cycle(practice, lang)
+            for action in cycle.get("available_actions", []):
+                if (action.get("action") == "open_practice"
+                        and action.get("practice_target_id")
+                        == practice.get("practice_target_id")):
+                    st.button(
+                        t("student_journey_action_open_practice", lang),
+                        use_container_width=True,
+                        key=f"journey_action_practice_{practice.get('practice_target_id')}",
+                        on_click=_navigate_journey_practice,
+                        args=(str(practice.get("practice_target_id") or ""), lang),
+                    )
+        for limitation in cycle.get("limitations", []):
+            limitation_notice(" " + limitation, lang)
 
 
 def render_learning_journey_page(api_client: StudentJourneyApiPort, lang: str) -> None:
@@ -276,8 +345,8 @@ def render_learning_journey_page(api_client: StudentJourneyApiPort, lang: str) -
 
     student_context_block([("student_context_learner", learner_id)], lang)
     try:
-        with st.spinner(t("journey_loading", lang)):
-            journey = api_client.get_journey(learner_id)
+        loading_box("journey_loading", lang)
+        journey = api_client.get_journey(learner_id)
     except ApiClientError as exc:
         render_api_error(exc, lang)
         return
