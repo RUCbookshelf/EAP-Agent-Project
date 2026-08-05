@@ -48,6 +48,7 @@ DESIGN_TOKENS = {
         "text-secondary": "#4a4a58",
         "muted": "#6b6b7b",
         "border": "#1a1c2c",
+        "border-subtle": "#8a8a9c",  # hairline separators, nested items
         "focus": "#0f6dbd",         # focus outline (>=3:1 on adjacent surfaces)
         "action": "#e00047",        # primary action red (AA measured)
         "action-hover": "#e00047",
@@ -55,32 +56,47 @@ DESIGN_TOKENS = {
         "action-disabled": "#e8e8ec",
         "action-text": "#ffffff",
         "action-text-disabled": "#5a5a68",
+        "destructive": "#a30d3d",   # reserved destructive action (no consumer yet)
         "secondary-action": "#f4f4f4",
         "link": "#0f6dbd",
         "pixel-red": "#ff004d",     # decorative accent only (non-text)
     },
     # ── Semantic status states (never color-alone) ─────────────────────
     "semantic": {
-        "success": "#00e436",
-        "warning": "#ffec27",
-        "error": "#e00047",
-        "info": "#29adff",
+        # v0.9.7-D: quiet tint fills with accent bars and AA label pairs;
+        # the legacy neon fills are retired from notices/badges.
+        "success": "#e6f6ec",
+        "warning": "#fdf6d8",
+        "error": "#fdeaef",
+        "info": "#e8f3fb",
         "unavailable": "#f4f4f4",
         "candidate": "#ffec27",
         "insufficient": "#f4f4f4",
         "selected": "#29adff",
         "neutral": "#f4f4f4",
-        "on-success": "#1a1c2c",
-        "on-warning": "#1a1c2c",
-        "on-error": "#ffffff",
-        "on-info": "#1a1c2c",
-        "on-unavailable": "#6b6b7b",
-        "on-insufficient": "#6b6b7b",
-        "on-neutral": "#1a1c2c",
+        "on-success": "#14532d",
+        "on-warning": "#713f12",
+        "on-error": "#a30d3d",
+        "on-info": "#0b4f86",
+        "on-unavailable": "#4a4a58",
+        "on-insufficient": "#4a4a58",
+        "on-neutral": "#4a4a58",
+        "accent-success": "#1c7a45",
+        "accent-warning": "#a16207",
+        "accent-error": "#c01048",
+        "accent-info": "#0f6dbd",
+        "accent-unavailable": "#6b6b7b",
+        "accent-insufficient": "#6b6b7b",
+        "accent-neutral": "#6b6b7b",
     },
     # ── Typography ─────────────────────────────────────────────────────
     "typography": {
         "font-body": (
+            "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', "
+            "'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', "
+            "'Helvetica Neue', Arial, sans-serif"
+        ),
+        "font-display": (
             "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', "
             "'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', "
             "'Helvetica Neue', Arial, sans-serif"
@@ -93,12 +109,14 @@ DESIGN_TOKENS = {
         "size-h1": "2rem",
         "size-h2": "1.625rem",
         "size-h3": "1.25rem",
+        "size-card-title": "1.0625rem",
         "size-body": "1rem",
         "size-compact": "0.875rem",
         "size-label": "0.8125rem",
         "size-metric": "1.125rem",
         "weight-heavy": "900",
         "weight-bold": "700",
+        "weight-semibold": "600",
         "weight-normal": "400",
         "line-height-body": "1.6",
         "line-height-compact": "1.5",
@@ -129,6 +147,9 @@ DESIGN_TOKENS = {
         "touch-target": "44px",
         "content-width-student": "720px",
         "content-width-research": "1200px",
+        "icon-sm": "16px",
+        "icon-md": "20px",
+        "icon-lg": "24px",
         "table-font-size": "0.8125rem",
         "table-cell-pad": "6px",
     },
@@ -182,6 +203,7 @@ def build_css_vars() -> dict[str, str]:
         "--px-text-secondary": c["text-secondary"],
         "--px-muted": c["muted"],
         "--px-border": c["border"],
+        "--px-border-subtle": c["border-subtle"],
         "--px-focus": c["focus"],
         "--px-action": c["action"],
         "--px-action-hover": c["action-hover"],
@@ -189,6 +211,7 @@ def build_css_vars() -> dict[str, str]:
         "--px-action-disabled": c["action-disabled"],
         "--px-action-text": c["action-text"],
         "--px-action-text-disabled": c["action-text-disabled"],
+        "--px-destructive": c["destructive"],
         "--px-secondary-action": c["secondary-action"],
         "--px-link": c["link"],
         "--px-red": c["pixel-red"],          # decorative accent only
@@ -209,19 +232,29 @@ def build_css_vars() -> dict[str, str]:
         "--px-status-on-unavailable": s["on-unavailable"],
         "--px-status-on-insufficient": s["on-insufficient"],
         "--px-status-on-neutral": s["on-neutral"],
+        "--px-status-accent-success": s["accent-success"],
+        "--px-status-accent-warning": s["accent-warning"],
+        "--px-status-accent-error": s["accent-error"],
+        "--px-status-accent-info": s["accent-info"],
+        "--px-status-accent-unavailable": s["accent-unavailable"],
+        "--px-status-accent-insufficient": s["accent-insufficient"],
+        "--px-status-accent-neutral": s["accent-neutral"],
         # Typography
         "--px-font-body": t["font-body"],
+        "--px-font-display": t["font-display"],
         "--px-font-mono": t["font-mono"],
-        "--px-font-heading": f"var(--px-font-mono)",
+        "--px-font-heading": f"var(--px-font-display)",
         "--px-font-size-h1": t["size-h1"],
         "--px-font-size-h2": t["size-h2"],
         "--px-font-size-h3": t["size-h3"],
+        "--px-font-size-card-title": t["size-card-title"],
         "--px-font-size-body": t["size-body"],
         "--px-font-size-compact": t["size-compact"],
         "--px-font-size-label": t["size-label"],
         "--px-font-size-metric": t["size-metric"],
         "--px-font-weight-heavy": t["weight-heavy"],
         "--px-font-weight-bold": t["weight-bold"],
+        "--px-font-weight-semibold": t["weight-semibold"],
         "--px-font-weight-normal": t["weight-normal"],
         "--px-line-height": t["line-height-body"],
         "--px-line-height-body": t["line-height-body"],
@@ -256,6 +289,9 @@ def build_css_vars() -> dict[str, str]:
         "--px-control-height": g["control-height"],
         "--px-control-height-mobile": g["control-height-mobile"],
         "--px-touch-target": g["touch-target"],
+        "--px-icon-sm": g["icon-sm"],
+        "--px-icon-md": g["icon-md"],
+        "--px-icon-lg": g["icon-lg"],
         "--px-content-width-student": g["content-width-student"],
         "--px-content-width-research": g["content-width-research"],
         "--px-table-font-size": g["table-font-size"],
@@ -398,7 +434,7 @@ div[data-testid="stTabs"] {{
 button[kind="primary"] {{
     background-color: var(--px-action) !important;
     color: var(--px-action-text) !important;
-    border: var(--px-border-thick) !important;
+    border: var(--px-border-thin) !important;
     box-shadow: var(--px-shadow-md) !important;
     min-height: var(--px-control-height) !important;
     font-family: var(--px-font-body) !important;
@@ -428,7 +464,7 @@ button[kind="secondary"],
 [data-testid="stDownloadButton"] {{
     background-color: var(--px-secondary-action) !important;
     color: var(--px-text) !important;
-    border: var(--px-border-thick) !important;
+    border: var(--px-border-thin) !important;
     box-shadow: var(--px-shadow-md) !important;
     min-height: var(--px-control-height) !important;
     font-family: var(--px-font-body) !important;
@@ -469,7 +505,7 @@ button[kind="secondary"]:disabled {{
 [data-testid="stTextArea"] textarea,
 .stSelectbox > div > div > div,
 .stNumberInput > div > div > input {{
-    border: var(--px-border-thick) !important;
+    border: var(--px-border-thin) !important;
     background-color: var(--px-white) !important;
     color: var(--px-text) !important;
     font-family: var(--px-font-body) !important;
@@ -486,7 +522,7 @@ button[kind="secondary"]:disabled {{
 
 /* ── Expanders / tabs / sidebar ────────────────────────────────────── */
 div[data-testid="stExpander"] {{
-    border: var(--px-border-thick) !important;
+    border: var(--px-border-thin) !important;
     background-color: var(--px-white) !important;
 }}
 div[data-testid="stTabs"] {{
@@ -607,6 +643,26 @@ div[data-testid="stMainBlockContainer"]:has([data-testid="px-student-page"]) {{
     font-family: var(--px-font-body);
 }}
 
+.px-page-heading {{
+    border-bottom: var(--px-border-thick) solid var(--px-dark);
+    padding-bottom: var(--px-space-2);
+    margin-bottom: var(--px-space-1);
+}}
+
+.px-section-heading {{
+    border-bottom: var(--px-border-hairline) solid var(--px-border-subtle);
+    padding-bottom: var(--px-space-1);
+    margin-top: var(--px-space-8);
+    margin-bottom: var(--px-space-2);
+}}
+
+.px-card-title {{
+    font-family: var(--px-font-display);
+    font-size: var(--px-font-size-card-title);
+    font-weight: var(--px-font-weight-semibold);
+    line-height: 1.35;
+}}
+
 .px-student-purpose p,
 .px-student-action p {{
     margin: 0;
@@ -677,7 +733,7 @@ div[data-testid="stMainBlockContainer"]:has([data-testid="px-student-page"]) {{
     gap: var(--px-space-2);
     margin: 0 0 var(--px-density-student-section);
     padding: var(--px-card-pad);
-    border: var(--px-border-thin);
+    border: var(--px-border-hairline) solid var(--px-border-subtle);
     background: var(--px-surface);
 }}
 
@@ -685,6 +741,11 @@ div[data-testid="stMainBlockContainer"]:has([data-testid="px-student-page"]) {{
     display: grid;
     grid-template-columns: minmax(120px, 0.45fr) 1fr;
     gap: var(--px-inline-gap);
+}}
+
+.px-student-context > div:not(:first-child) {{
+    border-top: var(--px-border-hairline) solid var(--px-border-subtle);
+    padding-top: var(--px-space-2);
 }}
 
 .px-student-context dt {{
@@ -702,8 +763,8 @@ div[data-testid="stMainBlockContainer"]:has([data-testid="px-student-page"]) {{
 
 .px-card {{
     background: var(--px-white);
-    border: var(--px-border-thick);
-    box-shadow: var(--px-shadow-md);
+    border: var(--px-border-thin);
+    box-shadow: var(--px-shadow-sm);
     padding: var(--px-card-pad);
     margin-bottom: var(--px-space-4);
     font-family: var(--px-font-body);
@@ -720,7 +781,7 @@ div[data-testid="stMainBlockContainer"]:has([data-testid="px-student-page"]) {{
     color: var(--px-action-text);
     font-family: var(--px-font-body);
     font-weight: var(--px-font-weight-bold);
-    border: var(--px-border-thick);
+    border: var(--px-border-thin);
     box-shadow: var(--px-shadow-md);
     padding: var(--px-space-2) var(--px-space-4);
     cursor: pointer;
@@ -753,6 +814,7 @@ div[data-testid="stMainBlockContainer"]:has([data-testid="px-student-page"]) {{
 .px-btn-primary {{
     background: var(--px-action);
     color: var(--px-action-text);
+    box-shadow: var(--px-shadow-sm);
 }}
 
 .px-btn-secondary {{
@@ -804,8 +866,51 @@ div[data-testid="stMainBlockContainer"]:has([data-testid="px-student-page"]) {{
     color: var(--px-status-on-warning);
 }}
 
+.px-status-badge {{
+    display: inline-flex;
+    align-items: center;
+    gap: var(--px-space-1);
+    padding: var(--px-space-1) var(--px-space-2);
+    border: var(--px-border-hairline) solid var(--px-border-subtle);
+    font-family: var(--px-font-body);
+    font-size: var(--px-font-size-label);
+    font-weight: var(--px-font-weight-bold);
+    line-height: 1.4;
+    vertical-align: middle;
+}}
+
+.px-status-badge[data-state="success"] {{
+    background: var(--px-status-success);
+    color: var(--px-status-on-success);
+    border-color: var(--px-status-accent-success);
+}}
+
+.px-status-badge[data-state="warning"] {{
+    background: var(--px-status-warning);
+    color: var(--px-status-on-warning);
+    border-color: var(--px-status-accent-warning);
+}}
+
+.px-status-badge[data-state="error"] {{
+    background: var(--px-status-error);
+    color: var(--px-status-on-error);
+    border-color: var(--px-status-accent-error);
+}}
+
+.px-status-badge[data-state="info"] {{
+    background: var(--px-status-info);
+    color: var(--px-status-on-info);
+    border-color: var(--px-status-accent-info);
+}}
+
+.px-status-badge[data-state="neutral"] {{
+    background: var(--px-status-neutral);
+    color: var(--px-status-on-neutral);
+    border-color: var(--px-status-accent-neutral);
+}}
+
 .px-notice {{
-    border: var(--px-border-thick);
+    border: var(--px-border-thin);
     padding: var(--px-space-3) var(--px-space-4);
     margin-bottom: var(--px-space-4);
     font-family: var(--px-font-body);
@@ -817,25 +922,25 @@ div[data-testid="stMainBlockContainer"]:has([data-testid="px-student-page"]) {{
 .px-notice-warning {{
     background: var(--px-status-warning);
     color: var(--px-status-on-warning);
-    border-color: var(--px-dark);
+    border-left: var(--px-border-thick) solid var(--px-status-accent-warning);
 }}
 
 .px-notice-error {{
     background: var(--px-status-error);
     color: var(--px-status-on-error);
-    border-color: var(--px-dark);
+    border-left: var(--px-border-thick) solid var(--px-status-accent-error);
 }}
 
 .px-notice-success {{
     background: var(--px-status-success);
     color: var(--px-status-on-success);
-    border-color: var(--px-dark);
+    border-left: var(--px-border-thick) solid var(--px-status-accent-success);
 }}
 
 .px-notice-info {{
     background: var(--px-status-info);
     color: var(--px-status-on-info);
-    border-color: var(--px-dark);
+    border-left: var(--px-border-thick) solid var(--px-status-accent-info);
 }}
 
 .px-notice-limitation {{
@@ -844,8 +949,14 @@ div[data-testid="stMainBlockContainer"]:has([data-testid="px-student-page"]) {{
     border-color: var(--px-dark);
 }}
 
+.px-notice-dashed {{
+    border: var(--px-border-thin) dashed var(--px-status-accent-neutral);
+    background: var(--px-status-neutral);
+    color: var(--px-status-on-neutral);
+}}
+
 .px-empty {{
-    border: var(--px-border-thick);
+    border: var(--px-border-thin) dashed var(--px-border-subtle);
     padding: var(--px-space-6) var(--px-space-4);
     text-align: center;
     color: var(--px-muted);
@@ -874,11 +985,77 @@ div[data-testid="stMainBlockContainer"]:has([data-testid="px-student-page"]) {{
 }}
 
 .px-quote {{
-    border: var(--px-border-thick);
+    border: var(--px-border-thin);
     background: var(--px-surface);
     padding-left: var(--px-space-4);
     color: var(--px-text-secondary);
     font-style: italic;
+}}
+
+.px-cycle-card {{
+    background: var(--px-white);
+    border: var(--px-border-thin);
+    box-shadow: var(--px-shadow-sm);
+    padding: var(--px-density-student-card-pad);
+    margin-bottom: var(--px-space-6);
+    font-family: var(--px-font-body);
+}}
+
+.px-cycle-head {{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--px-space-2);
+    margin-bottom: var(--px-space-3);
+    padding-bottom: var(--px-space-2);
+    border-bottom: var(--px-border-hairline) solid var(--px-border-subtle);
+}}
+
+.px-cycle-head .px-card-title {{
+    font-size: var(--px-font-size-h3);
+    font-weight: var(--px-font-weight-bold);
+}}
+
+.px-stage-item {{
+    background: var(--px-white);
+    border: var(--px-border-hairline) solid var(--px-border-subtle);
+    padding: var(--px-space-3) var(--px-space-4);
+    margin-bottom: var(--px-space-3);
+    font-family: var(--px-font-body);
+}}
+
+.px-stage-item[data-active="true"] {{
+    border: var(--px-border-thin) solid var(--px-status-accent-info);
+}}
+
+.px-stage-head {{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--px-space-2);
+    margin-bottom: var(--px-space-2);
+}}
+
+.px-stage-meta {{
+    margin-top: var(--px-space-2);
+}}
+
+.px-action-row {{
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--px-space-3);
+    margin-top: var(--px-space-3);
+}}
+
+@media (max-width: 640px) {{
+    .px-action-row {{
+        flex-direction: column;
+    }}
+    .px-stage-head {{
+        flex-direction: column;
+        align-items: stretch;
+    }}
 }}
 
 .px-metric-grid {{

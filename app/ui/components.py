@@ -28,8 +28,7 @@ def page_header(title: str, subtitle: str = "", lang: str = "en") -> None:
     """Render a pixel-art page header with thick bottom border."""
     display_title = t(title, lang) if not title.startswith(" ") else title.strip()
     st.markdown(
-        f'<h2 style="font-family:var(--px-font-heading);font-weight:900;color:var(--px-dark);'
-        f'border-bottom:4px solid var(--px-dark);padding-bottom:8px;margin-bottom:4px;">'
+        f'<h2 class="px-page-heading">'
         f'{display_title}</h2>',
         unsafe_allow_html=True,
     )
@@ -42,8 +41,7 @@ def section_header(title: str, description: str = "", lang: str = "en") -> None:
     """Render a pixel-art section header."""
     display_title = t(title, lang) if not title.startswith(" ") else title
     st.markdown(
-        f'<h3 style="font-family:var(--px-font-heading);font-weight:700;color:var(--px-dark);'
-        f'border-bottom:2px solid var(--px-dark);padding-bottom:4px;margin-top:20px;margin-bottom:8px;">'
+        f'<h3 class="px-section-heading">'
         f'{display_title}</h3>',
         unsafe_allow_html=True,
     )
@@ -56,8 +54,7 @@ def card_group_header(title: str, lang: str = "en") -> None:
     """Render a card group header for metric/construct grouping."""
     display_title = t(title, lang) if not title.startswith(" ") else title
     st.markdown(
-        f'<h3 style="font-family:var(--px-font-heading);font-weight:700;color:var(--px-dark);'
-        f'margin-top:24px;margin-bottom:8px;">{display_title}</h3>',
+        f'<h3 class="px-section-heading">{display_title}</h3>',
         unsafe_allow_html=True,
     )
 
@@ -146,25 +143,67 @@ def status_badge(
     success_states: tuple = ("passed", "active", "completed", "success"),
     warning_states: tuple = ("partial", "pending", "candidate", "provisional"),
     error_states: tuple = ("failed", "unavailable", "blocked", "error"),
+    neutral_states: tuple = ("insufficient", "legacy", "unlinked", "unresolved"),
+    icon_name: str | None = None,
 ) -> None:
-    """Render a pixel-art status badge with hard border and solid background."""
-    label = t(f"status_{status}", lang) if not status.startswith(" ") else status
-    if status in success_states:
-        color = "var(--px-status-success)"
-        text_color = "var(--px-status-on-success)"
-    elif status in warning_states:
-        color = "var(--px-status-warning)"
-        text_color = "var(--px-status-on-warning)"
-    elif status in error_states:
-        color = "var(--px-status-error)"
-        text_color = "var(--px-status-on-error)"
-    else:
-        color = "var(--px-status-info)"
-        text_color = "var(--px-status-on-info)"
+    """Render a quiet state badge with icon and localized label (v0.9.7-D).
+
+    Never color-alone: the badge always pairs a local SVG icon with the
+    localized status label. ``status`` may be a locale key (``status_*``)
+    or a raw label prefixed with a space (existing convention).
+    """
     st.markdown(
-        f'<span class="px-badge" data-testid="px-status-badge" '
-        f'style="background:{color};color:{text_color};">{label}</span>',
+        status_badge_html(
+            status,
+            lang,
+            success_states=success_states,
+            warning_states=warning_states,
+            error_states=error_states,
+            neutral_states=neutral_states,
+            icon_name=icon_name,
+        ),
         unsafe_allow_html=True,
+    )
+
+
+def status_badge_html(
+    status: str,
+    lang: str = "en",
+    *,
+    success_states: tuple = ("passed", "active", "completed", "success"),
+    warning_states: tuple = ("partial", "pending", "candidate", "provisional"),
+    error_states: tuple = ("failed", "unavailable", "blocked", "error"),
+    neutral_states: tuple = ("insufficient", "legacy", "unlinked", "unresolved"),
+    icon_name: str | None = None,
+    state: str | None = None,
+) -> str:
+    """Return the status-badge HTML fragment (shared by ``status_badge``
+    and composite components that embed badges inside their own markup)."""
+    import html as _html
+
+    label = t(f"status_{status}", lang) if not status.startswith(" ") else status
+    if state is None:
+        if status in success_states:
+            state = "success"
+        elif status in warning_states:
+            state = "warning"
+        elif status in error_states:
+            state = "error"
+        elif status in neutral_states:
+            state = "neutral"
+        else:
+            state = "info"
+    icon_name = icon_name or {
+        "success": "check",
+        "warning": "warning",
+        "error": "error",
+        "neutral": "info",
+        "info": "info",
+    }[state]
+    return (
+        f'<span class="px-status-badge" data-testid="px-status-badge" '
+        f'data-state="{state}">{icon(icon_name, size=14, label=str(label))}'
+        f'{_html.escape(str(label))}</span>'
     )
 
 
@@ -172,50 +211,68 @@ def status_badge(
 
 def limitation_notice(text: str, lang: str = "en") -> None:
     """Render a pixel-art limitation notice."""
-    display = t(text, lang) if not text.startswith(" ") else text
-    st.markdown(
-        f'<div class="px-notice px-notice-limitation" data-testid="px-notice">'
-        f'{icon("info", size=18, label=t("notice_limitation_icon", lang))}{display}</div>',
-        unsafe_allow_html=True,
-    )
+    notice(text, lang, state="limitation", icon_name="info",
+           icon_label_key="notice_limitation_icon")
 
 
 def warning_box(text: str, lang: str = "en") -> None:
     """Render a pixel-art warning box."""
-    display = t(text, lang) if not text.startswith(" ") else text
-    st.markdown(
-        f'<div class="px-notice px-notice-warning" data-testid="px-notice">'
-        f'{icon("warning", size=18, label=t("notice_warning_icon", lang))}{display}</div>',
-        unsafe_allow_html=True,
-    )
+    notice(text, lang, state="warning", icon_name="warning",
+           icon_label_key="notice_warning_icon")
 
 
 def info_box(text: str, lang: str = "en") -> None:
     """Render a pixel-art info box."""
+    notice(text, lang, state="info", icon_name="info",
+           icon_label_key="notice_info_icon")
+
+
+def success_box(text: str, lang: str = "en") -> None:
+    """Render a pixel-art success notice."""
+    notice(text, lang, state="success", icon_name="check",
+           icon_label_key="notice_success_icon")
+
+
+def error_box(text: str, lang: str = "en") -> None:
+    """Render a pixel-art error notice."""
+    notice(text, lang, state="error", icon_name="error",
+           icon_label_key="notice_error_icon")
+
+
+def neutral_box(text: str, lang: str = "en", *, dashed: bool = False) -> None:
+    """Render a quiet neutral state box (unavailable/legacy outcomes)."""
     display = t(text, lang) if not text.startswith(" ") else text
+    cls = "px-notice px-notice-limitation"
+    if dashed:
+        cls = "px-notice px-notice-dashed"
     st.markdown(
-        f'<div class="px-notice px-notice-info" data-testid="px-notice">'
+        f'<div class="{cls}" data-testid="px-notice">'
         f'{icon("info", size=18, label=t("notice_info_icon", lang))}{display}</div>',
         unsafe_allow_html=True,
     )
 
 
-def success_box(text: str, lang: str = "en") -> None:
-    """Render a pixel-art success notice."""
-    display = t(text, lang) if not text.startswith(" ") else text
-    st.markdown(
-        f'<div class="px-notice px-notice-success" data-testid="px-notice">'
-        f'{icon("check", size=18, label=t("notice_success_icon", lang))}{display}</div>',
-        unsafe_allow_html=True,
-    )
+def notice(
+    text: str,
+    lang: str = "en",
+    *,
+    state: str = "info",
+    icon_name: str = "info",
+    icon_label_key: str = "notice_info_icon",
+) -> None:
+    """Shared quiet notice core (v0.9.7-D): tint + accent bar + icon + text."""
+    import html as _html
 
-
-def error_box(text: str, lang: str = "en") -> None:
-    """Render a pixel-art error notice."""
     display = t(text, lang) if not text.startswith(" ") else text
+    variant = {
+        "success": "px-notice-success",
+        "warning": "px-notice-warning",
+        "error": "px-notice-error",
+        "limitation": "px-notice-limitation",
+    }.get(state, "px-notice-info")
     st.markdown(
-        f'<div class="px-notice px-notice-error" data-testid="px-notice">'
-        f'{icon("error", size=18, label=t("notice_error_icon", lang))}{display}</div>',
+        f'<div class="px-notice {variant}" data-testid="px-notice">'
+        f'{icon(icon_name, size=18, label=t(icon_label_key, lang))}{display}</div>',
         unsafe_allow_html=True,
     )
 
