@@ -36,6 +36,7 @@ from app.config import Settings, load_settings
 from app.database import Database
 from app.journey.service import JourneyService
 from app.practice.service import PracticeService
+from app.practice.target_creation import PracticeTargetCreationService
 from app.lifecycle import ServiceState, lifecycle
 from app.research.service import ResearchDataService
 from app.services import (
@@ -244,6 +245,12 @@ def _run_startup(api: FastAPI) -> None:
     api.state.practice_writer = repository._practice_repository
     api.state.practice_student_reader = repository._learner_repository
     api.state.practice_service = PracticeService()
+    api.state.practice_target_creation_service = PracticeTargetCreationService(
+        submission_reader=repository._submission_repository,
+        practice_reader=repository._practice_repository,
+        practice_writer=repository._practice_repository,
+        practice_service=PracticeService(),
+    )
     api.state.submission_bundle_reader = repository._submission_repository
     api.state.student_lookup = repository._learner_repository
     api.state.analysis_runs_reader = repository._analysis_repository
@@ -458,6 +465,12 @@ def _build_full_app(
     api.state.practice_writer = repository._practice_repository
     api.state.practice_student_reader = repository._learner_repository
     api.state.practice_service = PracticeService()
+    api.state.practice_target_creation_service = PracticeTargetCreationService(
+        submission_reader=repository._submission_repository,
+        practice_reader=repository._practice_repository,
+        practice_writer=repository._practice_repository,
+        practice_service=PracticeService(),
+    )
     api.state.submission_bundle_reader = repository._submission_repository
     api.state.student_lookup = repository._learner_repository
     api.state.analysis_runs_reader = repository._analysis_repository

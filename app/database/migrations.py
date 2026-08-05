@@ -6,7 +6,7 @@ import json
 from collections.abc import Callable
 
 
-LATEST_MIGRATION_VERSION = 12
+LATEST_MIGRATION_VERSION = 13
 
 
 def _add_column_if_missing(
@@ -707,6 +707,27 @@ def _migration_12(connection: sqlite3.Connection) -> None:
         connection.execute("PRAGMA user_version = 12")
 
 
+def _migration_13(connection: sqlite3.Connection) -> None:
+    """Additive one-active-priority-key uniqueness (v0.9.7-B WU3).
+
+    Enforces at most one ACTIVE practice target per
+    (student_id, source_submission_id, source_priority_id). The key's third
+    component lives inside target_json (WU1 audit finding: provenance is
+    JSON-only), so the partial unique index reads it via json_extract;
+    existing rows are preserved; legacy targets without a priority reference
+    (NULL source_priority_id) are exempt. Non-destructive: rollback only
+    drops the index.
+    """
+    connection.execute(
+        """CREATE UNIQUE INDEX IF NOT EXISTS ux_practice_targets_active_priority_key
+        ON practice_targets(student_id, source_submission_id,
+            json_extract(target_json, '$.source_priority_id'))
+        WHERE status = 'active'
+            AND json_extract(target_json, '$.source_priority_id') IS NOT NULL"""
+    )
+    connection.execute("PRAGMA user_version = 13")
+
+
 MIGRATIONS: dict[int, tuple[str, Callable[[sqlite3.Connection], None]]] = {
     1: ("preserve_v0_1_1_schema", _migration_1),
     2: ("cloud_ready_repository_indexes", _migration_2),
@@ -720,6 +741,7 @@ MIGRATIONS: dict[int, tuple[str, Callable[[sqlite3.Connection], None]]] = {
     10: ("calf_measurement_foundation", _migration_10),
     11: ("research_data_infrastructure", _migration_11),
     12: ("practice_and_transfer_foundation", _migration_12),
+    13: ("practice_target_priority_key_uniqueness", _migration_13),
 }
 
 
@@ -748,29 +770,32 @@ def rollback(connection: sqlite3.Connection, target_version: int) -> int:
     current = int(connection.execute("PRAGMA user_version").fetchone()[0])
     if current == target_version:
         return current
-    if (current, target_version) not in {(12, 11), (11, 10), (10, 9), (9, 8)}:
+    if (current, target_version) not in {(13, 12), (12, 11), (11, 10), (10, 9), (9, 8)}:
         raise ValueError("Only non-destructive one-step rollback is supported.")
     with connection:
-        expected = "config-v0.9.0" if current == 12 else ("config-v0.8.2" if current == 11 else ("config-v0.8.0" if current == 10 else "config-v0.7.1"))
-        active = connection.execute(
-            "SELECT * FROM configuration_versions WHERE status='active' AND version=?", (expected,)
-        ).fetchone()
-        if active:
-            item = dict(active)
-            parent = connection.execute(
-                "SELECT * FROM configuration_versions WHERE version=?", (item["parent_version"],)
+        if current == 13:
+            connection.execute("DROP INDEX IF EXISTS ux_practice_targets_active_priority_key")
+        else:
+            expected = "config-v0.9.0" if current == 12 else ("config-v0.8.2" if current == 11 else ("config-v0.8.0" if current == 10 else "config-v0.7.1"))
+            active = connection.execute(
+                "SELECT * FROM configuration_versions WHERE status='active' AND version=?", (expected,)
             ).fetchone()
-            if parent is None:
-                raise RuntimeError("config-v0.7.1 parent is unavailable; rollback was not applied.")
-            now = "2026-07-30T18:00:01+00:00" if current == 10 else "2026-07-30T16:00:01+00:00"
-            connection.execute(
-                "UPDATE configuration_versions SET status='inactive', deactivated_at=? WHERE configuration_id=?",
-                (now, item["configuration_id"]),
-            )
-            connection.execute(
-                "UPDATE configuration_versions SET status='active', activated_at=?, deactivated_at=NULL WHERE configuration_id=?",
-                (now, dict(parent)["configuration_id"]),
-            )
+            if active:
+                item = dict(active)
+                parent = connection.execute(
+                    "SELECT * FROM configuration_versions WHERE version=?", (item["parent_version"],)
+                ).fetchone()
+                if parent is None:
+                    raise RuntimeError("config-v0.7.1 parent is unavailable; rollback was not applied.")
+                now = "2026-07-30T18:00:01+00:00" if current == 10 else "2026-07-30T16:00:01+00:00"
+                connection.execute(
+                    "UPDATE configuration_versions SET status='inactive', deactivated_at=? WHERE configuration_id=?",
+                    (now, item["configuration_id"]),
+                )
+                connection.execute(
+                    "UPDATE configuration_versions SET status='active', activated_at=?, deactivated_at=NULL WHERE configuration_id=?",
+                    (now, dict(parent)["configuration_id"]),
+                )
         connection.execute("DELETE FROM schema_migrations WHERE version=?", (current,))
         connection.execute(f"PRAGMA user_version = {target_version}")
     return target_version

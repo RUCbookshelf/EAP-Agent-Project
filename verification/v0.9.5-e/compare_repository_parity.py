@@ -17,6 +17,23 @@ OUTPUT = ROOT / "verification" / "v0.9.5-g" / "postchange_facade_inventory.json"
 # postchange_repository_inventory.json evidence remains unchanged.
 BASELINE = "769e6d8"
 
+# v0.9.7-B WU3 documented revisions (2026-08-05).
+#
+# - `PracticeRepository._next_practice_id` was repaired: the numeric suffix
+#   now starts after the FULL id prefix (prefix-length-safe SUBSTR) with a
+#   same-prefix LIKE filter, so two- and three-character prefixes allocate
+#   correctly. The historical E-era SQL remains in git history; parity for
+#   the repaired function is pinned to this frozen fingerprint.
+# - migration 13 (additive partial unique index for one active priority key)
+#   legitimately revised app/database/migrations.py; parity is pinned to the
+#   WU3 frozen SHA-256 of the whole file instead of the E-era baseline.
+_PRIVATE_SQL_REVISIONS = {
+    "PracticeRepository._next_practice_id": [
+        "76d29ea4e034bf820d2f3ce0027433865fc31db442c334e7fee5de9756efbf9a",
+    ],
+}
+_MIGRATIONS_WU3_SHA256 = "b7aa0992fcc92ceb668c1cdd570434bd644b03cfe3c869492a469c14332c5f3f"
+
 OWNER_MODULE = {
     "SystemRepository": ("system.py", "SQLiteSystemRepository", "_system_repository"),
     "ConfigurationRepository": ("configuration.py", "SQLiteConfigurationRepository", "_configuration_repository"),
@@ -154,7 +171,11 @@ def main() -> None:
     }.items():
         for name in private_names:
             _, current = implementations[f"{owner}:{name}"]
-            parity = sql_hashes(baseline_private[name]) == sql_hashes(current)
+            revision_key = f"{owner}:{name}"
+            if revision_key in _PRIVATE_SQL_REVISIONS:
+                parity = sql_hashes(current) == _PRIVATE_SQL_REVISIONS[revision_key]
+            else:
+                parity = sql_hashes(baseline_private[name]) == sql_hashes(current)
             private_sql[name] = parity
             if not parity:
                 failures.append({"private_sql": name})
@@ -204,7 +225,12 @@ def main() -> None:
         "sql_fingerprint_drift_count": sum(not row["sql_fingerprint_parity"] for row in rows),
         "private_sql_parity": private_sql,
         "schema_constant_parity": schema_before == schema_after,
-        "migrations_source_parity": migrations_before == migrations_after,
+        "migrations_source_parity": (
+            hashlib.sha256(migrations_after.encode("utf-8")).hexdigest()
+            == _MIGRATIONS_WU3_SHA256
+            if _MIGRATIONS_WU3_SHA256
+            else migrations_before == migrations_after
+        ),
         "table_owner_count": len(all_tables),
         "table_owners_unique": len(all_tables) == len(set(all_tables)) == 33,
         "dynamic_delegation_present": dynamic_delegation,

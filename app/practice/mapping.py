@@ -192,6 +192,14 @@ def _signals_from_diagnosis(diagnosis: dict[str, Any]) -> list[dict[str, Any]]:
     return signals
 
 
+def diagnosis_contains_id(diagnosis: dict[str, Any], diagnosis_id: str) -> bool:
+    """True when the persisted diagnosis record contains the given signal ID."""
+    return any(
+        signal.get("diagnosis_id") == diagnosis_id
+        for signal in _signals_from_diagnosis(diagnosis)
+    )
+
+
 def build_target_contract(
     bundle: dict[str, Any],
     *,

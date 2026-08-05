@@ -176,109 +176,103 @@
     },
     {
       "dependency_function": "get_practice_student_reader",
-      "line": 70,
+      "line": 68,
       "router": "practice.py",
       "use_cache": null
     },
     {
       "dependency_function": "get_practice_reader",
-      "line": 71,
+      "line": 69,
       "router": "practice.py",
       "use_cache": null
     },
     {
-      "dependency_function": "get_practice_writer",
-      "line": 78,
-      "router": "practice.py",
-      "use_cache": null
-    },
-    {
-      "dependency_function": "get_practice_service",
-      "line": 79,
+      "dependency_function": "get_practice_target_creation_service",
+      "line": 76,
       "router": "practice.py",
       "use_cache": null
     },
     {
       "dependency_function": "get_practice_submission_reader",
-      "line": 80,
+      "line": 77,
       "router": "practice.py",
       "use_cache": null
     },
     {
       "dependency_function": "get_practice_reader",
-      "line": 113,
+      "line": 100,
       "router": "practice.py",
       "use_cache": null
     },
     {
       "dependency_function": "get_practice_writer",
+      "line": 101,
+      "router": "practice.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_practice_service",
+      "line": 102,
+      "router": "practice.py",
+      "use_cache": null
+    },
+    {
+      "dependency_function": "get_practice_reader",
       "line": 114,
       "router": "practice.py",
       "use_cache": null
     },
     {
-      "dependency_function": "get_practice_service",
-      "line": 115,
-      "router": "practice.py",
-      "use_cache": null
-    },
-    {
       "dependency_function": "get_practice_reader",
-      "line": 127,
-      "router": "practice.py",
-      "use_cache": null
-    },
-    {
-      "dependency_function": "get_practice_reader",
-      "line": 135,
+      "line": 122,
       "router": "practice.py",
       "use_cache": null
     },
     {
       "dependency_function": "get_practice_writer",
-      "line": 136,
+      "line": 123,
       "router": "practice.py",
       "use_cache": null
     },
     {
       "dependency_function": "get_practice_submission_reader",
-      "line": 137,
+      "line": 124,
       "router": "practice.py",
       "use_cache": null
     },
     {
       "dependency_function": "get_practice_service",
-      "line": 138,
+      "line": 125,
       "router": "practice.py",
       "use_cache": null
     },
     {
       "dependency_function": "get_practice_reader",
-      "line": 164,
+      "line": 151,
       "router": "practice.py",
       "use_cache": null
     },
     {
       "dependency_function": "get_practice_student_reader",
-      "line": 172,
+      "line": 159,
       "router": "practice.py",
       "use_cache": null
     },
     {
       "dependency_function": "get_practice_reader",
-      "line": 173,
+      "line": 160,
       "router": "practice.py",
       "use_cache": null
     },
     {
       "dependency_function": "get_practice_student_reader",
-      "line": 180,
+      "line": 167,
       "router": "practice.py",
       "use_cache": null
     },
     {
       "dependency_function": "get_practice_reader",
-      "line": 181,
+      "line": 168,
       "router": "practice.py",
       "use_cache": null
     },

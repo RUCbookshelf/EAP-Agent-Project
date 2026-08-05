@@ -9,9 +9,11 @@ from app.api.deps import (
     get_practice_service,
     get_practice_student_reader,
     get_practice_submission_reader,
+    get_practice_target_creation_service,
     get_practice_writer,
     require_student,
 )
+from app.practice.mapping import PriorityMappingError, PriorityPracticeMappingService
 
 router = APIRouter()
 
@@ -23,6 +25,7 @@ _STATUS_BY_MAPPING_KIND = {
     "malformed_priority": 422,
     "unresolved_priority": 422,
     "unsupported_category": 422,
+    "invalid_evidence": 422,
 }
 
 
@@ -33,11 +36,6 @@ def _resolve_priority_contract(payload: dict, submission_reader) -> dict:
     every target field is loaded from persistence and client-supplied values
     that conflict with the resolved contract are rejected.
     """
-    from app.practice.mapping import (
-        PriorityMappingError,
-        PriorityPracticeMappingService,
-    )
-
     mapper = PriorityPracticeMappingService(submission_reader)
     try:
         contract = mapper.resolve_target_contract(
@@ -75,37 +73,26 @@ def get_practice_targets(student_id: str,
 
 @router.post("/api/v1/practice-targets")
 def create_practice_target(payload: dict,
-                           practice_writer=Depends(get_practice_writer),
-                           practice_service=Depends(get_practice_service),
+                           target_creation_service=Depends(get_practice_target_creation_service),
                            practice_submission_reader=Depends(get_practice_submission_reader)) -> dict:
-    svc = practice_service
     source_priority_id = payload.get("source_priority_id")
-    if source_priority_id is not None:
-        contract = _resolve_priority_contract(payload, practice_submission_reader)
-        target = svc.create_practice_target(
-            student_id=contract.student_id,
-            source_submission_id=contract.source_submission_id,
-            source_diagnosis_id=contract.source_diagnosis_id,
-            target_code=contract.target_code,
-            target_label=contract.target_label,
-            source_priority_id=contract.source_priority_id,
-            evidence_ids=contract.evidence_ids,
-            gate_status=contract.diagnostic_gate_status,
-        )
-    else:
-        target = svc.create_practice_target(
+    try:
+        if source_priority_id is not None:
+            contract = _resolve_priority_contract(payload, practice_submission_reader)
+            return target_creation_service.create_or_reuse_priority_target(contract)
+        return target_creation_service.create_legacy_target(
             student_id=payload.get("student_id", ""),
             source_submission_id=payload.get("source_submission_id", 0),
             source_diagnosis_id=payload.get("source_diagnosis_id", ""),
             target_code=payload.get("target_code", ""),
             target_label=payload.get("target_label", ""),
-            source_priority_id=None,
             evidence_ids=payload.get("evidence_ids") or [],
             gate_status=payload.get("gate_status", "selected"),
         )
-    if target.get("status") != "practice_not_available":
-        target = practice_writer.save_practice_target(target)
-    return target
+    except PriorityMappingError as exc:
+        status = _STATUS_BY_MAPPING_KIND.get(exc.kind, 422)
+        raise HTTPException(
+            status, "The practice target could not be created.") from exc
 
 
 @router.post("/api/v1/practice-targets/{practice_target_id}/exercises")

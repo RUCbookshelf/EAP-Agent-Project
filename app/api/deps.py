@@ -135,6 +135,10 @@ def get_practice_service(request: Request):
     return request.app.state.practice_service
 
 
+def get_practice_target_creation_service(request: Request):
+    return request.app.state.practice_target_creation_service
+
+
 def require_student(repository, student_id: str) -> dict:
     """Return the student row or raise the canonical 404 used by the API."""
     student = repository.get_student(student_id)

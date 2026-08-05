@@ -72,6 +72,9 @@ G_ALLOWLIST = (
     "app/services/submission.py,"
     "app/practice/ports.py,"
     "app/practice/service.py,"
+    "app/practice/mapping.py,"
+    "app/practice/schemas.py,"
+    "app/practice/target_creation.py,"
     "app/api/routers/practice.py"
 )
 
