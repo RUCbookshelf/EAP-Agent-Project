@@ -562,7 +562,7 @@ class TestLegacyCompatibility:
         assert target["source_priority_id"] is None
         assert target["evidence_ids"] == []
 
-    def test_legacy_evidence_ids_are_forwarded(self, client):
+    def test_legacy_evidence_ids_are_rejected(self, client):
         essay_id, priority = self._seed(client)
         response = client.post("/api/v1/practice-targets", json={
             "student_id": "WU2-L", "source_submission_id": essay_id,
@@ -572,8 +572,10 @@ class TestLegacyCompatibility:
             "evidence_ids": ["repeated_content_words"],
             "gate_status": "selected",
         })
-        assert response.status_code == 200, response.text
-        assert response.json()["evidence_ids"] == ["repeated_content_words"]
+        assert response.status_code == 422
+        with client.app.state.repository.connect() as conn:
+            count = conn.execute("SELECT COUNT(*) FROM practice_targets").fetchone()[0]
+        assert count == 0
 
     def test_practice_flow_and_journey_remain_intact(self, client):
         essay_id, priority = self._seed(client)
@@ -636,7 +638,7 @@ class TestScopeGuards:
         }).json()
         assert target["status"] == "active"
 
-    def test_no_duplicate_prevention_in_wu2(self, client):
+    def test_duplicate_requests_reuse_the_same_target(self, client):
         response = client.post("/api/v1/submissions", json={
             "student_id": "WU2-G", "writing_prompt": "What actions matter for sustainability?",
             "genre": "argumentative essay", "draft_stage": "first draft", "timed": False,
@@ -656,7 +658,7 @@ class TestScopeGuards:
         first = client.post("/api/v1/practice-targets", json=payload)
         second = client.post("/api/v1/practice-targets", json=payload)
         assert first.status_code == 200 and second.status_code == 200
-        assert first.json()["practice_target_id"] != second.json()["practice_target_id"]
+        assert first.json()["practice_target_id"] == second.json()["practice_target_id"]
         with client.app.state.repository.connect() as conn:
             count = conn.execute("SELECT COUNT(*) FROM practice_targets").fetchone()[0]
-        assert count == 2
+        assert count == 1

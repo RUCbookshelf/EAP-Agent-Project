@@ -137,7 +137,7 @@ def test_three_points_create_provisional_direction_with_traceable_points():
 
 def test_migration_8_is_additive_and_activates_v07_configuration(tmp_path):
     database = Database(tmp_path / "v07.db"); database.initialize()
-    assert database._system_repository.migration_version() == LATEST_MIGRATION_VERSION == 12
+    assert database._system_repository.migration_version() == LATEST_MIGRATION_VERSION == 13
     with database.connect() as connection:
         tables = {row[0] for row in connection.execute("SELECT name FROM sqlite_master WHERE type='table'")}
         columns = {row[1] for row in connection.execute("PRAGMA table_info(learner_profile_snapshots)")}

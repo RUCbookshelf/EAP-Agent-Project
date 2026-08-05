@@ -83,7 +83,7 @@ def _dashboard_service(repository):
 
 def test_migration_6_creates_active_configuration_and_audit(tmp_path):
     repository = Database(tmp_path / "migration.db"); repository.initialize()
-    assert repository._system_repository.migration_version() == 12
+    assert repository._system_repository.migration_version() == 13
     active = repository._configuration_repository.get_active_configuration()
     assert active.version == "config-v0.9.0" and active.status == "active"
     assert len(repository._configuration_repository.list_configuration_audit()) >= 5
