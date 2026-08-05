@@ -371,11 +371,21 @@ logs/isolated DBs; all WU4 project changes are committed.
 - `25d901e` `test(v0.9.7-b): verify focused task and attempt recovery`
   - tests/test_v097b_wu4_practice_task.py (new, 32 tests) + surface/route/
     count contract test updates and the v0.9.7-A/v0.9.6-C1 entry updates.
-- `90a83c5` `docs(v0.9.7-b): close work unit 4`
+- `dbfe37b` `docs(v0.9.7-b): close work unit 4`
   - RUN_VERIFICATION_V0.9.7_B_WU4.md (new), project-state docs, and the WU4
     rendered-matrix run directory (scripts, evidence, screenshots).
 
 No push or pull request was opened (not instructed).
+
+### WU4 closure metadata reconciliation (WU5 preflight)
+
+The final `docs(v0.9.7-b): close work unit 4` commit on `master` is
+`dbfe37b` (WU4 implementation and verification closure HEAD; parent
+`25d901e`). The earlier `90a83c5` is the pre-amendment version of the same
+documentation commit (same parent `25d901e` and author timestamp, earlier
+committer timestamp). `90a83c5` is NOT an ancestor of the current `master`
+history and is superseded by `dbfe37b`; it is retained here only as
+historical record. The WU5 implementation baseline is `dbfe37b`.
 
 ## 30. End state
 
