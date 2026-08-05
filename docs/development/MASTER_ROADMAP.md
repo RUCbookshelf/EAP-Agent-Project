@@ -3,7 +3,7 @@
 | Item | Status |
 |---|---|
 | v0.9.7-A Priority-Guided Learning Cycle Completion | COMPLETE and verified (focused 14 passed; affected regression 293 passed; full non-live core 860 passed / 8 skipped / exit 0; `run.bat --verify` PASS; rendered matrix all four locale/viewport combinations PASS; evidence verification/v0.9.7-a/v0.9.7-a-20260804-r1/) |
-| v0.9.7-B Practice Target Generation and Practice Workflow | WU1-WU3 COMPLETE (RUN_VERIFICATION_V0.9.7_B_WU2.md + WU3.md); WU4 focused Practice task and attempt loop COMPLETE (RUN_VERIFICATION_V0.9.7_B_WU4.md; explicit entry intent + create-or-reuse, learner-owned context endpoint, seeded current exercise, attempt ownership + pending guard, saved-state recovery; focused 32 passed; affected 638 passed / 1 skipped; full non-live core 1000 passed / 8 skipped / exit 0; `run.bat --verify` PASS; rendered matrix en/zh x desktop/mobile PASS); WU5 (evaluation + completion semantics) next; v0.9.7-B overall NOT complete |
+| v0.9.7-B Practice Target Generation and Practice Workflow | WU1-WU3 COMPLETE (RUN_VERIFICATION_V0.9.7_B_WU2.md + WU3.md); WU4 focused Practice task and attempt loop COMPLETE (RUN_VERIFICATION_V0.9.7_B_WU4.md); WU5 evaluation semantics, target completion, and post-Practice next steps COMPLETE (RUN_VERIFICATION_V0.9.7_B_WU5.md; formative evaluation view with available/unavailable states, explicit Finish action, idempotent ACTIVE->COMPLETED with column/JSON consistency, persistence-backed completed-state re-entry, bounded next steps; focused 38 passed; combined WU2-WU5 178 passed; affected 553 passed / 3 skipped; full non-live core 1039 passed / 8 skipped / exit 0; `run.bat --verify` PASS; rendered matrix en/zh x desktop/mobile PASS); WU6 (Journey integration verification + full v0.9.7-B closure) next; v0.9.7-B overall NOT complete |
 | v0.9.7-C Student Journey Functional Completion | not started |
 | v0.9.7-D Student UI/UX Redesign and Visual Polish | not started |
 | v0.9.7-E Responsive, Mobile, and Accessibility Refinement | not started |
@@ -60,6 +60,24 @@ matrix (en/zh x 1280x900/390x844) PASS; evidence
 RUN_VERIFICATION_V0.9.7_B_WU4.md. WU5 (evaluation semantics + completion) is
 the next planned work unit; v0.9.7-B is not yet complete. Do not begin
 v0.9.7-C.
+
+**v0.9.7-B WU5 (2026-08-05):** evaluation semantics, target completion, and
+post-Practice next steps are complete and verified: the persisted
+rule-based evaluation is presented as formative task feedback with
+learner-owned AVAILABLE/UNAVAILABLE read states (malformed rows degrade
+safely), an explicit Finish This Practice Cycle action persists the
+idempotent ACTIVE -> COMPLETED transition atomically (status column +
+target_json + JSON-only updated_at; code-only enum; no migration 14),
+re-entry through reload/Feedback/Revision reuses the completed target from
+persistence without a fresh form, and bounded next steps (Return to
+Feedback, Open Learning Journey, explicit other-active-target selection)
+perform navigation only with no new Journey events. Focused 38 passed;
+combined WU2-WU5 178 passed; affected regression 553 passed / 3 skipped;
+full non-live core 1039 passed / 8 skipped / exit 0; `run.bat --verify`
+PASS; rendered matrix (en/zh x 1280x900/390x844) PASS; evidence
+RUN_VERIFICATION_V0.9.7_B_WU5.md. WU6 (Journey integration verification +
+full v0.9.7-B closure) is the next planned work unit; v0.9.7-B is not yet
+complete. Do not begin v0.9.7-C.
 
 # Master roadmap
 
