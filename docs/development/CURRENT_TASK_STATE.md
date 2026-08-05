@@ -1,34 +1,35 @@
 **Date:** 2026-08-05
-**Current task:** v0.9.7-B Work Unit 6 - Journey Integration Verification,
-Final Product Matrix, and Release Closure
-**Status:** COMPLETE - all 80 WU6 acceptance criteria satisfied; WU1-WU6
-complete; **v0.9.7-B is complete, verified, and closed**; the next planned
-phase is v0.9.7-C (NOT started; see RUN_VERIFICATION_V0.9.7_B_WU6.md and
-RUN_VERIFICATION_V0.9.7_B.md).
+**Current task:** v0.9.7-C Work Unit 4 - Final Verification and Release
+Closure
+**Status:** COMPLETE - all 36 WU4 acceptance criteria satisfied; WU1-WU4
+complete; **v0.9.7-C is complete, verified, and closed**; the next planned
+phase is v0.9.7-D (NOT started; see RUN_VERIFICATION_V0.9.7_C_WU4.md and
+RUN_VERIFICATION_V0.9.7_C.md).
 
-- Journey: the existing read-time projection (app/journey/service.py) was
-  verified for the complete priority-derived cycle - 12 event types with
-  exact dedup keys; completion creates no event (status flows through
-  `research_detail.status`); provenance/dedup/ordering deterministic;
-  repeated reads, reloads, locale switches, Feedback/Revision re-entry,
-  target reuse, and repeated completion never duplicate events; Journey
-  reads perform no writes (whole-DB row counts); evaluation-unavailable
-  and legacy records project honestly; no new Journey event types.
-- Release gates: focused WU6 18 passed; combined WU2-WU6 197 passed;
-  affected regression 569 passed / 0 failed; full non-live core 1057
-  passed / 8 skipped / exit 0; `run.bat --verify` PASS twice; locale
-  parity 572/572; Research smoke 6/6; fresh-index GitNexus impact review
-  (0 production symbols changed); `git diff --check` clean.
-- Matrix: EN/ZH x 1280x900/390x844 main cycles + evaluation-unavailable,
-  no-priority, and legacy scenarios all PASS independently (fresh isolated
-  DB + distinct learner each; 0 console/page errors; 0 remote requests;
-  no overflow/raw keys; mobile controls >= 44px; no mastery wording).
-- Metadata: WU5 closure roles reconciled in the WU5 report (`01115ba`
-  functional/evidence HEAD; `b9e030d` closure HEAD); WU6 implementation
-  baseline `b0f16b5` (protocol-freeze commit); no migration 14; no
-  production code change in WU6.
-- Next: v0.9.7-C (Student Journey Functional Completion). Do not begin
-  v0.9.7-C in this stage.
+- WU1 (cycle model): learner-owned read-time cycle view
+  (`app/journey/cycles.py`) - writing cycles anchored at the resolved root
+  submission, revisions through persisted linkage, feedback stages,
+  Practice activities with validated priority provenance, honest writing
+  and practice states, raw-order chronology; additive `cycles`/
+  `cycles_version` keys; one additive projection read
+  (`list_exercise_instances`); no writes, no migration, no new raw events.
+- WU2 (safe navigation): `available_actions` (Open Revision per submission
+  with feedback, Open Practice per target), navigation helpers carrying
+  stable references only, fail-safe guards on Revision/Practice pages for
+  stale and cross-learner presets; 2 locale keys.
+- WU3 (functional UI): grouped cycle rendering on the Journey page with
+  honest states, safe actions, and empty/error/legacy handling; 26 locale
+  keys (parity 600/600); fixed the pre-existing missing `render_api_error`
+  import.
+- WU4 (closure): 8 release tests; full UI end-to-end matrix (en/zh x
+  1280x900/390x844) PASS with 0 console/page errors, 0 remote requests, 0
+  writes, no unsupported learning claims; focused 75; combined continuity
+  510 passed; full non-live core 1132 passed / 8 skipped / exit 0;
+  `run.bat --verify` PASS twice; Research smoke 6/6; fresh-index GitNexus
+  impact review (production delta scoped; no unexplained fan-out); no
+  migration 14.
+- Next: v0.9.7-D (Student UI/UX Redesign and Visual Polish). Do not begin
+  v0.9.7-D in this stage.
 
 **Date:** 2026-08-04
 **Date:** 2026-08-05

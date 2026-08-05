@@ -1,8 +1,35 @@
-## Current v0.9.7-B State
+## Current v0.9.7-C State
 
-- Status: **v0.9.7-B is COMPLETE, verified, and closed.** WU1-WU6 are
-  complete; all 80 WU6 acceptance criteria (and all prior WU criteria) are
-  satisfied; the next planned phase is v0.9.7-C (NOT started).
+- Status: **v0.9.7-C is COMPLETE, verified, and closed.** WU1-WU4 are
+  complete; all WU1-WU4 acceptance criteria are satisfied; the next
+  planned phase is v0.9.7-D (NOT started).
+- Journey cycle model (WU1): learner-owned read-time cycle view
+  (`app/journey/cycles.py`) groups raw events into writing cycles with
+  revision-root resolution, feedback stages, Practice activities with
+  validated priority provenance, honest writing/practice states, and
+  raw-order chronology; the raw event response is preserved with additive
+  `cycles`/`cycles_version` keys; no writes, no migration, no new raw
+  events.
+- Safe navigation (WU2): `available_actions` descriptors with stable
+  references (Open Revision / Open Practice); destination pages validate
+  learner ownership and fail safely on stale/cross-learner references.
+- Functional UI (WU3): the Journey page renders grouped cycles
+  (original/revision distinction, feedback/priority relationships,
+  Practice states, safe actions, honest empty/error/legacy handling);
+  locale parity 600/600.
+- Verification (WU4): full UI end-to-end matrix (en/zh x 1280x900/390x844)
+  PASS with zero console/page errors, zero remote requests, zero writes,
+  no unsupported learning claims; focused 75; combined continuity 510
+  passed; full non-live core 1132 passed / 8 skipped / exit 0;
+  `run.bat --verify` PASS twice; Research smoke 6/6; fresh-index GitNexus
+  impact review (production delta limited to the cycle model, service read
+  surface, four student UI files, and locales).
+- Evidence: RUN_VERIFICATION_V0.9.7_C.md (aggregate),
+  RUN_VERIFICATION_V0.9.7_C_WU1/2/3/4.md,
+  docs/development/V0.9.7_C_SPEC.md,
+  verification/v0.9.7-c/v0.9.7-c-wu2/3/4-20260805-r1/.
+- Next: v0.9.7-D (Student UI/UX Redesign and Visual Polish). Do not begin
+  v0.9.7-D in this stage.
 - WU6 (Journey integration verification + full v0.9.7-B closure):
   the existing read-time Journey projection was verified for the complete
   priority-derived Practice cycle - exact event types/provenance/dedup

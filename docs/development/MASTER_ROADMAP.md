@@ -4,7 +4,7 @@
 |---|---|
 | v0.9.7-A Priority-Guided Learning Cycle Completion | COMPLETE and verified (focused 14 passed; affected regression 293 passed; full non-live core 860 passed / 8 skipped / exit 0; `run.bat --verify` PASS; rendered matrix all four locale/viewport combinations PASS; evidence verification/v0.9.7-a/v0.9.7-a-20260804-r1/) |
 | v0.9.7-B Practice Target Generation and Practice Workflow | COMPLETE and closed - WU1-WU6 complete (RUN_VERIFICATION_V0.9.7_B_WU2/3/4/5/6.md + aggregate RUN_VERIFICATION_V0.9.7_B.md; priority-to-practice mapping + provenance, idempotent create-or-reuse + migration 13, focused task + reliable attempt loop, honest evaluation + explicit completion + bounded next steps, Journey projection verified end to end; focused 18 (WU6) / combined WU2-WU6 197 passed; affected 569 passed / 0 failed; full non-live core 1057 passed / 8 skipped / exit 0; `run.bat --verify` PASS twice; rendered matrix en/zh x desktop/mobile PASS; locale parity 572/572; Research smoke 6/6; fresh-index impact review 0 production symbols; no migration 14; no new Journey event types) |
-| v0.9.7-C Student Journey Functional Completion | not started |
+| v0.9.7-C Student Journey Functional Completion | COMPLETE and closed - WU1-WU4 complete (RUN_VERIFICATION_V0.9.7_C_WU1/2/3/4.md + aggregate RUN_VERIFICATION_V0.9.7_C.md + docs/development/V0.9.7_C_SPEC.md; learner-owned read-time cycle view with honest states, safe Journey navigation with fail-safe destination guards, grouped Journey UI with safe actions, full UI end-to-end matrix en/zh x desktop/mobile PASS; focused 75; combined continuity 510 passed; full non-live core 1132 passed / 8 skipped / exit 0; `run.bat --verify` PASS twice; locale parity 600/600; Research smoke 6/6; fresh-index impact review with scoped production delta; no migration 14; no new raw events) |
 | v0.9.7-D Student UI/UX Redesign and Visual Polish | not started |
 | v0.9.7-E Responsive, Mobile, and Accessibility Refinement | not started |
 
@@ -97,6 +97,26 @@ WU5 closure metadata was reconciled (`01115ba` functional/evidence HEAD;
 production code change. Evidence: RUN_VERIFICATION_V0.9.7_B_WU6.md +
 verification/v0.9.7-b/v0.9.7-b-wu6-20260805-r1/. **v0.9.7-B is complete,
 verified, and closed.** The next planned phase is v0.9.7-C (not started).
+
+**v0.9.7-C (2026-08-05):** Student Journey functional completion is
+complete and closed: WU1 added a learner-owned read-time cycle view
+(writing cycles anchored at the resolved root, revisions, feedback stages,
+Practice activities with validated priority provenance, honest
+writing/practice states, raw-order chronology; additive
+`cycles`/`cycles_version` response keys; one additive projection read; no
+writes/migration/new raw events), WU2 added safe Journey actions
+(Open Revision / Open Practice with stable references; fail-safe
+destination guards for stale and cross-learner presets), WU3 rendered the
+grouped cycle UI with honest states and safe actions (600/600 locale
+parity; fixed the pre-existing missing `render_api_error` import), and WU4
+ran the final verification: focused 75 passed, combined continuity 510
+passed, full non-live core 1132 passed / 8 skipped / exit 0, `run.bat
+--verify` PASS twice, locale parity 600/600, Research smoke 6/6, full UI
+end-to-end matrix (en/zh x desktop/mobile) PASS with zero writes and zero
+console/page/network errors, and a fresh-index GitNexus impact review with
+a scoped production delta. Evidence: RUN_VERIFICATION_V0.9.7_C.md +
+verification/v0.9.7-c/. **v0.9.7-C is complete, verified, and closed.**
+The next planned phase is v0.9.7-D (not started).
 
 # Master roadmap
 

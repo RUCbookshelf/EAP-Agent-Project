@@ -1,3 +1,42 @@
+## v0.9.7-C (2026-08-05)
+
+### Student Journey Functional Completion (feature stage)
+
+- WU1: learner-owned read-time Journey cycle view
+  (`app/journey/cycles.py`) - persisted records group into coherent
+  writing cycles (anchor = resolved root submission through revision
+  linkage; broken chains become controlled unlinked cycles), feedback
+  stages attach to the correct submission, Practice activities attach
+  through the target's source submission with validated priority
+  provenance (valid/legacy/unresolved, never fabricated), honest writing
+  and practice states derive from persisted activity only, and each cycle
+  carries its raw-order chronology. The Journey response adds
+  `cycles`/`cycles_version` keys (additive; raw events unchanged); one
+  additive projection read (`list_exercise_instances`) supports honest
+  attempt->target association. No writes, no migration, no new raw events.
+- WU2: safe Journey navigation - cycle actions (Open Revision per
+  submission with feedback; Open Practice per target) carry stable
+  references only; destination pages validate learner ownership and fail
+  safely on stale/cross-learner references with honest notes; navigation
+  never writes and never creates targets/exercises/attempts/evaluations.
+- WU3: grouped Journey UI - the page renders coherent writing cycles with
+  original/revision distinction, feedback and priority relationships,
+  Practice states (available/attempted/evaluation available/evaluation
+  unavailable/completed), safe action buttons, and honest empty/error/
+  legacy handling; completion wording remains activity completion only
+  (saved response and formative feedback remain available); 26 new locale
+  keys (parity 600/600); fixed the pre-existing missing `render_api_error`
+  import on the Journey error path.
+- WU4: final verification and closure - 8 release tests, full UI
+  end-to-end matrix (en/zh x 1280x900/390x844) PASS with zero writes and
+  zero console/page/network errors, focused 75, combined continuity 510
+  passed, full non-live core 1132 passed / 8 skipped / exit 0,
+  `run.bat --verify` PASS twice, Research smoke 6/6, fresh-index impact
+  review with scoped production delta; no migration 14.
+- Status: COMPLETE and verified - **v0.9.7-C is closed**; WU1-WU4
+  complete; all acceptance criteria satisfied.
+- Next: v0.9.7-D Student UI/UX Redesign and Visual Polish (not started).
+
 ## v0.9.7-B (2026-08-05)
 
 ### Priority-to-Practice Target Generation and Practice Workflow (feature stage)
