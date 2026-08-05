@@ -1,0 +1,42 @@
+{
+  "run_id": "v0.9.7-c-wu2-midpoint",
+  "cycle_view": {
+    "version": "journey-cycle-v0.9.7-c",
+    "cycle_count": 1,
+    "actions": [
+      {
+        "action": "open_revision",
+        "submission_id": 35
+      },
+      {
+        "action": "open_revision",
+        "submission_id": 36
+      },
+      {
+        "action": "open_practice",
+        "practice_target_id": "PT000002"
+      }
+    ]
+  },
+  "en_desktop": {
+    "combination": "en 1280x900",
+    "exceptions": 0,
+    "overflow": false,
+    "raw_keys": [],
+    "console_errors": [],
+    "page_errors": [],
+    "remote_requests": [],
+    "screenshot": "verification\\v0.9.7-c\\v0.9.7-c-wu2-20260805-r1\\screenshots\\en_1280x900_journey.png"
+  },
+  "zh_mobile": {
+    "combination": "zh_CN 390x844",
+    "exceptions": 0,
+    "overflow": false,
+    "raw_keys": [],
+    "console_errors": [],
+    "page_errors": [],
+    "remote_requests": [],
+    "screenshot": "verification\\v0.9.7-c\\v0.9.7-c-wu2-20260805-r1\\screenshots\\zh_390x844_journey.png"
+  },
+  "journey_reads_zero_writes": true
+}
