@@ -85,6 +85,9 @@ v0.9.7-B as a whole is NOT complete.
   - WU5 browser harness + matrix + evidence JSON + screenshots.
 - `01115ba` `chore(v0.9.7-b): drop debug screenshots from WU5 matrix
   evidence`
+- `b9e030d` `docs(v0.9.7-b): close work unit 5`
+  - WU5 verification report + project-state documents; final closure
+    documentation commit (direct child of `01115ba`).
 
 No push or pull request was opened (not instructed).
 
@@ -378,10 +381,17 @@ fresh index.
 ## 34. Final Git state
 
 - Branch: `master`.
-- Final HEAD: `01115ba` (`chore(v0.9.7-b): drop debug screenshots from WU5
-  matrix evidence`) plus the closure documentation commit (section 8).
+- WU5 functional and evidence HEAD: `01115ba` (`chore(v0.9.7-b): drop
+  debug screenshots from WU5 matrix evidence`; direct pre-closure
+  evidence parent of the closure documentation commit).
+- WU5 final closure documentation commit: `b9e030d` (`docs(v0.9.7-b):
+  close work unit 5`; parent `01115ba`).
+- WU5 final closure HEAD: `b9e030d`.
+- WU6 implementation baseline: the WU6 protocol-freeze commit recorded in
+  `docs/development/V0.9.7_B_WU6_PROTOCOL.md` (exact hash recorded in
+  `RUN_VERIFICATION_V0.9.7_B_WU6.md`).
 - Commit sequence: `42e285e` -> `6dbf43a` -> `089419c` -> `74b8698` ->
-  `5abab20` -> `0efd36d` -> `0662492` -> `01115ba` -> closure docs.
+  `5abab20` -> `0efd36d` -> `0662492` -> `01115ba` -> `b9e030d`.
 
 ## 35. Preserved user-owned files
 
