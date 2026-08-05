@@ -331,7 +331,7 @@ class TestFastAPIParity:
                     routes.append({"method": method, "path": path, "name": getattr(route, "name", None)})
         routes = sorted(routes, key=lambda r: (r["path"], r["method"]))
         assert routes == before_graph["routes"]
-        assert len([r for r in routes if r["method"] in ("GET", "POST")]) == 78
+        assert len([r for r in routes if r["method"] in ("GET", "POST")]) == 80
 
         depends_calls = []
         for rpath in sorted((ROOT / "app/api/routers").glob("*.py")):

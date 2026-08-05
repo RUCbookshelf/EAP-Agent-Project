@@ -110,6 +110,7 @@ class TestPortContracts:
         assert _public_protocol_methods(PracticeWritePort) == {
             "save_practice_target", "save_exercise_instance",
             "save_exercise_attempt", "save_practice_evaluation",
+            "update_practice_target_status",
         }
         assert _public_protocol_methods(PracticeReadPort) & _public_protocol_methods(
             PracticeWritePort) == set()
@@ -232,9 +233,11 @@ class TestRouterContract:
             and not node.name.startswith("_")
         }
         assert names == {
-            "create_exercise", "create_practice_target", "get_engagement_traces",
+            "complete_practice_target", "create_exercise", "create_practice_target",
+            "get_engagement_traces",
             "get_exercise_attempts", "get_exercises", "get_practice_targets",
             "get_practice_target_context", "get_transfer_evidence",
+            "get_practice_target_evaluations",
             "submit_exercise_attempt",
         }
 
@@ -242,7 +245,8 @@ class TestRouterContract:
         source = (ROOT / "app/api/deps.py").read_text(encoding="utf-8")
         for name in ("get_practice_submission_reader", "get_practice_reader",
                      "get_practice_writer", "get_practice_student_reader",
-                     "get_practice_service"):
+                     "get_practice_service",
+                     "get_practice_target_completion_service"):
             assert f"def {name}(request: Request):" in source
             assert f"request.app.state.{name.replace('get_practice_', 'practice_')}" in source
         assert "app.state.repository" not in source.replace(

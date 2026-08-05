@@ -11,6 +11,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import streamlit as st
 
+from app.ui.api_client import ApiClientError, ErrorCategory
 from app.ui.features.student.feedback import render_feedback_page
 from app.ui.features.student.home import render_student_home
 from app.ui.features.student.practice import render_practice_page
@@ -54,6 +55,7 @@ class FakeClient:
         self.revision_post_count = 0
         self.target_create_count = 0
         self.attempt_post_count = 0
+        self.complete_count = 0
         self.journey = dict(
             st.session_state.get("harness_journey")
             or {"state": "feedback_no_practice_target", "events": []}
@@ -61,6 +63,7 @@ class FakeClient:
         self.targets = list(st.session_state.get("harness_targets") or [])
         self.exercises = list(st.session_state.get("harness_exercises") or [])
         self.attempts = list(st.session_state.get("harness_attempts") or [])
+        self.evaluations = list(st.session_state.get("harness_evaluations") or [])
         self.candidates = list(st.session_state.get("harness_candidates") or [])
         self.source_bundle = dict(st.session_state.get("harness_source_bundle") or {})
         self.submit_response = dict(st.session_state.get("harness_submit_response") or {})
@@ -118,6 +121,27 @@ class FakeClient:
             return dict(response)
         return {"status": "practice_not_available", "reason": "harness default"}
 
+    def complete_practice_target(self, practice_target_id, payload):
+        self.complete_count += 1
+        if st.session_state.get("harness_fail_complete"):
+            raise ApiClientError(
+                ErrorCategory.BACKEND_PROCESSING_ERROR,
+                "probe completion failure",
+                operation="complete_practice_target",
+            )
+        response = st.session_state.get("harness_complete_response")
+        if response is not None:
+            completed = dict(response)
+        elif self.targets:
+            completed = dict(self.targets[0])
+            completed["status"] = "completed"
+        else:
+            completed = {"practice_target_id": practice_target_id, "status": "completed"}
+        for index, item in enumerate(self.targets):
+            if item.get("practice_target_id") == practice_target_id:
+                self.targets[index] = completed
+        return completed
+
     def get_practice_target_context(self, student_id, practice_target_id):
         response = st.session_state.get("harness_target_context")
         if response is not None:
@@ -137,6 +161,9 @@ class FakeClient:
 
     def get_exercise_attempts(self, exercise_id):
         return list(self.attempts)
+
+    def get_practice_target_evaluations(self, student_id, practice_target_id):
+        return [dict(item) for item in self.evaluations]
 
     def get_exercise_instances(self, practice_target_id):
         return list(self.exercises)
