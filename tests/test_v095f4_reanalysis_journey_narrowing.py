@@ -153,6 +153,10 @@ class MinimalProjectionReader:
         self.calls.append("list_practice_targets")
         return list(self.lists.get("targets", []))
 
+    def list_exercise_instances(self, practice_target_id=None, student_id=None) -> list[dict]:
+        self.calls.append("list_exercise_instances")
+        return list(self.lists.get("exercises", []))
+
     def list_exercise_attempts_by_student(self, student_id: str) -> list[dict]:
         self.calls.append("list_exercise_attempts_by_student")
         return list(self.lists.get("attempts", []))
@@ -196,6 +200,11 @@ def _populated_lists() -> dict:
             "target_code": "lexical_repetition_local", "status": "pending",
             "created_at": "2026-08-01T10:03:00+00:00",
         }],
+        "exercises": [{
+            "exercise_id": "EX000001", "practice_target_id": "PT000001",
+            "student_id": "JSTUB", "exercise_type": "sentence_rewrite",
+            "created_at": "2026-08-01T10:03:30+00:00",
+        }],
         "attempts": [{
             "attempt_id": "AT000001", "exercise_id": "EX000001",
             "created_at": "2026-08-01T10:04:00+00:00",
@@ -230,6 +239,7 @@ class TestFourPorts:
             "list_analysis_runs_for_student",
             "list_feedback_records_for_student",
             "list_practice_targets",
+            "list_exercise_instances",
             "list_exercise_attempts_by_student",
             "list_practice_evaluations_by_student",
             "list_within_task_responses",
@@ -250,6 +260,7 @@ class TestFourPorts:
             "list_analysis_runs_for_student": SQLitePracticeRepository.list_analysis_runs_for_student,
             "list_feedback_records_for_student": SQLitePracticeRepository.list_feedback_records_for_student,
             "list_practice_targets": SQLitePracticeRepository.list_practice_targets,
+            "list_exercise_instances": SQLitePracticeRepository.list_exercise_instances,
             "list_exercise_attempts_by_student": SQLitePracticeRepository.list_exercise_attempts_by_student,
             "list_practice_evaluations_by_student": SQLitePracticeRepository.list_practice_evaluations_by_student,
             "list_within_task_responses": SQLitePracticeRepository.list_within_task_responses,
@@ -340,6 +351,7 @@ class TestJourneyNarrowing:
             "list_analysis_runs_for_student",
             "list_feedback_records_for_student",
             "list_practice_targets",
+            "list_exercise_instances",
             "list_exercise_attempts_by_student",
             "list_practice_evaluations_by_student",
             "list_within_task_responses",
@@ -379,6 +391,8 @@ class TestJourneyNarrowing:
             "events": [],
             "derived_states": [],
             "state": "no_submissions",
+            "cycles": [],
+            "cycles_version": "journey-cycle-v0.9.7-c",
         }
 
     def test_populated_journey_output_order_ids_and_derived_status_unchanged(self):
