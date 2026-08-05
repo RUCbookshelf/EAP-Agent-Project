@@ -202,7 +202,7 @@ def status_badge_html(
     }[state]
     return (
         f'<span class="px-status-badge" data-testid="px-status-badge" '
-        f'data-state="{state}">{icon(icon_name, size=14, label=str(label))}'
+        f'data-state="{state}">{icon(icon_name, size=16, label=str(label))}'
         f'{_html.escape(str(label))}</span>'
     )
 

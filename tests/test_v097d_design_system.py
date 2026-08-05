@@ -373,9 +373,11 @@ class TestJourneyStructure:
         assert "journey_action_revision_28" in labels
         assert "journey_action_practice_PT000001" in labels
 
-    def test_loading_box_present_on_journey(self):
+    def test_loading_box_is_transient(self):
+        """The unified loading box clears once content is rendered."""
         at = _run_harness(**_base_config(_cycle()))
-        assert any("px-loading" in m.value for m in at.markdown)
+        assert not any("px-loading" in m.value for m in at.markdown)
+        assert t("student_journey_cycle_title", "en") in _markdown_text(at)
 
     def test_empty_state_and_api_error(self):
         at = _run_harness(

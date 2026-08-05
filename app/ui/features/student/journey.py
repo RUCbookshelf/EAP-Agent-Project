@@ -344,12 +344,17 @@ def render_learning_journey_page(api_client: StudentJourneyApiPort, lang: str) -
         return
 
     student_context_block([("student_context_learner", learner_id)], lang)
-    try:
+    loading_placeholder = st.empty()
+    with loading_placeholder:
         loading_box("journey_loading", lang)
+    try:
         journey = api_client.get_journey(learner_id)
     except ApiClientError as exc:
+        loading_placeholder.empty()
         render_api_error(exc, lang)
         return
+    finally:
+        loading_placeholder.empty()
 
     cycles = journey.get("cycles") or []
     events = journey.get("events", [])

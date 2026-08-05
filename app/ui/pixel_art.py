@@ -569,11 +569,18 @@ button[data-testid="stExpandSidebarButton"] {{
     opacity: 1 !important;
 }}
 [data-testid="stRadioGroup"] label[data-testid="stRadioOption"] {{
-    border: var(--px-border-thick) !important;
+    border: var(--px-border-thin) !important;
     background: var(--px-white) !important;
     padding: var(--px-space-2) var(--px-space-4) !important;
     margin-bottom: var(--px-space-2) !important;
     min-height: var(--px-control-height) !important;
+}}
+
+/* v0.9.7-D: quiet selection emphasis (info tint + weight) on the
+   currently selected radio option. */
+[data-testid="stRadioGroup"] label:has(input:checked) {{
+    background: var(--px-status-info) !important;
+    font-weight: var(--px-font-weight-bold) !important;
 }}
 
 /* ── Notices ───────────────────────────────────────────────────────── */
@@ -636,7 +643,8 @@ div[data-testid="stMainBlockContainer"]:has([data-testid="px-student-page"]) {{
 }}
 
 .px-student-purpose {{
-    border-left: var(--px-border-thick);
+    border-left: var(--px-border-hairline);
+    border-left-color: var(--px-border-subtle);
     background: var(--px-surface);
     padding: var(--px-space-3) var(--px-space-4);
     margin-bottom: var(--px-density-student-section);
@@ -650,7 +658,8 @@ div[data-testid="stMainBlockContainer"]:has([data-testid="px-student-page"]) {{
 }}
 
 .px-section-heading {{
-    border-bottom: var(--px-border-hairline) solid var(--px-border-subtle);
+    border-bottom: var(--px-border-hairline);
+    border-bottom-color: var(--px-border-subtle);
     padding-bottom: var(--px-space-1);
     margin-top: var(--px-space-8);
     margin-bottom: var(--px-space-2);
@@ -733,7 +742,8 @@ div[data-testid="stMainBlockContainer"]:has([data-testid="px-student-page"]) {{
     gap: var(--px-space-2);
     margin: 0 0 var(--px-density-student-section);
     padding: var(--px-card-pad);
-    border: var(--px-border-hairline) solid var(--px-border-subtle);
+    border: var(--px-border-hairline);
+    border-color: var(--px-border-subtle);
     background: var(--px-surface);
 }}
 
@@ -744,7 +754,8 @@ div[data-testid="stMainBlockContainer"]:has([data-testid="px-student-page"]) {{
 }}
 
 .px-student-context > div:not(:first-child) {{
-    border-top: var(--px-border-hairline) solid var(--px-border-subtle);
+    border-top: var(--px-border-hairline);
+    border-top-color: var(--px-border-subtle);
     padding-top: var(--px-space-2);
 }}
 
@@ -822,7 +833,7 @@ div[data-testid="stMainBlockContainer"]:has([data-testid="px-student-page"]) {{
     color: var(--px-dark);
 }}
 
-.px-btn-destructive {{
+button.px-btn-destructive {{
     background: var(--px-dark);
     color: var(--px-white);
 }}
@@ -849,29 +860,30 @@ div[data-testid="stMainBlockContainer"]:has([data-testid="px-student-page"]) {{
     vertical-align: middle;
 }}
 
-.px-badge-red {{
+span.px-badge-red {{
     background: var(--px-status-error);
     color: var(--px-status-on-error);
 }}
-.px-badge-green {{
+span.px-badge-green {{
     background: var(--px-status-success);
     color: var(--px-status-on-success);
 }}
-.px-badge-blue {{
+span.px-badge-blue {{
     background: var(--px-status-info);
     color: var(--px-status-on-info);
 }}
-.px-badge-yellow {{
+span.px-badge-yellow {{
     background: var(--px-status-warning);
     color: var(--px-status-on-warning);
 }}
 
-.px-status-badge {{
+span.px-status-badge {{
     display: inline-flex;
     align-items: center;
     gap: var(--px-space-1);
     padding: var(--px-space-1) var(--px-space-2);
-    border: var(--px-border-hairline) solid var(--px-border-subtle);
+    border: var(--px-border-hairline);
+    border-color: var(--px-border-subtle);
     font-family: var(--px-font-body);
     font-size: var(--px-font-size-label);
     font-weight: var(--px-font-weight-bold);
@@ -879,31 +891,31 @@ div[data-testid="stMainBlockContainer"]:has([data-testid="px-student-page"]) {{
     vertical-align: middle;
 }}
 
-.px-status-badge[data-state="success"] {{
+span.px-status-badge[data-state="success"] {{
     background: var(--px-status-success);
     color: var(--px-status-on-success);
     border-color: var(--px-status-accent-success);
 }}
 
-.px-status-badge[data-state="warning"] {{
+span.px-status-badge[data-state="warning"] {{
     background: var(--px-status-warning);
     color: var(--px-status-on-warning);
     border-color: var(--px-status-accent-warning);
 }}
 
-.px-status-badge[data-state="error"] {{
+span.px-status-badge[data-state="error"] {{
     background: var(--px-status-error);
     color: var(--px-status-on-error);
     border-color: var(--px-status-accent-error);
 }}
 
-.px-status-badge[data-state="info"] {{
+span.px-status-badge[data-state="info"] {{
     background: var(--px-status-info);
     color: var(--px-status-on-info);
     border-color: var(--px-status-accent-info);
 }}
 
-.px-status-badge[data-state="neutral"] {{
+span.px-status-badge[data-state="neutral"] {{
     background: var(--px-status-neutral);
     color: var(--px-status-on-neutral);
     border-color: var(--px-status-accent-neutral);
@@ -919,44 +931,50 @@ div[data-testid="stMainBlockContainer"]:has([data-testid="px-student-page"]) {{
     gap: var(--px-inline-gap);
 }}
 
-.px-notice-warning {{
+div.px-notice-warning {{
     background: var(--px-status-warning);
     color: var(--px-status-on-warning);
-    border-left: var(--px-border-thick) solid var(--px-status-accent-warning);
+    border-left: var(--px-border-thick);
+    border-left-color: var(--px-status-accent-warning);
 }}
 
-.px-notice-error {{
+div.px-notice-error {{
     background: var(--px-status-error);
     color: var(--px-status-on-error);
-    border-left: var(--px-border-thick) solid var(--px-status-accent-error);
+    border-left: var(--px-border-thick);
+    border-left-color: var(--px-status-accent-error);
 }}
 
-.px-notice-success {{
+div.px-notice-success {{
     background: var(--px-status-success);
     color: var(--px-status-on-success);
-    border-left: var(--px-border-thick) solid var(--px-status-accent-success);
+    border-left: var(--px-border-thick);
+    border-left-color: var(--px-status-accent-success);
 }}
 
-.px-notice-info {{
+div.px-notice-info {{
     background: var(--px-status-info);
     color: var(--px-status-on-info);
-    border-left: var(--px-border-thick) solid var(--px-status-accent-info);
+    border-left: var(--px-border-thick);
+    border-left-color: var(--px-status-accent-info);
 }}
 
-.px-notice-limitation {{
+div.px-notice-limitation {{
     background: var(--px-surface);
     color: var(--px-text);
     border-color: var(--px-dark);
 }}
 
-.px-notice-dashed {{
-    border: var(--px-border-thin) dashed var(--px-status-accent-neutral);
+div.px-notice-dashed {{
+    border: var(--px-border-thin) dashed;
+    border-color: var(--px-status-accent-neutral);
     background: var(--px-status-neutral);
     color: var(--px-status-on-neutral);
 }}
 
-.px-empty {{
-    border: var(--px-border-thin) dashed var(--px-border-subtle);
+div.px-empty {{
+    border: var(--px-border-thin) dashed;
+    border-color: var(--px-border-subtle);
     padding: var(--px-space-6) var(--px-space-4);
     text-align: center;
     color: var(--px-muted);
@@ -984,7 +1002,7 @@ div[data-testid="stMainBlockContainer"]:has([data-testid="px-student-page"]) {{
     flex: 1;
 }}
 
-.px-quote {{
+div.px-quote {{
     border: var(--px-border-thin);
     background: var(--px-surface);
     padding-left: var(--px-space-4);
@@ -1008,7 +1026,8 @@ div[data-testid="stMainBlockContainer"]:has([data-testid="px-student-page"]) {{
     gap: var(--px-space-2);
     margin-bottom: var(--px-space-3);
     padding-bottom: var(--px-space-2);
-    border-bottom: var(--px-border-hairline) solid var(--px-border-subtle);
+    border-bottom: var(--px-border-hairline);
+    border-bottom-color: var(--px-border-subtle);
 }}
 
 .px-cycle-head .px-card-title {{
@@ -1018,14 +1037,16 @@ div[data-testid="stMainBlockContainer"]:has([data-testid="px-student-page"]) {{
 
 .px-stage-item {{
     background: var(--px-white);
-    border: var(--px-border-hairline) solid var(--px-border-subtle);
+    border: var(--px-border-hairline);
+    border-color: var(--px-border-subtle);
     padding: var(--px-space-3) var(--px-space-4);
     margin-bottom: var(--px-space-3);
     font-family: var(--px-font-body);
 }}
 
 .px-stage-item[data-active="true"] {{
-    border: var(--px-border-thin) solid var(--px-status-accent-info);
+    border: var(--px-border-thin);
+    border-color: var(--px-status-accent-info);
 }}
 
 .px-stage-head {{
@@ -1046,6 +1067,28 @@ div[data-testid="stMainBlockContainer"]:has([data-testid="px-student-page"]) {{
     flex-wrap: wrap;
     gap: var(--px-space-3);
     margin-top: var(--px-space-3);
+}}
+
+/* ── v0.9.7-D surface levels (L2 cycle card / L3 stage item) ───────────
+   Streamlit 1.60 renders `st.container(border=True)` as an
+   stVerticalBlock with the border applied to that element; the stable
+   `:has()` hooks are our own data-testid markers. */
+div[data-testid="stVerticalBlock"]:has([data-testid="px-cycle-head"]) {{
+    border: var(--px-border-thin);
+    box-shadow: var(--px-shadow-sm);
+    padding: var(--px-space-4);
+    margin-bottom: var(--px-space-6);
+    background: var(--px-white);
+}}
+
+div[data-testid="stVerticalBlock"]:has([data-testid="px-stage-item"]):not(
+    :has([data-testid="px-cycle-head"])) {{
+    border: var(--px-border-hairline);
+    border-color: var(--px-border-subtle);
+    padding: var(--px-space-3) var(--px-space-4);
+    margin-bottom: var(--px-space-3);
+    background: var(--px-white);
+    box-shadow: none;
 }}
 
 @media (max-width: 640px) {{
@@ -1124,10 +1167,11 @@ div[data-testid="stMainBlockContainer"]:has([data-testid="px-student-page"]) {{
     gap: var(--px-inline-gap);
 }}
 
-.px-loading {{
-    border: var(--px-border-thick);
-    background: var(--px-surface);
-    color: var(--px-dark);
+div.px-loading {{
+    border: var(--px-border-hairline);
+    border-color: var(--px-status-accent-neutral);
+    background: var(--px-status-neutral);
+    color: var(--px-status-on-neutral);
     padding: var(--px-space-3) var(--px-space-4);
     margin-bottom: var(--px-space-4);
     font-family: var(--px-font-body);

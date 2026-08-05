@@ -82,7 +82,7 @@ def _render_header(api_client: WritingFeedbackApiClient, lang: str) -> None:
     )
     st.title(t("app_title", lang))
     st.caption(t("app_subtitle", lang))
-    st.warning(t("app_prototype_warning", lang))
+    warning_box("app_prototype_warning", lang)
 
 
 def _render_system_status(api_client: WritingFeedbackApiClient, lang: str) -> None:

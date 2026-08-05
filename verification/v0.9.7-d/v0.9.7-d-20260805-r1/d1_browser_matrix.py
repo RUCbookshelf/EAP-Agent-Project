@@ -25,12 +25,15 @@ from playwright.sync_api import sync_playwright
 HERE = pathlib.Path(__file__).resolve().parent
 PROJECT_ROOT = HERE.parents[2]
 BASE_HARNESS_DIR = PROJECT_ROOT / "verification/v0.9.4-a/v0.9.4-a-20260801-r1"
+WU5_DIR = PROJECT_ROOT / "verification/v0.9.7-b/v0.9.7-b-wu5-20260805-r1"
 sys.path.insert(0, str(BASE_HARNESS_DIR))
+sys.path.insert(0, str(WU5_DIR))
 sys.path.insert(0, str(PROJECT_ROOT))
 
 from app.ui.locale import t  # noqa: E402
 
 import v094a_harness as harness  # noqa: E402
+import w5_harness as _w5  # noqa: E402
 
 harness.RUN_DIR = HERE
 harness.ISOLATED_DB = HERE / "isolated" / "writing_feedback_v097d_d1.db"
@@ -136,14 +139,14 @@ def run(browser, student_id: str, lang: str, viewport: dict, tag: str) -> dict:
     assert harness.wait_stable(page)
     if lang == "zh_CN":
         assert harness.select_locale(page, lang)
-    harness.open_sidebar(page)
-    harness.click_label(page, t("learning_journey", lang))
+    _w5.open_sidebar(page)
+    _w5.click_label(page, t("learning_journey", lang))
     assert harness.wait_stable(page, timeout=20)
-    harness.close_sidebar(page)
+    _w5.close_sidebar(page)
     harness.commit_text_input(
         page, ".st-key-journey_student_v2 input", student_id)
     assert harness.wait_stable(page, timeout=30)
-    harness.close_sidebar(page)
+    _w5.close_sidebar(page)
 
     assert page.locator('[data-testid="px-cycle-head"]').count() == 1
     assert page.locator('[data-testid="px-stage-item"]').count() >= 3
@@ -159,8 +162,67 @@ def run(browser, student_id: str, lang: str, viewport: dict, tag: str) -> dict:
     assert "monospace" not in family.lower()
     assert "cascadia" not in family.lower()
     assert "consolas" not in family.lower()
+    # KB-07: cycle card container carries the L2 recipe (2px ink border,
+    # hard shadow); stage containers carry the L3 hairline.
+    cycle_border = page.evaluate(
+        """() => {
+            const el = document.querySelector(
+                '[data-testid="stVerticalBlock"]:has([data-testid="px-cycle-head"])');
+            const s = getComputedStyle(el);
+            return [s.borderTopWidth, s.borderTopColor, s.boxShadow];
+        }"""
+    )
+    assert cycle_border[0] == "2px", cycle_border
+    assert cycle_border[1] == "rgb(26, 28, 44)", cycle_border
+    assert cycle_border[2] != "none", cycle_border
+    stage_border = page.evaluate(
+        """() => {
+            const el = document.querySelector(
+                '[data-testid="stVerticalBlock"]:has([data-testid="px-stage-item"]):not('
+                + ':has([data-testid="px-cycle-head"]))');
+            const s = getComputedStyle(el);
+            return [s.borderTopWidth, s.borderTopColor];
+        }"""
+    )
+    assert stage_border[0] == "1px", stage_border
+    assert stage_border[1] == "rgb(138, 138, 156)", stage_border
+    # KB-01: the warning/limitation notice carries a 4px accent bar.
+    notice = page.evaluate(
+        """() => {
+            const el = document.querySelector('.px-notice-warning, .px-notice-info,'
+                + ' .px-notice-success');
+            if (!el) return null;
+            const s = getComputedStyle(el);
+            return [s.borderLeftWidth, s.borderLeftColor];
+        }"""
+    )
+    expected_bar = "4px" if viewport["width"] >= 700 else "2px"
+    assert notice is not None and notice[0] == expected_bar, notice
+    assert notice[1] not in ("rgb(26, 28, 44)", "rgba(0, 0, 0, 0)"), notice
+    # KB-02: quiet state label colors actually render on the badge.
+    badge = page.evaluate(
+        """() => {
+            const el = document.querySelector(
+                '[data-testid="px-status-badge"][data-state="success"]');
+            if (!el) return null;
+            const matches = [];
+            for (const sheet of document.styleSheets) {
+                let rules;
+                try { rules = sheet.cssRules; } catch { continue; }
+                for (const rule of rules) {
+                    if (rule.selectorText && el.matches(rule.selectorText)) {
+                        matches.push(rule.selectorText + " -> " + rule.style.color);
+                    }
+                }
+            }
+            return {color: getComputedStyle(el).color, matches: matches};
+        }"""
+    )
+    assert badge is not None, badge
+    assert badge["color"] == "rgb(20, 83, 45)", badge
 
     exceptions = page.locator('[data-testid="stException"]').count()
+    assert page.locator('[data-testid="px-loading"]').count() == 0
     width = page.evaluate("() => window.innerWidth")
     overflow = page.evaluate(
         "() => document.documentElement.scrollWidth") > width
@@ -190,7 +252,17 @@ def run(browser, student_id: str, lang: str, viewport: dict, tag: str) -> dict:
 
     shot = SCREENSHOTS / f"{tag}_journey_design_system.png"
     shot.parent.mkdir(parents=True, exist_ok=True)
+    if viewport["width"] < 700:
+        sidebar = page.locator('[data-testid="stSidebar"]')
+        if sidebar.count() and sidebar.first.get_attribute("aria-expanded") == "true":
+            raise RuntimeError("mobile sidebar still open before capture")
     page.screenshot(path=str(shot), full_page=True)
+    page.evaluate("() => window.scrollTo(0, document.body.scrollHeight)")
+    page.wait_for_timeout(400)
+    bottom_shot = SCREENSHOTS / f"{tag}_journey_bottom.png"
+    page.screenshot(path=str(bottom_shot))
+    page.evaluate("() => window.scrollTo(0, 0)")
+    page.wait_for_timeout(200)
     unexpected = [item for item in console_errors
                   if not harness.is_allowed_console(item)]
     result = {
@@ -204,6 +276,7 @@ def run(browser, student_id: str, lang: str, viewport: dict, tag: str) -> dict:
         "console_errors": unexpected, "page_errors": page_errors,
         "remote_requests": remote_requests,
         "screenshot": str(shot.relative_to(PROJECT_ROOT)),
+        "bottom_screenshot": str(bottom_shot.relative_to(PROJECT_ROOT)),
     }
     context.close()
     return result
