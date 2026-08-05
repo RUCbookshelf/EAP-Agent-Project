@@ -36,6 +36,12 @@ _OUTCOME_MESSAGES = {
         "UNCONFIRMED": "student_practice_submit_pending",
         "PENDING": "student_practice_submit_pending",
     },
+    "PRACTICE_COMPLETE": {
+        "CONFIRMED_SUCCESS": "student_practice_finish_pending",
+        "STILL_PROCESSING": "student_practice_finish_pending",
+        "UNCONFIRMED": "student_practice_finish_pending",
+        "PENDING": "student_practice_finish_pending",
+    },
 }
 
 

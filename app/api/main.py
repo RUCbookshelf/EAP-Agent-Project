@@ -35,6 +35,7 @@ from app.api.routers import (
 from app.config import Settings, load_settings
 from app.database import Database
 from app.journey.service import JourneyService
+from app.practice.completion import PracticeTargetCompletionService
 from app.practice.service import PracticeService
 from app.practice.target_creation import PracticeTargetCreationService
 from app.lifecycle import ServiceState, lifecycle
@@ -250,6 +251,10 @@ def _run_startup(api: FastAPI) -> None:
         practice_reader=repository._practice_repository,
         practice_writer=repository._practice_repository,
         practice_service=PracticeService(),
+    )
+    api.state.practice_target_completion_service = PracticeTargetCompletionService(
+        practice_reader=repository._practice_repository,
+        practice_writer=repository._practice_repository,
     )
     api.state.submission_bundle_reader = repository._submission_repository
     api.state.student_lookup = repository._learner_repository
@@ -470,6 +475,10 @@ def _build_full_app(
         practice_reader=repository._practice_repository,
         practice_writer=repository._practice_repository,
         practice_service=PracticeService(),
+    )
+    api.state.practice_target_completion_service = PracticeTargetCompletionService(
+        practice_reader=repository._practice_repository,
+        practice_writer=repository._practice_repository,
     )
     api.state.submission_bundle_reader = repository._submission_repository
     api.state.student_lookup = repository._learner_repository

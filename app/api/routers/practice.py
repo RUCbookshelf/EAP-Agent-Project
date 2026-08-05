@@ -5,6 +5,7 @@ from __future__ import annotations
 from fastapi import APIRouter, Depends, HTTPException
 
 from app.api.deps import (
+    get_practice_target_completion_service,
     get_practice_reader,
     get_practice_service,
     get_practice_student_reader,
@@ -13,7 +14,12 @@ from app.api.deps import (
     get_practice_writer,
     require_student,
 )
+from app.practice.completion import (
+    PracticeCompletionError,
+    PracticeTargetCompletionService,
+)
 from app.practice.mapping import PriorityMappingError, PriorityPracticeMappingService
+from app.practice.evaluations import PracticeEvaluationReadService
 from app.practice.task_context import PracticeTaskContextService
 
 router = APIRouter()
@@ -27,6 +33,14 @@ _STATUS_BY_MAPPING_KIND = {
     "unresolved_priority": 422,
     "unsupported_category": 422,
     "invalid_evidence": 422,
+}
+
+_STATUS_BY_COMPLETION_KIND = {
+    "target_not_found": 404,
+    "cross_student": 403,
+    "malformed_priority": 422,
+    "no_eligible_attempt": 422,
+    "unsupported_status": 422,
 }
 
 
@@ -91,6 +105,49 @@ def get_practice_target_context(
         raise HTTPException(
             status,
             "The practice target context could not be resolved.",
+        ) from exc
+
+
+@router.get("/api/v1/students/{student_id}/practice-targets/{practice_target_id}/evaluations")
+def get_practice_target_evaluations(
+    student_id: str,
+    practice_target_id: str,
+    student_reader=Depends(get_practice_student_reader),
+    practice_reader=Depends(get_practice_reader),
+) -> list[dict]:
+    """Learner-owned, read-only evaluations for one target's attempts."""
+    require_student(student_reader, student_id)
+    service = PracticeEvaluationReadService(practice_reader)
+    try:
+        return service.list_attempt_evaluations(
+            student_id=student_id, practice_target_id=practice_target_id)
+    except PriorityMappingError as exc:
+        status = _STATUS_BY_MAPPING_KIND.get(exc.kind, 422)
+        raise HTTPException(
+            status,
+            "The practice evaluations could not be resolved.",
+        ) from exc
+
+
+@router.post("/api/v1/practice-targets/{practice_target_id}/complete")
+def complete_practice_target(
+    practice_target_id: str,
+    payload: dict,
+    student_reader=Depends(get_practice_student_reader),
+    completion_service=Depends(get_practice_target_completion_service),
+) -> dict:
+    """Explicit, learner-owned, idempotent ACTIVE -> COMPLETED transition."""
+    require_student(student_reader, payload.get("student_id", ""))
+    try:
+        return completion_service.complete_target(
+            student_id=payload.get("student_id", ""),
+            practice_target_id=practice_target_id,
+        )
+    except PracticeCompletionError as exc:
+        status = _STATUS_BY_COMPLETION_KIND.get(exc.kind, 422)
+        raise HTTPException(
+            status,
+            "The practice target could not be completed.",
         ) from exc
 
 

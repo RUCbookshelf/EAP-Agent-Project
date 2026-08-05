@@ -366,8 +366,24 @@ class WritingFeedbackApiClient:
             retry=True,
         )
 
+    def get_practice_target_evaluations(self, student_id: str, practice_target_id: str) -> list[dict[str, Any]]:
+        return self._request(
+            "GET",
+            f"/api/v1/students/{student_id}/practice-targets/{practice_target_id}/evaluations",
+            operation="practice_target_evaluations",
+            retry=True,
+        )
+
     def create_practice_target(self, payload: dict[str, Any]) -> dict[str, Any]:
         return self._request("POST", "/api/v1/practice-targets", operation="create_practice_target", json=payload)
+
+    def complete_practice_target(self, practice_target_id: str, payload: dict[str, Any]) -> dict[str, Any]:
+        return self._request(
+            "POST",
+            f"/api/v1/practice-targets/{practice_target_id}/complete",
+            operation="complete_practice_target",
+            json=payload,
+        )
 
     def create_exercise(self, practice_target_id: str, payload: dict[str, Any]) -> dict[str, Any]:
         return self._request("POST", f"/api/v1/practice-targets/{practice_target_id}/exercises", operation="create_exercise", json=payload)

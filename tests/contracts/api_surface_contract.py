@@ -44,6 +44,7 @@ ENDPOINT_CLASSIFICATION: dict[tuple[str, str], str] = {
     ('GET', '/api/v1/students/{student_id}/learner-model/task-clusters'): 'C',
     ('GET', '/api/v1/students/{student_id}/practice-targets'): 'A',
     ('GET', '/api/v1/students/{student_id}/practice-targets/{practice_target_id}/context'): 'A',
+    ('GET', '/api/v1/students/{student_id}/practice-targets/{practice_target_id}/evaluations'): 'A',
     ('GET', '/api/v1/students/{student_id}/profile'): 'C',
     ('GET', '/api/v1/students/{student_id}/progress'): 'C',
     ('GET', '/api/v1/students/{student_id}/revision-candidates'): 'A',
@@ -74,6 +75,7 @@ ENDPOINT_CLASSIFICATION: dict[tuple[str, str], str] = {
     ('POST', '/api/v1/admin/reanalysis/run'): 'B',
     ('POST', '/api/v1/exercises/{exercise_id}/attempts'): 'A',
     ('POST', '/api/v1/practice-targets'): 'B',
+    ('POST', '/api/v1/practice-targets/{practice_target_id}/complete'): 'A',
     ('POST', '/api/v1/practice-targets/{practice_target_id}/exercises'): 'A',
     ('POST', '/api/v1/research/dataset-split'): 'A',
     ('POST', '/api/v1/research/export/preview'): 'A',
@@ -120,6 +122,7 @@ ENDPOINT_UNWRAPPED_REASON: dict[tuple[str, str], str] = {
 
 CLIENT_METHOD_CLASSIFICATION: dict[str, str] = {
     'activate_configuration': 'B',
+    'complete_practice_target': 'A',
     'create_configuration': 'B',
     'create_dataset_split': 'A',
     'create_exercise': 'A',
@@ -143,6 +146,7 @@ CLIENT_METHOD_CLASSIFICATION: dict[str, str] = {
     'get_pii_candidates': 'A',
     'get_practice_targets': 'A',
     'get_practice_target_context': 'A',
+    'get_practice_target_evaluations': 'A',
     'get_registries': 'B',
     'get_revision_analysis': 'B',
     'get_revision_candidates': 'B',
@@ -230,13 +234,14 @@ PORT_METHODS: dict[str, list[str]] = {
     'StudentFeedbackApiPort': ['get_student_revision_candidates'],
     'StudentHomeApiPort': ['get_journey', 'get_practice_targets'],
     'StudentJourneyApiPort': ['get_journey'],
-    'StudentPracticeApiPort': ['create_exercise', 'create_practice_target', 'get_exercise_attempts', 'get_exercise_instances', 'get_practice_target_context', 'get_practice_targets', 'submit_exercise_attempt'],
+    'StudentPracticeApiPort': ['complete_practice_target', 'create_exercise', 'create_practice_target', 'get_exercise_attempts', 'get_exercise_instances', 'get_practice_target_context', 'get_practice_target_evaluations', 'get_practice_targets', 'submit_exercise_attempt'],
     'StudentRevisionApiPort': ['get_practice_targets', 'get_student_revision_candidates', 'get_submission', 'submit_linked_revision'],
     'StudentWritingApiPort': ['get_student_revision_candidates', 'get_submission', 'submit'],
 }
 
 CLIENT_ENDPOINT_MAP: dict[str, list[tuple[str, str]]] = {
     'activate_configuration': [('POST', '/api/v1/admin/configurations/{}/activate')],
+    'complete_practice_target': [('POST', '/api/v1/practice-targets/{}/complete')],
     'create_configuration': [('POST', '/api/v1/admin/configurations')],
     'create_dataset_split': [('POST', '/api/v1/research/dataset-split')],
     'create_exercise': [('POST', '/api/v1/practice-targets/{}/exercises')],
@@ -260,6 +265,7 @@ CLIENT_ENDPOINT_MAP: dict[str, list[tuple[str, str]]] = {
     'get_pii_candidates': [('GET', '/api/v1/submissions/{}/pii-candidates')],
     'get_practice_targets': [('GET', '/api/v1/students/{}/practice-targets')],
     'get_practice_target_context': [('GET', '/api/v1/students/{}/practice-targets/{}/context')],
+    'get_practice_target_evaluations': [('GET', '/api/v1/students/{}/practice-targets/{}/evaluations')],
     'get_registries': [('GET', '/api/v1/admin/registries')],
     'get_revision_analysis': [('GET', '/api/v1/submissions/{}/revision-analysis')],
     'get_revision_candidates': [('GET', '/api/v1/submissions/{}/revision-candidates')],

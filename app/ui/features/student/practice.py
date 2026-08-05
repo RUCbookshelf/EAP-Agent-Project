@@ -55,16 +55,29 @@ def _practice_status_label(prefix: str, value: str, lang: str) -> str:
     return localized if localized != key else value.replace("_", " ").title()
 
 
-def _practice_attempt_with_cached_evaluation(loaded: list[dict]) -> list[dict]:
-    """Keep a just-returned evaluation visible across the immediate rerun."""
+def _practice_attempts_with_evaluations(
+    loaded: list[dict], persisted: list[dict]
+) -> list[dict]:
+    """Attach persisted evaluations (WU5 read path) and keep a just-returned
+    session evaluation visible across the immediate rerun.
+
+    Persisted attempt/evaluation associations are authoritative; the cached
+    value is only a fallback for the rerun immediately after submission.
+    """
+    by_attempt = {
+        item.get("attempt_id"): item for item in persisted if item.get("attempt_id")
+    }
     cached = {
         item.get("attempt_id"): item.get("evaluation")
         for item in st.session_state.get("exercise_attempts_v2", [])
         if item.get("attempt_id") and item.get("evaluation")
     }
     for item in loaded:
-        if item.get("attempt_id") in cached:
-            item["evaluation"] = cached[item["attempt_id"]]
+        evaluation = by_attempt.get(item.get("attempt_id"))
+        if evaluation is None and item.get("attempt_id") in cached:
+            evaluation = cached[item.get("attempt_id")]
+        if evaluation is not None:
+            item["evaluation"] = evaluation
     return loaded
 
 
@@ -83,6 +96,9 @@ def _ensure_current_exercise(
     is recoverable: the target stays selected and the page shows the existing
     generate step (never a blank or fabricated task).
     """
+    if target.get("status") == "completed":
+        # A completed target is terminal: never create a new exercise.
+        return
     try:
         instances = api_client.get_exercise_instances(
             target.get("practice_target_id", ""))
@@ -141,15 +157,33 @@ def _consume_practice_intent(api_client: StudentPracticeApiPort, learner_id: str
     return True
 
 
-def _selected_active_target(targets: list[dict]) -> dict | None:
-    """Select the validated preset target or the deterministic oldest active."""
-    active_targets = [item for item in targets if item.get("status") == "active"]
+def _selected_target(targets: list[dict]) -> dict | None:
+    """Select the validated preset target (any status) or the deterministic
+    oldest active target; a completed target is shown when no active target
+    remains (so a finished cycle stays visible after refresh or direct
+    navigation).
+
+    A completed target stays reachable through its explicit preset so its
+    saved result can be re-entered; direct navigation without a preset keeps
+    the WU4 oldest-active rule unchanged while active targets exist.
+    """
     preset = st.session_state.pop("practice_target_preset", None)
     if preset:
-        for item in active_targets:
+        for item in targets:
             if item.get("practice_target_id") == preset:
                 return item
-    return active_targets[0] if active_targets else None
+    for item in targets:
+        if item.get("status") == "active":
+            return item
+    for item in targets:
+        if item.get("status") == "completed":
+            return item
+    return None
+
+
+def _open_other_active_target(target_id: str) -> None:
+    """Explicitly select another existing active target (no auto-sequencing)."""
+    st.session_state["practice_target_preset"] = target_id
 
 
 def _priority_task_context(context: dict | None) -> dict | None:
@@ -157,6 +191,31 @@ def _priority_task_context(context: dict | None) -> dict | None:
     if context and context.get("context_status") == "priority":
         return context.get("priority_context") or {}
     return None
+
+
+def _render_evaluation_section(evaluation: dict | None, lang: str) -> None:
+    """Render the persisted evaluation or an honest unavailable notice."""
+    section_header("practice_evaluation_label", lang=lang)
+    if evaluation:
+        student_context_block(
+            [
+                (
+                    "practice_evaluation_completion",
+                    _practice_status_label(
+                        "completion", evaluation.get("completion_status", ""), lang
+                    ),
+                ),
+                (
+                    "practice_evaluation_action",
+                    _practice_status_label(
+                        "action", evaluation.get("target_action_status", ""), lang
+                    ),
+                ),
+            ],
+            lang,
+        )
+    else:
+        info_box("student_practice_evaluation_unavailable", lang)
 
 
 def render_practice_page(api_client: StudentPracticeApiPort, lang: str) -> None:
@@ -193,7 +252,7 @@ def render_practice_page(api_client: StudentPracticeApiPort, lang: str) -> None:
     try:
         with st.spinner(t("practice_loading", lang)):
             targets = api_client.get_practice_targets(learner_id)
-            selected = _selected_active_target(targets)
+            selected = _selected_target(targets)
             context = None
             exercise = None
             attempts: list[dict] = []
@@ -208,7 +267,16 @@ def render_practice_page(api_client: StudentPracticeApiPort, lang: str) -> None:
                     loaded_attempts = api_client.get_exercise_attempts(
                         exercise.get("exercise_id", "")
                     )
-                    attempts = _practice_attempt_with_cached_evaluation(loaded_attempts)
+                    evaluations: list[dict] = []
+                    try:
+                        evaluations = api_client.get_practice_target_evaluations(
+                            learner_id, selected.get("practice_target_id", ""))
+                    except ApiClientError:
+                        # Best-effort read: the persisted attempt remains
+                        # authoritative when evaluation lookup fails.
+                        evaluations = []
+                    attempts = _practice_attempts_with_evaluations(
+                        loaded_attempts, evaluations)
     except ApiClientError as exc:
         render_api_error(exc, lang)
         return
@@ -275,6 +343,67 @@ def render_practice_page(api_client: StudentPracticeApiPort, lang: str) -> None:
     elif context and context.get("context_status") == "unavailable":
         info_box("student_practice_context_unavailable", lang)
 
+    if selected.get("status") == "completed":
+        student_task_steps(list(steps), 4, lang)
+        success_box("student_practice_completed_title", lang)
+        student_context_block(
+            [("student_practice_focus", selected.get("target_label", ""))], lang
+        )
+        if attempts:
+            latest = attempts[-1]
+            technical_caption(
+                f"{t('student_practice_attempt_reference', lang)}: "
+                f"#{latest.get('attempt_id', '?')}"
+            )
+            section_header("student_practice_saved_response", lang=lang)
+            student_context_block(
+                [
+                    (
+                        "student_practice_saved_response",
+                        latest.get("response_text", ""),
+                    )
+                ],
+                lang,
+            )
+            _render_evaluation_section(latest.get("evaluation"), lang)
+        success_box("student_practice_completed_saved", lang)
+        student_action_block(
+            "student_practice_current_action",
+            "student_practice_completed_next",
+            lang,
+        )
+        st.button(
+            t("student_practice_return_feedback", lang),
+            type="primary",
+            use_container_width=True,
+            key="practice_return_feedback",
+            on_click=_navigate_student_page,
+            args=("student_feedback_title", lang),
+        )
+        st.button(
+            t("student_practice_open_journey", lang),
+            use_container_width=True,
+            key="practice_open_journey",
+            on_click=_navigate_student_page,
+            args=("learning_journey", lang),
+        )
+        other_active = [
+            item
+            for item in targets
+            if item.get("status") == "active"
+            and item.get("practice_target_id") != selected.get("practice_target_id")
+        ]
+        if other_active:
+            st.button(
+                t("student_practice_open_other_target", lang),
+                use_container_width=True,
+                key="practice_open_other_target",
+                on_click=_open_other_active_target,
+                args=(other_active[0]["practice_target_id"],),
+            )
+        limitation_notice("practice_boundary", lang)
+        return
+
     if not exercise:
         student_task_steps(list(steps), 1, lang)
         student_action_block(
@@ -333,6 +462,12 @@ def render_practice_page(api_client: StudentPracticeApiPort, lang: str) -> None:
         )
 
     if attempts:
+        if consume_pending("practice", "PRACTICE_COMPLETE", lang):
+            # A duplicate click or refresh raced the in-flight completion:
+            # the queued action is consumed and the pending state shown; the
+            # next rerun reconciles against the persisted target status.
+            limitation_notice("practice_boundary", lang)
+            return
         student_task_steps(list(steps), 4, lang)
         latest = attempts[-1]
         success_box("student_practice_attempt_saved", lang)
@@ -344,36 +479,32 @@ def render_practice_page(api_client: StudentPracticeApiPort, lang: str) -> None:
         student_context_block(
             [("student_practice_saved_response", latest.get("response_text", ""))], lang
         )
-        section_header("practice_evaluation_label", lang=lang)
-        evaluation = latest.get("evaluation")
-        if evaluation:
-            student_context_block(
-                [
-                    (
-                        "practice_evaluation_completion",
-                        _practice_status_label(
-                            "completion", evaluation.get("completion_status", ""), lang
-                        ),
-                    ),
-                    (
-                        "practice_evaluation_action",
-                        _practice_status_label(
-                            "action", evaluation.get("target_action_status", ""), lang
-                        ),
-                    ),
-                ],
-                lang,
-            )
-        else:
-            info_box("student_practice_evaluation_unavailable", lang)
+        _render_evaluation_section(latest.get("evaluation"), lang)
         student_action_block(
             "student_practice_current_action",
-            "student_practice_action_revision",
+            "student_practice_action_finish",
             lang,
         )
+        if st.button(
+            t("student_practice_finish_cycle", lang),
+            key="practice_finish",
+            type="primary",
+            use_container_width=True,
+        ):
+            enter_pending("practice")
+            try:
+                api_client.complete_practice_target(
+                    selected.get("practice_target_id", ""),
+                    {"student_id": learner_id},
+                )
+            except ApiClientError as exc:
+                release_pending("practice")
+                render_api_error(exc, lang)
+            else:
+                release_pending("practice")
+                st.rerun()
         st.button(
             t("student_home_go_revision", lang),
-            type="primary",
             use_container_width=True,
             key="practice_primary_action",
             on_click=_navigate_student_page,

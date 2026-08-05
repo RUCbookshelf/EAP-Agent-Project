@@ -15,6 +15,7 @@ class PracticeTargetStatus(StrEnum):
     INACTIVE = "inactive"
     PRACTICE_NOT_AVAILABLE = "practice_not_available"
     ARCHIVED = "archived"
+    COMPLETED = "completed"
 
 
 class ExerciseType(StrEnum):
@@ -88,6 +89,10 @@ class PracticeTarget(BaseModel):
     configuration_version: str = "config-v0.9.0"
     status: PracticeTargetStatus = PracticeTargetStatus.ACTIVE
     created_at: str = Field(default_factory=lambda: utc_now().isoformat())
+    # JSON-only update timestamp (no relational column): set on the first
+    # ACTIVE -> COMPLETED transition (v0.9.7-B WU5). Creation time remains
+    # `created_at`; existing rows keep updated_at=None.
+    updated_at: str | None = None
 
 
 class ExerciseSpecification(BaseModel):

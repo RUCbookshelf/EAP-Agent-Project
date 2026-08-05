@@ -6418,6 +6418,60 @@
           "summary": "Create Practice Target"
         }
       },
+      "/api/v1/practice-targets/{practice_target_id}/complete": {
+        "post": {
+          "description": "Explicit, learner-owned, idempotent ACTIVE -> COMPLETED transition.",
+          "operationId": "complete_practice_target_api_v1_practice_targets__practice_target_id__complete_post",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "practice_target_id",
+              "required": true,
+              "schema": {
+                "title": "Practice Target Id",
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Payload",
+                  "type": "object"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "additionalProperties": true,
+                    "title": "Response Complete Practice Target Api V1 Practice Targets  Practice Target Id  Complete Post",
+                    "type": "object"
+                  }
+                }
+              },
+              "description": "Successful Response"
+            },
+            "422": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/HTTPValidationError"
+                  }
+                }
+              },
+              "description": "Validation Error"
+            }
+          },
+          "summary": "Complete Practice Target"
+        }
+      },
       "/api/v1/practice-targets/{practice_target_id}/exercises": {
         "get": {
           "operationId": "get_exercises_api_v1_practice_targets__practice_target_id__exercises_get",
@@ -7824,6 +7878,60 @@
             }
           },
           "summary": "Get Practice Target Context"
+        }
+      },
+      "/api/v1/students/{student_id}/practice-targets/{practice_target_id}/evaluations": {
+        "get": {
+          "description": "Learner-owned, read-only evaluations for one target's attempts.",
+          "operationId": "get_practice_target_evaluations_api_v1_students__student_id__practice_targets__practice_target_id__evaluations_get",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "student_id",
+              "required": true,
+              "schema": {
+                "title": "Student Id",
+                "type": "string"
+              }
+            },
+            {
+              "in": "path",
+              "name": "practice_target_id",
+              "required": true,
+              "schema": {
+                "title": "Practice Target Id",
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "items": {
+                      "additionalProperties": true,
+                      "type": "object"
+                    },
+                    "title": "Response Get Practice Target Evaluations Api V1 Students  Student Id  Practice Targets  Practice Target Id  Evaluations Get",
+                    "type": "array"
+                  }
+                }
+              },
+              "description": "Successful Response"
+            },
+            "422": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/HTTPValidationError"
+                  }
+                }
+              },
+              "description": "Validation Error"
+            }
+          },
+          "summary": "Get Practice Target Evaluations"
         }
       },
       "/api/v1/students/{student_id}/profile": {

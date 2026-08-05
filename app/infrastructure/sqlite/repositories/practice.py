@@ -102,6 +102,47 @@ class SQLitePracticeRepository:
                 row = c.execute("SELECT target_json FROM practice_targets WHERE practice_target_id=?", (pid,)).fetchone()
             return json.loads(row[0]) if row else None
 
+    def update_practice_target_status(self, practice_target_id: str,
+                                      status: str, updated_at: str) -> dict | None:
+            """Atomically update the status column and target_json for one
+            target (v0.9.7-B WU5 completion transition).
+
+            BEGIN IMMEDIATE serializes the transition with concurrent
+            writers; the conditional UPDATE (old status) makes a concurrent
+            or repeated request idempotent: when the row already carries the
+            requested status, the stored target is returned unchanged and
+            no write occurs. Returns None when the target does not exist.
+            """
+            with self._connection_manager.connect() as conn:
+                conn.execute("BEGIN IMMEDIATE")
+                row = conn.execute(
+                    "SELECT status, target_json FROM practice_targets "
+                    "WHERE practice_target_id=?",
+                    (practice_target_id,),
+                ).fetchone()
+                if row is None:
+                    return None
+                current_status, raw = row[0], row[1]
+                payload = json.loads(raw)
+                if current_status == status:
+                    return payload
+                payload["status"] = status
+                if updated_at:
+                    payload["updated_at"] = updated_at
+                conn.execute(
+                    "UPDATE practice_targets SET status=?, target_json=? "
+                    "WHERE practice_target_id=? AND status=?",
+                    (status, json.dumps(payload), practice_target_id,
+                     current_status),
+                )
+            with self._connection_manager.connect() as c:
+                row = c.execute(
+                    "SELECT target_json FROM practice_targets "
+                    "WHERE practice_target_id=?",
+                    (practice_target_id,),
+                ).fetchone()
+            return json.loads(row[0]) if row else None
+
     def save_exercise_instance(self, instance: dict) -> dict:
             from app.practice.schemas import ExerciseInstance
             obj = ExerciseInstance(**instance) if not isinstance(instance, ExerciseInstance) else instance
