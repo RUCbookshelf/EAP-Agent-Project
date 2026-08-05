@@ -148,8 +148,9 @@ def run(browser, student_id: str, lang: str, viewport: dict, tag: str) -> dict:
     assert harness.wait_stable(page, timeout=30)
     _w5.close_sidebar(page)
 
-    assert page.locator('[data-testid="px-cycle-head"]').count() == 1
-    assert page.locator('[data-testid="px-stage-item"]').count() >= 3
+    cycle_count = page.locator('[data-testid="px-cycle-head"]').count()
+    assert cycle_count == 2
+    assert page.locator('[data-testid="px-stage-item"]').count() >= 6
     assert page.locator('[data-testid="px-status-badge"]').count() >= 3
     badges = page.locator('[data-testid="px-status-badge"]')
     states = set(badges.evaluate_all(
@@ -162,12 +163,12 @@ def run(browser, student_id: str, lang: str, viewport: dict, tag: str) -> dict:
     assert "monospace" not in family.lower()
     assert "cascadia" not in family.lower()
     assert "consolas" not in family.lower()
-    # KB-07: cycle card container carries the L2 recipe (2px ink border,
-    # hard shadow); stage containers carry the L3 hairline.
+    # KB-07 / RC-01: only the keyed cycle containers carry the L2 recipe
+    # (2px ink border + hard shadow); ancestor blocks stay unframed.
     cycle_border = page.evaluate(
         """() => {
             const el = document.querySelector(
-                '[data-testid="stVerticalBlock"]:has([data-testid="px-cycle-head"])');
+                '[data-testid="stVerticalBlock"][class*="st-key-journey_cycle_"]');
             const s = getComputedStyle(el);
             return [s.borderTopWidth, s.borderTopColor, s.boxShadow];
         }"""
@@ -175,11 +176,25 @@ def run(browser, student_id: str, lang: str, viewport: dict, tag: str) -> dict:
     assert cycle_border[0] == "2px", cycle_border
     assert cycle_border[1] == "rgb(26, 28, 44)", cycle_border
     assert cycle_border[2] != "none", cycle_border
+    framed = page.evaluate(
+        """() => {
+            const els = document.querySelectorAll(
+                '[data-testid="stVerticalBlock"]');
+            let framed = 0;
+            for (const el of els) {
+                const s = getComputedStyle(el);
+                if (s.borderTopWidth === "2px" && s.boxShadow !== "none") {
+                    framed += 1;
+                }
+            }
+            return framed;
+        }"""
+    )
+    assert framed == cycle_count, framed
     stage_border = page.evaluate(
         """() => {
             const el = document.querySelector(
-                '[data-testid="stVerticalBlock"]:has([data-testid="px-stage-item"]):not('
-                + ':has([data-testid="px-cycle-head"]))');
+                '[data-testid="stVerticalBlock"][class*="st-key-journey_stage_"]');
             const s = getComputedStyle(el);
             return [s.borderTopWidth, s.borderTopColor];
         }"""
@@ -220,6 +235,13 @@ def run(browser, student_id: str, lang: str, viewport: dict, tag: str) -> dict:
     )
     assert badge is not None, badge
     assert badge["color"] == "rgb(20, 83, 45)", badge
+    column = page.evaluate(
+        """() => {
+            const el = document.querySelector(
+                '[data-testid="stMainBlockContainer"]');
+            return el ? getComputedStyle(el).maxWidth : null;
+        }"""
+    )
 
     exceptions = page.locator('[data-testid="stException"]').count()
     assert page.locator('[data-testid="px-loading"]').count() == 0
@@ -257,20 +279,70 @@ def run(browser, student_id: str, lang: str, viewport: dict, tag: str) -> dict:
         if sidebar.count() and sidebar.first.get_attribute("aria-expanded") == "true":
             raise RuntimeError("mobile sidebar still open before capture")
     page.screenshot(path=str(shot), full_page=True)
-    page.evaluate("() => window.scrollTo(0, document.body.scrollHeight)")
-    page.wait_for_timeout(400)
+    # RC-02: Streamlit 1.60 scrolls an inner container, not the window.
+    # Find the scroller inside the main content block (never the sidebar).
+    scroll_probe = """
+        () => {
+            const out = [];
+            for (const e of document.querySelectorAll('*')) {
+                const s = getComputedStyle(e);
+                if ((s.overflowY === "auto" || s.overflowY === "scroll")
+                        && e.scrollHeight > e.clientHeight + 40) {
+                    out.push({
+                        testid: e.getAttribute("data-testid") || "",
+                        cls: (e.getAttribute("class") || "").slice(0, 60),
+                        extra: e.scrollHeight - e.clientHeight,
+                    });
+                }
+            }
+            return out;
+        }
+    """
+    scrollers = page.evaluate(scroll_probe)
+    scroll_script = """
+        () => {
+            const candidates = [
+                document.querySelector('[data-testid="stMain"]'),
+            ].filter(Boolean);
+            const scroller = candidates.find(
+                (e) => e.scrollHeight > e.clientHeight + 120
+                    && getComputedStyle(e).overflowY === "auto");
+            if (!scroller) return 0;
+            scroller.scrollTop = scroller.scrollHeight;
+            return scroller.scrollTop;
+        }
+    """
+    scrolled = page.evaluate(scroll_script)
+    assert scrolled > 0, (scrolled, scrollers)
+    page.wait_for_timeout(500)
     bottom_shot = SCREENSHOTS / f"{tag}_journey_bottom.png"
     page.screenshot(path=str(bottom_shot))
-    page.evaluate("() => window.scrollTo(0, 0)")
+    assert bottom_shot.read_bytes() != shot.read_bytes(), \
+        "bottom capture identical to top"
+    page.evaluate(
+        """
+        () => {
+            const candidates = [
+                document.querySelector('[data-testid="stMain"]'),
+            ].filter(Boolean);
+            const scroller = candidates.find(
+                (e) => e.scrollHeight > e.clientHeight + 120
+                    && getComputedStyle(e).overflowY === "auto");
+            if (scroller) scroller.scrollTop = 0;
+        }
+        """
+    )
     page.wait_for_timeout(200)
     unexpected = [item for item in console_errors
                   if not harness.is_allowed_console(item)]
     result = {
         "combination": f"{lang} {viewport['width']}x{viewport['height']}",
-        "cycle_cards": 1,
+        "cycle_cards": cycle_count,
         "stage_items": page.locator('[data-testid="px-stage-item"]').count(),
         "badge_states": sorted(states),
         "heading_sans": True,
+        "main_column_max_width": column,
+        "framed_containers": framed,
         "exceptions": exceptions, "overflow": overflow,
         "raw_keys": raw_keys, "forbidden": forbidden,
         "console_errors": unexpected, "page_errors": page_errors,
@@ -297,11 +369,12 @@ def main() -> int:
         api, streamlit = harness.start_stack("d1_matrix")
         for student_id in STUDENTS:
             seed_cycle(student_id)
+            seed_cycle(student_id)
         payload = requests.get(
             f"{harness.BASE}/api/v1/students/{STUDENTS[0]}/journey",
             timeout=30).json()
         assert payload["cycles_version"] == "journey-cycle-v0.9.7-c"
-        assert len(payload["cycles"]) == 1
+        assert len(payload["cycles"]) == 2
         states = {p["activity_state"]
                   for p in payload["cycles"][0]["practice_cycles"]}
         assert states == {"completed", "available"}, states
@@ -343,7 +416,8 @@ def main() -> int:
         assert item["exceptions"] == 0 and not item["overflow"]
         assert not item["raw_keys"] and not item["forbidden"]
         assert item["heading_sans"]
-        assert item["cycle_cards"] == 1
+        assert item["cycle_cards"] == 2
+        assert item["framed_containers"] == 2
     print(json.dumps(evidence, indent=2, ensure_ascii=False))
     return 0
 

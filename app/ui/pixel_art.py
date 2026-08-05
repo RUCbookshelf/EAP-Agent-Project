@@ -652,7 +652,7 @@ div[data-testid="stMainBlockContainer"]:has([data-testid="px-student-page"]) {{
 }}
 
 .px-page-heading {{
-    border-bottom: var(--px-border-thick) solid var(--px-dark);
+    border-bottom: var(--px-border-thick);
     padding-bottom: var(--px-space-2);
     margin-bottom: var(--px-space-1);
 }}
@@ -1071,9 +1071,10 @@ div.px-quote {{
 
 /* ── v0.9.7-D surface levels (L2 cycle card / L3 stage item) ───────────
    Streamlit 1.60 renders `st.container(border=True)` as an
-   stVerticalBlock with the border applied to that element; the stable
-   `:has()` hooks are our own data-testid markers. */
-div[data-testid="stVerticalBlock"]:has([data-testid="px-cycle-head"]) {{
+   stVerticalBlock with the border applied to that element. The hooks are
+   the stable widget-keyed classes (`st-key-*`) that Streamlit applies to
+   keyed containers - never ancestor blocks. */
+div[data-testid="stVerticalBlock"][class*="st-key-journey_cycle_"] {{
     border: var(--px-border-thin);
     box-shadow: var(--px-shadow-sm);
     padding: var(--px-space-4);
@@ -1081,8 +1082,7 @@ div[data-testid="stVerticalBlock"]:has([data-testid="px-cycle-head"]) {{
     background: var(--px-white);
 }}
 
-div[data-testid="stVerticalBlock"]:has([data-testid="px-stage-item"]):not(
-    :has([data-testid="px-cycle-head"])) {{
+div[data-testid="stVerticalBlock"][class*="st-key-journey_stage_"] {{
     border: var(--px-border-hairline);
     border-color: var(--px-border-subtle);
     padding: var(--px-space-3) var(--px-space-4);
@@ -1153,11 +1153,12 @@ div[data-testid="stVerticalBlock"]:has([data-testid="px-stage-item"]):not(
     margin-right: var(--px-space-1);
 }}
 
-.px-field-error {{
+div.px-field-error {{
     border: var(--px-border-thin);
     border-left: var(--px-border-thick);
     background: var(--px-white);
     color: var(--px-status-error);
+    border-left-color: var(--px-status-accent-error);
     padding: var(--px-space-2) var(--px-space-3);
     margin-bottom: var(--px-space-3);
     font-family: var(--px-font-body);

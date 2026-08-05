@@ -2,7 +2,7 @@
   "run_id": "v0.9.7-d-20260805-r1",
   "cycle_view": {
     "version": "journey-cycle-v0.9.7-c",
-    "cycle_count": 1,
+    "cycle_count": 2,
     "practice_states": [
       "available",
       "completed"
@@ -10,14 +10,16 @@
   },
   "en_desktop": {
     "combination": "en 1280x900",
-    "cycle_cards": 1,
-    "stage_items": 6,
+    "cycle_cards": 2,
+    "stage_items": 12,
     "badge_states": [
       "info",
       "neutral",
       "success"
     ],
     "heading_sans": true,
+    "main_column_max_width": "720px",
+    "framed_containers": 2,
     "exceptions": 0,
     "overflow": false,
     "raw_keys": [],
@@ -30,14 +32,16 @@
   },
   "zh_desktop": {
     "combination": "zh_CN 1280x900",
-    "cycle_cards": 1,
-    "stage_items": 6,
+    "cycle_cards": 2,
+    "stage_items": 12,
     "badge_states": [
       "info",
       "neutral",
       "success"
     ],
     "heading_sans": true,
+    "main_column_max_width": "720px",
+    "framed_containers": 2,
     "exceptions": 0,
     "overflow": false,
     "raw_keys": [],
@@ -50,14 +54,16 @@
   },
   "en_mobile": {
     "combination": "en 390x844",
-    "cycle_cards": 1,
-    "stage_items": 6,
+    "cycle_cards": 2,
+    "stage_items": 12,
     "badge_states": [
       "info",
       "neutral",
       "success"
     ],
     "heading_sans": true,
+    "main_column_max_width": "720px",
+    "framed_containers": 2,
     "exceptions": 0,
     "overflow": false,
     "raw_keys": [],
@@ -70,14 +76,16 @@
   },
   "zh_mobile": {
     "combination": "zh_CN 390x844",
-    "cycle_cards": 1,
-    "stage_items": 6,
+    "cycle_cards": 2,
+    "stage_items": 12,
     "badge_states": [
       "info",
       "neutral",
       "success"
     ],
     "heading_sans": true,
+    "main_column_max_width": "720px",
+    "framed_containers": 2,
     "exceptions": 0,
     "overflow": false,
     "raw_keys": [],
