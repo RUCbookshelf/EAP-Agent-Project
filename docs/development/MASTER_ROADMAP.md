@@ -3,7 +3,7 @@
 | Item | Status |
 |---|---|
 | v0.9.7-A Priority-Guided Learning Cycle Completion | COMPLETE and verified (focused 14 passed; affected regression 293 passed; full non-live core 860 passed / 8 skipped / exit 0; `run.bat --verify` PASS; rendered matrix all four locale/viewport combinations PASS; evidence verification/v0.9.7-a/v0.9.7-a-20260804-r1/) |
-| v0.9.7-B Practice Target Generation and Practice Workflow | WU1 audit + protocol freeze COMPLETE (V0.9.7_B_PRACTICE_WORKFLOW_AUDIT.md, V0.9.7_B_SPEC.md); WU2 priority-to-practice mapping + provenance COMPLETE (RUN_VERIFICATION_V0.9.7_B_WU2.md; focused 76 passed; affected 408 passed; full non-live core 936 passed / 8 skipped / exit 0; `run.bat --verify` PASS); WU3 (idempotent creation/reuse) next; v0.9.7-B overall NOT complete |
+| v0.9.7-B Practice Target Generation and Practice Workflow | WU1 audit + protocol freeze COMPLETE; WU2 mapping + provenance COMPLETE (RUN_VERIFICATION_V0.9.7_B_WU2.md); WU3 idempotent creation/reuse COMPLETE (RUN_VERIFICATION_V0.9.7_B_WU3.md; allocator repair, migration 13, ownership validation; focused 33 passed; affected 562 passed; full non-live core 969 passed / 8 skipped / exit 0; `run.bat --verify` PASS); WU4 (focused Practice task and attempt loop) next; v0.9.7-B overall NOT complete |
 | v0.9.7-C Student Journey Functional Completion | not started |
 | v0.9.7-D Student UI/UX Redesign and Visual Polish | not started |
 | v0.9.7-E Responsive, Mobile, and Accessibility Refinement | not started |
@@ -29,6 +29,20 @@ priority-derived write (see RUN_VERIFICATION_V0.9.7_B_WU2.md). No schema or
 migration change; no UI automatic target creation; no idempotency/completion.
 WU3 (idempotent target creation and reuse) is the next planned work unit;
 v0.9.7-B as a whole is not yet complete. Do not begin v0.9.7-C.
+
+**v0.9.7-B WU3 (2026-08-05):** idempotent priority practice target creation
+and reuse is complete and verified: prefix-length-safe `_next_practice_id`
+repair (BEGIN IMMEDIATE serialized allocation; FET/WTR/PSS collision defect
+closed), `PracticeTargetCreationService` create-or-reuse on the logical key
+(student_id, source_submission_id, source_priority_id), migration 13
+(additive partial unique index on the persisted JSON priority key;
+one-step rollback), unified ownership/evidence validation for all creation
+paths, and the `FeedbackEngagementTrace.created_at` schema fix. Focused 33
+passed; affected regression 562 passed; full non-live core 969 passed /
+8 skipped / exit 0; `run.bat --verify` PASS; evidence
+RUN_VERIFICATION_V0.9.7_B_WU3.md. WU4 (focused Practice task and attempt
+loop) is the next planned work unit; v0.9.7-B is not yet complete. Do not
+begin v0.9.7-C.
 
 # Master roadmap
 

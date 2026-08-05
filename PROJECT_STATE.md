@@ -1,3 +1,30 @@
+## Current v0.9.7-B WU3 State
+
+- Status: WU1-WU2 COMPLETE; WU3 (Idempotent Priority Practice Target
+  Creation and Reuse) COMPLETE - all 20 WU3 acceptance criteria satisfied;
+  WU4 (focused Practice task and attempt loop) is the next planned work
+  unit; v0.9.7-B as a whole is NOT complete.
+- Allocator: `_next_practice_id` repaired (prefix-length-safe suffix +
+  same-prefix filter; BEGIN IMMEDIATE serialized allocation+insert);
+  FET/WTR/PSS no longer collide; `FeedbackEngagementTrace.created_at`
+  additive field fixed the never-exercised FET save path.
+- Idempotency: `PracticeTargetCreationService` create-or-reuse on the
+  logical key (student_id, source_submission_id, source_priority_id);
+  repeated/concurrent requests return the same target.
+- Uniqueness: migration 13 (additive partial unique index on the persisted
+  JSON priority key, ACTIVE only; rollback drops only the index); migration
+  version 13; version-pinning tests updated.
+- Ownership: unified validation for priority-derived and legacy creation
+  (cross-student 403, missing source 404, unrelated diagnosis 422,
+  client-supplied legacy evidence 422, zero writes on failure).
+- Verification: focused 33 passed; affected regression 562 passed; full
+  non-live core 969 passed / 8 skipped / exit 0; `run.bat --verify` PASS;
+  demo smoke PASS on migration 13; evidence RUN_VERIFICATION_V0.9.7_B_WU3.md.
+- Parity contracts refreshed with documented deltas: H2D2 dependency-graph
+  snapshots, allocator SQL fingerprint + migrations SHA-256 registry, and
+  the canonical allowlist (26 -> 29 entries).
+- Next: v0.9.7-B WU4. Do not begin WU5-WU6 or v0.9.7-C in this stage.
+
 ## Current v0.9.7-B WU2 State
 
 - Status: WU1 (audit + protocol freeze) COMPLETE; WU2 (Priority-to-Practice

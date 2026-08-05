@@ -1,4 +1,29 @@
 **Date:** 2026-08-04
+**Date:** 2026-08-05
+**Current task:** v0.9.7-B Work Unit 3 - Idempotent Priority Practice Target
+Creation and Reuse
+**Status:** COMPLETE - all 20 WU3 acceptance criteria satisfied; WU4 is the
+next planned work unit; v0.9.7-B as a whole is NOT complete (see
+RUN_VERIFICATION_V0.9.7_B_WU3.md).
+
+- WU2 (mapping + provenance) is complete; WU3 consumed the frozen contract
+  without redesigning it.
+- WU3 implemented: prefix-length-safe `_next_practice_id` repair with
+  BEGIN IMMEDIATE serialized allocation (FET/WTR/PSS no longer collide),
+  `PracticeTargetCreationService` create-or-reuse on
+  (student_id, source_submission_id, source_priority_id), migration 13
+  (additive partial unique index on the persisted JSON priority key),
+  unified ownership/evidence validation for priority-derived and legacy
+  creation, and the `FeedbackEngagementTrace.created_at` schema fix.
+- No Practice UI, answer submission, evaluation, completion, or Journey
+  change; no WU4/WU5 functionality; locale parity preserved (555/555).
+- Verification: focused 33 passed; affected regression 562 passed; full
+  non-live core 969 passed / 8 skipped / exit 0; `run.bat --verify` PASS;
+  demo smoke PASS (migration 13 + index).
+- Next: v0.9.7-B WU4 (focused Practice task and attempt loop). Do not begin
+  WU5-WU6 or v0.9.7-C in this stage.
+
+**Date:** 2026-08-05
 **Current task:** v0.9.7-B Work Unit 2 - Priority-to-Practice Mapping and
 Provenance
 **Status:** COMPLETE - all 24 WU2 acceptance criteria satisfied; WU3
