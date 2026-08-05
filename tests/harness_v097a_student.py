@@ -14,6 +14,7 @@ import streamlit as st
 from app.ui.api_client import ApiClientError, ErrorCategory
 from app.ui.features.student.feedback import render_feedback_page
 from app.ui.features.student.home import render_student_home
+from app.ui.features.student.journey import render_learning_journey_page
 from app.ui.features.student.practice import render_practice_page
 from app.ui.features.student.revision import render_revision_page
 from app.ui.features.student.writing import render_writing_page
@@ -25,6 +26,7 @@ RENDERERS = {
     "student_feedback_title": render_feedback_page,
     "student_revision_title": render_revision_page,
     "practice": render_practice_page,
+    "learning_journey": render_learning_journey_page,
 }
 
 PROMPT = "Should cities add more parks?"
