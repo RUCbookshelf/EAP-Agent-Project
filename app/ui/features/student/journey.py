@@ -10,16 +10,22 @@ from app.ui.components import (
     empty_state,
     info_box,
     limitation_notice,
+    render_api_error,
     section_header,
     student_action_block,
     student_context_block,
     student_page_intro,
+    success_box,
     technical_caption,
     timeline_event,
     warning_box,
 )
 from app.ui.features.student.formatting import _short_timestamp
-from app.ui.features.student.navigation import _navigate_student_page
+from app.ui.features.student.navigation import (
+    _navigate_journey_practice,
+    _navigate_journey_revision,
+    _navigate_student_page,
+)
 from app.ui.locale import t
 from app.ui.student_context import set_selected_learner, student_id_input
 
@@ -114,6 +120,144 @@ def _render_journey_action(state: str, lang: str) -> None:
     )
 
 
+def _state_label(state: str, lang: str) -> str:
+    """Localized writing/practice state label (cycle current_state uses the
+    same vocabulary)."""
+    key = f"student_journey_state_{state}"
+    localized = t(key, lang)
+    if localized != key:
+        return localized
+    return state.replace("_", " ").title()
+
+
+def _render_submission_block(
+    submission: dict, cycle: dict, lang: str, *, original: bool
+) -> None:
+    """One original/revision submission with its honest state and safe
+    action (v0.9.7-C WU3)."""
+    label_key = (
+        "student_journey_original_writing" if original
+        else "student_journey_revised_draft"
+    )
+    student_context_block([
+        (label_key, f"#{submission.get('submission_id', '')}"),
+        ("student_journey_state",
+         _state_label(str(submission.get("writing_state", "")), lang)),
+    ], lang)
+    if not original and submission.get("revision_of_submission_id"):
+        technical_caption(
+            f"{t('student_journey_revision_of', lang)}: "
+            f"#{submission.get('revision_of_submission_id')}")
+    if submission.get("writing_state") == "feedback_without_priority":
+        info_box("journey_event_feedback_without_priority_desc", lang)
+    elif submission.get("writing_state") == "insufficient_evidence":
+        info_box("journey_event_insufficient_evidence_desc", lang)
+    for action in cycle.get("available_actions", []):
+        if (action.get("action") == "open_revision"
+                and int(action.get("submission_id") or 0)
+                == int(submission.get("submission_id") or 0)):
+            st.button(
+                t("student_journey_action_open_revision", lang),
+                use_container_width=True,
+                key=f"journey_action_revision_{submission.get('submission_id')}",
+                on_click=_navigate_journey_revision,
+                args=(int(submission.get("submission_id") or 0), lang),
+            )
+
+
+def _render_feedback_stage(stage: dict, lang: str) -> None:
+    """One persisted feedback stage with its priority count."""
+    student_context_block([
+        ("student_journey_feedback", f"#{stage.get('feedback_id', '')}"),
+        ("student_journey_priority_count", int(stage.get("priority_count") or 0)),
+    ], lang)
+    for priority in stage.get("priorities", []):
+        category = priority.get("category") or ""
+        if category:
+            info_box(" " + t(f"student_feedback_category_{category}", lang), lang)
+
+
+def _render_practice_cycle(practice: dict, lang: str) -> None:
+    """One Practice activity with honest state, provenance, saved records,
+    completion wording, and its safe action (v0.9.7-C WU3)."""
+    student_context_block([
+        ("student_practice_focus",
+         practice.get("target_label") or practice.get("target_code") or ""),
+        ("student_journey_state",
+         _state_label(str(practice.get("activity_state", "")), lang)),
+    ], lang)
+    provenance = practice.get("priority_provenance") or {}
+    provenance_status = provenance.get("status")
+    if provenance_status == "valid":
+        category = provenance.get("category") or ""
+        category_label = (
+            t(f"student_feedback_category_{category}", lang) if category else ""
+        )
+        technical_caption(
+            f"{t('student_journey_priority_reference', lang)}: "
+            f"{provenance.get('reference', '')}"
+            + (f" · {category_label}" if category_label else ""))
+    elif provenance_status == "legacy":
+        info_box("student_journey_practice_legacy", lang)
+    elif provenance_status == "unresolved":
+        info_box("student_journey_practice_provenance_unresolved", lang)
+    attempt = practice.get("attempt")
+    if attempt:
+        technical_caption(
+            f"{t('student_practice_attempt_reference', lang)}: "
+            f"#{attempt.get('attempt_id', '')}")
+    activity_state = practice.get("activity_state", "")
+    if activity_state == "completed":
+        success_box("student_practice_completed_title", lang)
+        if practice.get("evaluation"):
+            info_box("student_practice_completed_saved", lang)
+        else:
+            info_box("student_practice_attempt_saved", lang)
+            warning_box("student_practice_evaluation_unavailable", lang)
+    elif activity_state == "evaluation_available":
+        info_box("student_practice_attempt_saved", lang)
+        info_box("journey_event_practice_evaluation_recorded", lang)
+    elif activity_state in ("evaluation_unavailable", "attempted"):
+        info_box("student_practice_attempt_saved", lang)
+        if activity_state == "evaluation_unavailable":
+            warning_box("student_practice_evaluation_unavailable", lang)
+
+
+def _render_cycle(cycle: dict, lang: str) -> None:
+    """One learner-owned writing cycle with its stages and activities."""
+    section_header("student_journey_cycle_title", lang=lang)
+    technical_caption(f"{cycle.get('cycle_id', '')}")
+    student_context_block([
+        ("student_journey_cycle_state",
+         _state_label(str(cycle.get("current_state", "")), lang)),
+    ], lang)
+    if cycle.get("relationship_status") == "unlinked":
+        warning_box("student_journey_cycle_unlinked", lang)
+    root = cycle.get("root_submission")
+    if root is not None:
+        _render_submission_block(root, cycle, lang, original=True)
+    for revision in cycle.get("revisions", []):
+        _render_submission_block(revision, cycle, lang, original=False)
+    for stage in cycle.get("feedback_stages", []):
+        _render_feedback_stage(stage, lang)
+    for practice in cycle.get("practice_cycles", []):
+        section_header("student_journey_practice_activity", lang=lang)
+        _render_practice_cycle(practice, lang)
+        for action in cycle.get("available_actions", []):
+            if (action.get("action") == "open_practice"
+                    and action.get("practice_target_id")
+                    == practice.get("practice_target_id")):
+                st.button(
+                    t("student_journey_action_open_practice", lang),
+                    use_container_width=True,
+                    key=f"journey_action_practice_{practice.get('practice_target_id')}",
+                    on_click=_navigate_journey_practice,
+                    args=(str(practice.get("practice_target_id") or ""), lang),
+                )
+    for limitation in cycle.get("limitations", []):
+        limitation_notice(" " + limitation, lang)
+
+
 def render_learning_journey_page(api_client: StudentJourneyApiPort, lang: str) -> None:
     """Render the authoritative read-time Journey projection without writes."""
     student_page_intro("learning_journey", "student_journey_purpose", lang)
@@ -138,25 +282,35 @@ def render_learning_journey_page(api_client: StudentJourneyApiPort, lang: str) -
         render_api_error(exc, lang)
         return
 
+    cycles = journey.get("cycles") or []
     events = journey.get("events", [])
-    if not events:
+    if not cycles and not events:
         _render_journey_empty_state(journey, lang)
         return
 
-    section_header("journey_timeline", lang=lang)
-    for event in events:
-        params = _journey_description_params(event, lang)
-        timeline_event(
-            event_label=t(event.get("title_key", ""), lang),
-            timestamp=_short_timestamp(event.get("occurred_at", "")),
-            detail=t(event.get("description_key", ""), lang, **params),
-            boundary=_journey_limitation(event, lang),
-            lang=lang,
-            source_label=_journey_source_label(event, lang),
-            evidence_status=_journey_evidence_label(
-                event.get("evidence_status", ""), lang
-            ),
-        )
+    if cycles:
+        # Grouped cycle view (v0.9.7-C): coherent writing cycles with
+        # honest states and safe actions instead of an undifferentiated
+        # raw-event list.
+        for cycle in cycles:
+            _render_cycle(cycle, lang)
+    else:
+        # Defensive fallback for consumers without cycle data: the raw
+        # timeline remains available.
+        section_header("journey_timeline", lang=lang)
+        for event in events:
+            params = _journey_description_params(event, lang)
+            timeline_event(
+                event_label=t(event.get("title_key", ""), lang),
+                timestamp=_short_timestamp(event.get("occurred_at", "")),
+                detail=t(event.get("description_key", ""), lang, **params),
+                boundary=_journey_limitation(event, lang),
+                lang=lang,
+                source_label=_journey_source_label(event, lang),
+                evidence_status=_journey_evidence_label(
+                    event.get("evidence_status", ""), lang
+                ),
+            )
 
     for state in journey.get("derived_states", []):
         message_key = state.get("message_key") or ""
