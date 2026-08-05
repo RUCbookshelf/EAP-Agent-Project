@@ -1,5 +1,33 @@
 **Date:** 2026-08-04
 **Date:** 2026-08-05
+**Date:** 2026-08-05
+**Current task:** v0.9.7-B Work Unit 4 - Focused Practice Task and Attempt
+Loop
+**Status:** COMPLETE - all 36 WU4 acceptance criteria satisfied; WU5
+(evaluation semantics + completion) is the next planned work unit;
+v0.9.7-B as a whole is NOT complete (see RUN_VERIFICATION_V0.9.7_B_WU4.md).
+
+- Explicit entry: Feedback per-priority "Practice this priority" actions and
+  Revision completion Open Practice transfer only reference components;
+  the Practice page resolves them server-side through WU3 create-or-reuse
+  (no render-time fabrication; stale/cross-learner presets ignored).
+- Focused task: learner-owned read-only context endpoint re-resolves the
+  persisted priority context; one current exercise reused or created and
+  seeded from the evidence quote; the task shows priority, why, direction,
+  evidence, instruction, and response field.
+- Attempt loop: server-side ownership validation (cross-student 403, zero
+  writes), shared pending guard (one action -> at most one attempt), input
+  preserved on failure, explicit saved state with attempt reference, and
+  rerun/refresh/re-entry recovery from persistence. Evaluation unchanged;
+  no COMPLETED status; no WU5 Finish/Continue actions.
+- Verification: focused 32 passed; combined WU2-WU4 141 passed; affected
+  regression 638 passed / 1 skipped; full non-live core 1000 passed /
+  8 skipped / exit 0; `run.bat --verify` PASS; rendered matrix (en/zh x
+  1280x900/390x844) PASS; locale parity 563/563.
+- Next: v0.9.7-B WU5 (evaluation/completion semantics). Do not begin WU6 or
+  v0.9.7-C in this stage.
+
+**Date:** 2026-08-05
 **Current task:** v0.9.7-B Work Unit 3 - Idempotent Priority Practice Target
 Creation and Reuse
 **Status:** COMPLETE - all 20 WU3 acceptance criteria satisfied; WU4 is the

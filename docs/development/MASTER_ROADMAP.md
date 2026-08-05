@@ -3,7 +3,7 @@
 | Item | Status |
 |---|---|
 | v0.9.7-A Priority-Guided Learning Cycle Completion | COMPLETE and verified (focused 14 passed; affected regression 293 passed; full non-live core 860 passed / 8 skipped / exit 0; `run.bat --verify` PASS; rendered matrix all four locale/viewport combinations PASS; evidence verification/v0.9.7-a/v0.9.7-a-20260804-r1/) |
-| v0.9.7-B Practice Target Generation and Practice Workflow | WU1 audit + protocol freeze COMPLETE; WU2 mapping + provenance COMPLETE (RUN_VERIFICATION_V0.9.7_B_WU2.md); WU3 idempotent creation/reuse COMPLETE (RUN_VERIFICATION_V0.9.7_B_WU3.md; allocator repair, migration 13, ownership validation; focused 33 passed; affected 562 passed; full non-live core 969 passed / 8 skipped / exit 0; `run.bat --verify` PASS); WU4 (focused Practice task and attempt loop) next; v0.9.7-B overall NOT complete |
+| v0.9.7-B Practice Target Generation and Practice Workflow | WU1-WU3 COMPLETE (RUN_VERIFICATION_V0.9.7_B_WU2.md + WU3.md); WU4 focused Practice task and attempt loop COMPLETE (RUN_VERIFICATION_V0.9.7_B_WU4.md; explicit entry intent + create-or-reuse, learner-owned context endpoint, seeded current exercise, attempt ownership + pending guard, saved-state recovery; focused 32 passed; affected 638 passed / 1 skipped; full non-live core 1000 passed / 8 skipped / exit 0; `run.bat --verify` PASS; rendered matrix en/zh x desktop/mobile PASS); WU5 (evaluation + completion semantics) next; v0.9.7-B overall NOT complete |
 | v0.9.7-C Student Journey Functional Completion | not started |
 | v0.9.7-D Student UI/UX Redesign and Visual Polish | not started |
 | v0.9.7-E Responsive, Mobile, and Accessibility Refinement | not started |
@@ -43,6 +43,23 @@ passed; affected regression 562 passed; full non-live core 969 passed /
 RUN_VERIFICATION_V0.9.7_B_WU3.md. WU4 (focused Practice task and attempt
 loop) is the next planned work unit; v0.9.7-B is not yet complete. Do not
 begin v0.9.7-C.
+
+**v0.9.7-B WU4 (2026-08-05):** the focused Practice task and attempt loop is
+complete and verified: Feedback per-priority and Revision-completion entry
+actions transfer explicit intents that the Practice page resolves
+server-side through WU3 create-or-reuse (never on render), a learner-owned
+read-only context endpoint re-resolves the persisted priority context, one
+current exercise is reused or created and seeded from the evidence quote,
+the focused task renders priority/why/direction/evidence/instruction, and
+attempt submission is ownership-validated with a shared pending guard and
+explicit saved-state recovery from persistence. Evaluation remains the
+existing unchanged side effect; no COMPLETED status and no WU5 actions.
+Focused 32 passed; affected regression 638 passed / 1 skipped; full non-live
+core 1000 passed / 8 skipped / exit 0; `run.bat --verify` PASS; rendered
+matrix (en/zh x 1280x900/390x844) PASS; evidence
+RUN_VERIFICATION_V0.9.7_B_WU4.md. WU5 (evaluation semantics + completion) is
+the next planned work unit; v0.9.7-B is not yet complete. Do not begin
+v0.9.7-C.
 
 # Master roadmap
 

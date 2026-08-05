@@ -1,0 +1,231 @@
+{
+  "run_id": "v0.9.7-b-wu4-20260805-r1",
+  "en_1280x900": {
+    "combination": "en 1280x900",
+    "feedback_priority": {
+      "health": {
+        "exceptions": 0,
+        "overflow": false,
+        "raw_keys": []
+      },
+      "screenshot": "verification\\v0.9.7-b\\v0.9.7-b-wu4-20260805-r1\\screenshots\\en_1280x900_feedback_priority.png"
+    },
+    "focused_task": {
+      "health": {
+        "exceptions": 0,
+        "overflow": false,
+        "raw_keys": []
+      },
+      "counts": {
+        "essays": 1,
+        "practice_targets": 1,
+        "exercise_instances": 1,
+        "exercise_attempts": 0,
+        "practice_evaluations": 0
+      },
+      "submit_size": {
+        "width": 560,
+        "height": 40
+      },
+      "screenshot": "verification\\v0.9.7-b\\v0.9.7-b-wu4-20260805-r1\\screenshots\\en_1280x900_practice_task.png"
+    },
+    "empty_validation_zero_write": true,
+    "attempt_saved": {
+      "health": {
+        "exceptions": 0,
+        "overflow": false,
+        "raw_keys": []
+      },
+      "counts": {
+        "essays": 1,
+        "practice_targets": 1,
+        "exercise_instances": 1,
+        "exercise_attempts": 1,
+        "practice_evaluations": 1
+      },
+      "screenshot": "verification\\v0.9.7-b\\v0.9.7-b-wu4-20260805-r1\\screenshots\\en_1280x900_practice_saved.png"
+    },
+    "reentry": {
+      "health": {
+        "exceptions": 0,
+        "overflow": false,
+        "raw_keys": []
+      },
+      "counts_stable": true,
+      "no_form": true,
+      "screenshot": "verification\\v0.9.7-b\\v0.9.7-b-wu4-20260805-r1\\screenshots\\en_1280x900_practice_reentry.png"
+    }
+  },
+  "zh_1280x900": {
+    "combination": "zh_CN 1280x900",
+    "feedback_priority": {
+      "health": {
+        "exceptions": 0,
+        "overflow": false,
+        "raw_keys": []
+      },
+      "screenshot": "verification\\v0.9.7-b\\v0.9.7-b-wu4-20260805-r1\\screenshots\\zh_1280x900_feedback_priority.png"
+    },
+    "focused_task": {
+      "health": {
+        "exceptions": 0,
+        "overflow": false,
+        "raw_keys": []
+      },
+      "counts": {
+        "essays": 1,
+        "practice_targets": 1,
+        "exercise_instances": 1,
+        "exercise_attempts": 0,
+        "practice_evaluations": 0
+      },
+      "submit_size": {
+        "width": 560,
+        "height": 40
+      },
+      "screenshot": "verification\\v0.9.7-b\\v0.9.7-b-wu4-20260805-r1\\screenshots\\zh_1280x900_practice_task.png"
+    },
+    "empty_validation_zero_write": true,
+    "attempt_saved": {
+      "health": {
+        "exceptions": 0,
+        "overflow": false,
+        "raw_keys": []
+      },
+      "counts": {
+        "essays": 1,
+        "practice_targets": 1,
+        "exercise_instances": 1,
+        "exercise_attempts": 1,
+        "practice_evaluations": 1
+      },
+      "screenshot": "verification\\v0.9.7-b\\v0.9.7-b-wu4-20260805-r1\\screenshots\\zh_1280x900_practice_saved.png"
+    },
+    "reentry": {
+      "health": {
+        "exceptions": 0,
+        "overflow": false,
+        "raw_keys": []
+      },
+      "counts_stable": true,
+      "no_form": true,
+      "screenshot": "verification\\v0.9.7-b\\v0.9.7-b-wu4-20260805-r1\\screenshots\\zh_1280x900_practice_reentry.png"
+    }
+  },
+  "en_390x844": {
+    "combination": "en 390x844",
+    "feedback_priority": {
+      "health": {
+        "exceptions": 0,
+        "overflow": false,
+        "raw_keys": []
+      },
+      "screenshot": "verification\\v0.9.7-b\\v0.9.7-b-wu4-20260805-r1\\screenshots\\en_390x844_feedback_priority.png"
+    },
+    "focused_task": {
+      "health": {
+        "exceptions": 0,
+        "overflow": false,
+        "raw_keys": []
+      },
+      "counts": {
+        "essays": 1,
+        "practice_targets": 1,
+        "exercise_instances": 1,
+        "exercise_attempts": 0,
+        "practice_evaluations": 0
+      },
+      "submit_size": {
+        "width": 358,
+        "height": 44
+      },
+      "screenshot": "verification\\v0.9.7-b\\v0.9.7-b-wu4-20260805-r1\\screenshots\\en_390x844_practice_task.png"
+    },
+    "empty_validation_zero_write": true,
+    "attempt_saved": {
+      "health": {
+        "exceptions": 0,
+        "overflow": false,
+        "raw_keys": []
+      },
+      "counts": {
+        "essays": 1,
+        "practice_targets": 1,
+        "exercise_instances": 1,
+        "exercise_attempts": 1,
+        "practice_evaluations": 1
+      },
+      "screenshot": "verification\\v0.9.7-b\\v0.9.7-b-wu4-20260805-r1\\screenshots\\en_390x844_practice_saved.png"
+    },
+    "reentry": {
+      "health": {
+        "exceptions": 0,
+        "overflow": false,
+        "raw_keys": []
+      },
+      "counts_stable": true,
+      "no_form": true,
+      "screenshot": "verification\\v0.9.7-b\\v0.9.7-b-wu4-20260805-r1\\screenshots\\en_390x844_practice_reentry.png"
+    }
+  },
+  "zh_390x844": {
+    "combination": "zh_CN 390x844",
+    "feedback_priority": {
+      "health": {
+        "exceptions": 0,
+        "overflow": false,
+        "raw_keys": []
+      },
+      "screenshot": "verification\\v0.9.7-b\\v0.9.7-b-wu4-20260805-r1\\screenshots\\zh_390x844_feedback_priority.png"
+    },
+    "focused_task": {
+      "health": {
+        "exceptions": 0,
+        "overflow": false,
+        "raw_keys": []
+      },
+      "counts": {
+        "essays": 1,
+        "practice_targets": 1,
+        "exercise_instances": 1,
+        "exercise_attempts": 0,
+        "practice_evaluations": 0
+      },
+      "submit_size": {
+        "width": 358,
+        "height": 44
+      },
+      "screenshot": "verification\\v0.9.7-b\\v0.9.7-b-wu4-20260805-r1\\screenshots\\zh_390x844_practice_task.png"
+    },
+    "empty_validation_zero_write": true,
+    "attempt_saved": {
+      "health": {
+        "exceptions": 0,
+        "overflow": false,
+        "raw_keys": []
+      },
+      "counts": {
+        "essays": 1,
+        "practice_targets": 1,
+        "exercise_instances": 1,
+        "exercise_attempts": 1,
+        "practice_evaluations": 1
+      },
+      "screenshot": "verification\\v0.9.7-b\\v0.9.7-b-wu4-20260805-r1\\screenshots\\zh_390x844_practice_saved.png"
+    },
+    "reentry": {
+      "health": {
+        "exceptions": 0,
+        "overflow": false,
+        "raw_keys": []
+      },
+      "counts_stable": true,
+      "no_form": true,
+      "screenshot": "verification\\v0.9.7-b\\v0.9.7-b-wu4-20260805-r1\\screenshots\\zh_390x844_practice_reentry.png"
+    }
+  },
+  "console_errors": [],
+  "page_errors": [],
+  "remote_requests": [],
+  "ports_cleaned": true
+}

@@ -1,3 +1,34 @@
+## Current v0.9.7-B WU4 State
+
+- Status: WU1-WU3 COMPLETE; WU4 (Focused Practice Task and Attempt Loop)
+  COMPLETE - all 36 WU4 acceptance criteria satisfied; WU5 (evaluation
+  semantics + completion) is the next planned work unit; v0.9.7-B as a whole
+  is NOT complete.
+- Entry: Feedback per-priority "Practice this priority" actions and Revision
+  completion Open Practice transfer explicit intents (source submission +
+  priority index only); the Practice page resolves them server-side through
+  WU3 create-or-reuse (never on render); direct navigation fabricates
+  nothing; stale/cross-learner presets are ignored.
+- Task: learner-owned read-only context endpoint re-resolves the persisted
+  priority context; one current exercise is reused or created (seeded from
+  the evidence quote); the focused task shows priority, why, direction,
+  evidence, instruction, and response field; legacy targets keep their path.
+- Attempt: server-side ownership validation (cross-student 403, zero
+  writes), shared pending guard (one explicit submission -> at most one
+  attempt), input preserved on failure, explicit saved state with attempt
+  reference, rerun/refresh/re-entry recovery from persistence. Evaluation
+  side effect unchanged; no COMPLETED status or WU5 actions.
+- Verification: focused 32 passed; combined WU2-WU4 141 passed; affected
+  regression 638 passed / 1 skipped; full non-live core 1000 passed /
+  8 skipped / exit 0; `run.bat --verify` PASS; rendered matrix
+  en/zh x 1280x900/390x844 PASS (0 console/page errors, 0 remote requests,
+  exact write counts); evidence RUN_VERIFICATION_V0.9.7_B_WU4.md +
+  verification/v0.9.7-b/v0.9.7-b-wu4-20260805-r1/.
+- API surface: new read-only context endpoint (78 GET/POST routes);
+  contracts, dependency graph, OpenAPI, and canonical allowlist (30 entries)
+  refreshed with documented deltas.
+- Next: v0.9.7-B WU5. Do not begin WU6 or v0.9.7-C in this stage.
+
 ## Current v0.9.7-B WU3 State
 
 - Status: WU1-WU2 COMPLETE; WU3 (Idempotent Priority Practice Target
