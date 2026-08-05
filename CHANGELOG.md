@@ -1,3 +1,42 @@
+## v0.9.7-B (2026-08-05)
+
+### Priority-to-Practice Target Generation and Practice Workflow (feature stage)
+
+- WU2: production priority-to-practice mapping and provenance - stable
+  `PRIO-{feedback_id}-{priority_index}` reference, category map
+  (lexical_repetition/connective_use/sentence_length_pattern), provenance
+  forwarding through the API, ownership/source validation before any
+  priority-derived write.
+- WU3: idempotent target creation and reuse - prefix-length-safe
+  `_next_practice_id` repair, create-or-reuse on
+  (student_id, source_submission_id, source_priority_id), migration 13
+  (additive partial unique index on the persisted priority key),
+  unified ownership/evidence validation.
+- WU4: focused Practice task and attempt loop - Feedback per-priority and
+  Revision-completion entry intents, read-only priority-context resolver,
+  one seeded exercise, ownership-validated pending-guarded attempt
+  persistence, saved-state recovery from persistence.
+- WU5: evaluation semantics, target completion, and post-Practice next
+  steps - learner-owned evaluation read path (available/unavailable/
+  malformed states), explicit idempotent ACTIVE -> COMPLETED transition
+  (code-only enum; status column + target_json + JSON-only `updated_at`;
+  no migration 14), persistence-backed completed-state re-entry, bounded
+  next steps (Return to Feedback / Open Learning Journey / explicit other
+  active target).
+- WU6: Journey integration verification and release closure - the existing
+  read-time Journey projection was verified for the complete cycle (no new
+  event on completion; exact provenance/dedup/ordering; no writes;
+  evaluation-unavailable and legacy honesty), the final EN/ZH x
+  desktop/mobile matrix plus evaluation-unavailable/no-priority/legacy
+  scenarios passed independently, and all release gates passed (focused
+  18; combined WU2-WU6 197; affected 569/0; full non-live core 1057/8
+  exit 0; `run.bat --verify` PASS twice; locale parity 572/572; Research
+  smoke 6/6; fresh-index impact review 0 production symbols). WU5 closure
+  metadata reconciled; no migration 14; no new Journey event types.
+- Status: COMPLETE and verified - **v0.9.7-B is closed**; WU1-WU6 complete;
+  all 80 WU6 acceptance criteria satisfied.
+- Next: v0.9.7-C Student Journey Functional Completion (not started).
+
 ## v0.9.7-A (2026-08-04)
 
 ### Priority-Guided Learning Cycle Completion (feature stage)

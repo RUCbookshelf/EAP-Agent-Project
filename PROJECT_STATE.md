@@ -1,34 +1,36 @@
-## Current v0.9.7-B WU5 State
+## Current v0.9.7-B State
 
-- Status: WU1-WU4 COMPLETE; WU5 (Evaluation Semantics, Target Completion,
-  and Post-Practice Next Steps) COMPLETE - all 54 WU5 acceptance criteria
-  satisfied; WU6 (Journey integration verification + full v0.9.7-B closure)
-  is the next planned work unit; v0.9.7-B as a whole is NOT complete.
-- Evaluation: the persisted rule-based evaluation is presented as
-  formative task feedback with explicit AVAILABLE/UNAVAILABLE states read
-  from persisted attempt/evaluation associations (new learner-owned
-  read-only endpoint); malformed rows degrade to controlled unavailable;
-  the attempt remains authoritative.
-- Completion: explicit "Finish This Practice Cycle" action (only after a
-  persisted attempt) persists the idempotent ACTIVE -> COMPLETED
-  transition atomically (status column + target_json + JSON-only
-  `updated_at`; code-only `PracticeTargetStatus.COMPLETED`; NO migration
-  14); repeated/concurrent completion returns one stable completed target.
-- Re-entry: reload, Feedback, Revision, and direct navigation reuse the
-  completed target from persistence with no fresh form; a learner-scoped
-  session selection keeps the current target stable across reruns.
-- Next steps: Return to Feedback and Open Learning Journey (navigation
-  only); another existing active target opens explicitly; no automatic
-  next-target creation or sequencing; no new Journey event types.
-- Verification: focused WU5 38 passed; combined WU2-WU5 178 passed;
-  affected regression 553 passed / 3 skipped; full non-live core 1039
-  passed / 8 skipped / exit 0; `run.bat --verify` PASS; rendered matrix
-  en/zh x 1280x900/390x844 PASS (0 console/page errors, 0 remote requests);
-  evidence RUN_VERIFICATION_V0.9.7_B_WU5.md +
-  verification/v0.9.7-b/v0.9.7-b-wu5-20260805-r1/.
-- API surface: 80 GET/POST routes; 56 client methods; canonical allowlist
-  32 entries; locale parity maintained.
-- Next: v0.9.7-B WU6. Do not begin v0.9.7-C in this stage.
+- Status: **v0.9.7-B is COMPLETE, verified, and closed.** WU1-WU6 are
+  complete; all 80 WU6 acceptance criteria (and all prior WU criteria) are
+  satisfied; the next planned phase is v0.9.7-C (NOT started).
+- WU6 (Journey integration verification + full v0.9.7-B closure):
+  the existing read-time Journey projection was verified for the complete
+  priority-derived Practice cycle - exact event types/provenance/dedup
+  keys/ordering, completion creates no new event (the completed status
+  flows through `research_detail.status`), evaluation-unavailable and
+  legacy records project honestly, repeated reads/re-entry/reuse/
+  completion never duplicate events, Journey navigation performs no
+  writes; no production change was required (no release blocker), no
+  migration 14, no new Journey event types.
+- Final product matrix: EN/ZH x 1280x900/390x844 main cycles plus
+  evaluation-unavailable, no-priority, and legacy scenarios all PASS
+  independently (fresh isolated DB + distinct learner per combination; 0
+  console/page errors; 0 remote requests; no overflow/raw keys; mobile
+  controls >= 44px; no mastery wording; Journey event count unchanged by
+  completion).
+- Verification: focused WU6 18 passed; combined WU2-WU6 197 passed;
+  affected regression 569 passed / 0 failed; full non-live core 1057
+  passed / 8 skipped / exit 0; `run.bat --verify` PASS twice; locale
+  parity 572/572; Research smoke 6/6; fresh-index GitNexus impact review
+  (90 changed symbols, all verification/test/docs; 0 production symbols).
+- WU5 metadata reconciled (`01115ba` = functional/evidence HEAD; `b9e030d`
+  = closure HEAD; baseline for WU6 = `b0f16b5` protocol-freeze commit);
+  WU6 protocol frozen at docs/development/V0.9.7_B_WU6_PROTOCOL.md.
+- Evidence: RUN_VERIFICATION_V0.9.7_B_WU6.md (WU6 report),
+  RUN_VERIFICATION_V0.9.7_B.md (aggregate v0.9.7-B closure report),
+  verification/v0.9.7-b/v0.9.7-b-wu6-20260805-r1/.
+- Next: v0.9.7-C (Student Journey Functional Completion). Do not begin
+  v0.9.7-C in this stage.
 
 ## Current v0.9.7-B WU4 State
 

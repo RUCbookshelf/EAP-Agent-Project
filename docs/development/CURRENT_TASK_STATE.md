@@ -1,31 +1,34 @@
 **Date:** 2026-08-05
-**Current task:** v0.9.7-B Work Unit 5 - Evaluation Semantics, Target
-Completion, and Post-Practice Next Steps
-**Status:** COMPLETE - all 54 WU5 acceptance criteria satisfied; WU6
-(Journey integration verification + full v0.9.7-B closure) is the next
-planned work unit; v0.9.7-B as a whole is NOT complete (see
-RUN_VERIFICATION_V0.9.7_B_WU5.md).
+**Current task:** v0.9.7-B Work Unit 6 - Journey Integration Verification,
+Final Product Matrix, and Release Closure
+**Status:** COMPLETE - all 80 WU6 acceptance criteria satisfied; WU1-WU6
+complete; **v0.9.7-B is complete, verified, and closed**; the next planned
+phase is v0.9.7-C (NOT started; see RUN_VERIFICATION_V0.9.7_B_WU6.md and
+RUN_VERIFICATION_V0.9.7_B.md).
 
-- Evaluation: persisted rule-based evaluation rendered as formative task
-  feedback; learner-owned read-only endpoint returns only evaluations
-  whose attempt/exercise/target/learner chain validates; malformed rows
-  degrade to controlled unavailable; attempt stays authoritative.
-- Completion: explicit Finish action (only after a persisted attempt)
-  persists the idempotent ACTIVE -> COMPLETED transition atomically
-  (status column + target_json + JSON-only updated_at; code-only
-  COMPLETED enum; no migration 14); repeated/concurrent completion returns
-  one stable completed target.
-- Re-entry: reload/Feedback/Revision/direct navigation reuse the completed
-  target from persistence with no fresh form; learner-scoped selection
-  keeps the current target stable across reruns.
-- Next steps: Return to Feedback and Open Learning Journey (navigation
-  only); another active target opens explicitly; no auto-creation or
-  auto-sequencing; no new Journey event types.
-- Verification: focused 38 passed; combined WU2-WU5 178 passed; affected
-  regression 553 passed / 3 skipped; full non-live core 1039 passed /
-  8 skipped / exit 0; `run.bat --verify` PASS; rendered matrix en/zh x
-  1280x900/390x844 PASS; API 80 GET/POST; client 56; allowlist 32.
-- Next: v0.9.7-B WU6. Do not begin v0.9.7-C in this stage.
+- Journey: the existing read-time projection (app/journey/service.py) was
+  verified for the complete priority-derived cycle - 12 event types with
+  exact dedup keys; completion creates no event (status flows through
+  `research_detail.status`); provenance/dedup/ordering deterministic;
+  repeated reads, reloads, locale switches, Feedback/Revision re-entry,
+  target reuse, and repeated completion never duplicate events; Journey
+  reads perform no writes (whole-DB row counts); evaluation-unavailable
+  and legacy records project honestly; no new Journey event types.
+- Release gates: focused WU6 18 passed; combined WU2-WU6 197 passed;
+  affected regression 569 passed / 0 failed; full non-live core 1057
+  passed / 8 skipped / exit 0; `run.bat --verify` PASS twice; locale
+  parity 572/572; Research smoke 6/6; fresh-index GitNexus impact review
+  (0 production symbols changed); `git diff --check` clean.
+- Matrix: EN/ZH x 1280x900/390x844 main cycles + evaluation-unavailable,
+  no-priority, and legacy scenarios all PASS independently (fresh isolated
+  DB + distinct learner each; 0 console/page errors; 0 remote requests;
+  no overflow/raw keys; mobile controls >= 44px; no mastery wording).
+- Metadata: WU5 closure roles reconciled in the WU5 report (`01115ba`
+  functional/evidence HEAD; `b9e030d` closure HEAD); WU6 implementation
+  baseline `b0f16b5` (protocol-freeze commit); no migration 14; no
+  production code change in WU6.
+- Next: v0.9.7-C (Student Journey Functional Completion). Do not begin
+  v0.9.7-C in this stage.
 
 **Date:** 2026-08-04
 **Date:** 2026-08-05

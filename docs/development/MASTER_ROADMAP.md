@@ -3,7 +3,7 @@
 | Item | Status |
 |---|---|
 | v0.9.7-A Priority-Guided Learning Cycle Completion | COMPLETE and verified (focused 14 passed; affected regression 293 passed; full non-live core 860 passed / 8 skipped / exit 0; `run.bat --verify` PASS; rendered matrix all four locale/viewport combinations PASS; evidence verification/v0.9.7-a/v0.9.7-a-20260804-r1/) |
-| v0.9.7-B Practice Target Generation and Practice Workflow | WU1-WU3 COMPLETE (RUN_VERIFICATION_V0.9.7_B_WU2.md + WU3.md); WU4 focused Practice task and attempt loop COMPLETE (RUN_VERIFICATION_V0.9.7_B_WU4.md); WU5 evaluation semantics, target completion, and post-Practice next steps COMPLETE (RUN_VERIFICATION_V0.9.7_B_WU5.md; formative evaluation view with available/unavailable states, explicit Finish action, idempotent ACTIVE->COMPLETED with column/JSON consistency, persistence-backed completed-state re-entry, bounded next steps; focused 38 passed; combined WU2-WU5 178 passed; affected 553 passed / 3 skipped; full non-live core 1039 passed / 8 skipped / exit 0; `run.bat --verify` PASS; rendered matrix en/zh x desktop/mobile PASS); WU6 (Journey integration verification + full v0.9.7-B closure) next; v0.9.7-B overall NOT complete |
+| v0.9.7-B Practice Target Generation and Practice Workflow | COMPLETE and closed - WU1-WU6 complete (RUN_VERIFICATION_V0.9.7_B_WU2/3/4/5/6.md + aggregate RUN_VERIFICATION_V0.9.7_B.md; priority-to-practice mapping + provenance, idempotent create-or-reuse + migration 13, focused task + reliable attempt loop, honest evaluation + explicit completion + bounded next steps, Journey projection verified end to end; focused 18 (WU6) / combined WU2-WU6 197 passed; affected 569 passed / 0 failed; full non-live core 1057 passed / 8 skipped / exit 0; `run.bat --verify` PASS twice; rendered matrix en/zh x desktop/mobile PASS; locale parity 572/572; Research smoke 6/6; fresh-index impact review 0 production symbols; no migration 14; no new Journey event types) |
 | v0.9.7-C Student Journey Functional Completion | not started |
 | v0.9.7-D Student UI/UX Redesign and Visual Polish | not started |
 | v0.9.7-E Responsive, Mobile, and Accessibility Refinement | not started |
@@ -78,6 +78,25 @@ PASS; rendered matrix (en/zh x 1280x900/390x844) PASS; evidence
 RUN_VERIFICATION_V0.9.7_B_WU5.md. WU6 (Journey integration verification +
 full v0.9.7-B closure) is the next planned work unit; v0.9.7-B is not yet
 complete. Do not begin v0.9.7-C.
+
+**v0.9.7-B WU6 (2026-08-05):** Journey integration verification, the final
+product matrix, and release closure are complete: the existing read-time
+Journey projection was verified for the complete priority-derived Practice
+cycle (exact event types, provenance, dedup keys, deterministic ordering;
+completion creates no new event; evaluation-unavailable and legacy records
+project honestly; repeated reads/re-entry/reuse/completion never duplicate
+events; Journey navigation performs no writes - whole-DB row counts), the
+final EN/ZH x 1280x900/390x844 matrix plus evaluation-unavailable,
+no-priority, and legacy scenarios all PASS independently, focused 18
+passed, combined WU2-WU6 197 passed, affected regression 569 passed / 0
+failed, full non-live core 1057 passed / 8 skipped / exit 0, `run.bat
+--verify` PASS twice, locale parity 572/572, Research smoke 6/6, and the
+fresh-index GitNexus impact review found 0 production symbols changed.
+WU5 closure metadata was reconciled (`01115ba` functional/evidence HEAD;
+`b9e030d` closure HEAD); WU6 baseline `b0f16b5`; no migration 14; no
+production code change. Evidence: RUN_VERIFICATION_V0.9.7_B_WU6.md +
+verification/v0.9.7-b/v0.9.7-b-wu6-20260805-r1/. **v0.9.7-B is complete,
+verified, and closed.** The next planned phase is v0.9.7-C (not started).
 
 # Master roadmap
 
