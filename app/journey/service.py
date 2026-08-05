@@ -16,6 +16,8 @@ from typing import Any, Protocol, runtime_checkable
 
 from pydantic import BaseModel, ConfigDict
 
+from app.journey.cycles import CYCLE_MODEL_VERSION, build_cycles
+
 EVENT_VERSION = "journey-event-v0.9.3-c"
 
 # Event types (stable identifiers; localization keys in locales/*.json)
@@ -114,6 +116,7 @@ class JourneyProjectionReadPort(Protocol):
     def list_analysis_runs_for_student(self, student_id: str) -> list[dict]: ...
     def list_feedback_records_for_student(self, student_id: str) -> list[dict]: ...
     def list_practice_targets(self, student_id: str) -> list[dict]: ...
+    def list_exercise_instances(self, practice_target_id=None, student_id=None) -> list[dict]: ...
     def list_exercise_attempts_by_student(self, student_id: str) -> list[dict]: ...
     def list_practice_evaluations_by_student(self, student_id: str) -> list[dict]: ...
     def list_within_task_responses(self, student_id: str) -> list[dict]: ...
@@ -146,6 +149,8 @@ class JourneyService:
             for rec in self.projection_reader.list_feedback_records_for_student(student_id)
         }
         targets = self.projection_reader.list_practice_targets(student_id)
+        exercises = self.projection_reader.list_exercise_instances(
+            student_id=student_id)
         attempts = self.projection_reader.list_exercise_attempts_by_student(student_id)
         evaluations = self.projection_reader.list_practice_evaluations_by_student(student_id)
         responses = self.projection_reader.list_within_task_responses(student_id)
@@ -415,6 +420,19 @@ class JourneyService:
         state, derived_states = self._classify_state(
             student_id, essays, analyses, feedbacks, targets, attempts, evaluations, responses, transfers,
         )
+        cycles = build_cycles(
+            student_id,
+            essays,
+            analyses,
+            feedbacks,
+            targets,
+            exercises,
+            attempts,
+            evaluations,
+            responses,
+            transfers,
+            [e.model_dump(mode="json") for e in unique],
+        )
         return {
             "student_id": student_id,
             "learner_found": True,
@@ -422,6 +440,8 @@ class JourneyService:
             "events": [e.model_dump(mode="json") for e in unique],
             "derived_states": derived_states,
             "state": state,
+            "cycles": cycles,
+            "cycles_version": CYCLE_MODEL_VERSION,
         }
 
     @staticmethod

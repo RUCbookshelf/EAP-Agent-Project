@@ -4066,6 +4066,25 @@
           "return_annotation": "list[dict]"
         },
         {
+          "name": "list_exercise_instances",
+          "signature": "list_exercise_instances(practice_target_id=None, student_id=None) -> list[dict]",
+          "params": [
+            {
+              "name": "practice_target_id",
+              "kind": "positional",
+              "annotation": null,
+              "has_default": true
+            },
+            {
+              "name": "student_id",
+              "kind": "positional",
+              "annotation": null,
+              "has_default": true
+            }
+          ],
+          "return_annotation": "list[dict]"
+        },
+        {
           "name": "list_exercise_attempts_by_student",
           "signature": "list_exercise_attempts_by_student(student_id: str) -> list[dict]",
           "params": [

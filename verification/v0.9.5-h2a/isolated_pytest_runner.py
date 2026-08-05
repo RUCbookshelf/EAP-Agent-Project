@@ -66,6 +66,7 @@ G_ALLOWLIST = (
     "app/services/factory.py,"
     "app/services/reanalysis.py,"
     "app/journey/service.py,"
+    "app/journey/cycles.py,"
     "app/research/service.py,"
     "app/services/revision.py,"
     "app/services/admin_reanalysis.py,"
