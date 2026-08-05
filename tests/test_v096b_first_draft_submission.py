@@ -121,13 +121,13 @@ def test_exactly_one_post_per_logical_submit():
         assert len(session.calls) == 1, method
 
 
-def test_frontend_public_method_count_remains_53():
+def test_frontend_public_method_count_remains_54():
     client = WritingFeedbackApiClient(base_url="http://127.0.0.1:8000")
     methods = {
         name for name in dir(client)
         if not name.startswith("_") and callable(getattr(client, name))
     }
-    assert len(methods) == 53
+    assert len(methods) == 54
     assert {"submit", "submit_linked_revision"} <= methods
     assert "_submit_long_running" not in methods
 

@@ -1,7 +1,7 @@
 """v0.9.5-D endpoint/client/feature contract enforcement tests.
 
 Validates the approved tests/contracts/api_surface_contract.py against the
-live runtime: the 77 endpoint path+method set, the 52 public client methods,
+live runtime: the 78 endpoint path+method set, the 53 public client methods,
 their classifications, the Feature -> Port allowance, and the facade
 private-helper import policy.
 """
@@ -154,7 +154,7 @@ def _feature_calls() -> dict[str, set[str]]:
 
 def test_endpoint_set_matches_runtime_and_is_fully_classified():
     runtime = _runtime_endpoints()
-    assert len(runtime) == 77
+    assert len(runtime) == 78
     assert runtime == set(ENDPOINT_CLASSIFICATION)
     for endpoint, classification in ENDPOINT_CLASSIFICATION.items():
         assert classification in {"A", "B", "C"}

@@ -123,6 +123,7 @@ EXPECTED_ROUTE_CONTRACT = {
     ("GET", "/api/v1/students/{student_id}/learner-model/snapshots/{snapshot_id}"),
     ("GET", "/api/v1/students/{student_id}/learner-model/task-clusters"),
     ("GET", "/api/v1/students/{student_id}/practice-targets"),
+    ("GET", "/api/v1/students/{student_id}/practice-targets/{practice_target_id}/context"),
     ("GET", "/api/v1/students/{student_id}/profile"),
     ("GET", "/api/v1/students/{student_id}/progress"),
     ("GET", "/api/v1/students/{student_id}/revision-candidates"),

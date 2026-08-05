@@ -169,7 +169,7 @@ def test_priority_selected_workflow_unchanged(monkeypatch):
     text = "\n".join(captured)
     assert "Strengths" in text
     assert "Suggested Next Step" in text
-    assert "BTN:Open Practice" in text
+    assert f"BTN:{t('student_feedback_practice_priority', 'en')}" in text
 
 
 # ---------------------------------------------------------------------------

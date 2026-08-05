@@ -234,7 +234,8 @@ class TestRouterContract:
         assert names == {
             "create_exercise", "create_practice_target", "get_engagement_traces",
             "get_exercise_attempts", "get_exercises", "get_practice_targets",
-            "get_transfer_evidence", "submit_exercise_attempt",
+            "get_practice_target_context", "get_transfer_evidence",
+            "submit_exercise_attempt",
         }
 
     def test_deps_accessors_use_app_state_without_facade(self):

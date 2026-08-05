@@ -170,7 +170,8 @@ def test_feedback_priority_branch_transfers_to_revision():
     )
     labels = _button_labels(at)
     assert labels.get("feedback_primary_action") == t("student_feedback_open_revision", "en")
-    assert labels.get("feedback_practice_action") == t("student_feedback_open_practice", "en")
+    assert labels.get("feedback_practice_priority_0") == t("student_feedback_practice_priority", "en")
+    assert labels.get("feedback_practice_priority_1") == t("student_feedback_practice_priority", "en")
     assert t("student_feedback_practice_note", "en") in _markdown_text(at)
 
     at.button(key="feedback_primary_action").click().run()
