@@ -98,6 +98,7 @@ class TestTokenInventory:
         # foundational colors
         "--px-bg", "--px-surface", "--px-surface-elevated", "--px-text",
         "--px-text-secondary", "--px-muted", "--px-border", "--px-focus",
+        "--px-border-subtle", "--px-destructive",
         "--px-action", "--px-action-hover", "--px-action-active",
         "--px-action-disabled", "--px-action-text",
         "--px-action-text-disabled", "--px-secondary-action", "--px-link",
@@ -111,8 +112,14 @@ class TestTokenInventory:
         "--px-status-on-error", "--px-status-on-info",
         "--px-status-on-unavailable", "--px-status-on-insufficient",
         "--px-status-on-neutral",
+        "--px-status-accent-success", "--px-status-accent-warning",
+        "--px-status-accent-error", "--px-status-accent-info",
+        "--px-status-accent-unavailable", "--px-status-accent-insufficient",
+        "--px-status-accent-neutral",
         # typography
-        "--px-font-body", "--px-font-mono", "--px-font-heading",
+        "--px-font-body", "--px-font-display", "--px-font-mono",
+        "--px-font-heading", "--px-font-size-card-title",
+        "--px-font-weight-semibold",
         "--px-font-size-h1", "--px-font-size-h2", "--px-font-size-h3",
         "--px-font-size-body", "--px-font-size-compact",
         "--px-font-size-label", "--px-font-size-metric",
@@ -130,6 +137,7 @@ class TestTokenInventory:
         "--px-touch-target", "--px-content-width-student",
         "--px-content-width-research", "--px-table-font-size",
         "--px-table-cell-pad",
+        "--px-icon-sm", "--px-icon-md", "--px-icon-lg",
         # density + responsive + motion
         "--px-density-student-section", "--px-density-research-section",
         "--px-density-student-card-pad", "--px-density-research-card-pad",
@@ -144,7 +152,12 @@ class TestTokenInventory:
     def test_semantic_state_values(self):
         assert token("colors.action") == "#e00047"
         assert token("colors.pixel-red") == "#ff004d"
-        assert token("semantic.error") == "#e00047"
+        # v0.9.7-D: quiet tint fills + accent bars; action red is reserved
+        # for forward actions only.
+        assert token("semantic.error") == "#fdeaef"
+        assert token("semantic.accent-error") == "#c01048"
+        assert token("colors.border-subtle") == "#8a8a9c"
+        assert token("colors.destructive") == "#a30d3d"
 
 
 # ── 3. CSS generation ──────────────────────────────────────────────────
@@ -276,6 +289,31 @@ class TestContrast:
         assert contrast(focus, token("colors.text")) >= 3.0
         assert token("geometry.focus-width") == "3px"
 
+    def test_accent_and_subtle_borders_non_text(self):
+        """State accent bars and subtle hairlines meet >=3:1 non-text."""
+        for name in (
+            "accent-success", "accent-warning", "accent-error", "accent-info",
+            "accent-unavailable", "accent-insufficient", "accent-neutral",
+        ):
+            value = token(f"semantic.{name}")
+            assert contrast(value, token("colors.white")) >= 3.0, name
+            assert contrast(value, token("colors.surface")) >= 3.0, name
+        assert contrast(token("colors.border-subtle"), token("colors.white")) >= 3.0
+
+    def test_quiet_state_label_pairs(self):
+        for fill, label in (
+            ("success", "on-success"),
+            ("warning", "on-warning"),
+            ("error", "on-error"),
+            ("info", "on-info"),
+            ("unavailable", "on-unavailable"),
+            ("insufficient", "on-insufficient"),
+            ("neutral", "on-neutral"),
+        ):
+            assert contrast(
+                token(f"semantic.{label}"), token(f"semantic.{fill}")
+            ) >= 4.5, fill
+
     def test_decorative_red_is_not_a_text_background(self):
         """#ff004d must not appear as a text-bearing background in CSS."""
         assert token("colors.action") != token("colors.pixel-red")
@@ -313,6 +351,11 @@ class TestTypography:
         assert ".px-badge, .px-table-wrap table" in css
         assert "stMetricValue" in css
 
+    def test_heading_role_is_sans_display(self, css_vars):
+        # v0.9.7-D: headings use the sans display role (mono is technical).
+        assert css_vars["--px-font-heading"] == "var(--px-font-display)"
+        assert css_vars["--px-font-display"] == css_vars["--px-font-body"]
+
 
 # ── 6. Selector policy ─────────────────────────────────────────────────
 
@@ -345,8 +388,10 @@ class TestSelectorPolicy:
             ("px-empty-state", ".px-empty"),
             ("px-table-wrap", ".px-table-wrap"),
             ("px-icon", ".px-icon"),
-            ("px-status-badge", ".px-badge"),
+            ("px-status-badge", ".px-status-badge"),
             ("px-mono", ".px-mono"),
+            ("px-cycle-head", ".px-cycle-head"),
+            ("px-stage-item", ".px-stage-item"),
         ):
             assert css_class in css, testid
 

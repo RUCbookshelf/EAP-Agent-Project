@@ -113,17 +113,26 @@ class TestValidateWritingForm:
 
 
 class TestStatusBadge:
-    def test_error_state_uses_semantic_error_tokens(self, captured_markdown):
+    def test_error_state_renders_icon_and_state_markup(self, captured_markdown):
         c.status_badge("failed", "en")
         html = captured_markdown[-1]
         assert 'data-testid="px-status-badge"' in html
-        assert "var(--px-status-error)" in html
-        assert "var(--px-status-on-error)" in html
+        assert 'class="px-status-badge"' in html
+        assert 'data-state="error"' in html
+        assert "px-icon" in html
+        assert t("status_failed", "en") in html
 
-    def test_warning_state_uses_warning_tokens(self, captured_markdown):
+    def test_warning_state_uses_warning_data_state(self, captured_markdown):
         c.status_badge("pending", "en")
         html = captured_markdown[-1]
-        assert "var(--px-status-warning)" in html
+        assert 'data-state="warning"' in html
+
+    def test_never_color_alone_icon_present(self, captured_markdown):
+        c.status_badge("insufficient", "en")
+        html = captured_markdown[-1]
+        assert 'data-state="neutral"' in html
+        assert 'role="img"' in html
+        assert 'aria-label=' in html
 
 
 class TestNoticeVariants:

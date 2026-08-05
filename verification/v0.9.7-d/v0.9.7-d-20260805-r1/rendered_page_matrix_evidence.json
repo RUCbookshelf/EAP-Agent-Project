@@ -1,0 +1,88 @@
+{
+  "run_id": "v0.9.7-d-20260805-r1",
+  "cycle_view": {
+    "version": "journey-cycle-v0.9.7-c",
+    "cycle_count": 1,
+    "practice_states": [
+      "available",
+      "completed"
+    ]
+  },
+  "en_desktop": {
+    "combination": "en 1280x900",
+    "cycle_cards": 1,
+    "stage_items": 6,
+    "badge_states": [
+      "info",
+      "neutral",
+      "success"
+    ],
+    "heading_sans": true,
+    "exceptions": 0,
+    "overflow": false,
+    "raw_keys": [],
+    "forbidden": [],
+    "console_errors": [],
+    "page_errors": [],
+    "remote_requests": [],
+    "screenshot": "verification\\v0.9.7-d\\v0.9.7-d-20260805-r1\\screenshots\\en_1280x900_journey_design_system.png"
+  },
+  "zh_desktop": {
+    "combination": "zh_CN 1280x900",
+    "cycle_cards": 1,
+    "stage_items": 6,
+    "badge_states": [
+      "info",
+      "neutral",
+      "success"
+    ],
+    "heading_sans": true,
+    "exceptions": 0,
+    "overflow": false,
+    "raw_keys": [],
+    "forbidden": [],
+    "console_errors": [],
+    "page_errors": [],
+    "remote_requests": [],
+    "screenshot": "verification\\v0.9.7-d\\v0.9.7-d-20260805-r1\\screenshots\\zh_1280x900_journey_design_system.png"
+  },
+  "en_mobile": {
+    "combination": "en 390x844",
+    "cycle_cards": 1,
+    "stage_items": 6,
+    "badge_states": [
+      "info",
+      "neutral",
+      "success"
+    ],
+    "heading_sans": true,
+    "exceptions": 0,
+    "overflow": false,
+    "raw_keys": [],
+    "forbidden": [],
+    "console_errors": [],
+    "page_errors": [],
+    "remote_requests": [],
+    "screenshot": "verification\\v0.9.7-d\\v0.9.7-d-20260805-r1\\screenshots\\en_390x844_journey_design_system.png"
+  },
+  "zh_mobile": {
+    "combination": "zh_CN 390x844",
+    "cycle_cards": 1,
+    "stage_items": 6,
+    "badge_states": [
+      "info",
+      "neutral",
+      "success"
+    ],
+    "heading_sans": true,
+    "exceptions": 0,
+    "overflow": false,
+    "raw_keys": [],
+    "forbidden": [],
+    "console_errors": [],
+    "page_errors": [],
+    "remote_requests": [],
+    "screenshot": "verification\\v0.9.7-d\\v0.9.7-d-20260805-r1\\screenshots\\zh_390x844_journey_design_system.png"
+  },
+  "journey_reads_zero_writes": true
+}
