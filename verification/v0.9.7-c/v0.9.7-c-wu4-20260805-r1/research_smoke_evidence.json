@@ -1,0 +1,42 @@
+{
+  "run_id": "v0.9.7-c-wu4-research-smoke",
+  "research_smoke": {
+    "en_1280x900_research_overview_title": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "main_max_width": "none"
+    },
+    "en_1280x900_nav_research_data": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "main_max_width": "none"
+    },
+    "en_1280x900_research_audit_title": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "main_max_width": "none"
+    },
+    "zh_CN_390x844_research_overview_title": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "main_max_width": "none"
+    },
+    "zh_CN_390x844_nav_research_data": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "main_max_width": "none"
+    },
+    "zh_CN_390x844_research_audit_title": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "main_max_width": "none"
+    }
+  },
+  "ports_cleaned": true
+}

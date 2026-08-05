@@ -1,0 +1,591 @@
+{
+  "run_id": "v0.9.7-c-wu4-20260805-r1",
+  "en_1280x900": {
+    "full_ui_cycle": {
+      "combination": "en 1280x900",
+      "feedback_priority": {
+        "health": {
+          "exceptions": 0,
+          "overflow": false,
+          "raw_keys": []
+        },
+        "screenshot": "verification\\v0.9.7-c\\v0.9.7-c-wu4-20260805-r1\\screenshots\\en_1280x900_feedback_priority.png"
+      },
+      "focused_task": {
+        "health": {
+          "exceptions": 0,
+          "overflow": false,
+          "raw_keys": []
+        },
+        "counts": {
+          "essays": 1,
+          "practice_targets": 1,
+          "completed_targets": 0,
+          "exercise_instances": 1,
+          "exercise_attempts": 0,
+          "practice_evaluations": 0
+        },
+        "submit_size": {
+          "width": 560,
+          "height": 40
+        },
+        "screenshot": "verification\\v0.9.7-c\\v0.9.7-c-wu4-20260805-r1\\screenshots\\en_1280x900_practice_task.png"
+      },
+      "empty_validation_zero_write": true,
+      "attempt_saved": {
+        "health": {
+          "exceptions": 0,
+          "overflow": false,
+          "raw_keys": []
+        },
+        "counts": {
+          "essays": 1,
+          "practice_targets": 1,
+          "completed_targets": 0,
+          "exercise_instances": 1,
+          "exercise_attempts": 1,
+          "practice_evaluations": 1
+        },
+        "finish_size": {
+          "width": 560,
+          "height": 40
+        },
+        "screenshot": "verification\\v0.9.7-c\\v0.9.7-c-wu4-20260805-r1\\screenshots\\en_1280x900_practice_saved.png"
+      },
+      "completed": {
+        "health": {
+          "exceptions": 0,
+          "overflow": false,
+          "raw_keys": []
+        },
+        "counts": {
+          "essays": 1,
+          "practice_targets": 1,
+          "completed_targets": 1,
+          "exercise_instances": 1,
+          "exercise_attempts": 1,
+          "practice_evaluations": 1
+        },
+        "no_form": true,
+        "no_finish": true,
+        "journey_events_unchanged": true,
+        "mobile_sidebar_reentry": false,
+        "column_status": "completed",
+        "json_status": "completed",
+        "screenshot": "verification\\v0.9.7-c\\v0.9.7-c-wu4-20260805-r1\\screenshots\\en_1280x900_practice_completed.png"
+      },
+      "repeat_completion_idempotent": {
+        "status": 200,
+        "same_target": true,
+        "counts_stable": true
+      },
+      "feedback_reentry": {
+        "reused_completed": true,
+        "counts_stable": true
+      },
+      "return_to_feedback": {
+        "navigation_only": true
+      },
+      "revision_reentry_session": {
+        "reused_completed": true
+      },
+      "reload_reentry": {
+        "health": {
+          "exceptions": 0,
+          "overflow": false,
+          "raw_keys": []
+        },
+        "completed_persisted": true,
+        "no_form": true,
+        "no_finish": true,
+        "screenshot": "verification\\v0.9.7-c\\v0.9.7-c-wu4-20260805-r1\\screenshots\\en_1280x900_practice_reentry.png"
+      },
+      "other_active_target_available": {
+        "explicit_action_present": true,
+        "other_size": {
+          "width": 560,
+          "height": 40
+        }
+      },
+      "journey": {
+        "event_count": 12,
+        "no_practice_completed_event": true,
+        "grouped_ui": true,
+        "no_writes": true,
+        "screenshot": "verification\\v0.9.7-c\\v0.9.7-c-wu4-20260805-r1\\screenshots\\en_1280x900_journey_grouped.png"
+      },
+      "open_other_active_target": {
+        "explicit_only": true
+      },
+      "journey_fresh_session": {
+        "fresh_session_renders": true,
+        "no_writes": true,
+        "no_duplicate_events": true,
+        "screenshot": "verification\\v0.9.7-c\\v0.9.7-c-wu4-20260805-r1\\screenshots\\en_1280x900_journey_fresh_session.png"
+      }
+    },
+    "grouped": {
+      "grouped_cycle": {
+        "cycle_count": 1,
+        "states": [
+          "available",
+          "completed"
+        ],
+        "screenshot": "verification\\v0.9.7-c\\v0.9.7-c-wu4-20260805-r1\\screenshots\\en_1280x900_journey_grouped.png"
+      },
+      "action_open_active_practice": {
+        "destination_reached": true,
+        "no_auto_completion": true
+      },
+      "action_open_revision": {
+        "destination_reached": true
+      },
+      "reload_and_zero_writes": {
+        "grouped_view_persists": true,
+        "no_writes": true
+      }
+    }
+  },
+  "zh_1280x900": {
+    "full_ui_cycle": {
+      "combination": "zh_CN 1280x900",
+      "feedback_priority": {
+        "health": {
+          "exceptions": 0,
+          "overflow": false,
+          "raw_keys": []
+        },
+        "screenshot": "verification\\v0.9.7-c\\v0.9.7-c-wu4-20260805-r1\\screenshots\\zh_1280x900_feedback_priority.png"
+      },
+      "focused_task": {
+        "health": {
+          "exceptions": 0,
+          "overflow": false,
+          "raw_keys": []
+        },
+        "counts": {
+          "essays": 1,
+          "practice_targets": 1,
+          "completed_targets": 0,
+          "exercise_instances": 1,
+          "exercise_attempts": 0,
+          "practice_evaluations": 0
+        },
+        "submit_size": {
+          "width": 560,
+          "height": 40
+        },
+        "screenshot": "verification\\v0.9.7-c\\v0.9.7-c-wu4-20260805-r1\\screenshots\\zh_1280x900_practice_task.png"
+      },
+      "empty_validation_zero_write": true,
+      "attempt_saved": {
+        "health": {
+          "exceptions": 0,
+          "overflow": false,
+          "raw_keys": []
+        },
+        "counts": {
+          "essays": 1,
+          "practice_targets": 1,
+          "completed_targets": 0,
+          "exercise_instances": 1,
+          "exercise_attempts": 1,
+          "practice_evaluations": 1
+        },
+        "finish_size": {
+          "width": 560,
+          "height": 40
+        },
+        "screenshot": "verification\\v0.9.7-c\\v0.9.7-c-wu4-20260805-r1\\screenshots\\zh_1280x900_practice_saved.png"
+      },
+      "completed": {
+        "health": {
+          "exceptions": 0,
+          "overflow": false,
+          "raw_keys": []
+        },
+        "counts": {
+          "essays": 1,
+          "practice_targets": 1,
+          "completed_targets": 1,
+          "exercise_instances": 1,
+          "exercise_attempts": 1,
+          "practice_evaluations": 1
+        },
+        "no_form": true,
+        "no_finish": true,
+        "journey_events_unchanged": true,
+        "mobile_sidebar_reentry": false,
+        "column_status": "completed",
+        "json_status": "completed",
+        "screenshot": "verification\\v0.9.7-c\\v0.9.7-c-wu4-20260805-r1\\screenshots\\zh_1280x900_practice_completed.png"
+      },
+      "repeat_completion_idempotent": {
+        "status": 200,
+        "same_target": true,
+        "counts_stable": true
+      },
+      "feedback_reentry": {
+        "reused_completed": true,
+        "counts_stable": true
+      },
+      "return_to_feedback": {
+        "navigation_only": true
+      },
+      "revision_reentry_session": {
+        "reused_completed": true
+      },
+      "reload_reentry": {
+        "health": {
+          "exceptions": 0,
+          "overflow": false,
+          "raw_keys": []
+        },
+        "completed_persisted": true,
+        "no_form": true,
+        "no_finish": true,
+        "screenshot": "verification\\v0.9.7-c\\v0.9.7-c-wu4-20260805-r1\\screenshots\\zh_1280x900_practice_reentry.png"
+      },
+      "other_active_target_available": {
+        "explicit_action_present": true,
+        "other_size": {
+          "width": 560,
+          "height": 40
+        }
+      },
+      "journey": {
+        "event_count": 12,
+        "no_practice_completed_event": true,
+        "grouped_ui": true,
+        "no_writes": true,
+        "screenshot": "verification\\v0.9.7-c\\v0.9.7-c-wu4-20260805-r1\\screenshots\\zh_1280x900_journey_grouped.png"
+      },
+      "open_other_active_target": {
+        "explicit_only": true
+      },
+      "journey_fresh_session": {
+        "fresh_session_renders": true,
+        "no_writes": true,
+        "no_duplicate_events": true,
+        "screenshot": "verification\\v0.9.7-c\\v0.9.7-c-wu4-20260805-r1\\screenshots\\zh_1280x900_journey_fresh_session.png"
+      }
+    },
+    "grouped": {
+      "grouped_cycle": {
+        "cycle_count": 1,
+        "states": [
+          "available",
+          "completed"
+        ],
+        "screenshot": "verification\\v0.9.7-c\\v0.9.7-c-wu4-20260805-r1\\screenshots\\zh_1280x900_journey_grouped.png"
+      },
+      "action_open_active_practice": {
+        "destination_reached": true,
+        "no_auto_completion": true
+      },
+      "action_open_revision": {
+        "destination_reached": true
+      },
+      "reload_and_zero_writes": {
+        "grouped_view_persists": true,
+        "no_writes": true
+      }
+    }
+  },
+  "en_390x844": {
+    "full_ui_cycle": {
+      "combination": "en 390x844",
+      "feedback_priority": {
+        "health": {
+          "exceptions": 0,
+          "overflow": false,
+          "raw_keys": []
+        },
+        "screenshot": "verification\\v0.9.7-c\\v0.9.7-c-wu4-20260805-r1\\screenshots\\en_390x844_feedback_priority.png"
+      },
+      "focused_task": {
+        "health": {
+          "exceptions": 0,
+          "overflow": false,
+          "raw_keys": []
+        },
+        "counts": {
+          "essays": 1,
+          "practice_targets": 1,
+          "completed_targets": 0,
+          "exercise_instances": 1,
+          "exercise_attempts": 0,
+          "practice_evaluations": 0
+        },
+        "submit_size": {
+          "width": 358,
+          "height": 44
+        },
+        "screenshot": "verification\\v0.9.7-c\\v0.9.7-c-wu4-20260805-r1\\screenshots\\en_390x844_practice_task.png"
+      },
+      "empty_validation_zero_write": true,
+      "attempt_saved": {
+        "health": {
+          "exceptions": 0,
+          "overflow": false,
+          "raw_keys": []
+        },
+        "counts": {
+          "essays": 1,
+          "practice_targets": 1,
+          "completed_targets": 0,
+          "exercise_instances": 1,
+          "exercise_attempts": 1,
+          "practice_evaluations": 1
+        },
+        "finish_size": {
+          "width": 358,
+          "height": 44
+        },
+        "screenshot": "verification\\v0.9.7-c\\v0.9.7-c-wu4-20260805-r1\\screenshots\\en_390x844_practice_saved.png"
+      },
+      "completed": {
+        "health": {
+          "exceptions": 0,
+          "overflow": false,
+          "raw_keys": []
+        },
+        "counts": {
+          "essays": 1,
+          "practice_targets": 1,
+          "completed_targets": 1,
+          "exercise_instances": 1,
+          "exercise_attempts": 1,
+          "practice_evaluations": 1
+        },
+        "no_form": true,
+        "no_finish": true,
+        "journey_events_unchanged": true,
+        "mobile_sidebar_reentry": true,
+        "column_status": "completed",
+        "json_status": "completed",
+        "screenshot": "verification\\v0.9.7-c\\v0.9.7-c-wu4-20260805-r1\\screenshots\\en_390x844_practice_completed.png"
+      },
+      "repeat_completion_idempotent": {
+        "status": 200,
+        "same_target": true,
+        "counts_stable": true
+      },
+      "feedback_reentry": {
+        "reused_completed": true,
+        "counts_stable": true
+      },
+      "return_to_feedback": {
+        "navigation_only": true
+      },
+      "revision_reentry_session": {
+        "reused_completed": true
+      },
+      "reload_reentry": {
+        "health": {
+          "exceptions": 0,
+          "overflow": false,
+          "raw_keys": []
+        },
+        "completed_persisted": true,
+        "no_form": true,
+        "no_finish": true,
+        "screenshot": "verification\\v0.9.7-c\\v0.9.7-c-wu4-20260805-r1\\screenshots\\en_390x844_practice_reentry.png"
+      },
+      "other_active_target_available": {
+        "explicit_action_present": true,
+        "other_size": {
+          "width": 358,
+          "height": 44
+        }
+      },
+      "journey": {
+        "event_count": 12,
+        "no_practice_completed_event": true,
+        "grouped_ui": true,
+        "no_writes": true,
+        "screenshot": "verification\\v0.9.7-c\\v0.9.7-c-wu4-20260805-r1\\screenshots\\en_390x844_journey_grouped.png"
+      },
+      "open_other_active_target": {
+        "explicit_only": true
+      },
+      "journey_fresh_session": {
+        "fresh_session_renders": true,
+        "no_writes": true,
+        "no_duplicate_events": true,
+        "screenshot": "verification\\v0.9.7-c\\v0.9.7-c-wu4-20260805-r1\\screenshots\\en_390x844_journey_fresh_session.png"
+      }
+    },
+    "grouped": {
+      "grouped_cycle": {
+        "cycle_count": 1,
+        "states": [
+          "available",
+          "completed"
+        ],
+        "screenshot": "verification\\v0.9.7-c\\v0.9.7-c-wu4-20260805-r1\\screenshots\\en_390x844_journey_grouped.png"
+      },
+      "action_open_active_practice": {
+        "destination_reached": true,
+        "no_auto_completion": true
+      },
+      "action_open_revision": {
+        "destination_reached": true
+      },
+      "reload_and_zero_writes": {
+        "grouped_view_persists": true,
+        "no_writes": true
+      }
+    }
+  },
+  "zh_390x844": {
+    "full_ui_cycle": {
+      "combination": "zh_CN 390x844",
+      "feedback_priority": {
+        "health": {
+          "exceptions": 0,
+          "overflow": false,
+          "raw_keys": []
+        },
+        "screenshot": "verification\\v0.9.7-c\\v0.9.7-c-wu4-20260805-r1\\screenshots\\zh_390x844_feedback_priority.png"
+      },
+      "focused_task": {
+        "health": {
+          "exceptions": 0,
+          "overflow": false,
+          "raw_keys": []
+        },
+        "counts": {
+          "essays": 1,
+          "practice_targets": 1,
+          "completed_targets": 0,
+          "exercise_instances": 1,
+          "exercise_attempts": 0,
+          "practice_evaluations": 0
+        },
+        "submit_size": {
+          "width": 358,
+          "height": 44
+        },
+        "screenshot": "verification\\v0.9.7-c\\v0.9.7-c-wu4-20260805-r1\\screenshots\\zh_390x844_practice_task.png"
+      },
+      "empty_validation_zero_write": true,
+      "attempt_saved": {
+        "health": {
+          "exceptions": 0,
+          "overflow": false,
+          "raw_keys": []
+        },
+        "counts": {
+          "essays": 1,
+          "practice_targets": 1,
+          "completed_targets": 0,
+          "exercise_instances": 1,
+          "exercise_attempts": 1,
+          "practice_evaluations": 1
+        },
+        "finish_size": {
+          "width": 358,
+          "height": 44
+        },
+        "screenshot": "verification\\v0.9.7-c\\v0.9.7-c-wu4-20260805-r1\\screenshots\\zh_390x844_practice_saved.png"
+      },
+      "completed": {
+        "health": {
+          "exceptions": 0,
+          "overflow": false,
+          "raw_keys": []
+        },
+        "counts": {
+          "essays": 1,
+          "practice_targets": 1,
+          "completed_targets": 1,
+          "exercise_instances": 1,
+          "exercise_attempts": 1,
+          "practice_evaluations": 1
+        },
+        "no_form": true,
+        "no_finish": true,
+        "journey_events_unchanged": true,
+        "mobile_sidebar_reentry": true,
+        "column_status": "completed",
+        "json_status": "completed",
+        "screenshot": "verification\\v0.9.7-c\\v0.9.7-c-wu4-20260805-r1\\screenshots\\zh_390x844_practice_completed.png"
+      },
+      "repeat_completion_idempotent": {
+        "status": 200,
+        "same_target": true,
+        "counts_stable": true
+      },
+      "feedback_reentry": {
+        "reused_completed": true,
+        "counts_stable": true
+      },
+      "return_to_feedback": {
+        "navigation_only": true
+      },
+      "revision_reentry_session": {
+        "reused_completed": true
+      },
+      "reload_reentry": {
+        "health": {
+          "exceptions": 0,
+          "overflow": false,
+          "raw_keys": []
+        },
+        "completed_persisted": true,
+        "no_form": true,
+        "no_finish": true,
+        "screenshot": "verification\\v0.9.7-c\\v0.9.7-c-wu4-20260805-r1\\screenshots\\zh_390x844_practice_reentry.png"
+      },
+      "other_active_target_available": {
+        "explicit_action_present": true,
+        "other_size": {
+          "width": 358,
+          "height": 44
+        }
+      },
+      "journey": {
+        "event_count": 12,
+        "no_practice_completed_event": true,
+        "grouped_ui": true,
+        "no_writes": true,
+        "screenshot": "verification\\v0.9.7-c\\v0.9.7-c-wu4-20260805-r1\\screenshots\\zh_390x844_journey_grouped.png"
+      },
+      "open_other_active_target": {
+        "explicit_only": true
+      },
+      "journey_fresh_session": {
+        "fresh_session_renders": true,
+        "no_writes": true,
+        "no_duplicate_events": true,
+        "screenshot": "verification\\v0.9.7-c\\v0.9.7-c-wu4-20260805-r1\\screenshots\\zh_390x844_journey_fresh_session.png"
+      }
+    },
+    "grouped": {
+      "grouped_cycle": {
+        "cycle_count": 1,
+        "states": [
+          "available",
+          "completed"
+        ],
+        "screenshot": "verification\\v0.9.7-c\\v0.9.7-c-wu4-20260805-r1\\screenshots\\zh_390x844_journey_grouped.png"
+      },
+      "action_open_active_practice": {
+        "destination_reached": true,
+        "no_auto_completion": true
+      },
+      "action_open_revision": {
+        "destination_reached": true
+      },
+      "reload_and_zero_writes": {
+        "grouped_view_persists": true,
+        "no_writes": true
+      }
+    }
+  },
+  "console_errors": [],
+  "page_errors": [],
+  "remote_requests": [],
+  "ports_cleaned": true
+}
