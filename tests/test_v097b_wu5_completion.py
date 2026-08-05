@@ -641,6 +641,7 @@ class TestPracticePageCompletion:
     def test_completed_target_reentry_through_preset(self):
         at = _run_harness(
             sidebar_page=t("practice", "en"),
+            selected_student_id="S02",
             practice_target_preset="PT000001",
             harness_targets=[COMPLETED_TARGET],
             harness_target_context=PRIORITY_CONTEXT,
@@ -663,6 +664,25 @@ class TestPracticePageCompletion:
         text = _markdown_text(at)
         assert "Vary sentence length" in text
         assert t("student_practice_completed_title", "en") not in text
+
+    def test_rerun_keeps_selected_target_with_another_active_present(self):
+        other = dict(PRIORITY_TARGET, practice_target_id="PT000002",
+                     source_submission_id=29, source_priority_id="PRIO-2-0",
+                     target_label="Vary sentence length")
+        at = _run_harness(
+            sidebar_page=t("practice", "en"),
+            selected_student_id="S02",
+            practice_target_preset="PT000001",
+            harness_targets=[other, PRIORITY_TARGET],
+            harness_target_context=PRIORITY_CONTEXT,
+            harness_exercises=[EXERCISE],
+        )
+        # The harness runs twice: the preset is consumed on the first run and
+        # the learner-scoped selection must keep the same target on reruns.
+        text = _markdown_text(at)
+        assert "Reduce lexical repetition" in text
+        assert "Vary sentence length" not in text
+        assert [ta for ta in at.text_area if ta.key == "practice_response_v2"]
 
     def test_pending_marker_consumes_duplicate_completion(self):
         at = _run_harness(
@@ -696,6 +716,7 @@ class TestPracticePageCompletion:
                      target_label="Vary sentence length")
         at = _run_harness(
             sidebar_page=t("practice", "en"),
+            selected_student_id="S02",
             harness_targets=[COMPLETED_TARGET, other],
             harness_target_context=PRIORITY_CONTEXT,
             harness_exercises=[EXERCISE],

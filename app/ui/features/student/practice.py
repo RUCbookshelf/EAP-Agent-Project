@@ -157,11 +157,25 @@ def _consume_practice_intent(api_client: StudentPracticeApiPort, learner_id: str
     return True
 
 
-def _selected_target(targets: list[dict]) -> dict | None:
-    """Select the validated preset target (any status) or the deterministic
-    oldest active target; a completed target is shown when no active target
-    remains (so a finished cycle stays visible after refresh or direct
-    navigation).
+def _remember_selection(learner_id: str, target: dict) -> None:
+    """Keep the current target selection stable across reruns (WU5).
+
+    The one-shot intent preset is consumed on the first render; the
+    learner-scoped selection then keeps the same target authoritative for
+    the session so reruns (submit, finish, locale switch) never silently
+    switch to another active target.
+    """
+    st.session_state["practice_selected_target_v2"] = {
+        "learner_id": learner_id,
+        "target_id": target.get("practice_target_id", ""),
+    }
+
+
+def _selected_target(targets: list[dict], learner_id: str) -> dict | None:
+    """Select the validated preset target (any status), the session-stable
+    selected target for this learner, or the deterministic oldest active
+    target; a completed target is shown when no active target remains (so a
+    finished cycle stays visible after refresh or direct navigation).
 
     A completed target stays reachable through its explicit preset so its
     saved result can be re-entered; direct navigation without a preset keeps
@@ -171,13 +185,22 @@ def _selected_target(targets: list[dict]) -> dict | None:
     if preset:
         for item in targets:
             if item.get("practice_target_id") == preset:
+                _remember_selection(learner_id, item)
+                return item
+    previous = st.session_state.get("practice_selected_target_v2")
+    if previous and previous.get("learner_id") == learner_id:
+        for item in targets:
+            if item.get("practice_target_id") == previous.get("target_id"):
                 return item
     for item in targets:
         if item.get("status") == "active":
+            _remember_selection(learner_id, item)
             return item
     for item in targets:
         if item.get("status") == "completed":
+            _remember_selection(learner_id, item)
             return item
+    st.session_state.pop("practice_selected_target_v2", None)
     return None
 
 
@@ -252,7 +275,7 @@ def render_practice_page(api_client: StudentPracticeApiPort, lang: str) -> None:
     try:
         with st.spinner(t("practice_loading", lang)):
             targets = api_client.get_practice_targets(learner_id)
-            selected = _selected_target(targets)
+            selected = _selected_target(targets, learner_id)
             context = None
             exercise = None
             attempts: list[dict] = []
