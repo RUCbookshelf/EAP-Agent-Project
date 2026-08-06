@@ -1,0 +1,280 @@
+{
+  "run_id": "v0.9.7-d-wu2-20260806-r1",
+  "en_1280x900": {
+    "combination": "en 1280x900",
+    "revision_default": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "forbidden": [],
+      "state_ok": true,
+      "screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\en_1280x900_revision_default.png",
+      "bottom_screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\en_1280x900_revision_default_bottom.png",
+      "bottom_distinct": true,
+      "reload_zero_writes": true
+    },
+    "practice_active": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "forbidden": [],
+      "state_ok": true,
+      "screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\en_1280x900_practice_active.png",
+      "bottom_screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\en_1280x900_practice_active_bottom.png",
+      "bottom_distinct": true,
+      "reload_zero_writes": true
+    },
+    "practice_evaluation_available": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "forbidden": [],
+      "state_ok": true,
+      "screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\en_1280x900_practice_evaluation_available.png",
+      "bottom_screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\en_1280x900_practice_evaluation_available_bottom.png",
+      "bottom_distinct": true,
+      "reload_zero_writes": true
+    },
+    "practice_evaluation_unavailable": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "forbidden": [],
+      "state_ok": true,
+      "screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\en_1280x900_practice_evaluation_unavailable.png",
+      "bottom_screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\en_1280x900_practice_evaluation_unavailable_bottom.png",
+      "bottom_distinct": true,
+      "reload_zero_writes": true
+    },
+    "practice_completed": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "forbidden": [],
+      "state_ok": true,
+      "screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\en_1280x900_practice_completed.png",
+      "bottom_screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\en_1280x900_practice_completed_bottom.png",
+      "bottom_distinct": true,
+      "reload_zero_writes": true
+    },
+    "practice_legacy": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "forbidden": [],
+      "state_ok": true,
+      "screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\en_1280x900_practice_legacy.png",
+      "bottom_screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\en_1280x900_practice_legacy_bottom.png",
+      "bottom_distinct": true,
+      "reload_zero_writes": true
+    }
+  },
+  "zh_1280x900": {
+    "combination": "zh_CN 1280x900",
+    "revision_default": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "forbidden": [],
+      "state_ok": true,
+      "screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\zh_1280x900_revision_default.png",
+      "bottom_screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\zh_1280x900_revision_default_bottom.png",
+      "bottom_distinct": true,
+      "reload_zero_writes": true
+    },
+    "practice_active": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "forbidden": [],
+      "state_ok": true,
+      "screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\zh_1280x900_practice_active.png",
+      "bottom_screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\zh_1280x900_practice_active_bottom.png",
+      "bottom_distinct": true,
+      "reload_zero_writes": true
+    },
+    "practice_evaluation_available": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "forbidden": [],
+      "state_ok": true,
+      "screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\zh_1280x900_practice_evaluation_available.png",
+      "bottom_screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\zh_1280x900_practice_evaluation_available_bottom.png",
+      "bottom_distinct": true,
+      "reload_zero_writes": true
+    },
+    "practice_evaluation_unavailable": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "forbidden": [],
+      "state_ok": true,
+      "screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\zh_1280x900_practice_evaluation_unavailable.png",
+      "bottom_screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\zh_1280x900_practice_evaluation_unavailable_bottom.png",
+      "bottom_distinct": true,
+      "reload_zero_writes": true
+    },
+    "practice_completed": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "forbidden": [],
+      "state_ok": true,
+      "screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\zh_1280x900_practice_completed.png",
+      "bottom_screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\zh_1280x900_practice_completed_bottom.png",
+      "bottom_distinct": true,
+      "reload_zero_writes": true
+    },
+    "practice_legacy": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "forbidden": [],
+      "state_ok": true,
+      "screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\zh_1280x900_practice_legacy.png",
+      "bottom_screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\zh_1280x900_practice_legacy_bottom.png",
+      "bottom_distinct": true,
+      "reload_zero_writes": true
+    }
+  },
+  "en_390x844": {
+    "combination": "en 390x844",
+    "revision_default": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "forbidden": [],
+      "state_ok": true,
+      "screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\en_390x844_revision_default.png",
+      "bottom_screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\en_390x844_revision_default_bottom.png",
+      "bottom_distinct": true,
+      "reload_zero_writes": true
+    },
+    "practice_active": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "forbidden": [],
+      "state_ok": true,
+      "screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\en_390x844_practice_active.png",
+      "bottom_screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\en_390x844_practice_active_bottom.png",
+      "bottom_distinct": true,
+      "reload_zero_writes": true
+    },
+    "practice_evaluation_available": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "forbidden": [],
+      "state_ok": true,
+      "screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\en_390x844_practice_evaluation_available.png",
+      "bottom_screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\en_390x844_practice_evaluation_available_bottom.png",
+      "bottom_distinct": true,
+      "reload_zero_writes": true
+    },
+    "practice_evaluation_unavailable": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "forbidden": [],
+      "state_ok": true,
+      "screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\en_390x844_practice_evaluation_unavailable.png",
+      "bottom_screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\en_390x844_practice_evaluation_unavailable_bottom.png",
+      "bottom_distinct": true,
+      "reload_zero_writes": true
+    },
+    "practice_completed": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "forbidden": [],
+      "state_ok": true,
+      "screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\en_390x844_practice_completed.png",
+      "bottom_screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\en_390x844_practice_completed_bottom.png",
+      "bottom_distinct": true,
+      "reload_zero_writes": true
+    },
+    "practice_legacy": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "forbidden": [],
+      "state_ok": true,
+      "screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\en_390x844_practice_legacy.png",
+      "bottom_screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\en_390x844_practice_legacy_bottom.png",
+      "bottom_distinct": true,
+      "reload_zero_writes": true
+    }
+  },
+  "zh_390x844": {
+    "combination": "zh_CN 390x844",
+    "revision_default": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "forbidden": [],
+      "state_ok": true,
+      "screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\zh_390x844_revision_default.png",
+      "bottom_screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\zh_390x844_revision_default_bottom.png",
+      "bottom_distinct": true,
+      "reload_zero_writes": true
+    },
+    "practice_active": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "forbidden": [],
+      "state_ok": true,
+      "screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\zh_390x844_practice_active.png",
+      "bottom_screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\zh_390x844_practice_active_bottom.png",
+      "bottom_distinct": true,
+      "reload_zero_writes": true
+    },
+    "practice_evaluation_available": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "forbidden": [],
+      "state_ok": true,
+      "screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\zh_390x844_practice_evaluation_available.png",
+      "bottom_screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\zh_390x844_practice_evaluation_available_bottom.png",
+      "bottom_distinct": true,
+      "reload_zero_writes": true
+    },
+    "practice_evaluation_unavailable": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "forbidden": [],
+      "state_ok": true,
+      "screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\zh_390x844_practice_evaluation_unavailable.png",
+      "bottom_screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\zh_390x844_practice_evaluation_unavailable_bottom.png",
+      "bottom_distinct": true,
+      "reload_zero_writes": true
+    },
+    "practice_completed": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "forbidden": [],
+      "state_ok": true,
+      "screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\zh_390x844_practice_completed.png",
+      "bottom_screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\zh_390x844_practice_completed_bottom.png",
+      "bottom_distinct": true,
+      "reload_zero_writes": true
+    },
+    "practice_legacy": {
+      "exceptions": 0,
+      "overflow": false,
+      "raw_keys": [],
+      "forbidden": [],
+      "state_ok": true,
+      "screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\zh_390x844_practice_legacy.png",
+      "bottom_screenshot": "verification\\v0.9.7-d\\v0.9.7-d-wu2-20260806-r1\\screenshots\\zh_390x844_practice_legacy_bottom.png",
+      "bottom_distinct": true,
+      "reload_zero_writes": true
+    }
+  },
+  "zero_writes": false
+}
