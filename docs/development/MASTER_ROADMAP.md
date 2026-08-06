@@ -5,7 +5,7 @@
 | v0.9.7-A Priority-Guided Learning Cycle Completion | COMPLETE and verified (focused 14 passed; affected regression 293 passed; full non-live core 860 passed / 8 skipped / exit 0; `run.bat --verify` PASS; rendered matrix all four locale/viewport combinations PASS; evidence verification/v0.9.7-a/v0.9.7-a-20260804-r1/) |
 | v0.9.7-B Practice Target Generation and Practice Workflow | COMPLETE and closed - WU1-WU6 complete (RUN_VERIFICATION_V0.9.7_B_WU2/3/4/5/6.md + aggregate RUN_VERIFICATION_V0.9.7_B.md; priority-to-practice mapping + provenance, idempotent create-or-reuse + migration 13, focused task + reliable attempt loop, honest evaluation + explicit completion + bounded next steps, Journey projection verified end to end; focused 18 (WU6) / combined WU2-WU6 197 passed; affected 569 passed / 0 failed; full non-live core 1057 passed / 8 skipped / exit 0; `run.bat --verify` PASS twice; rendered matrix en/zh x desktop/mobile PASS; locale parity 572/572; Research smoke 6/6; fresh-index impact review 0 production symbols; no migration 14; no new Journey event types) |
 | v0.9.7-C Student Journey Functional Completion | COMPLETE and closed - WU1-WU4 complete (RUN_VERIFICATION_V0.9.7_C_WU1/2/3/4.md + aggregate RUN_VERIFICATION_V0.9.7_C.md + docs/development/V0.9.7_C_SPEC.md; learner-owned read-time cycle view with honest states, safe Journey navigation with fail-safe destination guards, grouped Journey UI with safe actions, full UI end-to-end matrix en/zh x desktop/mobile PASS; focused 75; combined continuity 510 passed; full non-live core 1132 passed / 8 skipped / exit 0; `run.bat --verify` PASS twice; locale parity 600/600; Research smoke 6/6; fresh-index impact review with scoped production delta; no migration 14; no new raw events) |
-| v0.9.7-D Student UI/UX Redesign and Visual Polish | not started |
+| v0.9.7-D Student UI/UX Redesign and Visual Polish | COMPLETE and FROZEN - MCU D1.0-D1.3 complete (RUN_VERIFICATION_V0.9.7_D_DESIGN_SYSTEM_FREEZE.md + docs/development/V0.9.7_D_STUDENT_DESIGN_SYSTEM.md; Kimi consultations A/B/C via kimi-k3; calm-ledger tokens/components/Journey representative page validated; focused 24; full non-live core 1158 passed / 8 skipped / exit 0; rendered matrix en/zh x desktop/mobile PASS; final Kimi verdict READY WITH DOCUMENTED LIMITATIONS; rollout across Writing/Feedback/Revision/Practice is the next v0.9.7-D stage) |
 | v0.9.7-E Responsive, Mobile, and Accessibility Refinement | not started |
 
 **v0.9.7-A (2026-08-04):** the priority-guided learning cycle is complete and
@@ -117,6 +117,23 @@ console/page/network errors, and a fresh-index GitNexus impact review with
 a scoped production delta. Evidence: RUN_VERIFICATION_V0.9.7_C.md +
 verification/v0.9.7-c/. **v0.9.7-C is complete, verified, and closed.**
 The next planned phase is v0.9.7-D (not started).
+
+**v0.9.7-D (2026-08-06):** the Student design system is frozen and
+validated on the Journey representative page. D1.0 established the
+baseline/constraints/input package; D1.1 approved the Kimi "Calm ledger"
+proposal (kimi-k3 via the opencode-go channel; routing adaptation
+recorded); D1.2 implemented the approved tokens, shared foundations, and
+the Journey page (quiet semantic states, sans headings, L1/L2/L3
+surfaces, badges, transient loading; frozen contracts preserved); D1.3
+closed the Kimi critique/review loops (KB-01..KB-14, RC-01..RC-12,
+RC2-01..RC2-10) and froze the system with the final verdict READY WITH
+DOCUMENTED LIMITATIONS (RC3-01..RC3-05 resolved in the closure).
+Verification: focused 24, affected regression green, full non-live core
+1158 passed / 8 skipped / exit 0, rendered matrix en/zh x desktop/mobile
+PASS with computed-style evidence and zero writes. The next v0.9.7-D
+stage rolls the frozen system out to Writing, Feedback, Revision, and
+Practice in small per-page slices. v0.9.7-E (responsive/mobile/
+accessibility refinement) remains not started.
 
 # Master roadmap
 

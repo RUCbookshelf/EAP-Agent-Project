@@ -1,10 +1,27 @@
-**Date:** 2026-08-05
-**Current task:** v0.9.7-C Work Unit 4 - Final Verification and Release
-Closure
-**Status:** COMPLETE - all 36 WU4 acceptance criteria satisfied; WU1-WU4
-complete; **v0.9.7-C is complete, verified, and closed**; the next planned
-phase is v0.9.7-D (NOT started; see RUN_VERIFICATION_V0.9.7_C_WU4.md and
-RUN_VERIFICATION_V0.9.7_C.md).
+**Date:** 2026-08-06
+**Current task:** v0.9.7-D Design-System Freeze and Representative Page
+Validation
+**Status:** COMPLETE - MCU D1.0-D1.3 complete; **the v0.9.7-D Student
+design system is FROZEN and validated on the Journey representative
+page**; the next planned phase is the v0.9.7-D controlled rollout across
+Writing, Feedback, Revision, and Practice (per-page slices), then
+v0.9.7-E (not started; see RUN_VERIFICATION_V0.9.7_D_DESIGN_SYSTEM_FREEZE.md
+and docs/development/V0.9.7_D_STUDENT_DESIGN_SYSTEM.md).
+
+- D1.0 (GREEN): baseline verified; focused reconnaissance of the six
+  Student surfaces; inconsistency register; constraints and Kimi input
+  package; no production/locale/migration change.
+- D1.1 (GREEN): Kimi consultation A (kimi-k3 via opencode-go; routing
+  adaptation recorded) -> "Calm ledger" proposal; engineering decision
+  table; design system documented as APPROVED DRAFT.
+- D1.2 (GREEN): tokens + shared foundations + Journey representative
+  implementation; focused 24 tests; affected regression green; full
+  non-live core 1158 passed / 8 skipped / exit 0; rendered matrix en/zh x
+  desktop/mobile PASS (computed-style evidence, zero writes).
+- D1.3 (GREEN): Kimi critique B + review C rounds resolved all KB/RC/RC2
+  findings; final verdict READY WITH DOCUMENTED LIMITATIONS
+  (`kimi_review_c3.md`); RC3-01..RC3-05 resolved in the closure; system
+  formally FROZEN.
 
 - WU1 (cycle model): learner-owned read-time cycle view
   (`app/journey/cycles.py`) - writing cycles anchored at the resolved root

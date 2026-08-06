@@ -20,6 +20,20 @@
     "heading_sans": true,
     "main_column_max_width": "720px",
     "framed_containers": 2,
+    "badge_label_color": "rgb(20, 83, 45)",
+    "primary_cta_label_color": "rgb(255, 255, 255)",
+    "dashed_border": [
+      "dashed",
+      "2px"
+    ],
+    "page_heading_rule": [
+      "solid",
+      "4px"
+    ],
+    "notice_accent_bar": [
+      "4px",
+      "rgb(161, 98, 7)"
+    ],
     "exceptions": 0,
     "overflow": false,
     "raw_keys": [],
@@ -43,6 +57,20 @@
     "heading_sans": true,
     "main_column_max_width": "720px",
     "framed_containers": 2,
+    "badge_label_color": "rgb(20, 83, 45)",
+    "primary_cta_label_color": "rgb(255, 255, 255)",
+    "dashed_border": [
+      "dashed",
+      "2px"
+    ],
+    "page_heading_rule": [
+      "solid",
+      "4px"
+    ],
+    "notice_accent_bar": [
+      "4px",
+      "rgb(161, 98, 7)"
+    ],
     "exceptions": 0,
     "overflow": false,
     "raw_keys": [],
@@ -66,6 +94,20 @@
     "heading_sans": true,
     "main_column_max_width": "720px",
     "framed_containers": 2,
+    "badge_label_color": "rgb(20, 83, 45)",
+    "primary_cta_label_color": "rgb(255, 255, 255)",
+    "dashed_border": [
+      "dashed",
+      "2px"
+    ],
+    "page_heading_rule": [
+      "solid",
+      "2px"
+    ],
+    "notice_accent_bar": [
+      "2px",
+      "rgb(161, 98, 7)"
+    ],
     "exceptions": 0,
     "overflow": false,
     "raw_keys": [],
@@ -89,6 +131,20 @@
     "heading_sans": true,
     "main_column_max_width": "720px",
     "framed_containers": 2,
+    "badge_label_color": "rgb(20, 83, 45)",
+    "primary_cta_label_color": "rgb(255, 255, 255)",
+    "dashed_border": [
+      "dashed",
+      "2px"
+    ],
+    "page_heading_rule": [
+      "solid",
+      "2px"
+    ],
+    "notice_accent_bar": [
+      "2px",
+      "rgb(161, 98, 7)"
+    ],
     "exceptions": 0,
     "overflow": false,
     "raw_keys": [],

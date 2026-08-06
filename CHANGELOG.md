@@ -1,3 +1,48 @@
+## v0.9.7-D (2026-08-06)
+
+### Student Design-System Freeze and Representative Page Validation
+
+- D1.0: focused UI reconnaissance and constraints package - baseline
+  verified, per-page patterns recorded, inconsistency register
+  (SYSTEM/COMPONENT/PAGE/D-OPTIONAL/DEFER-E), Streamlit/token/contract
+  constraints documented, Kimi design input package prepared.
+- D1.1: Kimi design consultation A (kimi-k3 via the opencode-go channel;
+  UI/UX Pro Max applied; the `kimi/k3[1m]` OAuth route was unavailable -
+  402 - so the key-authenticated kimi-k3 channel was used and the
+  adaptation recorded) produced the "Calm ledger" proposal (visual
+  direction, semantic quiet-state tokens, typography roles, surface
+  levels, action ranks, 12-state matrix, 12 component specs, Journey
+  composition, bilingual rules, acceptance checklist); engineering
+  decision table with ACCEPT/ADAPT/DEFER/REJECT for every item; design
+  system documented as APPROVED DRAFT.
+- D1.2: approved foundations implemented - quiet semantic tint fills +
+  accent bars (AA measured), `border-subtle`, reserved destructive token,
+  sans display headings (mono confined to technical roles), card-title
+  and semibold roles, icon-size tokens, 2px/1px border roles, mobile 2px
+  scale; shared components (notice core with state variants, status badge
+  with icon+label+data-state, class-based page/section headers, neutral
+  dashed notices, transient loading placeholder); L2/L3 surfaces scoped
+  to widget-keyed containers; Journey representative page rebuilt as
+  cycle cards + stage items + badges with frozen behavior, wording,
+  navigation, and zero writes preserved; 24 focused tests; affected
+  regression green; full non-live core 1158 passed / 8 skipped / exit 0;
+  rendered matrix en/zh x 1280x900/390x844 PASS with computed-style
+  evidence and byte-distinct below-fold captures.
+- D1.3: Kimi screenshot critique B (FIX-BEFORE-FREEZE; KB-01..KB-14 -
+  invalid border composites, state-label cascade, transient loading,
+  honest evidence, header disclaimer, purpose hairline, container
+  surfaces, sidebar controls, badge icon, selection emphasis - resolved
+  and re-verified); Kimi review C rounds (RC-01..RC-12, RC2-01..RC2-10 -
+  keyed-container scoping, inner-scroller captures, white CTA labels,
+  field-error token, dashed-border composites - resolved); final Kimi
+  verdict READY WITH DOCUMENTED LIMITATIONS (`kimi_review_c3.md`);
+  RC3-01..RC3-05 resolved in the closure; design system formally FROZEN
+  and validated on the Journey representative page.
+- Status: **COMPLETE and verified - the v0.9.7-D Student design system is
+  FROZEN**; ready for controlled rollout across Writing, Feedback,
+  Revision, and Practice in the next v0.9.7-D stage.
+- Next: v0.9.7-D rollout stage (per-page slices); v0.9.7-E not started.
+
 ## v0.9.7-C (2026-08-05)
 
 ### Student Journey Functional Completion (feature stage)

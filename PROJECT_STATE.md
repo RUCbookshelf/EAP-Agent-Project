@@ -1,8 +1,34 @@
-## Current v0.9.7-C State
+## Current v0.9.7-D State
 
-- Status: **v0.9.7-C is COMPLETE, verified, and closed.** WU1-WU4 are
-  complete; all WU1-WU4 acceptance criteria are satisfied; the next
-  planned phase is v0.9.7-D (NOT started).
+- Status: **v0.9.7-D Student design system is FROZEN and validated on the
+  Journey representative page** (MCU D1.0-D1.3 complete; see
+  `docs/development/V0.9.7_D_STUDENT_DESIGN_SYSTEM.md` and
+  `RUN_VERIFICATION_V0.9.7_D_DESIGN_SYSTEM_FREEZE.md`).
+- D1.0: baseline verified; focused UI reconnaissance of the six Student
+  pages; inconsistency register (SYSTEM/COMPONENT/PAGE/D-OPTIONAL/
+  DEFER-E); constraints package; Kimi design input package.
+- D1.1: Kimi design consultation A (kimi-k3 via the opencode-go channel,
+  UI/UX Pro Max applied) produced the "Calm ledger" proposal
+  (`kimi_proposal_a.md`); every recommendation has an engineering
+  disposition (`engineering_decision_table.md`); the design system was
+  documented as APPROVED DRAFT.
+- D1.2: approved tokens implemented (quiet semantic tints + accents,
+  `border-subtle`, destructive, sans display headings, card-title,
+  semibold, icon sizes); shared foundations (notice core, status badge
+  with icon+label, class-based headers, L1/L2/L3 surfaces scoped to
+  keyed containers); Journey representative page rewritten on the system
+  (cycle cards, stage items, badges, record references, transient
+  loading, dashed unavailable/legacy channels) with all frozen contracts
+  preserved; focused 24 tests; affected regression 419+/134+; full
+  non-live core 1158 passed / 8 skipped; rendered matrix en/zh x
+  desktop/mobile PASS with zero writes.
+- D1.3: Kimi critique B (FIX-BEFORE-FREEZE; KB-01..KB-14 resolved), Kimi
+  review C rounds (RC-01..RC-12, RC2-01..RC2-10 resolved), final verdict
+  **READY WITH DOCUMENTED LIMITATIONS** (`kimi_review_c3.md`); RC3-01..
+  RC3-05 resolved in the closure; the design system is formally FROZEN.
+- Next: controlled v0.9.7-D rollout of the frozen system to Writing,
+  Feedback, Revision, and Practice in small per-page slices
+  (design-system section 19); v0.9.7-E remains not started.
 - Journey cycle model (WU1): learner-owned read-time cycle view
   (`app/journey/cycles.py`) groups raw events into writing cycles with
   revision-root resolution, feedback stages, Practice activities with

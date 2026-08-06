@@ -429,6 +429,22 @@ render_learning_journey_page(BoomClient(), "en")
 
 
 class TestJourneyContractsPreserved:
+    def test_field_error_renders_on_writing_page(self):
+        """RC3-03: the field-error recipe renders on the first form page
+        (empty prompt submit); computed-color verification is carried by
+        the Writing rollout slice per the freeze report."""
+        at = AppTest.from_file(str(HARNESS), default_timeout=90)
+        at.session_state["sidebar_page"] = t("student_writing_title", "en")
+        at.session_state["harness_lang"] = "en"
+        at.run()
+        assert not at.exception, at.exception
+        at.text_input[0].set_value("S02")
+        at.text_area[1].set_value("This is an essay body.")
+        at.button[0].click().run()
+        assert not at.exception, at.exception
+        assert any("px-field-error" in m.value for m in at.markdown)
+        assert t("student_writing_need_prompt", "en") in _markdown_text(at)
+
     def test_zero_writes_on_render(self):
         at = _run_harness(**_base_config(_cycle()))
         client = at.session_state["fake_client"]
