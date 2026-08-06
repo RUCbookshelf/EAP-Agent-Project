@@ -44,20 +44,23 @@ def render_feedback_content(result: dict, api_client: StudentFeedbackApiPort, la
     section_header("student_feedback_priorities", lang=lang)
     if has_priority:
         for index, item in enumerate(priorities[:2]):
-            feedback_priority_card(
-                category=_feedback_category_label(item.get("category", ""), lang),
-                evidence_quote_text="",
-                explanation=item.get("explanation", ""),
-                revision_guidance=item.get("revision_guidance", ""),
-                lang=lang,
-            )
-            st.button(
-                t("student_feedback_practice_priority", lang),
-                use_container_width=True,
-                key=f"feedback_practice_priority_{index}",
-                on_click=_navigate_priority_practice,
-                args=(int(result.get("submission_id") or 0), index, lang),
-            )
+            with st.container(border=True, key=f"feedback_priority_{index}"):
+                with st.container(border=True, key=f"feedback_evidence_{index}"):
+                    evidence_quote(item.get("evidence_quote", ""), lang)
+                feedback_priority_card(
+                    category=_feedback_category_label(item.get("category", ""), lang),
+                    evidence_quote_text="",
+                    explanation=item.get("explanation", ""),
+                    revision_guidance=item.get("revision_guidance", ""),
+                    lang=lang,
+                )
+                st.button(
+                    t("student_feedback_practice_priority", lang),
+                    use_container_width=True,
+                    key=f"feedback_practice_priority_{index}",
+                    on_click=_navigate_priority_practice,
+                    args=(int(result.get("submission_id") or 0), index, lang),
+                )
     else:
         empty_state(
             "student_feedback_no_priority_title",
@@ -67,44 +70,46 @@ def render_feedback_content(result: dict, api_client: StudentFeedbackApiPort, la
 
     section_header("student_feedback_next", lang=lang)
     if has_priority:
-        student_action_block(
-            "student_feedback_next",
-            "student_feedback_next_revise",
-            lang,
-        )
-        st.button(
-            t("student_feedback_open_revision", lang),
-            type="primary",
-            use_container_width=True,
-            key="feedback_primary_action",
-            on_click=_navigate_priority_revision,
-            args=(int(result.get("submission_id") or 0), lang),
-        )
-        info_box("student_feedback_practice_note", lang)
+        with st.container(border=True, key="feedback_next_action"):
+            student_action_block(
+                "student_feedback_next",
+                "student_feedback_next_revise",
+                lang,
+            )
+            st.button(
+                t("student_feedback_open_revision", lang),
+                type="primary",
+                use_container_width=True,
+                key="feedback_primary_action",
+                on_click=_navigate_priority_revision,
+                args=(int(result.get("submission_id") or 0), lang),
+            )
+            info_box("student_feedback_practice_note", lang)
     else:
         # No-priority is a valid, complete workflow branch (v0.9.6-C1):
         # the user explicitly chooses to revise this draft or to finish the
         # feedback cycle. Nothing is fabricated, submitted, or generated.
-        student_action_block(
-            "student_feedback_choose_action",
-            "student_feedback_choose_action_desc",
-            lang,
-        )
-        st.button(
-            t("student_revision_revise", lang),
-            type="primary",
-            use_container_width=True,
-            key="feedback_revise_action",
-            on_click=_navigate_writing_revision,
-            args=(int(result.get("submission_id") or 0), lang),
-        )
-        st.button(
-            t("student_feedback_finish_cycle", lang),
-            use_container_width=True,
-            key="feedback_finish_action",
-            on_click=_finish_feedback_cycle,
-            args=(int(result.get("submission_id") or 0), lang),
-        )
+        with st.container(border=True, key="feedback_next_action"):
+            student_action_block(
+                "student_feedback_choose_action",
+                "student_feedback_choose_action_desc",
+                lang,
+            )
+            st.button(
+                t("student_revision_revise", lang),
+                type="primary",
+                use_container_width=True,
+                key="feedback_revise_action",
+                on_click=_navigate_writing_revision,
+                args=(int(result.get("submission_id") or 0), lang),
+            )
+            st.button(
+                t("student_feedback_finish_cycle", lang),
+                use_container_width=True,
+                key="feedback_finish_action",
+                on_click=_finish_feedback_cycle,
+                args=(int(result.get("submission_id") or 0), lang),
+            )
 
     section_header("student_feedback_evidence", lang=lang)
     evidence_items = [

@@ -1108,6 +1108,39 @@ div[data-testid="stVerticalBlock"][class*="st-key-journey_stage_"] {{
     box-shadow: none;
 }}
 
+div[data-testid="stVerticalBlock"][class*="st-key-writing_saved_"] {{ /* L2 */
+    border: var(--px-border-thin);
+    box-shadow: var(--px-shadow-sm);
+    padding: var(--px-space-4);
+    margin-bottom: var(--px-space-6);
+    background: var(--px-white);
+}}
+
+div[data-testid="stVerticalBlock"][class*="st-key-feedback_priority_"] {{ /* L2 */
+    border: var(--px-border-thin);
+    box-shadow: var(--px-shadow-sm);
+    padding: var(--px-density-student-card-pad);
+    margin-bottom: var(--px-space-4);
+    background: var(--px-white);
+}}
+
+div[data-testid="stVerticalBlock"][class*="st-key-feedback_evidence_"] {{ /* L3 */
+    border: var(--px-border-hairline);
+    border-color: var(--px-border-subtle);
+    padding: var(--px-space-3) var(--px-space-4);
+    margin-bottom: var(--px-space-3);
+    background: var(--px-white);
+    box-shadow: none;
+}}
+
+div[data-testid="stVerticalBlock"][class*="st-key-feedback_next_action_"] {{ /* focused */
+    border: var(--px-border-thick);
+    box-shadow: var(--px-shadow-sm);
+    padding: var(--px-space-4);
+    margin: var(--px-space-4) 0;
+    background: var(--px-surface-elevated);
+}}
+
 @media (max-width: 640px) {{
     .px-action-row {{
         flex-direction: column;

@@ -360,8 +360,7 @@ def feedback_priority_card(
 
     st.markdown(
         f'<div class="px-card" data-testid="px-feedback-priority">'
-        f'<div style="font-weight:900;font-size:1.1rem;margin-bottom:8px;color:var(--px-action);">'
-        f'{category.replace("_", " ").title()}</div>'
+        f'<div class="px-card-title">{category.replace("_", " ").title()}</div>'
         f'{evidence_html}'
         f'<div style="margin-top:8px;">{explanation}</div>'
         f'<div style="margin-top:8px;"><strong>{t("revision_guidance", lang)}:</strong> {revision_guidance}</div>'

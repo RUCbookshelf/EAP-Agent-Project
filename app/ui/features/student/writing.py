@@ -135,28 +135,29 @@ def render_writing_page(api_client: StudentWritingApiPort, lang: str) -> None:
     saved = st.session_state.get("submission_result")
     if _writing_saved_for_learner(saved, learner_id):
         release_pending("writing")
-        student_context_block(
-            [
-                ("student_context_learner", learner_id),
-                ("writing_prompt", saved.get("ui_submission", {}).get("writing_prompt", "")),
-            ],
-            lang,
-        )
-        success_box("student_writing_saved_title", lang)
-        student_action_block(
-            "student_writing_saved_title", "student_writing_saved_desc", lang, state="complete"
-        )
-        technical_caption(
-            f"{t('student_writing_submission_reference', lang)}: #{saved.get('submission_id', '?')}"
-        )
-        st.button(
-            t("student_writing_review_feedback", lang),
-            type="primary",
-            use_container_width=True,
-            key="writing_review_feedback",
-            on_click=_navigate_student_page,
-            args=("student_feedback_title", lang),
-        )
+        with st.container(border=True, key="writing_saved_panel"):
+            student_context_block(
+                [
+                    ("student_context_learner", learner_id),
+                    ("writing_prompt", saved.get("ui_submission", {}).get("writing_prompt", "")),
+                ],
+                lang,
+            )
+            success_box("student_writing_saved_title", lang)
+            student_action_block(
+                "student_writing_saved_title", "student_writing_saved_desc", lang, state="complete"
+            )
+            technical_caption(
+                f"{t('student_writing_submission_reference', lang)}: #{saved.get('submission_id', '?')}"
+            )
+            st.button(
+                t("student_writing_review_feedback", lang),
+                type="primary",
+                use_container_width=True,
+                key="writing_review_feedback",
+                on_click=_navigate_student_page,
+                args=("student_feedback_title", lang),
+            )
         return
 
     preset_source = st.session_state.pop("writing_revision_source_preset", None)
@@ -281,6 +282,7 @@ def render_writing_page(api_client: StudentWritingApiPort, lang: str) -> None:
         t("submit_button", lang), type="primary", use_container_width=True,
         key="writing_submit_primary",
     )
+    limitation_notice("all_descriptive", lang)
     if not submitted:
         return
 
