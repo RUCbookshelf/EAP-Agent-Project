@@ -11,6 +11,7 @@ from app.ui.components import (
     field_error,
     info_box,
     limitation_notice,
+    neutral_box,
     render_api_error,
     section_header,
     student_action_block,
@@ -249,7 +250,7 @@ def _render_evaluation_section(evaluation: dict | None, lang: str) -> None:
             lang,
         )
     else:
-        info_box("student_practice_evaluation_unavailable", lang)
+        neutral_box("student_practice_evaluation_unavailable", lang, dashed=True)
 
 
 def render_practice_page(api_client: StudentPracticeApiPort, lang: str) -> None:
@@ -348,36 +349,50 @@ def render_practice_page(api_client: StudentPracticeApiPort, lang: str) -> None:
         return
 
     section_header("practice_target", lang=lang)
-    student_context_block(
-        [("student_practice_focus", selected.get("target_label", ""))], lang
-    )
-    technical_caption(
-        f"{t('student_practice_source_submission', lang)}: "
-        f"#{selected.get('source_submission_id', '?')}"
-    )
+    with st.container(
+        border=True,
+        key=f"practice_target_{selected.get('practice_target_id', '')}",
+    ):
+        student_context_block(
+            [("student_practice_focus", selected.get("target_label", ""))], lang
+        )
+        technical_caption(
+            f"{t('student_practice_source_submission', lang)}: "
+            f"#{selected.get('source_submission_id', '?')}"
+        )
 
     priority_context = _priority_task_context(context)
     if priority_context is not None:
         section_header("student_practice_priority_task", lang=lang)
-        student_context_block(
-            [
-                ("student_practice_focus", selected.get("target_label", "")),
-                (
-                    "student_practice_why_selected",
-                    priority_context.get("explanation", ""),
-                ),
-                (
-                    "student_practice_direction",
-                    priority_context.get("revision_guidance", ""),
-                ),
-            ],
-            lang,
-        )
+        with st.container(border=True, key="practice_priority_task"):
+            student_context_block(
+                [
+                    ("student_practice_focus", selected.get("target_label", "")),
+                    (
+                        "student_practice_why_selected",
+                        priority_context.get("explanation", ""),
+                    ),
+                    (
+                        "student_practice_direction",
+                        priority_context.get("revision_guidance", ""),
+                    ),
+                ],
+                lang,
+            )
         if priority_context.get("evidence_quote"):
             section_header("student_feedback_evidence", lang=lang)
-            evidence_quote(priority_context["evidence_quote"], lang)
+            with st.container(border=True, key=f"practice_evidence_priority_{selected.get('practice_target_id', '')}"):
+                evidence_quote(priority_context["evidence_quote"], lang)
     elif context and context.get("context_status") == "unavailable":
         info_box("student_practice_context_unavailable", lang)
+    elif context and context.get("context_status") in ("legacy", "unresolved"):
+        neutral_box(
+            "student_journey_practice_legacy"
+            if context.get("context_status") == "legacy"
+            else "student_journey_practice_provenance_unresolved",
+            lang,
+            dashed=True,
+        )
 
     if selected.get("status") == "completed":
         student_task_steps(list(steps), 4, lang)
@@ -483,11 +498,12 @@ def render_practice_page(api_client: StudentPracticeApiPort, lang: str) -> None:
         return
 
     section_header("exercise_instructions", lang=lang)
-    student_context_block(
-        [("exercise_instructions", _practice_instruction(exercise, lang))], lang
-    )
-    if exercise.get("source_text"):
-        evidence_quote(exercise["source_text"], lang)
+    with st.container(border=True, key="practice_exercise_card"):
+        student_context_block(
+            [("exercise_instructions", _practice_instruction(exercise, lang))], lang
+        )
+        if exercise.get("source_text"):
+            evidence_quote(exercise["source_text"], lang)
     constraints = exercise.get("constraints", [])
     if constraints:
         st.markdown(
@@ -507,15 +523,20 @@ def render_practice_page(api_client: StudentPracticeApiPort, lang: str) -> None:
         student_task_steps(list(steps), 4, lang)
         latest = attempts[-1]
         success_box("student_practice_attempt_saved", lang)
-        technical_caption(
-            f"{t('student_practice_attempt_reference', lang)}: "
-            f"#{latest.get('attempt_id', '?')}"
-        )
-        section_header("student_practice_saved_response", lang=lang)
-        student_context_block(
-            [("student_practice_saved_response", latest.get("response_text", ""))], lang
-        )
-        _render_evaluation_section(latest.get("evaluation"), lang)
+        with st.container(
+            border=True,
+            key=f"practice_attempt_saved_{latest.get('attempt_id', '')}",
+        ):
+            technical_caption(
+                f"{t('student_practice_attempt_reference', lang)}: "
+                f"#{latest.get('attempt_id', '?')}"
+            )
+            section_header("student_practice_saved_response", lang=lang)
+            with st.container(border=True, key=f"practice_evidence_attempt_{latest.get('attempt_id', '')}"):
+                student_context_block(
+                    [("student_practice_saved_response", latest.get("response_text", ""))], lang
+                )
+            _render_evaluation_section(latest.get("evaluation"), lang)
         student_action_block(
             "student_practice_current_action",
             "student_practice_action_finish",

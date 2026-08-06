@@ -32,13 +32,13 @@ import html
 import streamlit as st
 
 
-# ══════════════════════════════════════════════════════════════════════
+# 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲
 # 1. Canonical design-token contract (single source of truth)
-# ══════════════════════════════════════════════════════════════════════
+# 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲
 
 DESIGN_TOKENS = {
     "version": "hybrid-pixel-system-2.0-v0.9.4-a",
-    # ── Foundational colors ────────────────────────────────────────────
+    # 鈹€鈹€ Foundational colors 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
     "colors": {
         "dark": "#1a1c2c",          # borders, headings, structural
         "white": "#ffffff",         # application background, cards
@@ -61,7 +61,7 @@ DESIGN_TOKENS = {
         "link": "#0f6dbd",
         "pixel-red": "#ff004d",     # decorative accent only (non-text)
     },
-    # ── Semantic status states (never color-alone) ─────────────────────
+    # 鈹€鈹€ Semantic status states (never color-alone) 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
     "semantic": {
         # v0.9.7-D: quiet tint fills with accent bars and AA label pairs;
         # the legacy neon fills are retired from notices/badges.
@@ -89,7 +89,7 @@ DESIGN_TOKENS = {
         "accent-insufficient": "#6b6b7b",
         "accent-neutral": "#6b6b7b",
     },
-    # ── Typography ─────────────────────────────────────────────────────
+    # 鈹€鈹€ Typography 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
     "typography": {
         "font-body": (
             "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', "
@@ -121,7 +121,7 @@ DESIGN_TOKENS = {
         "line-height-body": "1.6",
         "line-height-compact": "1.5",
     },
-    # ── Spacing scale ──────────────────────────────────────────────────
+    # 鈹€鈹€ Spacing scale 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
     "spacing": {
         "1": "4px", "2": "8px", "3": "12px", "4": "16px", "5": "20px",
         "6": "24px", "8": "32px", "10": "40px", "12": "48px",
@@ -131,7 +131,7 @@ DESIGN_TOKENS = {
         "section-space": "32px",
         "page-space": "40px",
     },
-    # ── Geometry ───────────────────────────────────────────────────────
+    # 鈹€鈹€ Geometry 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
     "geometry": {
         "border-thick": "4px",
         "border-thin": "2px",
@@ -153,19 +153,19 @@ DESIGN_TOKENS = {
         "table-font-size": "0.8125rem",
         "table-cell-pad": "6px",
     },
-    # ── Role density aliases ───────────────────────────────────────────
+    # 鈹€鈹€ Role density aliases 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
     "density": {
         "student-section": "var(--px-space-8)",
         "research-section": "var(--px-space-4)",
         "student-card-pad": "var(--px-space-5)",
         "research-card-pad": "var(--px-space-3)",
     },
-    # ── Responsive foundation (reuse validated breakpoints) ───────────
+    # 鈹€鈹€ Responsive foundation (reuse validated breakpoints) 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
     "responsive": {
         "bp-mobile": "640px",
         "bp-tablet": "1024px",
     },
-    # ── Motion (deferred / disabled) ───────────────────────────────────
+    # 鈹€鈹€ Motion (deferred / disabled) 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
     "motion": {
         "transition": "none",
         "animation": "none",
@@ -329,9 +329,9 @@ PIXEL_COLORS = {
 }
 
 
-# ══════════════════════════════════════════════════════════════════════
+# 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲
 # 2. Global CSS (generated tokens + documented stable selectors)
-# ══════════════════════════════════════════════════════════════════════
+# 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲
 
 def build_pixel_css() -> str:
     """Global Hybrid Pixel System CSS.
@@ -345,7 +345,7 @@ def build_pixel_css() -> str:
 <style>
 {build_root_css()}
 
-/* ── Application shell ─────────────────────────────────────────────── */
+/* 鈹€鈹€ Application shell 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€ */
 .stApp {{
     background-color: var(--px-bg);
     font-family: var(--px-font-body);
@@ -357,7 +357,7 @@ def build_pixel_css() -> str:
     border-radius: 0 !important;
 }}
 
-/* ── Typography roles ──────────────────────────────────────────────── */
+/* 鈹€鈹€ Typography roles 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€ */
 /* Body prose, navigation, forms, feedback, evidence, Chinese text: sans.
    Native Streamlit icon spans (stable testid stIconMaterial) are excluded
    so Material Symbols ligatures keep the icon font (v0.9.6-C2). */
@@ -387,7 +387,7 @@ div[data-testid="stMetricValue"],
     font-family: var(--px-font-mono) !important;
 }}
 
-/* ── Remove Streamlit rounded corners (scoped !important) ──────────── */
+/* 鈹€鈹€ Remove Streamlit rounded corners (scoped !important) 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€ */
 div[data-testid="stVerticalBlock"] > div,
 div[data-testid="stHorizontalBlock"] > div,
 .stTextInput > div > div > input,
@@ -413,14 +413,14 @@ div[data-baseweb="tooltip"] {{
     border-radius: 0 !important;
 }}
 
-/* ── Motion is disabled (v0.9.4-A: no decorative animation, no
-   non-zero transition; reduced-motion block preserved below) ──────── */
+/* 鈹€鈹€ Motion is disabled (v0.9.4-A: no decorative animation, no
+   non-zero transition; reduced-motion block preserved below) 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€ */
 .stApp *, .stApp *::before, .stApp *::after {{
     transition: none !important;
     animation: none !important;
 }}
 
-/* ── Remove soft shadows; hard pixel shadows only (scoped !important) */
+/* 鈹€鈹€ Remove soft shadows; hard pixel shadows only (scoped !important) */
 .stApp button,
 div[data-testid="stExpander"],
 .stAlert,
@@ -429,7 +429,7 @@ div[data-testid="stTabs"] {{
     box-shadow: none !important;
 }}
 
-/* ── Buttons: primary = AA action red; secondary = surface ─────────── */
+/* 鈹€鈹€ Buttons: primary = AA action red; secondary = surface 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€ */
 [data-testid="stBaseButton-primary"],
 button[kind="primary"] {{
     background-color: var(--px-action) !important;
@@ -515,7 +515,7 @@ button[kind="secondary"]:disabled {{
     box-shadow: none !important;
 }}
 
-/* ── Form controls: square, 4px borders, readable sans ─────────────── */
+/* 鈹€鈹€ Form controls: square, 4px borders, readable sans 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€ */
 .stTextInput > div > div > input,
 [data-testid="stTextArea"] textarea,
 .stSelectbox > div > div > div,
@@ -535,7 +535,7 @@ button[kind="secondary"]:disabled {{
     box-shadow: none !important;
 }}
 
-/* ── Expanders / tabs / sidebar ────────────────────────────────────── */
+/* 鈹€鈹€ Expanders / tabs / sidebar 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€ */
 div[data-testid="stExpander"] {{
     border: var(--px-border-thin) !important;
     background-color: var(--px-white) !important;
@@ -598,7 +598,7 @@ button[data-testid="stExpandSidebarButton"] {{
     font-weight: var(--px-font-weight-bold) !important;
 }}
 
-/* ── Notices ───────────────────────────────────────────────────────── */
+/* 鈹€鈹€ Notices 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€ */
 .stAlert {{
     border: var(--px-border-thick) !important;
     font-family: var(--px-font-body) !important;
@@ -607,12 +607,12 @@ div[data-testid="stNotification"] {{
     border: var(--px-border-thick) !important;
 }}
 
-/* ── Remove gradients everywhere (scoped !important) ───────────────── */
+/* 鈹€鈹€ Remove gradients everywhere (scoped !important) 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€ */
 .stApp * {{
     background-image: none !important;
 }}
 
-/* ── Responsive: smaller borders/shadows, 44px touch targets on mobile */
+/* 鈹€鈹€ Responsive: smaller borders/shadows, 44px touch targets on mobile */
 @media (max-width: 640px) {{
     :root {{
         --px-border-thick: 2px solid var(--px-dark);
@@ -634,7 +634,7 @@ div[data-testid="stNotification"] {{
     }}
 }}
 
-/* ── prefers-reduced-motion ────────────────────────────────────────── */
+/* 鈹€鈹€ prefers-reduced-motion 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€ */
 @media (prefers-reduced-motion: reduce) {{
     .stApp *, .stApp *::before, .stApp *::after {{
         transition: none !important;
@@ -645,9 +645,9 @@ div[data-testid="stNotification"] {{
 """
 
 
-# ══════════════════════════════════════════════════════════════════════
+# 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲
 # 3. Shared component CSS (token-driven primitives)
-# ══════════════════════════════════════════════════════════════════════
+# 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲
 
 def build_component_css() -> str:
     return f"""
@@ -1086,7 +1086,7 @@ div.px-quote {{
     margin-top: var(--px-space-3);
 }}
 
-/* ── v0.9.7-D surface levels (L2 cycle card / L3 stage item) ───────────
+/* 鈹€鈹€ v0.9.7-D surface levels (L2 cycle card / L3 stage item) 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
    Streamlit 1.60 renders `st.container(border=True)` as an
    stVerticalBlock with the border applied to that element. The hooks are
    the stable widget-keyed classes (`st-key-*`) that Streamlit applies to
@@ -1139,6 +1139,79 @@ div[data-testid="stVerticalBlock"][class*="st-key-feedback_next_action_"] {{ /* 
     padding: var(--px-space-4);
     margin: var(--px-space-4) 0;
     background: var(--px-surface-elevated);
+}}
+
+div[data-testid="stVerticalBlock"][class*="st-key-revision_source_context_"] {{ /* L2 */
+    border: var(--px-border-thin);
+    box-shadow: var(--px-shadow-sm);
+    padding: var(--px-density-student-card-pad);
+    margin-bottom: var(--px-space-4);
+    background: var(--px-white);
+}}
+
+div[data-testid="stVerticalBlock"][class*="st-key-revision_priority_task_"] {{ /* L2 */
+    border: var(--px-border-thin);
+    box-shadow: var(--px-shadow-sm);
+    padding: var(--px-density-student-card-pad);
+    margin-bottom: var(--px-space-4);
+    background: var(--px-white);
+}}
+
+div[data-testid="stVerticalBlock"][class*="st-key-revision_observation_"] {{ /* L2 */
+    border: var(--px-border-thin);
+    box-shadow: var(--px-shadow-sm);
+    padding: var(--px-density-student-card-pad);
+    margin-bottom: var(--px-space-4);
+    background: var(--px-white);
+}}
+
+div[data-testid="stVerticalBlock"][class*="st-key-revision_next_action_"] {{ /* focused */
+    border: var(--px-border-thick);
+    box-shadow: var(--px-shadow-sm);
+    padding: var(--px-space-4);
+    margin: var(--px-space-4) 0;
+    background: var(--px-surface-elevated);
+}}
+
+div[data-testid="stVerticalBlock"][class*="st-key-practice_target_"] {{ /* L2 */
+    border: var(--px-border-thin);
+    box-shadow: var(--px-shadow-sm);
+    padding: var(--px-density-student-card-pad);
+    margin-bottom: var(--px-space-4);
+    background: var(--px-white);
+}}
+
+div[data-testid="stVerticalBlock"][class*="st-key-practice_priority_task_"] {{ /* L2 */
+    border: var(--px-border-thin);
+    box-shadow: var(--px-shadow-sm);
+    padding: var(--px-density-student-card-pad);
+    margin-bottom: var(--px-space-4);
+    background: var(--px-white);
+}}
+
+div[data-testid="stVerticalBlock"][class*="st-key-practice_evidence_"] {{ /* L3 */
+    border: var(--px-border-hairline);
+    border-color: var(--px-border-subtle);
+    padding: var(--px-space-3) var(--px-space-4);
+    margin-bottom: var(--px-space-3);
+    background: var(--px-white);
+    box-shadow: none;
+}}
+
+div[data-testid="stVerticalBlock"][class*="st-key-practice_exercise_"] {{ /* L2 */
+    border: var(--px-border-thin);
+    box-shadow: var(--px-shadow-sm);
+    padding: var(--px-density-student-card-pad);
+    margin-bottom: var(--px-space-4);
+    background: var(--px-white);
+}}
+
+div[data-testid="stVerticalBlock"][class*="st-key-practice_attempt_saved_"] {{ /* L2 */
+    border: var(--px-border-thin);
+    box-shadow: var(--px-shadow-sm);
+    padding: var(--px-density-student-card-pad);
+    margin-bottom: var(--px-space-4);
+    background: var(--px-white);
 }}
 
 @media (max-width: 640px) {{
@@ -1195,7 +1268,7 @@ div[data-testid="stVerticalBlock"][class*="st-key-feedback_next_action_"] {{ /* 
     margin-bottom: var(--px-space-1);
 }}
 
-/* ── v0.9.4-A primitives ───────────────────────────────────────────── */
+/* 鈹€鈹€ v0.9.4-A primitives 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€ */
 .px-icon {{
     display: inline-flex;
     vertical-align: middle;
@@ -1244,9 +1317,9 @@ PIXEL_CSS = build_pixel_css()
 PIXEL_COMPONENT_CSS = build_component_css()
 
 
-# ══════════════════════════════════════════════════════════════════════
+# 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲
 # 4. Local accessible icon primitive (icon policy)
-# ══════════════════════════════════════════════════════════════════════
+# 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲
 
 # Pixel-style 16x16 outline glyphs (square caps, no curves). All icons are
 # local inline SVG: no remote icon fonts or icon services are allowed.
@@ -1272,7 +1345,7 @@ def icon(
 
     Accessibility policy:
     - decorative icons: ``aria-hidden="true"`` (no label);
-    - meaningful icons: pass ``label`` → ``role="img"`` + ``aria-label``.
+    - meaningful icons: pass ``label`` 鈫?``role="img"`` + ``aria-label``.
     Icons never carry text meaning on their own in this system; status
     always has a visible text channel.
     """
@@ -1289,9 +1362,9 @@ def icon(
     )
 
 
-# ══════════════════════════════════════════════════════════════════════
+# 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲
 # 5. Reusable pixel-art HTML components (compatibility layer)
-# ══════════════════════════════════════════════════════════════════════
+# 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲
 
 def pixel_card(content: str, interactive: bool = False) -> str:
     """Wrap content in a pixel-art card with hard shadow."""

@@ -110,6 +110,10 @@ def _priority_selection(priorities: list[dict], source_id: int) -> tuple[int, bo
 def _render_priority_card(item: dict, lang: str, *, instruction: bool = True) -> None:
     """Render one active-priority task card from persisted feedback fields."""
     section_header("student_revision_priority_task", lang=lang)
+    # The keyed container is opened by the caller (revision_priority_task_<id>)
+    # so this helper stays composable for both the default and saved-success
+    # paths. The section header stays outside the container so the 1px
+    # border-subtle rule remains visible.
     student_context_block(
         [
             (
@@ -385,16 +389,23 @@ def render_revision_page(api_client: StudentRevisionApiPort, lang: str) -> None:
     if _revision_saved_for_source(saved, learner_id):
         release_pending("revision")
         source = saved.get("ui_submission", {}).get("revision_source", {})
-        section_header("student_revision_original_context", lang=lang)
-        student_context_block(
-            [
-                ("writing_prompt", source.get("writing_prompt", "")),
-                ("student_revision_source_stage", source.get("draft_stage", "")),
-            ],
-            lang,
+        source_id = int(
+            (saved.get("ui_submission") or {}).get("revision_of_submission_id") or 0
         )
-        if source.get("essay_text"):
-            evidence_quote(source["essay_text"], lang)
+        section_header("student_revision_original_context", lang=lang)
+        with st.container(
+            border=True,
+            key=f"revision_source_context_{source_id}",
+        ):
+            student_context_block(
+                [
+                    ("writing_prompt", source.get("writing_prompt", "")),
+                    ("student_revision_source_stage", source.get("draft_stage", "")),
+                ],
+                lang,
+            )
+            if source.get("essay_text"):
+                evidence_quote(source["essay_text"], lang)
         success_box("student_revision_saved_title", lang)
         student_action_block(
             "student_revision_saved_title",
@@ -417,8 +428,10 @@ def render_revision_page(api_client: StudentRevisionApiPort, lang: str) -> None:
             f"#{saved.get('ui_submission', {}).get('revision_of_submission_id', '?')} · "
             f"{t('student_revision_saved_reference', lang)}: #{saved.get('submission_id', '?')}"
         )
-        _render_revision_observation(saved, lang)
-        _render_revision_next_steps(lang, addressed_source, addressed_index)
+        with st.container(border=True, key="revision_observation_panel"):
+            _render_revision_observation(saved, lang)
+        with st.container(border=True, key="revision_next_action"):
+            _render_revision_next_steps(lang, addressed_source, addressed_index)
         return
 
     try:
@@ -482,13 +495,17 @@ def render_revision_page(api_client: StudentRevisionApiPort, lang: str) -> None:
         return
 
     section_header("student_revision_original_context", lang=lang)
-    student_context_block(
-        [
-            ("writing_prompt", source.get("writing_prompt", "")),
-            ("student_revision_source_stage", source.get("draft_stage", "")),
-        ],
-        lang,
-    )
+    with st.container(
+        border=True,
+        key=f"revision_source_context_{source_id}",
+    ):
+        student_context_block(
+            [
+                ("writing_prompt", source.get("writing_prompt", "")),
+                ("student_revision_source_stage", source.get("draft_stage", "")),
+            ],
+            lang,
+        )
     priorities = _source_priorities(source)
     existing_revision = _latest_revision_of_source(candidates, source_id)
     if not priorities:
@@ -520,28 +537,33 @@ def render_revision_page(api_client: StudentRevisionApiPort, lang: str) -> None:
         # v0.9.7-A: a saved revision is never treated as unsubmitted on
         # re-entry; show the completed state instead of a blank form so no
         # uncontrolled duplicate revision can be created from this page.
-        success_box("student_revision_already_submitted_title", lang)
-        student_action_block(
-            "student_revision_already_submitted_title",
-            "student_revision_step_complete",
-            lang,
-            state="complete",
-        )
-        _render_priority_addressed(
-            priorities, _priority_selection(priorities, source_id)[0], lang
-        )
-        technical_caption(
-            f"{t('student_revision_saved_reference', lang)}: "
-            f"#{existing_revision.get('essay_id', '?')}"
-        )
-        _render_revision_next_steps(
-            lang, source_id, _priority_selection(priorities, source_id)[0]
-        )
+        with st.container(border=True, key="revision_next_action"):
+            success_box("student_revision_already_submitted_title", lang)
+            student_action_block(
+                "student_revision_already_submitted_title",
+                "student_revision_step_complete",
+                lang,
+                state="complete",
+            )
+            _render_priority_addressed(
+                priorities, _priority_selection(priorities, source_id)[0], lang
+            )
+            technical_caption(
+                f"{t('student_revision_saved_reference', lang)}: "
+                f"#{existing_revision.get('essay_id', '?')}"
+            )
+            _render_revision_next_steps(
+                lang, source_id, _priority_selection(priorities, source_id)[0]
+            )
         limitation_notice("student_revision_boundary", lang)
         return
 
     if priorities:
-        _render_priority_task(priorities, source_id, lang)
+        with st.container(
+            border=True,
+            key=f"revision_priority_task_{source_id}",
+        ):
+            _render_priority_task(priorities, source_id, lang)
 
     validation_state = st.session_state.get("revision_validation_state") or {}
     invalid = (
