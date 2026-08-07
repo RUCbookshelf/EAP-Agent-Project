@@ -15,7 +15,7 @@
 1. `POST /api/v1/submissions` request schema: optional advisory `advisory_domain` / `advisory_language` (client hints only; server-derived values authoritative; mismatch or invalid → 422 in the canonical error envelope).
 2. `SubmissionResponse`: additive server-derived `domain`, `language`, `domain_attribution_rule` (`domain-attribution-v0.1.0`), `domain_attribution_version`.
 3. Platform version identity: new `app/version.py` (`PLATFORM_APPLICATION_VERSION=0.9.7-d`, `PLATFORM_API_VERSION=v1`, `PLATFORM_DATABASE_MIGRATION_VERSION=13`); all app-identity consumers (Settings, FastAPI, lifecycle health, submission `record_versions`, research ExportManifest) now import it; stale 0.8.0/0.8.2/10 literals corrected (D-20/D-29).
-4. API contract snapshots regenerated (D-37/RT-19): `verification/v0.9.5-h2d2/openapi_before.json` (+6 properties, info.version), `dependency_graph_before.json` (4 line shifts in submissions.py); runtime-checkable protocol count 36→39 (3 new shared protocols).
+4. API contract snapshots regenerated (D-37/RT-19): `verification/v0.9.5-h2d2/openapi_before.json` (+6 properties, info.version), `dependency_graph_before.json` (4 line shifts in submissions.py); runtime-checkable protocol count 36→39 (3 new shared protocols).\n5. D-27 architecture-drift check: `tests/test_shared_core_drift.py` (fails on sync-conflict duplicate patterns under `app/`; enforces the frozen module-set manifest) + `verification/shared-core-h1/module_set_manifest.json` (184 canonical app modules).
 
 ## Shared contracts intentionally unchanged
 
@@ -78,7 +78,7 @@ COMPATIBLE — 7/7 boundary checks PASS (resource descriptor; version/provenance
 - `app/version.py`, `app/config/settings.py`, `app/lifecycle.py`, `app/services/submission.py`, `app/research/schemas.py` (version identity; Research exports manifest value changed to 0.9.7-d).
 - `tests/test_v095h2d2_api_dependency_bindings.py`, `verification/v0.9.5-h2d2/*` (contract snapshots regenerated).
 - `tests/shared/*`, `app/shared/*`, `app/domain/*`, `app/configuration/domain_packs*` (new shared-owned modules; additive, low conflict risk).
-- `tests/contracts/api_surface_contract.py` (unchanged; regeneration tooling if extended).
+- 	ests/contracts/api_surface_contract.py (unchanged; regeneration tooling if extended).\n- 	ests/test_shared_core_drift.py, erification/shared-core-h1/module_set_manifest.json (new; future modules require a manifest update via the shared-contract process).
 
 ## Recommended merge order
 
@@ -96,4 +96,4 @@ COMPATIBLE — 7/7 boundary checks PASS (resource descriptor; version/provenance
 - Export domain-scope validation wiring (Research Evaluation WU2) against `validate_domain_scope`.
 - Migration-14 review (design in 07_MIGRATION_DECISION.md) before any second-domain persistence.
 - Golden-submission behavior diff re-run at integration (D-30) on the canonical Python 3.11 environment.
-- Locale parity 600/600 and full non-live core re-run on the canonical environment.
+- Locale parity 600/600 and full non-live core re-run on the canonical environment (now incl. the D-27 drift-check test).

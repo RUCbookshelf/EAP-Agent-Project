@@ -4,7 +4,7 @@
 
 ## Result
 
-Horizon 1 is implemented and verified: one application, one process, one SQLite database, one API namespace, one composition root, with an additive domain/language discriminator, domain-aware registry mechanisms, shared vocabularies, a per-domain pack boundary, a submission-ancestry resolver, version single-sourcing, Corpus Stage-5 boundary compatibility, and the D-30 zero-change regression gate — all while preserving current L2 behavior (full non-live core 1444 passed / 8 skipped / 0 failed).
+Horizon 1 is implemented and verified: one application, one process, one SQLite database, one API namespace, one composition root, with an additive domain/language discriminator, domain-aware registry mechanisms, shared vocabularies, a per-domain pack boundary, a submission-ancestry resolver, version single-sourcing, Corpus Stage-5 boundary compatibility, and the D-30 zero-change regression gate — all while preserving current L2 behavior (full non-live core 1448 passed / 8 skipped / 0 failed).
 
 ## Work Units
 

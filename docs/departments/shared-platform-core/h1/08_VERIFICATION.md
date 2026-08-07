@@ -1,5 +1,5 @@
 # 08 — Verification
-**Department:** Shared Platform & Core | **Date:** 2026-08-07 | **HEAD:** b171cce → 8ce8c36 (+ WU10 docs commit)
+**Department:** Shared Platform & Core | **Date:** 2026-08-07 | **HEAD:** b171cce → final H1 HEAD (see final report)
 
 ## Canonical runner environment
 
@@ -13,7 +13,7 @@
 
 | Gate | Result | Evidence |
 | --- | --- | --- |
-| Full non-live core (canonical: `pytest -q -p no:cacheprovider --ignore=tests/live tests`) | **1444 passed / 8 skipped / 0 failed / exit 0** (single clean run) | .agent-workflow/shared-core-h1/logs/wu10-fullcore-final.log |
+| Full non-live core (canonical: `pytest -q -p no:cacheprovider --ignore=tests/live tests`) | **1448 passed / 8 skipped / 0 failed / exit 0** (final single clean run incl. D-27 drift-check tests) | .agent-workflow/shared-core-h1/logs/wu10-fullcore-final2.log |
 | Shared-core focused suites (version drift, vocabularies, discriminator, resolver, registries, domain packs) | 167/167 | wu2/wu4/wu5/wu6/wu7 logs; combined runs |
 | Corpus Stage 5 (`tests/corpus`) | 36/36 | wu8-test.log |
 | Locale parity | preserved (no locale files changed; dedicated parity tests 3/3; embedded 600/600 checks green in core) | test_v097d_wu2_revision_practice.py, test_v096c1_no_priority_workflow.py, test_v096c2_sidebar_control.py |

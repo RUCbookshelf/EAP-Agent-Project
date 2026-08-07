@@ -245,7 +245,7 @@
   - `app/api/main.py` duplicated composition blocks (~L91 vs ~L378) accessing facade private attributes
   - Version constants scattered across 8+ locations with inconsistent values
   - DDL split between `repository.SCHEMA` and `migrations.py`
-  - No module-set manifest or quarantine/exclusion policy exists (D-27)
+  - D-27 drift check IMPLEMENTED in WU10 closure: `tests/test_shared_core_drift.py` (sync-conflict pattern gate + canonical manifest match) + `verification/shared-core-h1/module_set_manifest.json` (184 app modules)
   - No API-surface contract regeneration with additive-only diff (D-37/RT-19)
   - No domain-isolation invariant list (D-31)
 
@@ -314,7 +314,7 @@
 | `*Copy*` | 0 | Not present |
 | `*副本*` | 0 | Not present |
 
-**Note:** The current state map references12 `*-冲突-Rain_Win11.py` sync-conflict files. These are not present in this worktree (`dept/shared-core-h1`). They may exist in the main repo or have been cleaned. D-27 requires a canonical module-set manifest and drift check before any measurement-version claim.
+**Note:** The current state map references 12 `*-冲突-Rain_Win11.py` sync-conflict files. These are not present in this worktree (`dept/shared-core-h1`); they may exist in the main repo (untracked, user-owned). D-27 drift check implemented: `tests/test_shared_core_drift.py` fails verification on any `-冲突-`/`-Copy`/`-副本` (and variants) file under `app/`, and enforces the frozen canonical module-set manifest `verification/shared-core-h1/module_set_manifest.json`.
 
 ---
 
