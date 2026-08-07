@@ -1,0 +1,15 @@
+{
+  "pack_id": "l2-core-v0.1.0",
+  "domain": "l2",
+  "version": "v0.1.0",
+  "supported_task_types": [],
+  "dimensions": [],
+  "resource_requirements": [],
+  "availability": "not_available",
+  "content_status": {
+    "task_types": "NR — blocked by D-L2-01",
+    "dimensions": "NR — blocked by D-L2-03",
+    "resource_requirements": "empty — no domain-specific requirements yet",
+    "note": "H1 ship; L2 domain department owns content when D-L2-01/D-L2-03 resolved"
+  }
+}
