@@ -1,4 +1,24 @@
-## v0.9.7-D (2026-08-06)
+## v0.9.7-D (2026-08-06/07)
+
+### Controlled Student UI/UX Rollout and Consolidation (COMPLETE)
+
+- WU1 (Writing + Feedback) and WU2 (Revision + Practice): the frozen
+  design system adopted page by page - keyed L2/L3/focused surfaces,
+  verbatim evidence before interpretation, dashed neutral evaluation-
+  unavailable and legacy notices, honest no-priority/insufficient states,
+  one primary action per view; all verified learning, ownership,
+  persistence, navigation, and Journey contracts preserved.
+- WU3 (cross-page consolidation): grouped keyed-container CSS (12 rules
+  to 3 groups), CSS guard test, cross-page audit, MiniMax review PASS
+  WITH MINOR FINDINGS (WU1 no-priority evidence capture fixed).
+- WU4 (closure): full end-to-end browser workflow per combination
+  (Writing -> Feedback -> Revision -> Practice -> Journey) with zero
+  render writes and exact scenario deltas; full non-live core
+  1237 passed / 8 skipped / 0 failed; launcher PASS twice; locale
+  600/600; Research smoke 6/6; MiniMax final verdict READY TO CLOSE
+  WITH DOCUMENTED LIMITATIONS. No migration 14; no push/PR.
+- Known limitation: completed Practice panel renders flat (Streamlit
+  AppTest artifact; real runtime unaffected) - design doc section 21.
 
 ### Student Design-System Freeze and Representative Page Validation
 

@@ -1,12 +1,13 @@
-**Date:** 2026-08-06
-**Current task:** v0.9.7-D Design-System Freeze and Representative Page
-Validation
-**Status:** COMPLETE - MCU D1.0-D1.3 complete; **the v0.9.7-D Student
-design system is FROZEN and validated on the Journey representative
-page**; the next planned phase is the v0.9.7-D controlled rollout across
-Writing, Feedback, Revision, and Practice (per-page slices), then
-v0.9.7-E (not started; see RUN_VERIFICATION_V0.9.7_D_DESIGN_SYSTEM_FREEZE.md
-and docs/development/V0.9.7_D_STUDENT_DESIGN_SYSTEM.md).
+**Date:** 2026-08-07
+**Current task:** v0.9.7-D Controlled Student UI/UX Rollout and
+Consolidation
+**Status:** COMPLETE, VERIFIED, AND CLOSED - WU1-WU4 all GREEN; the
+frozen Student design system is applied consistently across Writing,
+Feedback, Revision, Practice, and Journey (RUN_VERIFICATION_V0.9.7_D.md
++ WU1-WU4 reports); full non-live core 1237 passed / 8 skipped / 0
+failed; launcher PASS twice; locale 600/600; Research smoke 6/6;
+MiniMax final verdict READY TO CLOSE WITH DOCUMENTED LIMITATIONS. The
+next planned phase is v0.9.7-E (Responsive, Mobile, and Accessibility).
 
 - D1.0 (GREEN): baseline verified; focused reconnaissance of the six
   Student surfaces; inconsistency register; constraints and Kimi input

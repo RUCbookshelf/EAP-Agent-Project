@@ -1,7 +1,21 @@
 ## Current v0.9.7-D State
 
-- Status: **v0.9.7-D Student design system is FROZEN and validated on the
-  Journey representative page** (MCU D1.0-D1.3 complete; see
+- Status: **v0.9.7-D is COMPLETE, VERIFIED, AND CLOSED** - the frozen
+  Student design system has been applied consistently across Writing,
+  Feedback, Revision, Practice, and Journey (WU1-WU4 GREEN; see
+  `RUN_VERIFICATION_V0.9.7_D.md` and the WU1-WU4 reports). The next
+  planned phase is v0.9.7-E (Responsive, Mobile, and Accessibility).
+- Rollout: WU1 (Writing + Feedback), WU2 (Revision + Practice), WU3
+  (cross-page consolidation: grouped keyed-container CSS), WU4 (final
+  integration verification and closure). Verification: focused 174,
+  continuity/affected regression 286 (+ WU5 38), full non-live core
+  1237 passed / 8 skipped / 0 failed, `run.bat --verify` PASS twice,
+  locale parity 600/600, Research smoke 6/6, rendered matrices
+  (WU1/WU2/WU4) exit 0 with zero render writes, MiniMax final verdict
+  READY TO CLOSE WITH DOCUMENTED LIMITATIONS. No migration (13
+  unchanged); no push/PR.
+- Freeze history (D1.0-D1.3): the Student design system was FROZEN and
+  validated on the Journey representative page (see
   `docs/development/V0.9.7_D_STUDENT_DESIGN_SYSTEM.md` and
   `RUN_VERIFICATION_V0.9.7_D_DESIGN_SYSTEM_FREEZE.md`).
 - D1.0: baseline verified; focused UI reconnaissance of the six Student
