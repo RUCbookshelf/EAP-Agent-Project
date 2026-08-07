@@ -225,12 +225,27 @@ def test_no_l2_contamination():
     # L2-specific modules that must never appear in fixtures.py
     forbidden_prefixes = (
         "app.analysis",
+        "app.analyzer",
+        "app.api",
+        "app.calf",
+        "app.calibration",
+        "app.configuration",
+        "app.corpus",
+        "app.database",
         "app.diagnosis",
         "app.feedback",
+        "app.infrastructure",
+        "app.journey",
+        "app.learner",
         "app.llm",
         "app.models",
+        "app.practice",
         "app.prompts",
-        "app.analyzer",
+        "app.repositories",
+        "app.research",
+        "app.revision",
+        "app.services",
+        "app.ui",
     )
 
     for mod in imported_modules:
