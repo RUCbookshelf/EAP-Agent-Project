@@ -33,6 +33,9 @@ be deleted and rebuilt at any time.
 
 ## Steps and outputs
 
+`run_all.py` orchestrates preparation steps 01-09; `10_version.py` is a
+separate step that emits the package version record (run it after 01-09).
+
 | Step | Outputs |
 | --- | --- |
 | 01_inventory.py | physical_inventory.csv, physical_inventory_summary.json |
@@ -44,6 +47,7 @@ be deleted and rebuilt at any time.
 | 07_reference_groups.py | reference_group_candidates.csv, reference_group_summary.json |
 | 08_features.py | feature_candidate_registry.csv, feature_summary.json |
 | 09_leakage.py | holdout_candidates.csv, leakage_plan.json |
+| 10_version.py | corpus_version.json (package identity + manifest hash) |
 
 ## Safety
 

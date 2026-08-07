@@ -41,8 +41,9 @@ WECCL 2.0 written corpus (primary product target: L2 writing development).
   quality, duplicates, composition, reference groups, features, holdouts).
 - Version record: `corpus_version.json` (manifest hash
   `0d8940ff84613807c11c0e492c61fb8d39fc1152a386061f9711a41487659eb9`).
-- Reproducible tooling: `scripts/corpus_readiness/` (10-step pipeline,
-  scripts 01-10, plus tests).
+- Reproducible tooling: `scripts/corpus_readiness/` (scripts 01-10 with
+  tests; `run_all.py` orchestrates preparation steps 01-09;
+  `10_version.py` emits the package version record).
 
 ## Key constraints respected
 

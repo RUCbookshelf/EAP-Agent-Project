@@ -19,6 +19,16 @@ charset_normalizer fallback. Strict decode + round-trip verification
 | cp1250 (fallback) | 2 |
 | Newlines | CRLF throughout (2 files without newlines); preserved as-is |
 
+## Terminology note (encoding fields)
+
+`physical_inventory.csv` carries two encoding fields per file:
+`detected_encoding` (the encoding value chosen) and `encoding_status` (the
+detection path that produced it: `ascii`, `utf8`, `gbk`, or `cn_detect` for
+the charset_normalizer fallback). For the two LEMMA files WARG2730/WARG4140
+the value is `cp1250` with status `cn_detect`; prose in this report and in
+`derived_manifest.csv` refers to the value (`cp1250`). The two fields describe
+different aspects of the same detection result and are not contradictory.
+
 ## Derived canonical layer
 
 Location: `A:\[Linguistics Data] Corpus\SWECCL 2.0\PREPARED\utf8\` (mirrors the

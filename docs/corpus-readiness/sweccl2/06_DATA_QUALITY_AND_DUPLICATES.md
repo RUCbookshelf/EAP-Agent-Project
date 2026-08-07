@@ -16,7 +16,7 @@ Data: `data/quality_issues.csv`, `data/duplicate_report.csv`,
 Notes: non-ASCII WECCL content is learner-typed (Chinese chars, fullwidth
 punctuation, ideographic spaces) and is preserved as-is. SECCL transcripts
 contain Chinese transcriber annotations (e.g., "未录完", "以下AB全反") embedded
-in the text; these are annotator notes, not learner speech.
+in the text; these are annotator notes, not learner speech. The 12 flagged files correspond to 6 unique transcripts duplicated across task-folder copies (TASK1/TASK3/TASK123).
 
 ## Duplicates (348 groups)
 
