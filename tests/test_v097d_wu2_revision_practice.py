@@ -278,6 +278,35 @@ class TestDesignTokensExtension:
             source = path.read_text(encoding="utf-8")
             assert "<style>" not in source
 
+    def test_keyed_rule_groups_consolidated(self):
+        """WU3: identical keyed-container recipes are grouped selectors, not
+        duplicated rule blocks (one L2/L3/focused declaration each)."""
+        css = pa.PIXEL_CSS + pa.PIXEL_COMPONENT_CSS
+        # The rollout L2 card body must exist exactly once (grouped); the
+        # same body is NOT duplicated per page.
+        assert css.count(
+            "padding: var(--px-density-student-card-pad);\n"
+            "    margin-bottom: var(--px-space-4);") == 1, "duplicate L2 bodies"
+        # One grouped L2 rule (plus the unique writing_saved rule), one
+        # grouped L3 rule, one grouped focused rule - no per-page copies.
+        assert css.count(" { /* L2 */") == 2, "L2 rule count"
+        assert css.count(" { /* L3 */") == 1, "L3 rule count"
+        assert css.count(" { /* focused */") == 1, "focused rule count"
+        # The grouped headers exist exactly once each.
+        assert css.count('[class*="st-key-feedback_priority_"],') == 1
+        assert css.count('[class*="st-key-feedback_evidence_"],') == 1
+        assert css.count('[class*="st-key-feedback_next_action_"],') == 1
+        # Every rollout key is present in the CSS.
+        for key in (
+            "st-key-feedback_priority_", "st-key-revision_source_context_",
+            "st-key-revision_priority_task_", "st-key-revision_observation_",
+            "st-key-practice_target_", "st-key-practice_priority_task_",
+            "st-key-practice_exercise_", "st-key-practice_attempt_saved_",
+            "st-key-feedback_evidence_", "st-key-practice_evidence_",
+            "st-key-feedback_next_action_", "st-key-revision_next_action_",
+        ):
+            assert key in css, key
+
 
 # ---------------------------------------------------------------------------
 # Revision tests

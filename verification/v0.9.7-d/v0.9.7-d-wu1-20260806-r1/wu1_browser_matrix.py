@@ -552,9 +552,10 @@ def run(browser, student_id, lang, viewport, tag):
 
     assert_feedback_no_priority(page, lang, tag, viewport)
 
-    # Reload write check for Feedback no-priority
-    db_before_fnp_reload, db_after_fnp_reload, fnp_reload_zero = reload_write_check(page, lang)
-
+    # Measure and capture the no-priority state BEFORE the reload check
+    # (the reload clears session state, so screenshots taken after it would
+    # show the Home fallback page instead of this state).
+    fb_np_heading = page.locator("h2.px-page-heading").first.inner_text()
     fb_np_exceptions = page.locator('[data-testid="stException"]').count()
     fb_np_overflow = page.evaluate(
         "() => document.documentElement.scrollWidth") > page.evaluate("() => window.innerWidth")
@@ -570,12 +571,18 @@ def run(browser, student_id, lang, viewport, tag):
     bottom_fb_np = SCREENSHOTS / f"{tag}_feedback_no_priority_bottom.png"
     page.screenshot(path=str(bottom_fb_np))
 
+    # Reload write check for Feedback no-priority
+    db_before_fnp_reload, db_after_fnp_reload, fnp_reload_zero = reload_write_check(page, lang)
+
     result["feedback_no_priority"] = {
         "exceptions": fb_np_exceptions,
         "overflow": fb_np_overflow,
         "raw_keys": fb_np_raw,
         "forbidden": fb_np_forbidden,
         "forbidden_after_limitation_normalization": fb_np_forbidden,
+        "heading": fb_np_heading,
+        "no_priority_title_present": (
+            t("student_feedback_no_priority_title", lang) in fb_np_text),
         "empty_state_present": True,
         "no_error_styling": True,
         "one_primary_revise": True,
