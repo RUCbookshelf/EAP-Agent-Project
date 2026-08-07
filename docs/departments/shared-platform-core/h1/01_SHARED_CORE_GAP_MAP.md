@@ -286,7 +286,7 @@
 | CHECK constraint on domain | **Does not exist** |
 | Export-time domain validation | **Does not exist** |
 | `ConfigurationPayload.extra` | `"forbid"` — additive domain field requires schema version bump |
-| Additive domain storage feasibility | **Safe via ALTER TABLE ADD COLUMN** with `DEFAULT 'l2_writing'` (additive, non-destructive). Requires migration 14+. Decision left to orchestrator. |
+| Additive domain storage feasibility | **Safe via ALTER TABLE ADD COLUMN** with `DEFAULT 'l2'` (additive, non-destructive). Requires migration 14+. Decision left to orchestrator. |
 
 **Key constraint:** Migration 14+ must be additive only (CHECK + DEFAULT, no backfill per D-17/D-36). Existing rows get default domain value. No destructive changes to frozen schema.
 
