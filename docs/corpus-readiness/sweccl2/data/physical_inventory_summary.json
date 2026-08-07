@@ -1,0 +1,54 @@
+{
+  "corpus_root": "A:\\[Linguistics Data] Corpus\\SWECCL 2.0",
+  "python": "3.12.13",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "total_files": 19858,
+  "total_bytes": 1878444373,
+  "component_counts": {
+    "root_artifact": 4,
+    "seccl_audio": 2139,
+    "seccl_texts": 2852,
+    "tools": 13,
+    "weccl_lemma": 4950,
+    "weccl_raw": 4950,
+    "weccl_tagged": 4950
+  },
+  "component_bytes": {
+    "root_artifact": 5543922,
+    "seccl_audio": 1801346957,
+    "seccl_texts": 8450275,
+    "tools": 35624177,
+    "weccl_lemma": 7331503,
+    "weccl_raw": 7356093,
+    "weccl_tagged": 12791446
+  },
+  "variant_counts": {
+    "lemma": 4950,
+    "raw": 4950,
+    "tagged": 4950,
+    "transcript": 2852
+  },
+  "extension_counts": {
+    ".avi": 1,
+    ".doc": 2,
+    ".exe": 8,
+    ".inf": 1,
+    ".md": 1,
+    ".mp3": 2139,
+    ".pdf": 1,
+    ".sav": 1,
+    ".txt": 17703,
+    ".xls": 1
+  },
+  "encoding_counts": {
+    "ascii": 17601,
+    "cp1250": 2,
+    "gbk": 101,
+    "needs_review": 2153,
+    "utf-8": 1
+  },
+  "physical_status_counts": {
+    "ok": 19858
+  },
+  "read_errors": []
+}

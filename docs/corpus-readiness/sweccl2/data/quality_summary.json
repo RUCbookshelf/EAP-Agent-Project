@@ -1,0 +1,410 @@
+{
+  "quality_issue_count": 90,
+  "issue_type_counts": {
+    "all_nul_bytes": 2,
+    "extremely_short_text": 1,
+    "variant_identical_bytes": 1,
+    "non_ascii_learner_content": 74,
+    "chinese_annotator_note_in_transcript": 12
+  },
+  "duplicate_group_count": 348,
+  "duplicate_kind_counts": {
+    "exact_duplicate_text": 115,
+    "exact_byte_duplicate": 233
+  },
+  "exclusion_candidate_count": 2,
+  "raw_token_length_stats": {
+    "n": 4950,
+    "min": 1,
+    "p1": 99,
+    "p5": 126,
+    "median": 242.0,
+    "mean": 252.1,
+    "p95": 407,
+    "max": 1076
+  },
+  "sample_issues": [
+    {
+      "relative_path": "WECCL20/LEMMA/WARG2081.txt",
+      "issue_type": "all_nul_bytes",
+      "severity": "high",
+      "detail": "2150 NUL bytes"
+    },
+    {
+      "relative_path": "WECCL20/RAW/WARG2081.txt",
+      "issue_type": "all_nul_bytes",
+      "severity": "high",
+      "detail": "2157 NUL bytes"
+    },
+    {
+      "relative_path": "WECCL20/RAW/WARG2081.txt",
+      "issue_type": "extremely_short_text",
+      "severity": "candidate",
+      "detail": "1 tokens"
+    },
+    {
+      "relative_path": "WECCL20 (RAW vs LEMMA)",
+      "issue_type": "variant_identical_bytes",
+      "severity": "candidate",
+      "detail": "1 documents where LEMMA byte-identical to RAW: WARG3437"
+    },
+    {
+      "relative_path": "WECCL20/LEMMA/WARG0099.txt",
+      "issue_type": "non_ascii_learner_content",
+      "severity": "info",
+      "detail": "encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner"
+    },
+    {
+      "relative_path": "WECCL20/LEMMA/WARG0203.txt",
+      "issue_type": "non_ascii_learner_content",
+      "severity": "info",
+      "detail": "encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner"
+    },
+    {
+      "relative_path": "WECCL20/LEMMA/WARG0439.txt",
+      "issue_type": "non_ascii_learner_content",
+      "severity": "info",
+      "detail": "encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner"
+    },
+    {
+      "relative_path": "WECCL20/LEMMA/WARG0441.txt",
+      "issue_type": "non_ascii_learner_content",
+      "severity": "info",
+      "detail": "encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner"
+    },
+    {
+      "relative_path": "WECCL20/LEMMA/WARG0476.txt",
+      "issue_type": "non_ascii_learner_content",
+      "severity": "info",
+      "detail": "encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner"
+    },
+    {
+      "relative_path": "WECCL20/LEMMA/WARG0545.txt",
+      "issue_type": "non_ascii_learner_content",
+      "severity": "info",
+      "detail": "encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner"
+    },
+    {
+      "relative_path": "WECCL20/LEMMA/WARG0739.txt",
+      "issue_type": "non_ascii_learner_content",
+      "severity": "info",
+      "detail": "encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner"
+    },
+    {
+      "relative_path": "WECCL20/LEMMA/WARG0946.txt",
+      "issue_type": "non_ascii_learner_content",
+      "severity": "info",
+      "detail": "encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner"
+    },
+    {
+      "relative_path": "WECCL20/LEMMA/WARG1096.txt",
+      "issue_type": "non_ascii_learner_content",
+      "severity": "info",
+      "detail": "encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner"
+    },
+    {
+      "relative_path": "WECCL20/LEMMA/WARG1281.txt",
+      "issue_type": "non_ascii_learner_content",
+      "severity": "info",
+      "detail": "encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner"
+    },
+    {
+      "relative_path": "WECCL20/LEMMA/WARG1391.txt",
+      "issue_type": "non_ascii_learner_content",
+      "severity": "info",
+      "detail": "encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner"
+    },
+    {
+      "relative_path": "WECCL20/LEMMA/WARG1496.txt",
+      "issue_type": "non_ascii_learner_content",
+      "severity": "info",
+      "detail": "encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner"
+    },
+    {
+      "relative_path": "WECCL20/LEMMA/WARG1516.txt",
+      "issue_type": "non_ascii_learner_content",
+      "severity": "info",
+      "detail": "encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner"
+    },
+    {
+      "relative_path": "WECCL20/LEMMA/WARG1946.txt",
+      "issue_type": "non_ascii_learner_content",
+      "severity": "info",
+      "detail": "encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner"
+    },
+    {
+      "relative_path": "WECCL20/LEMMA/WARG2008.txt",
+      "issue_type": "non_ascii_learner_content",
+      "severity": "info",
+      "detail": "encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner"
+    },
+    {
+      "relative_path": "WECCL20/LEMMA/WARG2039.txt",
+      "issue_type": "non_ascii_learner_content",
+      "severity": "info",
+      "detail": "encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner"
+    },
+    {
+      "relative_path": "WECCL20/LEMMA/WARG2247.txt",
+      "issue_type": "non_ascii_learner_content",
+      "severity": "info",
+      "detail": "encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner"
+    },
+    {
+      "relative_path": "WECCL20/LEMMA/WARG2433.txt",
+      "issue_type": "non_ascii_learner_content",
+      "severity": "info",
+      "detail": "encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner"
+    },
+    {
+      "relative_path": "WECCL20/LEMMA/WARG2730.txt",
+      "issue_type": "non_ascii_learner_content",
+      "severity": "info",
+      "detail": "encoding=cp1250; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner"
+    },
+    {
+      "relative_path": "WECCL20/LEMMA/WARG2788.txt",
+      "issue_type": "non_ascii_learner_content",
+      "severity": "info",
+      "detail": "encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner"
+    },
+    {
+      "relative_path": "WECCL20/LEMMA/WARG2815.txt",
+      "issue_type": "non_ascii_learner_content",
+      "severity": "info",
+      "detail": "encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner"
+    },
+    {
+      "relative_path": "WECCL20/LEMMA/WARG2857.txt",
+      "issue_type": "non_ascii_learner_content",
+      "severity": "info",
+      "detail": "encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner"
+    },
+    {
+      "relative_path": "WECCL20/LEMMA/WARG3073.txt",
+      "issue_type": "non_ascii_learner_content",
+      "severity": "info",
+      "detail": "encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner"
+    },
+    {
+      "relative_path": "WECCL20/LEMMA/WARG3190.txt",
+      "issue_type": "non_ascii_learner_content",
+      "severity": "info",
+      "detail": "encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner"
+    },
+    {
+      "relative_path": "WECCL20/LEMMA/WARG3256.txt",
+      "issue_type": "non_ascii_learner_content",
+      "severity": "info",
+      "detail": "encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner"
+    },
+    {
+      "relative_path": "WECCL20/LEMMA/WARG3281.txt",
+      "issue_type": "non_ascii_learner_content",
+      "severity": "info",
+      "detail": "encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner"
+    },
+    {
+      "relative_path": "WECCL20/LEMMA/WARG3285.txt",
+      "issue_type": "non_ascii_learner_content",
+      "severity": "info",
+      "detail": "encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner"
+    },
+    {
+      "relative_path": "WECCL20/LEMMA/WARG3541.txt",
+      "issue_type": "non_ascii_learner_content",
+      "severity": "info",
+      "detail": "encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner"
+    },
+    {
+      "relative_path": "WECCL20/LEMMA/WARG3610.txt",
+      "issue_type": "non_ascii_learner_content",
+      "severity": "info",
+      "detail": "encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner"
+    },
+    {
+      "relative_path": "WECCL20/LEMMA/WARG4140.txt",
+      "issue_type": "non_ascii_learner_content",
+      "severity": "info",
+      "detail": "encoding=cp1250; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner"
+    },
+    {
+      "relative_path": "WECCL20/LEMMA/WARG4224.txt",
+      "issue_type": "non_ascii_learner_content",
+      "severity": "info",
+      "detail": "encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner"
+    },
+    {
+      "relative_path": "WECCL20/LEMMA/WARG4464.txt",
+      "issue_type": "non_ascii_learner_content",
+      "severity": "info",
+      "detail": "encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner"
+    },
+    {
+      "relative_path": "WECCL20/LEMMA/WARG4486.txt",
+      "issue_type": "non_ascii_learner_content",
+      "severity": "info",
+      "detail": "encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner"
+    },
+    {
+      "relative_path": "WECCL20/LEMMA/WARG4594.txt",
+      "issue_type": "non_ascii_learner_content",
+      "severity": "info",
+      "detail": "encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner"
+    },
+    {
+      "relative_path": "WECCL20/LEMMA/WEXP0007.txt",
+      "issue_type": "non_ascii_learner_content",
+      "severity": "info",
+      "detail": "encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner"
+    },
+    {
+      "relative_path": "WECCL20/LEMMA/WEXP0089.txt",
+      "issue_type": "non_ascii_learner_content",
+      "severity": "info",
+      "detail": "encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner"
+    }
+  ],
+  "sample_duplicates": [
+    {
+      "scope": "weccl_raw",
+      "kind": "exact_duplicate_text",
+      "members": "WARG2725,WARG4127",
+      "n": 2,
+      "detail": "identical body text after whitespace/lowercase normalization"
+    },
+    {
+      "scope": "weccl_raw",
+      "kind": "exact_duplicate_text",
+      "members": "WARG4215,WARG4605",
+      "n": 2,
+      "detail": "identical body text after whitespace/lowercase normalization"
+    },
+    {
+      "scope": "weccl_raw",
+      "kind": "exact_duplicate_text",
+      "members": "WARG1320,WARG4597",
+      "n": 2,
+      "detail": "identical body text after whitespace/lowercase normalization"
+    },
+    {
+      "scope": "weccl_raw",
+      "kind": "exact_duplicate_text",
+      "members": "WARG0956,WARG1814",
+      "n": 2,
+      "detail": "identical body text after whitespace/lowercase normalization"
+    },
+    {
+      "scope": "weccl_raw",
+      "kind": "exact_duplicate_text",
+      "members": "WARG0938,WARG1328",
+      "n": 2,
+      "detail": "identical body text after whitespace/lowercase normalization"
+    },
+    {
+      "scope": "weccl_raw",
+      "kind": "exact_duplicate_text",
+      "members": "WARG1418,WARG1808",
+      "n": 2,
+      "detail": "identical body text after whitespace/lowercase normalization"
+    },
+    {
+      "scope": "weccl_raw",
+      "kind": "exact_duplicate_text",
+      "members": "WARG2825,WARG3683",
+      "n": 2,
+      "detail": "identical body text after whitespace/lowercase normalization"
+    },
+    {
+      "scope": "weccl_raw",
+      "kind": "exact_duplicate_text",
+      "members": "WARG3763,WARG4621",
+      "n": 2,
+      "detail": "identical body text after whitespace/lowercase normalization"
+    },
+    {
+      "scope": "weccl_raw",
+      "kind": "exact_duplicate_text",
+      "members": "WARG2258,WARG3660",
+      "n": 2,
+      "detail": "identical body text after whitespace/lowercase normalization"
+    },
+    {
+      "scope": "weccl_raw",
+      "kind": "exact_duplicate_text",
+      "members": "WARG2726,WARG4128",
+      "n": 2,
+      "detail": "identical body text after whitespace/lowercase normalization"
+    },
+    {
+      "scope": "weccl_raw",
+      "kind": "exact_duplicate_text",
+      "members": "WARG2731,WARG2809",
+      "n": 2,
+      "detail": "identical body text after whitespace/lowercase normalization"
+    },
+    {
+      "scope": "weccl_raw",
+      "kind": "exact_duplicate_text",
+      "members": "WARG3295,WARG4153",
+      "n": 2,
+      "detail": "identical body text after whitespace/lowercase normalization"
+    },
+    {
+      "scope": "weccl_raw",
+      "kind": "exact_duplicate_text",
+      "members": "WARG0384,WARG3662",
+      "n": 2,
+      "detail": "identical body text after whitespace/lowercase normalization"
+    },
+    {
+      "scope": "weccl_raw",
+      "kind": "exact_duplicate_text",
+      "members": "WARG0485,WARG1343",
+      "n": 2,
+      "detail": "identical body text after whitespace/lowercase normalization"
+    },
+    {
+      "scope": "weccl_raw",
+      "kind": "exact_duplicate_text",
+      "members": "WARG0474,WARG0864",
+      "n": 2,
+      "detail": "identical body text after whitespace/lowercase normalization"
+    },
+    {
+      "scope": "weccl_raw",
+      "kind": "exact_duplicate_text",
+      "members": "WARG0475,WARG0865",
+      "n": 2,
+      "detail": "identical body text after whitespace/lowercase normalization"
+    },
+    {
+      "scope": "weccl_raw",
+      "kind": "exact_duplicate_text",
+      "members": "WARG0852,WARG4129",
+      "n": 2,
+      "detail": "identical body text after whitespace/lowercase normalization"
+    },
+    {
+      "scope": "weccl_raw",
+      "kind": "exact_duplicate_text",
+      "members": "WARG3199,WARG3277",
+      "n": 2,
+      "detail": "identical body text after whitespace/lowercase normalization"
+    },
+    {
+      "scope": "weccl_raw",
+      "kind": "exact_duplicate_text",
+      "members": "WARG1411,WARG1801",
+      "n": 2,
+      "detail": "identical body text after whitespace/lowercase normalization"
+    },
+    {
+      "scope": "weccl_raw",
+      "kind": "exact_duplicate_text",
+      "members": "WARG0011,WARG0401",
+      "n": 2,
+      "detail": "identical body text after whitespace/lowercase normalization"
+    }
+  ]
+}

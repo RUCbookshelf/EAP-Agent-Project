@@ -1,0 +1,88 @@
+{
+  "weccl_manifest_rows": 4950,
+  "seccl_manifest_rows": 2852,
+  "header_issue_count": 0,
+  "header_issues": [],
+  "dimensions": [
+    {
+      "dimension": "genre",
+      "populated_n": 4950,
+      "total_n": 4950,
+      "coverage_pct": 100.0,
+      "distinct_values": 2,
+      "values": "{\"argumentative\": 4680, \"expository\": 270}"
+    },
+    {
+      "dimension": "prompt_id",
+      "populated_n": 4950,
+      "total_n": 4950,
+      "coverage_pct": 100.0,
+      "distinct_values": 27,
+      "values": "{\"ARG01\": 133, \"ARG02\": 426, \"ARG03\": 87, \"ARG04\": 239, \"ARG05\": 192, \"ARG06\": 127, \"ARG07\": 177, \"ARG08\": 214, \"ARG09\": 154, \"ARG10\": 256, \"ARG11\": 156, \"ARG12\": 108, \"ARG13\": 14, \"ARG14\": 136, \"ARG15\": 126, \"ARG16\": 66, \"ARG17\": 656, \"ARG18\": 43, \"ARG19\": 18, \"ARG20\": 32, \"ARG21\": 157, \"ARG22\": 165, \"ARG23\": 391, \"ARG24\": 89, \"ARG25\": 99, \"ARG26\": 419, \"EXP01\": 270}"
+    },
+    {
+      "dimension": "major_type",
+      "populated_n": 4950,
+      "total_n": 4950,
+      "coverage_pct": 100.0,
+      "distinct_values": 2,
+      "values": "{\"english_major\": 4359, \"non_english_major\": 591}"
+    },
+    {
+      "dimension": "entry_year",
+      "populated_n": 4950,
+      "total_n": 4950,
+      "coverage_pct": 100.0,
+      "distinct_values": 5,
+      "values": "{\"2003\": 68, \"2004\": 307, \"2005\": 1672, \"2006\": 2450, \"2007\": 453}"
+    },
+    {
+      "dimension": "grade",
+      "populated_n": 4950,
+      "total_n": 4950,
+      "coverage_pct": 100.0,
+      "distinct_values": 4,
+      "values": "{\"1\": 1549, \"2\": 2172, \"3\": 1108, \"4\": 121}"
+    },
+    {
+      "dimension": "timed_status",
+      "populated_n": 4950,
+      "total_n": 4950,
+      "coverage_pct": 100.0,
+      "distinct_values": 2,
+      "values": "{\"timed\": 2499, \"untimed\": 2451}"
+    },
+    {
+      "dimension": "seccl_exam",
+      "populated_n": 2852,
+      "total_n": 2852,
+      "coverage_pct": 100.0,
+      "distinct_values": 1,
+      "values": "{\"TEM4\": 2852}"
+    },
+    {
+      "dimension": "seccl_task_folder",
+      "populated_n": 2852,
+      "total_n": 2852,
+      "coverage_pct": 100.0,
+      "distinct_values": 4,
+      "values": "{\"TASK1\": 713, \"TASK123\": 713, \"TASK2\": 713, \"TASK3\": 713}"
+    },
+    {
+      "dimension": "seccl_year_folder",
+      "populated_n": 2852,
+      "total_n": 2852,
+      "coverage_pct": 100.0,
+      "distinct_values": 4,
+      "values": "{\"2003\": 644, \"2004\": 732, \"2005\": 744, \"2006\": 732}"
+    },
+    {
+      "dimension": "seccl_metadata_status",
+      "populated_n": 2852,
+      "total_n": 2852,
+      "coverage_pct": 100.0,
+      "distinct_values": 1,
+      "values": "{\"parsed\": 2852}"
+    }
+  ]
+}

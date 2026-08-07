@@ -1,0 +1,120 @@
+{
+  "usable_logical_texts": 4950,
+  "physical_raw_tokens_total": 1248026,
+  "documentation_total_texts": 4950,
+  "documentation_total_tokens": 1248476,
+  "n_mismatches": [],
+  "token_mismatch_count": 41,
+  "token_mismatch_sample": [
+    {
+      "dimension": "total",
+      "value": "all",
+      "doc_n": 4950,
+      "physical_n": 4950,
+      "n_status": "MATCH",
+      "doc_tokens": 1248476,
+      "physical_tokens": 1248026,
+      "token_status": "MISMATCH",
+      "note": "token counts use different counters (manual: WordSmith 5.0; physical: whitespace split, header excluded)"
+    },
+    {
+      "dimension": "genre",
+      "value": "argumentative",
+      "doc_n": 4680,
+      "physical_n": 4680,
+      "n_status": "MATCH",
+      "doc_tokens": 1207968,
+      "physical_tokens": 1207778,
+      "token_status": "MISMATCH",
+      "note": "token counts use different counters (manual: WordSmith 5.0; physical: whitespace split, header excluded)"
+    },
+    {
+      "dimension": "genre",
+      "value": "expository",
+      "doc_n": 270,
+      "physical_n": 270,
+      "n_status": "MATCH",
+      "doc_tokens": 40508,
+      "physical_tokens": 40248,
+      "token_status": "MISMATCH",
+      "note": "token counts use different counters (manual: WordSmith 5.0; physical: whitespace split, header excluded)"
+    },
+    {
+      "dimension": "major_type",
+      "value": "english_major",
+      "doc_n": 4359,
+      "physical_n": 4359,
+      "n_status": "MATCH",
+      "doc_tokens": 1131901,
+      "physical_tokens": 1131467,
+      "token_status": "MISMATCH",
+      "note": "token counts use different counters (manual: WordSmith 5.0; physical: whitespace split, header excluded)"
+    },
+    {
+      "dimension": "major_type",
+      "value": "non_english_major",
+      "doc_n": 591,
+      "physical_n": 591,
+      "n_status": "MATCH",
+      "doc_tokens": 116575,
+      "physical_tokens": 116559,
+      "token_status": "MISMATCH",
+      "note": "token counts use different counters (manual: WordSmith 5.0; physical: whitespace split, header excluded)"
+    },
+    {
+      "dimension": "entry_year",
+      "value": "2003",
+      "doc_n": 68,
+      "physical_n": 68,
+      "n_status": "MATCH",
+      "doc_tokens": 21517,
+      "physical_tokens": 21519,
+      "token_status": "MISMATCH",
+      "note": "token counts use different counters (manual: WordSmith 5.0; physical: whitespace split, header excluded)"
+    },
+    {
+      "dimension": "entry_year",
+      "value": "2004",
+      "doc_n": 307,
+      "physical_n": 307,
+      "n_status": "MATCH",
+      "doc_tokens": 89236,
+      "physical_tokens": 89240,
+      "token_status": "MISMATCH",
+      "note": "token counts use different counters (manual: WordSmith 5.0; physical: whitespace split, header excluded)"
+    },
+    {
+      "dimension": "entry_year",
+      "value": "2005",
+      "doc_n": 1672,
+      "physical_n": 1672,
+      "n_status": "MATCH",
+      "doc_tokens": 445769,
+      "physical_tokens": 445869,
+      "token_status": "MISMATCH",
+      "note": "token counts use different counters (manual: WordSmith 5.0; physical: whitespace split, header excluded)"
+    },
+    {
+      "dimension": "entry_year",
+      "value": "2006",
+      "doc_n": 2450,
+      "physical_n": 2450,
+      "n_status": "MATCH",
+      "doc_tokens": 602803,
+      "physical_tokens": 602242,
+      "token_status": "MISMATCH",
+      "note": "token counts use different counters (manual: WordSmith 5.0; physical: whitespace split, header excluded)"
+    },
+    {
+      "dimension": "entry_year",
+      "value": "2007",
+      "doc_n": 453,
+      "physical_n": 453,
+      "n_status": "MATCH",
+      "doc_tokens": 89151,
+      "physical_tokens": 89156,
+      "token_status": "MISMATCH",
+      "note": "token counts use different counters (manual: WordSmith 5.0; physical: whitespace split, header excluded)"
+    }
+  ]
+}

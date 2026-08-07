@@ -1,0 +1,512 @@
+﻿document_id,prompt_id,genre,protection_reason,protection_status
+WARG0004,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0006,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0008,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0011,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0013,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0014,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0015,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0017,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0018,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0019,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0378,ARG04,argumentative,duplicate-group member,CANDIDATE
+WARG0383,ARG23,argumentative,duplicate-group member,CANDIDATE
+WARG0384,ARG23,argumentative,duplicate-group member,CANDIDATE
+WARG0385,ARG23,argumentative,duplicate-group member,CANDIDATE
+WARG0391,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0394,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0396,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0398,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0401,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0403,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0404,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0405,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0406,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0407,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0470,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0473,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0474,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0475,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0479,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0480,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0482,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0484,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0485,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0487,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0665,ARG23,argumentative,duplicate-group member,CANDIDATE
+WARG0852,ARG21,argumentative,duplicate-group member,CANDIDATE
+WARG0854,ARG23,argumentative,duplicate-group member,CANDIDATE
+WARG0863,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0864,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0865,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0869,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0870,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0872,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0873,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0874,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0876,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0877,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0878,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0885,ARG02,argumentative,duplicate-group member,CANDIDATE
+WARG0938,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0941,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0945,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0949,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0950,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0953,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG0956,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG1127,ARG23,argumentative,duplicate-group member,CANDIDATE
+WARG1320,ARG21,argumentative,duplicate-group member,CANDIDATE
+WARG1321,ARG21,argumentative,duplicate-group member,CANDIDATE
+WARG1322,ARG23,argumentative,duplicate-group member,CANDIDATE
+WARG1328,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG1331,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG1335,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG1339,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG1340,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG1342,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG1343,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG1345,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG1408,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG1409,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG1411,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG1412,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG1413,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG1415,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG1416,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG1418,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG1421,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG1422,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG1423,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG1788,ARG23,argumentative,duplicate-group member,CANDIDATE
+WARG1790,ARG23,argumentative,duplicate-group member,CANDIDATE
+WARG1798,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG1799,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG1801,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG1802,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG1803,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG1805,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG1806,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG1808,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG1811,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG1814,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG1876,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG1879,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG1880,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG1884,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG1887,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG1888,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG1890,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2081,ARG23,argumentative,corrupt variant (raw/lemma NUL); tagged-only text,CANDIDATE
+WARG2255,ARG21,argumentative,duplicate-group member,CANDIDATE
+WARG2256,ARG23,argumentative,duplicate-group member,CANDIDATE
+WARG2257,ARG23,argumentative,duplicate-group member,CANDIDATE
+WARG2258,ARG23,argumentative,duplicate-group member,CANDIDATE
+WARG2263,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2266,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2269,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2270,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2274,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2279,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2280,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2281,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2341,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2343,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2344,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2346,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2347,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2348,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2352,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2354,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2358,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2723,ARG21,argumentative,duplicate-group member,CANDIDATE
+WARG2724,ARG23,argumentative,duplicate-group member,CANDIDATE
+WARG2725,ARG23,argumentative,duplicate-group member,CANDIDATE
+WARG2726,ARG21,argumentative,duplicate-group member,CANDIDATE
+WARG2731,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2733,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2734,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2736,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2737,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2738,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2742,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2744,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2745,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2746,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2748,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2809,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2811,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2814,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2816,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2817,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2818,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2819,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2820,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2821,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2822,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2825,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2826,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG2827,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3192,ARG23,argumentative,duplicate-group member,CANDIDATE
+WARG3193,ARG23,argumentative,duplicate-group member,CANDIDATE
+WARG3194,ARG23,argumentative,duplicate-group member,CANDIDATE
+WARG3199,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3201,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3204,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3206,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3207,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3208,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3209,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3210,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3211,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3212,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3216,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3277,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3278,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3279,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3280,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3283,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3284,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3286,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3287,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3290,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3291,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3292,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3293,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3294,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3295,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3659,ARG23,argumentative,duplicate-group member,CANDIDATE
+WARG3660,ARG23,argumentative,duplicate-group member,CANDIDATE
+WARG3661,ARG23,argumentative,duplicate-group member,CANDIDATE
+WARG3662,ARG23,argumentative,duplicate-group member,CANDIDATE
+WARG3667,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3668,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3669,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3670,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3673,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3674,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3676,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3677,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3680,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3683,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3684,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3685,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3693,ARG02,argumentative,duplicate-group member,CANDIDATE
+WARG3745,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3749,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3755,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3758,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3761,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3762,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG3763,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG4122,ARG04,argumentative,duplicate-group member,CANDIDATE
+WARG4127,ARG23,argumentative,duplicate-group member,CANDIDATE
+WARG4128,ARG21,argumentative,duplicate-group member,CANDIDATE
+WARG4129,ARG21,argumentative,duplicate-group member,CANDIDATE
+WARG4135,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG4139,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG4145,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG4148,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG4149,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG4150,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG4151,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG4152,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG4153,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG4213,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG4214,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG4215,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG4216,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG4217,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG4218,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG4219,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG4221,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG4225,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG4226,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG4227,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG4228,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG4229,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG4595,ARG23,argumentative,duplicate-group member,CANDIDATE
+WARG4596,ARG23,argumentative,duplicate-group member,CANDIDATE
+WARG4597,ARG21,argumentative,duplicate-group member,CANDIDATE
+WARG4598,ARG21,argumentative,duplicate-group member,CANDIDATE
+WARG4604,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG4605,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG4606,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG4607,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG4608,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG4609,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG4611,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG4615,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG4619,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG4620,ARG17,argumentative,duplicate-group member,CANDIDATE
+WARG4621,ARG17,argumentative,duplicate-group member,CANDIDATE
+WEXP0001,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0002,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0003,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0004,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0005,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0006,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0007,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0008,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0009,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0010,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0011,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0012,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0013,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0014,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0015,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0016,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0017,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0018,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0019,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0020,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0021,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0022,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0023,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0024,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0025,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0026,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0027,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0028,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0029,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0030,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0031,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0032,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0033,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0034,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0035,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0036,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0037,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0038,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0039,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0040,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0041,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0042,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0043,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0044,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0045,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0046,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0047,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0048,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0049,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0050,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0051,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0052,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0053,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0054,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0055,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0056,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0057,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0058,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0059,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0060,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0061,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0062,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0063,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0064,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0065,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0066,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0067,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0068,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0069,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0070,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0071,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0072,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0073,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0074,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0075,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0076,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0077,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0078,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0079,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0080,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0081,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0082,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0083,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0084,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0085,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0086,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0087,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0088,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0089,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0090,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0091,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0092,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0093,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0094,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0095,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0096,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0097,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0098,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0099,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0100,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0101,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0102,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0103,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0104,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0105,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0106,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0107,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0108,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0109,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0110,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0111,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0112,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0113,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0114,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0115,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0116,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0117,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0118,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0119,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0120,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0121,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0122,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0123,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0124,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0125,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0126,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0127,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0128,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0129,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0130,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0131,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0132,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0133,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0134,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0135,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0136,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0137,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0138,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0139,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0140,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0141,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0142,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0143,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0144,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0145,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0146,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0147,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0148,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0149,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0150,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0151,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0152,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0153,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0154,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0155,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0156,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0157,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0158,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0159,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0160,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0161,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0162,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0163,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0164,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0165,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0166,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0167,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0168,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0169,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0170,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0171,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0172,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0173,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0174,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0175,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0176,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0177,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0178,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0179,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0180,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0181,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0182,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0183,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0184,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0185,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0186,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0187,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0188,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0189,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0190,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0191,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0192,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0193,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0194,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0195,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0196,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0197,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0198,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0199,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0200,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0201,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0202,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0203,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0204,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0205,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0206,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0207,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0208,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0209,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0210,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0211,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0212,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0213,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0214,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0215,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0216,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0217,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0218,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0219,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0220,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0221,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0222,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0223,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0224,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0225,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0226,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0227,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0228,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0229,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0230,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0231,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0232,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0233,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0234,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0235,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0236,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0237,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0238,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0239,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0240,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0241,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0242,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0243,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0244,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0245,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0246,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0247,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0248,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0249,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0250,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0251,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0252,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0253,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0254,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0255,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0256,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0257,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0258,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0259,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0260,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0261,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0262,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0263,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0264,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0265,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0266,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0267,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0268,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0269,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE
+WEXP0270,EXP01,expository,scored expository subset (270 texts with rater scores) - high-value evaluation candidate,CANDIDATE

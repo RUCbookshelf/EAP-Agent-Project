@@ -1,0 +1,38 @@
+{
+  "partitioning_status": "no final partitions created (not justified before research design)",
+  "partitioning_constraints": [
+    "never place duplicate-group members in both dev and eval",
+    "never split same prompt across dev/eval without explicit prompt-matching design",
+    "same learner across texts cannot be identified from filenames (no learner ID in WECCL filenames) - repeated-text detection is the only proxy",
+    "scored expository texts must be treated as one protected block"
+  ],
+  "leakage_risks": [
+    {
+      "risk": "same_text_duplicate",
+      "detail": "240 documents in duplicate groups (byte/normalized-text level)"
+    },
+    {
+      "risk": "same_prompt_leakage",
+      "detail": "27 prompts; prompt-level splits required for prompt-controlled evaluation"
+    },
+    {
+      "risk": "corrupt_variant_usage",
+      "detail": "WARG2081 raw/lemma unusable; tagged-only"
+    },
+    {
+      "risk": "scored_data_contamination",
+      "detail": "270 expository texts carry human scores (exp.sav/exp.xls); using them as both reference and evaluation is circular"
+    },
+    {
+      "risk": "unknown_learner_identity",
+      "detail": "no learner ID in WECCL filenames; cannot guarantee same-learner isolation across documents"
+    }
+  ],
+  "stable_grouping_keys": [
+    "document_id",
+    "prompt_id",
+    "genre",
+    "duplicate_group_id (derived)"
+  ],
+  "holdout_candidate_count": 511
+}

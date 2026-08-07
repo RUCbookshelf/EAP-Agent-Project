@@ -1,0 +1,25 @@
+{
+  "total_documents": 4950,
+  "missing_variants": {},
+  "corrupt_variants": {
+    "raw": 1,
+    "lemma": 1
+  },
+  "header_mismatch_docs": [],
+  "tag_format_invalid_tokens": {},
+  "tag_format_low_docs": [],
+  "lemma_tab_artifact_files": [
+    "WARG2730",
+    "WARG4140"
+  ],
+  "token_ratio_stats": {
+    "n": 4949,
+    "min": 1.0,
+    "p1": 1.087,
+    "p5": 1.103,
+    "median": 1.142,
+    "p95": 1.189,
+    "max": 1.332
+  },
+  "token_ratio_outliers": []
+}

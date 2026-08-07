@@ -1,0 +1,31 @@
+{
+  "corpus_package_id": "sweccl2-weccl20-v0.1.0",
+  "source_corpus": "SWECCL 2.0 (Spoken and Written English Corpus of Chinese Learners 2.0)",
+  "source_version": "2.0 (ISBN 978-7-5600-8015-4; FLTRP 2008-12)",
+  "preparation_version": "0.1.0",
+  "physical_source_identity": {
+    "physical_root": "A:\\[Linguistics Data] Corpus\\SWECCL 2.0",
+    "inventory_snapshot": "docs/corpus-readiness/sweccl2/data/physical_inventory_discovery_snapshot.csv",
+    "source_file_count_at_discovery": 19858,
+    "note": "manual PDF was present at discovery (recorded in snapshot); relocated out of the root afterwards"
+  },
+  "source_file_count": 19858,
+  "usable_logical_text_count": 4950,
+  "usable_variants": {
+    "raw": 4949,
+    "lemma": 4949,
+    "tagged": 4950
+  },
+  "manifest_hash": "0d8940ff84613807c11c0e492c61fb8d39fc1152a386061f9711a41487659eb9",
+  "processing_tool_version": "corpus_readiness pipeline 0.1.0 (python 3.12.13, charset_normalizer)",
+  "creation_timestamp": "2026-08-07T06:50:39.279129+00:00",
+  "known_limitations": [
+    "WARG2081 RAW/LEMMA variants are all-NUL corrupt; TAGGED variant usable",
+    "TEM8 (TEM8 folder, documented 916 files) not present in this physical copy",
+    "manual PDF relocated out of corpus root after discovery; hash preserved in discovery snapshot",
+    "token totals differ from manual by <=0.1% due to counting tool differences",
+    "240 documents appear in duplicate groups (exact/normalized text level)",
+    "2 LEMMA files contain TreeTagger tab artifacts from Chinese characters"
+  ],
+  "license_status": "PARTIALLY_DOCUMENTED; external use REQUIRES_REVIEW"
+}

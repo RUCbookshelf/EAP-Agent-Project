@@ -1,0 +1,24 @@
+{
+  "feature_count": 10,
+  "status_counts": {
+    "READY": 4,
+    "PROMISING": 4,
+    "REQUIRES_VALIDATION": 2
+  },
+  "priority_shortlist": [
+    "F-LEX-LENGTH",
+    "F-LEX-DIVERSITY",
+    "F-LEX-PHRASEOLOGY",
+    "F-SYN-LENGTH",
+    "F-SYN-POS",
+    "F-SYN-SUBORD",
+    "F-DISC-CONNECTIVES",
+    "F-DISC-STANCE"
+  ],
+  "requires_validation": [
+    "F-LEX-FREQ",
+    "F-DISC-COHESION"
+  ],
+  "not_supported": [],
+  "note": "shortlist is evidence-based candidate design; final feature set is a domain/CALF decision"
+}

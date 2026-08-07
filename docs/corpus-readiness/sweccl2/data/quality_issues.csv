@@ -1,0 +1,91 @@
+﻿relative_path,issue_type,severity,detail
+WECCL20/LEMMA/WARG2081.txt,all_nul_bytes,high,2150 NUL bytes
+WECCL20/RAW/WARG2081.txt,all_nul_bytes,high,2157 NUL bytes
+WECCL20/RAW/WARG2081.txt,extremely_short_text,candidate,1 tokens
+WECCL20 (RAW vs LEMMA),variant_identical_bytes,candidate,1 documents where LEMMA byte-identical to RAW: WARG3437
+WECCL20/LEMMA/WARG0099.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/LEMMA/WARG0203.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/LEMMA/WARG0439.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/LEMMA/WARG0441.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/LEMMA/WARG0476.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/LEMMA/WARG0545.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/LEMMA/WARG0739.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/LEMMA/WARG0946.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/LEMMA/WARG1096.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/LEMMA/WARG1281.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/LEMMA/WARG1391.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/LEMMA/WARG1496.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/LEMMA/WARG1516.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/LEMMA/WARG1946.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/LEMMA/WARG2008.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/LEMMA/WARG2039.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/LEMMA/WARG2247.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/LEMMA/WARG2433.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/LEMMA/WARG2730.txt,non_ascii_learner_content,info,encoding=cp1250; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/LEMMA/WARG2788.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/LEMMA/WARG2815.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/LEMMA/WARG2857.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/LEMMA/WARG3073.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/LEMMA/WARG3190.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/LEMMA/WARG3256.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/LEMMA/WARG3281.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/LEMMA/WARG3285.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/LEMMA/WARG3541.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/LEMMA/WARG3610.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/LEMMA/WARG4140.txt,non_ascii_learner_content,info,encoding=cp1250; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/LEMMA/WARG4224.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/LEMMA/WARG4464.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/LEMMA/WARG4486.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/LEMMA/WARG4594.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/LEMMA/WEXP0007.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/LEMMA/WEXP0089.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/LEMMA/WEXP0124.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/RAW/WARG0099.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/RAW/WARG0203.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/RAW/WARG0439.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/RAW/WARG0441.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/RAW/WARG0476.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/RAW/WARG0545.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/RAW/WARG0739.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/RAW/WARG0946.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/RAW/WARG1096.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/RAW/WARG1281.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/RAW/WARG1391.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/RAW/WARG1496.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/RAW/WARG1516.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/RAW/WARG1946.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/RAW/WARG2008.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/RAW/WARG2039.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/RAW/WARG2247.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/RAW/WARG2433.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/RAW/WARG2730.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/RAW/WARG2788.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/RAW/WARG2815.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/RAW/WARG2857.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/RAW/WARG3073.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/RAW/WARG3190.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/RAW/WARG3256.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/RAW/WARG3281.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/RAW/WARG3285.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/RAW/WARG3541.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/RAW/WARG3610.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/RAW/WARG4140.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/RAW/WARG4224.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/RAW/WARG4464.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/RAW/WARG4486.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/RAW/WARG4594.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/RAW/WEXP0007.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/RAW/WEXP0089.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+WECCL20/RAW/WEXP0124.txt,non_ascii_learner_content,info,encoding=gbk; contains non-ASCII chars (Chinese/fullwidth/punctuation) typed by learner
+SECCL20/TEXTS/TASK123/2004/04-110/04-110-04A.txt,chinese_annotator_note_in_transcript,info,"3 CJK chars; transcriber annotations embedded in transcript (e.g., notes like '未录完')"
+SECCL20/TEXTS/TASK123/2004/04-128/04-128-22B.txt,chinese_annotator_note_in_transcript,info,"2 CJK chars; transcriber annotations embedded in transcript (e.g., notes like '未录完')"
+SECCL20/TEXTS/TASK123/2005/05-010/05-010-19A.txt,chinese_annotator_note_in_transcript,info,"8 CJK chars; transcriber annotations embedded in transcript (e.g., notes like '未录完')"
+SECCL20/TEXTS/TASK123/2005/05-010/05-010-25B.txt,chinese_annotator_note_in_transcript,info,"3 CJK chars; transcriber annotations embedded in transcript (e.g., notes like '未录完')"
+SECCL20/TEXTS/TASK123/2005/05-023/05-023-02B.txt,chinese_annotator_note_in_transcript,info,"2 CJK chars; transcriber annotations embedded in transcript (e.g., notes like '未录完')"
+SECCL20/TEXTS/TASK123/2006/06-007/06-007-07A.txt,chinese_annotator_note_in_transcript,info,"5 CJK chars; transcriber annotations embedded in transcript (e.g., notes like '未录完')"
+SECCL20/TEXTS/TASK2/2006/06-007/06-007-07A.txt,chinese_annotator_note_in_transcript,info,"5 CJK chars; transcriber annotations embedded in transcript (e.g., notes like '未录完')"
+SECCL20/TEXTS/TASK3/2004/04-110/04-110-04A.txt,chinese_annotator_note_in_transcript,info,"3 CJK chars; transcriber annotations embedded in transcript (e.g., notes like '未录完')"
+SECCL20/TEXTS/TASK3/2004/04-128/04-128-22B.txt,chinese_annotator_note_in_transcript,info,"2 CJK chars; transcriber annotations embedded in transcript (e.g., notes like '未录完')"
+SECCL20/TEXTS/TASK3/2005/05-010/05-010-19A.txt,chinese_annotator_note_in_transcript,info,"8 CJK chars; transcriber annotations embedded in transcript (e.g., notes like '未录完')"
+SECCL20/TEXTS/TASK3/2005/05-010/05-010-25B.txt,chinese_annotator_note_in_transcript,info,"3 CJK chars; transcriber annotations embedded in transcript (e.g., notes like '未录完')"
+SECCL20/TEXTS/TASK3/2005/05-023/05-023-02B.txt,chinese_annotator_note_in_transcript,info,"2 CJK chars; transcriber annotations embedded in transcript (e.g., notes like '未录完')"

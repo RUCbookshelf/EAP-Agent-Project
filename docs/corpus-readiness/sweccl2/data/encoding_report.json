@@ -1,0 +1,173 @@
+{
+  "derived_root": "A:\\[Linguistics Data] Corpus\\SWECCL 2.0\\PREPARED\\utf8",
+  "text_files": 17703,
+  "decoded_ok": 17703,
+  "needs_review": 0,
+  "encoding_counts": {
+    "ascii": 17600,
+    "cp1250": 2,
+    "gbk": 101
+  },
+  "newline_profiles": {
+    "crlf=1,lf=0,cr=0": 5645,
+    "crlf=3,lf=0,cr=0": 1588,
+    "crlf=5,lf=0,cr=0": 1406,
+    "crlf=4,lf=0,cr=0": 1088,
+    "crlf=6,lf=0,cr=0": 909,
+    "crlf=16,lf=0,cr=0": 431,
+    "crlf=17,lf=0,cr=0": 418,
+    "crlf=15,lf=0,cr=0": 416,
+    "crlf=18,lf=0,cr=0": 398,
+    "crlf=7,lf=0,cr=0": 391,
+    "crlf=14,lf=0,cr=0": 385,
+    "crlf=19,lf=0,cr=0": 365,
+    "crlf=20,lf=0,cr=0": 353,
+    "crlf=13,lf=0,cr=0": 335,
+    "crlf=21,lf=0,cr=0": 307,
+    "crlf=22,lf=0,cr=0": 287,
+    "crlf=12,lf=0,cr=0": 277,
+    "crlf=23,lf=0,cr=0": 259,
+    "crlf=24,lf=0,cr=0": 241,
+    "crlf=11,lf=0,cr=0": 213,
+    "crlf=8,lf=0,cr=0": 211,
+    "crlf=10,lf=0,cr=0": 201,
+    "crlf=25,lf=0,cr=0": 188,
+    "crlf=9,lf=0,cr=0": 182,
+    "crlf=2,lf=0,cr=0": 179,
+    "crlf=26,lf=0,cr=0": 170,
+    "crlf=27,lf=0,cr=0": 133,
+    "crlf=28,lf=0,cr=0": 119,
+    "crlf=30,lf=0,cr=0": 83,
+    "crlf=29,lf=0,cr=0": 74,
+    "crlf=31,lf=0,cr=0": 71,
+    "crlf=32,lf=0,cr=0": 65,
+    "crlf=33,lf=0,cr=0": 55,
+    "crlf=34,lf=0,cr=0": 50,
+    "crlf=35,lf=0,cr=0": 31,
+    "crlf=36,lf=0,cr=0": 31,
+    "crlf=38,lf=0,cr=0": 29,
+    "crlf=37,lf=0,cr=0": 20,
+    "crlf=39,lf=0,cr=0": 15,
+    "crlf=40,lf=0,cr=0": 15,
+    "crlf=41,lf=0,cr=0": 13,
+    "crlf=48,lf=0,cr=0": 8,
+    "crlf=42,lf=0,cr=0": 7,
+    "crlf=43,lf=0,cr=0": 6,
+    "crlf=46,lf=0,cr=0": 4,
+    "crlf=44,lf=0,cr=0": 3,
+    "crlf=47,lf=0,cr=0": 3,
+    "crlf=45,lf=0,cr=0": 3,
+    "crlf=50,lf=0,cr=0": 3,
+    "crlf=57,lf=0,cr=0": 3,
+    "crlf=51,lf=0,cr=0": 2,
+    "crlf=52,lf=0,cr=0": 2,
+    "none": 2,
+    "crlf=53,lf=0,cr=0": 1,
+    "crlf=55,lf=0,cr=0": 1,
+    "crlf=61,lf=0,cr=0": 1,
+    "crlf=69,lf=0,cr=0": 1,
+    "crlf=95,lf=0,cr=0": 1,
+    "crlf=49,lf=0,cr=0": 1,
+    "crlf=54,lf=0,cr=0": 1,
+    "crlf=62,lf=0,cr=0": 1,
+    "crlf=65,lf=0,cr=0": 1,
+    "crlf=91,lf=0,cr=0": 1
+  },
+  "non_ascii_files_by_component": {
+    "seccl_texts": 29,
+    "weccl_lemma": 37,
+    "weccl_raw": 37
+  },
+  "sample_non_ascii_contexts": [
+    {
+      "relative_path": "SECCL20/TEXTS/TASK1/2003/03-160/03-160-29A.txt",
+      "encoding": "gbk",
+      "byte_offset": 1122,
+      "context_gbk": "ter her mother smiled and held the new baby, Jane ＿＿ said <thought that> her son's birth was a sweet thing.... And he "
+    },
+    {
+      "relative_path": "SECCL20/TEXTS/TASK1/2004/04-082/04-082-09B.txt",
+      "encoding": "gbk",
+      "byte_offset": 183,
+      "context_gbk": "m wanted to travel around the world, and... visit ＜wisit＞as many foreign places as she could when she was young. When "
+    },
+    {
+      "relative_path": "SECCL20/TEXTS/TASK1/2005/05-030/05-030-13A.txt",
+      "encoding": "gbk",
+      "byte_offset": 1321,
+      "context_gbk": "vantaged> to take the girl. Then a resident said: ＂er I can get... the advantaged because I have money, I can, I can bu"
+    },
+    {
+      "relative_path": "SECCL20/TEXTS/TASK123/2003/03-168/03-168-06A.txt",
+      "encoding": "gbk",
+      "byte_offset": 1870,
+      "context_gbk": ". One day we get together at the coffee at the café, where we take where we took pictures and talked for a long time. W"
+    },
+    {
+      "relative_path": "SECCL20/TEXTS/TASK123/2003/03-168/03-168-13A.txt",
+      "encoding": "gbk",
+      "byte_offset": 3357,
+      "context_gbk": " in German Germany. I think that in the World War Ⅱ, some Jews has some Jews said in the under the evil of the Nazi Ger"
+    },
+    {
+      "relative_path": "SECCL20/TEXTS/TASK123/2004/04-082/04-082-09B.txt",
+      "encoding": "gbk",
+      "byte_offset": 183,
+      "context_gbk": "m wanted to travel around the world, and... visit ＜wisit＞as many foreign places as she could when she was young. When "
+    },
+    {
+      "relative_path": "SECCL20/TEXTS/TASK123/2004/04-110/04-110-04A.txt",
+      "encoding": "gbk",
+      "byte_offset": 4925,
+      "context_gbk": "urden. But It, it can afford the tuition for our (未录完)\r\n"
+    },
+    {
+      "relative_path": "SECCL20/TEXTS/TASK123/2004/04-110/04-110-16A.txt",
+      "encoding": "gbk",
+      "byte_offset": 3277,
+      "context_gbk": "bill.\" I wondered. \"Er, yes, sir, er, the cost is ￥1980.\" \"What?\" I got very sur... surprised, and suddenly I realized "
+    },
+    {
+      "relative_path": "SECCL20/TEXTS/TASK123/2004/04-128/04-128-22B.txt",
+      "encoding": "gbk",
+      "byte_offset": 6255,
+      "context_gbk": "or our... for our expense er ev ordinary expense <这样> not tuition. <B: Yeah.> I think <B: Yes.> my pa my med parents i"
+    },
+    {
+      "relative_path": "SECCL20/TEXTS/TASK123/2005/05-010/05-010-19A.txt",
+      "encoding": "gbk",
+      "byte_offset": 4614,
+      "context_gbk": "he university, B: you have made <make> a mistake. 以下AB全反\r\nB: Oh, I'm, I'm sorry, I made <make> a mistake. But what's"
+    },
+    {
+      "relative_path": "SECCL20/TEXTS/TASK123/2005/05-010/05-010-25B.txt",
+      "encoding": "gbk",
+      "byte_offset": 5503,
+      "context_gbk": "e with the peoples you can learn a lot, you know. 以下AB反\r\nA: No, in, in any hotel bellboys are in the lowest level, le"
+    },
+    {
+      "relative_path": "SECCL20/TEXTS/TASK123/2005/05-023/05-023-02B.txt",
+      "encoding": "gbk",
+      "byte_offset": 2797,
+      "context_gbk": "is work can help us learn a lot of knowledge with 那个out of school.\r\nA: But as a at a hotel's bellboy, it's not so perf"
+    },
+    {
+      "relative_path": "SECCL20/TEXTS/TASK123/2005/05-023/05-023-10A.txt",
+      "encoding": "gbk",
+      "byte_offset": 4461,
+      "context_gbk": "sn't and will not add to your experience.\r\nB: ... ┅ Oh, no, I don't think so. At <and> last, you can, you can know many"
+    },
+    {
+      "relative_path": "SECCL20/TEXTS/TASK123/2005/05-030/05-030-11A.txt",
+      "encoding": "gbk",
+      "byte_offset": 4587,
+      "context_gbk": "t entering the university. er That's a way of time、money and energy.\r\nB: En, to some degree you are right, but nowaday "
+    },
+    {
+      "relative_path": "SECCL20/TEXTS/TASK123/2005/05-030/05-030-13A.txt",
+      "encoding": "gbk",
+      "byte_offset": 1321,
+      "context_gbk": "vantaged> to take the girl. Then a resident said: ＂er I can get... the advantaged because I have money, I can, I can bu"
+    }
+  ]
+}

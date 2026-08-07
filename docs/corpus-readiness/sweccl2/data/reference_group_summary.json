@@ -1,0 +1,17 @@
+{
+  "min_n_criterion": 30,
+  "criterion_note": "conservative preparation criterion only; final policy is a Researcher decision",
+  "candidate_count": 42,
+  "status_counts": {
+    "READY_FOR_VALIDATION": 33,
+    "PROMISING": 7,
+    "TOO_SPARSE": 2
+  },
+  "duplicate_touched_stems": 241,
+  "fallback_hierarchy": [
+    "same prompt/task",
+    "same genre + writing condition",
+    "broader argumentative corpus",
+    "UNAVAILABLE"
+  ]
+}
