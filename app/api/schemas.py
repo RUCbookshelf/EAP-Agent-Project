@@ -194,4 +194,3 @@ class LearnerModelBuildRequest(BaseModel):
         "final_or_latest", "first_draft_only", "latest_draft_only", "all_drafts_research_mode",
     ] = "final_or_latest"
     max_submissions: int = Field(default=200, ge=1, le=200)
-

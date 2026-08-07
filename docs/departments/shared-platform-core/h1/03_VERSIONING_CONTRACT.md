@@ -1,7 +1,7 @@
 # 03 -- Versioning Contract (D-29 Scope)
 
-> **Document owner:** shared-platform-core department  
-> **Baseline:** v0.9.7-D single-sourcing integration  
+> **Document owner:** shared-platform-core department
+> **Baseline:** v0.9.7-D single-sourcing integration
 > **Status:** D-29 scope (app/package/API identity only)
 
 ## Purpose
