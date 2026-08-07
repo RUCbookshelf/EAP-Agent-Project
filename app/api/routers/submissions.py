@@ -14,6 +14,11 @@ from app.api.schemas import (
     SubmissionRecordResponse,
     SubmissionResponse,
 )
+from app.domain.attribution import (
+    AdvisoryValidation,
+    derive_attribution,
+    validate_advisory,
+)
 
 router = APIRouter()
 
@@ -23,6 +28,18 @@ def create_submission(
     payload: SubmissionCreateRequest,
     submission_service=Depends(get_submission_service),
 ) -> SubmissionResponse:
+    # Server-side domain/language derivation (D-21, D-36).
+    attribution = derive_attribution()
+
+    # Advisory validation: mismatch or invalid -> 422.
+    advisory_result: AdvisoryValidation = validate_advisory(
+        payload.advisory_domain,
+        payload.advisory_language,
+        attribution,
+    )
+    if not advisory_result.ok:
+        raise HTTPException(422, detail=advisory_result.reason) from None
+
     try:
         result = submission_service.submit(payload)
     except LookupError as exc:
@@ -39,6 +56,11 @@ def create_submission(
         revision_group_summary=result.revision_group_summary,
         within_task_revision_trajectory=result.within_task_revision_trajectory,
         ui_empty_states=result.ui_empty_states,
+        # Server-derived attribution fields.
+        domain=attribution.domain.value,
+        language=attribution.language.value,
+        domain_attribution_rule=attribution.rule_id,
+        domain_attribution_version=attribution.rule_version,
     )
 
 
