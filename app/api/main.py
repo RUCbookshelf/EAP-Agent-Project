@@ -20,6 +20,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
 from app.analysis import default_metric_registry
+from app.api.routers import system
 from app.api.routers import (
     admin,
     analysis,
@@ -30,7 +31,6 @@ from app.api.routers import (
     revisions,
     students,
     submissions,
-    system,
 )
 from app.config import Settings, load_settings
 from app.version import PLATFORM_APPLICATION_VERSION
@@ -56,8 +56,12 @@ from app.services import (
 from app.services.factory import build_analyzer
 
 
+# ---------------------------------------------------------------------------
+# Router constants
+# ---------------------------------------------------------------------------
+
 # Business routers are included after the system router in both the production
-# startup stage and the test/app-factory builder. The order mirrors the
+# startup stage and the test/app-factory builder.  The order mirrors the
 # pre-v0.9.5-B production registration order.
 _BUSINESS_ROUTERS = (
     submissions,
@@ -77,6 +81,10 @@ def _include_business_routers(api: FastAPI) -> None:
         api.include_router(router_module.router)
 
 
+# ---------------------------------------------------------------------------
+# Lifecycle helpers
+# ---------------------------------------------------------------------------
+
 def _apply_analyzer_lifecycle(settings: Settings, analyzer) -> None:
     """Populate lifecycle analyzer/NLP facts (shared by startup and test builder)."""
     lifecycle.active_analyzer = getattr(analyzer, "active_analyzer", "basic")
@@ -89,13 +97,181 @@ def _apply_analyzer_lifecycle(settings: Settings, analyzer) -> None:
     lifecycle.analyzer_fallback_active = getattr(analyzer, "fallback_active", False)
 
 
-def _run_startup(api: FastAPI) -> None:
-    """Run initialization stages in a background thread.
+# ---------------------------------------------------------------------------
+# Single composition root: _build_services
+# ---------------------------------------------------------------------------
 
-    Runs inside a daemon thread spawned by the lifespan so the ASGI server
-    can serve lifecycle endpoints (/live, /ready, /health) while heavy
-    initialization (spaCy, database, services) is still in progress.
+def _build_services(
+    settings: Settings,
+    *,
+    repository: Database | None = None,
+    submission_service: SubmissionService | None = None,
+) -> dict:
+    """Single parameterized service-graph builder.
+
+    Called by both the production lifespan startup and the test immediate
+    builder to avoid duplicated construction.  Returns a dict containing
+    every service reference that must be assigned to ``api.state.*``.
     """
+    # Repository
+    if repository is None:
+        repository = Database(settings.database_path)
+    repository.initialize()
+
+    # Analyzer
+    analyzer = build_analyzer(settings)
+    _apply_analyzer_lifecycle(settings, analyzer)
+
+    # Services
+    if submission_service is None:
+        submission_service = build_submission_service(
+            settings,
+            system_repository=repository._system_repository,
+            submission_repository=repository._submission_repository,
+            analysis_repository=repository._analysis_repository,
+            calibration_repository=repository._calf_repository,
+            learner_repository=repository._learner_repository,
+            configuration_repository=repository._configuration_repository,
+            revision_repository=repository._revision_repository,
+        )
+
+    learner_repository = repository._learner_repository
+    configuration_repository = repository._configuration_repository
+
+    lps = LearnerProfileService(
+        repository=learner_repository,
+        progress_service=ProgressService(
+            learner_repository=learner_repository,
+            configuration_repository=configuration_repository,
+        ),
+    )
+    m_registry = default_metric_registry()
+    cfgs = ConfigurationService(configuration_repository, analyzer.registry, m_registry)
+    dbs = DashboardService(
+        learner_repository,
+        m_registry,
+        ProgressService(
+            learner_repository=learner_repository,
+            configuration_repository=configuration_repository,
+        ),
+    )
+    reanalysis_svc = ReanalysisService(
+        repository._submission_repository,
+        repository._analysis_repository,
+        analyzer,
+    )
+    journey_svc = JourneyService(
+        repository._learner_repository,
+        repository._practice_repository,
+    )
+    rvs = RevisionService(repository=repository._revision_repository)
+    clf = CalfService(
+        calf_repository=repository._calf_repository,
+        submission_reader=repository._submission_repository,
+        analysis_reader=repository._analysis_repository,
+        student_reader=repository._learner_repository,
+    )
+    research_svc = ResearchDataService(
+        submission_reader=repository._submission_repository,
+        review_repository=repository._research_repository,
+        export_reader=repository._research_repository,
+    )
+
+    # Lifecycle metadata
+    lifecycle.application_version = settings.application_version
+    lifecycle.prompt_version = settings.prompt_version
+    lifecycle.llm_provider = settings.llm_provider
+    lifecycle.llm_api_configured = (
+        bool(settings.deepseek_api_key)
+        if settings.llm_provider == "deepseek"
+        else False
+    )
+    try:
+        active_cfg = configuration_repository.get_active_configuration()
+        lifecycle.active_configuration = active_cfg.version
+    except RuntimeError:
+        lifecycle.active_configuration = None
+
+    lifecycle.database_status = "connected"
+    lifecycle.migration_version = repository._system_repository.migration_version()
+
+    return {
+        "settings": settings,
+        "repository": repository,
+        "analyzer": analyzer,
+        "submission_service": submission_service,
+        "learner_profiles": lps,
+        "metrics": m_registry,
+        "configurations": cfgs,
+        "dashboards": dbs,
+        "reanalysis": reanalysis_svc,
+        "journey": journey_svc,
+        "revisions": rvs,
+        "calf": clf,
+        "research": research_svc,
+    }
+
+
+def _apply_service_state(api: FastAPI, services: dict) -> None:
+    """Assign the service graph to api.state.* (single assignment point)."""
+    settings = services["settings"]
+    repository = services["repository"]
+    sub_svc = services["submission_service"]
+    api.state.settings = settings
+    api.state.repository = repository
+    api.state.submission_service = sub_svc
+    api.state.learner_profiles = services["learner_profiles"]
+    api.state.analyzer = services["analyzer"]
+    api.state.metrics = services["metrics"]
+    api.state.configurations = services["configurations"]
+    api.state.dashboards = services["dashboards"]
+    api.state.reanalysis = services["reanalysis"]
+    api.state.revisions = services["revisions"]
+    api.state.calf = services["calf"]
+    api.state.research = services["research"]
+    api.state.journey_service = services["journey"]
+    api.state.practice_submission_reader = repository._submission_repository
+    api.state.practice_reader = repository._practice_repository
+    api.state.practice_writer = repository._practice_repository
+    api.state.practice_student_reader = repository._learner_repository
+    api.state.practice_service = PracticeService()
+    api.state.practice_target_creation_service = PracticeTargetCreationService(
+        submission_reader=repository._submission_repository,
+        practice_reader=repository._practice_repository,
+        practice_writer=repository._practice_repository,
+        practice_service=PracticeService(),
+    )
+    api.state.practice_target_completion_service = PracticeTargetCompletionService(
+        practice_reader=repository._practice_repository,
+        practice_writer=repository._practice_repository,
+    )
+    api.state.submission_bundle_reader = repository._submission_repository
+    api.state.student_lookup = repository._learner_repository
+    api.state.analysis_runs_reader = repository._analysis_repository
+    api.state.calf_reader = repository._calf_repository
+    api.state.research_export_writer = repository._research_repository
+    api.state.student_submission_list = repository._submission_repository
+    api.state.revision_group_lookup = repository._revision_repository
+    api.state.student_learner_reader = repository._learner_repository
+    api.state.submission_calibration_reader = repository._calf_repository
+    api.state.system_migration_reader = repository._system_repository
+    api.state.admin_reanalysis = AdminReanalysisService(
+        settings=settings,
+        configuration_reader=repository._configuration_repository,
+        submission_reader=repository._submission_repository,
+        analysis_repository=repository._analysis_repository,
+        configurations=services["configurations"],
+        submission_service=sub_svc,
+        revision_repository=repository._revision_repository,
+    )
+
+
+# ---------------------------------------------------------------------------
+# Production path: _run_startup (background thread)
+# ---------------------------------------------------------------------------
+
+def _run_startup(api: FastAPI) -> None:
+    """Run initialization stages in a background thread (production path)."""
     import logging
     logger = logging.getLogger("writing_feedback.startup")
 
@@ -103,8 +279,6 @@ def _run_startup(api: FastAPI) -> None:
     stage = lifecycle.start_stage("load_settings")
     try:
         settings = load_settings()
-        lifecycle.application_version = settings.application_version
-        lifecycle.prompt_version = settings.prompt_version
         lifecycle.complete_stage(stage, success=True)
         logger.info("Stage load_settings: OK (%.0fms)", stage.elapsed_ms)
     except Exception as exc:
@@ -149,69 +323,10 @@ def _run_startup(api: FastAPI) -> None:
         logger.error("Stage build_analyzer: FAILED (%s)", type(exc).__name__)
         return
 
-    # Stage 4: Business services
+    # Stage 4: Business services -- single builder
     stage = lifecycle.start_stage("build_services")
     try:
-        learner_repository = repository._learner_repository
-        configuration_repository = repository._configuration_repository
-        sub_svc = build_submission_service(
-            settings,
-            system_repository=repository._system_repository,
-            submission_repository=repository._submission_repository,
-            analysis_repository=repository._analysis_repository,
-            calibration_repository=repository._calf_repository,
-            learner_repository=learner_repository,
-            configuration_repository=configuration_repository,
-            revision_repository=repository._revision_repository,
-        )
-        lps = LearnerProfileService(
-            repository=learner_repository,
-            progress_service=ProgressService(
-                learner_repository=learner_repository,
-                configuration_repository=configuration_repository,
-            ),
-        )
-        m_registry = default_metric_registry()
-        cfgs = ConfigurationService(configuration_repository, analyzer.registry, m_registry)
-        dbs = DashboardService(
-            learner_repository,
-            m_registry,
-            ProgressService(
-                learner_repository=learner_repository,
-                configuration_repository=configuration_repository,
-            ),
-        )
-        reanalysis_svc = ReanalysisService(
-            repository._submission_repository,
-            repository._analysis_repository,
-            analyzer,
-        )
-        journey_svc = JourneyService(
-            repository._learner_repository,
-            repository._practice_repository,
-        )
-        rvs = RevisionService(repository=repository._revision_repository)
-        clf = CalfService(
-            calf_repository=repository._calf_repository,
-            submission_reader=repository._submission_repository,
-            analysis_reader=repository._analysis_repository,
-            student_reader=repository._learner_repository,
-        )
-        research_svc = ResearchDataService(
-            submission_reader=repository._submission_repository,
-            review_repository=repository._research_repository,
-            export_reader=repository._research_repository,
-        )
-
-        lifecycle.llm_provider = settings.llm_provider
-        lifecycle.llm_api_configured = bool(settings.deepseek_api_key) if settings.llm_provider == "deepseek" else False
-
-        try:
-            active_cfg = repository._configuration_repository.get_active_configuration()
-            lifecycle.active_configuration = active_cfg.version
-        except RuntimeError:
-            lifecycle.active_configuration = None
-
+        svc = _build_services(settings, repository=repository)
         lifecycle.complete_stage(stage, success=True)
         logger.info("Stage build_services: OK (%.0fms)", stage.elapsed_ms)
     except Exception as exc:
@@ -228,54 +343,8 @@ def _run_startup(api: FastAPI) -> None:
         lifecycle.degraded_components.append("provider_unavailable")
         logger.warning("Optional provider unavailable: DeepSeek key missing; LocalDemo fallback active")
 
-    # Store on app state
-    api.state.settings = settings
-    api.state.repository = repository
-    api.state.submission_service = sub_svc
-    api.state.learner_profiles = lps
-    api.state.analyzer = analyzer
-    api.state.metrics = m_registry
-    api.state.configurations = cfgs
-    api.state.dashboards = dbs
-    api.state.reanalysis = reanalysis_svc
-    api.state.revisions = rvs
-    api.state.calf = clf
-    api.state.research = research_svc
-    api.state.journey_service = journey_svc
-    api.state.practice_submission_reader = repository._submission_repository
-    api.state.practice_reader = repository._practice_repository
-    api.state.practice_writer = repository._practice_repository
-    api.state.practice_student_reader = repository._learner_repository
-    api.state.practice_service = PracticeService()
-    api.state.practice_target_creation_service = PracticeTargetCreationService(
-        submission_reader=repository._submission_repository,
-        practice_reader=repository._practice_repository,
-        practice_writer=repository._practice_repository,
-        practice_service=PracticeService(),
-    )
-    api.state.practice_target_completion_service = PracticeTargetCompletionService(
-        practice_reader=repository._practice_repository,
-        practice_writer=repository._practice_repository,
-    )
-    api.state.submission_bundle_reader = repository._submission_repository
-    api.state.student_lookup = repository._learner_repository
-    api.state.analysis_runs_reader = repository._analysis_repository
-    api.state.calf_reader = repository._calf_repository
-    api.state.research_export_writer = repository._research_repository
-    api.state.student_submission_list = repository._submission_repository
-    api.state.revision_group_lookup = repository._revision_repository
-    api.state.student_learner_reader = repository._learner_repository
-    api.state.submission_calibration_reader = repository._calf_repository
-    api.state.system_migration_reader = repository._system_repository
-    api.state.admin_reanalysis = AdminReanalysisService(
-        settings=settings,
-        configuration_reader=repository._configuration_repository,
-        submission_reader=repository._submission_repository,
-        analysis_repository=repository._analysis_repository,
-        configurations=cfgs,
-        submission_service=sub_svc,
-        revision_repository=repository._revision_repository,
-    )
+    # Store on app state via shared assignment
+    _apply_service_state(api, svc)
 
     # Register feature routers (system router is already included at app creation)
     _include_business_routers(api)
@@ -289,6 +358,10 @@ def _run_startup(api: FastAPI) -> None:
         logger.info("Startup complete: ready total=%.0fms stages=%d",
                      lifecycle.startup_elapsed_ms, len(lifecycle.stages))
 
+
+# ---------------------------------------------------------------------------
+# Lifespan
+# ---------------------------------------------------------------------------
 
 @asynccontextmanager
 async def _lifespan(api: FastAPI):
@@ -305,6 +378,10 @@ async def _lifespan(api: FastAPI):
     yield
     lifecycle.transition(ServiceState.STOPPING)
 
+
+# ---------------------------------------------------------------------------
+# Middleware and error handlers
+# ---------------------------------------------------------------------------
 
 def _register_request_middleware(api: FastAPI) -> None:
     """Request-ID middleware: generate/accept a request ID, set response header,
@@ -376,135 +453,61 @@ def _register_error_handlers(api: FastAPI) -> None:
         return JSONResponse(status_code=500, content=err.to_public_dict(include_detail=True))
 
 
+# ---------------------------------------------------------------------------
+# Test/immediate path: _build_full_app
+# ---------------------------------------------------------------------------
+
 def _build_full_app(
     settings: Settings,
     *,
     repository: Database | None = None,
     submission_service: SubmissionService | None = None,
 ) -> FastAPI:
-    """Build a fully-initialized app immediately (used by tests)."""
+    """Build a fully-initialized app immediately (used by tests).
+
+    Delegates service construction to the shared _build_services builder
+    so both production and test paths resolve through a single root.
+    """
     if settings is None:
         settings = load_settings()
-    if repository is None:
-        repository = Database(settings.database_path)
-    repository.initialize()
-    learner_repository = repository._learner_repository
-    configuration_repository = repository._configuration_repository
-    if submission_service is None:
-        submission_service = build_submission_service(
-            settings,
-            system_repository=repository._system_repository,
-            submission_repository=repository._submission_repository,
-            analysis_repository=repository._analysis_repository,
-            calibration_repository=repository._calf_repository,
-            learner_repository=learner_repository,
-            configuration_repository=configuration_repository,
-            revision_repository=repository._revision_repository,
-        )
-    learner_profiles = LearnerProfileService(
-        repository=learner_repository,
-        progress_service=ProgressService(
-            learner_repository=learner_repository,
-            configuration_repository=configuration_repository,
-        ),
-    )
-    analyzer = submission_service.analyzer if hasattr(submission_service, "analyzer") else build_analyzer(settings)
-    metrics = default_metric_registry()
-    configurations = ConfigurationService(configuration_repository, analyzer.registry, metrics)
-    dashboards = DashboardService(
-        learner_repository,
-        metrics,
-        ProgressService(
-            learner_repository=learner_repository,
-            configuration_repository=configuration_repository,
-        ),
-    )
-    reanalysis = ReanalysisService(
-        repository._submission_repository,
-        repository._analysis_repository,
-        analyzer,
-    )
-    journey = JourneyService(
-        repository._learner_repository,
-        repository._practice_repository,
-    )
-    revisions = RevisionService(repository=repository._revision_repository)
-    calf = CalfService(
-        calf_repository=repository._calf_repository,
-        submission_reader=repository._submission_repository,
-        analysis_reader=repository._analysis_repository,
-        student_reader=repository._learner_repository,
-    )
-    research = ResearchDataService(
-        submission_reader=repository._submission_repository,
-        review_repository=repository._research_repository,
-        export_reader=repository._research_repository,
-    )
 
-    lifecycle.application_version = settings.application_version
-    lifecycle.prompt_version = settings.prompt_version
-    lifecycle.database_status = "connected"
-    lifecycle.migration_version = repository._system_repository.migration_version()
-    _apply_analyzer_lifecycle(settings, analyzer)
-    lifecycle.llm_provider = settings.llm_provider
-    lifecycle.llm_api_configured = bool(settings.deepseek_api_key) if settings.llm_provider == "deepseek" else False
+    svc = _build_services(settings, repository=repository, submission_service=submission_service)
+    services = dict(svc)
+
     lifecycle.transition(ServiceState.READY)
 
     api = FastAPI(title="Writing Feedback API", version=PLATFORM_APPLICATION_VERSION)
     _register_request_middleware(api)
     _register_error_handlers(api)
-    api.state.settings = settings
-    api.state.repository = repository
-    api.state.submission_service = submission_service
-    api.state.learner_profiles = learner_profiles
-    api.state.analyzer = analyzer
-    api.state.metrics = metrics
-    api.state.configurations = configurations
-    api.state.dashboards = dashboards
-    api.state.reanalysis = reanalysis
-    api.state.revisions = revisions
-    api.state.calf = calf
-    api.state.research = research
-    api.state.journey_service = journey
-    api.state.practice_submission_reader = repository._submission_repository
-    api.state.practice_reader = repository._practice_repository
-    api.state.practice_writer = repository._practice_repository
-    api.state.practice_student_reader = repository._learner_repository
-    api.state.practice_service = PracticeService()
-    api.state.practice_target_creation_service = PracticeTargetCreationService(
-        submission_reader=repository._submission_repository,
-        practice_reader=repository._practice_repository,
-        practice_writer=repository._practice_repository,
-        practice_service=PracticeService(),
-    )
-    api.state.practice_target_completion_service = PracticeTargetCompletionService(
-        practice_reader=repository._practice_repository,
-        practice_writer=repository._practice_repository,
-    )
-    api.state.submission_bundle_reader = repository._submission_repository
-    api.state.student_lookup = repository._learner_repository
-    api.state.analysis_runs_reader = repository._analysis_repository
-    api.state.calf_reader = repository._calf_repository
-    api.state.research_export_writer = repository._research_repository
-    api.state.student_submission_list = repository._submission_repository
-    api.state.revision_group_lookup = repository._revision_repository
-    api.state.student_learner_reader = repository._learner_repository
-    api.state.submission_calibration_reader = repository._calf_repository
-    api.state.system_migration_reader = repository._system_repository
-    api.state.admin_reanalysis = AdminReanalysisService(
-        settings=settings,
-        configuration_reader=repository._configuration_repository,
-        submission_reader=repository._submission_repository,
-        analysis_repository=repository._analysis_repository,
-        configurations=configurations,
-        submission_service=submission_service,
-        revision_repository=repository._revision_repository,
-    )
 
+    @api.middleware("http")
+    async def readiness_gate(request: Request, call_next):
+        """Return 503 for business routes while initialization is incomplete."""
+        path = request.url.path
+        lifecycle_paths = (
+            "/api/v1/system/live",
+            "/api/v1/system/ready",
+            "/api/v1/system/health",
+            "/docs", "/docs/", "/redoc", "/openapi.json",
+        )
+        if not path.startswith(lifecycle_paths) and lifecycle.state not in (
+            ServiceState.READY, ServiceState.DEGRADED,
+        ):
+            return JSONResponse(
+                status_code=503,
+                content={"error": {"code": "not_ready", "message": "API is starting; please retry.", "details": None}},
+            )
+        return await call_next(request)
+
+    _apply_service_state(api, services)
     api.include_router(system.router)
     _include_business_routers(api)
     return api
 
+
+# ---------------------------------------------------------------------------
+# Public entry point
+# ---------------------------------------------------------------------------
 
 def create_app(
     settings: Settings | None = None,
