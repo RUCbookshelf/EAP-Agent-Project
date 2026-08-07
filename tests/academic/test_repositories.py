@@ -535,4 +535,3 @@ class TestZeroL2Imports:
         import_lines = [l for l in source.splitlines() if l.startswith("from app.")]
         for line in import_lines:
             assert line.startswith("from .") or "app.academic" in line, f"Unexpected import: {line}"
-

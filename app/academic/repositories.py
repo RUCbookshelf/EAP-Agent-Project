@@ -339,4 +339,3 @@ class InMemoryRepositories:
             citations=self.citations.list(),
             records=self.records.list(),
         )
-

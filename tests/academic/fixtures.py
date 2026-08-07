@@ -293,4 +293,3 @@ def build_foundation_fixture() -> InMemoryRepositories:
     repos.citations.create(cit_xproj)
 
     return repos
-

@@ -298,4 +298,3 @@ def test_serialization_roundtrip_spotcheck(repos, graph):
     restored = type(cit).model_validate_json(json_str)
     assert restored.citation_id == cit.citation_id
     assert restored.verification_status == cit.verification_status
-
