@@ -282,6 +282,13 @@ class AcademicService:
                     f"Parent section {parent_section_id!r} not found in project {project_id!r}",
                     code="entity_not_found",
                 )
+        for rq_id in (rq_ids or []):
+            rq = self._repos.questions.get(rq_id)
+            if rq is None or rq.project_id != project_id:
+                raise AcademicDomainError(
+                    f"Research question {rq_id!r} not found in project {project_id!r}",
+                    code="entity_not_found",
+                )
         sid = section_id or f"sec-{_hex12()}"
         sec = PaperSection(
             section_id=sid,

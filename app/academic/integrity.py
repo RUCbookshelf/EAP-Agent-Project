@@ -239,6 +239,15 @@ class IntegrityService:
                     )
 
         for sec in [s for s in graph.all_sections() if s.project_id == project_id]:
+            for rq_id in sec.rq_ids:
+                rq = graph.question(rq_id)
+                if rq is not None and rq.project_id != sec.project_id:
+                    _record(
+                        "ACAD-RULE-06",
+                        "paper_section",
+                        sec.section_id,
+                        f"rq_id={rq_id!r} belongs to project {rq.project_id!r}, expected {sec.project_id!r}",
+                    )
             if sec.parent_section_id is not None:
                 parent = graph.section(sec.parent_section_id)
                 if parent is not None and parent.project_id != sec.project_id:

@@ -122,12 +122,13 @@ class TestHappyFlowEndToEnd:
         )
         assert claim.support_state == "unsupported"
 
-        # 6. Link evidence to claim → becomes supported
+        # 6. Link evidence to claim (support_state stays learner-declared, never inferred)
         claim = svc.link_evidence_to_claim(
             "cl-444444444444", "ev-333333333333", "supports"
         )
         assert len(claim.evidence_links) == 1
         assert claim.evidence_links[0].link_type == "supports"
+        assert claim.support_state == "unsupported"
 
         # Re-link (same evidence, same type) → dedupe no-op
         claim2 = svc.link_evidence_to_claim(
@@ -354,6 +355,22 @@ class TestErrorMatrix:
                 PID,
                 section_title="Child",
                 parent_section_id="sec-bbbbbbbbbbbb",
+            )
+        assert exc_info.value.code == "entity_not_found"
+
+    def test_create_section_rq_cross_project(
+        self, svc: AcademicService
+    ) -> None:
+        _make_project(svc, pid=PID, title="P1")
+        _make_project(svc, pid=PID2, title="P2")
+        svc.add_research_question(
+            PID2, "Q2", question_id="rq-bbbbbbbbbbbb"
+        )
+        with pytest.raises(AcademicDomainError) as exc_info:
+            svc.create_paper_section(
+                PID,
+                section_title="Sec",
+                rq_ids=["rq-bbbbbbbbbbbb"],
             )
         assert exc_info.value.code == "entity_not_found"
 

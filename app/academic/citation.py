@@ -84,8 +84,13 @@ class CitationVerifier:
 
         now = run_time or utc_now()
 
-        # --- verification_unavailable: no source or no source text ---
-        if source is None or source.source_text is None:
+        # --- verification_unavailable: no source, no/blank source text, or source not active ---
+        if (
+            source is None
+            or source.source_text is None
+            or not source.source_text.strip()
+            or source.availability != "active"
+        ):
             return CitationVerificationRecord(
                 record_id=f"vr-{uuid.uuid4().hex[:12]}",
                 citation_id=citation_id,
@@ -111,8 +116,8 @@ class CitationVerifier:
             if evidence is None or evidence.project_id != citation.project_id:
                 all_pass = False
 
-        # CIT-RULE-02: source exists (guaranteed) and is active
-        if source.availability != "active":
+        # CIT-RULE-02: source belongs to the citation's project (active is handled above)
+        if source.project_id != citation.project_id:
             all_pass = False
 
         # CIT-RULE-03: if evidence_id set, evidence.source_id == citation.source_id

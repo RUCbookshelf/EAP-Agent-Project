@@ -304,6 +304,45 @@ class TestUnverifiedPaths:
 
 
 class TestVerificationUnavailable:
+    def test_cross_project_source_unverified(self) -> None:
+        repos = _make_repos()
+        _create_project(repos, pid="rp-1")
+        _create_project(repos, pid="rp-2")
+        _create_source(repos, sid="src-1", pid="rp-2")
+        _create_evidence(repos)
+        _create_claim(repos)
+        _create_citation(repos, source_id="src-1")
+        svc = CitationVerificationService(repos)
+        updated_cit, record = svc.verify_citation("cit-1", run_time=_T0)
+        assert record.result == "unverified"
+        assert updated_cit.verification_status == "unverified"
+
+    def test_unavailable_source_verification_unavailable(self) -> None:
+        repos = _make_repos()
+        _create_project(repos)
+        _create_source(repos, availability="unavailable")
+        _create_evidence(repos)
+        _create_claim(repos)
+        _create_citation(repos)
+        svc = CitationVerificationService(repos)
+        updated_cit, record = svc.verify_citation("cit-1", run_time=_T0)
+        assert record.result == "verification_unavailable"
+        assert record.source_revision_hash is None
+        assert updated_cit.verification_status == "verification_unavailable"
+
+    def test_blank_source_text_verification_unavailable(self) -> None:
+        repos = _make_repos()
+        _create_project(repos)
+        _create_source(repos, source_text="   ")
+        _create_evidence(repos)
+        _create_claim(repos)
+        _create_citation(repos)
+        svc = CitationVerificationService(repos)
+        updated_cit, record = svc.verify_citation("cit-1", run_time=_T0)
+        assert record.result == "verification_unavailable"
+        assert record.source_revision_hash is None
+        assert updated_cit.verification_status == "verification_unavailable"
+
     def test_no_source_text(self) -> None:
         repos = _make_repos()
         _create_project(repos)
