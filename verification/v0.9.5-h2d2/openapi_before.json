@@ -4818,6 +4818,30 @@
               ],
               "title": "Active Writing Duration Seconds"
             },
+            "advisory_domain": {
+              "anyOf": [
+                {
+                  "maxLength": 50,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Advisory Domain"
+            },
+            "advisory_language": {
+              "anyOf": [
+                {
+                  "maxLength": 10,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Advisory Language"
+            },
             "draft_stage": {
               "default": "first draft",
               "maxLength": 100,
@@ -5210,6 +5234,21 @@
                 }
               ]
             },
+            "domain": {
+              "default": "l2",
+              "title": "Domain",
+              "type": "string"
+            },
+            "domain_attribution_rule": {
+              "default": "domain-attribution-v0.1.0",
+              "title": "Domain Attribution Rule",
+              "type": "string"
+            },
+            "domain_attribution_version": {
+              "default": "0.1.0",
+              "title": "Domain Attribution Version",
+              "type": "string"
+            },
             "feedback_provider_status": {
               "anyOf": [
                 {
@@ -5225,6 +5264,11 @@
             },
             "history": {
               "$ref": "#/components/schemas/HistoryResult"
+            },
+            "language": {
+              "default": "en",
+              "title": "Language",
+              "type": "string"
             },
             "longitudinal_assessment": {
               "anyOf": [
@@ -5713,7 +5757,7 @@
     },
     "info": {
       "title": "Writing Feedback API",
-      "version": "0.8.0"
+      "version": "0.9.7-d"
     },
     "openapi": "3.1.0",
     "paths": {

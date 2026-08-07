@@ -249,7 +249,7 @@ class TestExactBindings:
                     "runtime_checkable" in ast.unparse(d) for d in node.decorator_list
                 ):
                     runtime_count += 1
-        assert runtime_count == 36
+        # H1 shared-core additions: AncestryFetchProtocol (D-23 resolver),\n        # _DomainTagged, _DictEntry (D-26 registry selection policy).\n        assert runtime_count == 39
 
 
 class TestFunctionParity:
