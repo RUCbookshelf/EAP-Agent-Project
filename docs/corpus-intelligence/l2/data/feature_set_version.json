@@ -1,0 +1,22 @@
+{
+  "feature_set_version": "corpus-features-v0.1.0",
+  "spacy_model": "en_core_web_sm",
+  "spacy_model_version": "3.8.0",
+  "features": [
+    "text_length_tokens",
+    "sentence_length_mean",
+    "t_unit_proxy",
+    "connective_density",
+    "pos_share_noun",
+    "pos_share_verb",
+    "pos_share_adjective",
+    "pos_share_adverb",
+    "pos_share_pronoun",
+    "pos_share_determiner",
+    "pos_share_preposition",
+    "pos_share_conjunction",
+    "pos_share_numeral",
+    "pos_share_other"
+  ],
+  "connective_resource": "connectives_v0_6_1.json"
+}

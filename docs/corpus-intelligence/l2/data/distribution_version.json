@@ -1,0 +1,18 @@
+{
+  "distribution_version": "reference-distributions-v0.1.0",
+  "algorithm_version": "distribution-algorithm-v0.1.0",
+  "statistics": [
+    "n_effective",
+    "n_missing",
+    "mean",
+    "median",
+    "std",
+    "iqr",
+    "quantiles_5_25_50_75_95",
+    "min",
+    "max"
+  ],
+  "quantile_method": "numpy linear interpolation",
+  "manifest_hash": "0d8940ff84613807c11c0e492c61fb8d39fc1152a386061f9711a41487659eb9",
+  "creation_timestamp": "2026-08-07T09:06:57.600852+00:00"
+}

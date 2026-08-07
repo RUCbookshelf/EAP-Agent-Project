@@ -1,0 +1,13 @@
+{
+  "reference_group_version": "reference-groups-v0.1.0",
+  "min_n": 30,
+  "fallback_hierarchy": [
+    "prompt+timed",
+    "prompt",
+    "genre+timed",
+    "genre",
+    "UNAVAILABLE"
+  ],
+  "duplicate_policy": "effective_sample_excludes_non_canonical_duplicate_members",
+  "approved_group_count": 75
+}
