@@ -479,6 +479,35 @@ class TestDedupNoOps:
 
 
 # ------------------------------------------------------------------
+# Support-state declaration
+# ------------------------------------------------------------------
+
+
+class TestSetClaimSupportState:
+    def test_declare_supported_after_linking(self, svc: AcademicService) -> None:
+        _make_project(svc)
+        src = _make_source(svc)
+        ev = _make_evidence(svc)
+        claim = svc.create_claim(PID, "C", claim_id="cl-declare000001")
+        claim = svc.link_evidence_to_claim(
+            "cl-declare000001", "ev-333333333333", "supports"
+        )
+        claim = svc.set_claim_support_state("cl-declare000001", "supported")
+        assert claim.support_state == "supported"
+
+    def test_supported_without_supports_link_rejected(self, svc: AcademicService) -> None:
+        _make_project(svc)
+        claim = svc.create_claim(PID, "C", claim_id="cl-declare000002")
+        with pytest.raises(Exception):
+            svc.set_claim_support_state("cl-declare000002", "supported")
+
+    def test_unknown_claim_raises(self, svc: AcademicService) -> None:
+        with pytest.raises(AcademicDomainError) as exc_info:
+            svc.set_claim_support_state("cl-missing000000", "unsupported")
+        assert exc_info.value.code == "entity_not_found"
+
+
+# ------------------------------------------------------------------
 # Citation always unverified
 # ------------------------------------------------------------------
 

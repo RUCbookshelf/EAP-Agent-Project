@@ -22,6 +22,7 @@ from .entities import (
     ResearchQuestion,
     Source,
     SourceOrigin,
+    utc_now,
 )
 from .errors import AcademicDomainError
 from .integrity import IntegrityService, IntegrityViolation
@@ -336,6 +337,30 @@ class AcademicService:
     # ------------------------------------------------------------------
     # Write - Citation Links
     # ------------------------------------------------------------------
+
+    def set_claim_support_state(
+        self, claim_id: str, support_state: ClaimSupportState
+    ) -> Claim:
+        """Declare a claim's support state (learner-declared, never inferred).
+
+        The Claim entity validator enforces consistency: supported requires at
+        least one supports link; supported/partially_supported require at
+        least one link.
+        """
+        claim = self._repos.claims.get(claim_id)
+        if claim is None:
+            raise AcademicDomainError(
+                f"Claim {claim_id!r} not found",
+                code="entity_not_found",
+            )
+        updated = Claim.model_validate(
+            {
+                **claim.model_dump(),
+                "support_state": support_state,
+                "updated_at": utc_now(),
+            }
+        )
+        return self._repos.claims.save(updated)
 
     def create_citation_link(
         self,
