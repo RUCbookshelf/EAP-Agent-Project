@@ -1,4 +1,4 @@
-"""Tests for app.academic.provenance.ProvenanceGraph."""
+﻿"""Tests for app.academic.provenance.ProvenanceGraph."""
 
 from __future__ import annotations
 
@@ -604,3 +604,79 @@ class TestDeterministicOrdering:
         )
         g = ProvenanceGraph(projects=[rp], claims=[cl1, cl2])
         assert g.unsupported_claims("rp-dup")[0].claim_text == "Second"
+
+class TestGetters:
+    "Tests for ProvenanceGraph lookup getters and sorted all_* iterators."
+
+    def _g(self) -> ProvenanceGraph:
+        rp1 = ResearchProject(project_id="rp-1", title="P1")
+        rp2 = ResearchProject(project_id="rp-2", title="P2")
+        rq1 = ResearchQuestion(question_id="rq-1", project_id="rp-1", question_text="Q1")
+        rq2 = ResearchQuestion(question_id="rq-2", project_id="rp-1", question_text="Q2")
+        src1 = Source(source_id="src-1", project_id="rp-1", title="S1", origin="learner_entered")
+        src2 = Source(source_id="src-2", project_id="rp-1", title="S2", origin="learner_entered")
+        ev1 = EvidenceUnit(evidence_id="ev-1", project_id="rp-1", source_id="src-1", source_version=1, kind="direct_quote", locator="p.1", content="c1")
+        ev2 = EvidenceUnit(evidence_id="ev-2", project_id="rp-1", source_id="src-2", source_version=1, kind="direct_quote", locator="p.2", content="c2")
+        cl1 = Claim(claim_id="cl-1", project_id="rp-1", claim_text="T1", support_state="supported", evidence_links=[ClaimEvidenceLink(evidence_id="ev-1", link_type="supports")])
+        cl2 = Claim(claim_id="cl-2", project_id="rp-1", claim_text="T2", support_state="unsupported")
+        sec1 = PaperSection(section_id="sec-1", project_id="rp-1", section_title="Sec1")
+        sec2 = PaperSection(section_id="sec-2", project_id="rp-1", section_title="Sec2")
+        cit1 = CitationLink(citation_id="cit-1", project_id="rp-1", claim_id="cl-1", source_id="src-1")
+        cit2 = CitationLink(citation_id="cit-2", project_id="rp-1", claim_id="cl-1", source_id="src-1")
+        return ProvenanceGraph(
+            projects=[rp1, rp2], questions=[rq1, rq2], sources=[src1, src2],
+            evidence_units=[ev1, ev2], claims=[cl1, cl2], sections=[sec1, sec2],
+            citations=[cit1, cit2],
+        )
+
+    def test_project_hit(self) -> None:
+        assert self._g().project("rp-1") is not None
+    def test_question_hit(self) -> None:
+        assert self._g().question("rq-1") is not None
+    def test_source_hit(self) -> None:
+        assert self._g().source("src-1") is not None
+    def test_evidence_hit(self) -> None:
+        assert self._g().evidence("ev-1") is not None
+    def test_claim_hit(self) -> None:
+        assert self._g().claim("cl-1") is not None
+    def test_section_hit(self) -> None:
+        assert self._g().section("sec-1") is not None
+    def test_citation_hit(self) -> None:
+        assert self._g().citation("cit-1") is not None
+
+    def test_project_miss(self) -> None:
+        assert self._g().project("rp-nope") is None
+    def test_question_miss(self) -> None:
+        assert self._g().question("rq-nope") is None
+    def test_source_miss(self) -> None:
+        assert self._g().source("src-nope") is None
+    def test_evidence_miss(self) -> None:
+        assert self._g().evidence("ev-nope") is None
+    def test_claim_miss(self) -> None:
+        assert self._g().claim("cl-nope") is None
+    def test_section_miss(self) -> None:
+        assert self._g().section("sec-nope") is None
+    def test_citation_miss(self) -> None:
+        assert self._g().citation("cit-nope") is None
+
+    def test_all_projects_sorted(self) -> None:
+        assert [p.project_id for p in self._g().all_projects()] == ["rp-1", "rp-2"]
+    def test_all_questions_sorted(self) -> None:
+        assert [q.question_id for q in self._g().all_questions()] == ["rq-1", "rq-2"]
+    def test_all_sources_sorted(self) -> None:
+        assert [s.source_id for s in self._g().all_sources()] == ["src-1", "src-2"]
+    def test_all_evidence_sorted(self) -> None:
+        assert [e.evidence_id for e in self._g().all_evidence()] == ["ev-1", "ev-2"]
+    def test_all_claims_sorted(self) -> None:
+        assert [cl.claim_id for cl in self._g().all_claims()] == ["cl-1", "cl-2"]
+    def test_all_sections_sorted(self) -> None:
+        assert [s.section_id for s in self._g().all_sections()] == ["sec-1", "sec-2"]
+    def test_all_citations_sorted(self) -> None:
+        assert [c.citation_id for c in self._g().all_citations()] == ["cit-1", "cit-2"]
+
+    def test_empty_all_projects(self) -> None:
+        assert ProvenanceGraph().all_projects() == []
+    def test_empty_all_evidence(self) -> None:
+        assert ProvenanceGraph().all_evidence() == []
+    def test_empty_all_claims(self) -> None:
+        assert ProvenanceGraph().all_claims() == []

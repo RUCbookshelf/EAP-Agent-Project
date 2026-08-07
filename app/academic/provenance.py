@@ -1,4 +1,4 @@
-"""In-memory read-only provenance graph for Academic domain entities."""
+﻿"""In-memory read-only provenance graph for Academic domain entities."""
 
 from __future__ import annotations
 
@@ -228,3 +228,67 @@ class ProvenanceGraph:
     def records_for_citation(self, citation_id: str) -> list[CitationVerificationRecord]:
         """Verification records for a citation, sorted by run_time then record_id."""
         return list(self._records.get(citation_id, []))
+
+    # ------------------------------------------------------------------
+    # Lookup getters (single entity)
+    # ------------------------------------------------------------------
+
+    def project(self, project_id: str) -> ResearchProject | None:
+        """Return the project or None."""
+        return self._projects.get(project_id)
+
+    def question(self, question_id: str) -> ResearchQuestion | None:
+        """Return the question or None."""
+        return self._questions.get(question_id)
+
+    def source(self, source_id: str) -> Source | None:
+        """Return the source or None."""
+        return self._sources.get(source_id)
+
+    def evidence(self, evidence_id: str) -> EvidenceUnit | None:
+        """Return the evidence unit or None."""
+        return self._evidence.get(evidence_id)
+
+    def claim(self, claim_id: str) -> Claim | None:
+        """Return the claim or None."""
+        return self._claims.get(claim_id)
+
+    def section(self, section_id: str) -> PaperSection | None:
+        """Return the section or None."""
+        return self._sections.get(section_id)
+
+    def citation(self, citation_id: str) -> CitationLink | None:
+        """Return the citation link or None."""
+        return self._citations.get(citation_id)
+
+    # ------------------------------------------------------------------
+    # Sorted all_* iterators
+    # ------------------------------------------------------------------
+
+    def all_projects(self) -> list[ResearchProject]:
+        """All projects sorted by project_id."""
+        return sorted(self._projects.values(), key=lambda p: p.project_id)
+
+    def all_questions(self) -> list[ResearchQuestion]:
+        """All questions sorted by question_id."""
+        return sorted(self._questions.values(), key=lambda q: q.question_id)
+
+    def all_sources(self) -> list[Source]:
+        """All sources sorted by source_id."""
+        return sorted(self._sources.values(), key=lambda s: s.source_id)
+
+    def all_evidence(self) -> list[EvidenceUnit]:
+        """All evidence units sorted by evidence_id."""
+        return sorted(self._evidence.values(), key=lambda e: e.evidence_id)
+
+    def all_claims(self) -> list[Claim]:
+        """All claims sorted by claim_id."""
+        return sorted(self._claims.values(), key=lambda c: c.claim_id)
+
+    def all_sections(self) -> list[PaperSection]:
+        """All sections sorted by section_id."""
+        return sorted(self._sections.values(), key=lambda s: s.section_id)
+
+    def all_citations(self) -> list[CitationLink]:
+        """All citations sorted by citation_id."""
+        return sorted(self._citations.values(), key=lambda c: c.citation_id)
