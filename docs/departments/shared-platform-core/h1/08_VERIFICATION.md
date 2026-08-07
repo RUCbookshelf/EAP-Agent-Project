@@ -13,7 +13,7 @@
 
 | Gate | Result | Evidence |
 | --- | --- | --- |
-| Full non-live core (canonical: `pytest -q -p no:cacheprovider --ignore=tests/live tests`) | **1448 passed / 8 skipped / 0 failed / exit 0** (final single clean run incl. D-27 drift-check tests) | .agent-workflow/shared-core-h1/logs/wu10-fullcore-final2.log |
+| Full non-live core (canonical: `pytest -q -p no:cacheprovider --ignore=tests/live tests`) | **1448 passed / 8 skipped / 0 failed / exit 0** (final single clean run; hermetic DATABASE_URL isolation; dev DB hash stable across the run) | .agent-workflow/shared-core-h1/logs/wu10-fullcore-final3.log |
 | Shared-core focused suites (version drift, vocabularies, discriminator, resolver, registries, domain packs) | 167/167 | wu2/wu4/wu5/wu6/wu7 logs; combined runs |
 | Corpus Stage 5 (`tests/corpus`) | 36/36 | wu8-test.log |
 | Locale parity | preserved (no locale files changed; dedicated parity tests 3/3; embedded 600/600 checks green in core) | test_v097d_wu2_revision_practice.py, test_v096c1_no_priority_workflow.py, test_v096c2_sidebar_control.py |
@@ -21,8 +21,21 @@
 | H2D2 dependency/parity contracts | green after snapshot regeneration + documented allowlist | commit 32b7927; 45-test gate run |
 | Application startup (`python -m scripts.verify_launcher`) | PASS: health 200, docs 200, streamlit 200; migration 13; 33 tables; config-v0.9.0; LocalDemo | launcher output (LASTEXITCODE=0) |
 | Golden-submission behavior diff (D-30) | before-state = frozen v0.9.3-c..v0.9.7-D behavior suite + deterministic demo journey (all green); after-state run on isolated DB: DEMO-001 2 submissions → 2 feedback → 1 priority → revision → 1 practice target/attempt/evaluation; journey 12 events; 10 produced event types all within the frozen vocabulary; 0 new event types; no data mutation | scripts/demo_journey.py runs; journey projection check |
-| Persistence / legacy records | migration 13 unchanged (no new migration); WU3 legacy-payload and WU4 legacy-submission tests green; dev DB byte-identical | dev DB SHA-256 40A2907834990B575DE1CA0080D7FB115B499133E03568DE5F94810A3B3BE4DE before/after |
+| Persistence / legacy records | migration 13 unchanged (no new migration); WU3 legacy-payload and WU4 legacy-submission tests green; dev DB hash stable across the final canonical run | dev DB SHA-256 29AC74CEA00E02119D004B8551FB3DE6683D0151553AEAE611A1B1C1F034735B (unchanged before/after final run) |
 | Regression of browser-in-core (genre-icon) suite | 11/11 | pytest-fresh1 run |
+
+## Data-safety note (V2-DB-A incident class)
+
+During the first full-core runs, the pre-existing `tests/test_v095b_router_contract.py`
+production-builder helper constructed `create_app()` with DEFAULT settings, so the
+TestClient lifespan refreshed `system_versions.recorded_at` in the checkout dev
+database (`data/writing_feedback.db`) — the same metadata-only incident class as
+v0.9.6-DP0-V2. Read-only audit confirmed: the dev database contains ZERO user rows
+(students=0, essays=0, all user tables empty); only the routine `system_versions`
+metadata rows were refreshed. The test was fixed to inject isolated settings
+(`make_test_app_settings`), the canonical run now sets hermetic `DATABASE_URL`
+isolation, and the dev database hash is STABLE across the final full-core run.
+The current dev database hash (29AC74CE...) is adopted as this checkout's baseline.
 
 ## Environment notes and limitations
 

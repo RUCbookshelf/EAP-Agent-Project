@@ -40,6 +40,14 @@ _BUSINESS_ROUTERS = (
 )
 
 
+def make_test_app_settings(tmp_path) -> Settings:
+    return Settings(
+        database_path=tmp_path / "prod-contract.db", llm_provider="local",
+        deepseek_api_key=None, deepseek_base_url="https://example.invalid",
+        deepseek_model="deepseek-test",
+    )
+
+
 def make_test_app(tmp_path):
     settings = Settings(
         database_path=tmp_path / "api.db", llm_provider="local",
@@ -49,9 +57,9 @@ def make_test_app(tmp_path):
     return create_app(settings)
 
 
-def make_prod_app_with_business_routers():
+def make_prod_app_with_business_routers(settings):
     """Production builder at steady state: system router + startup business routers."""
-    app = create_app()
+    app = create_app(settings)
     for module in _BUSINESS_ROUTERS:
         app.include_router(module.router)
     return app
@@ -193,7 +201,7 @@ def test_no_duplicate_path_method_pairs(tmp_path):
 
 
 def test_health_registered_exactly_once_in_both_builders(tmp_path):
-    for app in (make_test_app(tmp_path), make_prod_app_with_business_routers()):
+    for app in (make_test_app(tmp_path), make_prod_app_with_business_routers(make_test_app_settings(tmp_path))):
         health_routes = [
             route
             for route in app.routes
@@ -206,7 +214,7 @@ def test_health_registered_exactly_once_in_both_builders(tmp_path):
 
 def test_production_and_test_route_sets_match(tmp_path):
     test_app = make_test_app(tmp_path)
-    prod_app = make_prod_app_with_business_routers()
+    prod_app = make_prod_app_with_business_routers(make_test_app_settings(tmp_path))
     assert route_surface(test_app) == route_surface(prod_app)
 
 
@@ -251,7 +259,7 @@ def test_health_semantics_identical_in_production_and_test_builders(tmp_path):
     lifecycle.transition(ServiceState.READY)
     lifecycle.database_status = "connected"
     test_app = make_test_app(tmp_path)
-    prod_app = make_prod_app_with_business_routers()
+    prod_app = make_prod_app_with_business_routers(make_test_app_settings(tmp_path))
     with TestClient(test_app) as test_client, TestClient(prod_app) as prod_client:
         test_response = test_client.get("/api/v1/system/health")
         prod_response = prod_client.get("/api/v1/system/health")
@@ -281,7 +289,7 @@ def test_live_and_ready_unchanged(tmp_path):
 
 
 def test_business_route_gated_until_ready_while_health_available(tmp_path):
-    app = make_prod_app_with_business_routers()
+    app = make_prod_app_with_business_routers(make_test_app_settings(tmp_path))
     lifecycle.transition(ServiceState.STARTING)
     client = TestClient(app)  # no lifespan: startup stage does not run
     try:
