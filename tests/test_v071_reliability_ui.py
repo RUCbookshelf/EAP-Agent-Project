@@ -7,6 +7,7 @@ from fastapi.testclient import TestClient
 
 from app.api.main import create_app
 from app.config import load_settings
+from app.version import PLATFORM_APPLICATION_VERSION
 from app.database import Database, rollback, upgrade
 from app.feedback import FeedbackReliabilityService, FeedbackValidator
 from app.llm import FeedbackContext, LLMProvider, LocalDemoProvider, ProviderOutputError, ProviderRouter
@@ -282,7 +283,7 @@ def test_migration_9_is_additive_persists_provider_status_and_rolls_back_logical
         ).fetchone()[0] == "config-v0.8.2"
         assert upgrade(connection) == 13
         assert repository._configuration_repository.get_active_configuration().version == "config-v0.9.0"
-    assert settings.application_version == "0.8.0"
+    assert settings.application_version == PLATFORM_APPLICATION_VERSION
 
 
 def test_api_returns_backward_compatible_and_v071_fields(tmp_path):

@@ -4,6 +4,7 @@ from fastapi.testclient import TestClient
 
 from app.api.main import create_app
 from app.config import Settings
+from app.version import PLATFORM_APPLICATION_VERSION
 
 
 def make_client(tmp_path, *, provider="local"):
@@ -33,7 +34,7 @@ def test_health_version_and_docs(tmp_path):
         assert health.json()["database_status"] == "connected"
         assert health.json()["llm_api_configured"] is False
         assert "deepseek_api_key" not in health.text.casefold()
-        assert client.get("/api/v1/system/version").json()["application_version"] == "0.8.0"
+        assert client.get("/api/v1/system/version").json()["application_version"] == PLATFORM_APPLICATION_VERSION
         assert client.get("/docs").status_code == 200
 
 

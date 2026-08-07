@@ -11,6 +11,7 @@ import threading
 import time
 from dataclasses import dataclass, field
 from enum import Enum
+from app.version import PLATFORM_API_VERSION
 from typing import Any
 
 
@@ -93,7 +94,7 @@ class ServiceLifecycle:
                 "status": "ok" if self.state in (ServiceState.READY, ServiceState.DEGRADED) else self.state.value,
                 "lifecycle_state": self.state.value,
                 "application_version": self.application_version,
-                "api_version": "v1",
+                "api_version": PLATFORM_API_VERSION,
                 "database_status": self.database_status,
                 "database_migration_version": self.migration_version,
                 "prompt_version": self.prompt_version,

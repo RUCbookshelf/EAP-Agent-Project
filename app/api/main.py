@@ -33,6 +33,7 @@ from app.api.routers import (
     system,
 )
 from app.config import Settings, load_settings
+from app.version import PLATFORM_APPLICATION_VERSION
 from app.database import Database
 from app.journey.service import JourneyService
 from app.practice.completion import PracticeTargetCompletionService
@@ -449,7 +450,7 @@ def _build_full_app(
     lifecycle.llm_api_configured = bool(settings.deepseek_api_key) if settings.llm_provider == "deepseek" else False
     lifecycle.transition(ServiceState.READY)
 
-    api = FastAPI(title="Writing Feedback API", version="0.8.0")
+    api = FastAPI(title="Writing Feedback API", version=PLATFORM_APPLICATION_VERSION)
     _register_request_middleware(api)
     _register_error_handlers(api)
     api.state.settings = settings
@@ -522,7 +523,7 @@ def create_app(
 
     api = FastAPI(
         title="Writing Feedback API",
-        version="0.8.0",
+        version=PLATFORM_APPLICATION_VERSION,
         lifespan=_lifespan,
     )
     _register_error_handlers(api)

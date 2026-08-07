@@ -23,6 +23,7 @@ from app.api.routers import (
     submissions,
 )
 from app.config import Settings
+from app.version import PLATFORM_APPLICATION_VERSION
 from app.lifecycle import ServiceState, lifecycle
 
 
@@ -230,7 +231,7 @@ def test_health_contract_healthy_state(tmp_path):
         assert body["status"] == "ok"
         assert body["database_status"] == "connected"
         assert body["database_migration_version"] == 13
-        assert body["application_version"] == "0.8.0"
+        assert body["application_version"] == PLATFORM_APPLICATION_VERSION
         assert "deepseek_api_key" not in response.text.casefold()
 
 
