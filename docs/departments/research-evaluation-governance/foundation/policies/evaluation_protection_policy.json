@@ -1,0 +1,25 @@
+{
+  "policy_id": "evaluation-protection-policy",
+  "policy_version": "evaluation-protection-policy-v0.1.0",
+  "policy_family": "evaluation-protection",
+  "status": "ratified",
+  "owner": "research-evaluation-governance",
+  "effective_date": "2026-08-07",
+  "ratification_decision_id": "RD-POL-004",
+  "supersedes": null,
+  "description": "Formalizes protection of the 270 scored expository texts: permitted and prohibited uses, reference-distribution participation, validation reservation, circular-evaluation prevention with a conservative default rule, and reproducible protection keys.",
+  "scope": ["270 scored expository texts (WEXP####)", "scores in TOOLS/exp.xls and exp.sav", "all evaluation and reference-distribution designs consuming this block"],
+  "statements": [
+    {"statement_id": "EP-01", "statement": "The 270 scored expository texts are a single protected evaluation block with reproducible protection keys.", "class": "ALLOWED", "evidence": ["docs/corpus-intelligence/l2/03_SCORE_DUPLICATE_EVALUATION_POLICY.md:40-41", "docs/departments/research-evaluation-governance/foundation/04_EVALUATION_PROTECTION_POLICY.md:2"], "applies_to": ["evaluation design"]},
+    {"statement_id": "EP-02", "statement": "The block may be used for evaluation and validation design of the target signal with a declared construction/evaluation source split.", "class": "ALLOWED", "evidence": ["docs/corpus-intelligence/l2/03_SCORE_DUPLICATE_EVALUATION_POLICY.md:9-24", "docs/corpus-intelligence/l2/10_STAGE6_IMPLEMENTATION_HANDOFF.md:92-94"], "applies_to": ["Stage 6 evaluation design"]},
+    {"statement_id": "EP-03", "statement": "The block's texts may participate in descriptive reference distributions as text features (research_only, statistics only, no score values).", "class": "ALLOWED", "evidence": ["docs/corpus-intelligence/l2/06_REFERENCE_DISTRIBUTIONS.md", "docs/corpus-intelligence/l2/evidence/methodology_review.md"], "applies_to": ["reference distributions"]},
+    {"statement_id": "EP-04", "statement": "Using the same scored block both to construct the target signal and to evaluate that signal is prohibited.", "class": "PROHIBITED", "evidence": ["docs/architecture/writing-intelligence-platform/07_CORPUS_NLP_ARCHITECTURE.md:45", "docs/architecture/writing-intelligence-platform/08_FEEDBACK_LEARNER_INTELLIGENCE.md:43"], "applies_to": ["target signal construction", "evaluation"]},
+    {"statement_id": "EP-05", "statement": "Using the scores to build reference norms for a measure later validated against the same scores is prohibited.", "class": "PROHIBITED", "evidence": ["docs/architecture/writing-intelligence-platform/07_CORPUS_NLP_ARCHITECTURE.md:45"], "applies_to": ["norm construction", "validation"]},
+    {"statement_id": "EP-06", "statement": "Score fields must never appear in reference distributions, membership artifacts, or the query boundary.", "class": "PROHIBITED", "evidence": ["docs/corpus-intelligence/l2/03_SCORE_DUPLICATE_EVALUATION_POLICY.md:23-24", "docs/corpus-intelligence/l2/evidence/independent_review_stage5.md"], "applies_to": ["distribution artifacts", "query boundary"]},
+    {"statement_id": "EP-07", "statement": "The block must never be split across development/evaluation boundaries.", "class": "PROHIBITED", "evidence": ["docs/corpus-readiness/sweccl2/10_EVALUATION_AND_LEAKAGE_READINESS.md:37-42", "docs/corpus-intelligence/l2/10_STAGE6_IMPLEMENTATION_HANDOFF.md:72-75"], "applies_to": ["partitions"]},
+    {"statement_id": "EP-08", "statement": "No development use of the block without Research Evaluation approval.", "class": "PROHIBITED", "evidence": ["docs/corpus-intelligence/l2/03_SCORE_DUPLICATE_EVALUATION_POLICY.md:40-41"], "applies_to": ["development"]},
+    {"statement_id": "EP-09", "statement": "Learner-facing raw display of the protected texts requires review and the D-08 display policy; default disabled.", "class": "REQUIRES_REVIEW", "evidence": ["docs/architecture/writing-intelligence-platform/14_ARCHITECTURE_DECISIONS.md:77-84"], "applies_to": ["learner surfaces"]},
+    {"statement_id": "EP-10", "statement": "No irreversible final train/dev/test partition is required unless scientifically justified; partitions must be versioned, reproducible, and leak-safe.", "class": "ALLOWED", "evidence": ["docs/corpus-readiness/sweccl2/10_EVALUATION_AND_LEAKAGE_READINESS.md:37-42"], "applies_to": ["partition planning"]}
+  ],
+  "references": ["docs/corpus-intelligence/l2/03_SCORE_DUPLICATE_EVALUATION_POLICY.md", "docs/corpus-intelligence/l2/10_STAGE6_IMPLEMENTATION_HANDOFF.md", "docs/corpus-readiness/sweccl2/10_EVALUATION_AND_LEAKAGE_READINESS.md", "docs/architecture/writing-intelligence-platform/07_CORPUS_NLP_ARCHITECTURE.md", "docs/architecture/writing-intelligence-platform/14_ARCHITECTURE_DECISIONS.md"]
+}

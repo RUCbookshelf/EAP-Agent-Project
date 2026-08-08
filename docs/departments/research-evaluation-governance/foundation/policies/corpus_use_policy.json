@@ -1,0 +1,27 @@
+{
+  "policy_id": "corpus-use-policy",
+  "policy_version": "corpus-use-policy-v0.1.0",
+  "policy_family": "corpus-use",
+  "status": "ratified",
+  "owner": "research-evaluation-governance",
+  "effective_date": "2026-08-07",
+  "ratification_decision_id": "RD-POL-003",
+  "supersedes": null,
+  "description": "Canonicalizes license_status=PARTIALLY_DOCUMENTED and defines authorization states (ALLOWED/REQUIRES_REVIEW/PROHIBITED/UNKNOWN) for corpus operations with documented evidence; no invented legal rights.",
+  "scope": ["SWECCL 2.0 corpus package sweccl2-weccl20-v0.1.0", "all platform operations consuming corpus texts or derived artifacts"],
+  "statements": [
+    {"statement_id": "CU-01", "statement": "Local deterministic analysis over prepared corpus texts is allowed.", "class": "ALLOWED", "evidence": ["docs/corpus-readiness/sweccl2/11_LIMITATIONS_AND_OPEN_ISSUES.md:43-48", "docs/corpus-intelligence/l2/09_STAGE5_VERIFICATION.md"], "applies_to": ["corpus feature extraction", "distributions", "query boundary"]},
+    {"statement_id": "CU-02", "statement": "Aggregate internal statistics and descriptive internal research reporting are allowed.", "class": "ALLOWED", "evidence": ["docs/corpus-readiness/sweccl2/11_LIMITATIONS_AND_OPEN_ISSUES.md:43-48", "docs/corpus-intelligence/l2/06_REFERENCE_DISTRIBUTIONS.md"], "applies_to": ["reference distributions", "internal reporting"]},
+    {"statement_id": "CU-03", "statement": "Research and development use inside the platform with research_only exposure is allowed.", "class": "ALLOWED", "evidence": ["docs/corpus-readiness/sweccl2/11_LIMITATIONS_AND_OPEN_ISSUES.md:43-48", "docs/architecture/writing-intelligence-platform/14_ARCHITECTURE_DECISIONS.md:77-84", "docs/corpus-intelligence/l2/07_CORPUS_INTELLIGENCE_QUERY_BOUNDARY.md"], "applies_to": ["internal pipeline", "research surfaces"]},
+    {"statement_id": "CU-04", "statement": "External redistribution of corpus texts or derived raw text requires review before any action.", "class": "REQUIRES_REVIEW", "evidence": ["docs/corpus-readiness/sweccl2/11_LIMITATIONS_AND_OPEN_ISSUES.md:45-48"], "applies_to": ["third-party sharing", "publication"]},
+    {"statement_id": "CU-05", "statement": "Learner-facing raw corpus examples require review and the D-08 display policy and licensing/anonymization gate; default is disabled.", "class": "REQUIRES_REVIEW", "evidence": ["docs/architecture/writing-intelligence-platform/14_ARCHITECTURE_DECISIONS.md:77-84", "docs/corpus-readiness/sweccl2/11_LIMITATIONS_AND_OPEN_ISSUES.md:45-48"], "applies_to": ["learner feedback", "learner UI"]},
+    {"statement_id": "CU-06", "statement": "External API upload of corpus texts requires review; no external uploads by default.", "class": "REQUIRES_REVIEW", "evidence": ["docs/corpus-readiness/sweccl2/12_L2_CORPUS_IMPLEMENTATION_HANDOFF.md"], "applies_to": ["third-party APIs", "cloud services"]},
+    {"statement_id": "CU-07", "statement": "Model training or fine-tuning on corpus texts requires review with a recorded legal basis.", "class": "REQUIRES_REVIEW", "evidence": ["docs/corpus-readiness/sweccl2/11_LIMITATIONS_AND_OPEN_ISSUES.md:43-48"], "applies_to": ["training", "fine-tuning"]},
+    {"statement_id": "CU-08", "statement": "Public release of the corpus or raw derived texts requires review.", "class": "REQUIRES_REVIEW", "evidence": ["docs/corpus-readiness/sweccl2/11_LIMITATIONS_AND_OPEN_ISSUES.md:45-48"], "applies_to": ["public release"]},
+    {"statement_id": "CU-09", "statement": "Publishing raw corpus text into the repository or reports is prohibited.", "class": "PROHIBITED", "evidence": ["docs/corpus-readiness/sweccl2/00_L2_CORPUS_READINESS_EXECUTIVE_SUMMARY.md", "docs/architecture/writing-intelligence-platform/07_CORPUS_NLP_ARCHITECTURE.md:28"], "applies_to": ["git", "reports", "deliverables"]},
+    {"statement_id": "CU-10", "statement": "Unrestricted corpus-example exposure through the query boundary is prohibited at PARTIALLY_DOCUMENTED status.", "class": "PROHIBITED", "evidence": ["docs/corpus-intelligence/l2/07_CORPUS_INTELLIGENCE_QUERY_BOUNDARY.md"], "applies_to": ["query boundary", "example index"]},
+    {"statement_id": "CU-11", "statement": "Writing learner text into the corpus or mutating corpus artifacts is prohibited.", "class": "PROHIBITED", "evidence": ["docs/architecture/writing-intelligence-platform/07_CORPUS_NLP_ARCHITECTURE.md:28"], "applies_to": ["corpus artifacts"]},
+    {"statement_id": "CU-12", "statement": "Commercial exploitation, sub-licensing, and derivative corpus publication are unknown until a license text or owner grant is documented.", "class": "UNKNOWN", "evidence": ["docs/corpus-readiness/sweccl2/11_LIMITATIONS_AND_OPEN_ISSUES.md:43-48", "docs/architecture/writing-intelligence-platform/15_OPEN_QUESTIONS_AND_DEFERRED_DECISIONS.md:43"], "applies_to": ["commercial use", "sub-licensing", "derivative corpora"]}
+  ],
+  "references": ["docs/corpus-readiness/sweccl2/corpus_version.json", "docs/corpus-readiness/sweccl2/11_LIMITATIONS_AND_OPEN_ISSUES.md", "docs/corpus-intelligence/l2/01_CORPUS_RESOURCE_REGISTRATION.md", "docs/corpus-intelligence/l2/07_CORPUS_INTELLIGENCE_QUERY_BOUNDARY.md", "docs/architecture/writing-intelligence-platform/14_ARCHITECTURE_DECISIONS.md"]
+}

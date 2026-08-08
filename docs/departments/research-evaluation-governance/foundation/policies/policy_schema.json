@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "research-governance-foundation/policy_schema.json",
+  "title": "Research Governance Policy Artifact",
+  "description": "Machine-readable shape of a Research Evaluation & Data Governance policy. Every policy artifact under docs/departments/research-evaluation-governance/foundation/policies/ must validate against this schema.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["policy_id", "policy_version", "policy_family", "status", "owner", "effective_date", "ratification_decision_id", "description", "scope", "statements", "references"],
+  "properties": {
+    "policy_id": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+    "policy_version": {"type": "string", "pattern": "^[a-z0-9-]+-v[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "policy_family": {"type": "string", "enum": ["evaluation-policy-versioning", "corpus-use", "evaluation-protection", "duplicate-handling", "reference-group-eligibility", "measurement-claim", "stage6-evidence-admissibility", "feedback-audit-sampling", "evaluation-leakage"]},
+    "status": {"type": "string", "enum": ["draft", "ratified", "amended", "superseded"]},
+    "owner": {"const": "research-evaluation-governance"},
+    "effective_date": {"type": "string", "format": "date"},
+    "ratification_decision_id": {"type": "string", "pattern": "^RD-POL-[0-9]{3}$"},
+    "supersedes": {"type": ["string", "null"]},
+    "description": {"type": "string", "minLength": 10},
+    "scope": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+    "statements": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["statement_id", "statement", "class", "evidence", "applies_to"],
+        "properties": {
+          "statement_id": {"type": "string", "pattern": "^[A-Z][A-Z0-9-]+$"},
+          "statement": {"type": "string", "minLength": 5},
+          "class": {"type": "string"},
+          "evidence": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+          "applies_to": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    },
+    "references": {"type": "array", "items": {"type": "string"}}
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "policy_id": "evaluation-leakage-policy",
+  "policy_version": "evaluation-leakage-policy-v0.1.0",
+  "policy_family": "evaluation-leakage",
+  "status": "ratified",
+  "owner": "research-evaluation-governance",
+  "effective_date": "2026-08-07",
+  "ratification_decision_id": "RD-POL-010",
+  "supersedes": null,
+  "description": "Formalizes future evaluation-leakage constraints: duplicate groups never split, same-prompt leakage controlled, the 270 scored block protected, unknown learner IDs acknowledged, versioned partition logic, and domain scoping. Includes a reusable partition-plan validator. No final split is created.",
+  "scope": ["future evaluation partitions", "exports", "corpus evaluation designs"],
+  "statements": [
+    {"statement_id": "EL-01", "statement": "Duplicate-group members must never be split across development/evaluation boundaries.", "class": "PROHIBITED", "evidence": ["docs/corpus-readiness/sweccl2/10_EVALUATION_AND_LEAKAGE_READINESS.md:39", "docs/departments/research-evaluation-governance/foundation/05_DUPLICATE_POLICY.md"], "applies_to": ["partitions"]},
+    {"statement_id": "EL-02", "statement": "The same prompt must not be split across dev/eval without an explicit prompt-matching design with recorded justification.", "class": "PROHIBITED", "evidence": ["docs/corpus-readiness/sweccl2/10_EVALUATION_AND_LEAKAGE_READINESS.md:40-41"], "applies_to": ["prompt-controlled splits"]},
+    {"statement_id": "EL-03", "statement": "The 270 scored expository block moves as one unit and is protected from development use.", "class": "PROHIBITED", "evidence": ["docs/corpus-readiness/sweccl2/10_EVALUATION_AND_LEAKAGE_READINESS.md:42", "docs/corpus-intelligence/l2/03_SCORE_DUPLICATE_EVALUATION_POLICY.md:40-41"], "applies_to": ["scored block"]},
+    {"statement_id": "EL-04", "statement": "No partition may claim learner-level isolation from WECCL filenames; duplicate detection is the only proxy.", "class": "PROHIBITED", "evidence": ["docs/corpus-readiness/sweccl2/10_EVALUATION_AND_LEAKAGE_READINESS.md:22-23", "docs/corpus-readiness/sweccl2/11_LIMITATIONS_AND_OPEN_ISSUES.md:28"], "applies_to": ["learner isolation claims"]},
+    {"statement_id": "EL-05", "statement": "Every partition must be versioned and reproducible from document_id plus grouping keys (prompt_id, genre, duplicate_group_id, timed_status, grade, major_type, entry_year).", "class": "ALLOWED", "evidence": ["docs/corpus-readiness/sweccl2/10_EVALUATION_AND_LEAKAGE_READINESS.md:25-28,37-42"], "applies_to": ["partition logic"]},
+    {"statement_id": "EL-06", "statement": "Exports and partitions are domain-scoped by default; unknown domain values are rejected or quarantined.", "class": "ALLOWED", "evidence": ["docs/architecture/writing-intelligence-platform/14_ARCHITECTURE_DECISIONS.md:176-183,269-272"], "applies_to": ["exports", "partitions"]},
+    {"statement_id": "EL-07", "statement": "Any evaluation design touching corpus data must pass the reusable partition-plan validator before execution.", "class": "ALLOWED", "evidence": ["docs/departments/research-evaluation-governance/foundation/10_EVALUATION_LEAKAGE_POLICY.md:4"], "applies_to": ["evaluation designs"]},
+    {"statement_id": "EL-08", "statement": "No final benchmark split is created by this policy; its purpose is preventing accidental leakage.", "class": "ALLOWED", "evidence": ["docs/corpus-readiness/sweccl2/10_EVALUATION_AND_LEAKAGE_READINESS.md:7-9"], "applies_to": ["partition creation"]},
+    {"statement_id": "EL-09", "statement": "The prototype student-level splitter is infrastructure tooling, not a research partition authority; research partitions must satisfy this policy.", "class": "REQUIRES_REVIEW", "evidence": ["app/research/schemas.py", "app/research/service.py"], "applies_to": ["dataset splitting"]}
+  ],
+  "references": ["docs/corpus-readiness/sweccl2/10_EVALUATION_AND_LEAKAGE_READINESS.md", "docs/corpus-intelligence/l2/10_STAGE6_IMPLEMENTATION_HANDOFF.md", "docs/architecture/writing-intelligence-platform/14_ARCHITECTURE_DECISIONS.md", "docs/departments/research-evaluation-governance/foundation/05_DUPLICATE_POLICY.md", "docs/departments/research-evaluation-governance/foundation/04_EVALUATION_PROTECTION_POLICY.md"]
+}

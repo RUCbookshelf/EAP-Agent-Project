@@ -1,0 +1,22 @@
+{
+  "policy_id": "duplicate-handling-policy",
+  "policy_version": "duplicate-handling-policy-v0.1.0",
+  "policy_family": "duplicate-handling",
+  "status": "ratified",
+  "owner": "research-evaluation-governance",
+  "effective_date": "2026-08-07",
+  "ratification_decision_id": "RD-POL-005",
+  "supersedes": null,
+  "description": "Per-purpose duplicate governance: physical counts for descriptive statistics, effective membership for reference distributions, isolation for evaluation, and an explicit non-decision for future model development. Ratifies the Stage-5 deterministic representative selection with conditions.",
+  "scope": ["corpus duplicate groups (348 scope-level; 240 documents; 120 folded groups)", "reference distributions", "evaluation partitions", "future model development"],
+  "statements": [
+    {"statement_id": "DP-01", "statement": "Physical N counts all source documents; source records are never deleted.", "class": "ALLOWED", "evidence": ["docs/corpus-readiness/sweccl2/06_DATA_QUALITY_AND_DUPLICATES.md", "docs/corpus-intelligence/l2/03_SCORE_DUPLICATE_EVALUATION_POLICY.md:31-33"], "applies_to": ["descriptive corpus statistics"]},
+    {"statement_id": "DP-02", "statement": "Descriptive corpus statistics keep all documents and report duplicates as a documented quality fact.", "class": "ALLOWED", "evidence": ["docs/corpus-readiness/sweccl2/06_DATA_QUALITY_AND_DUPLICATES.md"], "applies_to": ["descriptive statistics"]},
+    {"statement_id": "DP-03", "statement": "Reference distributions use effective membership (canonical members only, canonical = lexicographically smallest document_id).", "class": "ALLOWED", "evidence": ["docs/corpus-intelligence/l2/03_SCORE_DUPLICATE_EVALUATION_POLICY.md:26-35", "docs/corpus-intelligence/l2/evidence/methodology_review.md"], "applies_to": ["reference distributions"]},
+    {"statement_id": "DP-04", "statement": "Every distribution record carries the duplicate policy id; missingness and duplicate sensitivity are reported, never imputed.", "class": "ALLOWED", "evidence": ["docs/corpus-intelligence/l2/06_REFERENCE_DISTRIBUTIONS.md"], "applies_to": ["distribution records"]},
+    {"statement_id": "DP-05", "statement": "Duplicate-group members are never split across development/evaluation boundaries.", "class": "PROHIBITED", "evidence": ["docs/corpus-readiness/sweccl2/10_EVALUATION_AND_LEAKAGE_READINESS.md:37-42", "docs/corpus-intelligence/l2/10_STAGE6_IMPLEMENTATION_HANDOFF.md:72-75"], "applies_to": ["evaluation partitions"]},
+    {"statement_id": "DP-06", "statement": "Changing the representative-selection rule requires a major policy amendment and methodological review.", "class": "REQUIRES_REVIEW", "evidence": ["docs/departments/research-evaluation-governance/foundation/02_POLICY_VERSIONING.md"], "applies_to": ["duplicate policy changes"]},
+    {"statement_id": "DP-07", "statement": "Duplicate handling for future model development is not settled by this policy and requires a separate Researcher decision.", "class": "REQUIRES_REVIEW", "evidence": ["docs/departments/research-evaluation-governance/foundation/05_DUPLICATE_POLICY.md:4.4"], "applies_to": ["model training", "fine-tuning"]}
+  ],
+  "references": ["docs/corpus-intelligence/l2/03_SCORE_DUPLICATE_EVALUATION_POLICY.md", "docs/corpus-intelligence/l2/evidence/methodology_review.md", "docs/corpus-readiness/sweccl2/06_DATA_QUALITY_AND_DUPLICATES.md", "docs/corpus-readiness/sweccl2/10_EVALUATION_AND_LEAKAGE_READINESS.md"]
+}

@@ -1,0 +1,28 @@
+{
+  "policy_id": "measurement-claim-policy",
+  "policy_version": "measurement-claim-policy-v0.1.0",
+  "policy_family": "measurement-claim",
+  "status": "ratified",
+  "owner": "research-evaluation-governance",
+  "effective_date": "2026-08-07",
+  "ratification_decision_id": "RD-POL-007",
+  "supersedes": null,
+  "description": "Defines permitted and prohibited platform statements per evidence class (observed feature, reference comparison, diagnostic inference, feedback recommendation, longitudinal evidence, learning outcome) with machine-checkable banned-vocabulary guardrails.",
+  "scope": ["all platform statements about learners or corpus-derived evidence", "Stage 6 evidence artifacts", "feedback and learner-facing copy", "longitudinal output"],
+  "statements": [
+    {"statement_id": "MC-01", "statement": "Observed feature statements may state value, unit, version, and evidence location; they may not judge the learner.", "class": "ALLOWED", "evidence": ["docs/architecture/writing-intelligence-platform/04_DATA_AND_INTELLIGENCE_ARCHITECTURE.md:31-39"], "applies_to": ["observed feature"]},
+    {"statement_id": "MC-02", "statement": "Reference comparison statements must carry group, versions, effective N, availability, and fallback disclosure; normative interpretation is blocked.", "class": "ALLOWED", "evidence": ["docs/architecture/writing-intelligence-platform/14_ARCHITECTURE_DECISIONS.md:68-75"], "applies_to": ["reference comparison"]},
+    {"statement_id": "MC-03", "statement": "The learner has advanced proficiency, the learner mastered this skill, and the learner improved are prohibited from corpus descriptive evidence.", "class": "PROHIBITED", "evidence": ["docs/architecture/writing-intelligence-platform/07_CORPUS_NLP_ARCHITECTURE.md:27,32"], "applies_to": ["reference comparison", "observed feature"]},
+    {"statement_id": "MC-04", "statement": "Diagnostic inference statements require gate version, evidence ids, and prototype limitation wording; they may not assert learner traits.", "class": "ALLOWED", "evidence": ["app/calibration/service.py:117", "docs/development/DECISION_LOG.md"], "applies_to": ["diagnostic inference"]},
+    {"statement_id": "MC-05", "statement": "Feedback recommendations carry evidence and provenance; practice completion is activity completion only.", "class": "ALLOWED", "evidence": ["docs/architecture/writing-intelligence-platform/08_FEEDBACK_LEARNER_INTELLIGENCE.md:43"], "applies_to": ["feedback recommendation"]},
+    {"statement_id": "MC-06", "statement": "Mastery, learning, or ability claims attached to practice completion or feedback are prohibited.", "class": "PROHIBITED", "evidence": ["docs/architecture/writing-intelligence-platform/08_FEEDBACK_LEARNER_INTELLIGENCE.md:43"], "applies_to": ["feedback recommendation", "practice"]},
+    {"statement_id": "MC-07", "statement": "Longitudinal output must be descriptive with HISTORY_LIMITATION wording; improvement/decline/mastery/regression claims are prohibited.", "class": "ALLOWED", "evidence": ["app/learner/history.py:15", "docs/architecture/writing-intelligence-platform/07_CORPUS_NLP_ARCHITECTURE.md:32"], "applies_to": ["longitudinal evidence"]},
+    {"statement_id": "MC-08", "statement": "Learning outcome statements are reserved for validated measurement models behind the outcome-layer gate; none may be made today.", "class": "PROHIBITED", "evidence": ["docs/architecture/writing-intelligence-platform/08_FEEDBACK_LEARNER_INTELLIGENCE.md:27-34"], "applies_to": ["learning outcome"]},
+    {"statement_id": "MC-09", "statement": "Banned vocabulary (level, score, ability, mastery, gain, cefr; word boundary) must not appear in corpus-derived field names or UI strings.", "class": "PROHIBITED", "evidence": ["docs/architecture/writing-intelligence-platform/07_CORPUS_NLP_ARCHITECTURE.md:27"], "applies_to": ["field names", "UI strings"]},
+    {"statement_id": "MC-10", "statement": "Risky ability phrases (advanced proficiency, mastery, native-like, superior writing ability, etc.) are prohibited in learner-directed statements.", "class": "PROHIBITED", "evidence": ["app/configuration/schemas.py:72-80"], "applies_to": ["learner-facing copy"]},
+    {"statement_id": "MC-11", "statement": "Display may downgrade epistemic layers, never upgrade them.", "class": "ALLOWED", "evidence": ["docs/architecture/writing-intelligence-platform/14_ARCHITECTURE_DECISIONS.md:86-95"], "applies_to": ["display", "UI"]},
+    {"statement_id": "MC-12", "statement": "L2 diagnostic evidence and Academic research evidence never share a schema or claim templates.", "class": "PROHIBITED", "evidence": ["docs/architecture/writing-intelligence-platform/14_ARCHITECTURE_DECISIONS.md"], "applies_to": ["evidence schemas"]},
+    {"statement_id": "MC-13", "statement": "Direct learner-to-learner comparison statements (e.g., outperforms peers) are prohibited.", "class": "PROHIBITED", "evidence": ["docs/architecture/writing-intelligence-platform/04_DATA_AND_INTELLIGENCE_ARCHITECTURE.md:34"], "applies_to": ["reference comparison", "feedback"]}
+  ],
+  "references": ["docs/architecture/writing-intelligence-platform/07_CORPUS_NLP_ARCHITECTURE.md", "docs/architecture/writing-intelligence-platform/14_ARCHITECTURE_DECISIONS.md", "docs/architecture/writing-intelligence-platform/08_FEEDBACK_LEARNER_INTELLIGENCE.md", "app/learner/history.py", "app/configuration/schemas.py"]
+}

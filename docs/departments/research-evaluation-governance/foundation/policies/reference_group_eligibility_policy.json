@@ -1,0 +1,25 @@
+{
+  "policy_id": "reference-group-eligibility-policy",
+  "policy_version": "reference-group-eligibility-policy-v0.1.0",
+  "policy_family": "reference-group-eligibility",
+  "status": "ratified",
+  "owner": "research-evaluation-governance",
+  "effective_date": "2026-08-07",
+  "ratification_decision_id": "RD-POL-006",
+  "supersedes": null,
+  "description": "Classifies min-N=30 as a general feature-independent descriptive floor (not a validity claim), defines eligible/limited/unavailable/requires-review criteria, ratifies the 75 approved groups, ARG13/ARG19 unavailability, and the fallback hierarchy with disclosure.",
+  "scope": ["reference-groups-v0.1.0 (75 approved groups)", "reference-distributions-v0.1.0", "corpus-features-v0.1.0", "fallback resolution"],
+  "statements": [
+    {"statement_id": "RG-01", "statement": "For v0.1 descriptive reference distributions, effective N >= 30 after duplicate policy is a general feature-independent eligibility floor.", "class": "ALLOWED", "evidence": ["docs/corpus-intelligence/l2/04_REFERENCE_GROUP_POLICY.md:11-16", "docs/corpus-intelligence/l2/evidence/methodology_review.md"], "applies_to": ["reference distributions"]},
+    {"statement_id": "RG-02", "statement": "N >= 30 establishes no statistical validity or normative sufficiency; normative interpretation remains blocked by the validated-measurement gate.", "class": "PROHIBITED", "evidence": ["docs/architecture/writing-intelligence-platform/14_ARCHITECTURE_DECISIONS.md:68-75", "docs/corpus-intelligence/l2/04_REFERENCE_GROUP_POLICY.md:13-15"], "applies_to": ["normative claims"]},
+    {"statement_id": "RG-03", "statement": "A group is ELIGIBLE when approved, effective N >= 30, complete-case N >= 30, feature version matches, distribution exists, and no degenerate flag, for descriptive reference purposes.", "class": "ALLOWED", "evidence": ["docs/corpus-intelligence/l2/04_REFERENCE_GROUP_POLICY.md", "docs/corpus-intelligence/l2/06_REFERENCE_DISTRIBUTIONS.md"], "applies_to": ["reference lookups"]},
+    {"statement_id": "RG-04", "statement": "Groups with missingness flags, degenerate distributions, or fragile entry-year sizes (2003/2007) are LIMITED and must disclose their limitation.", "class": "ALLOWED", "evidence": ["docs/corpus-readiness/sweccl2/08_REFERENCE_GROUP_READINESS.md", "docs/corpus-intelligence/l2/06_REFERENCE_DISTRIBUTIONS.md"], "applies_to": ["limited groups"]},
+    {"statement_id": "RG-05", "statement": "ARG13 and ARG19 standalone distributions are UNAVAILABLE; their documents remain in broader approved groups.", "class": "ALLOWED", "evidence": ["docs/corpus-intelligence/l2/04_REFERENCE_GROUP_POLICY.md:18,29-30", "docs/corpus-intelligence/l2/evidence/methodology_review.md"], "applies_to": ["ARG13", "ARG19"]},
+    {"statement_id": "RG-06", "statement": "Any group with effective N < 30 after duplicate policy, unknown ids, missing distributions, or feature/version mismatch is UNAVAILABLE; silent group widening is forbidden.", "class": "PROHIBITED", "evidence": ["docs/corpus-intelligence/l2/04_REFERENCE_GROUP_POLICY.md:29-30", "docs/architecture/writing-intelligence-platform/07_CORPUS_NLP_ARCHITECTURE.md:30"], "applies_to": ["unavailable states"]},
+    {"statement_id": "RG-07", "statement": "The fallback hierarchy prompt+timed -> prompt -> genre+timed -> genre -> UNAVAILABLE is ratified with mandatory requested/resolved/disclosure reporting.", "class": "ALLOWED", "evidence": ["docs/corpus-intelligence/l2/04_REFERENCE_GROUP_POLICY.md:34-37", "docs/corpus-intelligence/l2/10_STAGE6_IMPLEMENTATION_HANDOFF.md:44-47"], "applies_to": ["fallback resolution"]},
+    {"statement_id": "RG-08", "statement": "Fallback to a genre-level group without prompt control is descriptive only and is not a prompt-controlled comparison.", "class": "LIMITED", "evidence": ["docs/corpus-readiness/sweccl2/08_REFERENCE_GROUP_READINESS.md"], "applies_to": ["genre fallback"]},
+    {"statement_id": "RG-09", "statement": "Any use outside the descriptive reference purpose (normative interpretation, learner-facing output, cross-version comparisons, model development, frequency-resource features) requires review.", "class": "REQUIRES_REVIEW", "evidence": ["docs/architecture/writing-intelligence-platform/14_ARCHITECTURE_DECISIONS.md:68-84", "docs/architecture/writing-intelligence-platform/15_OPEN_QUESTIONS_AND_DEFERRED_DECISIONS.md:50"], "applies_to": ["non-descriptive uses"]},
+    {"statement_id": "RG-10", "statement": "Raising or lowering the floor, feature-dependent floors, or changing the fallback hierarchy require a major policy amendment with methodological review.", "class": "REQUIRES_REVIEW", "evidence": ["docs/departments/research-evaluation-governance/foundation/02_POLICY_VERSIONING.md"], "applies_to": ["policy changes"]}
+  ],
+  "references": ["docs/corpus-intelligence/l2/04_REFERENCE_GROUP_POLICY.md", "docs/corpus-intelligence/l2/06_REFERENCE_DISTRIBUTIONS.md", "docs/corpus-readiness/sweccl2/08_REFERENCE_GROUP_READINESS.md", "docs/architecture/writing-intelligence-platform/14_ARCHITECTURE_DECISIONS.md", "docs/architecture/writing-intelligence-platform/07_CORPUS_NLP_ARCHITECTURE.md"]
+}

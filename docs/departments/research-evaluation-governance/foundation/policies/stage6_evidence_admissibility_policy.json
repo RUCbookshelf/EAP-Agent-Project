@@ -1,0 +1,25 @@
+{
+  "policy_id": "stage6-evidence-admissibility-policy",
+  "policy_version": "stage6-evidence-admissibility-policy-v0.1.0",
+  "policy_family": "stage6-evidence-admissibility",
+  "status": "ratified",
+  "owner": "research-evaluation-governance",
+  "effective_date": "2026-08-07",
+  "ratification_decision_id": "RD-POL-008",
+  "supersedes": null,
+  "description": "Defines the evidence a future Stage-6 diagnostic comparison must provide before admission (ADMISSIBLE/LIMITED/UNAVAILABLE/INVALID), including version provenance, group disclosure, effective N, availability, reproducibility, missingness, descriptive direction, and prohibited inference.",
+  "scope": ["future Stage 6 diagnostic comparisons (student vs reference distribution)", "admissibility records", "ReferencePatternMatch design"],
+  "statements": [
+    {"statement_id": "SA-01", "statement": "A comparison artifact must carry corpus_package_id, manifest_hash, FeatureSetVersion, ReferenceGroupVersion, DistributionVersion, requested and resolved group, effective N, availability, reproducibility, missingness, and provenance.", "class": "ALLOWED", "evidence": ["docs/corpus-intelligence/l2/06_REFERENCE_DISTRIBUTIONS.md", "docs/corpus-intelligence/l2/10_STAGE6_IMPLEMENTATION_HANDOFF.md"], "applies_to": ["admissibility records"]},
+    {"statement_id": "SA-02", "statement": "Student and corpus feature versions must match exactly; mismatch yields UNAVAILABLE, never best-effort comparability.", "class": "ALLOWED", "evidence": ["docs/architecture/writing-intelligence-platform/07_CORPUS_NLP_ARCHITECTURE.md:29"], "applies_to": ["version matching"]},
+    {"statement_id": "SA-03", "statement": "Fallback resolution must be disclosed per artifact; fallback use yields LIMITED.", "class": "ALLOWED", "evidence": ["docs/corpus-intelligence/l2/04_REFERENCE_GROUP_POLICY.md:34-37"], "applies_to": ["fallback disclosure"]},
+    {"statement_id": "SA-04", "statement": "Effective N below 30, ARG13/ARG19 standalone, missing distributions, or license-restricted operations yield UNAVAILABLE.", "class": "ALLOWED", "evidence": ["docs/corpus-intelligence/l2/04_REFERENCE_GROUP_POLICY.md:29-30", "docs/corpus-intelligence/l2/07_CORPUS_INTELLIGENCE_QUERY_BOUNDARY.md"], "applies_to": ["unavailable states"]},
+    {"statement_id": "SA-05", "statement": "Missingness is never imputed; n_missing and validity flags are reported; elevated missingness yields LIMITED.", "class": "ALLOWED", "evidence": ["docs/corpus-intelligence/l2/06_REFERENCE_DISTRIBUTIONS.md"], "applies_to": ["missingness"]},
+    {"statement_id": "SA-06", "statement": "Comparison direction is descriptive only; normative wording yields INVALID.", "class": "PROHIBITED", "evidence": ["docs/architecture/writing-intelligence-platform/14_ARCHITECTURE_DECISIONS.md:68-75"], "applies_to": ["comparison artifacts"]},
+    {"statement_id": "SA-07", "statement": "Proficiency/mastery/learning-gain/CEFR wording, causal or transfer claims, cross-version comparisons, and score fields yield INVALID.", "class": "PROHIBITED", "evidence": ["docs/architecture/writing-intelligence-platform/07_CORPUS_NLP_ARCHITECTURE.md:27,45"], "applies_to": ["inference", "artifacts"]},
+    {"statement_id": "SA-08", "statement": "Circular use of the 270 scored block (construction and evaluation from the same block) yields INVALID.", "class": "PROHIBITED", "evidence": ["docs/departments/research-evaluation-governance/foundation/04_EVALUATION_PROTECTION_POLICY.md"], "applies_to": ["evaluation designs"]},
+    {"statement_id": "SA-09", "statement": "Learner-facing corpus output remains disabled by default; exposure without the D-08 display policy and licensing gate yields INVALID.", "class": "PROHIBITED", "evidence": ["docs/architecture/writing-intelligence-platform/14_ARCHITECTURE_DECISIONS.md:77-84"], "applies_to": ["learner surfaces"]},
+    {"statement_id": "SA-10", "statement": "The diagnostic algorithm, band method, and thresholds are not defined by this policy; they remain Researcher decisions (D4).", "class": "REQUIRES_REVIEW", "evidence": ["docs/architecture/writing-intelligence-platform/15_OPEN_QUESTIONS_AND_DEFERRED_DECISIONS.md:43"], "applies_to": ["Stage 6 design"]}
+  ],
+  "references": ["docs/corpus-intelligence/l2/06_REFERENCE_DISTRIBUTIONS.md", "docs/corpus-intelligence/l2/10_STAGE6_IMPLEMENTATION_HANDOFF.md", "docs/architecture/writing-intelligence-platform/07_CORPUS_NLP_ARCHITECTURE.md", "docs/architecture/writing-intelligence-platform/14_ARCHITECTURE_DECISIONS.md", "docs/departments/research-evaluation-governance/foundation/06_REFERENCE_GROUP_ELIGIBILITY_POLICY.md"]
+}

@@ -1,0 +1,24 @@
+{
+  "policy_id": "feedback-audit-sampling-policy",
+  "policy_version": "feedback-audit-sampling-policy-v0.1.0",
+  "policy_family": "feedback-audit-sampling",
+  "status": "ratified",
+  "owner": "research-evaluation-governance",
+  "effective_date": "2026-08-07",
+  "ratification_decision_id": "RD-POL-009",
+  "supersedes": null,
+  "description": "Defines the feedback audit sampling framework (evaluation-of-evaluation): sampling unit, triggers, deterministic rates, risk strata, evidence requirements, human-review fields, failure categories, and version provenance. Operation deferred; rate/criteria/reviewer pool remain a Researcher decision.",
+  "scope": ["future learner-facing feedback records", "practice evaluations", "human review operation (Horizon 2)"],
+  "statements": [
+    {"statement_id": "AS-01", "statement": "The sampling unit is one feedback delivery instance (feedback_id), audited with its full evidence chain.", "class": "ALLOWED", "evidence": ["docs/architecture/writing-intelligence-platform/08_FEEDBACK_LEARNER_INTELLIGENCE.md:23-25"], "applies_to": ["feedback audit"]},
+    {"statement_id": "AS-02", "statement": "Selection is deterministic and reproducible (stable hash of feedback_id, versioned sampler rule audit-sampler-v0.1.0).", "class": "ALLOWED", "evidence": ["docs/departments/research-evaluation-governance/foundation/09_FEEDBACK_AUDIT_SAMPLING.md"], "applies_to": ["sampling"]},
+    {"statement_id": "AS-03", "statement": "High-risk strata (strength claims, corpus grounding, longitudinal statements, low-confidence admissions, fallback comparisons) are sampled at 100%.", "class": "ALLOWED", "evidence": ["docs/departments/research-evaluation-governance/foundation/09_FEEDBACK_AUDIT_SAMPLING.md:5"], "applies_to": ["risk strata"]},
+    {"statement_id": "AS-04", "statement": "The default systematic rate is 5% (medium stratum); rate, criteria, and reviewer pool are a Researcher decision and change only through policy amendment.", "class": "REQUIRES_REVIEW", "evidence": ["docs/architecture/writing-intelligence-platform/15_OPEN_QUESTIONS_AND_DEFERRED_DECISIONS.md:63"], "applies_to": ["sampling rate"]},
+    {"statement_id": "AS-05", "statement": "Every sampled unit requires the full pipeline version chain and evidence ids; missing evidence makes the unit not_auditable, never inferred.", "class": "ALLOWED", "evidence": ["docs/departments/research-evaluation-governance/foundation/09_FEEDBACK_AUDIT_SAMPLING.md:6"], "applies_to": ["evidence collection"]},
+    {"statement_id": "AS-06", "statement": "Human review reuses the research review contracts (decision/confidence/reason_code/comment/guideline_version, target_type=FEEDBACK).", "class": "ALLOWED", "evidence": ["app/research/schemas.py"], "applies_to": ["human review"]},
+    {"statement_id": "AS-07", "statement": "Failure categories are a closed vocabulary (evidence_not_grounded, unsupported_claim, claim_template_violation, fabricated_evidence, attribution_error, unavailability_mishandled, leakage_or_domain_violation, pii_exposure, provenance_missing, other).", "class": "ALLOWED", "evidence": ["docs/departments/research-evaluation-governance/foundation/09_FEEDBACK_AUDIT_SAMPLING.md:8"], "applies_to": ["audit results"]},
+    {"statement_id": "AS-08", "statement": "Audit sampling is evaluation-of-evaluation; audit outcomes never become learner-outcome measures.", "class": "PROHIBITED", "evidence": ["docs/architecture/writing-intelligence-platform/08_FEEDBACK_LEARNER_INTELLIGENCE.md:23-25,43"], "applies_to": ["learner-outcome evaluation"]},
+    {"statement_id": "AS-09", "statement": "No learner-facing feedback is built by this foundation; operation is deferred to Horizon 2.", "class": "REQUIRES_REVIEW", "evidence": ["docs/architecture/writing-intelligence-platform/12_DEPENDENCY_ROADMAP.md:29"], "applies_to": ["operation"]}
+  ],
+  "references": ["docs/architecture/writing-intelligence-platform/08_FEEDBACK_LEARNER_INTELLIGENCE.md", "docs/architecture/writing-intelligence-platform/15_OPEN_QUESTIONS_AND_DEFERRED_DECISIONS.md", "app/research/schemas.py", "docs/departments/research-evaluation-governance/foundation/02_POLICY_VERSIONING.md"]
+}
