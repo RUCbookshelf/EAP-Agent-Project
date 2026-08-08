@@ -1,0 +1,1 @@
+"""Academic Writing entity tests."""
