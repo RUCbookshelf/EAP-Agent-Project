@@ -292,7 +292,10 @@ def test_normal_launcher_behavior_without_verify_is_unchanged():
     assert run_bat.index("scripts.migrate_database") < run_bat.index("scripts.initialize_project")
     assert run_bat.index("scripts.initialize_project") < run_bat.index("scripts.run_local")
     assert run_bat.index('"%~1"=="--install-only"') > run_bat.index("scripts.initialize_project")
-    assert "scripts.verify_launcher" not in run_bat[run_bat.rindex(":python_missing") :]
+    # Launcher migration (environment goal): the Python 3.11 failure label was
+    # replaced by :bootstrap_failed; verify_launcher must still only appear in
+    # the --verify branch, never in the normal startup/failure tail.
+    assert "scripts.verify_launcher" not in run_bat[run_bat.rindex(":bootstrap_failed") :]
 def test_settings_database_resolution_contract(monkeypatch):
     from app.config import load_settings
 

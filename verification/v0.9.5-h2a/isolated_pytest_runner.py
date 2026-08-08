@@ -121,7 +121,7 @@ def main() -> int:
             print(f"[h2a-isolation] FAIL: port {port} is busy")
             return 2
 
-    before = digest(DEV_DB)
+    before = digest(DEV_DB) if DEV_DB.exists() else None
     print(f"[h2a-isolation] dev db before: {before}")
 
     tmp = Path(tempfile.mkdtemp(prefix="v095h2a-"))
@@ -151,10 +151,13 @@ def main() -> int:
     print(f"[h2a-isolation] running: {' '.join(command)}")
     result = subprocess.run(command, cwd=ROOT, env=env)
 
-    after = digest(DEV_DB)
+    after = digest(DEV_DB) if DEV_DB.exists() else None
     print(f"[h2a-isolation] dev db after: {after}")
     if before != after:
-        print("[h2a-isolation] FAIL: development database changed during verification")
+        if before is None and after is not None:
+            print("[h2a-isolation] FAIL: development database was CREATED during verification")
+        else:
+            print("[h2a-isolation] FAIL: development database changed during verification")
         return 2
 
     shutil.rmtree(tmp, ignore_errors=True)

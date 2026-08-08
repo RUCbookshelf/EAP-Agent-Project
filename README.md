@@ -55,7 +55,8 @@ v0.6 在修订分析基础上新增 API 驱动的学习者时间线、版本分�
 
 ## 1.1 安装（请按以下顺序执行）
 
-新电脑推荐直接双击 `run.bat`，它会创建 Python 3.11 独立环境、安装依赖并启动。完整迁移说明见 [INSTALL.md](INSTALL.md)。
+新电脑推荐直接双击 `run.bat`：它会自动完成环境引导（bootstrap，基于 uv）、创建工作树本地
+`.venv`、安装锁定依赖并启动。完整迁移说明见 [INSTALL.md](INSTALL.md)。
 
 Step 1. 在运行安装命令之前，**先切换到项目所在目录（这里以你安装在C:\path\to\writing-feedback-mvp文件夹下为例，请按需调整路径）**：
 
@@ -63,14 +64,17 @@ Step 1. 在运行安装命令之前，**先切换到项目所在目录（这里�
 cd "C:\path\to\writing-feedback-mvp"
 ```
 
-Step 2. 要求 Windows 11 和 CPython 3.11。所有命令均在项目根目录运行，无需激活环境;：
+Step 2. 要求 Windows 11。Python 支持范围为 3.11–3.12（首选 3.12.x；声明见 `.python-version`
+和 `pyproject.toml` 的 `requires-python`）。所有命令均在项目根目录运行，无需激活环境：
 
 ```powershell
-py -V:Astral/CPython3.11.15 -m venv .venv
-& ".\.venv\Scripts\python.exe" -m pip install -r requirements.txt
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\dev\bootstrap_environment.ps1
 ```
-若新电脑安装的是标准 Python 3.11，而非 Astral 发行版，将第一条命令替换为 `py -3.11 -m venv .venv`。
-项目不会修改系统 Python 或系统环境变量。
+
+引导脚本会：定位或按官方来源在用户目录安装 uv；解析受支持解释器（3.12.13，必要时自动
+下载）；用 `uv.lock` 精确重建工作树本地 `.venv`（含 pytest/Playwright 和固定版 spaCy
+英语模型）；输出 `ENVIRONMENT READY` 或带原因码的失败信息。重复运行是幂等的。
+项目不会修改系统 Python、系统环境变量或系统级安装。
 
 ## 1.2 启动
 
@@ -97,6 +101,7 @@ Step 2. 在智能体安装文件夹下，复制 `.env.example` 为 `.env`，随�
 ## 1.4 测试与验证（使用人员不用看这一步，这一步仅作效果验证的说明）
 
 ```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\dev\run_tests.ps1
 & ".\.venv\Scripts\python.exe" -m pytest tests -v
 & ".\.venv\Scripts\python.exe" -m scripts.seed_demo_data
 & ".\.venv\Scripts\python.exe" -m scripts.verify_closed_loop

@@ -1,17 +1,19 @@
 # 新电脑安装指南
 
-本指南适用于 Windows 11。项目只使用 Python 3.11，不需要 PowerShell 激活脚本，也不会修改系统级环境变量或已有 Python 安装。
+本指南适用于 Windows 11。项目支持 Python 3.11–3.12（首选 3.12.x），使用 uv 管理运行环境；
+不需要 PowerShell 激活脚本，也不会修改系统级环境变量或已有 Python 安装。
 
 ## 1. 新电脑准备
 
-1. 安装 64 位 CPython 3.11，并确保同时安装 Windows `py` launcher。
-2. 打开“命令提示符”或 PowerShell，运行：
+1. 本机无需预装 Python：引导脚本会按官方来源在用户目录安装 uv，并由 uv 解析/下载受支持的
+   解释器（3.12.13）。已有的 Python 3.11 安装（若存在）不会被修改。
+2. 打开“命令提示符”或 PowerShell，可选检查网络连通性：
 
    ```powershell
-   py -3.11 --version
+   uv --version
    ```
 
-   输出必须以 `Python 3.11` 开头。如果系统注册了 Astral 发行版，也可使用 `py -V:Astral/CPython3.11.15 --version`。
+   若未安装，引导脚本会给出安装指引（官方安装脚本或 `python -m pip install uv`）。
 3. 首次安装依赖需要互联网连接。运行应用本身可使用 LocalDemo 离线反馈；调用 DeepSeek 需要网络。
 
 ## 2. 复制项目
@@ -34,14 +36,13 @@
 它会依次：
 
 1. 切换到 `run.bat` 所在目录，因此不依赖用户当前路径；
-2. 优先查找指定的 Astral CPython 3.11.15，否则查找标准 `py -3.11`；
-3. 在项目内创建 `.venv`；
-4. 使用 `.venv\Scripts\python.exe` 安装或核对 `requirements.txt`；
-5. 安装并检查 `requirements-nlp.txt` 中固定的 spaCy 英语模型；模型失败时明确保留 BasicAnalyzer 回退；
-6. 检查环境确实是 Python 3.11；
-7. 执行版本化数据库迁移；
-8. 启动 FastAPI，等待 health endpoint 正常；
-9. 启动 Streamlit API 客户端。
+2. 调用 `scripts\dev\bootstrap_environment.ps1`：定位/安装 uv，解析受支持解释器
+   （首选 3.12.13），用 `uv.lock` 精确重建工作树本地 `.venv`（幂等，重复运行不重复安装）；
+3. 检查并安装 `nlp` 依赖组中固定的 spaCy 英语模型；模型失败时明确保留 BasicAnalyzer 回退；
+4. 检查环境确实在受支持范围（>=3.11,<3.13）；
+5. 执行版本化数据库迁移；
+6. 启动 FastAPI，等待 health endpoint 正常；
+7. 启动 Streamlit API 客户端。
 
 默认 FastAPI 为 `http://127.0.0.1:8000`，API 文档为 `http://127.0.0.1:8000/docs`，Streamlit 为 `http://127.0.0.1:8501`。使用期间不要关闭启动窗口；按 `Ctrl+C` 可停止两项服务。
 
@@ -65,33 +66,25 @@
 如果不使用批处理，可在项目根目录运行：
 
 ```powershell
-py -V:Astral/CPython3.11.15 -m venv .venv
-& ".\.venv\Scripts\python.exe" -m pip install -r requirements.txt
-& ".\.venv\Scripts\python.exe" -m pip install -r requirements-nlp.txt
-& ".\.venv\Scripts\python.exe" -m scripts.verify_nlp_resources
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\dev\bootstrap_environment.ps1
 & ".\.venv\Scripts\python.exe" -m scripts.migrate_database
 & ".\.venv\Scripts\python.exe" -m scripts.run_local
-```
-
-标准 Python 3.11 安装没有 Astral 标识时，将第一行替换为：
-
-```powershell
-py -3.11 -m venv .venv
 ```
 
 ## 6. 安装后检查
 
 ```powershell
 & ".\.venv\Scripts\python.exe" --version
-& ".\.venv\Scripts\python.exe" -m pip check
-& ".\.venv\Scripts\python.exe" -m pytest tests -q
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\dev\verify_environment.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\dev\run_tests.ps1
 ```
 
-预期 Python 为 3.11，`pip check` 显示无依赖冲突，测试全部通过。
+预期输出 `ENVIRONMENT READY`，且聚焦测试通过。
 
 ## 7. 常见问题
 
-- 提示找不到 Python：重新安装 Python 3.11 并勾选/安装 `py launcher`，然后确认 `py -3.11 --version` 可用。
+- 提示找不到 Python/uv：按引导脚本给出的原因码处理（`UV_NOT_AVAILABLE`/`PYTHON_RUNTIME_MISSING`），
+  按官方来源安装 uv 后重跑。
 - 依赖下载失败：检查网络、代理和防火墙后再次运行 `run.bat`。已成功安装的包会被复用。
 - 端口 8000 或 8501 被占用：先关闭占用程序，或在 `.env` 中一致设置 `API_PORT`、`STREAMLIT_PORT` 和 `API_BASE_URL`；系统不会静默改用其他端口。
 - DeepSeek 不可用：系统应自动回退到 LocalDemo，并显示 `fallback_success`；不要把 API Key 发给维护人员排查。

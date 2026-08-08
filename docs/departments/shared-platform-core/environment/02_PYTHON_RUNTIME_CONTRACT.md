@@ -97,9 +97,9 @@ Justification:
    provisionable via uv. Option A remains rejected because 3.11 is not uniquely required by any
    evidence — the entire integrated baseline runs on 3.12.13.
 4. This Goal's canonical verification runs on the preferred 3.12.x runtime; the canonical 3.11
-   re-run (Wave-1 handoff follow-up, owner Platform/Infrastructure) has its trigger satisfied
-   (working 3.11 interpreter available) and is executed as focused 3.11 verification in WU13,
-   with a full 3.11 core re-run recorded for the integration handoff.
+   re-run (Wave-1 handoff follow-up, owner Platform/Infrastructure) is **COMPLETED** in WU13:
+   full non-live core on Python 3.11.15 → **1851 passed / 8 skipped / 0 failed, exit 0**
+   (identical totals to 3.12.13). The recorded 3.11 debt is closed.
 
 ## 4. Testability and drift protection
 
