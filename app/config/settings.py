@@ -7,6 +7,8 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 
+from app.version import PLATFORM_APPLICATION_VERSION, PLATFORM_API_VERSION, PLATFORM_DATABASE_MIGRATION_VERSION
+
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 
@@ -22,9 +24,9 @@ class Settings:
     api_port: int = 8000
     streamlit_port: int = 8501
     api_base_url: str = "http://127.0.0.1:8000"
-    application_version: str = "0.8.0"
-    api_version: str = "v1"
-    database_migration_version: int = 10
+    application_version: str = PLATFORM_APPLICATION_VERSION
+    api_version: str = PLATFORM_API_VERSION
+    database_migration_version: int = PLATFORM_DATABASE_MIGRATION_VERSION
     prompt_version: str = "feedback-prompt-v0.7.1"
     analysis_version: str = "spacy-analyzer-v0.8.0"
     diagnosis_version: str = "prototype-diagnosis-v0.6.1"

@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any, Protocol, runtime_checkable
 
 from app.analyzer import Analyzer
+from app.version import PLATFORM_APPLICATION_VERSION
 from app.calibration import DiagnosticCalibrationResult, DiagnosticCalibrationService
 from app.calf import append_product_fluency_metric
 from app.configuration import ConfigurationPayload
@@ -97,7 +98,7 @@ class SubmissionService:
         self.calibrator = calibrator
         self.calf_configuration = calf_configuration or ConfigurationPayload()
         self.system_repository.record_versions({
-            "application": "0.8.0",
+            "application": PLATFORM_APPLICATION_VERSION,
             "analysis": getattr(analyzer, "version", "unknown"),
             "diagnosis": getattr(diagnoser, "version", "unknown"),
             "diagnostic_calibration": "diagnostic-calibration-v0.6.1",

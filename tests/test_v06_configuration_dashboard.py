@@ -11,6 +11,7 @@ from app.analysis import AnalyzerRegistry, UnavailableAnalyzer, default_metric_r
 from app.analyzer import BasicAnalyzer
 from app.api.main import create_app
 from app.config import Settings
+from app.version import PLATFORM_APPLICATION_VERSION
 from app.configuration import ConfigurationCreate, ConfigurationPayload, configuration_hash
 from app.database import Database
 from app.diagnosis import HeuristicDiagnoser
@@ -335,7 +336,7 @@ def test_admin_api_configuration_dashboard_registries_and_reanalysis(tmp_path):
         })
         assert run.status_code == 200 and run.json()["llm_called"] is False
         version = client.get("/api/v1/system/version").json()
-        assert version["application_version"] == "0.8.0" and version["active_configuration_version"].startswith("config-v0.")
+        assert version["application_version"] == PLATFORM_APPLICATION_VERSION and version["active_configuration_version"].startswith("config-v0.")
 
 
 def test_sensitive_configuration_fields_never_enter_api_or_database(tmp_path):

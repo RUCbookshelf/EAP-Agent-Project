@@ -7,6 +7,7 @@ from typing import Any, Literal
 from pydantic import BaseModel, ConfigDict, Field
 
 from app.models.schemas import utc_now
+from app.version import PLATFORM_APPLICATION_VERSION
 
 
 class ExportSchemaVersion(StrEnum):
@@ -155,7 +156,7 @@ class ExportManifest(BaseModel):
     export_id: str = Field(pattern=r'^EXP\d{6}$')
     export_schema_version: str = ExportSchemaVersion.V0_1.value
     created_at: str
-    application_version: str = '0.8.2'
+    application_version: str = PLATFORM_APPLICATION_VERSION
     git_commit: str | None = None
     database_migration_version: int | None = None
     active_configuration_version: str | None = None

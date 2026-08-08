@@ -632,25 +632,25 @@
     },
     {
       "dependency_function": "get_submission_service",
-      "line": 24,
+      "line": 29,
       "router": "submissions.py",
       "use_cache": null
     },
     {
       "dependency_function": "get_submission_bundle_reader",
-      "line": 48,
+      "line": 70,
       "router": "submissions.py",
       "use_cache": null
     },
     {
       "dependency_function": "get_submission_calibration_reader",
-      "line": 49,
+      "line": 71,
       "router": "submissions.py",
       "use_cache": null
     },
     {
       "dependency_function": "get_submission_bundle_reader",
-      "line": 62,
+      "line": 84,
       "router": "submissions.py",
       "use_cache": null
     },

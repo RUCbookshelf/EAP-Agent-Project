@@ -21,6 +21,7 @@ from app.api.main import _build_full_app, _run_startup
 from app.database import Database
 from app.models import EssaySubmission
 from app.services import build_submission_service
+from app.version import PLATFORM_APPLICATION_VERSION as _PLATFORM_APP_VERSION
 from app.services.submission import (
     SubmissionAnalysisPort,
     SubmissionCalibrationPort,
@@ -295,7 +296,7 @@ class TestServiceContract:
             router=ProviderRouter(LocalDemoProvider(), LocalDemoProvider()),
         )
         assert len(system.calls) == 1
-        assert system.calls[0]["application"] == "0.8.0"
+        assert system.calls[0]["application"] == _PLATFORM_APP_VERSION
         assert system.calls[0]["feedback_schema"] == "structured-feedback-v0.7.1"
         assert data.calls == [] and analysis.calls == [] and calibration.calls == []
         assert service.history.database is data

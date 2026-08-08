@@ -30,6 +30,9 @@ class ErrorResponse(BaseModel):
 
 class SubmissionCreateRequest(EssaySubmission):
     essay_text: str = Field(min_length=1, max_length=50_000)
+    # Advisory domain/language hints (optional; server-derived values are authoritative).
+    advisory_domain: str | None = Field(default=None, max_length=50)
+    advisory_language: str | None = Field(default=None, max_length=10)
 
 
 class SubmissionResponse(BaseModel):
@@ -45,6 +48,11 @@ class SubmissionResponse(BaseModel):
     revision_group_summary: RevisionGroupSummary | None = None
     within_task_revision_trajectory: WithinTaskRevisionTrajectory | None = None
     ui_empty_states: list[str] = Field(default_factory=list)
+    # Server-derived domain/language attribution (additive, always present).
+    domain: str = Field(default="l2")
+    language: str = Field(default="en")
+    domain_attribution_rule: str = Field(default="domain-attribution-v0.1.0")
+    domain_attribution_version: str = Field(default="0.1.0")
 
 
 class RevisionCreateRequest(BaseModel):
