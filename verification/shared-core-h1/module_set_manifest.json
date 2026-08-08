@@ -127,6 +127,8 @@
                     "repositories/__init__.py",
                     "repositories/protocols.py",
                     "research/__init__.py",
+                    "research/governance/__init__.py",
+                    "research/governance/validators.py",
                     "research/scanner.py",
                     "research/schemas.py",
                     "research/service.py",
