@@ -5,41 +5,22 @@ cd /d "%~dp0"
 
 set "PYTHONUTF8=1"
 if not defined WRITING_FEEDBACK_VENV set "WRITING_FEEDBACK_VENV=.venv"
-set "VENV_PYTHON=%WRITING_FEEDBACK_VENV%\Scripts\python.exe"
+set "WF_VENV_PATH=%WRITING_FEEDBACK_VENV%"
 
-echo [1/7] Checking for Python 3.11 and the isolated project environment...
-if not exist "%VENV_PYTHON%" (
-    py -V:Astral/CPython3.11.15 --version >nul 2>&1
-    if not errorlevel 1 (
-        py -V:Astral/CPython3.11.15 -m venv "%WRITING_FEEDBACK_VENV%"
-    ) else (
-        py -3.11 --version >nul 2>&1
-        if errorlevel 1 goto :python_missing
-        py -3.11 -m venv "%WRITING_FEEDBACK_VENV%"
-    )
-    if errorlevel 1 goto :venv_failed
-)
+echo [1/7] Bootstrapping environment...
+powershell -NoProfile -ExecutionPolicy Bypass -File "scripts\dev\bootstrap_environment.ps1"
+if errorlevel 1 goto :bootstrap_failed
 
-"%VENV_PYTHON%" -c "import sys; raise SystemExit(0 if sys.version_info[:2] == (3, 11) else 1)"
-if errorlevel 1 goto :wrong_python
+set "VENV_PYTHON=%~dp0.venv\Scripts\python.exe"
+if not exist "%VENV_PYTHON%" set "VENV_PYTHON=%WRITING_FEEDBACK_VENV%\Scripts\python.exe"
 
-echo [2/7] Ensuring pip is available and installing project dependencies...
-"%VENV_PYTHON%" -m ensurepip --upgrade >nul
-if errorlevel 1 goto :pip_failed
-"%VENV_PYTHON%" -m pip install --disable-pip-version-check -r requirements.txt
-if errorlevel 1 goto :install_failed
-
-echo [3/7] Installing and checking the pinned English NLP resource...
-"%VENV_PYTHON%" -m scripts.verify_nlp_resources --require-model >nul 2>&1
-if errorlevel 1 (
-    "%VENV_PYTHON%" -m pip install --disable-pip-version-check -r requirements-nlp.txt
-    if errorlevel 1 (
-        echo WARNING: The English spaCy model could not be installed. BasicAnalyzer fallback will remain available and visible in health status.
-    )
-)
+echo [2/7] Verifying NLP resources...
 "%VENV_PYTHON%" -m scripts.verify_nlp_resources
+if errorlevel 1 (
+    echo WARNING: NLP resource check reported issues. BasicAnalyzer fallback may be active.
+)
 
-echo [4/7] Checking optional local configuration...
+echo [3/7] Checking optional local configuration...
 set "ENV_CHECK_FILE=.env"
 if defined WRITING_FEEDBACK_ENV_FILE set "ENV_CHECK_FILE=%WRITING_FEEDBACK_ENV_FILE%"
 if not exist "%ENV_CHECK_FILE%" (
@@ -58,11 +39,11 @@ if /I "%~1"=="--verify" (
     exit /b 0
 )
 
-echo [5/7] Applying versioned database migrations...
+echo [4/7] Applying versioned database migrations...
 "%VENV_PYTHON%" -m scripts.migrate_database
 if errorlevel 1 goto :migration_failed
 
-echo [6/7] Checking data directories, database, and prompt templates...
+echo [5/7] Checking data directories, database, and prompt templates...
 "%VENV_PYTHON%" -m scripts.initialize_project
 if errorlevel 1 goto :initialize_failed
 
@@ -71,31 +52,18 @@ if /I "%~1"=="--install-only" (
     exit /b 0
 )
 
-echo [7/7] Starting FastAPI and the Streamlit API client for v0.8...
+echo [6/7] Starting FastAPI and the Streamlit API client for v0.8...
 echo Keep this window open while using the application. Press Ctrl+C to stop.
 "%VENV_PYTHON%" -m scripts.run_local
 if errorlevel 1 goto :start_failed
 exit /b 0
 
-:python_missing
-echo ERROR: Python 3.11 was not found. Python 3.14 will not be used.
-echo Install 64-bit Python 3.11 with the Windows py launcher, then run this file again.
-goto :failed
-
-:venv_failed
-echo ERROR: The project virtual environment could not be created.
-goto :failed
-
-:wrong_python
-echo ERROR: The selected virtual environment is not running Python 3.11.
-goto :failed
-
-:pip_failed
-echo ERROR: pip could not be initialized inside the project virtual environment.
-goto :failed
-
-:install_failed
-echo ERROR: Project dependencies could not be installed. Check the internet connection and retry.
+:bootstrap_failed
+echo ERROR: Environment bootstrap failed. See messages above for details.
+echo Common fixes:
+echo   - Install uv: powershell -ExecutionPolicy Bypass -c "iwr https://astral.sh/uv/install.ps1 -UseBasicParsing | iex"
+echo   - Or: python -m pip install uv
+echo Then re-run this file.
 goto :failed
 
 :initialize_failed
