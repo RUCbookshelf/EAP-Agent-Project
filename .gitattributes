@@ -1,0 +1,6 @@
+# Environment contract machine-readable files must stay LF regardless of
+# core.autocrlf, so uv version parsing and lockfile hashes are never affected
+# by checkout line endings (Windows reliability; goal environment scope).
+.python-version text eol=lf
+uv.lock text eol=lf
+pyproject.toml text eol=lf

@@ -1,0 +1,36 @@
+# Repository dependency contract (Shared Platform & Core, environment goal).
+# AUTHORITATIVE manifest: pyproject.toml -> uv.lock -> authorized environment.
+# The product/platform application version is single-sourced in app/version.py
+# and is intentionally NOT duplicated here (this is a virtual project: no build).
+[project]
+name = "writing-feedback-mvp"
+description = "L2 writing feedback MVP (research prototype)"
+# Virtual-project placeholder required by tooling; the real product/platform
+# version is single-sourced in app/version.py and must never be mirrored here.
+version = "0.0.0"
+requires-python = ">=3.11,<3.13"
+dependencies = [
+    "fastapi==0.135.2",
+    "httpx==0.28.1",
+    "pydantic==2.13.4",
+    "python-dotenv==1.2.2",
+    "spacy==3.8.7",
+    "streamlit==1.60.0",
+    "uvicorn==0.41.0",
+]
+
+[dependency-groups]
+dev = [
+    "playwright==1.61.0",
+    "pytest==9.1.1",
+]
+nlp = [
+    # Pinned English spaCy model (default analyzer resource; BasicAnalyzer
+    # fallback exists). Same artifact as the legacy requirements-nlp.txt.
+    "en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl",
+]
+
+[tool.uv]
+# dev (pytest/playwright) and nlp (spaCy model) are installed by default so a
+# plain `uv sync` produces the complete development environment.
+default-groups = ["dev", "nlp"]
