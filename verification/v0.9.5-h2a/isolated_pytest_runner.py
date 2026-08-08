@@ -46,6 +46,10 @@ DEFAULT_TARGETS = [
     "tests/test_v095h2a_removed_contracts.py",
 ]
 
+# Wave-1 integration registration (2026-08-08): shared-core H1 additive
+# advisory domain/language fields and version single-sourcing, plus the
+# research governance foundation validators.  Reviewed at the Wave-1
+# Integration Gate; see docs/integration/wave1/04_SHARED_CONTRACT_CONVERGENCE.md.
 G_ALLOWLIST = (
     "app/services/calf.py,"
     "app/services/configuration.py,"
@@ -79,7 +83,11 @@ G_ALLOWLIST = (
     "app/practice/task_context.py,"
     "app/practice/completion.py,"
     "app/practice/evaluations.py,"
-    "app/api/routers/practice.py"
+    "app/api/routers/practice.py,"
+    "app/api/schemas.py,"
+    "app/research/schemas.py,"
+    "app/research/governance/__init__.py,"
+    "app/research/governance/validators.py,"
 )
 
 
