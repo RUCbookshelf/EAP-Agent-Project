@@ -50,16 +50,20 @@ APP = ROOT / "app"
 L2_CONSUMER_TREES = (
     "analysis",
     "analyzer",
+    "api",
     "calf",
     "calibration",
     "diagnosis",
     "feedback",
+    "infrastructure",
     "journey",
     "learner",
     "practice",
+    "repositories",
     "revision",
     "research",
     "services",
+    "ui",
 )
 
 
