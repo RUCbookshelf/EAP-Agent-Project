@@ -81,3 +81,13 @@ pre-existing suites pass unchanged.
 environment (1851/8/0), the Python 3.11 canonical re-run (1851/8/0), launcher/startup
 verification, locale parity, and drift guards pass; dev-DB isolation holds; product behavior
 is unchanged (only documented verification/test alignments).**
+
+## 7. Post-final-review revalidation (same session)
+
+After the fresh independent review (APPROVE_WITH_FINDINGS), all findings were resolved and the
+affected tooling revalidated: bootstrap (lock-first enforcement, writability probes,
+`UV_PROJECT_ENVIRONMENT` routing) → `ENVIRONMENT READY`, no changes; verifier (version-range
+check + store/cache/browser readability) → `ENVIRONMENT READY`; focused tests via the isolated
+runner (temp DB + digest guard) → PASS; `run.bat --verify` → PASS; `WF_VENV_PATH` custom-venv
+bootstrap → `ENVIRONMENT READY` (custom path honored); drift guards → 10/10. No product code or
+test behavior changed, so the full-core totals above remain the canonical record.

@@ -19,7 +19,7 @@ Python 3.11 parseability.
 | `test_requires_python_covers_policy_range` | `pyproject.toml` requires-python == `>=3.11,<3.13` |
 | `test_uv_lock_exists_and_matches_manifest` | `uv.lock` present, requires-python range matches, project name/version match manifest |
 | `test_no_sibling_worktree_venv_references` | no `worktrees\…\.venv`, `writing-feedback-mvp\.venv`, or `.pth` borrow references in scripts/tests/run.bat |
-| `test_no_absolute_developer_specific_python_paths` | no `C:\Users\16073`, `codex-runtimes`, or `AppData\…\uv` absolute paths in committed tooling |
+| `test_no_absolute_developer_specific_python_paths` | no `C:\Users\16073`, `codex-runtimes`, `AppData\…\uv`, or drive-letter absolute paths in committed tooling (corpus-owned files allowlisted, see §3) |
 | `test_no_unauthorized_pip_install_in_canonical_scripts` | `scripts/dev/*.ps1` never pip-installs project dependencies (only the documented `install uv` provisioning line is allowed) |
 | `test_bootstrap_and_verifier_agree_on_environment_location` | bootstrap/verifier/launcher all consume `uv_helpers.ps1` `Get-VenvPython` (single environment-location definition) |
 | `test_requirements_txt_is_consistent_compatibility_export` | every pin in `requirements.txt` exists with the same version in pyproject runtime deps or dev group |
@@ -33,6 +33,10 @@ Python 3.11 parseability.
 - Guards are deterministic, offline, and require no uv/network — they run in every context,
   including CI and restricted sandboxes.
 - The guards encode the contracts from 02/03/04/05 so doc drift and code drift fail together.
+- **Corpus exception:** pre-existing corpus-owned scripts
+  (`scripts/corpus_readiness/*`, `scripts/corpus_intelligence/build_stage5.py`) contain
+  absolute corpus-data/checkout paths and are explicitly allowlisted with owner Corpus & NLP
+  (recorded follow-up; the environment layer does not modify corpus semantics).
 
 ## 4. Gate statement
 

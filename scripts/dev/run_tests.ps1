@@ -65,40 +65,41 @@ $env:UV_CACHE_DIR          = $cacheDir
 $env:PLAYWRIGHT_BROWSERS_PATH = $browsersPath
 
 # ---------------------------------------------------------------------------
-# 4. Run tests
+# 4. Run tests (all modes route through the isolated runner so DB isolation,
+#    dev-DB digest guard, ports check, and LLM_PROVIDER=local always apply)
 # ---------------------------------------------------------------------------
-if ($Full) {
-    # Full mode: use the isolated_pytest_runner with --full
-    $runnerScript = Join-Path $repoRoot "verification\v0.9.5-h2a\isolated_pytest_runner.py"
-    if (Test-Path $runnerScript) {
-        & $venvPython $runnerScript --full
-        exit $LASTEXITCODE
-    } else {
-        Write-Host "ERROR: isolated_pytest_runner.py not found at $runnerScript"
-        exit 1
-    }
-} else {
-    # Targeted mode
-    $pytestArgsList = @("-m", "pytest", "-q", "-p", "no:cacheprovider")
+$runnerScript = Join-Path $repoRoot "verification\v0.9.5-h2a\isolated_pytest_runner.py"
+if (-not (Test-Path $runnerScript)) {
+    Write-Host "ERROR: isolated_pytest_runner.py not found at $runnerScript"
+    exit 1
+}
 
-    if ($Targets -and $Targets.Count -gt 0) {
-        # Add specified targets
-        foreach ($t in $Targets) {
-            $pytestArgsList += $t
-        }
-    } else {
-        # Default: run tests directory minus live tests
-        $pytestArgsList += "--ignore=tests/live"
-        $pytestArgsList += "tests"
-    }
-
-    # Add any remaining pytest arguments
-    if ($PytestArgs) {
-        foreach ($arg in $PytestArgs) {
-            $pytestArgsList += $arg
-        }
-    }
-
-    & $venvPython @pytestArgsList
+if ($Full -or -not $Targets) {
+    # Full non-live core (default mode is the same canonical suite)
+    & $venvPython $runnerScript --full
     exit $LASTEXITCODE
 }
+
+if (-not $PytestArgs) {
+    # Focused targets through the isolated runner
+    & $venvPython $runnerScript --targets @Targets
+    exit $LASTEXITCODE
+}
+
+# Advanced mode: extra pytest arguments (e.g. -k) cannot pass through the
+# runner; run direct pytest with the same database-isolation environment
+# (fresh temp DB outside the repository, LLM_PROVIDER=local). The dev-DB
+# digest guard does not apply in this advanced mode.
+$tmpDb = Join-Path $env:TEMP ("wfm-run-{0}.db" -f ([System.Guid]::NewGuid().ToString("N")))
+$env:PYTHON_DOTENV_DISABLED = "1"
+Remove-Item Env:DATABASE_URL -ErrorAction SilentlyContinue
+$env:DATABASE_PATH = $tmpDb
+$env:LLM_PROVIDER = "local"
+Write-Host "WARNING: advanced pytest-args mode uses isolated temp DB ($tmpDb) without the dev-DB digest guard."
+$pytestArgsList = @("-m", "pytest", "-q", "-p", "no:cacheprovider")
+foreach ($t in $Targets) { $pytestArgsList += $t }
+foreach ($arg in $PytestArgs) { $pytestArgsList += $arg }
+& $venvPython @pytestArgsList
+$code = $LASTEXITCODE
+Remove-Item -LiteralPath $tmpDb -Force -ErrorAction SilentlyContinue
+exit $code

@@ -47,7 +47,9 @@ ENVIRONMENT READY
 Store/cache/browser paths are probed: machine defaults are preferred when healthy; user-level
 fallbacks are used when a default is unusable in the current context (restricted agent contexts
 on this machine provision into `C:\Users\16073\.uv-python`, `C:\Users\16073\.uv-cache`, and
-`C:\Users\16073\.cache\wfm-ms-playwright`).
+`C:\Users\16073\.cache\wfm-ms-playwright`). The bootstrap probes **writability** (probe file)
+before selecting a store/cache; the verifier is read-only and reports path readability only.
+The example paths above are this machine's recorded values, not the contract.
 
 ### 2.2 Verify environment (read-only)
 
@@ -115,7 +117,7 @@ explicitly — never a PATH python.
 | Variable | Purpose | Default | Override |
 | --- | --- | --- | --- |
 | `WF_UV_EXE` | explicit uv.exe path | auto-discovered | set to override discovery |
-| `WF_VENV_PATH` | worktree venv path | `<repo root>\.venv` | set for a custom venv location |
+| `WF_VENV_PATH` | worktree venv path | `<repo root>\.venv` | set for a custom venv location; the bootstrap routes `uv sync` there via `UV_PROJECT_ENVIRONMENT` |
 | `UV_PYTHON_INSTALL_DIR` | managed Python runtime store | `%APPDATA%\uv\python` | fallback `~\.uv-python` |
 | `UV_CACHE_DIR` | uv package cache | `%LOCALAPPDATA%\uv\cache` | fallback `~\.uv-cache` |
 | `PLAYWRIGHT_BROWSERS_PATH` / `WF_PLAYWRIGHT_BROWSERS_PATH` | Playwright browser binaries | `%LOCALAPPDATA%\ms-playwright` when healthy, else `~\.cache\wfm-ms-playwright` | set to override |

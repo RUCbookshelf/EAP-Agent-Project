@@ -25,31 +25,46 @@ if ($osPlatform -ne "Win32NT") {
 }
 
 # ---------------------------------------------------------------------------
-# 2. Discover uv
+# 2. Discover or provision uv
 # ---------------------------------------------------------------------------
 $uv = Find-Uv
 if (-not $uv) {
-    Write-Host "UV_NOT_AVAILABLE"
-    Write-Host "  Action: install uv 0.12.x user-space from official sources."
-    Write-Host "    Option A (recommended): powershell -ExecutionPolicy Bypass -c `"iwr https://astral.sh/uv/install.ps1 -UseBasicParsing | iex`""
-    Write-Host "    Option B: python -m pip install uv"
-    Write-Host "  Then re-run this bootstrap."
-    exit 1
+    Write-Host "UV_NOT_AVAILABLE: attempting best-effort user-space provisioning from the"
+    Write-Host "  official Astral installer (https://astral.sh/uv/install.ps1)..."
+    try {
+        $webClient = New-Object System.Net.WebClient
+        $installerScript = $webClient.DownloadString("https://astral.sh/uv/install.ps1")
+        $scriptBlock = [scriptblock]::Create($installerScript)
+        & $scriptBlock
+    } catch {
+        Write-Host "  Provisioning attempt failed: $($_.Exception.Message)"
+    }
+    $uv = Find-Uv
+    if (-not $uv) {
+        Write-Host "UV_NOT_AVAILABLE"
+        Write-Host "  Action: install uv 0.12.x user-space from official sources, then re-run."
+        Write-Host "    Option A (recommended): powershell -ExecutionPolicy Bypass -c `"iwr https://astral.sh/uv/install.ps1 -UseBasicParsing | iex`""
+        Write-Host "    Option B: python -m pip install uv"
+        exit 1
+    }
+    Write-Host "[bootstrap] uv provisioned: $uv"
 }
 Write-Host "[bootstrap] uv found at: $uv"
-$uvVersion = & $uv --version 2>&1
+$uvVersion = (& $uv --version 2>&1 | Out-String).Trim()
 Write-Host "[bootstrap] uv version: $uvVersion"
 
 # ---------------------------------------------------------------------------
-# 3. Compute environment
+# 3. Compute environment (writability-aware; bootstrap may probe-write)
 # ---------------------------------------------------------------------------
-$pythonDir = Resolve-UvPythonInstallDir
-$cacheDir  = Resolve-UvCacheDir
-$browsersPath = Resolve-BrowsersPath
+$pythonDir = Resolve-UvPythonInstallDir -ProbeWritable
+$cacheDir  = Resolve-UvCacheDir -ProbeWritable
+$browsersPath = Resolve-BrowsersPath -ProbeWritable
 
 $env:UV_PYTHON_INSTALL_DIR = $pythonDir
 $env:UV_CACHE_DIR          = $cacheDir
 $env:PLAYWRIGHT_BROWSERS_PATH = $browsersPath
+# Route `uv sync` to the contract environment location (honors WF_VENV_PATH).
+$env:UV_PROJECT_ENVIRONMENT = Split-Path (Split-Path (Get-VenvPython))
 
 Write-Host "[bootstrap] UV_PYTHON_INSTALL_DIR = $pythonDir"
 Write-Host "[bootstrap] UV_CACHE_DIR = $cacheDir"
@@ -58,32 +73,23 @@ Write-Host "[bootstrap] PLAYWRIGHT_BROWSERS_PATH = $browsersPath"
 # ---------------------------------------------------------------------------
 # 4. Ensure managed Python 3.12.13
 # ---------------------------------------------------------------------------
-# Try to find managed Python
-$prevErrorActionPreference = $ErrorActionPreference
-$ErrorActionPreference = "Continue"
 $findPy = & $uv python find 3.12.13 2>&1
 $uvExitCode = $LASTEXITCODE
-$ErrorActionPreference = $prevErrorActionPreference
-
-# Check for cache initialization errors
 $findPyStr = $findPy | Out-String
+
 if ($findPyStr -match "Failed to initialize cache") {
     Write-Host "UV_CACHE_UNUSABLE: cannot initialize cache at $cacheDir"
     Write-Host "  Action: ensure write access to $cacheDir or set UV_CACHE_DIR to a writable location."
-    Write-Host "    Current user may not have write permission to this directory."
     exit 1
 }
 
 if ($uvExitCode -ne 0) {
-    Write-Host "PYTHON_RUNTIME_MISSING"
-    Write-Host "  Action: install Python 3.12.13 via uv (downloading ~21 MB)."
-    Write-Host "    Command: & `"$uv`" python install 3.12.13"
+    Write-Host "PYTHON_RUNTIME_MISSING: installing Python 3.12.13 via uv (~21 MB)..."
     & $uv python install 3.12.13
     if ($LASTEXITCODE -ne 0) {
         Write-Host "PYTHON_RUNTIME_MISSING: install failed."
         exit 1
     }
-    # Re-check
     $findPy = & $uv python find 3.12.13 2>&1
     if ($LASTEXITCODE -ne 0) {
         Write-Host "PYTHON_RUNTIME_MISSING: could not locate Python 3.12.13 after install."
@@ -93,40 +99,58 @@ if ($uvExitCode -ne 0) {
 Write-Host "[bootstrap] managed Python 3.12.13 located: $findPy"
 
 # ---------------------------------------------------------------------------
-# 5. Venv health
+# 5. Lock-first enforcement and venv health
 # ---------------------------------------------------------------------------
+# Manifest/lock drift is detected BEFORE any sync can rewrite uv.lock (the
+# bootstrap never rewrites the lock; matches future CI `uv sync --locked`).
+$null = & $uv lock --check 2>&1
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "LOCKFILE_DRIFT"
+    Write-Host "  uv.lock does not match pyproject.toml. This bootstrap never rewrites the"
+    Write-Host "  lock; Shared Platform & Core must regenerate and commit it with a"
+    Write-Host "  verification record. Run: `"$uv`" lock --check"
+    exit 1
+}
+
+$null = & $uv sync --check 2>&1
+$envInSync = ($LASTEXITCODE -eq 0)
+
 $venvPython = Get-VenvPython
 $venvState = Test-VenvHealthy
 
 if (-not $venvState.Healthy) {
     Write-Host "VENV_INTERPRETER_BROKEN: $($venvState.Reason)"
-    # Remove broken venv
     if (Test-Path $venvPython) {
         # $venvPython = <venv>\Scripts\python.exe -> remove the <venv> root
         Remove-VenvLongPath (Split-Path (Split-Path $venvPython))
     }
     Write-Host "[bootstrap] rebuilding .venv"
-    & $uv sync
-    if ($LASTEXITCODE -ne 0) {
-        $lastErr = $Error[0]
-        Write-Host "DEPENDENCY_SYNC_FAILED: $lastErr"
-        exit 1
-    }
-} else {
-    Write-Host "[bootstrap] venv healthy: $($venvState.Version)"
-    # Sync against the committed lock (fast no-op on a correct environment)
-    $null = & $uv sync 2>&1
+    & $uv sync --locked
     if ($LASTEXITCODE -ne 0) {
         Write-Host "DEPENDENCY_SYNC_FAILED: uv sync exited $LASTEXITCODE"
         exit 1
     }
-    # Deterministic drift check
     $null = & $uv sync --check 2>&1
     if ($LASTEXITCODE -ne 0) {
-        Write-Host "LOCKFILE_DRIFT"
-        Write-Host "  Action: run `"$uv`" sync --check for details, then have Shared Platform & Core"
-        Write-Host "  update pyproject.toml/uv.lock together with a verification record."
+        Write-Host "DEPENDENCY_SYNC_FAILED: environment still out of sync after rebuild"
         exit 1
+    }
+} else {
+    Write-Host "[bootstrap] venv healthy: $($venvState.Version)"
+    if (-not $envInSync) {
+        Write-Host "[bootstrap] environment out of sync with lock; syncing..."
+        & $uv sync --locked
+        if ($LASTEXITCODE -ne 0) {
+            Write-Host "DEPENDENCY_SYNC_FAILED: uv sync exited $LASTEXITCODE"
+            exit 1
+        }
+        $null = & $uv sync --check 2>&1
+        if ($LASTEXITCODE -ne 0) {
+            Write-Host "DEPENDENCY_SYNC_FAILED: environment still out of sync after sync"
+            exit 1
+        }
+    } else {
+        Write-Host "[bootstrap] environment in sync with lock (no changes needed)"
     }
 }
 
@@ -134,12 +158,12 @@ if (-not $venvState.Healthy) {
 # 6. Verify interpreter identity
 # ---------------------------------------------------------------------------
 $venvPython = Get-VenvPython
-& $venvPython -c "import sys; assert (3,12) <= sys.version_info[:2] < (3,13)"
+& $venvPython -c "import sys; assert (3,11) <= sys.version_info[:2] < (3,13)"
 if ($LASTEXITCODE -ne 0) {
-    Write-Host "PYTHON_RUNTIME_MISSING: venv python is not CPython 3.12.x"
+    Write-Host "PYTHON_RUNTIME_MISSING: venv python outside supported range >=3.11,<3.13"
     exit 1
 }
-$pyVer = & $venvPython -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}')"
+$pyVer = (& $venvPython -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}')" 2>&1 | Out-String).Trim()
 Write-Host "[bootstrap] interpreter verified: Python $pyVer"
 
 # ---------------------------------------------------------------------------
@@ -155,8 +179,7 @@ Write-Host "[bootstrap] pytest available"
 $nlpScript = Join-Path $repoRoot "scripts\verify_nlp_resources.py"
 if (Test-Path $nlpScript) {
     $nlpOut = & $venvPython -m scripts.verify_nlp_resources 2>&1
-    $nlpStr = $nlpOut | Out-String
-    Write-Host "[bootstrap] NLP resources: $nlpStr"
+    Write-Host "[bootstrap] NLP resources: $($nlpOut | Out-String)"
 } else {
     Write-Host "[bootstrap] NLP resources: verify_nlp_resources.py not found (skipped)"
 }
@@ -169,7 +192,7 @@ try {
     $gitVer = & git --version 2>&1
     Write-Host "[bootstrap] git: $gitVer"
 } catch {
-    Write-Host "GIT_NOT_AVAILABLE: git is not on PATH (non-fatal warning)"
+    Write-Host "GIT_NOT_AVAILABLE: git is not usable (parity tests spawn git subprocesses)"
 }
 
 # ---------------------------------------------------------------------------
@@ -179,7 +202,7 @@ Write-Host ""
 Write-Host "ENVIRONMENT READY"
 Write-Host "  python:   $pyVer"
 Write-Host "  uv:       $uvVersion"
-Write-Host "  venv:     $(Split-Path $venvPython)"
+Write-Host "  venv:     $(Split-Path (Split-Path $venvPython))"
 Write-Host "  store:    $pythonDir"
 Write-Host "  cache:    $cacheDir"
 Write-Host "  browsers: $browsersPath"

@@ -80,7 +80,7 @@ complexity without evidence of benefit.
 
 | Layer | Failure state | Repair command | Owner |
 | --- | --- | --- | --- |
-| uv binary | `UV_NOT_AVAILABLE` | run `scripts/dev/bootstrap_environment.ps1` (provisions uv user-space from official sources) | Shared Platform & Core |
+| uv binary | `UV_NOT_AVAILABLE` | the bootstrap attempts best-effort user-space provisioning from the official Astral installer and reports the result; on failure it prints official-source install instructions (`astral.sh/uv/install.ps1` or `python -m pip install uv`) and exits — it never downloads from unverified sources | Shared Platform & Core |
 | uv runtime store | `PYTHON_RUNTIME_MISSING` / store unusable | bootstrap selects a healthy `UV_PYTHON_INSTALL_DIR` and runs `uv python install 3.12.13`; a genuinely ACL-broken store is bypassed, never repaired in-place | Shared Platform & Core |
 | uv package cache | `CACHE_UNUSABLE` | bootstrap falls back to a healthy `UV_CACHE_DIR`; `uv cache clean` under single-owner policy | Shared Platform & Core |
 | venv | `VENV_INTERPRETER_BROKEN` / `DEPENDENCY_SYNC_FAILED` | `Remove-Item` the worktree `.venv` using the long-path-safe procedure (`\\?\` prefix) and re-run `uv sync` | Shared Platform & Core |

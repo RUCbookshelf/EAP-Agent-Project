@@ -33,8 +33,6 @@ function Find-Uv {
     # 3. Known user-space locations
     $localBin = Join-Path $env:USERPROFILE ".local\bin\uv.exe"
     if (Test-Path $localBin) { return $localBin }
-    $bootstrap = Join-Path $env:USERPROFILE ".uv-bootstrap\Scripts\uv.exe"
-    if (Test-Path $bootstrap) { return $bootstrap }
     return $null
 }
 
@@ -53,13 +51,34 @@ function Test-PathHealthy {
 }
 
 # ---------------------------------------------------------------------------
+# Test-PathWritable - creates and removes a probe file (bootstrap use only;
+# the verifier is read-only and must never call this).
+# ---------------------------------------------------------------------------
+function Test-PathWritable {
+    param([string]$Path)
+    if (-not (Test-Path $Path)) { return $false }
+    $probe = Join-Path $Path (".wfm-write-probe-" + [System.Guid]::NewGuid().ToString("N"))
+    try {
+        $null = [System.IO.File]::Open($probe, [System.IO.FileMode]::CreateNew,
+            [System.IO.FileAccess]::Write, [System.IO.FileShare]::None).Close()
+        Remove-Item -LiteralPath $probe -Force -ErrorAction Stop
+        return $true
+    } catch {
+        return $false
+    }
+}
+
+# ---------------------------------------------------------------------------
 # Resolve-UvPythonInstallDir
 # ---------------------------------------------------------------------------
 function Resolve-UvPythonInstallDir {
+    param([switch]$ProbeWritable)
     $defaultDir = Join-Path $env:APPDATA "uv\python"
     if (Test-PathHealthy $defaultDir) {
-        $script:UV_PYTHON_INSTALL_DIR = $defaultDir
-        return $defaultDir
+        if (-not $ProbeWritable -or (Test-PathWritable $defaultDir)) {
+            $script:UV_PYTHON_INSTALL_DIR = $defaultDir
+            return $defaultDir
+        }
     }
     $fallback = Join-Path $env:USERPROFILE ".uv-python"
     $script:UV_PYTHON_INSTALL_DIR = $fallback
@@ -70,10 +89,13 @@ function Resolve-UvPythonInstallDir {
 # Resolve-UvCacheDir
 # ---------------------------------------------------------------------------
 function Resolve-UvCacheDir {
+    param([switch]$ProbeWritable)
     $defaultCache = Join-Path $env:LOCALAPPDATA "uv\cache"
     if (Test-PathHealthy $defaultCache) {
-        $script:UV_CACHE_DIR = $defaultCache
-        return $defaultCache
+        if (-not $ProbeWritable -or (Test-PathWritable $defaultCache)) {
+            $script:UV_CACHE_DIR = $defaultCache
+            return $defaultCache
+        }
     }
     $fallback = Join-Path $env:USERPROFILE ".uv-cache"
     # Try to create fallback if it doesn't exist
@@ -92,6 +114,7 @@ function Resolve-UvCacheDir {
 # Resolve-BrowsersPath
 # ---------------------------------------------------------------------------
 function Resolve-BrowsersPath {
+    param([switch]$ProbeWritable)
     if ($env:WF_PLAYWRIGHT_BROWSERS_PATH -and (Test-Path $env:WF_PLAYWRIGHT_BROWSERS_PATH)) {
         $script:PLAYWRIGHT_BROWSERS_PATH = $env:WF_PLAYWRIGHT_BROWSERS_PATH
         return $env:WF_PLAYWRIGHT_BROWSERS_PATH
@@ -100,8 +123,10 @@ function Resolve-BrowsersPath {
     # (mirrors the uv store/cache probe policy).
     $defaultStore = Join-Path $env:LOCALAPPDATA "ms-playwright"
     if (Test-PathHealthy $defaultStore) {
-        $script:PLAYWRIGHT_BROWSERS_PATH = $defaultStore
-        return $defaultStore
+        if (-not $ProbeWritable -or (Test-PathWritable $defaultStore)) {
+            $script:PLAYWRIGHT_BROWSERS_PATH = $defaultStore
+            return $defaultStore
+        }
     }
     $default = Join-Path $env:USERPROFILE ".cache\wfm-ms-playwright"
     $script:PLAYWRIGHT_BROWSERS_PATH = $default

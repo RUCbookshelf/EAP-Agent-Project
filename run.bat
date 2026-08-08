@@ -11,8 +11,15 @@ echo [1/7] Bootstrapping environment...
 powershell -NoProfile -ExecutionPolicy Bypass -File "scripts\dev\bootstrap_environment.ps1"
 if errorlevel 1 goto :bootstrap_failed
 
-set "VENV_PYTHON=%~dp0.venv\Scripts\python.exe"
-if not exist "%VENV_PYTHON%" set "VENV_PYTHON=%WRITING_FEEDBACK_VENV%\Scripts\python.exe"
+if defined WRITING_FEEDBACK_VENV (
+    set "VENV_PYTHON=%WRITING_FEEDBACK_VENV%\Scripts\python.exe"
+) else (
+    set "VENV_PYTHON=%~dp0.venv\Scripts\python.exe"
+)
+if not exist "%VENV_PYTHON%" (
+    echo ERROR: Environment was bootstrapped but "%VENV_PYTHON%" was not found.
+    goto :failed
+)
 
 echo [2/7] Verifying NLP resources...
 "%VENV_PYTHON%" -m scripts.verify_nlp_resources

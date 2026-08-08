@@ -109,10 +109,12 @@ Justification:
 - An environment drift guard (WU12) asserts: `.python-version` exactly matches the preferred
   version declared in this contract (3.12.13); `requires-python` covers 3.11 and 3.12; a
   syntax-level 3.11 gate (`ast.parse(feature_version=(3, 11))` over the repository's Python
-  files, BOM-stripped) stays green; lockfile creation must not admit packages whose
-  Requires-Python excludes 3.11 or 3.12.
+  files, BOM-stripped) stays green. Lockfile regeneration (owned by Shared Platform & Core)
+  additionally requires that no resolved package's Requires-Python excludes 3.11 or 3.12
+  (checked at `uv lock` time by the owning engineer; enforced by the syntax gate afterwards).
 - The verifier (`verify_environment.ps1`) checks the resolved interpreter's `sys.version_info`
-  against `>=3.11,<3.13` and prints the preferred version.
+  against `>=3.11,<3.13` (a venv outside the range reports `PYTHON_RUNTIME_MISSING`) and prints
+  the preferred version.
 
 ## 5. Gate statement
 

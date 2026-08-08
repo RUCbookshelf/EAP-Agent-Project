@@ -28,7 +28,7 @@ There must never again be "local setup A / CI setup B / agent setup C". All cons
 | Python version | `.python-version` (3.12.13) + `requires-python` | `uv sync` | `astral-sh/setup-uv` + `uv sync --locked` |
 | Dependency resolution | `uv.lock` | `uv sync --check` (drift) | `uv sync --locked` (hard failure on drift) |
 | Environment validation | `scripts/dev/verify_environment.ps1` | full check | `--json` output consumed by CI step |
-| Test invocation | `scripts/dev/run_tests.ps1` | focused/full | `uv run python -m pytest -q -p no:cacheprovider --ignore=tests/live tests` |
+| Test invocation | `scripts/dev/run_tests.ps1` | focused/full | the same canonical command: `python verification/v0.9.5-h2a/isolated_pytest_runner.py --full` (venv interpreter) |
 | DB isolation | `verification/v0.9.5-h2a/isolated_pytest_runner.py` + `scripts/verify_launcher.py` | runner handles it | same runner, fresh temp DB |
 | External resources | 06_EXTERNAL_RESOURCE_CONTRACT.md | `uv sync` (model); documented browser install | same commands with cache dirs |
 

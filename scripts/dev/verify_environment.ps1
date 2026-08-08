@@ -54,8 +54,22 @@ if ($LASTEXITCODE -eq 0) {
 $venvPython = Get-VenvPython
 $venvState = Test-VenvHealthy
 if ($venvState.Healthy) {
-    Add-Check "python" "READY" "$venvPython ($($venvState.Version))"
-    Write-Host "[verify] python: $venvPython ($($venvState.Version))"
+    $rangeOk = $false
+    try {
+        $versionMatch = [regex]::Match($venvState.Version, '\((\d+), (\d+)\)')
+        $major = [int]$versionMatch.Groups[1].Value
+        $minor = [int]$versionMatch.Groups[2].Value
+        $rangeOk = (($major -eq 3) -and ($minor -ge 11) -and ($minor -lt 13))
+    } catch {
+        $rangeOk = $false
+    }
+    if ($rangeOk) {
+        Add-Check "python" "READY" "$venvPython ($($venvState.Version))"
+        Write-Host "[verify] python: $venvPython ($($venvState.Version))"
+    } else {
+        Add-Check "python" "NOT_READY" "PYTHON_RUNTIME_MISSING: version $($venvState.Version) outside supported range >=3.11,<3.13"
+        Write-Host "[verify] python: NOT_READY (version outside >=3.11,<3.13)"
+    }
 } else {
     Add-Check "python" "NOT_READY" "VENV_MISSING: $($venvState.Reason)"
     Write-Host "[verify] python: VENV_MISSING - $($venvState.Reason)"
@@ -80,8 +94,15 @@ if ($uv) {
 $pythonDir = Resolve-UvPythonInstallDir
 $cacheDir  = Resolve-UvCacheDir
 $browsersPath = Resolve-BrowsersPath
-$envLocation = "store=$pythonDir cache=$cacheDir browsers=$browsersPath"
-Add-Check "environment" "READY" $envLocation
+$storeOk = Test-PathHealthy $pythonDir
+$cacheOk = Test-PathHealthy $cacheDir
+$browsersOk = Test-PathHealthy $browsersPath
+$envLocation = "store=$pythonDir readable=$storeOk cache=$cacheDir readable=$cacheOk browsers=$browsersPath readable=$browsersOk"
+if ($storeOk -and $cacheOk) {
+    Add-Check "environment" "READY" $envLocation
+} else {
+    Add-Check "environment" "NOT_READY" "STORE_OR_CACHE_UNREADABLE: $envLocation"
+}
 Write-Host "[verify] environment: $envLocation"
 
 # ---------------------------------------------------------------------------

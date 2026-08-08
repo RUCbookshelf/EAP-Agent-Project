@@ -61,6 +61,10 @@ Notes for the integration gate:
   Integration, next Integration Gate).
 - Research Evaluation: policy-artifact hash robustness to checkout line endings (unchanged
   owner; Wave-1 follow-up still open).
+- Corpus & NLP: corpus-owned scripts carry machine-specific absolute paths
+  (`scripts/corpus_readiness/*` CORPUS_ROOT/REPO_ROOT, `scripts/corpus_intelligence/build_stage5.py`
+  `sys.path.insert` of the main checkout `A:\EAP Agent Project\writing-feedback-mvp`) — these
+  break on fresh clones; allowlisted in the drift guard with owner Corpus & NLP.
 - Future CI introduction must consume `uv.lock` with `uv sync --locked` per 08 doc.
 - Optional: persist user-level env overrides (`UV_PYTHON_INSTALL_DIR` etc.) on machines with
   genuinely broken default stores (bootstrap already handles per-invocation).

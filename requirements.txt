@@ -1,4 +1,6 @@
-# v0.2 runtime and test dependencies (Python 3.11)
+# Runtime and test dependencies (Python >=3.11,<3.13; canonical 3.12.13).
+# COMPATIBILITY EXPORT: pyproject.toml + uv.lock are authoritative; drift guard
+# tests/test_environment_drift.py keeps this file in sync.
 streamlit==1.60.0
 fastapi==0.135.2
 uvicorn==0.41.0
