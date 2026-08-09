@@ -1,0 +1,54 @@
+{
+  "content_id": "l2-task-types-v1.0.0",
+  "taxonomy_version": "l2-task-type-taxonomy-v1.0.0",
+  "pack_version": "l2-core-v1.0.0",
+  "display_order": [
+    "opinion",
+    "argumentative",
+    "discussion",
+    "problem_solution",
+    "general_eap"
+  ],
+  "types": {
+    "opinion": {
+      "task_type_id": "opinion",
+      "locale_key": "task_type_opinion",
+      "display_name_en": "Opinion Essay",
+      "display_name_zh_CN": "观点类作文",
+      "semantics": "Task asks for the writer's personal viewpoint/preference; no mandated evidence or counterargument structure.",
+      "trigger_class": "explicit personal-viewpoint/preference/agree-disagree request WITHOUT an evidence or counterargument mandate"
+    },
+    "argumentative": {
+      "task_type_id": "argumentative",
+      "locale_key": "task_type_argumentative",
+      "display_name_en": "Argumentative Essay",
+      "display_name_zh_CN": "议论文",
+      "semantics": "Task mandates a position plus evidence-based argumentation (reasons/evidence and/or counterargument).",
+      "trigger_class": "stance mandate (take/defend a position) PLUS evidence/argument/counterargument mandate"
+    },
+    "discussion": {
+      "task_type_id": "discussion",
+      "locale_key": "task_type_discussion",
+      "display_name_en": "Discussion Essay",
+      "display_name_zh_CN": "讨论类作文",
+      "semantics": "Task requires balanced examination of two or more perspectives; no mandated final stance.",
+      "trigger_class": "balanced multi-perspective requirement (both sides, advantages AND disadvantages, compare views) WITHOUT a mandated final stance"
+    },
+    "problem_solution": {
+      "task_type_id": "problem_solution",
+      "locale_key": "task_type_problem_solution",
+      "display_name_en": "Problem-Solution Essay",
+      "display_name_zh_CN": "问题解决类作文",
+      "semantics": "Task names a problem and requires cause/solution content.",
+      "trigger_class": "named problem plus explicit solution/cause requirement"
+    },
+    "general_eap": {
+      "task_type_id": "general_eap",
+      "locale_key": "task_type_general_eap",
+      "display_name_en": "General EAP",
+      "display_name_zh_CN": "通用学术写作",
+      "semantics": "Task is affirmatively an EAP writing task that matches no specific type under the current criteria.",
+      "trigger_class": "generic academic-writing instruction with no specific-type trigger (contract section 7 conditions)"
+    }
+  }
+}

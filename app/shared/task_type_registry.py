@@ -44,9 +44,10 @@ class TaskTypeRegistry:
     (``l2`` and ``academic``) coexist without collisions. Unknown
     namespaces are rejected at registration time.
 
-    In H1 the ``l2`` namespace carries the mechanism with explicit
-    empty/None content (D-L2-01 blocked). The ``academic`` namespace
-    carries the mechanism with NO content entries.
+    The ``l2`` namespace carries the Domain Pack v1 content (five types +
+    the ``legacy_unclassified`` sentinel) registered under the qualified
+    taxonomy contract (``l2-task-type-taxonomy-v1.0.0``). The ``academic``
+    namespace carries the mechanism with NO content entries.
     """
 
     def __init__(self) -> None:
@@ -111,16 +112,48 @@ class TaskTypeRegistry:
 def default_task_type_registry() -> TaskTypeRegistry:
     """Create a TaskTypeRegistry with H1 baseline content.
 
-    In H1:
-    - ``l2`` namespace: mechanism only, explicit empty/None content.
-      D-L2-01 blocks task-type enumeration content.
+    Domain Pack v1 (authorized 2026-08-09):
+    - ``l2`` namespace: five types (opinion, argumentative, discussion,
+      problem_solution, general_eap) per the qualified taxonomy contract
+      section 1, plus the ``legacy_unclassified`` sentinel (D-22).
     - ``academic`` namespace: mechanism only, no content entries.
-    - ``legacy_unclassified`` is registered in the ``l2`` namespace as
-      an explicit sentinel value (D-22).
+
+    Registry content is metadata-only (D-22): no comparability predicate and
+    no ordering semantics. Display names follow the taxonomy contract
+    section 1 table; the canonical non-hierarchical display order and the
+    zh_CN labels (D-L2-09) live in the Domain Pack v1 content
+    (``app/configuration/domain_packs/l2/v1.0.0``) and the locale files.
     """
     registry = TaskTypeRegistry()
 
-    # l2 namespace: only the legacy sentinel (D-22).
+    # l2 namespace: Domain Pack v1 five-type content (metadata-only).
+    _FIVE_TYPES = (
+        ("opinion", "Opinion Essay", 1),
+        ("argumentative", "Argumentative Essay", 2),
+        ("discussion", "Discussion Essay", 3),
+        ("problem_solution", "Problem-Solution Essay", 4),
+        ("general_eap", "General EAP", 5),
+    )
+    for task_type_id, display_name, display_order in _FIVE_TYPES:
+        registry.register(TaskTypeEntry(
+            task_type_id=task_type_id,
+            namespace="l2",
+            display_name=display_name,
+            description=(
+                "Task-routing/task-semantics metadata per the qualified "
+                "L2 task-type taxonomy (l2-task-type-taxonomy-v1.0.0)."
+            ),
+            metadata={
+                "taxonomy_version": "l2-task-type-taxonomy-v1.0.0",
+                "display_order": display_order,
+                "locale_key": f"task_type_{task_type_id}",
+                "pack": "l2-core-v1.0.0",
+                "metadata_only": True,
+            },
+        ))
+
+    # The legacy sentinel (D-22): explicit allowed value for historical rows
+    # whose genre/task evidence is insufficient for explicit mapping.
     registry.register(TaskTypeEntry(
         task_type_id=LEGACY_UNCLASSIFIED,
         namespace="l2",
@@ -129,7 +162,12 @@ def default_task_type_registry() -> TaskTypeRegistry:
             "Explicit sentinel for task types that cannot be classified "
             "under the current L2 task-type taxonomy (D-22)."
         ),
-        metadata={"blocked_by": "D-L2-01"},
+        metadata={
+            "role": "legacy_sentinel",
+            "mapping_manifest": "l2-legacy-genre-mapping-v1.0.0",
+            "taxonomy_version": "l2-task-type-taxonomy-v1.0.0",
+            "metadata_only": True,
+        },
     ))
 
     # academic namespace: mechanism only, zero content entries.

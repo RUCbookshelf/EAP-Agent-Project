@@ -1,0 +1,22 @@
+{
+  "pack_id": "l2-core-v1.0.0",
+  "domain": "l2",
+  "version": "v1.0.0",
+  "taxonomy_version": "l2-task-type-taxonomy-v1.0.0",
+  "supported_task_types": [
+    "opinion",
+    "argumentative",
+    "discussion",
+    "problem_solution",
+    "general_eap"
+  ],
+  "dimensions": [],
+  "resource_requirements": [],
+  "availability": "available",
+  "content_status": {
+    "task_types": "Domain Pack v1: five-type registry pack (opinion/argumentative/discussion/problem_solution/general_eap) registered under the l2 namespace; task-routing/task-semantics metadata ONLY",
+    "dimensions": "NR - blocked by D-L2-03 (dimension feasibility); discourse_organization EXCLUDED: CANDIDATE/INSUFFICIENT_EVIDENCE (UD-02 DEFER)",
+    "resource_requirements": "empty - no domain-specific runtime requirements",
+    "note": "Authorized by program-control/researcher-decisions/DOMAIN-PACK-V1-conditional-auth.json (2026-08-09). Metadata-only: no proficiency/mastery/ability/learning-gain/comparability claims. No schema migration in this pack (D-L2-02 additive columns are a separate CORE-owned migration lane; design note docs/domain/D-L2-02_MIGRATION_14_DESIGN_NOTE.md)."
+  }
+}
