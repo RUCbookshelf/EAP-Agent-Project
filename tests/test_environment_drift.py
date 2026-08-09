@@ -101,29 +101,11 @@ def test_no_absolute_developer_specific_python_paths() -> None:
         # "word:\n"-style escaped sequences inside string literals.
         re.compile(r"(?<![A-Za-z0-9])[A-Za-z]:\\"),
     ]
-    # Corpus & NLP owns pre-existing absolute corpus-data / checkout paths in
-    # these scripts (recorded follow-up; the environment layer does not change
-    # corpus semantics). Everything else in scripts/ and tests/ must be free of
-    # machine-specific absolute paths.
-    corpus_owned_allowed = {
-        Path("scripts/corpus_readiness/01_inventory.py"),
-        Path("scripts/corpus_readiness/02_encoding.py"),
-        Path("scripts/corpus_readiness/03_manifest.py"),
-        Path("scripts/corpus_readiness/04_pairing.py"),
-        Path("scripts/corpus_readiness/05_quality.py"),
-        Path("scripts/corpus_readiness/06_composition.py"),
-        Path("scripts/corpus_readiness/07_reference_groups.py"),
-        Path("scripts/corpus_readiness/08_features.py"),
-        Path("scripts/corpus_readiness/09_leakage.py"),
-        Path("scripts/corpus_readiness/10_version.py"),
-        Path("scripts/corpus_readiness/README.md"),
-        Path("scripts/corpus_readiness/tests/test_readiness.py"),
-        Path("scripts/corpus_intelligence/build_stage5.py"),
-    }
+    # Corpus & NLP scripts are portabilized via scripts/corpus_paths.py
+    # (CORPUS-PATH-PORTABILITY); there is no allowlist, so any machine-specific
+    # absolute path in scripts/ or tests/ fails this guard.
     offenders: list[str] = []
     for path in _scan_targets():
-        if path.relative_to(ROOT) in corpus_owned_allowed:
-            continue
         for lineno, line in enumerate(path.read_text(encoding="utf-8", errors="replace").splitlines(), 1):
             for pattern in forbidden:
                 if pattern.search(line):
@@ -131,8 +113,8 @@ def test_no_absolute_developer_specific_python_paths() -> None:
     assert not offenders, (
         "developer-specific or machine-specific absolute paths found:\n"
         + "\n".join(offenders[:20])
-        + "\n(corpus-owned absolute paths are allowlisted with owner Corpus & NLP; "
-        "new absolute paths must be removed or allowlisted with a documented owner)"
+        + "\n(corpus-owned paths are portabilized via scripts/corpus_paths.py; "
+        "new absolute paths must be removed or portabilized)"
     )
 
 

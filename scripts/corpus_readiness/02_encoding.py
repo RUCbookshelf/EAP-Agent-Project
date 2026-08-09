@@ -4,7 +4,8 @@ For every .txt file under the corpus root:
   1. detect encoding (ascii -> utf-8 strict -> gbk strict -> charset_normalizer)
   2. strict decode with round-trip check (derived.encode(enc) == original bytes)
   3. write a derived UTF-8 copy (original newlines preserved) under
-     A:\[Linguistics Data] Corpus\SWECCL 2.0\PREPARED\utf8\<component>\...
+     <CORPUS_ROOT>/PREPARED/utf8/<component>/... (corpus root resolved
+     portably via scripts/corpus_paths.py; no machine-specific literal)
   4. record provenance in derived_manifest.csv
 
 Never modifies source files.
@@ -18,6 +19,7 @@ import json
 import sys
 from collections import Counter, defaultdict
 from pathlib import Path
+from scripts.corpus_paths import get_repo_root, get_corpus_root
 
 try:
     from charset_normalizer import from_bytes
@@ -25,10 +27,10 @@ try:
 except Exception:
     HAS_CN = False
 
-CORPUS_ROOT = Path(r"A:\[Linguistics Data] Corpus\SWECCL 2.0")
-REPO_ROOT = Path(r"A:\EAP Agent Project\writing-feedback-mvp")
+CORPUS_ROOT = get_corpus_root()
+REPO_ROOT = get_repo_root()
 INVENTORY = REPO_ROOT / "docs" / "corpus-readiness" / "sweccl2" / "data" / "physical_inventory.csv"
-OUT_DIR = REPO_ROOT / "docs" / "corpus-readiness" / "sweccl2" / "data"
+OUT_DIR = get_readiness_out_dir()
 DERIVED_ROOT = CORPUS_ROOT / "PREPARED" / "utf8"
 
 

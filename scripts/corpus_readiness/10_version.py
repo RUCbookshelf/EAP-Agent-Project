@@ -10,8 +10,9 @@ import hashlib
 import json
 from datetime import datetime, timezone
 from pathlib import Path
+from scripts.corpus_paths import get_repo_root, get_corpus_root
 
-REPO_ROOT = Path(r"A:\EAP Agent Project\writing-feedback-mvp")
+REPO_ROOT = get_repo_root()
 OUT_DIR = REPO_ROOT / "docs" / "corpus-readiness" / "sweccl2"
 DATA = OUT_DIR / "data"
 
@@ -48,7 +49,7 @@ def main() -> None:
         "source_version": "2.0 (ISBN 978-7-5600-8015-4; FLTRP 2008-12)",
         "preparation_version": "0.1.0",
         "physical_source_identity": {
-            "physical_root": r"A:\[Linguistics Data] Corpus\SWECCL 2.0",
+            "physical_root": str(get_corpus_root()),
             "inventory_snapshot": "docs/corpus-readiness/sweccl2/data/physical_inventory_discovery_snapshot.csv",
             "source_file_count_at_discovery": 19858,
             "note": "manual PDF was present at discovery (recorded in snapshot); relocated out of the root afterwards",

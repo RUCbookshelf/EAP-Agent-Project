@@ -1,0 +1,112 @@
+{
+  "schema_version": "1.0.0",
+  "handoff_id": "corpus-licensing-review-20260809",
+  "goal_id": "CORPUS-LICENSING-REVIEW",
+  "owner": "CORPUS",
+  "starting_sha": "5aafe2728d7135212bd675a6975b44bcf99ee099",
+  "final_sha": "5aafe2728d7135212bd675a6975b44bcf99ee099",
+  "branch": "dept/corpus",
+  "worktree": "A:\\EAP Agent Project\\worktrees\\corpus",
+  "verdict": "GREEN",
+  "tests": [
+    {
+      "name": "git_preflight_identity",
+      "result": "PASS",
+      "evidence": [
+        "git rev-parse --show-toplevel = A:/EAP Agent Project/worktrees/corpus",
+        "git branch --show-current = dept/corpus",
+        "git rev-parse HEAD = 5aafe2728d7135212bd675a6975b44bcf99ee099 (matches assigned baseline)",
+        "pre-existing dirty/untracked files preserved untouched (path-portability work)"
+      ]
+    },
+    {
+      "name": "governed_policy_evidence_read",
+      "result": "PASS",
+      "evidence": [
+        "03_CORPUS_USE_AND_LICENSE_POLICY.md read verbatim (corpus-use-policy-v0.1.0 RATIFIED RD-POL-003)",
+        "policies/corpus_use_policy.json read verbatim (CU-01..CU-12)",
+        "01_DECISION_INVENTORY.md C-01/A-09/A-12/A-24/A-25 read",
+        "ARCH-14:77-84 (D-08) and ARCH-07:28 (I2) line refs re-verified"
+      ]
+    },
+    {
+      "name": "ud04_and_adr06_read",
+      "result": "PASS",
+      "evidence": [
+        "USER_DECISION_BRIEF.md/.json UD-04 ACTIVE (open Researcher/authorization decision)",
+        "qualified-adrs/ADR-06-corpus-intelligence.json QUALIFIED; raw-path rejection constraints; does not authorize Stage 6"
+      ]
+    },
+    {
+      "name": "raw_tree_licensing_metadata_inspection",
+      "result": "PASS",
+      "evidence": [
+        "read-only listing of A:\\[Linguistics Data] Corpus\\SWECCL 2.0: no README/license/EULA file present",
+        "SWECCL2.0_语料库概况报告.md read: manual transcription documents copyright page (ISBN 978-7-5600-8015-4, FLTRP 2008-12) and purpose statement only; no license grant text",
+        "recursive filename scan for readme/license/说明/版权/手册/manual: no such file found"
+      ]
+    },
+    {
+      "name": "stage5_stage6_evidence_chain_read",
+      "result": "PASS",
+      "evidence": [
+        "L2-01/04/06/07/09/10 read: Stage 5 implemented (36/36 tests), Stage 6 WU-A..E consume governed/versioned artifacts only",
+        "corpus_version.json license_status PARTIALLY_DOCUMENTED confirmed",
+        "query boundary contract: every result learner_exposure=research_only; no raw text; no unrestricted examples"
+      ]
+    },
+    {
+      "name": "permitted_use_matrix_complete",
+      "result": "PASS",
+      "evidence": [
+        "12/12 required categories classified (RAW SOURCE / NON-RECONSTRUCTIVE AGGREGATE ARTIFACT / TEXTUAL/RECONSTRUCTIVE DERIVATIVE)",
+        "disposition PERMITTED/CONDITIONAL/FAIL-CLOSED stated per category with documented basis",
+        "fail-closed register recorded (8 entries); no unrestricted open license asserted; no redistribution authorized"
+      ]
+    },
+    {
+      "name": "write_boundary_respected",
+      "result": "PASS",
+      "evidence": [
+        "only new files created under docs/corpus-licensing/",
+        "no existing file modified; no commit, push, or PR; no program-control or raw-corpus writes",
+        "git status re-checked after artifact creation"
+      ]
+    }
+  ],
+  "artifacts": [
+    "A:\\EAP Agent Project\\worktrees\\corpus\\docs\\corpus-licensing\\CORPUS-LICENSING-REVIEW.md",
+    "A:\\EAP Agent Project\\worktrees\\corpus\\docs\\corpus-licensing\\CORPUS-LICENSING-REVIEW.decision.json",
+    "A:\\EAP Agent Project\\worktrees\\corpus\\docs\\corpus-licensing\\handoff.json"
+  ],
+  "findings": [
+    "License status PARTIALLY_DOCUMENTED confirmed from governed policy (RD-POL-003) and corpus_version.json; no license text, vendor statement, or owner grant exists in the manual transcription or the raw corpus tree (read-only inspection).",
+    "RATIFIED policy marks local deterministic analysis (CU-01), aggregate internal statistics (CU-02), and internal research/development with research_only exposure (CU-03) as ALLOWED; external redistribution, learner-facing raw examples, external API upload, training, and public release REQUIRE_REVIEW; unrestricted example exposure, raw text in git/reports, and corpus mutation are PROHIBITED; commercial/sub-licensing/derivative-corpus publication is UNKNOWN.",
+    "Governed/versioned Stage-6 artifact use (WU-A/B/C/E research-only scope) is confirmed permitted by the documented review; WU-D and all learner-facing scope remain gated by D-08 display policy + licensing/anonymization gate and D3.",
+    "Raw corpus tree contains no license metadata beyond the manual transcription; the manual states a research/teaching purpose but grants no use rights.",
+    "ADR-06 (QUALIFIED) requires testable rejection of raw SWECCL path/handle through generic runtime, retrieval, Skills, and MCP plumbing; unchanged by this review."
+  ],
+  "blocking_findings": [],
+  "dependencies_unlocked": [
+    "CORPUS Stage-6 preparation Goal (research-only Work Units A/B/C/E) — recommended unlock conditional on UD-04 scoped authorization; not self-executing"
+  ],
+  "dependencies_remaining": [
+    "UD-04 user authorization (user_decision_required=true)",
+    "LEARNER foundation / WU-D learner-facing diagnostic gating (requires D-08 display policy + licensing/anonymization gate)",
+    "D3 licensing-model determination (Researcher/legal)",
+    "D8 feature-set scope, D12 UI exposure, final exclusion/duplicate policy, reference-group min-N ratification",
+    "Any external redistribution, export of text, model training, or public release (requires recorded owner grant/license text or named legal review)"
+  ],
+  "repair_owner": null,
+  "integration_required": true,
+  "promotion_eligible": false,
+  "user_decision_required": true,
+  "researcher_decision_required": false,
+  "returned_at": "2026-08-09T03:18:00+08:00",
+  "gate_authority": null,
+  "gate_evidence": [
+    "A:\\EAP Agent Project\\worktrees\\corpus\\docs\\corpus-licensing\\CORPUS-LICENSING-REVIEW.md",
+    "A:\\EAP Agent Project\\worktrees\\corpus\\docs\\corpus-licensing\\CORPUS-LICENSING-REVIEW.decision.json"
+  ],
+  "notes": "Bounded UD-04 licensing review; no Stage 6 implementation, no product code changes, no raw corpus mutation (read-only metadata inspection only). Stage 6 remains gated until the user resolves UD-04; the review supplies the documented-basis recommendation for a scoped unlock. Pre-existing dirty/untracked worktree files preserved."
+}
