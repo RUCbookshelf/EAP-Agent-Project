@@ -470,15 +470,21 @@ class TestJourneyContractsPreserved:
         assert "<style>" not in source
         assert "st.markdown" in source  # HTML fragments only, no style blocks
 
-    def test_no_new_locale_keys_needed(self):
-        # The Journey page consumes only existing locale keys; parity is
-        # preserved without a locale diff (600/600).
+    def test_locale_key_parity_with_task_type_keys(self):
+        # Domain Pack v1 adds five task_type locale keys to BOTH locales
+        # (D-L2-09); parity count moves 600/600 -> 605/605 at implementation
+        # time. The Journey page itself still consumes only existing keys.
         import json as _json
 
         en = _json.loads((ROOT / "locales/en.json").read_text(encoding="utf-8"))
         zh = _json.loads((ROOT / "locales/zh_CN.json").read_text(encoding="utf-8"))
         assert set(en) == set(zh)
-        assert len(en) == 600
+        assert len(en) == 605
+        for key in ("task_type_opinion", "task_type_argumentative",
+                    "task_type_discussion", "task_type_problem_solution",
+                    "task_type_general_eap"):
+            assert key in en and key in zh
+            assert en[key].strip() and zh[key].strip()
 
     def test_state_label_keys_exist_in_both_locales(self):
         import json as _json

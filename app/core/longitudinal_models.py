@@ -122,7 +122,7 @@ class TaskCluster(BaseModel):
     excluded_submission_ids: list[str] = Field(default_factory=list)
     comparability_status: Literal["comparable", "limited", "not_comparable"]
     confidence: TrendConfidence
-    rule_version: str = "task-cluster-v0.7.0"
+    rule_version: str = "task-cluster-v0.8.0"
     limitations: list[str] = Field(default_factory=list)
 
 

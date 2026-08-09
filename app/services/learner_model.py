@@ -11,6 +11,7 @@ from app.core import (
     HistoryEvidenceRecord, LearningTarget, MetricTrajectory, MetricTrajectoryPoint,
     StrengthPattern, TaskCluster,
 )
+from app.services.legacy_genre_mapping import map_legacy_genre
 
 
 class LearnerModelEngine:
@@ -21,7 +22,7 @@ class LearnerModelEngine:
     """
 
     profile_version = "learner-profile-v0.7.0"
-    task_cluster_version = "task-cluster-v0.7.0"
+    task_cluster_version = "task-cluster-v0.8.0"
     metric_version = "metric-trajectory-v0.7.0"
     diagnostic_version = "diagnostic-trajectory-v0.7.0"
 
@@ -331,7 +332,15 @@ class LearnerModelEngine:
 
     def _cluster_key(self, record: dict[str, Any]) -> tuple[str, ...]:
         genre = str(record.get("genre") or "unknown").casefold().strip()
-        purpose = "argument" if "argument" in genre else "narration" if "narr" in genre else "exposition"
+        # Domain Pack v1 / D-22: the cluster purpose is derived from the
+        # deterministic task-type lane, never from genre substring inference.
+        # A persisted task_type (future D-L2-02 additive column) wins; legacy
+        # rows map through the qualified D-22 manifest (explicit-only).
+        persisted = record.get("task_type")
+        if persisted:
+            purpose = str(persisted)
+        else:
+            purpose = map_legacy_genre(genre).mapping
         timed = "timed" if bool(record.get("timed")) else "untimed"
         minutes = int(record.get("time_limit_minutes") or 0)
         time_band = "not_applicable" if not record.get("timed") else "1-30" if minutes <= 30 else "31-60" if minutes <= 60 else "61+"

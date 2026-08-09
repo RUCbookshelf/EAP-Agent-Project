@@ -742,4 +742,10 @@ class TestLocaleParity:
         en = json.loads((ROOT / "locales/en.json").read_text(encoding="utf-8"))
         zh = json.loads((ROOT / "locales/zh_CN.json").read_text(encoding="utf-8"))
         assert set(en) == set(zh)
-        assert len(en) == 600
+        # Domain Pack v1 adds five task_type keys to both locales (D-L2-09);
+        # parity count moves 600/600 -> 605/605 at implementation time.
+        assert len(en) == 605
+        for key in ("task_type_opinion", "task_type_argumentative",
+                    "task_type_discussion", "task_type_problem_solution",
+                    "task_type_general_eap"):
+            assert key in en and key in zh

@@ -127,10 +127,13 @@ class TestTaskTypeRegistryLegacyUnclassified:
         academic_entries = registry.list_namespace("academic")
         assert academic_entries == []
 
-    def test_legacy_unclassified_metadata_blocked_by_d_l2_01(self):
+    def test_legacy_unclassified_metadata_manifest_reference(self):
         registry = default_task_type_registry()
         entry = registry.get("l2", LEGACY_UNCLASSIFIED)
-        assert entry.metadata.get("blocked_by") == "D-L2-01"
+        # D-L2-01 resolved via the qualified taxonomy contract; the sentinel
+        # now references the qualified D-22 legacy mapping manifest.
+        assert entry.metadata.get("role") == "legacy_sentinel"
+        assert entry.metadata.get("mapping_manifest") == "l2-legacy-genre-mapping-v1.0.0"
 
 
 # --- FeedbackDimensionRegistry tests ----------------------------------------

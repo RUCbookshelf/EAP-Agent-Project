@@ -1,0 +1,17 @@
+{
+  "content_id": "l2-conflict-pairs-v1.0.0",
+  "dictionary_version": "l2-domain-pack-v1.0.0",
+  "taxonomy_version": "l2-task-type-taxonomy-v1.0.0",
+  "rule": "A prompt whose fully-matched type set contains any enumerated pair is assigned unclassified with reason_code ambiguous_precedence_conflict; otherwise the highest-priority fully-matched type is assigned by the chain problem_solution > argumentative > discussion > opinion > general_eap (taxonomy contract section 4).",
+  "pairs": [
+    {
+      "pair": ["argumentative", "discussion"],
+      "rationale": "Canonical comparable-strength conflict (taxonomy contract section 4 application rule 2; V1 adjudication A-3). A stance+evidence mandate and a balanced multi-perspective requirement are equally strong rhetorical obligations with materially different routing semantics; no silent choice is made.",
+      "example": "Discuss both views and take a position, arguing with evidence."
+    }
+  ],
+  "notes": [
+    "v1 enumerates only the argumentative/discussion pair as a comparable-strength conflict. V1 adjudication A-1/A-2: discussion+opinion is chain-resolved (viewpoint request is structurally subordinate to the balanced-treatment mandate), not a conflict. A-4: problem_solution+argumentative is chain-resolved (content-anchored problem_solution outranks the rhetorical mandate). All other pairs resolve by the chain.",
+    "The conflict outcome (unclassified / ambiguous_precedence_conflict) is a first-class honest state; it is never coerced to a type and never folded into general_eap (contract section 6)."
+  ]
+}
