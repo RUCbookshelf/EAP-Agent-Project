@@ -13,7 +13,7 @@ SWECCL 2.0 through the frozen v0.1 feature contract, with:
     learner_exposure=research_only
 
 Usage:
-  $env:CORPUS_ROOT = "A:\\[Linguistics Data] Corpus\\SWECCL 2.0"
+  $env:CORPUS_ROOT = "<corpus root>"   # e.g. the SWECCL 2.0 collection root
   python scripts/corpus_intelligence/build_seccl.py            # full run
   python scripts/corpus_intelligence/build_seccl.py --dry-run  # inventory only
   python scripts/corpus_intelligence/build_seccl.py --partition 0 4
