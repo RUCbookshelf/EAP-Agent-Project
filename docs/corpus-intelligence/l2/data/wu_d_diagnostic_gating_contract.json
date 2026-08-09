@@ -1,0 +1,260 @@
+{
+  "schema_version": "1.0.0",
+  "contract_id": "wu-d-diagnostic-gating-contract-v0.1.0",
+  "goal_id": "CORPUS-WUD-CONTRACT",
+  "owner": "CORPUS",
+  "consumer": "LEARNER",
+  "status": "CONTRACT_DESIGN_ONLY",
+  "promoted_baseline": "09264abbd93cdc6b62b83cefd94b3b640319ac9b",
+  "approved_at": "2026-08-09",
+  "qualifying_decisions": [
+    "RD-D3-UD06-approved.json",
+    "RD-D08-approved.json"
+  ],
+  "binding_sources": [
+    "docs/corpus-intelligence/l2/10_STAGE6_IMPLEMENTATION_HANDOFF.md",
+    "docs/corpus-licensing/CORPUS-LICENSING-REVIEW.md",
+    "docs/corpus-licensing/CORPUS-LICENSING-REVIEW.decision.json",
+    "docs/corpus-intelligence/l2/data/stage6_artifact_register.json",
+    "docs/departments/research-evaluation-governance/foundation/08_STAGE6_EVIDENCE_ADMISSIBILITY.md",
+    "docs/departments/research-evaluation-governance/foundation/07_MEASUREMENT_CLAIM_POLICY.md",
+    "docs/architecture/writing-intelligence-platform/14_ARCHITECTURE_DECISIONS.md",
+    "docs/corpus-intelligence/l2/07_CORPUS_INTELLIGENCE_QUERY_BOUNDARY.md"
+  ],
+  "exposure_classes": [
+    {
+      "class": "research_only",
+      "semantics": "default state (D3 O1); authorized internal research/evaluation only; never automatically learner-facing",
+      "learner_facing": false,
+      "permitted_epistemic_layers": ["L0", "L1"],
+      "transition": "enter from hidden after licensing/permitted-use classification (G1); default whenever qualification incomplete"
+    },
+    {
+      "class": "diagnostic_only",
+      "semantics": "qualified internal diagnostic computation (D3 O2); not automatically displayable",
+      "learner_facing": false,
+      "permitted_epistemic_layers": ["L0", "L1"],
+      "transition": "enter from research_only only when ALL O2 gates G1-G7 pass"
+    },
+    {
+      "class": "displayable",
+      "semantics": "explicit display-policy qualification; descriptive/non-normative language only",
+      "learner_facing": true,
+      "permitted_epistemic_layers": ["L0"],
+      "transition": "enter from diagnostic_only only via explicit D-08 display policy + licensing/anonymization gate; unpopulated in this Goal"
+    },
+    {
+      "class": "hidden",
+      "semantics": "internal pipeline only; intermediate computation states",
+      "learner_facing": false,
+      "permitted_epistemic_layers": ["L0", "L1"],
+      "transition": "initial class for newly produced aggregates; must resolve before use"
+    },
+    {
+      "class": "unavailable",
+      "semantics": "fail closed; never fabricated or substituted (I4)",
+      "learner_facing": false,
+      "permitted_epistemic_layers": [],
+      "transition": "terminal for unqualified/unknown/inadmissible artifacts; no widening"
+    }
+  ],
+  "exposure_rules": [
+    "research_only is the default for every corpus-derived artifact; qualification incomplete means O1",
+    "diagnostic_only is a computation class, not a display class",
+    "displayable requires Researcher decision + display policy + licensing/anonymization gate (D-08)",
+    "downgrade always permitted; upgrade requires gate evidence (D-09)",
+    "unavailable is terminal for that artifact version"
+  ],
+  "anonymization_requirements": [
+    "P1 aggregate-only content: min-N 30 effective and complete-case N >= 30; no per-document text or per-learner records",
+    "P2 no raw text, excerpts, examples, paraphrases, or reconstructive derivatives in any artifact",
+    "P3 no corpus paths or handles in artifacts or machine records (ADR-06)",
+    "P4 no PII propagation; no identifiers that re-identify corpus documents beyond registered provenance document_ids",
+    "P5 learner text never written into corpus (I2); numeric snapshots stay outside git",
+    "P6 no cross-domain leakage; same-domain predicate; domain-scoped export default (D-19)",
+    "P7 missingness and uncertainty exposed, never hidden behind false precision",
+    "P8 anonymization gate required before any displayable class",
+    "P9 internal descriptive reporting only; no external redistribution or public release"
+  ],
+  "epistemic_layers": [
+    {
+      "layer": "L0",
+      "status": "observed_descriptive",
+      "meaning": "observed feature value; reference comparison within declared group",
+      "admissible_exposure": ["research_only", "diagnostic_only", "displayable"],
+      "prohibited": "ability/quality/level judgments; learner-to-learner comparison"
+    },
+    {
+      "layer": "L1",
+      "status": "gated_inference",
+      "meaning": "diagnostic inference from verified evidence through a declared gate",
+      "admissible_exposure": ["research_only", "diagnostic_only"],
+      "prohibited": "trait attribution; claim that a gated signal measures an ability"
+    },
+    {
+      "layer": "L2",
+      "status": "recommendation",
+      "meaning": "feedback recommendation; LEARNER-owned via FeedbackPolicy; corpus contributes evidence only",
+      "admissible_exposure": ["not_corpus_derived"],
+      "prohibited": "outcome/ability claim attached to a recommendation"
+    },
+    {
+      "layer": "L3",
+      "status": "outcome_claim",
+      "meaning": "learning outcome; reserved; validated measurement models only",
+      "admissible_exposure": [],
+      "prohibited": "proficiency/mastery/learning-gain reporting; CEFR assignment; rankings"
+    }
+  ],
+  "admissibility_mapping": [
+    {
+      "status": "ADMISSIBLE",
+      "meaning": "all record fields correct; versions match; group eligible; no validity flags; no fallback",
+      "exposure_consequence": "eligible for diagnostic_only qualification with all O2 gates"
+    },
+    {
+      "status": "LIMITED",
+      "meaning": "admissible with validity flags, fragile group, or fallback disclosure",
+      "exposure_consequence": "usable descriptively with disclosure and limitation attached; never presented without them"
+    },
+    {
+      "status": "UNAVAILABLE",
+      "meaning": "terminal record-level failure (unknown/version mismatch/N<30/missing record/fallback-analyzer/license-restricted)",
+      "exposure_consequence": "maps to exposure class unavailable; no widening or substitution"
+    },
+    {
+      "status": "INVALID",
+      "meaning": "prohibited use (normative wording, cross-version, 270-block circularity, score fields, ungated learner exposure, silent defaults, imputed missingness, missing disclosure)",
+      "exposure_consequence": "never usable; excluded from any diagnostic computation"
+    }
+  ],
+  "admissibility_precedence": ["INVALID", "UNAVAILABLE", "LIMITED"],
+  "qualification_gates": [
+    {
+      "gate": "G0",
+      "criterion": "named consumer + authorization: consuming capability (LEARNER foundation) declared; Goal authorization covers diagnostic use",
+      "evidence": "goal packet/authorization record; named consumer in contract record"
+    },
+    {
+      "gate": "G1",
+      "criterion": "permitted-use/licensing classification: artifact class NON-RECONSTRUCTIVE AGGREGATE; internal research-pipeline category permitted",
+      "evidence": "licensing matrix classification + decision"
+    },
+    {
+      "gate": "G2",
+      "criterion": "non-reconstructive aggregate: statistics/distributions/numeric snapshots only",
+      "evidence": "artifact-class register entry + machine check"
+    },
+    {
+      "gate": "G3",
+      "criterion": "anonymization/privacy: P1-P9 satisfied",
+      "evidence": "privacy review record attached to artifact"
+    },
+    {
+      "gate": "G4",
+      "criterion": "provenance completeness: 7-field provenance chain",
+      "evidence": "admissibility record"
+    },
+    {
+      "gate": "G5",
+      "criterion": "evidence-admissibility: ADMISSIBLE or LIMITED-with-disclosure; never UNAVAILABLE/INVALID",
+      "evidence": "assess_admissibility(record) result"
+    },
+    {
+      "gate": "G6",
+      "criterion": "D-08 display-policy compatibility: exposure class assigned; canonical claim templates; no normative labels; banned vocabulary absent",
+      "evidence": "claim-template validation + banned-token check"
+    },
+    {
+      "gate": "G7",
+      "criterion": "diagnostic-contract qualification: construct-registry entries; declared reference group; validated-measurement status; FeedbackPolicy compatibility with LEARNER",
+      "evidence": "construct registry entries; declared-group record; validated-measurement status; LEARNER FeedbackPolicy declaration"
+    }
+  ],
+  "qualification_rule": "O2 (diagnostic_only) progresses only when G1-G7 ALL pass; any failed or missing gate means O1 research_only default; displayable additionally requires the D-08 display-policy qualification; gate records versioned with artifact; re-qualification per artifact version",
+  "fail_closed_rules": [
+    "F1 default exposure research_only (O1)",
+    "F2 qualification incomplete/missing/stale => O1; never inferred",
+    "F3 unknown artifact/corpus/feature/group, wrong hash, corrupt resource => unavailable",
+    "F4 FeatureSetVersion mismatch => UNAVAILABLE, never best-effort comparable (I3)",
+    "F5 fallback always disclosed; silent widening forbidden (I4)",
+    "F6 fallback-analyzer features and cross-version comparisons => INVALID",
+    "F7 banned vocabulary or risky ability phrases => INVALID (explicit prohibition text exempted)",
+    "F8 no LLM computation of corpus statistics (I5)",
+    "F9 no learner-facing corpus content without Researcher decision + display policy + licensing/anonymization gate (D-08)",
+    "F10 no raw SWECCL path/handle through generic runtime/retrieval/Skill/MCP/UX/L2/ACAD/LEARNER pathways (ADR-06)",
+    "F11 no proficiency/mastery/ability/learning-gain/CEFR claims; no causal/transfer claims; no cross-learner comparison",
+    "F12 no circular use of the 270 scored block; no score fields; partitions never split duplicate groups",
+    "F13 no external redistribution, text export, or public release",
+    "F14 learner evidence families never merged; HISTORY_LIMITATION accompanies longitudinal output",
+    "F15 missingness never imputed; evaluation-unavailable never replaced by zero or inference"
+  ],
+  "learner_input_requirements": [
+    "1 exposure-class envelope: exposure_class + learner_exposure fields on every artifact/result",
+    "2 admissibility record with status and reasons; reject artifacts without a record",
+    "3 epistemic-status fields L0-L3 with downgrade-only invariant",
+    "4 canonical claim templates; verified-slot wording only (I5)",
+    "5 construct registry entries + declared reference group + validated-measurement gate",
+    "6 FeedbackPolicy compatibility declaration (policy_id/version, gate rules, priority limits, evidence-eligibility, no-priority semantics, claims constraints)",
+    "7 versioned consumption: same FeatureSetVersion both sides; cross-version rejected",
+    "8 7-field provenance chain",
+    "9 n_effective/n_raw/complete-case N/missingness reporting",
+    "10 explicit failure/unavailable semantics; no silent defaults"
+  ],
+  "learner_non_consumption": [
+    "raw corpus text",
+    "examples or excerpts",
+    "reconstructive derivatives",
+    "corpus paths/handles",
+    "normative labels",
+    "proficiency/mastery classifications",
+    "learning-gain claims",
+    "cross-domain merged evidence",
+    "artifacts without exposure-class + admissibility record"
+  ],
+  "exclusions": [
+    "textual/reconstructive derivatives (excerpts, quotations, examples, paraphrases, near-verbatim reproductions, example indices)",
+    "proficiency/mastery/learning-gain claims; normative labels; rankings; outcome claims",
+    "learner-facing UI implementation",
+    "product code changes (app code, tests, persistence, API routes, composition root)",
+    "diagnostic algorithm/threshold/band method (D4 open)",
+    "LLM-computed corpus statistics (I5)",
+    "raw corpus access changes (CORPUS-owned, read-only, Goal-scoped)"
+  ],
+  "artifact_classification": [
+    {
+      "path": "docs/corpus-intelligence/l2/17_STAGE6_WU_D_DIAGNOSTIC_GATING_CONTRACT.md",
+      "kind": "documentation",
+      "artifact_class": "NON-RECONSTRUCTIVE AGGREGATE ARTIFACT",
+      "disposition": "PERMITTED",
+      "matrix_category": 10,
+      "notes": "internal descriptive reporting; contract/design only; no raw text, no excerpts"
+    },
+    {
+      "path": "docs/corpus-intelligence/l2/data/wu_d_diagnostic_gating_contract.json",
+      "kind": "data",
+      "artifact_class": "NON-RECONSTRUCTIVE AGGREGATE ARTIFACT",
+      "disposition": "PERMITTED",
+      "matrix_category": 3,
+      "notes": "machine-checkable contract mirror + artifact-class register for this Goal"
+    },
+    {
+      "path": "docs/integration/CORPUS-WUD-CONTRACT-20260809.md",
+      "kind": "documentation",
+      "artifact_class": "NON-RECONSTRUCTIVE AGGREGATE ARTIFACT",
+      "disposition": "PERMITTED",
+      "matrix_category": 10,
+      "notes": "goal handoff report; internal descriptive reporting"
+    },
+    {
+      "path": "docs/integration/CORPUS-WUD-CONTRACT-20260809.handoff.json",
+      "kind": "data",
+      "artifact_class": "NON-RECONSTRUCTIVE AGGREGATE ARTIFACT",
+      "disposition": "PERMITTED",
+      "matrix_category": 3,
+      "notes": "structured executor handoff for Program Control"
+    }
+  ],
+  "classification_rule": "No WU-D artifact may be classified TEXTUAL/RECONSTRUCTIVE DERIVATIVE; any future WU-D artifact not listed here fails closed until classified and re-reviewed",
+  "notes": "Contract/design only. displayable is defined but unpopulated (no display policy exists; learner-facing corpus content FAIL-CLOSED per D-08/licensing review). WU-D diagnostic computation remains gated on LEARNER consumption (LEARNER WAIT) and open Researcher decisions D4/D8/D12."
+}
