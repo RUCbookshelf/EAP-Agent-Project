@@ -1,0 +1,18 @@
+{
+  "artifact_type": "corpus_package_descriptor",
+  "version": "seccl-v0.1.0",
+  "corpus_package_id": "sweccl2-seccl20-v0.1.0",
+  "source_corpus": "SWECCL 2.0 (Spoken English Corpus of Chinese Learners 2.0)",
+  "component": "SECCL20 spoken transcripts (TEM4)",
+  "manifest": "seccl_manifest.csv",
+  "manifest_hash": "d4258448392727374dc56652ed87aea967dff41b90f219015c520cb3ac558de5",
+  "manifest_row_count": 2852,
+  "prepared_layer_status": "verified_present",
+  "owner": "CORPUS",
+  "generator": "scripts/corpus_intelligence/build_seccl.py",
+  "generated_at": "2026-08-09T17:11:08.833839+00:00",
+  "learner_exposure": "research_only",
+  "exposure_class": "research_only",
+  "license_status": "PARTIALLY_DOCUMENTED; internal research pipeline only",
+  "duplicate_policy": "effective_sample_excludes_merged_task123_members"
+}
