@@ -159,6 +159,71 @@
           "title": "AnalysisResult",
           "type": "object"
         },
+        "AnalysisStep": {
+          "additionalProperties": false,
+          "properties": {
+            "analyzer_id": {
+              "title": "Analyzer Id",
+              "type": "string"
+            },
+            "analyzer_version": {
+              "title": "Analyzer Version",
+              "type": "string"
+            },
+            "backend": {
+              "title": "Backend",
+              "type": "string"
+            },
+            "configuration_version": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Configuration Version"
+            },
+            "fallback_used": {
+              "default": false,
+              "title": "Fallback Used",
+              "type": "boolean"
+            },
+            "metrics": {
+              "additionalProperties": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "title": "Metrics",
+              "type": "object"
+            },
+            "provenance": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "title": "Provenance",
+              "type": "object"
+            }
+          },
+          "required": [
+            "analyzer_id",
+            "analyzer_version",
+            "backend",
+            "metrics"
+          ],
+          "title": "AnalysisStep",
+          "type": "object"
+        },
         "BaselineProfile": {
           "properties": {
             "analysis_version": {
@@ -239,6 +304,189 @@
             "limitations"
           ],
           "title": "BaselineProfile",
+          "type": "object"
+        },
+        "ClassificationStep": {
+          "additionalProperties": false,
+          "properties": {
+            "declared_task_type": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Declared Task Type"
+            },
+            "dictionary_version": {
+              "title": "Dictionary Version",
+              "type": "string"
+            },
+            "fallback_disclosure": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Fallback Disclosure"
+            },
+            "outcome": {
+              "title": "Outcome",
+              "type": "string"
+            },
+            "provenance": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "title": "Provenance",
+              "type": "object"
+            },
+            "reason_code": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Reason Code"
+            },
+            "task_type": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Task Type"
+            },
+            "taxonomy_version": {
+              "title": "Taxonomy Version",
+              "type": "string"
+            }
+          },
+          "required": [
+            "outcome",
+            "task_type",
+            "reason_code",
+            "taxonomy_version",
+            "dictionary_version"
+          ],
+          "title": "ClassificationStep",
+          "type": "object"
+        },
+        "ComparisonView": {
+          "additionalProperties": false,
+          "properties": {
+            "availability": {
+              "title": "Availability",
+              "type": "string"
+            },
+            "distribution_version": {
+              "title": "Distribution Version",
+              "type": "string"
+            },
+            "estimated_percentile": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Estimated Percentile"
+            },
+            "evidence_class": {
+              "default": "observed_descriptive",
+              "title": "Evidence Class",
+              "type": "string"
+            },
+            "feature_id": {
+              "title": "Feature Id",
+              "type": "string"
+            },
+            "learner_exposure": {
+              "default": "research_only",
+              "title": "Learner Exposure",
+              "type": "string"
+            },
+            "limitations": {
+              "items": {
+                "type": "string"
+              },
+              "title": "Limitations",
+              "type": "array"
+            },
+            "n_effective": {
+              "title": "N Effective",
+              "type": "integer"
+            },
+            "percentile_method": {
+              "title": "Percentile Method",
+              "type": "string"
+            },
+            "student_analysis_status": {
+              "title": "Student Analysis Status",
+              "type": "string"
+            },
+            "student_value": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Student Value"
+            },
+            "unavailable_reason": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Unavailable Reason"
+            },
+            "z_distance": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Z Distance"
+            }
+          },
+          "required": [
+            "feature_id",
+            "student_value",
+            "student_analysis_status",
+            "availability",
+            "estimated_percentile",
+            "z_distance",
+            "percentile_method",
+            "distribution_version",
+            "n_effective"
+          ],
+          "title": "ComparisonView",
           "type": "object"
         },
         "ConfigurationCreate": {
@@ -904,6 +1152,58 @@
           "title": "ConfigurationVersion",
           "type": "object"
         },
+        "CorpusQueryStep": {
+          "additionalProperties": false,
+          "properties": {
+            "comparisons": {
+              "items": {
+                "$ref": "#/components/schemas/ComparisonView"
+              },
+              "title": "Comparisons",
+              "type": "array"
+            },
+            "exposure": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/ExposureView"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "match": {
+              "$ref": "#/components/schemas/MatchView"
+            },
+            "n_available": {
+              "default": 0,
+              "title": "N Available",
+              "type": "integer"
+            },
+            "n_unavailable": {
+              "default": 0,
+              "title": "N Unavailable",
+              "type": "integer"
+            },
+            "provenance": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "title": "Provenance",
+              "type": "object"
+            },
+            "status": {
+              "title": "Status",
+              "type": "string"
+            }
+          },
+          "required": [
+            "status",
+            "match"
+          ],
+          "title": "CorpusQueryStep",
+          "type": "object"
+        },
         "DataSufficiency": {
           "properties": {
             "analyzer_compatible": {
@@ -1288,6 +1588,90 @@
             "kind"
           ],
           "title": "DiagnosisSignal",
+          "type": "object"
+        },
+        "DiagnosisSignalView": {
+          "additionalProperties": false,
+          "properties": {
+            "category": {
+              "title": "Category",
+              "type": "string"
+            },
+            "confidence": {
+              "title": "Confidence",
+              "type": "string"
+            },
+            "diagnosis_id": {
+              "title": "Diagnosis Id",
+              "type": "string"
+            },
+            "evidence": {
+              "title": "Evidence",
+              "type": "string"
+            },
+            "interpretation": {
+              "title": "Interpretation",
+              "type": "string"
+            },
+            "kind": {
+              "title": "Kind",
+              "type": "string"
+            },
+            "rule_version": {
+              "title": "Rule Version",
+              "type": "string"
+            }
+          },
+          "required": [
+            "diagnosis_id",
+            "category",
+            "evidence",
+            "interpretation",
+            "confidence",
+            "kind",
+            "rule_version"
+          ],
+          "title": "DiagnosisSignalView",
+          "type": "object"
+        },
+        "DiagnosisStep": {
+          "additionalProperties": false,
+          "properties": {
+            "diagnosis_version": {
+              "title": "Diagnosis Version",
+              "type": "string"
+            },
+            "improvement_priorities": {
+              "items": {
+                "$ref": "#/components/schemas/DiagnosisSignalView"
+              },
+              "title": "Improvement Priorities",
+              "type": "array"
+            },
+            "limitation": {
+              "title": "Limitation",
+              "type": "string"
+            },
+            "provenance": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "title": "Provenance",
+              "type": "object"
+            },
+            "strengths": {
+              "items": {
+                "$ref": "#/components/schemas/DiagnosisSignalView"
+              },
+              "title": "Strengths",
+              "type": "array"
+            }
+          },
+          "required": [
+            "diagnosis_version",
+            "limitation"
+          ],
+          "title": "DiagnosisStep",
           "type": "object"
         },
         "DiagnosisTrajectory": {
@@ -1771,6 +2155,62 @@
           "title": "ErrorAnnotation",
           "type": "object"
         },
+        "EvidenceView": {
+          "additionalProperties": false,
+          "properties": {
+            "admission_status": {
+              "title": "Admission Status",
+              "type": "string"
+            },
+            "epistemic_status": {
+              "title": "Epistemic Status",
+              "type": "string"
+            },
+            "evidence_id": {
+              "title": "Evidence Id",
+              "type": "string"
+            },
+            "evidence_type": {
+              "title": "Evidence Type",
+              "type": "string"
+            },
+            "exposure_class": {
+              "title": "Exposure Class",
+              "type": "string"
+            },
+            "limitations": {
+              "items": {
+                "type": "string"
+              },
+              "title": "Limitations",
+              "type": "array"
+            },
+            "provenance": {
+              "additionalProperties": true,
+              "title": "Provenance",
+              "type": "object"
+            },
+            "source_event_id": {
+              "title": "Source Event Id",
+              "type": "string"
+            },
+            "value": {
+              "additionalProperties": true,
+              "title": "Value",
+              "type": "object"
+            }
+          },
+          "required": [
+            "evidence_id",
+            "evidence_type",
+            "source_event_id",
+            "epistemic_status",
+            "admission_status",
+            "exposure_class"
+          ],
+          "title": "EvidenceView",
+          "type": "object"
+        },
         "ExcludedSubmission": {
           "properties": {
             "reasons": {
@@ -1889,6 +2329,152 @@
             "exercise_content"
           ],
           "title": "ExerciseItem",
+          "type": "object"
+        },
+        "ExposureView": {
+          "additionalProperties": false,
+          "properties": {
+            "diagnostic_eligible": {
+              "title": "Diagnostic Eligible",
+              "type": "boolean"
+            },
+            "exposure_class": {
+              "title": "Exposure Class",
+              "type": "string"
+            },
+            "learner_exposure": {
+              "title": "Learner Exposure",
+              "type": "string"
+            },
+            "reasons": {
+              "items": {
+                "type": "string"
+              },
+              "title": "Reasons",
+              "type": "array"
+            },
+            "reject": {
+              "title": "Reject",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "exposure_class",
+            "learner_exposure",
+            "diagnostic_eligible",
+            "reject"
+          ],
+          "title": "ExposureView",
+          "type": "object"
+        },
+        "FeatureSnapshotStep": {
+          "additionalProperties": false,
+          "properties": {
+            "artifact_version": {
+              "title": "Artifact Version",
+              "type": "string"
+            },
+            "eligibility": {
+              "items": {
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "type": "object"
+              },
+              "title": "Eligibility",
+              "type": "array"
+            },
+            "extractor": {
+              "title": "Extractor",
+              "type": "string"
+            },
+            "feature_set_version": {
+              "title": "Feature Set Version",
+              "type": "string"
+            },
+            "features": {
+              "items": {
+                "$ref": "#/components/schemas/FeatureValueView"
+              },
+              "title": "Features",
+              "type": "array"
+            },
+            "learner_exposure": {
+              "default": "research_only",
+              "title": "Learner Exposure",
+              "type": "string"
+            },
+            "processing_version": {
+              "title": "Processing Version",
+              "type": "string"
+            },
+            "provenance": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "title": "Provenance",
+              "type": "object"
+            },
+            "text_retained": {
+              "default": false,
+              "title": "Text Retained",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "artifact_version",
+            "feature_set_version",
+            "processing_version",
+            "extractor",
+            "features"
+          ],
+          "title": "FeatureSnapshotStep",
+          "type": "object"
+        },
+        "FeatureValueView": {
+          "additionalProperties": false,
+          "properties": {
+            "analysis_status": {
+              "title": "Analysis Status",
+              "type": "string"
+            },
+            "feature_id": {
+              "title": "Feature Id",
+              "type": "string"
+            },
+            "limitations": {
+              "items": {
+                "type": "string"
+              },
+              "title": "Limitations",
+              "type": "array"
+            },
+            "unit": {
+              "title": "Unit",
+              "type": "string"
+            },
+            "value": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Value"
+            }
+          },
+          "required": [
+            "feature_id",
+            "value",
+            "unit",
+            "analysis_status"
+          ],
+          "title": "FeatureValueView",
           "type": "object"
         },
         "FeedbackItem": {
@@ -3350,6 +3936,102 @@
           "title": "LongitudinalFeedback",
           "type": "object"
         },
+        "MatchView": {
+          "additionalProperties": false,
+          "properties": {
+            "corpus_package_id": {
+              "title": "Corpus Package Id",
+              "type": "string"
+            },
+            "fallback_disclosure": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Fallback Disclosure"
+            },
+            "feature_set_version": {
+              "title": "Feature Set Version",
+              "type": "string"
+            },
+            "manifest_hash": {
+              "title": "Manifest Hash",
+              "type": "string"
+            },
+            "matched": {
+              "title": "Matched",
+              "type": "boolean"
+            },
+            "provenance": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "title": "Provenance",
+              "type": "object"
+            },
+            "reference_group_version": {
+              "title": "Reference Group Version",
+              "type": "string"
+            },
+            "requested_task": {
+              "additionalProperties": true,
+              "title": "Requested Task",
+              "type": "object"
+            },
+            "resolved_reference_group": {
+              "anyOf": [
+                {
+                  "additionalProperties": true,
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Resolved Reference Group"
+            },
+            "resolved_reference_group_id": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Resolved Reference Group Id"
+            },
+            "unmatched_reason": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Unmatched Reason"
+            }
+          },
+          "required": [
+            "matched",
+            "requested_task",
+            "resolved_reference_group_id",
+            "resolved_reference_group",
+            "fallback_disclosure",
+            "reference_group_version",
+            "feature_set_version",
+            "corpus_package_id",
+            "manifest_hash",
+            "unmatched_reason"
+          ],
+          "title": "MatchView",
+          "type": "object"
+        },
         "MetricChange": {
           "properties": {
             "change": {
@@ -3775,6 +4457,63 @@
           "title": "MetricTrend",
           "type": "object"
         },
+        "PolicyStep": {
+          "additionalProperties": false,
+          "properties": {
+            "application_id": {
+              "title": "Application Id",
+              "type": "string"
+            },
+            "evidence_ids": {
+              "items": {
+                "type": "string"
+              },
+              "title": "Evidence Ids",
+              "type": "array"
+            },
+            "limitations": {
+              "items": {
+                "type": "string"
+              },
+              "title": "Limitations",
+              "type": "array"
+            },
+            "policy_id": {
+              "title": "Policy Id",
+              "type": "string"
+            },
+            "policy_version": {
+              "title": "Policy Version",
+              "type": "string"
+            },
+            "provenance": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "title": "Provenance",
+              "type": "object"
+            },
+            "recommendations": {
+              "items": {
+                "$ref": "#/components/schemas/RecommendationView"
+              },
+              "title": "Recommendations",
+              "type": "array"
+            },
+            "status": {
+              "title": "Status",
+              "type": "string"
+            }
+          },
+          "required": [
+            "application_id",
+            "policy_id",
+            "policy_version",
+            "status"
+          ],
+          "title": "PolicyStep",
+          "type": "object"
+        },
         "PositiveFinding": {
           "properties": {
             "evidence_quote": {
@@ -4036,6 +4775,43 @@
             "analysis"
           ],
           "title": "ReanalysisResponse",
+          "type": "object"
+        },
+        "RecommendationView": {
+          "additionalProperties": false,
+          "properties": {
+            "epistemic_status": {
+              "title": "Epistemic Status",
+              "type": "string"
+            },
+            "evidence_ids": {
+              "items": {
+                "type": "string"
+              },
+              "title": "Evidence Ids",
+              "type": "array"
+            },
+            "priority": {
+              "title": "Priority",
+              "type": "integer"
+            },
+            "recommendation_id": {
+              "title": "Recommendation Id",
+              "type": "string"
+            },
+            "statement": {
+              "title": "Statement",
+              "type": "string"
+            }
+          },
+          "required": [
+            "recommendation_id",
+            "evidence_ids",
+            "priority",
+            "statement",
+            "epistemic_status"
+          ],
+          "title": "RecommendationView",
           "type": "object"
         },
         "RevisionComparabilityResult": {
@@ -5394,7 +6170,7 @@
               "type": "array"
             },
             "rule_version": {
-              "default": "task-cluster-v0.7.0",
+              "default": "task-cluster-v0.8.0",
               "title": "Rule Version",
               "type": "string"
             },
@@ -5631,7 +6407,7 @@
               "type": "string"
             },
             "task_cluster_version": {
-              "default": "task-cluster-v0.7.0",
+              "default": "task-cluster-v0.8.0",
               "title": "Task Cluster Version",
               "type": "string"
             },
@@ -5751,6 +6527,195 @@
             "major_rewrite_detected"
           ],
           "title": "WithinTaskRevisionTrajectory",
+          "type": "object"
+        },
+        "WritingIntelligenceSliceRequest": {
+          "additionalProperties": false,
+          "description": "Essay submission envelope for the research-only writing slice.",
+          "properties": {
+            "declared_task_type": {
+              "anyOf": [
+                {
+                  "maxLength": 64,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Declared Task Type"
+            },
+            "draft_stage": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Draft Stage"
+            },
+            "essay_text": {
+              "maxLength": 50000,
+              "minLength": 1,
+              "title": "Essay Text",
+              "type": "string"
+            },
+            "genre": {
+              "anyOf": [
+                {
+                  "maxLength": 32,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Genre"
+            },
+            "prompt_id": {
+              "anyOf": [
+                {
+                  "maxLength": 32,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Prompt Id"
+            },
+            "submission_id": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Submission Id"
+            },
+            "timed_status": {
+              "anyOf": [
+                {
+                  "maxLength": 16,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Timed Status"
+            },
+            "tool_use": {
+              "anyOf": [
+                {
+                  "maxLength": 300,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Tool Use"
+            },
+            "writing_prompt": {
+              "anyOf": [
+                {
+                  "maxLength": 4000,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Writing Prompt"
+            }
+          },
+          "required": [
+            "essay_text"
+          ],
+          "title": "WritingIntelligenceSliceRequest",
+          "type": "object"
+        },
+        "WritingIntelligenceSliceResponse": {
+          "additionalProperties": false,
+          "properties": {
+            "analysis": {
+              "$ref": "#/components/schemas/AnalysisStep"
+            },
+            "classification": {
+              "$ref": "#/components/schemas/ClassificationStep"
+            },
+            "corpus_query": {
+              "$ref": "#/components/schemas/CorpusQueryStep"
+            },
+            "diagnosis": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/DiagnosisStep"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "evidence": {
+              "items": {
+                "$ref": "#/components/schemas/EvidenceView"
+              },
+              "title": "Evidence",
+              "type": "array"
+            },
+            "feature_snapshot": {
+              "$ref": "#/components/schemas/FeatureSnapshotStep"
+            },
+            "learner_exposure": {
+              "default": "research_only",
+              "title": "Learner Exposure",
+              "type": "string"
+            },
+            "policy": {
+              "$ref": "#/components/schemas/PolicyStep"
+            },
+            "provenance": {
+              "additionalProperties": {
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "type": "object"
+              },
+              "title": "Provenance",
+              "type": "object"
+            },
+            "slice_id": {
+              "title": "Slice Id",
+              "type": "string"
+            },
+            "slice_version": {
+              "title": "Slice Version",
+              "type": "string"
+            },
+            "status": {
+              "title": "Status",
+              "type": "string"
+            }
+          },
+          "required": [
+            "slice_id",
+            "slice_version",
+            "status",
+            "classification",
+            "analysis",
+            "feature_snapshot",
+            "corpus_query",
+            "policy"
+          ],
+          "title": "WritingIntelligenceSliceResponse",
           "type": "object"
         }
       }
@@ -8946,6 +9911,45 @@
             }
           },
           "summary": "Version"
+        }
+      },
+      "/api/v1/writing-intelligence/slice": {
+        "post": {
+          "description": "Run the end-to-end Writing Intelligence vertical slice (research-only).",
+          "operationId": "run_writing_intelligence_slice_api_v1_writing_intelligence_slice_post",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WritingIntelligenceSliceRequest"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/WritingIntelligenceSliceResponse"
+                  }
+                }
+              },
+              "description": "Successful Response"
+            },
+            "422": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/HTTPValidationError"
+                  }
+                }
+              },
+              "description": "Validation Error"
+            }
+          },
+          "summary": "Run Writing Intelligence Slice"
         }
       }
     }

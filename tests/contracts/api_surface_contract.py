@@ -89,6 +89,7 @@ ENDPOINT_CLASSIFICATION: dict[tuple[str, str], str] = {
     ('POST', '/api/v1/submissions/{submission_id}/calf/reanalyze'): 'C',
     ('POST', '/api/v1/submissions/{submission_id}/error-annotations/import'): 'C',
     ('POST', '/api/v1/submissions/{submission_id}/pii-review'): 'C',
+    ('POST', '/api/v1/writing-intelligence/slice'): 'C',
 }
 
 ENDPOINT_UNWRAPPED_REASON: dict[tuple[str, str], str] = {
@@ -118,6 +119,7 @@ ENDPOINT_UNWRAPPED_REASON: dict[tuple[str, str], str] = {
     ('POST', '/api/v1/submissions/{submission_id}/calf/reanalyze'): 'CALF reanalysis action; future feature',
     ('POST', '/api/v1/submissions/{submission_id}/error-annotations/import'): 'error-annotation import; future feature',
     ('POST', '/api/v1/submissions/{submission_id}/pii-review'): 'PII review workflow; not part of current Streamlit product',
+    ('POST', '/api/v1/writing-intelligence/slice'): 'research-only writing intelligence slice; not part of current Streamlit product',
 }
 
 CLIENT_METHOD_CLASSIFICATION: dict[str, str] = {
