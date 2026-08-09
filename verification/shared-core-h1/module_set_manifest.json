@@ -43,6 +43,7 @@
                     "api/routers/students.py",
                     "api/routers/submissions.py",
                     "api/routers/system.py",
+                    "api/routers/writing_intelligence.py",
                     "api/schemas.py",
                     "calf/__init__.py",
                     "calf/lexical_diversity.py",
