@@ -765,6 +765,29 @@ def assess_admissibility(record: dict) -> tuple[str, list[str]]:
 
 POLICY_REGISTRY_PATH = POLICY_DIR / "policy_registry.json"
 
+# Policy-artifact hash normalization rule (POLICY-HASH-1; Wave-1 CRLF debt
+# follow-up GOV-CRLF-HASH-FOLLOWUP): the canonical content hash of a policy JSON
+# artifact is SHA-256 over its LF-normalized bytes - every CRLF sequence is
+# converted to LF before hashing (the Git blob form). Working-tree line-ending
+# conversion (core.autocrlf / .gitattributes) therefore never changes registry
+# hashes; the recorded artifact_hash values in policy_registry.json are
+# LF-canonical and verify identically for LF and CRLF checkouts alike.
+
+
+def _lf_canonical_bytes(data: bytes) -> bytes:
+    """Normalize CRLF line endings to LF (canonical Git blob form)."""
+    return data.replace(b"\r\n", b"\n")
+
+
+def _policy_artifact_digest_bytes(data: bytes) -> str:
+    """SHA-256 of LF-canonical artifact bytes (POLICY-HASH-1)."""
+    return hashlib.sha256(_lf_canonical_bytes(data)).hexdigest()
+
+
+def _policy_artifact_digest(path: Path) -> str:
+    """SHA-256 of the LF-canonical bytes of a policy artifact file (POLICY-HASH-1)."""
+    return _policy_artifact_digest_bytes(path.read_bytes())
+
 
 def load_policy_registry() -> dict:
     with open(POLICY_REGISTRY_PATH, "r", encoding="utf-8") as handle:
@@ -789,7 +812,7 @@ def validate_policy_registry() -> dict:
         if not path.exists():
             findings.append(f"artifact missing: {artifact}")
             continue
-        digest = hashlib.sha256(path.read_bytes()).hexdigest()
+        digest = _policy_artifact_digest(path)
         if digest != entry.get("artifact_hash"):
             findings.append(f"hash mismatch for {artifact}")
         try:
