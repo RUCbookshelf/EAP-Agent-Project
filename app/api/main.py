@@ -31,6 +31,7 @@ from app.api.routers import (
     revisions,
     students,
     submissions,
+    writing_intelligence,
 )
 from app.config import Settings, load_settings
 from app.version import PLATFORM_APPLICATION_VERSION
@@ -73,6 +74,7 @@ _BUSINESS_ROUTERS = (
     practice,
     journey,
     research,
+    writing_intelligence,
 )
 
 
