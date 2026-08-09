@@ -344,8 +344,27 @@ def build_pixel_css() -> str:
     return f"""
 <style>
 {build_root_css()}
+/* Skip navigation link for keyboard accessibility */
+.px-skip-link {{
+    position: absolute;
+    top: -100px;
+    left: 0;
+    background: var(--px-action);
+    color: var(--px-action-text);
+    padding: var(--px-space-2) var(--px-space-4);
+    z-index: 10000;
+    font-family: var(--px-font-body);
+    font-weight: var(--px-font-weight-bold);
+    border: var(--px-border-thin);
+    box-shadow: var(--px-shadow-md);
+    text-decoration: none;
+}}
 
-/* 鈹€鈹€ Application shell 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€ */
+.px-skip-link:focus {{
+    top: 0;
+}}
+
+/* Application shell */ 鈹€鈹€ Application shell 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€ */
 .stApp {{
     background-color: var(--px-bg);
     font-family: var(--px-font-body);

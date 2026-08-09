@@ -173,6 +173,10 @@ def run() -> None:
 
     # Inject Pixel Art CSS system
     inject_pixel_art()
+    # Skip navigation link for keyboard accessibility
+    st.markdown('<a href="#main-content" class="px-skip-link">Skip to main content</a>', unsafe_allow_html=True)
+    # Main content anchor for skip navigation target
+    st.markdown('<div id="main-content"></div>', unsafe_allow_html=True)
 
     _render_header(api_client, lang)
     role, page_key = _render_sidebar(lang)
