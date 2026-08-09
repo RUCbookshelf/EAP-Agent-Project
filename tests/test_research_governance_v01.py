@@ -1,6 +1,7 @@
 """WU11 governance-validator tests (department-owned; deterministic; read-only).
 
-Covers the policy tables and the independent-review resolutions (F1-F14).
+Covers the policy tables, the independent-review resolutions (F1-F14), and the
+POLICY-HASH-1 CRLF line-ending normalization rule (GOV-CRLF-HASH-FOLLOWUP).
 """
 from __future__ import annotations
 
@@ -415,6 +416,67 @@ def test_policy_registry_consistency():
     result = v.validate_policy_registry()
     assert result["valid"], result["findings"]
     assert result["entry_count"] == len(v.POLICY_ARTIFACTS) + 1  # 8 artifacts + framework entry
+
+
+# ---------------------------------------------------------------------------
+# Policy registry hash normalization (POLICY-HASH-1; GOV-CRLF-HASH-FOLLOWUP)
+# ---------------------------------------------------------------------------
+
+def test_policy_registry_hashes_are_lf_canonical():
+    # Recorded artifact hashes must equal the LF-canonical digest regardless of
+    # the working-tree line endings the checkout happens to have.
+    registry = v.load_policy_registry()
+    checked = 0
+    for entry in registry["policies"]:
+        artifact = entry.get("artifact")
+        if not artifact:
+            continue
+        path = v.POLICY_DIR / artifact
+        assert path.exists(), artifact
+        assert v._policy_artifact_digest(path) == entry["artifact_hash"], artifact
+        checked += 1
+    assert checked == len(v.POLICY_ARTIFACTS)
+
+
+def test_policy_hash_normalizes_crlf_to_lf():
+    # The digest must be invariant under CRLF<->LF conversion (POLICY-HASH-1).
+    path = v.POLICY_DIR / "corpus_use_policy.json"
+    on_disk = path.read_bytes()
+    lf_form = on_disk.replace(b"\r\n", b"\n")
+    crlf_form = lf_form.replace(b"\n", b"\r\n")
+    assert lf_form != crlf_form  # artifact is multi-line; the conversion is meaningful
+    assert v._policy_artifact_digest_bytes(on_disk) == v._policy_artifact_digest_bytes(lf_form)
+    assert v._policy_artifact_digest_bytes(crlf_form) == v._policy_artifact_digest_bytes(lf_form)
+    assert v._policy_artifact_digest(path) == v._policy_artifact_digest_bytes(lf_form)
+
+
+def test_policy_registry_valid_under_crlf_checkout(monkeypatch, tmp_path):
+    # Simulate core.autocrlf=true: identical content stored as CRLF bytes.
+    policies_copy = Path(tmp_path) / "policies"
+    shutil.copytree(v.POLICY_DIR, policies_copy)
+    for file_path in policies_copy.iterdir():
+        if file_path.is_file():
+            data = file_path.read_bytes()
+            if b"\r\n" not in data:
+                file_path.write_bytes(data.replace(b"\n", b"\r\n"))
+    monkeypatch.setattr(v, "POLICY_DIR", policies_copy)
+    monkeypatch.setattr(v, "POLICY_REGISTRY_PATH", policies_copy / "policy_registry.json")
+    result = v.validate_policy_registry()
+    assert result["valid"], result["findings"]
+    assert result["entry_count"] == len(v.POLICY_ARTIFACTS) + 1
+
+
+def test_policy_registry_detects_hash_mismatch(monkeypatch, tmp_path):
+    # Content changes must still be detected after line-ending normalization.
+    policies_copy = Path(tmp_path) / "policies"
+    shutil.copytree(v.POLICY_DIR, policies_copy)
+    artifact = policies_copy / "corpus_use_policy.json"
+    artifact.write_bytes(artifact.read_bytes() + b" ")
+    monkeypatch.setattr(v, "POLICY_DIR", policies_copy)
+    monkeypatch.setattr(v, "POLICY_REGISTRY_PATH", policies_copy / "policy_registry.json")
+    result = v.validate_policy_registry()
+    assert not result["valid"]
+    assert any("hash mismatch for corpus_use_policy.json" in finding for finding in result["findings"])
 
 
 # ---------------------------------------------------------------------------

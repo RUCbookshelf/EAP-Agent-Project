@@ -37,7 +37,8 @@ policy lives here — never inside Corpus feature code (per D-24 and the goal's
 
 The single machine-readable registry is `policies/policy_registry.json`; it lists every
 policy version, its status, effective date, ratification decision id, artifact path, and
-content hash (SHA-256 of the JSON artifact bytes). The registry is finalized with the
+content hash (SHA-256 over the LF-canonical JSON artifact bytes, per the
+**POLICY-HASH-1** normalization rule in section 4). The registry is finalized with the
 first ratified policy set in this foundation and is validated by the WU11 validators.
 
 | Policy | Version (this foundation) | Status | Human artifact | Machine artifact | Ratification |
@@ -54,8 +55,15 @@ first ratified policy set in this foundation and is validated by the WU11 valida
 
 ## 4. Determinism and auditability
 
-- Content hash: SHA-256 over the exact bytes of each policy JSON artifact, recorded in
-  `policy_registry.json`; the WU11 validator recomputes and compares.
+- Content hash: SHA-256 over the LF-canonical bytes of each policy JSON artifact,
+  recorded in `policy_registry.json`; the WU11 validator recomputes and compares.
+- **Hash normalization rule (POLICY-HASH-1)** — the canonical content hash of a policy
+  JSON artifact is SHA-256 over its LF-normalized bytes: every CRLF (`\r\n`) sequence
+  is converted to LF (`\n`) before hashing (the Git blob form). Working-tree
+  line-ending conversion (`core.autocrlf`, `.gitattributes`) therefore never changes
+  registry hashes: a CRLF checkout hashes identically to an LF checkout, and the
+  recorded `artifact_hash` values remain valid in both. This resolves the Wave-1
+  recorded CRLF policy-hash debt (see `docs/integration/GOV-CRLF-HASH-FOLLOWUP*`).
 - Audit chain: each policy JSON records `supersedes` (null for v0.1.0) and
   `ratification_decision_id`; the registry records effective dates; the department
   decision register records rationale and alternatives.
