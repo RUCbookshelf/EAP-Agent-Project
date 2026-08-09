@@ -1,4 +1,10 @@
-# 数据模型（迁移 10）
+# 数据模型（迁移 13）
+
+迁移 13 新增部分唯一索引 `ux_practice_targets_active_priority_key`：对每个 (student_id, source_submission_id, target_json 内 source_priority_id) 至多允许一个 ACTIVE 练习目标；无优先级引用的旧目标豁免。回滚只删除该索引，不删除数据，重建幂等。
+
+迁移 12 新增练习与迁移证据表族：`practice_targets`、`exercise_instances`、`exercise_attempts`、`practice_evaluations`、`feedback_engagement_traces`、`within_task_response_candidates`、`transfer_evidence_candidates`、`practice_state_snapshots`，并激活 config-v0.9.0 作为 config-v0.8.2 的子版本；旧配置保留。
+
+迁移 11 新增研究数据基础设施：`human_reviews`（人工评审）、`pii_candidates`（PII 候选）、`export_jobs`（导出任务），并激活 config-v0.8.2 作为 config-v0.8.0 的子版本。
 
 Migration 10 additively adds nullable actual-timing fields to essays, semantic/provenance fields to metric results, append-only `analysis_units` and `error_annotations`, and active `config-v0.8.0` as a child of preserved `config-v0.7.1`. Logical rollback reactivates migration 9/config v0.7.1 without deleting additive data; re-upgrade is idempotent.
 
@@ -23,7 +29,7 @@ SQLite 默认文件为 `data/writing_feedback.db`，外键约束在每个连接�
 | 表 | 主要字段 | 用途 |
 |---|---|---|
 | `students` | `student_id`, `created_at`, `is_synthetic` | 匿名学习者标识；不保存姓名 |
-| `essays` | `essay_id`, `student_id`, prompt, genre, draft_stage, timed, tool_use, essay_text, submitted_at | 原始作文和任务条件 |
+| `essays` | `essay_id`, `student_id`, writing_prompt, genre, draft_stage, timed, time_limit_minutes, tool_use, essay_text, submitted_at, timing 字段（迁移 10）, revision 元数据（迁移 5） | 原始作文和任务条件 |
 | `metrics` | `essay_id`, `metrics_json`, `analysis_version`, `limitations` | 基础表层指标 |
 | `diagnoses` | `essay_id`, `diagnosis_json`, `diagnosis_version` | 优点与改进重点的结构化信号 |
 | `feedback_records` | `essay_id`, `feedback_json`, provider_name, model_name, success_status, fallback_reason, prompt_version, analysis_version | 结构化反馈及生成溯源 |
@@ -36,6 +42,17 @@ SQLite 默认文件为 `data/writing_feedback.db`，外键约束在每个连接�
 | `metric_results` | AnalysisRun, metric/version/value/unit/parameters/resources/status/evidence/limitations | 通用指标结果，不要求新增固定列 |
 | `analysis_artifacts` | AnalysisRun, artifact type/schema, JSON | token、位置与词汇/衔接/句法证据 |
 | `diagnostic_calibrations` | essay/AnalysisRun IDs, calibration JSON, calibration/gate/priority/configuration versions, created_at | 追加式诊断准入、排序、证据和抑制审计 |
+| `human_reviews` | review_id, target_type/target_id, reviewer_id, decision, confidence, guideline_version, review_status, superseded_by, source_system_result_snapshot | 人工评审记录；更新评审通过 superseded_by 取代旧评审 |
+| `pii_candidates` | pii_candidate_id, submission_id, category, offsets, matched_text, confidence, rule_id, review_status, action, reviewer_id, reviewed_at, replacement_marker | 待评审的 PII 候选 |
+| `export_jobs` | export_id, filter_json, privacy_mode, formats_json, status, completed_at, export_directory, file_count, record_counts_json, excluded_counts_json, manifest_path | 研究数据导出任务（filter/privacy 白名单） |
+| `practice_targets` | practice_target_id, student_id, source_submission_id, source_diagnosis_id, target_code/label, status, target_json | 练习目标；迁移 13 保证至多一个 ACTIVE 优先级键 |
+| `exercise_instances` | exercise_id, practice_target_id, student_id, exercise_type, created_at, instance_json | 练习实例 |
+| `exercise_attempts` | attempt_id, exercise_id, student_id, attempt_number, status, created_at, attempt_json | 练习尝试（按 attempt_number 追加） |
+| `practice_evaluations` | evaluation_id, attempt_id, practice_target_id, created_at, evaluation_json | 练习评估 |
+| `feedback_engagement_traces` | trace_id, student_id, target_code, created_at, trace_json | 反馈参与轨迹 |
+| `within_task_response_candidates` | response_id, student_id, practice_target_id, created_at, response_json | 任务内回应候选 |
+| `transfer_evidence_candidates` | transfer_evidence_id, student_id, practice_target_id, created_at, transfer_json | 迁移证据候选 |
+| `practice_state_snapshots` | practice_state_snapshot_id, student_id, created_at, snapshot_json | 练习状态快照 |
 
 ## 关系
 

@@ -6,6 +6,23 @@ import json
 from collections.abc import Callable
 
 
+"""Minimal native SQLite migration runner.
+
+Rollback note for the FUTURE migration 14 (recorded at CORE-MIGRATION14-AMENDMENTS,
+design-review finding F-6; migration 14 is NOT implemented here and no schema
+change exists):
+
+- ``ALTER TABLE ... DROP COLUMN`` rollback requires SQLite >= 3.35 (bundled
+  SQLite 3.53.1 satisfies this).
+- The deferred additive ``essays.domain`` discriminator must keep a
+  COLUMN-level CHECK; any future index/view/trigger on the ``domain`` column
+  must be dropped BEFORE ``DROP COLUMN``, because a dependent object blocks
+  the drop.
+
+Asserted by ``tests/test_migration_drop_column_rollback_note.py``.
+"""
+
+
 LATEST_MIGRATION_VERSION = 13
 
 
