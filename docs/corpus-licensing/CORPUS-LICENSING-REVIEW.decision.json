@@ -1,0 +1,60 @@
+{
+  "schema_version": "1.0.0",
+  "decision_id": "UD-04",
+  "title": "Corpus Stage-6 authorization / licensing (scoped resolution recommendation)",
+  "owning_work": "CORPUS",
+  "review_goal": "CORPUS-LICENSING-REVIEW",
+  "reviewed_at": "2026-08-09",
+  "review_basis": [
+    "docs/departments/research-evaluation-governance/foundation/03_CORPUS_USE_AND_LICENSE_POLICY.md (corpus-use-policy-v0.1.0, RATIFIED RD-POL-003)",
+    "docs/departments/research-evaluation-governance/foundation/policies/corpus_use_policy.json (CU-01..CU-12)",
+    "docs/corpus-readiness/sweccl2/11_LIMITATIONS_AND_OPEN_ISSUES.md:43-48",
+    "docs/corpus-readiness/sweccl2/corpus_version.json",
+    "docs/corpus-intelligence/l2/10_STAGE6_IMPLEMENTATION_HANDOFF.md",
+    "program-control/qualified-adrs/ADR-06-corpus-intelligence.json",
+    "program-control/WORKSTREAM_REGISTRY.json (external_corpus)",
+    "A:\\[Linguistics Data] Corpus\\SWECCL 2.0\\SWECCL2.0_语料库概况报告.md (read-only manual transcription; no license grant text)"
+  ],
+  "license_status": "PARTIALLY_DOCUMENTED",
+  "open_license_asserted": false,
+  "redistribution_authorized": false,
+  "recommended_option": "authorize governed/versioned artifact usage under the documented licensing review for the internal research-pipeline scope only (USER_DECISION_BRIEF UD-04 option 1, scoped)",
+  "recommended_scope": {
+    "permitted": [
+      "local research processing (category 1)",
+      "internal product-development processing (category 2)",
+      "persistent derived statistics (category 3)",
+      "reference-group distributions (category 4)",
+      "feature-level aggregates (category 5)",
+      "reproducibility artifacts: numeric/manifest layer only (category 7 aggregate layer)",
+      "product/runtime exposure of statistics only with learner_exposure=research_only (category 9 statistics-only)",
+      "export for internal descriptive reporting only (category 10 internal reporting)",
+      "raw corpus access: CORPUS-owned, read-only, Goal-scoped (category 12)"
+    ],
+    "fail_closed": [
+      "example/text excerpts and example indices (category 6)",
+      "reproducibility artifacts containing raw or derived text (category 7 textual layer)",
+      "product/runtime exposure of corpus text or examples (category 9 text exposure)",
+      "external export of corpus text (category 10 text export)",
+      "external redistribution (category 11)",
+      "learner-facing display of any corpus content (D-08 gate; includes Stage-6 WU-D output)",
+      "raw-source access outside CORPUS-owned read-only Goal scope",
+      "raw SWECCL path/handle through generic runtime/retrieval/Skills/MCP/UX/L2/ACAD/LEARNER pathways (ADR-06)"
+    ]
+  },
+  "stage6_unlock_recommendation": "Resolve UD-04 for the recommended scope; then the Stage-6 preparation Goal (WU-A/B/C/E research-only work) may be assigned. WU-D and all learner-facing scope remain gated on D-08 display policy + licensing/anonymization gate and the D3 licensing-model determination.",
+  "alternatives_if_declined": [
+    "restrict Stage 6 to public/owned corpora (e.g., openly licensed learner corpora or owned student data with explicit consent frameworks)",
+    "defer Stage 6 until a license text or owner grant is located"
+  ],
+  "user_decision_required": true,
+  "researcher_decision_required": false,
+  "open_researcher_decisions_remaining": [
+    "D3 licensing model (commercial/sub-licensing/derivative corpus publication)",
+    "D8 feature-set scope",
+    "D12 UI exposure",
+    "final corpus exclusion and duplicate-handling policy",
+    "reference-group min-N policy ratification (Research Evaluation review)"
+  ],
+  "notes": "This review is a documentation review, not a legal opinion. No license text, vendor statement, or owner grant was located in the manual transcription or the raw corpus tree. Categories the review could not resolve are fail-closed."
+}

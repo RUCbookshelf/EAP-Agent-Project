@@ -17,11 +17,12 @@ import re
 import statistics
 from collections import Counter, defaultdict
 from pathlib import Path
+from scripts.corpus_paths import get_repo_root, get_corpus_root
 
-CORPUS_ROOT = Path(r"A:\[Linguistics Data] Corpus\SWECCL 2.0")
+CORPUS_ROOT = get_corpus_root()
 DERIVED_ROOT = CORPUS_ROOT / "PREPARED" / "utf8"
-REPO_ROOT = Path(r"A:\EAP Agent Project\writing-feedback-mvp")
-OUT_DIR = REPO_ROOT / "docs" / "corpus-readiness" / "sweccl2" / "data"
+REPO_ROOT = get_repo_root()
+OUT_DIR = get_readiness_out_dir()
 INVENTORY = OUT_DIR / "physical_inventory.csv"
 
 CHINESE_RE = re.compile(r"[\u4e00-\u9fff]")

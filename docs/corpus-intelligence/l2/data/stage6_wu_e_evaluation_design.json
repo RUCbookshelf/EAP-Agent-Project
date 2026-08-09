@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_version": "stage6-wu-e-design-v0.1.0",
+  "artifact_class": "NON-RECONSTRUCTIVE AGGREGATE ARTIFACT",
+  "disclosure_risk": "none - contains no corpus text, excerpts, or learner text",
+  "goal_id": "CORPUS-STAGE6-WU-ABCE",
+  "owner": "CORPUS",
+  "scope": "research-only evaluation DESIGN for WU-E; no partitions are created, no model is trained, no learner-facing output exists",
+  "protected_block": {
+    "count": 270,
+    "document_series": "EXP01 expository documents (WEXP#### ids)",
+    "score_linkage": {
+      "source": "TOOLS/exp.xls and TOOLS/exp.sav (raw SWECCL, read-only metadata inspection)",
+      "key": "ID = WEXP#### exact match to corpus document ids",
+      "coverage": "270/270",
+      "ambiguity": 0,
+      "missingness": 0,
+      "fields": ["Rater_A", "Rater_B", "Rater_C", "Language", "Content", "Organization", "Average_score"]
+    },
+    "partitions_created": false,
+    "duplicate_policy": "duplicate-group members are never split across dev/eval",
+    "development_use": "requires explicit Research Evaluation approval; protected block is not development material by default"
+  },
+  "evaluation_objectives": [
+    "design an evaluation of the WU-A/B/C research pipeline (student FeatureSnapshot, task matching, observed-descriptive comparison) against the human expository scores",
+    "define descriptive association metrics between observed-descriptive comparison output (estimated percentile, z_distance per feature) and rater scores",
+    "record leakage and admissibility constraints so any future execution stays research-only and protected"
+  ],
+  "metrics_design": [
+    {
+      "metric": "descriptive association between per-feature observed-descriptive comparison output and Average_score",
+      "analysis_level": "document-level within the 270-document protected block",
+      "claim_limit": "observed-descriptive association only; no causal claim, no diagnostic threshold, no proficiency/mastery/learning-gain interpretation"
+    },
+    {
+      "metric": "coverage and availability accounting (feature/distribution availability across the block)",
+      "analysis_level": "document-level",
+      "claim_limit": "missingness is recorded, never imputed"
+    }
+  ],
+  "constraints": [
+    "no final train/dev/test partitions are created by this design",
+    "duplicate-group members never split across any future dev/eval grouping",
+    "protected block is not used as development material without Research Evaluation approval",
+    "no proficiency/mastery/learning-gain vocabulary in any evaluation output",
+    "all results carry learner_exposure=research_only",
+    "no LLM computation of corpus statistics (I5)",
+    "no raw corpus text, excerpts, or reconstructed wording in any evaluation artifact",
+    "no raw SWECCL path or handle leaves the CORPUS boundary (ADR-06)"
+  ],
+  "licensing": {
+    "basis": "docs/corpus-licensing/CORPUS-LICENSING-REVIEW.md (permitted-use matrix, categories 3/4/5, category 7 aggregate layer)",
+    "authorization": "UD-04 RESOLVED_FOR_SCOPED_RESEARCH_STAGE6_WU_A_B_C_E (2026-08-09)",
+    "fail_closed": [
+      "example/text excerpts and example indices",
+      "learner-facing display of corpus content (D-08 gate)",
+      "external redistribution, public release, training use",
+      "raw corpus export or third-party access"
+    ]
+  },
+  "provenance": {
+    "source_package": "sweccl2-weccl20-v0.1.0",
+    "source_version": "2.0",
+    "manifest_hash": "0d8940ff84613807c11c0e492c61fb8d39fc1152a386061f9711a41487659eb9",
+    "score_linkage_source": "docs/corpus-intelligence/l2/03_SCORE_DUPLICATE_EVALUATION_POLICY.md (WU3.1)",
+    "design_version": "stage6-wu-e-design-v0.1.0"
+  }
+}

@@ -7,9 +7,10 @@ from pathlib import Path
 
 import pytest
 
-REPO = Path(r"A:\EAP Agent Project\writing-feedback-mvp")
+from scripts.corpus_paths import get_corpus_root, get_repo_root
+
+REPO = get_repo_root()
 DATA = REPO / "docs" / "corpus-readiness" / "sweccl2" / "data"
-CORPUS = Path(r"A:\[Linguistics Data] Corpus\SWECCL 2.0")
 
 BANNED = ("level", "score", "ability", "mastery", "gain", "cefr")
 
@@ -49,9 +50,10 @@ def test_derived_roundtrip_sample():
     import random
 
     random.seed(7)
+    corpus = get_corpus_root()
     for m in random.sample(ok, 25):
-        src = (CORPUS / m["source_relative_path"]).read_bytes()
-        derived = (CORPUS / "PREPARED" / "utf8" / m["source_relative_path"]).read_bytes()
+        src = (corpus / m["source_relative_path"]).read_bytes()
+        derived = (corpus / "PREPARED" / "utf8" / m["source_relative_path"]).read_bytes()
         enc = m["encoding"]
         assert derived.decode("utf-8").encode(enc) == src
 

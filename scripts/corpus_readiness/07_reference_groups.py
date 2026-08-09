@@ -11,9 +11,10 @@ import csv
 import json
 from collections import Counter, defaultdict
 from pathlib import Path
+from scripts.corpus_paths import get_repo_root, get_corpus_root
 
-REPO_ROOT = Path(r"A:\EAP Agent Project\writing-feedback-mvp")
-OUT_DIR = REPO_ROOT / "docs" / "corpus-readiness" / "sweccl2" / "data"
+REPO_ROOT = get_repo_root()
+OUT_DIR = get_readiness_out_dir()
 MANIFEST = OUT_DIR / "corpus_manifest.csv"
 DUPLICATES = OUT_DIR / "duplicate_report.csv"
 MIN_N = 30

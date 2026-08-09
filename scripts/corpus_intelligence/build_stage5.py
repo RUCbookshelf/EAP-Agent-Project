@@ -17,17 +17,18 @@ import sys
 from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
+from scripts.corpus_paths import get_repo_root, get_corpus_root
 
-sys.path.insert(0, str(Path(r"A:\EAP Agent Project\writing-feedback-mvp")))
+sys.path.insert(0, str(get_repo_root()))
 
 from app.corpus.distributions import DISTRIBUTION_ALGORITHM_VERSION, build_distribution
 from app.corpus.features import FEATURE_SET_VERSION, extract_features_batch
 from app.corpus.groups import REFERENCE_GROUP_VERSION, ReferenceGroupIndex
 from app.corpus.resource import load_corpus_resource
 
-REPO = Path(r"A:\EAP Agent Project\writing-feedback-mvp")
+REPO = get_repo_root()
 READINESS = REPO / "docs" / "corpus-readiness" / "sweccl2"
-PREPARED = Path(r"A:\[Linguistics Data] Corpus\SWECCL 2.0\PREPARED")
+PREPARED = get_corpus_root() / "PREPARED"
 OUT = REPO / "docs" / "corpus-intelligence" / "l2" / "data"
 SNAPSHOT_DIR = PREPARED / "corpus-intelligence"
 DISTRIBUTION_VERSION = "reference-distributions-v0.1.0"
