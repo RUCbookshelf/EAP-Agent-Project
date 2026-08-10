@@ -230,7 +230,7 @@ def test_health_contract_healthy_state(tmp_path):
     app = make_test_app(tmp_path)
     lifecycle.transition(ServiceState.READY)
     lifecycle.database_status = "connected"
-    lifecycle.migration_version = 13
+    lifecycle.migration_version = 14
     lifecycle.active_configuration = "config-v0.9.0"
     with TestClient(app) as client:
         response = client.get("/api/v1/system/health")
@@ -239,7 +239,7 @@ def test_health_contract_healthy_state(tmp_path):
         body = response.json()
         assert body["status"] == "ok"
         assert body["database_status"] == "connected"
-        assert body["database_migration_version"] == 13
+        assert body["database_migration_version"] == 14
         assert body["application_version"] == PLATFORM_APPLICATION_VERSION
         assert "deepseek_api_key" not in response.text.casefold()
 

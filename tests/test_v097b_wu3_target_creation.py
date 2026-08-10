@@ -324,11 +324,12 @@ class TestMigration13:
             ),
         )
         connection.commit()
-        assert upgrade(connection) == 13
+        assert upgrade(connection) == 14
         row = connection.execute(
             "SELECT target_json FROM practice_targets WHERE practice_target_id='PT000001'"
         ).fetchone()
         assert json.loads(row[0])["source_priority_id"] == "PRIO-18"
+        assert rollback(connection, 13) == 13
         assert rollback(connection, 12) == 12
         names = {
             row[0] for row in connection.execute(
@@ -337,7 +338,7 @@ class TestMigration13:
         assert "ux_practice_targets_active_priority_key" not in names
         assert connection.execute(
             "SELECT COUNT(*) FROM practice_targets").fetchone()[0] == 1
-        assert upgrade(connection) == 13
+        assert upgrade(connection) == 14
         connection.close()
 
 
