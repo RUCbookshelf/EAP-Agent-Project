@@ -1,0 +1,121 @@
+{
+  "schema_version": "1.0.0",
+  "goal_id": "PDW1-CORPUS-THROUGHPUT-EXPANSION",
+  "binding_matrix": "docs/corpus-licensing/CORPUS-LICENSING-REVIEW.md",
+  "authorization": "UD-04 scoped internal research pipeline (CU-01/CU-02/CU-03); Product Delivery Wave 1 CORPUS throughput Goal",
+  "artifact_classes": [
+    "RAW SOURCE",
+    "NON-RECONSTRUCTIVE AGGREGATE ARTIFACT",
+    "TEXTUAL/RECONSTRUCTIVE DERIVATIVE"
+  ],
+  "dispositions": ["PERMITTED", "CONDITIONAL", "FAIL-CLOSED"],
+  "fail_closed_categories": [
+    "6 (example/text excerpts and example indices)",
+    "7-textual (reproducibility artifacts containing raw or derived text)",
+    "9-text (product/runtime exposure of corpus text or examples)",
+    "10-text (external export of corpus text)",
+    "11 (external redistribution)",
+    "learner-facing display of corpus content (D-08 gate)",
+    "raw-source access outside CORPUS-owned read-only Goal scope",
+    "raw SWECCL path/handle through generic runtime/retrieval/Skills/MCP/UX/L2/ACAD/LEARNER pathways (ADR-06)"
+  ],
+  "artifacts": [
+    {
+      "path": "app/corpus/seccl.py",
+      "kind": "code",
+      "artifact_class": "NON-RECONSTRUCTIVE AGGREGATE ARTIFACT",
+      "disposition": "PERMITTED",
+      "matrix_category": 5,
+      "notes": "SECCL20 adapter/group index/batch plan; numeric snapshots only; research_only exposure"
+    },
+    {
+      "path": "scripts/corpus_intelligence/build_seccl.py",
+      "kind": "code",
+      "artifact_class": "NON-RECONSTRUCTIVE AGGREGATE ARTIFACT",
+      "disposition": "PERMITTED",
+      "matrix_category": 5,
+      "notes": "deterministic resumable batch builder; snapshots outside git; governed aggregates only"
+    },
+    {
+      "path": "tests/corpus/test_seccl.py",
+      "kind": "code",
+      "artifact_class": "NON-RECONSTRUCTIVE AGGREGATE ARTIFACT",
+      "disposition": "PERMITTED",
+      "matrix_category": 3,
+      "notes": "TDD verification of adapter/groups/batch plan/hygiene"
+    },
+    {
+      "path": "tests/corpus/test_seccl_artifacts.py",
+      "kind": "code",
+      "artifact_class": "NON-RECONSTRUCTIVE AGGREGATE ARTIFACT",
+      "disposition": "PERMITTED",
+      "matrix_category": 3,
+      "notes": "machine-checkable register/aggregate verification"
+    },
+    {
+      "path": "docs/corpus-intelligence/l2/data/seccl/seccl_feature_set_version.json",
+      "kind": "data",
+      "artifact_class": "NON-RECONSTRUCTIVE AGGREGATE ARTIFACT",
+      "disposition": "PERMITTED",
+      "matrix_category": 5,
+      "notes": "feature contract provenance; statistics/versions only"
+    },
+    {
+      "path": "docs/corpus-intelligence/l2/data/seccl/seccl_reference_group_version.json",
+      "kind": "data",
+      "artifact_class": "NON-RECONSTRUCTIVE AGGREGATE ARTIFACT",
+      "disposition": "PERMITTED",
+      "matrix_category": 4,
+      "notes": "reference-group version/min-N/duplicate policy"
+    },
+    {
+      "path": "docs/corpus-intelligence/l2/data/seccl/seccl_distribution_version.json",
+      "kind": "data",
+      "artifact_class": "NON-RECONSTRUCTIVE AGGREGATE ARTIFACT",
+      "disposition": "PERMITTED",
+      "matrix_category": 4,
+      "notes": "distribution version/algorithm/provenance"
+    },
+    {
+      "path": "docs/corpus-intelligence/l2/data/seccl/seccl_package_descriptor.json",
+      "kind": "data",
+      "artifact_class": "NON-RECONSTRUCTIVE AGGREGATE ARTIFACT",
+      "disposition": "PERMITTED",
+      "matrix_category": 3,
+      "notes": "package provenance descriptor; research_only exposure"
+    },
+    {
+      "path": "docs/corpus-intelligence/l2/data/seccl/seccl_reference_group_membership.csv",
+      "kind": "data",
+      "artifact_class": "NON-RECONSTRUCTIVE AGGREGATE ARTIFACT",
+      "disposition": "PERMITTED",
+      "matrix_category": 4,
+      "notes": "document-id memberships only; no text"
+    },
+    {
+      "path": "docs/corpus-intelligence/l2/data/seccl/seccl_reference_distributions.jsonl",
+      "kind": "data",
+      "artifact_class": "NON-RECONSTRUCTIVE AGGREGATE ARTIFACT",
+      "disposition": "PERMITTED",
+      "matrix_category": 4,
+      "notes": "numeric distribution records; research_only exposure; no text"
+    },
+    {
+      "path": "docs/corpus-intelligence/l2/18_PDW1_THROUGHPUT_EXPANSION.md",
+      "kind": "documentation",
+      "artifact_class": "NON-RECONSTRUCTIVE AGGREGATE ARTIFACT",
+      "disposition": "PERMITTED",
+      "matrix_category": 10,
+      "notes": "internal descriptive reporting; no raw text, no excerpts, no paths"
+    },
+    {
+      "path": "docs/integration/CORPUS-PDW1-THROUGHPUT-EXPANSION-20260810.md",
+      "kind": "documentation",
+      "artifact_class": "NON-RECONSTRUCTIVE AGGREGATE ARTIFACT",
+      "disposition": "PERMITTED",
+      "matrix_category": 10,
+      "notes": "goal handoff report; internal descriptive reporting"
+    }
+  ],
+  "rule": "No SECCL throughput artifact may be classified TEXTUAL/RECONSTRUCTIVE DERIVATIVE; any future artifact not listed here fails closed until classified and re-reviewed."
+}

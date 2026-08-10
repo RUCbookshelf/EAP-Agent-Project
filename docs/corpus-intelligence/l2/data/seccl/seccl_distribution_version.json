@@ -1,0 +1,19 @@
+{
+  "distribution_version": "seccl-reference-distributions-v0.1.0",
+  "algorithm_version": "distribution-algorithm-v0.1.0",
+  "statistics": [
+    "n_effective",
+    "n_missing",
+    "mean",
+    "median",
+    "std",
+    "iqr",
+    "quantiles_5_25_50_75_95",
+    "min",
+    "max"
+  ],
+  "quantile_method": "numpy linear interpolation",
+  "manifest_hash": "d4258448392727374dc56652ed87aea967dff41b90f219015c520cb3ac558de5",
+  "corpus_package_id": "sweccl2-seccl20-v0.1.0",
+  "creation_timestamp": "2026-08-09T17:11:08.833839+00:00"
+}

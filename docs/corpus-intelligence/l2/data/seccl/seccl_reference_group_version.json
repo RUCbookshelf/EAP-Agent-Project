@@ -1,0 +1,14 @@
+{
+  "reference_group_version": "seccl-reference-groups-v0.1.0",
+  "corpus_package_id": "sweccl2-seccl20-v0.1.0",
+  "min_n": 30,
+  "duplicate_policy": "effective_sample_excludes_merged_task123_members",
+  "approved_group_count": 21,
+  "dimensions": [
+    "exam",
+    "task_folder",
+    "year_folder",
+    "grade",
+    "task_folder x year_folder"
+  ]
+}
