@@ -8,22 +8,32 @@ from collections.abc import Callable
 
 """Minimal native SQLite migration runner.
 
-Rollback note for the FUTURE migration 14 (recorded at CORE-MIGRATION14-AMENDMENTS,
-design-review finding F-6; migration 14 is NOT implemented here and no schema
-change exists):
+Migration-version note (supersedes the pre-Wave-2 numbering plan):
 
-- ``ALTER TABLE ... DROP COLUMN`` rollback requires SQLite >= 3.35 (bundled
-  SQLite 3.53.1 satisfies this).
-- The deferred additive ``essays.domain`` discriminator must keep a
-  COLUMN-level CHECK; any future index/view/trigger on the ``domain`` column
-  must be dropped BEFORE ``DROP COLUMN``, because a dependent object blocks
-  the drop.
+- Version 14 is the Wave-2 additive persistence migration
+  (``wave2_revision_loop_and_learner_model``, Goal PDW2-A-CORE-PERSISTENCE):
+  it creates only new tables (writing_tasks, submission_revisions,
+  learning_observations, learning_items) plus indexes. It is additive and
+  non-destructive; rollback 14->13 is a logical ledger-only rollback that
+  preserves the new tables and their data.
+- The previously planned ``essays.domain`` discriminator (recorded at
+  CORE-MIGRATION14-AMENDMENTS, design-review finding F-6) remains DEFERRED
+  and trigger-gated; it was NOT implemented. When its implementation Goal
+  fires it must use the next free version number (>= 15), NOT 14. Its DROP
+  COLUMN rollback contract is preserved below:
+
+  - ``ALTER TABLE ... DROP COLUMN`` rollback requires SQLite >= 3.35 (bundled
+    SQLite 3.53.1 satisfies this).
+  - The deferred additive ``essays.domain`` discriminator must keep a
+    COLUMN-level CHECK; any future index/view/trigger on the ``domain`` column
+    must be dropped BEFORE ``DROP COLUMN``, because a dependent object blocks
+    the drop.
 
 Asserted by ``tests/test_migration_drop_column_rollback_note.py``.
 """
 
 
-LATEST_MIGRATION_VERSION = 13
+LATEST_MIGRATION_VERSION = 14
 
 
 def _add_column_if_missing(
@@ -745,6 +755,108 @@ def _migration_13(connection: sqlite3.Connection) -> None:
     connection.execute("PRAGMA user_version = 13")
 
 
+def _migration_14(connection: sqlite3.Connection) -> None:
+    """Wave-2 additive persistence: L2 revision loop + longitudinal learner model.
+
+    Goal PDW2-A-CORE-PERSISTENCE. Additive and non-destructive: creates only
+    new tables and indexes; no existing table DDL is altered; the deferred
+    ``essays.domain`` discriminator and D-09 lanes are NOT touched. All new
+    columns are DEFAULT-covered so existing write paths remain valid.
+
+    Entities (minimum qualified set):
+    - writing_tasks: task/context metadata for the L2 revision loop.
+    - submission_revisions: revision relationship records with ancestry,
+      timestamps, task-context, analysis, and feedback links. Existing
+      revision_groups/revision_snapshots remain authoritative for grouping
+      and analysis payloads; this table adds the qualified relationship
+      contract (explicit ancestry chain + task/analysis/feedback link refs)
+      without duplicating their payloads.
+    - learning_observations: longitudinal learner observations (type,
+      evidence refs, task/context, occurrence/recency, revision response).
+    - learning_items: learner-owned items (originating evidence, feedback,
+      revision history, task/context, status).
+
+    Rollback 14->13 is a logical ledger-only rollback (see ``rollback``);
+    tables and data are preserved and re-apply is idempotent.
+    """
+    connection.executescript(
+        """
+        CREATE TABLE IF NOT EXISTS writing_tasks (
+            task_id TEXT PRIMARY KEY,
+            student_id TEXT NOT NULL REFERENCES students(student_id),
+            writing_prompt TEXT NOT NULL,
+            genre TEXT NOT NULL DEFAULT 'argumentative essay',
+            task_type TEXT NOT NULL DEFAULT 'independent_writing',
+            modality TEXT NOT NULL DEFAULT 'written',
+            reference_group_id TEXT,
+            created_at TEXT NOT NULL,
+            metadata_json TEXT NOT NULL DEFAULT '{}',
+            limitations_json TEXT NOT NULL DEFAULT '[]'
+        );
+        CREATE INDEX IF NOT EXISTS idx_writing_tasks_student
+            ON writing_tasks(student_id, created_at);
+        CREATE TABLE IF NOT EXISTS submission_revisions (
+            revision_link_id TEXT PRIMARY KEY,
+            revision_group_id TEXT NOT NULL
+                REFERENCES revision_groups(revision_group_id),
+            source_submission_id INTEGER NOT NULL REFERENCES essays(essay_id),
+            target_submission_id INTEGER NOT NULL REFERENCES essays(essay_id),
+            ancestry_json TEXT NOT NULL DEFAULT '[]',
+            task_id TEXT REFERENCES writing_tasks(task_id),
+            analysis_run_id TEXT REFERENCES analysis_runs(analysis_run_id),
+            feedback_record_id INTEGER REFERENCES feedback_records(feedback_id),
+            revision_sequence INTEGER NOT NULL DEFAULT 1,
+            created_at TEXT NOT NULL,
+            limitations_json TEXT NOT NULL DEFAULT '[]'
+        );
+        CREATE UNIQUE INDEX IF NOT EXISTS ux_submission_revisions_group_target
+            ON submission_revisions(revision_group_id, target_submission_id);
+        CREATE INDEX IF NOT EXISTS idx_submission_revisions_group
+            ON submission_revisions(revision_group_id, revision_sequence);
+        CREATE INDEX IF NOT EXISTS idx_submission_revisions_target
+            ON submission_revisions(target_submission_id);
+        CREATE INDEX IF NOT EXISTS idx_submission_revisions_task
+            ON submission_revisions(task_id);
+        CREATE TABLE IF NOT EXISTS learning_observations (
+            observation_id TEXT PRIMARY KEY,
+            student_id TEXT NOT NULL REFERENCES students(student_id),
+            observation_type TEXT NOT NULL DEFAULT 'difficulty',
+            evidence_refs_json TEXT NOT NULL DEFAULT '[]',
+            task_id TEXT REFERENCES writing_tasks(task_id),
+            context_json TEXT NOT NULL DEFAULT '{}',
+            occurrence_count INTEGER NOT NULL DEFAULT 1,
+            first_observed_at TEXT NOT NULL,
+            last_observed_at TEXT NOT NULL,
+            recency TEXT NOT NULL DEFAULT 'unknown',
+            revision_response_json TEXT NOT NULL DEFAULT '{}',
+            limitations_json TEXT NOT NULL DEFAULT '[]',
+            created_at TEXT NOT NULL
+        );
+        CREATE INDEX IF NOT EXISTS idx_learning_observations_student
+            ON learning_observations(student_id, observation_type, last_observed_at);
+        CREATE INDEX IF NOT EXISTS idx_learning_observations_task
+            ON learning_observations(task_id);
+        CREATE TABLE IF NOT EXISTS learning_items (
+            learning_item_id TEXT PRIMARY KEY,
+            student_id TEXT NOT NULL REFERENCES students(student_id),
+            originating_evidence_json TEXT NOT NULL DEFAULT '{}',
+            feedback_reference TEXT,
+            revision_history_json TEXT NOT NULL DEFAULT '[]',
+            task_id TEXT REFERENCES writing_tasks(task_id),
+            context_json TEXT NOT NULL DEFAULT '{}',
+            status TEXT NOT NULL DEFAULT 'proposed',
+            created_at TEXT NOT NULL,
+            updated_at TEXT NOT NULL
+        );
+        CREATE INDEX IF NOT EXISTS idx_learning_items_student
+            ON learning_items(student_id, status, updated_at);
+        CREATE INDEX IF NOT EXISTS idx_learning_items_task
+            ON learning_items(task_id);
+        """
+    )
+    connection.execute("PRAGMA user_version = 14")
+
+
 MIGRATIONS: dict[int, tuple[str, Callable[[sqlite3.Connection], None]]] = {
     1: ("preserve_v0_1_1_schema", _migration_1),
     2: ("cloud_ready_repository_indexes", _migration_2),
@@ -759,6 +871,7 @@ MIGRATIONS: dict[int, tuple[str, Callable[[sqlite3.Connection], None]]] = {
     11: ("research_data_infrastructure", _migration_11),
     12: ("practice_and_transfer_foundation", _migration_12),
     13: ("practice_target_priority_key_uniqueness", _migration_13),
+    14: ("wave2_revision_loop_and_learner_model", _migration_14),
 }
 
 
@@ -787,10 +900,15 @@ def rollback(connection: sqlite3.Connection, target_version: int) -> int:
     current = int(connection.execute("PRAGMA user_version").fetchone()[0])
     if current == target_version:
         return current
-    if (current, target_version) not in {(13, 12), (12, 11), (11, 10), (10, 9), (9, 8)}:
+    if (current, target_version) not in {(14, 13), (13, 12), (12, 11), (11, 10), (10, 9), (9, 8)}:
         raise ValueError("Only non-destructive one-step rollback is supported.")
     with connection:
-        if current == 13:
+        if current == 14:
+            # Logical rollback: migration 14 only added tables/indexes, so the
+            # rollback is ledger-only; tables and data are preserved and
+            # re-apply (CREATE IF NOT EXISTS) is idempotent.
+            connection.execute("DELETE FROM schema_migrations WHERE version=14")
+        elif current == 13:
             connection.execute("DROP INDEX IF EXISTS ux_practice_targets_active_priority_key")
         else:
             expected = "config-v0.9.0" if current == 12 else ("config-v0.8.2" if current == 11 else ("config-v0.8.0" if current == 10 else "config-v0.7.1"))

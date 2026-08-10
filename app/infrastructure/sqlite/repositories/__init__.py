@@ -7,6 +7,7 @@ from .research import SQLiteResearchRepository
 from .revision import SQLiteRevisionRepository
 from .submission import SQLiteSubmissionRepository
 from .system import SQLiteSystemRepository
+from .wave2 import SQLiteWave2Repository
 
 __all__ = [
     "SQLiteAnalysisRepository",
@@ -18,4 +19,5 @@ __all__ = [
     "SQLiteRevisionRepository",
     "SQLiteSubmissionRepository",
     "SQLiteSystemRepository",
+    "SQLiteWave2Repository",
 ]

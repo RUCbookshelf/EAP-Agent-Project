@@ -31,6 +31,7 @@ from app.api.routers import (
     revisions,
     students,
     submissions,
+    wave2,
     writing_intelligence,
 )
 from app.config import Settings, load_settings
@@ -75,6 +76,7 @@ _BUSINESS_ROUTERS = (
     journey,
     research,
     writing_intelligence,
+    wave2,  # Wave-2 assembly: mounts wave2_modules sub-routers when present
 )
 
 
