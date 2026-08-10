@@ -1,0 +1,1 @@
+"""Wave-2 Student Experience UI tests (Goal PDW2-D-UX-STUDENT)."""
