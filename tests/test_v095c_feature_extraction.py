@@ -117,6 +117,8 @@ def test_page_order_and_navigation_contract():
         "student_revision",
         "student_practice",
         "student_journey",
+        "student_wave2_studio",
+        "student_wave2_history",
     ]
     assert list(streamlit_app.RESEARCH_PAGES) == [
         "research_overview",
