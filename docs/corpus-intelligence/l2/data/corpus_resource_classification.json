@@ -1,0 +1,114 @@
+{
+  "schema_version": "1.0.0",
+  "record_id": "corpus-resource-classification-v0.1.0",
+  "goal_id": "PDW2-E-CORPUS-ROUTING",
+  "owner": "CORPUS",
+  "created_at": "2026-08-10",
+  "binding_sources": [
+    ".agent-workflow/product-delivery-wave-2/task_plan.md",
+    "docs/corpus-intelligence/l2/17_STAGE6_WU_D_DIAGNOSTIC_GATING_CONTRACT.md",
+    "docs/corpus-intelligence/l2/data/wu_d_diagnostic_gating_contract.json",
+    "docs/corpus-intelligence/l2/data/seccl/seccl_package_descriptor.json"
+  ],
+  "classifications": [
+    {
+      "corpus_package_id": "sweccl2-weccl20-v0.1.0",
+      "modality": "written",
+      "role": "primary",
+      "secondary": false,
+      "exposure_class": "research_only",
+      "learner_exposure": "research_only",
+      "allowed_exposures": ["research_only"],
+      "domains": ["l2_writing"],
+      "rationale": "WECCL20 written essays are the primary written reference corpus for L2 Writing routing."
+    },
+    {
+      "corpus_package_id": "sweccl2-seccl20-v0.1.0",
+      "modality": "spoken",
+      "role": "secondary",
+      "secondary": true,
+      "exposure_class": "research_only",
+      "learner_exposure": "research_only",
+      "allowed_exposures": ["research_only"],
+      "domains": ["l2_speaking"],
+      "rationale": "SECCL20 is a spoken transcript corpus (TEM4); secondary for L2 Writing and research_only. All existing SECCL artifacts and their research_only exposure are preserved unchanged."
+    }
+  ],
+  "default_routing": {
+    "domain": "l2_writing",
+    "requested_modality": "written",
+    "default_resource_id": "sweccl2-weccl20-v0.1.0",
+    "seccl_excluded_by_default": true,
+    "seccl_exclusion_reasons": [
+      "domain relevance fails: l2_writing not in SECCL classification domains",
+      "modality relevance fails: spoken does not match requested written modality"
+    ]
+  },
+  "spoken_opt_in": {
+    "required": ["requested_modality=spoken", "allow_secondary=true", "requested_exposure=research_only", "spoken-language domain"],
+    "result_flags": {"secondary": true, "learner_exposure": "research_only"}
+  },
+  "written_fallback_chain": [
+    "same_prompt",
+    "task_type_context",
+    "task_type",
+    "similar_written_context",
+    "broader_distribution"
+  ],
+  "eligibility_factors": [
+    "domain_relevance",
+    "modality_relevance",
+    "exposure_policy",
+    "artifact_availability",
+    "reference_group_eligibility"
+  ],
+  "exposure_policy": {
+    "allowed_exposures": ["research_only"],
+    "no_widening": true,
+    "note": "diagnostic_only/displayable require D3/D8/D12 qualification; this Goal never widens exposure."
+  },
+  "descriptive_only": true,
+  "artifact_classification": [
+    {
+      "path": "app/corpus/routing.py",
+      "kind": "code",
+      "artifact_class": "NON-RECONSTRUCTIVE AGGREGATE ARTIFACT",
+      "disposition": "PERMITTED",
+      "matrix_category": 4,
+      "notes": "modality-aware routing; semantic values only; research_only exposure; no raw text, no corpus paths in results"
+    },
+    {
+      "path": "tests/corpus/test_routing.py",
+      "kind": "code",
+      "artifact_class": "NON-RECONSTRUCTIVE AGGREGATE ARTIFACT",
+      "disposition": "PERMITTED",
+      "matrix_category": 4,
+      "notes": "routing verification; synthetic fixtures only"
+    },
+    {
+      "path": "docs/corpus-intelligence/l2/19_PDW2_MODALITY_AWARE_ROUTING.md",
+      "kind": "documentation",
+      "artifact_class": "NON-RECONSTRUCTIVE AGGREGATE ARTIFACT",
+      "disposition": "PERMITTED",
+      "matrix_category": 10,
+      "notes": "internal descriptive reporting; no raw text, no excerpts"
+    },
+    {
+      "path": "docs/corpus-intelligence/l2/data/corpus_resource_classification.json",
+      "kind": "data",
+      "artifact_class": "NON-RECONSTRUCTIVE AGGREGATE ARTIFACT",
+      "disposition": "PERMITTED",
+      "matrix_category": 3,
+      "notes": "machine-checkable classification record"
+    },
+    {
+      "path": "docs/integration/CORPUS-PDW2-E-ROUTING-20260810.md",
+      "kind": "documentation",
+      "artifact_class": "NON-RECONSTRUCTIVE AGGREGATE ARTIFACT",
+      "disposition": "PERMITTED",
+      "matrix_category": 10,
+      "notes": "goal handoff report; internal descriptive reporting"
+    }
+  ],
+  "classification_rule": "No PDW2-E artifact may be classified TEXTUAL/RECONSTRUCTIVE DERIVATIVE; any future routing artifact not listed here fails closed until classified and re-reviewed."
+}
