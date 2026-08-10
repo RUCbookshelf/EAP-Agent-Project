@@ -152,10 +152,27 @@ EXPECTED_ROUTE_CONTRACT = {
     ("GET", "/api/v1/system/live"),
     ("GET", "/api/v1/system/ready"),
     ("GET", "/api/v1/system/version"),
+    # Wave-2 routes (F-3 pin refresh; merged composition surface)
+    ("GET", "/api/v1/wave2/learner/difficulties"),
+    ("GET", "/api/v1/wave2/learner/evidence"),
+    ("GET", "/api/v1/wave2/learner/observations"),
+    ("GET", "/api/v1/wave2/learner/observations/{observation_id}"),
+    ("GET", "/api/v1/wave2/learner/proficiency-context"),
+    ("GET", "/api/v1/wave2/learner/stable"),
+    ("GET", "/api/v1/wave2/learner/strengths"),
+    ("GET", "/api/v1/wave2/personalized/learning-items"),
+    ("GET", "/api/v1/wave2/revision/tasks/{task_id}"),
+    ("GET", "/api/v1/wave2/revision/tasks/{task_id}/versions"),
+    (
+        "GET",
+        "/api/v1/wave2/revision/tasks/{task_id}/versions/"
+        "{submission_id}/observation",
+    ),
     ("GET", "/docs"),
     ("GET", "/docs/oauth2-redirect"),
     ("GET", "/openapi.json"),
     ("GET", "/redoc"),
+    ("PATCH", "/api/v1/wave2/personalized/learning-items/{learning_item_id}"),
     ("POST", "/api/v1/admin/configurations"),
     ("POST", "/api/v1/admin/configurations/{configuration_id}/activate"),
     ("POST", "/api/v1/admin/configurations/{configuration_id}/rollback"),
@@ -178,6 +195,17 @@ EXPECTED_ROUTE_CONTRACT = {
     ("POST", "/api/v1/submissions/{submission_id}/calf/reanalyze"),
     ("POST", "/api/v1/submissions/{submission_id}/error-annotations/import"),
     ("POST", "/api/v1/submissions/{submission_id}/pii-review"),
+    ("POST", "/api/v1/wave2/personalized/learning-items"),
+    ("POST", "/api/v1/wave2/personalized/priority-plan"),
+    ("POST", "/api/v1/wave2/personalized/scaffold"),
+    ("POST", "/api/v1/wave2/revision/submissions/{submission_id}/reanalysis"),
+    ("POST", "/api/v1/wave2/revision/tasks"),
+    ("POST", "/api/v1/wave2/revision/tasks/{task_id}/submissions"),
+    (
+        "POST",
+        "/api/v1/wave2/revision/tasks/{task_id}/submissions/"
+        "{submission_id}/revisions",
+    ),
     ("POST", "/api/v1/writing-intelligence/slice"),
 }
 
