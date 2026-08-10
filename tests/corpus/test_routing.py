@@ -14,6 +14,7 @@ All fixtures are synthetic; no raw SWECCL data is touched.
 from __future__ import annotations
 
 import json
+import os
 import re
 from pathlib import Path
 
@@ -419,7 +420,13 @@ class TestResultSemantics:
             ("RG-prompt_id=ARG17", FEATURE): _dist("RG-prompt_id=ARG17"),
         }).route(TaskSignature(prompt_id="ARG17", timed_status="timed", genre="argumentative"))
         sample = json.dumps(result.__dict__, default=str)
-        assert "A:\\" not in sample
+        # Negative denial: the routing result must never carry an absolute
+        # drive-letter path (the raw SWECCL root lives on one). The prefix is
+        # derived from os.path so the assertion stays platform-independent;
+        # on POSIX there is no drive letter and the check is trivially true.
+        drive, _ = os.path.splitdrive(os.path.abspath(__file__))
+        drive_root = f"{drive}{os.sep}" if drive else ""
+        assert drive_root not in sample
         assert "SWECCL 2.0" not in sample
         assert "PREPARED" not in sample
 
