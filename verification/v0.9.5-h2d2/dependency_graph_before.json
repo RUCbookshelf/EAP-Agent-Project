@@ -689,10 +689,16 @@
       "line": 75,
       "router": "system.py",
       "use_cache": null
+    },
+    {
+      "dependency_function": "get_analyzer",
+      "line": 899,
+      "router": "writing_intelligence.py",
+      "use_cache": null
     }
   ],
   "kind": "dependency_graph_before",
-  "route_count": 84,
+  "route_count": 85,
   "routes": [
     {
       "method": "GET",
@@ -1073,6 +1079,11 @@
       "method": "GET",
       "name": "version",
       "path": "/api/v1/system/version"
+    },
+    {
+      "method": "POST",
+      "name": "run_writing_intelligence_slice",
+      "path": "/api/v1/writing-intelligence/slice"
     },
     {
       "method": "GET",

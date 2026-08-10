@@ -178,6 +178,7 @@ EXPECTED_ROUTE_CONTRACT = {
     ("POST", "/api/v1/submissions/{submission_id}/calf/reanalyze"),
     ("POST", "/api/v1/submissions/{submission_id}/error-annotations/import"),
     ("POST", "/api/v1/submissions/{submission_id}/pii-review"),
+    ("POST", "/api/v1/writing-intelligence/slice"),
 }
 
 
