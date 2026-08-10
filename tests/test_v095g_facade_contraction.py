@@ -225,7 +225,7 @@ class TestMigratedRouterBehavior:
         with TestClient(create_app(settings)) as client:
             response = client.get("/api/v1/system/version")
             assert response.status_code == 200
-            assert response.json()["database_migration_version"] == 13
+            assert response.json()["database_migration_version"] == 14
 
     def test_student_and_history_endpoints_use_narrow_readers(self, tmp_path):
         settings = _settings(tmp_path)

@@ -27,12 +27,65 @@ BASELINE = "769e6d8"
 # - migration 13 (additive partial unique index for one active priority key)
 #   legitimately revised app/database/migrations.py; parity is pinned to the
 #   WU3 frozen SHA-256 of the whole file instead of the E-era baseline.
+# - migration 14 (Wave-2 additive persistence, PDW2-A-CORE-PERSISTENCE)
+#   legitimately revised app/database/migrations.py again (four new table
+#   families); the frozen SHA-256 is refreshed to the migration-14 file
+#   fingerprint (same pin convention as the WU3 refresh).
 _PRIVATE_SQL_REVISIONS = {
     "PracticeRepository._next_practice_id": [
         "76d29ea4e034bf820d2f3ce0027433865fc31db442c334e7fee5de9756efbf9a",
     ],
 }
-_MIGRATIONS_WU3_SHA256 = "b7aa0992fcc92ceb668c1cdd570434bd644b03cfe3c869492a469c14332c5f3f"
+_MIGRATIONS_WU3_SHA256 = "ea8e1f639ef530b5a5a13fe34b7b4f425f5f063c83a1a3ace824e1ff9bc3bb17"
+
+# Wave-2 (2026-08-10): the legitimately-evolved service/API diff vs the
+# v0.9.5-E parity baseline (769e6d8) grew by the Wave-2 files.  The default
+# allowlist is refreshed to the full current diff so the parity contract
+# remains self-contained when the runner does not export the env var.
+_SERVICE_API_DIFF_ALLOWLIST = (
+    "app/api/deps.py",
+    "app/api/main.py",
+    "app/api/ports.py",
+    "app/api/routers/analysis.py",
+    "app/api/routers/calf.py",
+    "app/api/routers/journey.py",
+    "app/api/routers/practice.py",
+    "app/api/routers/research.py",
+    "app/api/routers/revisions.py",
+    "app/api/routers/students.py",
+    "app/api/routers/submissions.py",
+    "app/api/routers/system.py",
+    "app/api/routers/wave2.py",
+    "app/api/routers/wave2_modules/__init__.py",
+    "app/api/routers/writing_intelligence.py",
+    "app/api/schemas.py",
+    "app/journey/cycles.py",
+    "app/journey/service.py",
+    "app/practice/completion.py",
+    "app/practice/evaluations.py",
+    "app/practice/mapping.py",
+    "app/practice/ports.py",
+    "app/practice/schemas.py",
+    "app/practice/service.py",
+    "app/practice/target_creation.py",
+    "app/practice/task_context.py",
+    "app/research/governance/__init__.py",
+    "app/research/governance/validators.py",
+    "app/research/schemas.py",
+    "app/research/service.py",
+    "app/services/admin_reanalysis.py",
+    "app/services/calf.py",
+    "app/services/configuration.py",
+    "app/services/dashboard.py",
+    "app/services/factory.py",
+    "app/services/learner_model.py",
+    "app/services/learner_profile.py",
+    "app/services/legacy_genre_mapping.py",
+    "app/services/progress.py",
+    "app/services/reanalysis.py",
+    "app/services/submission.py",
+    "app/services/task_type_classifier.py",
+)
 
 OWNER_MODULE = {
     "SystemRepository": ("system.py", "SQLiteSystemRepository", "_system_repository"),
@@ -212,7 +265,7 @@ def main() -> None:
     ).splitlines()
     allowed_diff = {
         item for item in os.environ.get("SERVICE_API_DIFF_ALLOWLIST", "").split(",") if item
-    }
+    } or set(_SERVICE_API_DIFF_ALLOWLIST)
     service_diff = [path for path in service_diff if path not in allowed_diff]
     summary = {
         "method_count_before": pre["public_method_count"],

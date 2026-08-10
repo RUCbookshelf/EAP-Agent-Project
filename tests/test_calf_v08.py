@@ -174,17 +174,18 @@ def test_configuration_enforces_v08_isolation_and_parameter_validation():
 def test_migration_10_is_additive_and_logical_rollback_preserves_rows(tmp_path):
     path = tmp_path / "migration.db"
     db = Database(path); db.initialize()
-    assert db._system_repository.migration_version() == 13 and db._configuration_repository.get_active_configuration().version == "config-v0.9.0"
+    assert db._system_repository.migration_version() == 14 and db._configuration_repository.get_active_configuration().version == "config-v0.9.0"
     with db.connect() as connection:
         assert {"analysis_units", "error_annotations"} <= {
             row[0] for row in connection.execute("SELECT name FROM sqlite_master WHERE type='table'")
         }
         assert "active_writing_duration_seconds" in {row[1] for row in connection.execute("PRAGMA table_info(essays)")}
+        assert rollback(connection, 13) == 13
         assert rollback(connection, 12) == 12
         assert rollback(connection, 11) == 11
     assert db._configuration_repository.get_active_configuration().version == "config-v0.8.2"
     with db.connect() as connection:
-        assert upgrade(connection) == 13
+        assert upgrade(connection) == 14
         assert db._configuration_repository.get_active_configuration().version == "config-v0.9.0"
 
 

@@ -1,4 +1,6 @@
-# 数据模型（迁移 13）
+# 数据模型（迁移 14）
+
+迁移 14（`wave2_revision_loop_and_learner_model`，Goal PDW2-A-CORE-PERSISTENCE）是 Wave-2 追加式持久化迁移：仅新建 `writing_tasks`（L2 修订循环的任务/上下文元数据）、`submission_revisions`（修订关系记录，含血缘、时间戳及任务/分析/反馈链接；现有 `revision_groups`/`revision_snapshots` 仍为分组与分析载荷的权威来源）、`learning_observations`（纵向学习观察）与 `learning_items`（学习者条目），外加索引。所有新列均有 DEFAULT 覆盖，不改动任何既有表 DDL；回滚 14→13 仅做台账式逻辑回滚（保留表与数据，重放幂等）。此前规划的 `essays.domain` 判别器车道保持未实现且触发门控，其实现 Goal 必须使用 >= 15 的版本号。
 
 迁移 13 新增部分唯一索引 `ux_practice_targets_active_priority_key`：对每个 (student_id, source_submission_id, target_json 内 source_priority_id) 至多允许一个 ACTIVE 练习目标；无优先级引用的旧目标豁免。回滚只删除该索引，不删除数据，重建幂等。
 
@@ -53,6 +55,10 @@ SQLite 默认文件为 `data/writing_feedback.db`，外键约束在每个连接�
 | `within_task_response_candidates` | response_id, student_id, practice_target_id, created_at, response_json | 任务内回应候选 |
 | `transfer_evidence_candidates` | transfer_evidence_id, student_id, practice_target_id, created_at, transfer_json | 迁移证据候选 |
 | `practice_state_snapshots` | practice_state_snapshot_id, student_id, created_at, snapshot_json | 练习状态快照 |
+| `writing_tasks` | writing_task_id, student_id, prompt, genre, task_type, modality, reference_group, timestamps, metadata/limitations | 迁移 14：Wave-2 L2 修订循环的任务/上下文元数据 |
+| `submission_revisions` | revision link records with ancestry, timestamps, task-context, analysis-run and feedback-record links | 迁移 14：修订关系记录（任务/分析/反馈链接） |
+| `learning_observations` | observation type, evidence refs, task/context, occurrence/recency, revision response | 迁移 14：纵向学习者观察 |
+| `learning_items` | originating evidence, feedback reference, revision history, task/context, status | 迁移 14：学习者条目及状态 |
 
 ## 关系
 

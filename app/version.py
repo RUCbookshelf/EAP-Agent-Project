@@ -39,5 +39,5 @@ PLATFORM_API_VERSION: str = "v1"
 # -- Database migration version -------------------------------------
 # This must match migrations.LATEST_MIGRATION_VERSION; drift tests
 # enforce the invariant.
-PLATFORM_DATABASE_MIGRATION_VERSION: int = 13
+PLATFORM_DATABASE_MIGRATION_VERSION: int = 14
 

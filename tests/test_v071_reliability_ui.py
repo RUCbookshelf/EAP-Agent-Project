@@ -269,19 +269,20 @@ def test_migration_9_is_additive_persists_provider_status_and_rolls_back_logical
         "V071-MIG", "Parks support public health and community activities."
     ), synthetic=True)
     with repository.connect() as connection:
-        assert connection.execute("PRAGMA user_version").fetchone()[0] == 13
+        assert connection.execute("PRAGMA user_version").fetchone()[0] == 14
         columns = {row[1] for row in connection.execute("PRAGMA table_info(feedback_records)")}
         stored = connection.execute(
             "SELECT provider_status_json FROM feedback_records WHERE essay_id=?", (result.essay_id,)
         ).fetchone()[0]
         assert "fallback_used" in stored
+        assert rollback(connection, 13) == 13
         assert rollback(connection, 12) == 12
         assert rollback(connection, 11) == 11
         assert connection.execute("SELECT essay_text FROM essays WHERE essay_id=?", (result.essay_id,)).fetchone()
         assert connection.execute(
             "SELECT version FROM configuration_versions WHERE status='active'"
         ).fetchone()[0] == "config-v0.8.2"
-        assert upgrade(connection) == 13
+        assert upgrade(connection) == 14
         assert repository._configuration_repository.get_active_configuration().version == "config-v0.9.0"
     assert settings.application_version == PLATFORM_APPLICATION_VERSION
 
