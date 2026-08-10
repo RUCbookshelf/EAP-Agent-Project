@@ -5,10 +5,12 @@ Router module under ``/api/v1/wave2/revision/``. The CORE Wave-2 assembly
 ``wave2_modules/__init__.py`` is contributed by CORE, so this module stays
 importable as a namespace package on the L2 branch.
 
-The branch-local default dependency builds the service over the EXISTING
-composition-root services (``app.state.submission_service`` /
-``app.state.reanalysis``) with an in-memory repository; integration wiring
-replaces the repository. Test clients override the dependency.
+The default dependency builds the service over the EXISTING composition-root
+services (``app.state.submission_service`` / ``app.state.reanalysis``) and
+consumes the CORE-composed shared repository
+(``request.app.state.wave2_repository``) when present; it falls back to the
+module-local in-memory repository only for standalone test contexts. Test
+clients override the dependency.
 
 All responses use bounded non-normative language; composed outputs are
 scanned with the shared NormativeClaimsScanner (strict) and rejected
@@ -40,8 +42,10 @@ NORMATIVE_REJECTION_DETAIL = (
 
 
 def get_revision_loop_service(request: Request) -> RevisionLoopService:
-    """Branch-local default: existing composition-root services + in-memory
-    repository until the Wave-2 composition wiring lands at integration."""
+    """Composition-aware default: existing composition-root services + the
+    CORE-composed shared repository (``request.app.state.wave2_repository``)
+    when present; module-local in-memory repository only for standalone test
+    contexts."""
 
     submission_service = getattr(request.app.state, "submission_service", None)
     reanalysis_service = getattr(request.app.state, "reanalysis", None)
@@ -50,8 +54,11 @@ def get_revision_loop_service(request: Request) -> RevisionLoopService:
             status_code=503,
             detail="Wave-2 revision router requires the composition-root services.",
         )
+    repository = getattr(request.app.state, "wave2_repository", None)
+    if repository is None:
+        repository = _DEFAULT_REPOSITORY
     return RevisionLoopService(
-        repository=_DEFAULT_REPOSITORY,
+        repository=repository,
         pipeline=ExistingWritingPipeline(submission_service, reanalysis_service),
         routing=LocalWrittenCorpusRouter(),
     )

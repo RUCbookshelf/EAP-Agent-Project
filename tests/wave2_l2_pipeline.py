@@ -28,8 +28,11 @@ from app.services import (
 from app.services.factory import build_analyzer
 
 
-def build_real_pipeline(tmp_path, *, database_name: str = "wave2.db"):
-    """Return (pipeline, repository, submission_service) with the real pipeline."""
+def build_real_services(tmp_path, *, database_name: str = "wave2.db"):
+    """Return (pipeline, repository, submission_service, reanalysis_service)
+    with the REAL composition-root services, ready to be attached to
+    ``app.state`` by composition-aware router tests (F-1 shared-repository
+    consumption)."""
     settings = Settings(
         database_path=tmp_path / database_name,
         llm_provider="local",
@@ -71,6 +74,14 @@ def build_real_pipeline(tmp_path, *, database_name: str = "wave2.db"):
         analyzer,
     )
     pipeline = ExistingWritingPipeline(submission_service, reanalysis)
+    return pipeline, repository, submission_service, reanalysis
+
+
+def build_real_pipeline(tmp_path, *, database_name: str = "wave2.db"):
+    """Return (pipeline, repository, submission_service) with the real pipeline."""
+    pipeline, repository, submission_service, _ = build_real_services(
+        tmp_path, database_name=database_name,
+    )
     return pipeline, repository, submission_service
 
 

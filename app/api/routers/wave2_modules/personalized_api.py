@@ -37,8 +37,10 @@ NORMATIVE_REJECTION_DETAIL = (
 
 
 def get_personalized_bridge_service(request: Request) -> PersonalizedBridgeService:
-    """Branch-local default: existing composition-root services + in-memory
-    repository until the Wave-2 composition wiring lands at integration."""
+    """Composition-aware default: existing composition-root services + the
+    CORE-composed shared repository (``request.app.state.wave2_repository``)
+    when present; module-local in-memory repository only for standalone test
+    contexts."""
 
     submission_service = getattr(request.app.state, "submission_service", None)
     reanalysis_service = getattr(request.app.state, "reanalysis", None)
@@ -47,8 +49,11 @@ def get_personalized_bridge_service(request: Request) -> PersonalizedBridgeServi
             status_code=503,
             detail="Wave-2 personalized router requires the composition-root services.",
         )
+    repository = getattr(request.app.state, "wave2_repository", None)
+    if repository is None:
+        repository = _DEFAULT_REPOSITORY
     return PersonalizedBridgeService(
-        repository=_DEFAULT_REPOSITORY,
+        repository=repository,
         pipeline=ExistingWritingPipeline(submission_service, reanalysis_service),
         routing=LocalWrittenCorpusRouter(),
     )
