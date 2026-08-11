@@ -14,6 +14,10 @@ from app.ui.api_client import ApiClientError, WritingFeedbackApiClient
 from app.ui.components import page_header, technical_caption, warning_box
 from app.ui.locale import t
 from app.ui.pixel_art import inject_pixel_art
+from app.ui.wave2.client import Wave2ApiClient
+from app.ui.wave2.gateway import Wave2Gateway
+from app.ui.wave2.history import render_wave2_history_page
+from app.ui.wave2.journey import render_wave2_studio_page
 from app.ui.pages.student_pages import (
     render_feedback_page,
     render_learning_journey_page,
@@ -57,6 +61,8 @@ STUDENT_PAGES = {
     "student_revision": "student_revision_title",
     "student_practice": "practice",
     "student_journey": "learning_journey",
+    "student_wave2_studio": "student_wave2_studio_title",
+    "student_wave2_history": "student_wave2_history_title",
 }
 
 RESEARCH_PAGES = {
@@ -72,6 +78,23 @@ RESEARCH_PAGES = {
 @st.cache_resource
 def get_api_client(base_url: str) -> WritingFeedbackApiClient:
     return WritingFeedbackApiClient(base_url)
+
+
+@st.cache_resource
+def get_wave2_gateway(base_url: str) -> Wave2Gateway:
+    """Build the Wave-2 gateway once per app (mode=auto).
+
+    ``auto`` probes the Wave-2 namespace once and caches the result: guided
+    mode when the Wave-2 endpoints are available at integration, graceful
+    degradation to the existing writing/feedback flow otherwise. The legacy
+    client is the same cached WritingFeedbackApiClient the rest of the app
+    uses.
+    """
+    return Wave2Gateway(
+        Wave2ApiClient(base_url),
+        get_api_client(base_url),
+        mode="auto",
+    )
 
 
 def _render_header(api_client: WritingFeedbackApiClient, lang: str) -> None:
@@ -169,6 +192,7 @@ def _render_sidebar(lang: str) -> tuple[str, str]:
 
 def run() -> None:
     api_client = get_api_client(load_settings().api_base_url)
+    wave2_gateway = get_wave2_gateway(load_settings().api_base_url)
     lang = st.session_state.get("ui_language", "en")
 
     # Inject Pixel Art CSS system
@@ -198,6 +222,10 @@ def run() -> None:
             render_practice_page(api_client, lang)
         elif page_key == "student_journey":
             render_learning_journey_page(api_client, lang)
+        elif page_key == "student_wave2_studio":
+            render_wave2_studio_page(wave2_gateway, lang)
+        elif page_key == "student_wave2_history":
+            render_wave2_history_page(wave2_gateway, lang)
     else:
         if page_key == "research_overview":
             render_research_overview(api_client, lang)
