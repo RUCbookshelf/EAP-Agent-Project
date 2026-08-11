@@ -758,23 +758,47 @@ def _migration_13(connection: sqlite3.Connection) -> None:
 def _migration_14(connection: sqlite3.Connection) -> None:
     """Wave-2 additive persistence: L2 revision loop + longitudinal learner model.
 
-    Goal PDW2-A-CORE-PERSISTENCE. Additive and non-destructive: creates only
-    new tables and indexes; no existing table DDL is altered; the deferred
-    ``essays.domain`` discriminator and D-09 lanes are NOT touched. All new
-    columns are DEFAULT-covered so existing write paths remain valid.
+    Goal PDW2-A-CORE-PERSISTENCE, amended by the F-5 repair
+    (PDW2-WU2-INT-INTEGRATION-GATE-RE-GATE__REPAIR): the migration is still
+    unpromoted, so the amendment extends the SAME lane in place. Additive and
+    non-destructive: creates only new tables/columns and indexes; no existing
+    table DDL is altered; the deferred ``essays.domain`` discriminator and
+    D-09 lanes are NOT touched. All new columns are DEFAULT-covered so
+    existing write paths remain valid.
 
     Entities (minimum qualified set):
-    - writing_tasks: task/context metadata for the L2 revision loop.
+    - writing_tasks: task/context metadata for the L2 revision loop. F-5
+      amendment: two-level task contract -- ``writing_context`` (the L2
+      context id; authoritative for L2-shaped tasks) plus
+      ``classification_json``/``status``; the legacy ``genre`` column remains
+      for CORE-origin compatibility rows.
     - submission_revisions: revision relationship records with ancestry,
       timestamps, task-context, analysis, and feedback links. Existing
       revision_groups/revision_snapshots remain authoritative for grouping
       and analysis payloads; this table adds the qualified relationship
       contract (explicit ancestry chain + task/analysis/feedback link refs)
       without duplicating their payloads.
+    - submission_versions: F-5 amendment -- the L2 RevisionLoopRepository
+      version family (V1/V2/... with ancestry, timestamps, task-context
+      snapshot, analysis/feedback links, corpus routing, reanalysis events).
+      Append-only: a revision always creates a NEW row; prior versions are
+      preserved as evidence.
+    - revision_observations: F-5 amendment -- bounded observational
+      comparisons between versions (what changed, feedback areas
+      appears_addressed/appears_remaining, new observations, apparent
+      independent corrections; no intent inference).
+    - priority_plans: F-5 amendment -- small actionable revision plans
+      (local + global observations, historical feedback, observation-only
+      claims).
+    - scaffold_events: F-5 amendment -- recorded scaffold requests (7-level
+      SCAFFOLD FIRST; learner/learning-item/plan-item linkage).
     - learning_observations: longitudinal learner observations (type,
       evidence refs, task/context, occurrence/recency, revision response).
     - learning_items: learner-owned items (originating evidence, feedback,
-      revision history, task/context, status).
+      revision history, task/context, status). F-5 amendment: LearningItem
+      v1 contract fields -- ``category``, ``task_context``, ``limitations``,
+      ``no_fsrs_note``, ``no_practice_note``; the legacy ``context`` column
+      remains for CORE-origin rows.
 
     Rollback 14->13 is a logical ledger-only rollback (see ``rollback``);
     tables and data are preserved and re-apply is idempotent.
@@ -786,9 +810,12 @@ def _migration_14(connection: sqlite3.Connection) -> None:
             student_id TEXT NOT NULL REFERENCES students(student_id),
             writing_prompt TEXT NOT NULL,
             genre TEXT NOT NULL DEFAULT 'argumentative essay',
+            writing_context TEXT NOT NULL DEFAULT 'other',
             task_type TEXT NOT NULL DEFAULT 'independent_writing',
             modality TEXT NOT NULL DEFAULT 'written',
             reference_group_id TEXT,
+            classification_json TEXT NOT NULL DEFAULT '{}',
+            status TEXT NOT NULL DEFAULT 'active',
             created_at TEXT NOT NULL,
             metadata_json TEXT NOT NULL DEFAULT '{}',
             limitations_json TEXT NOT NULL DEFAULT '[]'
@@ -817,6 +844,75 @@ def _migration_14(connection: sqlite3.Connection) -> None:
             ON submission_revisions(target_submission_id);
         CREATE INDEX IF NOT EXISTS idx_submission_revisions_task
             ON submission_revisions(task_id);
+        CREATE TABLE IF NOT EXISTS submission_versions (
+            task_id TEXT NOT NULL REFERENCES writing_tasks(task_id),
+            submission_id INTEGER NOT NULL REFERENCES essays(essay_id),
+            version_number INTEGER NOT NULL,
+            revision_of_submission_id INTEGER,
+            ancestry_json TEXT NOT NULL DEFAULT '[]',
+            submitted_at TEXT NOT NULL,
+            task_context_json TEXT NOT NULL DEFAULT '{}',
+            essay_text_hash TEXT NOT NULL,
+            draft_stage TEXT NOT NULL DEFAULT 'first draft',
+            analysis_run_id TEXT,
+            analysis_version TEXT,
+            feedback_record_id INTEGER,
+            revision_group_id TEXT,
+            revision_snapshot_id TEXT,
+            corpus_routing_json TEXT,
+            reanalysis_events_json TEXT NOT NULL DEFAULT '[]',
+            limitations_json TEXT NOT NULL DEFAULT '[]',
+            PRIMARY KEY (task_id, submission_id)
+        );
+        CREATE INDEX IF NOT EXISTS idx_submission_versions_submission
+            ON submission_versions(submission_id);
+        CREATE INDEX IF NOT EXISTS idx_submission_versions_task_version
+            ON submission_versions(task_id, version_number);
+        CREATE TABLE IF NOT EXISTS revision_observations (
+            observation_id TEXT PRIMARY KEY,
+            task_id TEXT NOT NULL REFERENCES writing_tasks(task_id),
+            source_submission_id INTEGER NOT NULL,
+            target_submission_id INTEGER NOT NULL,
+            observed_at TEXT NOT NULL,
+            what_changed_json TEXT NOT NULL DEFAULT '{}',
+            feedback_areas_json TEXT NOT NULL DEFAULT '[]',
+            new_observations_json TEXT NOT NULL DEFAULT '[]',
+            apparent_independent_corrections_json TEXT NOT NULL DEFAULT '[]',
+            no_intent_inference TEXT NOT NULL,
+            limitations_json TEXT NOT NULL DEFAULT '[]'
+        );
+        CREATE INDEX IF NOT EXISTS idx_revision_observations_task
+            ON revision_observations(task_id, observed_at);
+        CREATE TABLE IF NOT EXISTS priority_plans (
+            plan_id TEXT PRIMARY KEY,
+            learner_id TEXT NOT NULL,
+            task_id TEXT NOT NULL,
+            submission_id INTEGER NOT NULL,
+            generated_at TEXT NOT NULL,
+            items_json TEXT NOT NULL DEFAULT '[]',
+            history_state TEXT NOT NULL DEFAULT 'insufficient_history',
+            history_reasons_json TEXT NOT NULL DEFAULT '[]',
+            local_observations_json TEXT NOT NULL DEFAULT '[]',
+            global_observations_json TEXT NOT NULL DEFAULT '[]',
+            historical_feedback_json TEXT NOT NULL DEFAULT '[]',
+            limitations_json TEXT NOT NULL DEFAULT '[]',
+            claims_status TEXT NOT NULL DEFAULT 'observation_only'
+        );
+        CREATE INDEX IF NOT EXISTS idx_priority_plans_learner
+            ON priority_plans(learner_id, generated_at);
+        CREATE TABLE IF NOT EXISTS scaffold_events (
+            scaffold_event_id TEXT PRIMARY KEY,
+            learner_id TEXT NOT NULL,
+            learning_item_id TEXT,
+            plan_item_id TEXT,
+            category TEXT NOT NULL,
+            level INTEGER NOT NULL,
+            requested_at TEXT NOT NULL,
+            default_first INTEGER NOT NULL DEFAULT 0,
+            limitations_json TEXT NOT NULL DEFAULT '[]'
+        );
+        CREATE INDEX IF NOT EXISTS idx_scaffold_events_learner
+            ON scaffold_events(learner_id, learning_item_id, requested_at);
         CREATE TABLE IF NOT EXISTS learning_observations (
             observation_id TEXT PRIMARY KEY,
             student_id TEXT NOT NULL REFERENCES students(student_id),
@@ -844,6 +940,11 @@ def _migration_14(connection: sqlite3.Connection) -> None:
             revision_history_json TEXT NOT NULL DEFAULT '[]',
             task_id TEXT REFERENCES writing_tasks(task_id),
             context_json TEXT NOT NULL DEFAULT '{}',
+            category TEXT NOT NULL DEFAULT 'unclassified',
+            task_context_json TEXT NOT NULL DEFAULT '{}',
+            no_fsrs_note TEXT NOT NULL DEFAULT 'no FSRS scheduling or spaced-repetition state is stored in LearningItem v1',
+            no_practice_note TEXT NOT NULL DEFAULT 'no practice or tutor expansion is attached to LearningItem v1',
+            limitations_json TEXT NOT NULL DEFAULT '[]',
             status TEXT NOT NULL DEFAULT 'proposed',
             created_at TEXT NOT NULL,
             updated_at TEXT NOT NULL

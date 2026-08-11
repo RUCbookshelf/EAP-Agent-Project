@@ -1,6 +1,6 @@
 # 数据模型（迁移 14）
 
-迁移 14（`wave2_revision_loop_and_learner_model`，Goal PDW2-A-CORE-PERSISTENCE）是 Wave-2 追加式持久化迁移：仅新建 `writing_tasks`（L2 修订循环的任务/上下文元数据）、`submission_revisions`（修订关系记录，含血缘、时间戳及任务/分析/反馈链接；现有 `revision_groups`/`revision_snapshots` 仍为分组与分析载荷的权威来源）、`learning_observations`（纵向学习观察）与 `learning_items`（学习者条目），外加索引。所有新列均有 DEFAULT 覆盖，不改动任何既有表 DDL；回滚 14→13 仅做台账式逻辑回滚（保留表与数据，重放幂等）。此前规划的 `essays.domain` 判别器车道保持未实现且触发门控，其实现 Goal 必须使用 >= 15 的版本号。
+迁移 14（`wave2_revision_loop_and_learner_model`，Goal PDW2-A-CORE-PERSISTENCE；在未提升状态下由 F-5 修复 PDW2-WU2-INT-INTEGRATION-GATE-RE-GATE__REPAIR 就地修订）是 Wave-2 追加式持久化迁移：新建 `writing_tasks`（L2 两级任务/上下文元数据，含 `writing_context`/`classification_json`/`status`；保留遗留 `genre` 列）、`submission_revisions`（修订关系记录，含血缘、时间戳及任务/分析/反馈链接；现有 `revision_groups`/`revision_snapshots` 仍为分组与分析载荷的权威来源）、`submission_versions`（L2 版本族：V1/V2/... 追加式，含血缘、任务上下文快照、分析/反馈链接、语料路由与再分析事件）、`revision_observations`（有界观察性版本对比，无意图推断）、`priority_plans`（仅观察声明的小型可执行修订计划）、`scaffold_events`（7 级 SCAFFOLD FIRST 支架请求记录）、`learning_observations`（纵向学习观察）与 `learning_items`（学习者条目，含 LearningItem v1 字段 `category`/`task_context`/`limitations`/`no_fsrs_note`/`no_practice_note`；保留遗留 `context` 列），外加索引。所有新列均有 DEFAULT 覆盖，不改动任何既有表 DDL；回滚 14→13 仅做台账式逻辑回滚（保留表与数据，重放幂等）。此前规划的 `essays.domain` 判别器车道保持未实现且触发门控，其实现 Goal 必须使用 >= 15 的版本号。
 
 迁移 13 新增部分唯一索引 `ux_practice_targets_active_priority_key`：对每个 (student_id, source_submission_id, target_json 内 source_priority_id) 至多允许一个 ACTIVE 练习目标；无优先级引用的旧目标豁免。回滚只删除该索引，不删除数据，重建幂等。
 
@@ -55,10 +55,14 @@ SQLite 默认文件为 `data/writing_feedback.db`，外键约束在每个连接�
 | `within_task_response_candidates` | response_id, student_id, practice_target_id, created_at, response_json | 任务内回应候选 |
 | `transfer_evidence_candidates` | transfer_evidence_id, student_id, practice_target_id, created_at, transfer_json | 迁移证据候选 |
 | `practice_state_snapshots` | practice_state_snapshot_id, student_id, created_at, snapshot_json | 练习状态快照 |
-| `writing_tasks` | writing_task_id, student_id, prompt, genre, task_type, modality, reference_group, timestamps, metadata/limitations | 迁移 14：Wave-2 L2 修订循环的任务/上下文元数据 |
+| `writing_tasks` | task_id, student_id, prompt, genre(legacy), writing_context, task_type, modality, reference_group, classification/status, timestamps, metadata/limitations | 迁移 14：Wave-2 L2 两级任务/上下文元数据（F-5 修订：`writing_context` 权威，`genre` 为遗留兼容列） |
 | `submission_revisions` | revision link records with ancestry, timestamps, task-context, analysis-run and feedback-record links | 迁移 14：修订关系记录（任务/分析/反馈链接） |
+| `submission_versions` | task_id, submission_id, version_number, revision_of, ancestry, submitted_at, task_context, essay_text_hash, draft_stage, analysis/feedback links, corpus_routing, reanalysis_events, limitations | 迁移 14（F-5 修订）：L2 追加式提交版本族（V1/V2/...，历史版本即证据） |
+| `revision_observations` | observation_id, task_id, source/target submission, observed_at, what_changed, feedback_areas, new_observations, apparent corrections, no_intent_inference, limitations | 迁移 14（F-5 修订）：有界观察性版本对比（无意图推断） |
+| `priority_plans` | plan_id, learner_id, task_id, submission_id, generated_at, items, history_state/reasons, local/global observations, historical feedback, limitations, claims_status | 迁移 14（F-5 修订）：仅观察声明的小型可执行修订计划 |
+| `scaffold_events` | scaffold_event_id, learner_id, learning_item_id, plan_item_id, category, level, requested_at, default_first, limitations | 迁移 14（F-5 修订）：7 级 SCAFFOLD FIRST 支架请求记录 |
 | `learning_observations` | observation type, evidence refs, task/context, occurrence/recency, revision response | 迁移 14：纵向学习者观察 |
-| `learning_items` | originating evidence, feedback reference, revision history, task/context, status | 迁移 14：学习者条目及状态 |
+| `learning_items` | originating evidence, feedback reference, revision history, task/context, category, task_context, limitations, no_fsrs/no_practice notes, status | 迁移 14：学习者条目及状态（F-5 修订：LearningItem v1 契约字段；遗留 `context` 保留） |
 
 ## 关系
 
