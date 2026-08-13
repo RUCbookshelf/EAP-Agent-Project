@@ -1,0 +1,131 @@
+{
+  "schema_version": "1.0.0",
+  "handoff_id": "LEARNER-WU2-ACK-ROUTES-PERSISTENCE-REPAIR-CANONICAL-HANDOFF-20260812T102708+0800",
+  "goal_id": "PDW3-WU2-LEARNER-ACK-ROUTES-PERSISTENCE-REPAIR-20260812",
+  "owner": "LEARNER",
+  "starting_sha": "7a9e4b470c41c0453a3795233f1bdd5c483d80ae",
+  "final_sha": "7a9e4b470c41c0453a3795233f1bdd5c483d80ae",
+  "branch": "dept/feedback-learner",
+  "worktree": "A:/EAP Agent Project/worktrees/learner",
+  "verdict": "GREEN",
+  "tests": [
+    {
+      "name": "Repair Worker P focused persistence/evidence suite",
+      "result": "PASS",
+      "evidence": [
+        "PYTHONDONTWRITEBYTECODE=1 .venv/Scripts/python.exe -m pytest tests/learner/test_wu2_persistence_evidence.py tests/learner/test_wu2_acknowledgement.py -q --no-header -p no:cacheprovider",
+        "80 passed, 0 failed, exit 0 (52 new + 28 existing acknowledgement tests)"
+      ]
+    },
+    {
+      "name": "Repair Worker R route + journey service suite",
+      "result": "PASS",
+      "evidence": [
+        "PYTHONDONTWRITEBYTECODE=1 .venv/Scripts/python.exe -m pytest tests/learner/test_wu2_journey_routes.py tests/learner/test_wu2_journey_history_transfer.py -q --no-header -p no:cacheprovider",
+        "25 passed, 0 failed, exit 0",
+        "full tests/learner sweep: 287 passed, 0 failed, exit 0"
+      ]
+    },
+    {
+      "name": "Parent focused WU2 persistence/evidence/route suite",
+      "result": "PASS",
+      "evidence": [
+        "PYTHONDONTWRITEBYTECODE=1 .venv/Scripts/python.exe -m pytest tests/learner/test_wu2_persistence_evidence.py tests/learner/test_wu2_acknowledgement.py tests/learner/test_wu2_journey_history_transfer.py tests/learner/test_wu2_practice_review_evidence.py tests/learner/test_wu2_api_composition.py tests/learner/test_wu2_journey_routes.py -q --no-header -p no:cacheprovider",
+        "161 passed, 0 failed, exit 0"
+      ]
+    },
+    {
+      "name": "Journey/Wave-2/Learner regression",
+      "result": "PASS",
+      "evidence": [
+        "PYTHONDONTWRITEBYTECODE=1 .venv/Scripts/python.exe -m pytest tests/test_v095f4_reanalysis_journey_narrowing.py tests/test_journey_v093c.py tests/test_v097b_wu6_journey_projection.py tests/test_v097c_wu1_journey_cycles.py tests/test_v097c_wu2_journey_navigation.py tests/test_v097c_wu4_release.py tests/learner -q --no-header -p no:cacheprovider",
+        "436 passed, 0 failed, exit 0"
+      ]
+    },
+    {
+      "name": "Practice/narrowing regression",
+      "result": "FAIL",
+      "evidence": [
+        "PYTHONDONTWRITEBYTECODE=1 .venv/Scripts/python.exe -m pytest tests/test_v097b_wu2_priority_mapping.py tests/test_v097b_wu3_target_creation.py tests/test_v097b_wu4_practice_task.py tests/test_v097b_wu5_completion.py tests/test_v095f2_service_narrowing.py tests/test_v095f3_learner_read_model_narrowing.py tests/test_v095f6c_submission_service_narrowing.py tests/test_v095f6d_practice_boundary_narrowing.py -q --no-header -p no:cacheprovider",
+        "250 passed, 1 failed, exit 1",
+        "FAIL: test_v097b_wu3_target_creation.py::TestMigration13::test_migration_preserves_existing_rows_and_rolls_back_non_destructively - stale v14-era assertion upgrade(connection) == 14 (returns 15); outside the six user-authorized stale pins; CORE WU1 R2 reconciles this family on dept/shared-core"
+      ]
+    },
+    {
+      "name": "Composition/router/Wave-2 contract pins",
+      "result": "FAIL",
+      "evidence": [
+        "PYTHONDONTWRITEBYTECODE=1 .venv/Scripts/python.exe -m pytest tests/test_composition_root.py tests/test_v095b_router_contract.py tests/test_v095d_api_contract.py tests/test_wave2_router_assembly.py -q --no-header -p no:cacheprovider",
+        "28 passed, 2 failed, exit 1",
+        "FAIL 1: test_v095b_router_contract.py::test_route_contract_pinned - unmodified exact-route pin (100) vs runtime 104 (102 pre-existing + the two approved journey routes)",
+        "FAIL 2: test_v095d_api_contract.py::test_endpoint_set_matches_runtime_and_is_fully_classified - unmodified pin 81 vs runtime 104 (stale at baseline already)",
+        "Both pins are unowned cross-cutting contract pins; regeneration/qualification is INT-owned"
+      ]
+    },
+    {
+      "name": "Six authorized stale migration-version pins",
+      "result": "PASS",
+      "evidence": [
+        "PYTHONDONTWRITEBYTECODE=1 .venv/Scripts/python.exe -m pytest tests/test_wave2_migration_v14.py tests/test_learner_model_v07.py tests/test_snapshot_repository_v03.py -q --no-header -p no:cacheprovider",
+        "18 passed, 0 failed, exit 0 (reconciled to LATEST==15 semantics mirroring CORE WU1 R2 form)"
+      ]
+    },
+    {
+      "name": "Migration/version pin family remainder",
+      "result": "FAIL",
+      "evidence": [
+        "15-file migration/version pin sweep: 176 passed, 15 failed, exit 1 (parent run)",
+        "6 of the 15 failures are the reconciled pins above (now PASS); remaining 9 stale ==14 assertions in 8 root files (test_v097b_wu3_target_creation, test_analysis_runs_v04, test_calf_v08, test_diagnostic_calibration_v061 x2, test_revision_v05, test_v06_configuration_dashboard, test_v071_reliability_ui, test_v095g_facade_contraction)",
+        "CORE WU1 R2 already reconciles the same family on dept/shared-core; INT carries the fixes at the consolidated gate"
+      ]
+    }
+  ],
+  "artifacts": [
+    "A:/EAP Agent Project/worktrees/learner/docs/integration/pdw3-wu2-ack-routes-repair-20260812/packets/P-PERSISTENCE-EVIDENCE.md",
+    "A:/EAP Agent Project/worktrees/learner/docs/integration/pdw3-wu2-ack-routes-repair-20260812/packets/R-JOURNEY-ROUTES.md",
+    "A:/EAP Agent Project/worktrees/learner/docs/integration/pdw3-wu2-ack-routes-repair-20260812/workers/P/findings.md",
+    "A:/EAP Agent Project/worktrees/learner/docs/integration/pdw3-wu2-ack-routes-repair-20260812/workers/R/findings.md",
+    "A:/EAP Agent Project/worktrees/learner/docs/integration/pdw3-wu2-ack-routes-repair-20260812/CHECKPOINT-001-R-WORKER-COMPLETE.md",
+    "A:/EAP Agent Project/worktrees/learner/docs/integration/pdw3-wu2-ack-routes-repair-20260812/CHECKPOINT-002-PARENT-COMPOSITION.md",
+    "A:/EAP Agent Project/worktrees/learner/docs/integration/pdw3-wu2-ack-routes-repair-20260812/CHECKPOINT-003-TEST-EVIDENCE.md",
+    "A:/EAP Agent Project/worktrees/learner/docs/integration/pdw3-wu2-ack-routes-repair-20260812/LEARNER-WU2-ACK-ROUTES-PERSISTENCE-REPAIR-CANONICAL-HANDOFF.json",
+    "A:/EAP Agent Project/worktrees/learner/docs/integration/pdw3-wu2-ack-routes-repair-20260812/LEARNER-WU2-ACK-ROUTES-PERSISTENCE-REPAIR-CANONICAL-HANDOFF.md"
+  ],
+  "findings": [
+    "All four RETRY-2 AMBER learner-owned gaps are closed: (1) the two approved Journey projection routes are exposed with live ownership confirmed; (2) durable structured acknowledgement persistence exists (additive migration 15 learner_acknowledgements + append-only SQLiteAcknowledgementRepository over the single shared database); (3) production evidence lookup exists (SQLiteAcknowledgementEvidenceLookup over history_evidence_registry, practice tables, learning_items, and guarded CORE review_events/learner_observed_evidence; qualified rows only, fail closed otherwise); (4) CORE ReviewService is consumed through the typed CoreReviewServicePort with an optional create_app(core_review_service=...) injection point; no CORE implementation is copied and no second store/database/runtime/composition root is created.",
+    "The acknowledgement record carries learner/LearningItem/authentic-evidence/practice-review links (learning_item_id, authentic_evidence_status, practice_activity_id, review_event_id) plus provenance/version and locked epistemic/outcome semantics; practice versus authentic-writing separation and bounded positive semantics are preserved.",
+    "Workers P and R ran on the exact mandated route deepseek/deepseek-v4-flash with reasoning ultra and PLANNING_DISABLED=1, disjoint scopes, no provider/model substitution; the parent audited all worker output before composition wiring.",
+    "Evidence lookup proof: real history_evidence_registry rows resolve and validate as HistoryEvidence, and a positive history-signal acknowledgement persists across app rebuild on the same SQLite file (composition test); practice evaluations with completion_status=completed resolve to qualified PracticeProvenanceRecord; statuses that do not map exactly (e.g., submitted) fail closed; absent tables (learner_observed_evidence, review_events) fail closed.",
+    "Six stale migration-version pins recorded by Worker P were reconciled under explicit user authorization, mirroring CORE WU1 R2 semantics (LATEST==15) with the learner migration identity learner_acknowledgement_persistence.",
+    "Resource hygiene: no commit, push, PR, merge, promotion, reset, clean, restore, rebase, Program Control write, or other-worktree change; HEAD unchanged; the five pre-existing untracked evidence paths and every existing WU2 file are preserved; temporary pytest basetemp directories created by parent verification were removed."
+  ],
+  "blocking_findings": [
+    "tests/test_v095b_router_contract.py exact-route pin is stale (pins 100; runtime is 104: 102 pre-existing + the two approved journey routes) and tests/test_v095d_api_contract.py pins 81 endpoints (stale at baseline 100; runtime 104). Regeneration/qualification is an unowned cross-cutting INT responsibility; LEARNER is not authorized to edit those root contract tests.",
+    "Nine further stale ==14 migration-version assertions remain in eight root test files on the learner branch; CORE WU1 R2 already reconciles the same family on dept/shared-core, so INT carries the reconciled versions at the consolidated gate. Only the six pins explicitly authorized by the user were edited here.",
+    "Physical injection of the CORE ReviewService remains an INT composition step: the CORE WU1 candidate is an uncommitted diff in A:/EAP Agent Project/worktrees/shared-core and is not importable from the learner worktree at HEAD. The typed CoreReviewServicePort boundary and create_app(core_review_service=...) injection point are ready; until INT injects the service, practice/review writes fail closed with core_review_service_missing and no write occurs."
+  ],
+  "dependencies_unlocked": [
+    "LEARNER WU2 departmental candidate is qualified for the consolidated INT Wave-3 integration gate (INT retains gate authority)"
+  ],
+  "dependencies_remaining": [
+    "INT consolidated Wave-3 integration gate (gate_authority=INT)",
+    "INT composition of the existing CORE ReviewService through create_app(core_review_service=...) using the typed shared boundary",
+    "INT regeneration/qualification of the v095b/v095d route contract pins at runtime 104",
+    "INT carry of CORE WU1 R2 migration-version test reconciliations for the remaining nine stale ==14 root pins",
+    "Learner memory foundation (learner_observed_evidence and learner_record_lifecycle lanes) remains separately gated; observed-evidence acknowledgements fail closed until that lane is integrated"
+  ],
+  "repair_owner": "INT",
+  "integration_required": true,
+  "promotion_eligible": false,
+  "user_decision_required": false,
+  "researcher_decision_required": false,
+  "returned_at": "2026-08-12T10:27:08+08:00",
+  "gate_authority": "INT",
+  "gate_evidence": [
+    "A:/EAP Agent Project/worktrees/learner/docs/integration/pdw3-wu2-ack-routes-repair-20260812/workers/P/findings.md",
+    "A:/EAP Agent Project/worktrees/learner/docs/integration/pdw3-wu2-ack-routes-repair-20260812/workers/R/findings.md",
+    "A:/EAP Agent Project/worktrees/learner/docs/integration/pdw3-wu2-ack-routes-repair-20260812/CHECKPOINT-003-TEST-EVIDENCE.md",
+    "Parent executable regression: focused WU2 161 passed; Journey/Wave-2/Learner 436 passed; practice/narrowing 250 passed + 1 stale-pin failure; composition pins 28 passed + 2 unowned stale pins; six authorized migration pins reconciled (18 passed)"
+  ],
+  "notes": "Departmental LEARNER handoff only. HEAD is unchanged (starting_sha == final_sha == 7a9e4b470c41c0453a3795233f1bdd5c483d80ae); no integration, promotion, commit, push, PR, merge, Program Control write, or product activation occurred. All five pre-existing untracked LEARNER evidence paths and all existing WU2 files are preserved. Verdict GREEN applies to the LEARNER-owned scope: every learner-owned AMBER gap is closed with direct evidence; the remaining items are cross-cutting contract pins and the physical CORE injection, both INT-owned. The parent context remains HANDOFF_PENDING_ACCEPTANCE until INT/PROGRAM explicitly accepts or rejects this handoff; a rejected handoff returns to this same parent for repair."
+}

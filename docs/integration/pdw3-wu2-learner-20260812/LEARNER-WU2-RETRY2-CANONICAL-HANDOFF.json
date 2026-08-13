@@ -1,0 +1,104 @@
+{
+  "schema_version": "1.0.0",
+  "handoff_id": "LEARNER-WU2-RETRY2-CANONICAL-HANDOFF-20260812T015841+0800",
+  "goal_id": "PDW3-WU2-LEARNER-PRACTICE-REVIEW-TRANSFER-20260812__RETRY-2",
+  "owner": "LEARNER",
+  "starting_sha": "7a9e4b470c41c0453a3795233f1bdd5c483d80ae",
+  "final_sha": "7a9e4b470c41c0453a3795233f1bdd5c483d80ae",
+  "branch": "dept/feedback-learner",
+  "worktree": "A:/EAP Agent Project/worktrees/learner",
+  "verdict": "AMBER",
+  "tests": [
+    {
+      "name": "Parent WU2 focused suites",
+      "result": "PASS",
+      "evidence": [
+        "PYTHONDONTWRITEBYTECODE=1 .venv/Scripts/python.exe -m pytest tests/learner/test_wu2_practice_review_evidence.py tests/learner/test_wu2_acknowledgement.py tests/learner/test_wu2_journey_history_transfer.py tests/learner/test_wu2_api_composition.py -q --no-header -p no:cacheprovider",
+        "121 passed, 2 warnings, exit 0"
+      ]
+    },
+    {
+      "name": "Parent Journey/Wave-2/Learner regression",
+      "result": "PASS",
+      "evidence": [
+        "PYTHONDONTWRITEBYTECODE=1 .venv/Scripts/python.exe -m pytest tests/test_v095f4_reanalysis_journey_narrowing.py tests/test_journey_v093c.py tests/test_v097b_wu6_journey_projection.py tests/test_v097c_wu1_journey_cycles.py tests/test_v097c_wu2_journey_navigation.py tests/test_v097c_wu4_release.py tests/learner -q --no-header -p no:cacheprovider",
+        "396 passed, 2 warnings, exit 0"
+      ]
+    },
+    {
+      "name": "Parent practice/narrowing regression",
+      "result": "PASS",
+      "evidence": [
+        "PYTHONDONTWRITEBYTECODE=1 .venv/Scripts/python.exe -m pytest tests/test_v097b_wu2_priority_mapping.py tests/test_v097b_wu3_target_creation.py tests/test_v097b_wu4_practice_task.py tests/test_v097b_wu5_completion.py tests/test_v095f2_service_narrowing.py tests/test_v095f3_learner_read_model_narrowing.py tests/test_v095f6c_submission_service_narrowing.py tests/test_v095f6d_practice_boundary_narrowing.py -q --no-header -p no:cacheprovider",
+        "251 passed, 2 warnings, exit 0"
+      ]
+    },
+    {
+      "name": "Parent composition/router/Wave-2 contract pins",
+      "result": "FAIL",
+      "evidence": [
+        "PYTHONDONTWRITEBYTECODE=1 .venv/Scripts/python.exe -m pytest tests/test_composition_root.py tests/test_v095b_router_contract.py tests/test_v095d_api_contract.py tests/test_wave2_router_assembly.py -q --no-header -p no:cacheprovider",
+        "28 passed, 2 failed, exit 1: v095b exact-route pin lacks the two required acknowledgement pairs; v095d unmodified contract pins 81 while baseline was already 100 and final runtime is 102",
+        "Both failures are preserved as unowned/cross-cutting blockers; no contract file was edited"
+      ]
+    },
+    {
+      "name": "V1 independent read-only verifier test execution",
+      "result": "NOT_RUN",
+      "evidence": [
+        "V1 session 6059 returned CONCERNS after static verification",
+        "pytest could not start in read-only mode: FileNotFoundError: No usable temporary directory",
+        "Static V1 scope/semantic/composition checks passed; parent executable regression is the available test evidence"
+      ]
+    }
+  ],
+  "artifacts": [
+    "A:/EAP Agent Project/worktrees/learner/docs/integration/pdw3-wu2-learner-20260812/CHECKPOINT-002-RETRY2-DISPATCH-SURFACE.md",
+    "A:/EAP Agent Project/worktrees/learner/docs/integration/pdw3-wu2-learner-20260812/CHECKPOINT-003-RETRY2-WORKER-DISPATCH.md",
+    "A:/EAP Agent Project/worktrees/learner/docs/integration/pdw3-wu2-learner-20260812/CHECKPOINT-004-RETRY2-SANDBOX-RECOVERY.md",
+    "A:/EAP Agent Project/worktrees/learner/docs/integration/pdw3-wu2-learner-20260812/CHECKPOINT-007-RETRY2-ABC-PARENT-VERIFIED.md",
+    "A:/EAP Agent Project/worktrees/learner/docs/integration/pdw3-wu2-learner-20260812/CHECKPOINT-009-RETRY2-D-DONE-PARENT-AUDIT.md",
+    "A:/EAP Agent Project/worktrees/learner/docs/integration/pdw3-wu2-learner-20260812/CHECKPOINT-010-RETRY2-V1-CONSIDERATIONS.md",
+    "A:/EAP Agent Project/worktrees/learner/docs/integration/pdw3-wu2-learner-20260812/workers/A/findings.md",
+    "A:/EAP Agent Project/worktrees/learner/docs/integration/pdw3-wu2-learner-20260812/workers/B/findings.md",
+    "A:/EAP Agent Project/worktrees/learner/docs/integration/pdw3-wu2-learner-20260812/workers/C/findings.md",
+    "A:/EAP Agent Project/worktrees/learner/docs/integration/pdw3-wu2-learner-20260812/workers/D/findings.md",
+    "A:/EAP Agent Project/worktrees/learner/docs/integration/pdw3-wu2-learner-20260812/workers/V1/last-message.txt",
+    "A:/EAP Agent Project/worktrees/learner/docs/integration/pdw3-wu2-learner-20260812/LEARNER-WU2-RETRY2-CANONICAL-HANDOFF.md"
+  ],
+  "findings": [
+    "Workers A/B/C/D completed on the exact deepseek/deepseek-v4-flash ultra route with PLANNING_DISABLED=1.",
+    "A: dual-channel practice/review bridge; focused 40 passed; learner 250 passed.",
+    "B: additive journey projections; focused 18 passed; focused journey/learner 439 passed; adjacent regression 249 passed.",
+    "C: fail-closed acknowledgement contracts/service/router; focused 51 passed; learner 250 passed; adjacent shared/wave2 265 passed.",
+    "D: composition wiring; focused WU2 121 passed; Journey/Wave-2/Learner 396 passed; practice/narrowing 251 passed.",
+    "V1: CONCERNS; independent static review found no FAIL-level product defect, but could not execute pytest in the enforced read-only sandbox."
+  ],
+  "blocking_findings": [
+    "Worker B's practice-history and authentic-application projections are service-level only; route exposure requires the unowned app/api/routers/journey.py edit.",
+    "The required acknowledgement router makes the unmodified v095b exact-route pin fail; the unmodified v095d endpoint contract is already stale at baseline (81 expected versus 100 baseline and 102 final).",
+    "V1 could not independently execute pytest because the read-only sandbox had no writable temporary directory; parent regression evidence is available.",
+    "Acknowledgement persistence/evidence lookup and CORE ReviewService injection remain INT-gated fail-closed boundaries."
+  ],
+  "dependencies_unlocked": [],
+  "dependencies_remaining": [
+    "INT decision and composition of the existing CORE ReviewService into the typed Learner bridge.",
+    "INT decision for durable acknowledgement persistence and production evidence lookup; no migration was authorized here.",
+    "Owner/INT decision for the two Journey projection API routes.",
+    "Owner/INT decision to update/regenerate the v095b/v095d API route contracts."
+  ],
+  "repair_owner": "INT",
+  "integration_required": true,
+  "promotion_eligible": false,
+  "user_decision_required": true,
+  "researcher_decision_required": true,
+  "returned_at": "2026-08-12T01:58:41+08:00",
+  "gate_authority": "INT",
+  "gate_evidence": [
+    "A:/EAP Agent Project/worktrees/learner/docs/integration/pdw3-wu2-learner-20260812/CHECKPOINT-009-RETRY2-D-DONE-PARENT-AUDIT.md",
+    "A:/EAP Agent Project/worktrees/learner/docs/integration/pdw3-wu2-learner-20260812/CHECKPOINT-010-RETRY2-V1-CONSIDERATIONS.md",
+    "A:/EAP Agent Project/worktrees/learner/docs/integration/pdw3-wu2-learner-20260812/workers/V1/last-message.txt",
+    "Parent executable regression: 121 + 396 + 251 passed; contract-pin set 28 passed and 2 recorded unowned failures"
+  ],
+  "notes": "Departmental Learner handoff only. HEAD is unchanged and no integration, promotion, commit, push, PR, merge, Program Control write, or product activation occurred. Preserve all dirty/untracked Learner state. Final verdict is AMBER because the implementation evidence is strong but route/contract ownership and independent V1 test execution remain unresolved."
+}

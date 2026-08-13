@@ -16,6 +16,15 @@ Migration-version note (supersedes the pre-Wave-2 numbering plan):
   learning_observations, learning_items) plus indexes. It is additive and
   non-destructive; rollback 14->13 is a logical ledger-only rollback that
   preserves the new tables and their data.
+- Option A (user-authorized 2026-08-12): the project keeps ONE shared
+  integer migration ledger. Global Migration 15 is CORE-owned as
+  ``review_scheduling_foundation`` (Wave-3 WU1 shared Review/Scheduling
+  Foundation; body consumed byte-identical from the accepted CORE candidate
+  per PDW3-WU2-CORE-GLOBAL-LEDGER-GUARD-OPTION-A-20260812). LEARNER
+  acknowledgement persistence is global Migration 16
+  (``learner_acknowledgement_persistence``) in this same runner/ledger; the
+  CORE-15 seam must not be renumbered or renamed (see
+  ``assert_global_migration_15_identity`` below).
 - The previously planned ``essays.domain`` discriminator (recorded at
   CORE-MIGRATION14-AMENDMENTS, design-review finding F-6) remains DEFERRED
   and trigger-gated; it was NOT implemented. When its implementation Goal
@@ -33,7 +42,7 @@ Asserted by ``tests/test_migration_drop_column_rollback_note.py``.
 """
 
 
-LATEST_MIGRATION_VERSION = 14
+LATEST_MIGRATION_VERSION = 16
 
 
 def _add_column_if_missing(
@@ -958,6 +967,179 @@ def _migration_14(connection: sqlite3.Connection) -> None:
     connection.execute("PRAGMA user_version = 14")
 
 
+def _migration_15(connection: sqlite3.Connection) -> None:
+    """Wave-3 WU1 additive persistence: shared Review/Scheduling Foundation.
+
+    Goal PDW3-WU1-CORE-REVIEW-SCHEDULING-FOUNDATION (final operational
+    retry). Additive and non-destructive: creates only NEW tables and
+    indexes; no existing-table DDL is altered; Migration 14 (the protected
+    Wave-2 baseline) is untouched and historical data is never reinterpreted.
+
+    Entities (minimum qualified set for the Wave-3 learning loop
+    LearningItem -> Practice -> Review Evidence -> FSRS Scheduling):
+
+    - practice_activities: shared activity representation DISTINCT from
+      LearningItem (stable activity identity, learner and LearningItem
+      identity, activity type, creation/source, status, timestamps,
+      provenance, evaluator/evaluation linkage). ``evidence_kind`` keeps
+      practice evidence distinguishable from authentic writing evidence;
+      practice completion never implies authentic transfer
+      (``authentic_evidence_status`` defaults to 'insufficient').
+    - review_events: durable review events preserving learner, LearningItem,
+      relevant PracticeActivity link, system provisional rating, learner
+      self-rating, final scheduler rating, rating-rule version, review
+      timestamp, scheduling result, and provenance. The three rating
+      channels are separate columns: no collapse and no weighted average.
+    - learning_item_scheduler_states: ONE durable FSRS memory-scheduling
+      state per LearningItem (due/stability/difficulty/state/step/last
+      review -- the py-fsrs Card "true equivalent"). FSRS state is strictly
+      memory scheduling state; it is never named or exposed as proficiency,
+      mastery, ability, validated acquisition, or learning gain, and it is
+      never stored inside LearningItem v1 (whose no-FSRS contract is
+      preserved).
+
+    Every review_events row stores scheduler implementation/version,
+    scheduler parameters, rating-rule version, input ratings, prior and
+    resulting scheduler state, and the scheduling result so historical
+    scheduling behavior can be reconstructed deterministically.
+
+    Rollback 15->14 is a logical ledger-only rollback (see ``rollback``);
+    tables and data are preserved and re-apply is idempotent.
+    """
+    connection.executescript(
+        """
+        CREATE TABLE IF NOT EXISTS practice_activities (
+            activity_id TEXT PRIMARY KEY,
+            student_id TEXT NOT NULL,
+            learning_item_id TEXT NOT NULL
+                REFERENCES learning_items(learning_item_id),
+            activity_type TEXT NOT NULL,
+            source TEXT NOT NULL DEFAULT 'practice',
+            status TEXT NOT NULL,
+            occurred_at TEXT NOT NULL,
+            completed_at TEXT,
+            created_at TEXT NOT NULL,
+            provenance_json TEXT NOT NULL DEFAULT '{}',
+            evaluator TEXT,
+            evaluation_id TEXT,
+            evaluator_version TEXT,
+            evidence_kind TEXT NOT NULL DEFAULT 'practice',
+            authentic_evidence_status TEXT NOT NULL DEFAULT 'insufficient'
+                CHECK(authentic_evidence_status IN ('insufficient','present')),
+            limitations_json TEXT NOT NULL DEFAULT '[]'
+        );
+        CREATE INDEX IF NOT EXISTS idx_practice_activities_item
+            ON practice_activities(learning_item_id, created_at, activity_id);
+        CREATE INDEX IF NOT EXISTS idx_practice_activities_student
+            ON practice_activities(student_id, created_at, activity_id);
+        CREATE TABLE IF NOT EXISTS review_events (
+            review_event_id TEXT PRIMARY KEY,
+            student_id TEXT NOT NULL,
+            learning_item_id TEXT NOT NULL
+                REFERENCES learning_items(learning_item_id),
+            practice_activity_id TEXT
+                REFERENCES practice_activities(activity_id),
+            reviewed_at TEXT NOT NULL,
+            system_provisional_rating TEXT NOT NULL
+                CHECK(system_provisional_rating IN ('again','hard','good','easy')),
+            learner_self_rating TEXT
+                CHECK(learner_self_rating IN ('again','hard','good','easy')),
+            final_scheduler_rating TEXT NOT NULL
+                CHECK(final_scheduler_rating IN ('again','hard','good','easy')),
+            rating_rule_version TEXT NOT NULL,
+            scheduler_implementation TEXT NOT NULL,
+            scheduler_version TEXT NOT NULL,
+            scheduler_parameters_json TEXT NOT NULL DEFAULT '{}',
+            state_before_json TEXT NOT NULL,
+            state_after_json TEXT NOT NULL,
+            scheduling_result_json TEXT NOT NULL DEFAULT '{}',
+            authentic_evidence_status TEXT NOT NULL DEFAULT 'insufficient'
+                CHECK(authentic_evidence_status IN ('insufficient','present')),
+            provenance_json TEXT NOT NULL DEFAULT '{}',
+            limitations_json TEXT NOT NULL DEFAULT '[]',
+            recorded_at TEXT NOT NULL
+        );
+        CREATE INDEX IF NOT EXISTS idx_review_events_item
+            ON review_events(learning_item_id, reviewed_at, review_event_id);
+        CREATE INDEX IF NOT EXISTS idx_review_events_student
+            ON review_events(student_id, reviewed_at, review_event_id);
+        CREATE INDEX IF NOT EXISTS idx_review_events_activity
+            ON review_events(practice_activity_id);
+        CREATE TABLE IF NOT EXISTS learning_item_scheduler_states (
+            learning_item_id TEXT PRIMARY KEY
+                REFERENCES learning_items(learning_item_id),
+            student_id TEXT NOT NULL,
+            scheduler_implementation TEXT NOT NULL,
+            scheduler_version TEXT NOT NULL,
+            scheduler_parameters_json TEXT NOT NULL DEFAULT '{}',
+            state_json TEXT NOT NULL,
+            rating_rule_version TEXT NOT NULL,
+            updated_at TEXT NOT NULL,
+            last_review_event_id TEXT NOT NULL
+        );
+        """
+    )
+    connection.execute("PRAGMA user_version = 15")
+
+
+def _migration_16_learner_acknowledgement_persistence(
+    connection: sqlite3.Connection,
+) -> None:
+    """Additive LEARNER acknowledgement persistence (global Migration 16).
+
+    Goal PDW3-WU2-LEARNER-MIGRATION16-PINS-OPTION-A-20260812 (user-authorized
+    Option A): LEARNER acknowledgement persistence is the global integer
+    Migration 16 after the CORE-owned Migration 15 seam
+    (``review_scheduling_foundation``). Body moved from the former 15 lane
+    unchanged: creates ONE new table (``learner_acknowledgements``) plus two
+    indexes. Strictly additive and non-destructive: no existing
+    table/column/index is altered or dropped, so rollback 16->15 is
+    ledger-only (data preserved) and re-apply is idempotent.
+
+    The ``learning_item_id``, ``practice_activity_id``, and
+    ``review_event_id`` columns are loose structural links (no FK): the
+    CORE ``review_events`` and learner ``learning_items`` tables are
+    integration-owned; ``review_events`` now exists through the CORE-15
+    seam, while learner ``learning_items`` exists through Wave-2.
+    """
+    connection.executescript(
+        """
+        CREATE TABLE IF NOT EXISTS learner_acknowledgements (
+            acknowledgement_id TEXT PRIMARY KEY,
+            learner_id TEXT NOT NULL REFERENCES students(student_id),
+            source_kind TEXT NOT NULL,
+            source_evidence_ids_json TEXT NOT NULL,
+            source_event_ids_json TEXT NOT NULL DEFAULT '[]',
+            learning_item_id TEXT,
+            authentic_evidence_status TEXT
+                CHECK(authentic_evidence_status IN ('insufficient','present')),
+            practice_activity_id TEXT,
+            review_event_id TEXT,
+            evidence_status TEXT NOT NULL,
+            epistemic_status TEXT NOT NULL,
+            outcome_claim TEXT NOT NULL DEFAULT 'none',
+            provenance_json TEXT NOT NULL,
+            policy_version TEXT,
+            model_version TEXT,
+            config_version TEXT,
+            record_version TEXT NOT NULL,
+            acknowledgement_text TEXT NOT NULL,
+            limitations_json TEXT NOT NULL DEFAULT '[]',
+            consent_json TEXT NOT NULL,
+            observed_span_start TEXT,
+            observed_span_end TEXT,
+            recorded_at TEXT NOT NULL,
+            created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+        );
+        CREATE INDEX IF NOT EXISTS idx_learner_acknowledgements_learner
+            ON learner_acknowledgements(learner_id, recorded_at, acknowledgement_id);
+        CREATE INDEX IF NOT EXISTS idx_learner_acknowledgements_kind
+            ON learner_acknowledgements(learner_id, source_kind, recorded_at);
+        """
+    )
+    connection.execute("PRAGMA user_version = 16")
+
+
 MIGRATIONS: dict[int, tuple[str, Callable[[sqlite3.Connection], None]]] = {
     1: ("preserve_v0_1_1_schema", _migration_1),
     2: ("cloud_ready_repository_indexes", _migration_2),
@@ -973,7 +1155,107 @@ MIGRATIONS: dict[int, tuple[str, Callable[[sqlite3.Connection], None]]] = {
     12: ("practice_and_transfer_foundation", _migration_12),
     13: ("practice_target_priority_key_uniqueness", _migration_13),
     14: ("wave2_revision_loop_and_learner_model", _migration_14),
+    15: ("review_scheduling_foundation", _migration_15),
+    16: ("learner_acknowledgement_persistence", _migration_16_learner_acknowledgement_persistence),
 }
+
+
+# ---------------------------------------------------------------------------
+# CORE global integer ledger guard / consumer seam (Option A, composed path)
+#
+# The project keeps ONE shared integer migration ledger:
+# ``schema_migrations.version INTEGER PRIMARY KEY``, the ``MIGRATIONS``
+# registry above, and the ``upgrade``/``rollback`` runners below. Global
+# Migration 15 is CORE-owned as ``review_scheduling_foundation``; its body
+# is consumed byte-identical from the accepted CORE candidate
+# (PDW3-WU2-CORE-GLOBAL-LEDGER-GUARD-OPTION-A-20260812,
+# app/database/migrations.py:1120-1162 seam). LEARNER acknowledgement
+# persistence is global Migration 16 in the SAME registry and the SAME
+# ``app.database.upgrade``/``rollback`` on the SAME sqlite3 connection -- no
+# second migration runner, no second SQLite database, no renumbering of 15.
+# ---------------------------------------------------------------------------
+GLOBAL_MIGRATION_LEDGER_OWNER: str = "CORE"
+GLOBAL_MIGRATION_LEDGER_VERSION_15: int = 15
+GLOBAL_MIGRATION_LEDGER_VERSION_15_NAME: str = "review_scheduling_foundation"
+
+LEARNER_MIGRATION_ACK_PERSISTENCE_VERSION: int = 16
+LEARNER_MIGRATION_ACK_PERSISTENCE_NAME: str = "learner_acknowledgement_persistence"
+
+
+def assert_global_migration_15_identity() -> tuple[int, str]:
+    """Guard the CORE-owned version-15 identity in the composed product path.
+
+    Returns ``(version, name)`` for the CORE-owned Migration 15 identity.
+    Raises ``RuntimeError`` on any drift (missing registry entry, rename, or
+    duplicate identity). Unlike the CORE-lane guard, this composed-path guard
+    does not require ``LATEST_MIGRATION_VERSION == 15``: in the LEARNER
+    product path the shared ledger intentionally continues to 16, and the
+    version-16 guard below enforces the composed LATEST pin instead.
+    """
+    if GLOBAL_MIGRATION_LEDGER_VERSION_15 not in MIGRATIONS:
+        raise RuntimeError(
+            "Global ledger guard failed: version "
+            f"{GLOBAL_MIGRATION_LEDGER_VERSION_15} missing from MIGRATIONS"
+        )
+    name = MIGRATIONS[GLOBAL_MIGRATION_LEDGER_VERSION_15][0]
+    if name != GLOBAL_MIGRATION_LEDGER_VERSION_15_NAME:
+        raise RuntimeError(
+            "Global ledger guard failed: MIGRATIONS[15] name="
+            f"{name!r}, expected {GLOBAL_MIGRATION_LEDGER_VERSION_15_NAME!r}"
+        )
+    duplicates = [
+        version
+        for version, (migration_name, _) in MIGRATIONS.items()
+        if migration_name == GLOBAL_MIGRATION_LEDGER_VERSION_15_NAME
+    ]
+    if duplicates != [GLOBAL_MIGRATION_LEDGER_VERSION_15]:
+        raise RuntimeError(
+            "Global ledger guard failed: identity "
+            f"{GLOBAL_MIGRATION_LEDGER_VERSION_15_NAME!r} is not unique at "
+            f"version {GLOBAL_MIGRATION_LEDGER_VERSION_15} "
+            f"(found at {duplicates})"
+        )
+    return GLOBAL_MIGRATION_LEDGER_VERSION_15, name
+
+
+def assert_global_migration_16_identity() -> tuple[int, str]:
+    """Guard the LEARNER-owned version-16 identity in the composed path.
+
+    Returns ``(version, name)`` for the LEARNER acknowledgement persistence
+    migration. Raises ``RuntimeError`` if the composed LATEST pin is not 16,
+    the registry entry at 16 is missing/renamed, or the LEARNER identity is
+    duplicated anywhere in the shared ledger.
+    """
+    if LATEST_MIGRATION_VERSION != LEARNER_MIGRATION_ACK_PERSISTENCE_VERSION:
+        raise RuntimeError(
+            "Global ledger guard failed: LATEST_MIGRATION_VERSION="
+            f"{LATEST_MIGRATION_VERSION}, expected "
+            f"{LEARNER_MIGRATION_ACK_PERSISTENCE_VERSION} (LEARNER Option A)"
+        )
+    if LEARNER_MIGRATION_ACK_PERSISTENCE_VERSION not in MIGRATIONS:
+        raise RuntimeError(
+            "Global ledger guard failed: version "
+            f"{LEARNER_MIGRATION_ACK_PERSISTENCE_VERSION} missing from MIGRATIONS"
+        )
+    name = MIGRATIONS[LEARNER_MIGRATION_ACK_PERSISTENCE_VERSION][0]
+    if name != LEARNER_MIGRATION_ACK_PERSISTENCE_NAME:
+        raise RuntimeError(
+            "Global ledger guard failed: MIGRATIONS[16] name="
+            f"{name!r}, expected {LEARNER_MIGRATION_ACK_PERSISTENCE_NAME!r}"
+        )
+    duplicates = [
+        version
+        for version, (migration_name, _) in MIGRATIONS.items()
+        if migration_name == LEARNER_MIGRATION_ACK_PERSISTENCE_NAME
+    ]
+    if duplicates != [LEARNER_MIGRATION_ACK_PERSISTENCE_VERSION]:
+        raise RuntimeError(
+            "Global ledger guard failed: identity "
+            f"{LEARNER_MIGRATION_ACK_PERSISTENCE_NAME!r} is not unique at "
+            f"version {LEARNER_MIGRATION_ACK_PERSISTENCE_VERSION} "
+            f"(found at {duplicates})"
+        )
+    return LEARNER_MIGRATION_ACK_PERSISTENCE_VERSION, name
 
 
 def upgrade(connection: sqlite3.Connection) -> int:
@@ -1001,10 +1283,22 @@ def rollback(connection: sqlite3.Connection, target_version: int) -> int:
     current = int(connection.execute("PRAGMA user_version").fetchone()[0])
     if current == target_version:
         return current
-    if (current, target_version) not in {(14, 13), (13, 12), (12, 11), (11, 10), (10, 9), (9, 8)}:
+    if (current, target_version) not in {(16, 15), (15, 14), (14, 13), (13, 12), (12, 11), (11, 10), (10, 9), (9, 8)}:
         raise ValueError("Only non-destructive one-step rollback is supported.")
     with connection:
-        if current == 14:
+        if current == 16:
+            # Logical rollback: migration 16 only added one table and two
+            # indexes, so the rollback is ledger-only; table and data are
+            # preserved and re-apply (CREATE IF NOT EXISTS) is idempotent.
+            # The common ledger DELETE below removes the version-16 row.
+            pass
+        elif current == 15:
+            # Logical rollback: CORE migration 15 only added tables/indexes,
+            # so the rollback is ledger-only; tables and data are preserved
+            # and re-apply (CREATE IF NOT EXISTS) is idempotent. The common
+            # ledger DELETE below removes the version-15 row.
+            pass
+        elif current == 14:
             # Logical rollback: migration 14 only added tables/indexes, so the
             # rollback is ledger-only; tables and data are preserved and
             # re-apply (CREATE IF NOT EXISTS) is idempotent.

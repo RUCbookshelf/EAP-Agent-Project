@@ -13,7 +13,7 @@ from app.api.main import create_app
 from app.config import Settings
 from app.version import PLATFORM_APPLICATION_VERSION
 from app.configuration import ConfigurationCreate, ConfigurationPayload, configuration_hash
-from app.database import Database
+from app.database import Database, LATEST_MIGRATION_VERSION
 from app.diagnosis import HeuristicDiagnoser
 from app.llm import LocalDemoProvider, ProviderRouter
 from app.models import EssaySubmission
@@ -84,7 +84,7 @@ def _dashboard_service(repository):
 
 def test_migration_6_creates_active_configuration_and_audit(tmp_path):
     repository = Database(tmp_path / "migration.db"); repository.initialize()
-    assert repository._system_repository.migration_version() == 14
+    assert repository._system_repository.migration_version() == LATEST_MIGRATION_VERSION
     active = repository._configuration_repository.get_active_configuration()
     assert active.version == "config-v0.9.0" and active.status == "active"
     assert len(repository._configuration_repository.list_configuration_audit()) >= 5

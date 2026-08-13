@@ -1,0 +1,9 @@
+I have to stop here and report a blocker: the execution environment's shell is down, and I cannot start this slice without it.
+
+What happened: every `shell_command` attempt fails before execution with the same infrastructure error — `windows sandbox: helper_unknown_error: setup refresh had errors`. I retried 10 times over ~10 minutes with escalating timeouts (30s–180s), with and without login-shell semantics, and checked the MCP resource channels for an alternative file-access path; there is none that reaches the worktree.
+
+Why this blocks the task: the mandatory execution contract requires reading the dispatch surface, the CORE WU1 handoff, the current learner modules, API router conventions, and `AGENTS.md` before implementation, and the verification contract requires running the TDD tests and recording exact commands/counts. Both need a working shell. I did not write or modify any files — no code, no tests, no findings doc — because doing so blind (without reading the required context) or claiming test counts I couldn't run would violate the slice's contracts and your honesty rules.
+
+Current state: no files changed, no commit/Program Control action taken, baseline untouched.
+
+Requested next step: restore the sandbox helper (this looks like a host-side sandbox initialization failure, not a command issue) and re-dispatch Worker C; the slice can then proceed as specified.

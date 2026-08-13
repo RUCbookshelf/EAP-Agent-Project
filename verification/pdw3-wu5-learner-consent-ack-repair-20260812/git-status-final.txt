@@ -1,0 +1,44 @@
+﻿ M app/api/deps.py
+ M app/api/main.py
+ M app/api/routers/journey.py
+ M app/database/migrations.py
+ M app/infrastructure/sqlite/repositories/__init__.py
+ M app/journey/service.py
+ M app/version.py
+ M tests/test_analysis_runs_v04.py
+ M tests/test_calf_v08.py
+ M tests/test_composition_root.py
+ M tests/test_diagnostic_calibration_v061.py
+ M tests/test_learner_model_v07.py
+ M tests/test_revision_v05.py
+ M tests/test_snapshot_repository_v03.py
+ M tests/test_v06_configuration_dashboard.py
+ M tests/test_v071_reliability_ui.py
+ M tests/test_v095g_facade_contraction.py
+ M tests/test_v097b_wu3_target_creation.py
+ M tests/test_wave2_migration_v14.py
+?? app/api/routers/acknowledgement.py
+?? app/infrastructure/sqlite/repositories/acknowledgement.py
+?? app/journey/transfer.py
+?? app/learner/acknowledgement.py
+?? app/learner/acknowledgement_contracts.py
+?? app/learner/review_bridge.py
+?? app/practice/review_transfer.py
+?? docs/integration/LEARNER-FOUNDATION-FREEZE-20260809.md
+?? docs/integration/PDW1-ALIGN-LEARNER-B6FCE9-20260809.md
+?? docs/integration/PDW2-ALIGN-LEARNER-59500127-20260810.md
+?? docs/integration/PDW3-ALIGN-LEARNER-7A9E4B-20260811.md
+?? docs/integration/pdw3-wu2-ack-routes-repair-20260812/
+?? docs/integration/pdw3-wu2-learner-20260812/
+?? docs/integration/pdw3-wu2-learner-migration16-pins-option-a-20260812/
+?? docs/integration/pdw3-wu5-learner-consent-ack-repair-20260812/
+?? tests/learner/__init__.py
+?? tests/learner/test_migration_16_option_a_global_ledger.py
+?? tests/learner/test_wu2_acknowledgement.py
+?? tests/learner/test_wu2_api_composition.py
+?? tests/learner/test_wu2_journey_history_transfer.py
+?? tests/learner/test_wu2_journey_routes.py
+?? tests/learner/test_wu2_persistence_evidence.py
+?? tests/learner/test_wu2_practice_review_evidence.py
+?? tests/learner/test_wu5_consent_ack_boundary.py
+?? verification/pdw3-wu5-learner-consent-ack-repair-20260812/

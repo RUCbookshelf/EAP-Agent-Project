@@ -1,0 +1,109 @@
+{
+  "schema_version": "1.0.0",
+  "handoff_id": "PDW3-WU2-LEARNER-MIGRATION16-PINS-OPTION-A-20260812__20260812T045022Z__d2c40f",
+  "goal_id": "PDW3-WU2-LEARNER-MIGRATION16-PINS-OPTION-A-20260812",
+  "owner": "LEARNER",
+  "starting_sha": "7a9e4b470c41c0453a3795233f1bdd5c483d80ae",
+  "final_sha": "7a9e4b470c41c0453a3795233f1bdd5c483d80ae",
+  "branch": "dept/feedback-learner",
+  "worktree": "A:\\EAP Agent Project\\worktrees\\learner",
+  "verdict": "GREEN",
+  "tests": [
+    {
+      "name": "Option-A global ledger composition suite (new)",
+      "result": "PASS",
+      "evidence": [
+        "7 passed in tests/learner/test_migration_16_option_a_global_ledger.py",
+        "Exact identities: MIGRATIONS[15]=review_scheduling_foundation (CORE seam, real _migration_15), MIGRATIONS[16]=learner_acknowledgement_persistence; LATEST=16 and PLATFORM_DATABASE_MIGRATION_VERSION=16",
+        "Fresh DB upgrades 14->15->16 with exact ledger rows; genuine v14-era DB (real migrations 1..14 + Wave-2 rows) upgrades to 16 preserving rows",
+        "Rollback 16->15->14 is ledger-only (tables/data preserved, exact rows removed); idempotent re-apply restores exactly one row at 15 and one at 16",
+        "Non-adjacent rollback from 16 rejected; composed-path guards reject renamed 15 / duplicated 16 identity"
+      ]
+    },
+    {
+      "name": "Migration/ledger/pin family suite (14 files)",
+      "result": "PASS",
+      "evidence": [
+        "190 passed, 0 failed, exit 0 (evidence/pytest-ledger-pins-option-a.log)",
+        "tests/test_wave2_migration_v14.py rewritten to LATEST=16 semantics: fresh ledger rows 14/15/16, v14-era one-step rollbacks 16->15->14 with data preservation, legacy-DB upgrade, DEFAULT coverage",
+        "All 12 current-version-stale ==14 sites repaired in the exact CORE WU1 R2 form (LATEST_MIGRATION_VERSION + added one-step rollback(connection,14) steps in test_calf_v08/test_v071_reliability_ui/test_v097b_wu3_target_creation)",
+        "Historical post-rollback ==14/==13 and fixture-safe ==14 literals preserved literally (INT adjudication Section 5.2 classification re-audited live)",
+        "Includes test_composition_root.py and tests/shared/test_version_single_sourcing.py"
+      ]
+    },
+    {
+      "name": "Independent Option-A probe (real migrations, transient SQLite files)",
+      "result": "PASS",
+      "evidence": [
+        "PROBE_OK, PROBE_EXIT=0; evidence/probe-migration16-option-a.log",
+        "22/22 checks: fresh upgrade()=16 with ledger 14/15/16 identities; genuine v14-era DB upgrades 14->15->16 preserving Wave-2 rows; rollback 16->15->14 ledger-only with CORE tables + acknowledgement data preserved; idempotent re-apply restores exact ledger rows",
+        "assert_global_migration_15_identity()=(15,'review_scheduling_foundation'); assert_global_migration_16_identity()=(16,'learner_acknowledgement_persistence')",
+        "CORE-15 body byte-identical to accepted CORE candidate: SHA-256 67a55c1708d8cccd5f98cffec932eb3649255ba4e6907c0295444528b447a08a, 5975 chars both worktrees (hash includes the terminal newline)"
+      ]
+    },
+    {
+      "name": "Acknowledgement persistence/evidence/route regression (as in ACK-ROUTES packet)",
+      "result": "PASS",
+      "evidence": [
+        "161 passed, 0 failed, exit 0 (evidence/pytest-wu2-ack-evidence-routes.log)",
+        "tests/learner/test_wu2_acknowledgement.py, test_wu2_persistence_evidence.py, test_wu2_journey_routes.py, test_wu2_journey_history_transfer.py, test_wu2_api_composition.py, test_wu2_practice_review_evidence.py",
+        "Same six-file focused set and count (161) as the accepted ACK-ROUTES repair parent run, now green against LATEST=16"
+      ]
+    },
+    {
+      "name": "Full tests/learner sweep (affected Wave-2/Learner regression)",
+      "result": "PASS",
+      "evidence": [
+        "327 passed, 0 failed, exit 0 (evidence/pytest-learner-sweep.log)",
+        "Canonical invocation from the worktree root (A:\\EAP Agent Project\\worktrees\\learner); one test reads a relative path app/learner/wave2/sqlite_repository.py and passes only from the worktree root",
+        "No stale ==15 current-latest pins remain; the only ==15 sites are the post-rollback 16->15 assertion and unrelated ID-length checks"
+      ]
+    }
+  ],
+  "artifacts": [
+    "A:\\EAP Agent Project\\worktrees\\learner\\docs\\integration\\pdw3-wu2-learner-migration16-pins-option-a-20260812\\LEARNER-WU2-MIGRATION16-OPTION-A-CANONICAL-HANDOFF.json",
+    "A:\\EAP Agent Project\\worktrees\\learner\\docs\\integration\\pdw3-wu2-learner-migration16-pins-option-a-20260812\\LEARNER-WU2-MIGRATION16-OPTION-A-CANONICAL-HANDOFF.md",
+    "A:\\EAP Agent Project\\worktrees\\learner\\docs\\integration\\pdw3-wu2-learner-migration16-pins-option-a-20260812\\WU2-CHANGED-FILES.md",
+    "A:\\EAP Agent Project\\worktrees\\learner\\docs\\integration\\pdw3-wu2-learner-migration16-pins-option-a-20260812\\evidence\\probe_migration16_option_a.py",
+    "A:\\EAP Agent Project\\worktrees\\learner\\docs\\integration\\pdw3-wu2-learner-migration16-pins-option-a-20260812\\evidence\\probe-migration16-option-a.log",
+    "A:\\EAP Agent Project\\worktrees\\learner\\docs\\integration\\pdw3-wu2-learner-migration16-pins-option-a-20260812\\evidence\\pytest-ledger-pins-option-a.log",
+    "A:\\EAP Agent Project\\worktrees\\learner\\docs\\integration\\pdw3-wu2-learner-migration16-pins-option-a-20260812\\evidence\\pytest-wu2-ack-evidence-routes.log",
+    "A:\\EAP Agent Project\\worktrees\\learner\\docs\\integration\\pdw3-wu2-learner-migration16-pins-option-a-20260812\\evidence\\pytest-learner-sweep.log"
+  ],
+  "findings": [
+    "Option A is fully composed in the LEARNER product path: ONE shared integer ledger (schema_migrations.version INTEGER PRIMARY KEY + MIGRATIONS dict + app.database.upgrade/rollback). Global Migration 15 is uniquely review_scheduling_foundation (CORE-owned, body byte-identical to the accepted CORE candidate); global Migration 16 is uniquely learner_acknowledgement_persistence (LEARNER-owned). LATEST_MIGRATION_VERSION=16 and PLATFORM_DATABASE_MIGRATION_VERSION=16.",
+    "The canonical CORE-15 consumer seam is consumed, not duplicated: GLOBAL_MIGRATION_LEDGER_OWNER='CORE', GLOBAL_MIGRATION_LEDGER_VERSION_15=15, GLOBAL_MIGRATION_LEDGER_VERSION_15_NAME='review_scheduling_foundation', assert_global_migration_15_identity() and assert_global_migration_16_identity() guards (migrations.py:1177-1258) enforce no rename, no missing entry, no duplicate identity, and the composed LATEST=16 pin. One runner, one registry, one sqlite3 connection; no second scheduler/store/runner/composition root and no CORE ReviewService internals copied.",
+    "Genuine v14-era upgrade proven twice (tests + independent probe): a real migrations-1..14 database with Wave-2 rows and user_version=14 upgrades 14->15->16 without missing-key or duplicate-identity failure; Wave-2 rows (writing_tasks WT000001, learning_items LI000001) survive byte-for-byte; CORE review families (practice_activities/review_events/learning_item_scheduler_states) and learner_acknowledgements exist after upgrade.",
+    "Logical rollback 16->15->14 proven: ledger-only and non-destructive (CORE tables, acknowledgement table and ACK rows preserved), exact ledger rows removed at each step, non-adjacent rollback rejected with the one-step guard; idempotent re-apply restores exactly one row at 15 and one at 16 with data intact.",
+    "All 12 current-version-stale ==14 assertion sites (8 root files, per INT adjudication Section 5.1) are repaired to the governed latest source in the exact CORE WU1 R2 form, including the added rollback(connection,14) one-step steps the INT report required. Historical v14-era and fixture-safe ==14/==15 literals are retained literally (Section 5.2 set re-audited live; enumerated in WU2-CHANGED-FILES.md Section 3).",
+    "Acknowledgement persistence/evidence/route regressions are green at LATEST=16: focused WU2 six-file suite 161 passed; full tests/learner sweep 327 passed.",
+    "The previous run's recorded executor note (opencode-go/mimo-v2.5 in run-state.json) is the dispatch-tool record; the actual mandated parent route is deepseek/deepseek-v4-flash with ultra reasoning, and this continuation run (Darwin successor) executed the audit/verification/handoff directly under that route with PLANNING_DISABLED=1 semantics.",
+    "Resource hygiene: HEAD unchanged 7a9e4b470c41c0453a3795233f1bdd5c483d80ae; no commit/stage/push/PR/merge/promotion/reset/clean/restore/rebase; no Program Control write; no other worktree touched; every pre-existing dirty/untracked WU2 file preserved (initial vs final git status delta is only the new docs/integration/pdw3-wu2-learner-migration16-pins-option-a-20260812/ evidence package). pytest basetemp and probe temp SQLite files were routed to a writable transient location outside product data (C:\\Users\\16073\\.codex\\visualizations\\2026\\08\\11\\019ff07f-0388-7433-80f3-92e0b2ee496d). Recursive cleanup of those scratch directories was attempted but the sandbox approval-review backend failed with a provider error, so per policy the deletion was not routed around: the scratch directories (pdw3-wu2-mig16-basetemp*, pdw3-wu2-mig16-probe-tmp) remain in that scratch root and contain only transient test SQLite files; they are safe to delete by the user or a later approved run."
+  ],
+  "blocking_findings": [],
+  "dependencies_unlocked": [
+    "LEARNER-side Option A implementation is complete and verified: one global integer ledger, Migration 15 review_scheduling_foundation (CORE) and Migration 16 learner_acknowledgement_persistence (LEARNER), composed LATEST=16, v14-era 14->15->16 upgrade, logical rollback 16->15->14 and idempotent re-apply, Wave-2 data/table preservation, stale ==14 pins replaced with governed latest source",
+    "INT can now run the consolidated Wave-3 integration gate against the LEARNER candidate with the Option-A ledger composition already proven on the LEARNER side"
+  ],
+  "dependencies_remaining": [
+    "INT consolidated Wave-3 integration gate (gate_authority=INT): composition of the CORE ReviewService candidate and ledger merge validation across shared-core + learner",
+    "INT physical injection of the CORE ReviewService through create_app(core_review_service=...) using the typed shared boundary (CORE WU2 composition repair)",
+    "INT regeneration/qualification of the unowned cross-cutting route-contract pins (tests/test_v095b_router_contract.py exact-route pin, tests/test_v095d_api_contract.py endpoint pin) documented in the ACK-ROUTES repair handoff",
+    "Exact-SHA promotion decision (WAITING_USER; no promotion authority granted)",
+    "Learner memory foundation (learner_observed_evidence / learner_record_lifecycle lanes) remains separately gated; observed-evidence acknowledgements fail closed until that lane is integrated"
+  ],
+  "repair_owner": null,
+  "integration_required": true,
+  "promotion_eligible": false,
+  "user_decision_required": false,
+  "researcher_decision_required": false,
+  "returned_at": "2026-08-12T05:45:00Z",
+  "gate_authority": "INT",
+  "gate_evidence": [
+    "190 passed ledger/pins suite (14 files) + 7 new Option-A ledger tests; 161 passed WU2 acknowledgement/evidence/route suite; 327 passed full tests/learner sweep; all PYTEST_EXIT=0",
+    "Independent probe PROBE_OK/PROBE_EXIT=0: fresh upgrade=16, genuine v14-era upgrade 14->15->16 with Wave-2 preservation, rollback 16->15->14 ledger-only, idempotent re-apply, composed guards (15,'review_scheduling_foundation')/(16,'learner_acknowledgement_persistence')",
+    "CORE-15 body byte-identical to accepted CORE candidate (SHA-256 67a55c1708d8cccd5f98cffec932eb3649255ba4e6907c0295444528b447a08a; hash includes the terminal newline)",
+    "git status initial vs final delta limited to the new bounded evidence directory; HEAD unchanged 7a9e4b470c41c0453a3795233f1bdd5c483d80ae"
+  ],
+  "notes": "Handoff state after submission: HANDOFF_PENDING_ACCEPTANCE. The parent remains open until PROGRAM/INT explicitly accepts or rejects this handoff; no self-close. final_sha == starting_sha because no commit was created (candidate remains uncommitted in the authorized worktree per packet constraints). This is the canonical handoff for run PDW3-WU2-LEARNER-MIGRATION16-PINS-OPTION-A-20260812__20260812T045022Z__d2c40f; the packet accepted-dependency refs (CORE-WU2-DEPARTMENT-HANDOFF.json, CORE-GLOBAL-LEDGER-GUARD handoff, INT adjudication report) were consumed as the seam and pin-repair specification. Departmental GREEN only; DEPARTMENT GREEN is not INTEGRATION GREEN or promotion. No promotion authority granted. pytest basetemp and probe temp SQLite files were routed to a writable dedicated transient location outside product data because the shared default pytest temp root is not writable in this sandbox (environment limitation, not a product defect); residual scratch directories there are documented in findings and were left in place because approval-required cleanup could not be auto-reviewed (provider error)."
+}

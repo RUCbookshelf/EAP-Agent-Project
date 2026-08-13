@@ -1,0 +1,17 @@
+**Result: BLOCKED — environment failure, no files changed.**
+
+Every command execution in this session fails before running, so none of the mandatory contract steps (read context, TDD, focused tests, verified findings) could be performed.
+
+Evidence:
+
+- All `shell_command` invocations fail with the same sandbox-helper error, regardless of command, workdir, login mode, or timeout (tested across ~10 attempts with timeouts up to 240 s):
+  `windows sandbox: helper_unknown_error: setup refresh had errors`
+- The earliest attempt surfaced the underlying cause:
+  `orchestrator_helper_report_read_failed: setup helper exited with status Some(1); failed to read setup_error.json: parse C:\Users\16073\.codex\.sandbox\setup_error.json`
+- Non-shell tooling that still works (MCP resource listing, GitNexus repo index) is read-only and cannot run `pytest` or read the live worktree files; the GitNexus index is also stale (2026-08-07, main checkout) and not a substitute for the current `dept/feedback-learner` state.
+
+What I deliberately did not do: write `app/journey/service.py`, `cycles.py`, `transfer.py`, tests, or `findings.md` blind. The contract requires preserving existing Journey response keys and Wave-2 compatibility, and the verification contract requires running the focused tests — neither is possible without reading the current files or executing commands, and writing unverified edits or fabricated command counts would violate the honest-evidence rules.
+
+Blocked at: baseline `7a9e4b470c41c0453a3795233f1bdd5c483d80ae`, worktree `A:\EAP Agent Project\worktrees\learner`, branch `dept/feedback-learner` (not verified via git since no shell was available).
+
+To unblock, the sandbox setup helper needs to recover — likely clearing/repairing `C:\Users\16073\.codex\.sandbox\setup_error.json` or restarting the orchestrator helper — after which I can execute the full RETRY-2 contract: read the CHECKPOINT-002 dispatch surface and CORE WU1 handoff, implement the two typed projections, run the focused WU2 tests plus the existing Wave-2 journey tests, and record verified results in `workers/B/findings.md`.

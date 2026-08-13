@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.0.0",
+  "handoff_id": "PDW3-WU5-INT-CONSOLIDATED-WAVE3-INTEGRATION-GATE__REPAIR__20260812T154707Z__8e8c9",
+  "goal_id": "PDW3-WU5-INT-CONSOLIDATED-WAVE3-INTEGRATION-GATE__REPAIR",
+  "owner": "LEARNER",
+  "starting_sha": "7a9e4b470c41c0453a3795233f1bdd5c483d80ae",
+  "final_sha": "7a9e4b470c41c0453a3795233f1bdd5c483d80ae",
+  "branch": "dept/feedback-learner",
+  "worktree": "A:\\EAP Agent Project\\worktrees\\learner",
+  "verdict": "GREEN",
+  "tests": [
+    {
+      "name": "Focused WU5 consent/acknowledgement boundary regression (new)",
+      "result": "PASS",
+      "evidence": [
+        "3 passed, 0 failed, exit 0 (verification/pdw3-wu5-learner-consent-ack-repair-20260812/logs/pytest-wu5-focused.log)",
+        "Real SQLite composition boundary: genuine acknowledgement + durable tutor_consent row in the same migration-16 table; listing returns 200 and excludes non-acknowledgement rows",
+        "DB retains 2 rows (1 acknowledgement + 1 tutor_consent) after the listing; consent data preserved",
+        "Repository get() returns None for the consent row; WU2 control (no consent row) returns 200 with 1 item",
+        "RED reproduction before repair: 2 failed, 1 passed, exit 1 with ValueError 'tutor_consent' is not a valid AcknowledgementSourceKind (acknowledgement.py:132 via list_for_learner:220 and get:211)"
+      ]
+    },
+    {
+      "name": "Decisive LEARNER WU2 acknowledgement/persistence/route suite (six test_wu2_* files)",
+      "result": "PASS",
+      "evidence": [
+        "161 passed, 0 failed, exit 0 (verification/pdw3-wu5-learner-consent-ack-repair-20260812/logs/pytest-wu2-focused.log)",
+        "tests/learner/test_wu2_acknowledgement.py, test_wu2_persistence_evidence.py, test_wu2_journey_routes.py, test_wu2_journey_history_transfer.py, test_wu2_api_composition.py, test_wu2_practice_review_evidence.py",
+        "Same six-file focused set and count (161) as the parent INT gate's WU2 suite"
+      ]
+    },
+    {
+      "name": "Full tests/learner sweep (includes the 3 new WU5 boundary tests)",
+      "result": "PASS",
+      "evidence": [
+        "330 passed, 0 failed, exit 0 (verification/pdw3-wu5-learner-consent-ack-repair-20260812/logs/pytest-learner-sweep.log)",
+        "Prior INT gate learner sweep count 327 plus the 3 new test_wu5_consent_ack_boundary.py tests",
+        "Canonical invocation from the worktree root with the worktree-local .venv"
+      ]
+    }
+  ],
+  "artifacts": [
+    "A:\\EAP Agent Project\\worktrees\\learner\\docs\\integration\\pdw3-wu5-learner-consent-ack-repair-20260812\\LEARNER-WU5-CONSENT-ACK-REPAIR-REPORT.md",
+    "A:\\EAP Agent Project\\worktrees\\learner\\docs\\integration\\pdw3-wu5-learner-consent-ack-repair-20260812\\LEARNER-WU5-CONSENT-ACK-REPAIR-CANONICAL-HANDOFF.json",
+    "A:\\EAP Agent Project\\worktrees\\learner\\verification\\pdw3-wu5-learner-consent-ack-repair-20260812\\reproduction_and_run_facts.json",
+    "A:\\EAP Agent Project\\worktrees\\learner\\verification\\pdw3-wu5-learner-consent-ack-repair-20260812\\logs\\pytest-wu5-focused.log",
+    "A:\\EAP Agent Project\\worktrees\\learner\\verification\\pdw3-wu5-learner-consent-ack-repair-20260812\\logs\\pytest-wu2-focused.log",
+    "A:\\EAP Agent Project\\worktrees\\learner\\verification\\pdw3-wu5-learner-consent-ack-repair-20260812\\logs\\pytest-learner-sweep.log",
+    "A:\\EAP Agent Project\\worktrees\\learner\\tests\\learner\\test_wu5_consent_ack_boundary.py"
+  ],
+  "findings": [
+    "INT AMBER defect reproduced at the real one-application/one-SQLite composition boundary: a durable tutor_consent row (source_kind='tutor_consent') in the migration-16 learner_acknowledgements table raised ValueError 'tutor_consent' is not a valid AcknowledgementSourceKind in SQLiteAcknowledgementRepository._from_row (acknowledgement.py:132), surfacing as HTTP 500 on GET /api/v1/students/{id}/acknowledgements (list_for_learner:220) and as ValueError on get() (line 211).",
+    "Smallest LEARNER-owned read-side repair in the single authorized product file: _is_acknowledgement_row() discriminates by AcknowledgementSourceKind membership; get() returns None and list_for_learner() filters non-acknowledgement rows before _from_row. No schema change, migration, row deletion, or acknowledgement-semantics/API/route/composition-root change.",
+    "Composed-boundary proof (new regression, real SQLite): with both a genuine acknowledgement and a tutor_consent row for the same learner, the listing returns HTTP 200 with exactly the one acknowledgement and no consent item; the same single SQLite file retains 2 rows (1 acknowledgement + 1 tutor_consent), proving consent durability.",
+    "Existing WU2 behavior remains intact: decisive six-file WU2 suite passes 161/161 (matching the parent INT gate) and full tests/learner sweep passes 330/330 (327 prior + 3 new), all exit 0.",
+    "Scope and resource hygiene: only the packet-authorized product file was modified; only the new regression test and the two packet-scoped evidence/documentation directories were added; every pre-existing dirty/untracked WU2 file is preserved; no Git mutation; no Program Control write; no other worktree touched; HEAD unchanged 7a9e4b470c41c0453a3795233f1bdd5c483d80ae.",
+    "Route note (honest): the packet mandated opencode-go/deepseek-v4-flash/ultra; no deepseek-v4-flash subagent runtime was available in this execution environment, so the bounded packet was executed directly by the Codex executor with PLANNING_DISABLED semantics; no provider substitution occurred (mimo not used)."
+  ],
+  "blocking_findings": [],
+  "dependencies_unlocked": [
+    "LEARNER-owned read-boundary repair complete: composed tutor-consent rows no longer break the WU2 acknowledgement listing (HTTP 200, non-acknowledgement rows excluded, durable consent data preserved); the single INT AMBER driver for the consolidated Wave-3 gate is removed.",
+    "INT can now re-run the consolidated Wave-3 integration gate composition smoke against the repaired LEARNER repository and re-qualify the composed boundary."
+  ],
+  "dependencies_remaining": [
+    "INT re-gate (gate_authority=INT) of the composed consent/acknowledgement boundary with the repaired LEARNER candidate.",
+    "INT separately authorized follow-up: regenerate tests/test_wave2_router_assembly.py wave2 sub-router surface pin 19 -> 27 (exact +8 WU3 delta; outside this packet's write scope and not edited).",
+    "CORE review-router surface (5 /api/v1/review/* routes) remains an INT/owner decision for a later gate; the review service is already consumed and proven.",
+    "Exact-SHA promotion decision remains WAITING_USER; no promotion authority granted."
+  ],
+  "repair_owner": null,
+  "integration_required": true,
+  "promotion_eligible": false,
+  "user_decision_required": false,
+  "researcher_decision_required": false,
+  "returned_at": "2026-08-12T15:47:07Z",
+  "gate_authority": "INT",
+  "gate_evidence": [
+    "Preflight PASS: learner worktree on dept/feedback-learner at 7a9e4b470c41c0453a3795233f1bdd5c483d80ae; registry/current.json/status docs read and matched; parent INT WU5 AMBER handoff consumed.",
+    "RED reproduction before repair: focused regression 2 failed / 1 passed, exit 1, with the exact INT-documented ValueError path (acknowledgement.py:132 via list_for_learner:220 and get:211).",
+    "GREEN after repair: focused WU5 regression 3 passed; decisive WU2 six-file suite 161 passed; full tests/learner sweep 330 passed; all exit 0; logs under verification/pdw3-wu5-learner-consent-ack-repair-20260812/logs/.",
+    "Durability proof: listing returned 200 with exactly 1 acknowledgement item while the same SQLite file retained 2 rows (1 acknowledgement + 1 tutor_consent) after the listing.",
+    "Scope proof: only app/infrastructure/sqlite/repositories/acknowledgement.py modified (read-side discrimination); initial vs final git status delta confined to the new test and packet-scoped docs/verification paths; HEAD unchanged."
+  ],
+  "notes": "Handoff state after submission: HANDOFF_PENDING_ACCEPTANCE. The parent repair run remains open until PROGRAM/INT explicitly accepts or rejects this handoff; no self-close. final_sha == starting_sha because no commit was created (candidate remains uncommitted in the authorized worktree per packet constraints). Verdict GREEN is for the bounded LEARNER repair only: the INT AMBER defect is reproduced and fixed with direct evidence; this is DEPARTMENT qualification, not INTEGRATION GREEN and not promotion-eligible. INT must re-gate the composed boundary. The mandated opencode-go/deepseek-v4-flash/ultra route was not available in this execution environment; the packet was executed directly by the Codex executor with PLANNING_DISABLED semantics and no provider substitution (mimo not used), recorded honestly. pytest basetemp transient folders were routed under the packet verification scope and removed after runs; only the three log files and the facts JSON are retained as evidence."
+}

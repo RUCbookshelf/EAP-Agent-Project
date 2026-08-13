@@ -1,0 +1,22 @@
+**Worker D — DONE with two BLOCKED items.** Findings: [workers/D/findings.md](A:/EAP%20Agent%20Project/worktrees/learner/docs/integration/pdw3-wu2-learner-20260812/workers/D/findings.md)
+
+## What was wired (owned scope only)
+
+- `app/api/main.py`: registered Worker C's acknowledgement router exactly once in `_BUSINESS_ROUTERS`; `_build_services` now returns `acknowledgement` (service with an append-only placeholder store and `evidence_port=None`) and `practice_review_transfer` (`PracticeReviewTransferOrchestrator(core_review_service=None)` — typed optional CORE boundary, no copied CORE code, no second store/DB); both assigned to `app.state` via the single assignment point.
+- `app/api/deps.py`: added `get_acknowledgement_service` / `get_practice_review_transfer`.
+- `tests/learner/test_wu2_api_composition.py` (new, 12 tests, TDD: 9 failed RED → 17 GREEN with `test_composition_root.py`).
+- `tests/test_composition_root.py`: additive key assertion + one additive state test.
+
+## Verification (exact)
+
+- WU2 focused: **121 passed** (40+51+18+12)
+- Composition/router/Wave-2 pins: **28 passed, 2 failed** — (1) `test_v095b::test_route_contract_pinned`, NEW, caused by the required router inclusion; (2) `test_v095d`, **pre-existing baseline failure** (runtime 100 vs contract 81, before any D change). Both unowned, not edited.
+- Journey/Wave-2/learner regression: **396 passed**; practice/narrowing sweep: **251 passed**
+- Route inspection: 102 method+path pairs, **zero duplicates**; acknowledgement paths registered exactly once; one `Database` authority with all readers sharing its connection manager; HEAD unchanged `7a9e4b47`.
+
+## BLOCKED (unowned edits required; reported, not performed)
+
+1. **Journey route exposure**: adding `GET /journey/practice-history` and `.../authentic-application` requires editing `app/api/routers/journey.py` (outside scope). The service-level exposure is complete — `app.state.journey_service` carries Worker B's additive methods, fail-closed for unknown students.
+2. **Route-contract pins**: including the acknowledgement router requires updating the pinned `test_v095b` contract and regenerating the approved `tests/contracts/api_surface_contract.py` (approved cross-cutting process, unowned).
+
+Residual for INT: acknowledgement POST fails closed 503 (`evidence_unavailable`) until a production evidence lookup is composed; durable acknowledgement storage and the CORE `ReviewService` injection both remain INT-gated migration/composition steps. No commit, push, PR, merge, promotion, reset, clean, or Program Control write performed.

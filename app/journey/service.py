@@ -17,6 +17,10 @@ from typing import Any, Protocol, runtime_checkable
 from pydantic import BaseModel, ConfigDict
 
 from app.journey.cycles import CYCLE_MODEL_VERSION, build_cycles
+from app.journey.transfer import (
+    build_authentic_application,
+    build_practice_history,
+)
 
 EVENT_VERSION = "journey-event-v0.9.3-c"
 
@@ -443,6 +447,54 @@ class JourneyService:
             "cycles": cycles,
             "cycles_version": CYCLE_MODEL_VERSION,
         }
+
+    def get_practice_history(self, student_id: str) -> dict[str, Any]:
+        """Typed practice-history projection (activity/evidence only).
+
+        Additive read of the same learner-owned projection port used by
+        ``get_journey``. Review events are consumed structurally through the
+        optional ``list_review_events_by_student`` read when the injected
+        reader exposes it; otherwise the rating-channel section fails closed
+        to ``unavailable``. Never claims mastery/proficiency/ability/learning
+        gain and never implies authentic transfer.
+        """
+        self._require_learner(student_id)
+        targets = self.projection_reader.list_practice_targets(student_id)
+        attempts = self.projection_reader.list_exercise_attempts_by_student(
+            student_id)
+        evaluations = (
+            self.projection_reader.list_practice_evaluations_by_student(
+                student_id))
+        review_reader = getattr(
+            self.projection_reader, "list_review_events_by_student", None)
+        review_events = (
+            review_reader(student_id) if review_reader is not None else None)
+        return build_practice_history(
+            student_id, targets, attempts, evaluations, review_events)
+
+    def get_authentic_application(self, student_id: str) -> dict[str, Any]:
+        """Typed authentic writing application observation projection.
+
+        Additive read built only from later writing/submission observations
+        and the existing within-task / transfer candidate concepts. Practice
+        records never merge into this channel; non-comparable or insufficient
+        observations stay explicitly non-comparable/insufficient and no
+        causal transfer, mastery, proficiency, ability, or learning-gain
+        inference is produced.
+        """
+        self._require_learner(student_id)
+        essays = self.projection_reader.list_essays_by_student(student_id)
+        responses = self.projection_reader.list_within_task_responses(
+            student_id)
+        transfers = (
+            self.projection_reader.list_transfer_evidence_candidates(
+                student_id))
+        return build_authentic_application(
+            student_id, essays, responses, transfers)
+
+    def _require_learner(self, student_id: str) -> None:
+        if self.student_reader.get_student(student_id) is None:
+            raise LookupError("Student not found.")
 
     @staticmethod
     def _classify_state(

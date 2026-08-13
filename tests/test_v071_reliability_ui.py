@@ -8,7 +8,7 @@ from fastapi.testclient import TestClient
 from app.api.main import create_app
 from app.config import load_settings
 from app.version import PLATFORM_APPLICATION_VERSION
-from app.database import Database, rollback, upgrade
+from app.database import Database, LATEST_MIGRATION_VERSION, rollback, upgrade
 from app.feedback import FeedbackReliabilityService, FeedbackValidator
 from app.llm import FeedbackContext, LLMProvider, LocalDemoProvider, ProviderOutputError, ProviderRouter
 from app.models import EssaySubmission, LongitudinalAssessment, StructuredFeedback
@@ -269,12 +269,14 @@ def test_migration_9_is_additive_persists_provider_status_and_rolls_back_logical
         "V071-MIG", "Parks support public health and community activities."
     ), synthetic=True)
     with repository.connect() as connection:
-        assert connection.execute("PRAGMA user_version").fetchone()[0] == 14
+        assert connection.execute("PRAGMA user_version").fetchone()[0] == LATEST_MIGRATION_VERSION
         columns = {row[1] for row in connection.execute("PRAGMA table_info(feedback_records)")}
         stored = connection.execute(
             "SELECT provider_status_json FROM feedback_records WHERE essay_id=?", (result.essay_id,)
         ).fetchone()[0]
         assert "fallback_used" in stored
+        assert rollback(connection, 15) == 15
+        assert rollback(connection, 14) == 14
         assert rollback(connection, 13) == 13
         assert rollback(connection, 12) == 12
         assert rollback(connection, 11) == 11
@@ -282,7 +284,7 @@ def test_migration_9_is_additive_persists_provider_status_and_rolls_back_logical
         assert connection.execute(
             "SELECT version FROM configuration_versions WHERE status='active'"
         ).fetchone()[0] == "config-v0.8.2"
-        assert upgrade(connection) == 14
+        assert upgrade(connection) == LATEST_MIGRATION_VERSION
         assert repository._configuration_repository.get_active_configuration().version == "config-v0.9.0"
     assert settings.application_version == PLATFORM_APPLICATION_VERSION
 

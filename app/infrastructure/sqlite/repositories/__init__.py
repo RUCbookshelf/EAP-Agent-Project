@@ -1,3 +1,7 @@
+from .acknowledgement import (
+    SQLiteAcknowledgementEvidenceLookup,
+    SQLiteAcknowledgementRepository,
+)
 from .analysis import SQLiteAnalysisRepository
 from .calf import SQLiteCalfRepository
 from .configuration import SQLiteConfigurationRepository
@@ -10,6 +14,8 @@ from .system import SQLiteSystemRepository
 from .wave2 import SQLiteWave2Repository
 
 __all__ = [
+    "SQLiteAcknowledgementEvidenceLookup",
+    "SQLiteAcknowledgementRepository",
     "SQLiteAnalysisRepository",
     "SQLiteCalfRepository",
     "SQLiteConfigurationRepository",

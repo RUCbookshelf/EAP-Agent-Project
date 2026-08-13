@@ -1,15 +1,22 @@
-"""Wave-2 Goal A migration tests: additive migration 14.
+"""Wave-2 Goal A migration tests: additive migration 14 under LATEST=16.
 
-Covers: fresh-DB upgrade to 14 with the four Wave-2 table families,
-non-destructive one-step logical rollback 14->13 (ledger only; tables and
-data preserved), idempotent re-apply, legacy-DB upgrade without history
-loss, and DEFAULT coverage for minimal inserts.
+Covers: fresh-DB upgrade to LATEST (15) with the four Wave-2 table families,
+non-destructive one-step logical rollback chain 15->14->13 (ledger only;
+tables and data preserved), idempotent re-apply, legacy-DB upgrade without
+history loss, DEFAULT coverage for minimal inserts, and the v14-era upgrade
+path (a genuine migration-14 database with Wave-2 rows upgraded to 16)
+preserving data.
 
 Contract (Goal PDW2-A-CORE-PERSISTENCE): migration 14 is additive and
 non-destructive: it creates only new tables (writing_tasks,
 submission_revisions, learning_observations, learning_items) plus indexes.
 It does not alter existing table DDL and does not touch the deferred
-``essays.domain`` discriminator / D-09 lanes.
+``essays.domain`` discriminator / D-09 lanes. Under the user-authorized
+Option A ledger (PDW3-WU2-LEARNER-MIGRATION16-PINS-OPTION-A-20260812),
+Migration 15 is CORE-owned ``review_scheduling_foundation`` and Migration 16
+is LEARNER acknowledgement persistence (``learner_acknowledgement_persistence``);
+16 is the current LATEST. Historical v14-era upgrade paths must still prove
+data preservation.
 """
 
 from __future__ import annotations
@@ -19,11 +26,18 @@ import sqlite3
 from app.database import Database, LATEST_MIGRATION_VERSION, rollback
 
 MIGRATION_14_NAME = "wave2_revision_loop_and_learner_model"
+MIGRATION_15_NAME = "review_scheduling_foundation"
+MIGRATION_16_NAME = "learner_acknowledgement_persistence"
 WAVE2_TABLES = (
     "writing_tasks",
     "submission_revisions",
     "learning_observations",
     "learning_items",
+)
+CORE_REVIEW_TABLES = (
+    "practice_activities",
+    "review_events",
+    "learning_item_scheduler_states",
 )
 
 
@@ -47,25 +61,43 @@ def _seed_student_and_essays(connection: sqlite3.Connection) -> None:
     )
 
 
-def test_fresh_db_upgrades_to_migration_14_with_wave2_tables(tmp_path):
+def test_fresh_db_upgrades_to_latest_with_wave2_tables(tmp_path):
     repository = Database(tmp_path / "wave2.db")
     repository.initialize()
-    assert LATEST_MIGRATION_VERSION == 14
-    assert repository._system_repository.migration_version() == 14
+    assert repository._system_repository.migration_version() == LATEST_MIGRATION_VERSION
     with repository.connect() as connection:
         names = _table_names(connection)
         assert set(WAVE2_TABLES) <= names
-        ledger = connection.execute(
+        ledger_14 = connection.execute(
             "SELECT name FROM schema_migrations WHERE version=14"
         ).fetchone()
-        assert ledger is not None
-        assert ledger["name"] == MIGRATION_14_NAME
+        assert ledger_14 is not None
+        assert ledger_14["name"] == MIGRATION_14_NAME
+        ledger_15 = connection.execute(
+            "SELECT name FROM schema_migrations WHERE version=15"
+        ).fetchone()
+        assert ledger_15 is not None
+        assert ledger_15["name"] == MIGRATION_15_NAME
+        ledger_16 = connection.execute(
+            "SELECT name FROM schema_migrations WHERE version=16"
+        ).fetchone()
+        assert ledger_16 is not None
+        assert ledger_16["name"] == MIGRATION_16_NAME
+        assert set(CORE_REVIEW_TABLES) <= names
+        assert "learner_acknowledgements" in names
 
 
-def test_rollback_14_to_13_is_non_destructive_and_reapply_is_idempotent(tmp_path):
+def test_v14_era_wave2_data_survives_one_step_rollbacks_and_latest_upgrade(
+    tmp_path,
+):
     repository = Database(tmp_path / "rollback14.db")
     repository.initialize()
     with repository.connect() as connection:
+        # Construct a genuine migration-14-era database: one-step rollbacks
+        # from LATEST (16) to 15 then 14, then seed Wave-2 rows at version 14.
+        assert rollback(connection, 15) == 15
+        assert rollback(connection, 14) == 14
+        assert int(connection.execute("PRAGMA user_version").fetchone()[0]) == 14
         _seed_student_and_essays(connection)
         connection.execute(
             "INSERT INTO writing_tasks(task_id, student_id, writing_prompt,"
@@ -73,10 +105,11 @@ def test_rollback_14_to_13_is_non_destructive_and_reapply_is_idempotent(tmp_path
             " '2026-01-01T00:00:00+00:00')"
         )
     with repository.connect() as connection:
+        # One-step logical rollback 14 -> 13: ledger only, tables and data
+        # preserved.
         result = rollback(connection, 13)
         assert result == 13
         assert int(connection.execute("PRAGMA user_version").fetchone()[0]) == 13
-        # Logical rollback: the Wave-2 tables and their data are preserved.
         assert set(WAVE2_TABLES) <= _table_names(connection)
         assert (
             connection.execute(
@@ -90,8 +123,10 @@ def test_rollback_14_to_13_is_non_destructive_and_reapply_is_idempotent(tmp_path
             ).fetchone()
             is not None
         )
+    # Re-apply: the v14-era Wave-2 rows must survive the 13 -> 14 -> 15 -> 16
+    # upgrade (v14-era upgrade path to LATEST preserves data).
     repository.initialize()
-    assert repository._system_repository.migration_version() == 14
+    assert repository._system_repository.migration_version() == LATEST_MIGRATION_VERSION
     with repository.connect() as connection:
         assert (
             connection.execute(
@@ -101,7 +136,7 @@ def test_rollback_14_to_13_is_non_destructive_and_reapply_is_idempotent(tmp_path
         )
 
 
-def test_legacy_database_upgrades_through_14_without_losing_history(tmp_path):
+def test_legacy_database_upgrades_to_latest_without_losing_history(tmp_path):
     path = tmp_path / "legacy14.db"
     with sqlite3.connect(path) as connection:
         connection.executescript(
@@ -127,7 +162,7 @@ def test_legacy_database_upgrades_through_14_without_losing_history(tmp_path):
         )
     repository = Database(path)
     repository.initialize()
-    assert repository._system_repository.migration_version() == 14
+    assert repository._system_repository.migration_version() == LATEST_MIGRATION_VERSION
     assert (
         repository._submission_repository.get_submission_bundle(1)["essay_text"]
         == "Legacy essay."

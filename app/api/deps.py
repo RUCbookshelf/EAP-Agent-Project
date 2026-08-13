@@ -115,6 +115,14 @@ def get_research(request: Request):
     return request.app.state.research
 
 
+def get_acknowledgement_service(request: Request):
+    return request.app.state.acknowledgement_service
+
+
+def get_practice_review_transfer(request: Request):
+    return request.app.state.practice_review_transfer
+
+
 def get_practice_submission_reader(request: Request):
     return request.app.state.practice_submission_reader
 

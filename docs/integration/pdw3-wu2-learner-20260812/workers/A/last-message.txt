@@ -1,0 +1,26 @@
+**Status: BLOCKED — environment unavailable; no files changed, no tests run.**
+
+## What happened
+
+Every tool execution in this session failed at sandbox setup with the identical infrastructure error:
+
+```
+execution error: Io(Custom { kind: Other, error: "windows sandbox: helper_unknown_error: setup refresh had errors" })
+```
+
+I made 14 `shell_command` attempts (varying login/workdir/timeout parameters), all failing before any command could run. The patch-based file write also failed. The memory lookup failed with the same error, so no prior-run context could be read either.
+
+## Exact boundary
+
+The execution contract requires, before any implementation: reading the CHECKPOINT-002 dispatch surface, the CORE WU1 handoff, CORE `app/review` contracts, and the learner `app/practice` modules; then a TDD red/green cycle run with the worktree Python environment, with exact commands/counts recorded in `workers/A/findings.md`. None of that is possible while the sandbox helper cannot initialize, and I will not write ungrounded code into the protected worktree without being able to read the existing contracts or verify anything.
+
+## Result
+
+- Changed files: none (the findings-file write at `docs/integration/pdw3-wu2-learner-20260812/workers/A/findings.md` also failed, so no file exists there)
+- Tests: 0 collected, 0 passed, 0 failed — no verification performed
+- Commits / Program Control writes: none
+- Risks: the worktree state at baseline `7a9e4b47` could not even be re-verified with `git status`; nothing was mutated, so RETRY-3 can resume from the same baseline
+
+## Required for retry
+
+A session whose shell sandbox initializes successfully. Once available, the run proceeds exactly as contracted: read the five context groups → write focused tests first → observe red → implement the smallest owned-scope change → observe green → record exact test commands and output counts in the findings file.
