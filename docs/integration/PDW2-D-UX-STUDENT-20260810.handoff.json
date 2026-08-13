@@ -1,0 +1,108 @@
+{
+  "schema_version": "1.1.0",
+  "handoff_id": "PDW2-D-UX-STUDENT__20260810T111638Z__c9e7a5",
+  "goal_id": "PDW2-D-UX-STUDENT",
+  "owner": "UX",
+  "starting_sha": "59500127ca2cf798ae730cee2a5a3e16707c320c",
+  "final_sha": "1c89454e7f5a2c9b05138e1852320c0b01c578f2",
+  "branch": "dept/frontend",
+  "worktree": "A:\\EAP Agent Project\\worktrees\\frontend",
+  "verdict": "GREEN",
+  "tests": [
+    {
+      "name": "wave2-mock-contracts-and-scenarios",
+      "result": "PASS",
+      "evidence": [
+        "tests/wave2/test_wave2_mock_backend.py: 15 tests - contract shapes for task/version/observation/plan/scaffold/learning-item/learner views; new learner never fabricates history; returning learner seeds history; append-only revisions"
+      ]
+    },
+    {
+      "name": "wave2-http-client",
+      "result": "PASS",
+      "evidence": [
+        "tests/wave2/test_wave2_api_client.py: routes/methods for revision/personalized/learner endpoints; 404/405/503+connection => Wave2ApiUnavailable; 422/500 => Wave2ApiClientError; probe cached"
+      ]
+    },
+    {
+      "name": "wave2-gateway-fallback",
+      "result": "PASS",
+      "evidence": [
+        "tests/wave2/test_wave2_gateway.py: auto mode guided when available; graceful degradation to legacy /api/v1/submissions flow when unavailable; forced modes; legacy scaffold honestly unavailable; guided revision observation; guided/legacy history views"
+      ]
+    },
+    {
+      "name": "wave2-views-no-internals",
+      "result": "PASS",
+      "evidence": [
+        "tests/wave2/test_wave2_views.py: allowlist view shapes; FORBIDDEN_VIEW_KEYS never present; hashes/run ids/internal ids never pass through; legacy feedback mapping"
+      ]
+    },
+    {
+      "name": "wave2-journey-cases-a-f",
+      "result": "PASS",
+      "evidence": [
+        "tests/wave2/test_wave2_journey_ui.py: 7 AppTest tests through the real renderers (harness_wave2_studio.py) - CASE A new learner no fabricated history; B revise/resubmit; C returning learner history+plan; D scaffold expand+revise; E history+LearningItems; F standard-mode degradation; F2 insufficient states; rendered UI contains no internal ids/hashes"
+      ]
+    },
+    {
+      "name": "existing-student-ui-regression",
+      "result": "PASS",
+      "evidence": [
+        "test_streamlit.py 5 passed/1 skipped; test_ui_api_client_v02+test_student_experience_v094b+test_v095c_ui_boundaries+test_v097d_design_system+test_v097c_wu3_journey_ui 94 passed/1 skipped; contracts/test_wave1_domain_isolation+test_v097c_wu2_journey_navigation+test_v097a_priority_revision_cycle 61 passed"
+      ]
+    },
+    {
+      "name": "resource-hygiene",
+      "result": "PASS",
+      "evidence": [
+        "git diff --stat empty (zero tracked modifications); only new untracked files; pre-existing untracked evidence preserved; no push/PR/promotion"
+      ]
+    }
+  ],
+  "artifacts": [
+    "A:\\EAP Agent Project\\worktrees\\frontend\\app\\ui\\wave2\\contracts.py",
+    "A:\\EAP Agent Project\\worktrees\\frontend\\app\\ui\\wave2\\client.py",
+    "A:\\EAP Agent Project\\worktrees\\frontend\\app\\ui\\wave2\\mock.py",
+    "A:\\EAP Agent Project\\worktrees\\frontend\\app\\ui\\wave2\\views.py",
+    "A:\\EAP Agent Project\\worktrees\\frontend\\app\\ui\\wave2\\gateway.py",
+    "A:\\EAP Agent Project\\worktrees\\frontend\\app\\ui\\wave2\\locale.py",
+    "A:\\EAP Agent Project\\worktrees\\frontend\\app\\ui\\wave2\\journey.py",
+    "A:\\EAP Agent Project\\worktrees\\frontend\\app\\ui\\wave2\\history.py",
+    "A:\\EAP Agent Project\\worktrees\\frontend\\tests\\wave2\\",
+    "A:\\EAP Agent Project\\worktrees\\frontend\\tests\\harness_wave2_studio.py",
+    "A:\\EAP Agent Project\\worktrees\\frontend\\docs\\integration\\PDW2-D-UX-STUDENT-20260810.md",
+    "A:\\EAP Agent Project\\worktrees\\frontend\\docs\\integration\\PDW2-D-UX-STUDENT-20260810.handoff.json"
+  ],
+  "findings": [
+    "Student Writing Experience v1 delivered as an additive module family under app/ui/wave2 with real Streamlit renderers (journey + history) exercised via AppTest through the repo-standard harness pattern.",
+    "Wave-2 contracts integrated via Wave2ApiClient (HTTP) and MockWave2Client (tests); Wave2Gateway auto-probes the namespace and degrades to the existing writing/feedback flow while Wave-2 endpoints are unavailable, without fabricating Wave-2 features.",
+    "Student surfaces prioritize what to revise / why / what to try / have I seen this before / what improved or stayed stable / what to learn next; raw technical internals are filtered by an allowlist (FORBIDDEN_VIEW_KEYS) and asserted absent from rendered UI.",
+    "Locale strings ship in app/ui/wave2/locale.py with additive runtime registration into the app locale; frozen locale JSON files untouched (INT may fold them into locales/*.json).",
+    "Studio session state (wave2_* keys) is session-local and not yet added to student_context.LEARNER_SCOPED_KEYS; learner switching mid-journey is handled by starting a new task (documented follow-up).",
+    "Guided history() assembles tasks from LearningItem task references plus in-session tasks because the v1 contract has no learner-task listing endpoint; INT may add a listing endpoint or persist tasks at integration."
+  ],
+  "blocking_findings": [],
+  "dependencies_unlocked": [
+    "Wave-2 Student Writing Experience v1 UI surfaces ready for integration against the Wave-2 API contracts (revision/personalized/learner) at PDW2-WU2-INT-GATE."
+  ],
+  "dependencies_remaining": [
+    "CORE Wave-2 assembly + migration-14 repositories (PDW2-A) at integration",
+    "LEARNER longitudinal model wiring (PDW2-B) at integration",
+    "L2 revision loop + personalized bridge wiring (PDW2-C) at integration",
+    "CORPUS written-corpus routing swap (PDW2-E) at integration",
+    "INT wiring steps: mount studio/history pages in app/ui/streamlit_app.py, build Wave2Gateway from Wave2ApiClient + WritingFeedbackApiClient (mode auto), optional locale fold-in"
+  ],
+  "repair_owner": null,
+  "integration_required": true,
+  "promotion_eligible": false,
+  "user_decision_required": false,
+  "researcher_decision_required": false,
+  "returned_at": "2026-08-10T14:20:00Z",
+  "gate_authority": null,
+  "gate_evidence": [
+    "69/69 wave2 tests (mock contracts, HTTP client, gateway fallback, view allowlist, AppTest CASE A-F)",
+    "160 passed / 2 skipped across quick existing student UI + design-token + domain-isolation suites",
+    "zero tracked modifications; new files only"
+  ],
+  "notes": "Wave-2 Goal D DEPARTMENT GREEN; candidate local-only; no promotion/push/PR. Full canonical suite intentionally not run per Program instruction."
+}

@@ -19,6 +19,7 @@ from app.ui.wave2.gateway import Wave2Gateway
 from app.ui.wave2.history import render_wave2_history_page
 from app.ui.wave2.journey import render_wave2_studio_page
 from app.ui.pages.student_pages import (
+    render_adaptive_learning_page,
     render_feedback_page,
     render_learning_journey_page,
     render_practice_page,
@@ -61,6 +62,7 @@ STUDENT_PAGES = {
     "student_revision": "student_revision_title",
     "student_practice": "practice",
     "student_journey": "learning_journey",
+    "student_adaptive": "student_adaptive_title",
     "student_wave2_studio": "student_wave2_studio_title",
     "student_wave2_history": "student_wave2_history_title",
 }
@@ -222,6 +224,8 @@ def run() -> None:
             render_practice_page(api_client, lang)
         elif page_key == "student_journey":
             render_learning_journey_page(api_client, lang)
+        elif page_key == "student_adaptive":
+            render_adaptive_learning_page(wave2_gateway, lang)
         elif page_key == "student_wave2_studio":
             render_wave2_studio_page(wave2_gateway, lang)
         elif page_key == "student_wave2_history":

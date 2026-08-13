@@ -41,6 +41,20 @@ PERSONALIZED_SCAFFOLD = "/api/v1/wave2/personalized/scaffold"
 PERSONALIZED_LEARNING_ITEMS = "/api/v1/wave2/personalized/learning-items"
 PERSONALIZED_LEARNING_ITEM = "/api/v1/wave2/personalized/learning-items/{learning_item_id}"
 
+# -- Wave-3 WU3 adaptive practice + tutor (accepted L2 WU3 contract) ---------
+ADAPTIVE_PRACTICE_RECOMMEND = (
+    "/api/v1/wave2/personalized/adaptive-practice/recommend"
+)
+ADAPTIVE_PRACTICE_SELECT = "/api/v1/wave2/personalized/adaptive-practice/select"
+ADAPTIVE_PRACTICE_EVALUATE = (
+    "/api/v1/wave2/personalized/adaptive-practice/evaluate"
+)
+PERSONALIZED_MINI_WRITING = "/api/v1/wave2/personalized/mini-writing"
+TUTOR_RECOMMEND = "/api/v1/wave2/personalized/tutor/recommend"
+TUTOR_ACCEPT = "/api/v1/wave2/personalized/tutor/accept"
+TUTOR_DECLINE = "/api/v1/wave2/personalized/tutor/decline"
+TUTOR_OBSERVATION = "/api/v1/wave2/personalized/tutor/observation"
+
 # -- learner API -------------------------------------------------------------
 LEARNER_OBSERVATIONS = "/api/v1/wave2/learner/observations"
 LEARNER_OBSERVATION = "/api/v1/wave2/learner/observations/{observation_id}"
@@ -112,6 +126,19 @@ STUDENT_INTERNAL_KEYS = frozenset({
     "available_levels",
     "evidence",
     "occurrences",
+    # Wave-3 WU3 raw internals (accepted L2 WU3 contract fields). These are
+    # technical feature/record/scheduling internals that must never reach a
+    # student-facing view; the gateway builds allowlisted views instead.
+    "target_code",
+    "source_priority_id",
+    "evidence_ids",
+    "exercise_version",
+    "evaluator_version",
+    "learning_item_ids",
+    "later_submission_id",
+    "pipeline_adapter",
+    "positive_observations",
+    "due",
 })
 
 # Written-context -> legacy genre mapping used by the degraded (standard)

@@ -1,0 +1,118 @@
+{
+  "schema_version": "1.0.0",
+  "handoff_id": "PDW3-WU4-UX-ADAPTIVE-LEARNING-EXPERIENCE-20260812__20260812T130000Z__d6ed5d",
+  "goal_id": "PDW3-WU4-UX-ADAPTIVE-LEARNING-EXPERIENCE-20260812",
+  "owner": "UX",
+  "starting_sha": "7a9e4b470c41c0453a3795233f1bdd5c483d80ae",
+  "final_sha": "7a9e4b470c41c0453a3795233f1bdd5c483d80ae",
+  "branch": "dept/frontend",
+  "worktree": "A:\\EAP Agent Project\\worktrees\\frontend",
+  "verdict": "GREEN",
+  "tests": [
+    {
+      "name": "Focused WU4 suite (tests/test_wave3_wu4_adaptive_ux.py + harness_wu4_adaptive.py)",
+      "result": "PASS",
+      "evidence": [
+        "47 passed, 0 failed, exit 0 (evidence: pytest-wu4-focused.log)",
+        "Red phase captured first: collection failed with ImportError cannot import name ADAPTIVE_PRACTICE_EVALUATE before implementation (basetemp-red)",
+        "Covers: exact 8 WU3 POST endpoints; allowlist policy additions; client exact paths/payloads + fail-closed classification; gateway student-safe views with recursive no-internal-keys guard; graceful degradation (unavailable + legacy mode); learner isolation; insufficient-history; selection/evaluation/mini-writing/tutor views; AppTest Today page recommendation/choice/evaluation/self-rating/next-step; Tutor consent accept/decline/insufficient/positive; mini-writing handoff with/without session task; Today->Journey/Practice navigation; zero writes on read-only render; en/zh locale parity; no forbidden wording"
+      ]
+    },
+    {
+      "name": "Affected v0.9.7-C/D + design-system/contract regressions",
+      "result": "PASS",
+      "evidence": [
+        "262 passed, 0 failed, exit 0 (evidence: pytest-v097cd-affected.log)",
+        "test_v095c_feature_extraction + test_v095d_port_contract + test_hybrid_components_v094a + test_design_tokens_v094a + test_v097d_design_system + test_v097d_wu1_writing_feedback + test_v097d_wu2_revision_practice + test_v097c_wu1_journey_cycles + test_v097c_wu2_journey_navigation + test_v097c_wu3_journey_ui + test_v097c_wu4_release"
+      ]
+    },
+    {
+      "name": "Wave-2 + Practice/Journey + student UI regression",
+      "result": "PASS",
+      "evidence": [
+        "336 passed, 3 skipped, exit 0 (evidence: pytest-wave2-affected.log)",
+        "test_wave2_l2_api/personalized/models/repository/repository_consume/revision_loop/corpus_routing + test_wave2_router_assembly + test_v095d_parity + test_student_experience_v094b + test_streamlit + test_streamlit_api_integration_v02 + test_ui_api_client_v02 + test_v096c1_no_priority_workflow + harness_wave2_studio + test_v097b_wu4_practice_task + test_v097b_wu5_completion + test_v097b_wu6_journey_projection + test_journey_v093c + test_practice_v09 + test_v095f6d_practice_boundary_narrowing + test_v095f6a0_revision_capability_completion"
+      ]
+    },
+    {
+      "name": "Rendered locale/viewport matrix (real stack, en/zh x 1280x900/390x844)",
+      "result": "PASS",
+      "evidence": [
+        "4/4 combinations PASS, exit 0 (evidence: rendered_wu4_matrix_evidence.json + screenshots/)",
+        "0 exceptions, 0 overflow, 0 raw locale keys, 0 forbidden wording, 0 console/page errors, 0 remote requests; honest degraded/unavailable state rendered (WU3 not composed in this worktree); zero DB writes on render and reload (zero_writes_overall true)",
+        "Whole-app AppTest boot: streamlit_app.py -> sidebar -> Today page renders without exception"
+      ]
+    },
+    {
+      "name": "Route-surface pin regeneration check (INT-owned pins)",
+      "result": "FAIL",
+      "evidence": [
+        "8 passed, 1 failed, exit 1 (evidence: pytest-route-pins.log)",
+        "test_v095d_api_contract.py::test_endpoint_set_matches_runtime_and_is_fully_classified asserts 100 == 81",
+        "Pre-existing INT-owned cross-cutting route/endpoint pin: merged Wave-2 master surface is 100 pairs while the v0.9.5-D pin pins 81; identical dependency recorded by the accepted LEARNER WU2 and L2 WU3 handoffs (INT regeneration/qualification at the WU5 gate)",
+        "WU4 changes no app/api, app/l2, or INT pin file; runtime surface unchanged by this diff"
+      ]
+    }
+  ],
+  "artifacts": [
+    "A:\\EAP Agent Project\\worktrees\\frontend\\docs\\integration\\pdw3-wu4-ux-adaptive-learning-experience-20260812\\UX-WU4-ADAPTIVE-LEARNING-EXPERIENCE-REPORT.md",
+    "A:\\EAP Agent Project\\worktrees\\frontend\\docs\\integration\\pdw3-wu4-ux-adaptive-learning-experience-20260812\\UX-WU4-ADAPTIVE-LEARNING-EXPERIENCE-HANDOFF.json",
+    "A:\\EAP Agent Project\\worktrees\\frontend\\app\\ui\\wave2\\contracts.py",
+    "A:\\EAP Agent Project\\worktrees\\frontend\\app\\ui\\wave2\\client.py",
+    "A:\\EAP Agent Project\\worktrees\\frontend\\app\\ui\\wave2\\gateway.py",
+    "A:\\EAP Agent Project\\worktrees\\frontend\\app\\ui\\features\\student\\adaptive.py",
+    "A:\\EAP Agent Project\\worktrees\\frontend\\app\\ui\\pages\\student_pages.py",
+    "A:\\EAP Agent Project\\worktrees\\frontend\\app\\ui\\streamlit_app.py",
+    "A:\\EAP Agent Project\\worktrees\\frontend\\locales\\en.json",
+    "A:\\EAP Agent Project\\worktrees\\frontend\\locales\\zh_CN.json",
+    "A:\\EAP Agent Project\\worktrees\\frontend\\tests\\test_wave3_wu4_adaptive_ux.py",
+    "A:\\EAP Agent Project\\worktrees\\frontend\\tests\\harness_wu4_adaptive.py",
+    "A:\\EAP Agent Project\\worktrees\\frontend\\tests\\test_v095c_feature_extraction.py",
+    "A:\\EAP Agent Project\\worktrees\\frontend\\tests\\test_v097d_design_system.py",
+    "A:\\EAP Agent Project\\worktrees\\frontend\\tests\\test_v097d_wu2_revision_practice.py",
+    "A:\\EAP Agent Project\\worktrees\\frontend\\verification\\pdw3-wu4-ux-adaptive-learning-experience-20260812\\pytest-wu4-focused.log",
+    "A:\\EAP Agent Project\\worktrees\\frontend\\verification\\pdw3-wu4-ux-adaptive-learning-experience-20260812\\pytest-v097cd-affected.log",
+    "A:\\EAP Agent Project\\worktrees\\frontend\\verification\\pdw3-wu4-ux-adaptive-learning-experience-20260812\\pytest-wave2-affected.log",
+    "A:\\EAP Agent Project\\worktrees\\frontend\\verification\\pdw3-wu4-ux-adaptive-learning-experience-20260812\\pytest-route-pins.log",
+    "A:\\EAP Agent Project\\worktrees\\frontend\\verification\\pdw3-wu4-ux-adaptive-learning-experience-20260812\\rendered_wu4_matrix_evidence.json",
+    "A:\\EAP Agent Project\\worktrees\\frontend\\verification\\pdw3-wu4-ux-adaptive-learning-experience-20260812\\wu4_browser_matrix.py",
+    "A:\\EAP Agent Project\\worktrees\\frontend\\verification\\pdw3-wu4-ux-adaptive-learning-experience-20260812\\git-status-final.txt",
+    "A:\\EAP Agent Project\\worktrees\\frontend\\verification\\pdw3-wu4-ux-adaptive-learning-experience-20260812\\screenshots\\en_1280x900_adaptive_today.png",
+    "A:\\EAP Agent Project\\worktrees\\frontend\\verification\\pdw3-wu4-ux-adaptive-learning-experience-20260812\\screenshots\\zh_1280x900_adaptive_today.png",
+    "A:\\EAP Agent Project\\worktrees\\frontend\\verification\\pdw3-wu4-ux-adaptive-learning-experience-20260812\\screenshots\\en_390x844_adaptive_today.png",
+    "A:\\EAP Agent Project\\worktrees\\frontend\\verification\\pdw3-wu4-ux-adaptive-learning-experience-20260812\\screenshots\\zh_390x844_adaptive_today.png"
+  ],
+  "findings": [
+    "The WU3 client/gateway surface is additive and bounded: eight exact endpoints, student-safe allowlisted views, fail-closed classification, and graceful degradation; no backend semantic is redefined.",
+    "The Today/adaptive page is real-API-backed over the accepted WU3 contract: recommend/select/evaluate/mini-writing/tutor recommend/accept/decline/observation all map to the exact endpoints; honest unavailable/insufficient-history states are first-class and tested.",
+    "Tutor execution is consent-gated with a visible explicit checkbox using the exact accepted scope (proactive_tutor_execution) and version (learner-consent-v0.1.0); decline is side-effect safe; positive observations carry bounded non-causal wording.",
+    "Rendered matrix (en/zh x 1280x900/390x844) is clean: zero exceptions, overflow, raw keys, forbidden wording, console/page/remote errors, and zero DB writes on render/reload.",
+    "Locale parity 668/668; the three pinned tests were updated for the new page and 63 WU4 locale keys.",
+    "The only non-green item is the pre-existing INT-owned route-surface pin whose runtime delta (100 vs 81) predates WU4 and matches the accepted LEARNER WU2 / L2 WU3 precedent (INT regeneration at WU5)."
+  ],
+  "blocking_findings": [],
+  "dependencies_unlocked": [
+    "UX WU4 Adaptive Learning Student Experience is DEPARTMENT GREEN over the accepted L2 WU3 API contract: exact WU3 client constants/methods, student-safe gateway views, Today recommendation/choice/evaluation/self-rating/next-step, consented Tutor accept/decline/observation, bounded mini-writing handoff, locale parity, degraded and zero-write paths.",
+    "INT can qualify the UX candidate at the consolidated Wave-3 gate; the WU4 diff is UI-only and does not change the API surface."
+  ],
+  "dependencies_remaining": [
+    "INT regeneration/qualification of the unowned cross-cutting route-contract pins (including tests/test_v095d_api_contract.py) at the WU5 consolidated gate; runtime delta 100 vs 81 is pre-existing and unchanged by WU4.",
+    "INT composition-root injection of the real CORE ReviewService and LEARNER consent persistence behind the L2 WU3 protocols; until then the WU3 endpoints are not reachable in this frontend worktree and the Today page renders honest degraded/unavailable states (verified).",
+    "Exact-SHA promotion decision remains WAITING_USER; no promotion authority granted."
+  ],
+  "repair_owner": null,
+  "integration_required": true,
+  "promotion_eligible": false,
+  "user_decision_required": false,
+  "researcher_decision_required": false,
+  "returned_at": "2026-08-12T13:00:00Z",
+  "gate_authority": null,
+  "gate_evidence": [
+    "Focused WU4 suite: 47 passed / 0 failed / exit 0; red phase captured before implementation",
+    "Affected regression: 262 (v0.9.7-C/D + contracts) + 336 (Wave-2 + Practice/Journey + student UI) passed; all exit 0",
+    "Rendered matrix: en/zh x 1280x900/390x844 all PASS; 0 exceptions/overflow/raw keys/forbidden wording/console/page/remote errors; zero writes; honest degraded state; whole-app boot of the Today page PASS",
+    "Route-pin files fail with the expected pre-existing delta (INT-owned; same as accepted LEARNER WU2 / L2 WU3 precedent)",
+    "git status initial vs final: only authorized WU4 files changed; all six pre-existing untracked UX evidence paths preserved; HEAD unchanged"
+  ],
+  "notes": "Handoff state after submission: HANDOFF_PENDING_ACCEPTANCE. The parent remains open until PROGRAM/INT explicitly accepts or rejects; no self-close. final_sha == starting_sha because no commit was created (candidate remains uncommitted in the authorized worktree per packet constraints). Verdict is department-scope GREEN: focused and affected regression are green, the rendered locale/viewport matrix passes with zero errors and zero writes, and the only non-green item is the three-file INT-owned route-surface pin set whose runtime delta (100 vs 81) is pre-existing and unchanged by this UI-only diff, matching the accepted LEARNER WU2 and L2 WU3 precedent (INT regenerates the unowned cross-cutting route-contract pins at the WU5 gate). DEPARTMENT GREEN is not INTEGRATION GREEN or promotion; no promotion authority was granted. The executor ran under the mandated opencode-go/deepseek-v4-flash route with ultra reasoning and PLANNING_DISABLED=1 semantics; no global planning file was created or modified. pytest basetemp was routed to writable dedicated temp directories under the authorized verification path (shared default pytest temp root not writable in this sandbox; environment limitation). Playwright chromium-1234 was launched with an explicit executable path because the venv's playwright expects chromium_headless_shell-1228 (environment limitation, not a product defect); the pre-existing browser-based tests in test_v096c2_sidebar_control.py and test_v096c2_genre_icon_rendering.py error on that launch mismatch and are unchanged by this diff."
+}

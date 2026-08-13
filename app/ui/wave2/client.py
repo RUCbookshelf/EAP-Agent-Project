@@ -18,6 +18,9 @@ import requests
 
 from app.ui.api_client import TimeoutProfile
 from app.ui.wave2.contracts import (
+    ADAPTIVE_PRACTICE_EVALUATE,
+    ADAPTIVE_PRACTICE_RECOMMEND,
+    ADAPTIVE_PRACTICE_SELECT,
     LEARNER_DIFFICULTIES,
     LEARNER_EVIDENCE,
     LEARNER_OBSERVATION,
@@ -25,6 +28,7 @@ from app.ui.wave2.contracts import (
     LEARNER_PROFICIENCY_CONTEXT,
     LEARNER_STABLE,
     LEARNER_STRENGTHS,
+    PERSONALIZED_MINI_WRITING,
     PERSONALIZED_LEARNING_ITEM,
     PERSONALIZED_LEARNING_ITEMS,
     PERSONALIZED_PRIORITY_PLAN,
@@ -36,6 +40,10 @@ from app.ui.wave2.contracts import (
     REVISION_TASK,
     REVISION_TASKS,
     REVISION_VERSIONS,
+    TUTOR_ACCEPT,
+    TUTOR_DECLINE,
+    TUTOR_OBSERVATION,
+    TUTOR_RECOMMEND,
     UNAVAILABLE_STATUSES,
 )
 
@@ -219,6 +227,86 @@ class Wave2ApiClient:
             "PATCH", PERSONALIZED_LEARNING_ITEM.format(learning_item_id=learning_item_id),
             operation="update_learning_item_status",
             json={"status": status},
+        )
+
+    # -- Wave-3 WU3 adaptive practice ---------------------------------------
+
+    def adaptive_recommend(self, learner_id: str) -> dict[str, Any]:
+        """Deterministic, explainable qualified activity recommendation."""
+        return self._request(
+            "POST", ADAPTIVE_PRACTICE_RECOMMEND, operation="adaptive_recommend",
+            json={"learner_id": learner_id},
+        )
+
+    def adaptive_select(
+        self, learner_id: str, recommendation_id: str, activity_id: str,
+    ) -> dict[str, Any]:
+        """Explicit (or default) learner choice over a qualified activity."""
+        return self._request(
+            "POST", ADAPTIVE_PRACTICE_SELECT, operation="adaptive_select",
+            json={
+                "learner_id": learner_id,
+                "recommendation_id": recommendation_id,
+                "activity_id": activity_id,
+            },
+        )
+
+    def adaptive_evaluate(
+        self, learner_id: str, activity_id: str, response_text: str,
+    ) -> dict[str, Any]:
+        """Deterministic rule-based evaluation of one attempt."""
+        return self._request(
+            "POST", ADAPTIVE_PRACTICE_EVALUATE, operation="adaptive_evaluate",
+            json={
+                "learner_id": learner_id,
+                "activity_id": activity_id,
+                "response_text": response_text,
+            },
+        )
+
+    def mini_writing(self, learner_id: str, task_id: str, text: str) -> dict[str, Any]:
+        """Bounded mini-writing through the existing Writing Intelligence pipeline."""
+        return self._request(
+            "POST", PERSONALIZED_MINI_WRITING, operation="mini_writing",
+            json={"learner_id": learner_id, "task_id": task_id, "text": text},
+        )
+
+    # -- Wave-3 WU3 proactive tutor -----------------------------------------
+
+    def tutor_recommend(self, learner_id: str) -> dict[str, Any]:
+        """History/due-item grounded Tutor suggestion (never executed here)."""
+        return self._request(
+            "POST", TUTOR_RECOMMEND, operation="tutor_recommend",
+            json={"learner_id": learner_id},
+        )
+
+    def tutor_accept(
+        self, learner_id: str, recommendation_id: str,
+        consent: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        """Accept a Tutor suggestion with explicit learner consent."""
+        body: dict[str, Any] = {
+            "learner_id": learner_id,
+            "recommendation_id": recommendation_id,
+        }
+        if consent is not None:
+            body["consent"] = consent
+        return self._request(
+            "POST", TUTOR_ACCEPT, operation="tutor_accept", json=body,
+        )
+
+    def tutor_decline(self, learner_id: str, recommendation_id: str) -> dict[str, Any]:
+        """Decline a Tutor suggestion (side-effect safe)."""
+        return self._request(
+            "POST", TUTOR_DECLINE, operation="tutor_decline",
+            json={"learner_id": learner_id, "recommendation_id": recommendation_id},
+        )
+
+    def tutor_observation(self, learner_id: str, category: str) -> dict[str, Any]:
+        """Bounded positive observation of authentic writing evidence."""
+        return self._request(
+            "POST", TUTOR_OBSERVATION, operation="tutor_observation",
+            json={"learner_id": learner_id, "category": category},
         )
 
     # -- learner API ---------------------------------------------------------
