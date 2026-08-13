@@ -1,0 +1,141 @@
+{
+  "schema_version": "1.0.0",
+  "handoff_id": "PDW2-C-L2-REVISION-SCAFFOLD__20260810T095151Z__59d6e7",
+  "goal_id": "PDW2-C-L2-REVISION-SCAFFOLD",
+  "owner": "L2",
+  "starting_sha": "59500127ca2cf798ae730cee2a5a3e16707c320c",
+  "final_sha": "b13155d23a3f416fd5a8d116f007120a15e9cf12",
+  "branch": "dept/l2-writing",
+  "worktree": "A:\\\\EAP Agent Project\\\\worktrees\\\\l2-writing",
+  "verdict": "GREEN",
+  "tests": [
+    {
+      "name": "tdd-red-phase",
+      "result": "PASS",
+      "evidence": [
+        "ModuleNotFoundError: No module named app.l2 before implementation across all six new test modules"
+      ]
+    },
+    {
+      "name": "wave2-models",
+      "result": "PASS",
+      "evidence": [
+        "9 passed: five-type taxonomy unchanged vs registry; writing_context/genre set; metadata round-trip; unknown task_type/writing_context rejected; legacy sentinel allowed"
+      ]
+    },
+    {
+      "name": "wave2-corpus-routing",
+      "result": "PASS",
+      "evidence": [
+        "10 passed: written default routes to WECCL20 research_only; SECCL excluded; spoken opt-in gating; no app.corpus.routing import in module source"
+      ]
+    },
+    {
+      "name": "wave2-repository",
+      "result": "PASS",
+      "evidence": [
+        "15 passed: in-memory + TEST-ONLY SQLite round-trips; version ancestry/links; append-only prior versions; scaffold events; learning-item status updates"
+      ]
+    },
+    {
+      "name": "wave2-revision-loop-real-pipeline",
+      "result": "PASS",
+      "evidence": [
+        "14 passed: V1 submit -> real feedback -> revise -> persisted V2 -> ancestry -> observation -> V2 reanalysis; V3 chain; prior versions never overwritten; task prompt+context preserved; routing attached; observation bounded with no-intent statement"
+      ]
+    },
+    {
+      "name": "wave2-personalized",
+      "result": "PASS",
+      "evidence": [
+        "12 passed: returning-learner fixture via real pipeline; recurring/stable/reappeared/first_observed grounded with supporting ids; priority plan <=3 recurrence/revision-aware not a ranking; local+global observations with discourse_organization NOT established; 7-level scaffold SCAFFOLD FIRST + history; LearningItem linkage; no-history fallback"
+      ]
+    },
+    {
+      "name": "wave2-api",
+      "result": "PASS",
+      "evidence": [
+        "11 passed: TestClient over revision_api + personalized_api; namespace-package import; full flow; input mastery-claim rejection 422; output normative guard 500; responses scan clean"
+      ]
+    },
+    {
+      "name": "wave2-suite-total",
+      "result": "PASS",
+      "evidence": [
+        "71 passed at candidate commit b13155d (pre- and post-commit runs identical)"
+      ]
+    },
+    {
+      "name": "regression-subset",
+      "result": "PASS",
+      "evidence": [
+        "177 passed incl. writing_intelligence_slice, task_type_classifier_v1, revision_v05, learner_model_v07, composition_root, v095d_parity, legacy_genre_mapping_v1, environment_drift"
+      ]
+    },
+    {
+      "name": "baseline-class-drift",
+      "result": "FAIL",
+      "evidence": [
+        "test_shared_core_drift module-set manifest does not record new wave2 module paths (same documented INT repair class as CORE PDW2-A / LEARNER PDW2-B)",
+        "test_environment_drift corpus path literals in pre-existing CORPUS-owned tests/corpus/test_seccl*.py (untouched by this Goal)"
+      ]
+    },
+    {
+      "name": "resource-hygiene",
+      "result": "PASS",
+      "evidence": [
+        "git diff --stat empty at HEAD (0 tracked modifications); 19 new files committed; 23 pre-existing untracked evidence files preserved; no push/PR/promotion; leak scan clean; session temp dirs removed"
+      ]
+    }
+  ],
+  "artifacts": [
+    "A:\\\\EAP Agent Project\\\\worktrees\\\\l2-writing\\\\app\\\\l2\\\\wave2\\\\",
+    "A:\\\\EAP Agent Project\\\\worktrees\\\\l2-writing\\\\app\\\\api\\\\routers\\\\wave2_modules\\\\revision_api.py",
+    "A:\\\\EAP Agent Project\\\\worktrees\\\\l2-writing\\\\app\\\\api\\\\routers\\\\wave2_modules\\\\personalized_api.py",
+    "A:\\\\EAP Agent Project\\\\worktrees\\\\l2-writing\\\\tests\\\\test_wave2_l2_models.py",
+    "A:\\\\EAP Agent Project\\\\worktrees\\\\l2-writing\\\\tests\\\\test_wave2_l2_corpus_routing.py",
+    "A:\\\\EAP Agent Project\\\\worktrees\\\\l2-writing\\\\tests\\\\test_wave2_l2_repository.py",
+    "A:\\\\EAP Agent Project\\\\worktrees\\\\l2-writing\\\\tests\\\\test_wave2_l2_revision_loop.py",
+    "A:\\\\EAP Agent Project\\\\worktrees\\\\l2-writing\\\\tests\\\\test_wave2_l2_personalized.py",
+    "A:\\\\EAP Agent Project\\\\worktrees\\\\l2-writing\\\\tests\\\\test_wave2_l2_api.py",
+    "A:\\\\EAP Agent Project\\\\worktrees\\\\l2-writing\\\\tests\\\\wave2_l2_pipeline.py",
+    "A:\\\\EAP Agent Project\\\\worktrees\\\\l2-writing\\\\docs\\\\integration\\\\PDW2-C-L2-REVISION-SCAFFOLD-20260810.md"
+  ],
+  "findings": [
+    "Two-level task model implemented: task_type five-type taxonomy unchanged (test asserts identity with TaskTypeRegistry l2 namespace) + writing_context/genre (cet4/cet6/ielts_task2/toefl_style/course_essay/email/application/reflective_journal/other) with optional metadata; prompt+context preserved on every version and stored row.",
+    "Revision versioning: WritingTask -> V1 -> V2 -> V3 with ancestry/timestamps/task-context/analysis/feedback links; every submission goes through the existing SubmissionService pipeline (analyzer -> diagnosis -> feedback router -> revision relationships -> history); revisions never overwrite prior versions (historical versions are evidence).",
+    "Revision observation is bounded/observational: what_changed token diff, feedback areas appears_addressed/appears_remaining, new observations, apparent independent corrections; explicit no-intent-inference statement; no causation language.",
+    "Reanalysis re-enters the real pipeline: existing ReanalysisService.run (real analyzer) + SubmissionService.regenerate_feedback (real feedback path); version updated with new run/feedback links + reanalysis_events audit list.",
+    "Written-corpus routing via locally-defined protocol/fake: written default -> WECCL20 research_only descriptive_only; SECCL spoken+secondary excluded unless explicit opt-in; module does not import the CORPUS routing module (asserted).",
+    "Personalized bridge: local + global (whole-text, basic organization only; discourse_organization validated measurement NOT established) + historical feedback (recurring/stable/reappeared/first_observed/insufficient-history, grounded in stored bundles, never fabricated) -> priority plan (<=3 items, recurrence/context/revision-success aware, explicitly not a ranking) + 7-level scaffold (default SCAFFOLD FIRST, never writes the essay, history recorded) + LearningItem v1 (full linkage; no FSRS; no practice/tutor).",
+    "Non-normative language: outputs scanned with NormativeClaimsScanner (strict) -> HTTP 500 structural rejection; request free-text with normative/mastery claims -> HTTP 422; explicit insufficient-history states everywhere.",
+    "Router modules under /api/v1/wave2/revision/ and /api/v1/wave2/personalized/; wave2_modules is a namespace package (no __init__.py; CORE contributes it at integration, same pattern as LEARNER PDW2-B).",
+    "Environment repair: worktree .venv pyvenv.cfg pointed at deleted interpreter home; repaired to working C:\\Users\\16073\\.uv-python cpython-3.12.13 home (backup pyvenv.cfg.pre-l2wave2.bak; local env state only)."
+  ],
+  "blocking_findings": [],
+  "dependencies_unlocked": [
+    "Wave-2 revision loop + personalized bridge foundations for PDW2-D and the INT Wave-2 gate"
+  ],
+  "dependencies_remaining": [
+    "CORE integration: migration-14 repository implementing RevisionLoopRepository (writing_tasks/submission_revisions/learning_items semantics); wave2_modules/__init__.py + wave2.py assembly",
+    "CORPUS PDW2-E real app/corpus/routing.py swap behind CorpusRoutingProtocol",
+    "Manifest refresh (module set + census parity) for 19 new paths",
+    "D-22 write-time persistence (migration-14 lane)",
+    "D3/D8/D12/UD-05 binding for any exposure widening (none performed)"
+  ],
+  "repair_owner": "INT",
+  "integration_required": true,
+  "promotion_eligible": false,
+  "user_decision_required": false,
+  "researcher_decision_required": false,
+  "returned_at": "2026-08-10T11:05:00Z",
+  "gate_authority": null,
+  "gate_evidence": [
+    "71/71 wave2 tests PASS pre- and post-commit",
+    "177/177 regression subset PASS",
+    "candidate commit b13155d23a3f416fd5a8d116f007120a15e9cf12 (19 files, +4640, local-only)",
+    "baseline-class drift: 2 pre-existing failures (module-set manifest; corpus path literals) documented as INT repair items",
+    "resource hygiene: 0 tracked modifications; 23 pre-existing untracked files preserved; no push/PR/promotion"
+  ],
+  "notes": "Wave-2 Goal C DEPARTMENT GREEN. New-files-only implementation in the L2 worktree; no existing module modified; real pipeline reused for every submission/revision/reanalysis; local protocols/fakes for repository, corpus routing and learner history land at integration. Baseline-class failures are identical in kind to CORE PDW2-A and LEARNER PDW2-B (INT-owned manifest refresh)."
+}

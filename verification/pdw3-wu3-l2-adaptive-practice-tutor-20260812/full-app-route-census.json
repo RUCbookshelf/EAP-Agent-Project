@@ -1,0 +1,40 @@
+{
+  "candidate_full_app_route_pairs": 108,
+  "master_baseline_route_pairs": 100,
+  "candidate_minus_master_delta": 8,
+  "delta_is_exactly_wu3": true,
+  "wu3_routes": [
+    [
+      "POST",
+      "/api/v1/wave2/personalized/adaptive-practice/evaluate"
+    ],
+    [
+      "POST",
+      "/api/v1/wave2/personalized/adaptive-practice/recommend"
+    ],
+    [
+      "POST",
+      "/api/v1/wave2/personalized/adaptive-practice/select"
+    ],
+    [
+      "POST",
+      "/api/v1/wave2/personalized/mini-writing"
+    ],
+    [
+      "POST",
+      "/api/v1/wave2/personalized/tutor/accept"
+    ],
+    [
+      "POST",
+      "/api/v1/wave2/personalized/tutor/decline"
+    ],
+    [
+      "POST",
+      "/api/v1/wave2/personalized/tutor/observation"
+    ],
+    [
+      "POST",
+      "/api/v1/wave2/personalized/tutor/recommend"
+    ]
+  ]
+}

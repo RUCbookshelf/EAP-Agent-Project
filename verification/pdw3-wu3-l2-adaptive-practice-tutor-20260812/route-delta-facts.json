@@ -1,0 +1,42 @@
+{
+  "current_wave2_pair_count": 27,
+  "baseline_wave2_pair_count": 19,
+  "preserved_baseline": true,
+  "missing_from_baseline": [],
+  "added_by_wu3": [
+    [
+      "POST",
+      "/api/v1/wave2/personalized/adaptive-practice/evaluate"
+    ],
+    [
+      "POST",
+      "/api/v1/wave2/personalized/adaptive-practice/recommend"
+    ],
+    [
+      "POST",
+      "/api/v1/wave2/personalized/adaptive-practice/select"
+    ],
+    [
+      "POST",
+      "/api/v1/wave2/personalized/mini-writing"
+    ],
+    [
+      "POST",
+      "/api/v1/wave2/personalized/tutor/accept"
+    ],
+    [
+      "POST",
+      "/api/v1/wave2/personalized/tutor/decline"
+    ],
+    [
+      "POST",
+      "/api/v1/wave2/personalized/tutor/observation"
+    ],
+    [
+      "POST",
+      "/api/v1/wave2/personalized/tutor/recommend"
+    ]
+  ],
+  "wu3_routes_exact": true,
+  "unexpected_delta": []
+}

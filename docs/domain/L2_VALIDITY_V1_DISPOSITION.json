@@ -1,0 +1,113 @@
+{
+  "disposition_id": "L2-VALIDITY-V1-DISPOSITION-001",
+  "goal_id": "L2-D22-CENSUS-AND-V1",
+  "baseline": "09264abbd93cdc6b62b83cefd94b3b640319ac9b",
+  "date": "2026-08-09",
+  "authorization": "program-control/researcher-decisions/L2-VALIDITY-scoped-disposition.json",
+  "adjudication_record": "docs/domain/L2_VALIDITY_V1_ADJUDICATION.md",
+  "disposition": "OPERATIONAL_CONTENT_VALIDITY: ADEQUATE_FOR_V1_ROUTING_AND_CLASSIFICATION",
+  "disposition_scope": [
+    "content-level adequacy of the five types, the two honest states, the precedence chain, the conflict rule, and the D-22 legacy mapping manifest (M0-M4) for operational task-routing and task-classification semantics",
+    "NOT a psychometric validity claim; confers no proficiency, mastery, ability, learning-gain, or measurement meaning",
+    "new-task classification execution remains gated on Domain Pack v1 trigger dictionaries (G5) and the separately authorized Domain Pack v1 implementation Goal",
+    "legacy mapping execution remains gated on the D-22 write-time application lane (manifest v1.0.0 qualified; D-L2-02)",
+    "no comparability participation implied (D-22 comparability freeze; behavior-diff + D-30 gate required before any future change)",
+    "contract text v1.0.0 not amended; adopted interpretations recorded for the next versioned contract revision (wording-clarification class)"
+  ],
+  "items": [
+    {
+      "ambiguity": "A-1",
+      "topic": "discussion vs opinion boundary when a prompt requires balanced treatment AND the writer's own view without an evidence mandate",
+      "determination": "RESOLVED-CLARIFICATION",
+      "outcome": "discussion by chain (viewpoint-only request is the opinion trigger class and is not a mandated final stance; discussion > opinion per 4 application rule 1; pair is not a comparable-strength conflict)",
+      "new_construct": false,
+      "material_taxonomy_change": false,
+      "researcher_required": false
+    },
+    {
+      "ambiguity": "A-2",
+      "topic": "precedence rationale for discussion > opinion and silent chain resolution of their co-match",
+      "determination": "RESOLVED-CLARIFICATION",
+      "outcome": "rationale documented: balanced-treatment content obligation subsumes viewpoint request; chain expresses subsumption, not difficulty; no outcome change",
+      "new_construct": false,
+      "material_taxonomy_change": false,
+      "researcher_required": false
+    },
+    {
+      "ambiguity": "A-3",
+      "topic": "comparable-strength conflict-vs-chain boundary unoperationalized",
+      "determination": "RESOLVED-SCOPING",
+      "outcome": "contract defines chain rule, conflict rule, and outcome state (unclassified / ambiguous_precedence_conflict); the enumerated conflict-pair table is Domain Pack v1 trigger-dictionary content (G5), not contract semantics; table not authored here; execution G5-gated",
+      "new_construct": false,
+      "material_taxonomy_change": false,
+      "researcher_required": false
+    },
+    {
+      "ambiguity": "A-4",
+      "topic": "problem_solution silently outranks a full argumentative match",
+      "determination": "RESOLVED-CLARIFICATION",
+      "outcome": "no contradiction: section 3 governs only the opinion/argumentative pair; section 4 chain governs multi-type co-matches (problem_solution > argumentative); rationale documented; outcome unchanged",
+      "new_construct": false,
+      "material_taxonomy_change": false,
+      "researcher_required": false
+    },
+    {
+      "ambiguity": "A-5",
+      "topic": "general_eap condition (c) circular at contract level",
+      "determination": "RESOLVED-CLARIFICATION",
+      "outcome": "(c) is a version-binding hook referencing Domain Pack v1 general_eap trigger content; satisfied iff (a)+(b) hold; adds no independent criterion; no outcome change",
+      "new_construct": false,
+      "material_taxonomy_change": false,
+      "researcher_required": false
+    },
+    {
+      "ambiguity": "A-6",
+      "topic": "compound/multi-part prompts have no unit-of-classification rule",
+      "determination": "RESOLVED-CLARIFICATION",
+      "outcome": "unit = the registered task definition (one prompt + declared metadata at registration); compound definitions classify whole via the chain; comparable-strength full matches invoke the conflict rule; unit fixed at registration, never re-split on read",
+      "new_construct": false,
+      "material_taxonomy_change": false,
+      "researcher_required": false
+    },
+    {
+      "ambiguity": "A-7",
+      "topic": "effects-only prompts not governed by problem_solution",
+      "determination": "RESOLVED-CLARIFICATION",
+      "outcome": "closed trigger class: effects-only prompts do not match problem_solution (effects are not cause/solution); they fall to general_eap if EAP-affirmative else unclassified; the class-extension reading is not adopted (would be a major-version trigger-class change requiring Research Evaluation approval)",
+      "new_construct": false,
+      "material_taxonomy_change": false,
+      "researcher_required": false
+    },
+    {
+      "ambiguity": "A-8",
+      "topic": "mandated is semantically but not machine-operationally defined",
+      "determination": "RESOLVED-SCOPING",
+      "outcome": "semantic definition complete at contract level (section 3 discriminator + trigger classes); machine detection is dictionary-based Domain Pack v1 content (G5) by the contract's explicit design; execution G5-gated; not an implementation claim",
+      "new_construct": false,
+      "material_taxonomy_change": false,
+      "researcher_required": false
+    }
+  ],
+  "summary": {
+    "total_items": 8,
+    "resolved_clarification": 6,
+    "resolved_scoping": 2,
+    "researcher_required_items": [],
+    "researcher_decision_required": false
+  },
+  "non_claims": [
+    "no psychometric, proficiency, mastery, ability, learning-gain, or measurement claim",
+    "no Domain Pack v1 implementation",
+    "no product code change",
+    "no contract file amendment",
+    "signed expert-panel disposition (validity package G1) remains outstanding and unchanged",
+    "V2 agreement study and V4 adversarial-set execution remain outstanding and unchanged"
+  ],
+  "dependencies_remaining": [
+    "signed human expert-panel disposition on the taxonomy content review (G1)",
+    "Domain Pack v1 trigger dictionaries and conflict-pair table (G5) for executable new-task classification",
+    "D-22 write-time application lane (manifest v1.0.0 qualified; D-L2-02) for legacy rows",
+    "D-22 behavior-diff test + D-30 zero-change gate before any comparability participation",
+    "V2 agreement set and V4 adversarial boundary set execution"
+  ]
+}

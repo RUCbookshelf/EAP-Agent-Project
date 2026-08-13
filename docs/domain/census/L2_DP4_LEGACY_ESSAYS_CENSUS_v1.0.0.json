@@ -1,0 +1,285 @@
+{
+  "artifact_id": "L2-DP4-LEGACY-ESSAYS-CENSUS-001",
+  "artifact_version": "1.0.0",
+  "goal_id": "L2-D22-CENSUS-AND-V1",
+  "goal_scope": "DP-4 governed-snapshot census (read-only analytical)",
+  "baseline": "09264abbd93cdc6b62b83cefd94b3b640319ac9b",
+  "created_at": "2026-08-09T07:34:00Z",
+  "authorizations": [
+    "program-control/researcher-decisions/RD-D22-approved.json",
+    "program-control/researcher-decisions/RD-D22-DP4-authorized.json"
+  ],
+  "manifest_source": "docs/domain/D-22_legacy_genre_mapping_manifest.proposal.json",
+  "manifest_status_at_census": "PROPOSAL",
+  "provenance": {
+    "source_db": "A:\\EAP Agent Project\\writing-feedback-mvp\\data\\writing_feedback.db",
+    "source_db_sha256": "20c609ee0a091dce22114adb08233081993c517dba50c854fe163fa0b16b1d0c",
+    "source_db_size_bytes": 14569472,
+    "source_db_mtime_epoch": 1786071262.9149477,
+    "access_mode": "sqlite mode=ro (read-only URI); no writes",
+    "integrity_check": "ok",
+    "journal_mode": "delete",
+    "schema_migrations_max_version": 13,
+    "normalization": "NFC + casefold + strip + Unicode-whitespace collapse; exact normalized match only; no punctuation stripping; no substring/similarity",
+    "extract_digest_sha256": "169d5c1c014ddad32f776ea068d018ca9b726c436ba63a14ca214fcd3b8d0de6",
+    "extract_columns": [
+      "essay_id",
+      "genre",
+      "draft_stage",
+      "timed",
+      "revision_of_submission_id",
+      "revision_stage",
+      "original_draft_stage",
+      "timing_source",
+      "students.is_synthetic"
+    ],
+    "excluded_columns": [
+      "essay_text",
+      "writing_prompt",
+      "tool_use"
+    ]
+  },
+  "essays_schema": [
+    {
+      "name": "essay_id",
+      "type": "INTEGER",
+      "notnull": false,
+      "pk": true
+    },
+    {
+      "name": "student_id",
+      "type": "TEXT",
+      "notnull": true,
+      "pk": false
+    },
+    {
+      "name": "writing_prompt",
+      "type": "TEXT",
+      "notnull": true,
+      "pk": false
+    },
+    {
+      "name": "genre",
+      "type": "TEXT",
+      "notnull": true,
+      "pk": false
+    },
+    {
+      "name": "draft_stage",
+      "type": "TEXT",
+      "notnull": true,
+      "pk": false
+    },
+    {
+      "name": "timed",
+      "type": "INTEGER",
+      "notnull": true,
+      "pk": false
+    },
+    {
+      "name": "time_limit_minutes",
+      "type": "INTEGER",
+      "notnull": false,
+      "pk": false
+    },
+    {
+      "name": "tool_use",
+      "type": "TEXT",
+      "notnull": true,
+      "pk": false
+    },
+    {
+      "name": "essay_text",
+      "type": "TEXT",
+      "notnull": true,
+      "pk": false
+    },
+    {
+      "name": "submitted_at",
+      "type": "TEXT",
+      "notnull": true,
+      "pk": false
+    },
+    {
+      "name": "revision_of_submission_id",
+      "type": "INTEGER",
+      "notnull": false,
+      "pk": false
+    },
+    {
+      "name": "revision_group_id",
+      "type": "TEXT",
+      "notnull": false,
+      "pk": false
+    },
+    {
+      "name": "revision_sequence",
+      "type": "INTEGER",
+      "notnull": false,
+      "pk": false
+    },
+    {
+      "name": "revision_stage",
+      "type": "TEXT",
+      "notnull": true,
+      "pk": false
+    },
+    {
+      "name": "original_draft_stage",
+      "type": "TEXT",
+      "notnull": false,
+      "pk": false
+    },
+    {
+      "name": "writing_started_at",
+      "type": "TEXT",
+      "notnull": false,
+      "pk": false
+    },
+    {
+      "name": "writing_submitted_at",
+      "type": "TEXT",
+      "notnull": false,
+      "pk": false
+    },
+    {
+      "name": "active_writing_duration_seconds",
+      "type": "REAL",
+      "notnull": false,
+      "pk": false
+    },
+    {
+      "name": "timing_source",
+      "type": "TEXT",
+      "notnull": true,
+      "pk": false
+    },
+    {
+      "name": "timing_quality",
+      "type": "TEXT",
+      "notnull": true,
+      "pk": false
+    },
+    {
+      "name": "unexplained_interruption",
+      "type": "INTEGER",
+      "notnull": true,
+      "pk": false
+    }
+  ],
+  "census": {
+    "total_rows": 29,
+    "rule_counts": {
+      "M1": 26,
+      "M1-zh": 3
+    },
+    "reason_code_counts": {
+      "null": 29
+    },
+    "resulting_task_type_rows": {
+      "argumentative": 29
+    },
+    "typed_rate": 1.0,
+    "legacy_unclassified_rate": 0.0,
+    "distinct_raw_genre_values": 2,
+    "distinct_normalized_genre_values": 2,
+    "distinct_value_coverage": "100% of distinct normalized values dispositioned by M0-M4 (M0 default catches all unmatched)",
+    "rule_value_disjointness": "PASS (no duplicate normalized values; manifest validation clean)",
+    "mapping_conflicts": 0
+  },
+  "legacy_source_distribution": {
+    "by_genre_option": {
+      "option_argumentative_en": 26,
+      "option_argumentative_zh": 3
+    },
+    "by_locale_hint": {
+      "en": 26,
+      "zh_CN": 3
+    },
+    "by_independent_vs_revision": {
+      "independent": 12,
+      "revision": 17
+    },
+    "by_revision_stage": {
+      "first_draft": 11,
+      "revised_draft": 11,
+      "final_draft": 5,
+      "independent_submission": 2
+    },
+    "by_draft_stage": {
+      "first draft": 11,
+      "revised draft": 11,
+      "final draft": 5,
+      "independent submission": 1,
+      "终稿": 1
+    },
+    "by_student_class": {
+      "real": 27,
+      "synthetic_demo": 2
+    }
+  },
+  "distinct_value_dispositions": [
+    {
+      "genre_normalized": "argumentative essay",
+      "rows": 26,
+      "raw_variants": 1,
+      "raw_values": [
+        {
+          "raw": "argumentative essay",
+          "count": 26
+        }
+      ],
+      "disposition": {
+        "rule_id": "M1",
+        "mapping": "argumentative",
+        "reason_code": null
+      }
+    },
+    {
+      "genre_normalized": "议论文",
+      "rows": 3,
+      "raw_variants": 1,
+      "raw_values": [
+        {
+          "raw": "议论文",
+          "count": 3
+        }
+      ],
+      "disposition": {
+        "rule_id": "M1-zh",
+        "mapping": "argumentative",
+        "reason_code": null
+      }
+    }
+  ],
+  "edge_cases_requiring_review": {
+    "values_with_no_rule": [],
+    "empty_or_whitespace": [],
+    "near_miss_variants": [],
+    "mixed_scripts": [],
+    "long_values": [],
+    "digits_in_value": []
+  },
+  "qa": {
+    "second_disposition_pass_identical": true,
+    "second_pass_value_coverage_identical": true,
+    "duplicate_rule_detection": {
+      "result": "PASS",
+      "problems": []
+    },
+    "reason_code_completeness": true
+  },
+  "nr_items": {
+    "prompt_pattern_audit": "NR - not performed in the governed snapshot; prompt text is excluded from this snapshot (no essay/prompt text copied). Feature-checklist pattern audit (V3 instrument 2, F01-F17) remains a separate V3/V4 execution item.",
+    "v2_agreement_sample": "NR - V2 sampling frame derivable from this census but study execution not part of this Goal",
+    "v4_adversarial_set": "NR - V4 execution not part of this Goal"
+  },
+  "non_claims": [
+    "Snapshot contains no essay text, no prompt text, and no learner identity values",
+    "No product mutation; DB opened read-only",
+    "Census is metadata-only; assigns no proficiency/difficulty/measurement meaning",
+    "No mappings outside M0-M4 were created",
+    "No validity claim; census coverage evidence only",
+    "Raw SWECCL untouched; not a substitute source"
+  ]
+}
