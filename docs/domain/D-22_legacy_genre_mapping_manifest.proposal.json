@@ -1,0 +1,106 @@
+{
+  "manifest_id": "l2-legacy-genre-mapping-proposal-v0.1.0",
+  "status": "PROPOSAL",
+  "taxonomy_version": "l2-task-type-taxonomy-v1.0.0",
+  "proposal_ref": "docs/domain/D-22_LEGACY_GENRE_MAPPING_PROPOSAL.md",
+  "approval": "PENDING - Research Evaluation + L2 review; PROGRAM does not infer approval",
+  "normalization": "casefold + strip + whitespace/punctuation normalization (L2_TASK_TYPE_TAXONOMY_CONTRACT.md Constraint 1.2 discipline)",
+  "matching": "exact normalized value match only; no substring, no similarity, no taxonomy-definition inference (contract Constraint 4)",
+  "default_rule": "M0",
+  "rules": [
+    {
+      "rule_id": "M0",
+      "normalized_value": "*",
+      "locale": null,
+      "mapping": "legacy_unclassified",
+      "reason_code": "no_mapping_rule",
+      "rationale": "Default: no approved rule exists for this value; sentinel, never guessed (contract 5.2, 6.2).",
+      "evidence": ["L2_TASK_TYPE_TAXONOMY_CONTRACT.md Constraint 5"]
+    },
+    {
+      "rule_id": "M1",
+      "normalized_value": "argumentative essay",
+      "locale": "en",
+      "mapping": "argumentative",
+      "reason_code": null,
+      "rationale": "Product option genre_argumentative declared the task metadata for argumentative writing; documented genre-level mapping to the same-named taxonomy type. Caveat: declared genre semantics, not prompt re-analysis.",
+      "evidence": ["locales/en.json", "app/ui/features/student/writing.py:233-236", "data/demo_students.json", "L2_TASK_TYPE_TAXONOMY_CONTRACT.md section 1"]
+    },
+    {
+      "rule_id": "M1-zh",
+      "normalized_value": "议论文",
+      "locale": "zh_CN",
+      "mapping": "argumentative",
+      "reason_code": null,
+      "rationale": "Same option as M1 in zh_CN; matches existing genre_argumentative = 议论文 usage.",
+      "evidence": ["locales/zh_CN.json"]
+    },
+    {
+      "rule_id": "M2",
+      "normalized_value": "expository essay",
+      "locale": "en",
+      "mapping": "legacy_unclassified",
+      "reason_code": "no_mapping_rule",
+      "rationale": "Explicit no-map decision: contract 5.2 names expository as a genre without a documented mapping rule; no five-type definition covers exposition. DP-1 open (general_eap consideration).",
+      "evidence": ["L2_TASK_TYPE_TAXONOMY_CONTRACT.md Constraint 4 (5.2)"]
+    },
+    {
+      "rule_id": "M2-zh",
+      "normalized_value": "说明文",
+      "locale": "zh_CN",
+      "mapping": "legacy_unclassified",
+      "reason_code": "no_mapping_rule",
+      "rationale": "Same decision as M2, zh_CN form.",
+      "evidence": ["L2_TASK_TYPE_TAXONOMY_CONTRACT.md Constraint 4 (5.2)"]
+    },
+    {
+      "rule_id": "M3",
+      "normalized_value": "narrative essay",
+      "locale": "en",
+      "mapping": "legacy_unclassified",
+      "reason_code": "no_mapping_rule",
+      "rationale": "Contract 5.2 names narrative as a genre without a documented mapping rule; no five-type definition covers narration.",
+      "evidence": ["L2_TASK_TYPE_TAXONOMY_CONTRACT.md Constraint 4 (5.2)"]
+    },
+    {
+      "rule_id": "M3-zh",
+      "normalized_value": "记叙文",
+      "locale": "zh_CN",
+      "mapping": "legacy_unclassified",
+      "reason_code": "no_mapping_rule",
+      "rationale": "Same decision as M3, zh_CN form.",
+      "evidence": ["L2_TASK_TYPE_TAXONOMY_CONTRACT.md Constraint 4 (5.2)"]
+    },
+    {
+      "rule_id": "M4",
+      "normalized_value": "",
+      "locale": null,
+      "mapping": "legacy_unclassified",
+      "reason_code": "missing_genre",
+      "rationale": "Defensive explicit rule for empty/missing values; schema is NOT NULL but free text may be empty in practice.",
+      "evidence": ["app/database schema: essays.genre TEXT NOT NULL"]
+    }
+  ],
+  "precedence_rules": [
+    "exact normalized value match only",
+    "approved rules have disjoint normalized values; duplicate coverage is a manifest validation error",
+    "row-level R-class overrides (if approved) take precedence over genre-level rules for the exact row; otherwise genre-level applies",
+    "no match -> legacy_unclassified (no_mapping_rule); multiple applicable rules -> legacy_unclassified (mapping_rule_conflict)",
+    "general_eap is never assigned from genre alone",
+    "mapping applies once at write time with manifest_version + rule_id + approval reference (D-L2-02); reads never re-map"
+  ],
+  "coverage_prerequisite": "governed snapshot of the real legacy essays table (product DB) required for census + D-22 behavior-diff; not available in the L2 worktree at proposal time; raw SWECCL is not a substitute",
+  "non_claims": [
+    "metadata-only; no proficiency/difficulty/measurement meaning",
+    "no comparability participation until the D-22 behavior-diff gate passes",
+    "no product behavior change from this proposal",
+    "discourse_organization excluded (UD-02 DEFER)",
+    "no Domain Pack v1 implementation"
+  ],
+  "decision_points": [
+    "DP-1 expository disposition (recommended legacy_unclassified for v1; general_eap alternative requires rationale + evidence)",
+    "DP-2 row-level override path R-class (recommended defer to manifest v2)",
+    "DP-3 validation targets kappa >= 0.80 / >= 90% agreement (validity-evidence package)",
+    "DP-4 governed snapshot procedure authorization for the real legacy essays table"
+  ]
+}

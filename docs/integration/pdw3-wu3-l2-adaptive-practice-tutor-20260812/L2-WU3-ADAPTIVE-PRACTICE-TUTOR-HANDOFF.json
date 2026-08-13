@@ -1,0 +1,140 @@
+{
+  "schema_version": "1.0.0",
+  "handoff_id": "PDW3-WU3-L2-ADAPTIVE-PRACTICE-TUTOR-20260812__20260812T195500Z__d847d9",
+  "goal_id": "PDW3-WU3-L2-ADAPTIVE-PRACTICE-TUTOR-20260812",
+  "owner": "L2",
+  "starting_sha": "7a9e4b470c41c0453a3795233f1bdd5c483d80ae",
+  "final_sha": "7a9e4b470c41c0453a3795233f1bdd5c483d80ae",
+  "branch": "dept/l2-writing",
+  "worktree": "A:\\EAP Agent Project\\worktrees\\l2-writing",
+  "verdict": "GREEN",
+  "tests": [
+    {
+      "name": "Focused WU3 suite (tests/wave3 + root-level contract test)",
+      "result": "PASS",
+      "evidence": [
+        "70 passed, 0 failed, exit 0 (evidence: pytest-wave3-focused.log)",
+        "Red phase captured first: collection failed with ModuleNotFoundError app.l2.wave3 before implementation (basetemp-red)",
+        "Covers: deterministic recommendation default + reasons + learner choice; qualified subset from existing practice capability; provenance + deterministic evaluation; insufficient-history honesty; mini-writing through the real pipeline; consent-gated accept; side-effect-safe decline; due-item/history-grounded/insufficient-history/positive-observation; learner isolation; failure isolation; prohibited-claim scans"
+      ]
+    },
+    {
+      "name": "Affected Wave-2/L2 regression",
+      "result": "PASS",
+      "evidence": [
+        "172 passed, 0 failed, exit 0 (evidence: pytest-wave2-regression.log)",
+        "tests/wave2/ + tests/test_wave2_l2_api.py + test_wave2_l2_corpus_routing.py + test_wave2_l2_models.py + test_wave2_l2_personalized.py + test_wave2_l2_repository.py + test_wave2_l2_repository_consume.py + test_wave2_l2_revision_loop.py + test_wave2_migration_v14.py + test_wave2_repositories_v14.py + test_wave2_repository_composition.py + harness_wave2_studio.py"
+      ]
+    },
+    {
+      "name": "Practice/Journey regression (composition, practice, priority mapping, journey)",
+      "result": "PASS",
+      "evidence": [
+        "278 passed, 0 failed, exit 0 (evidence: pytest-practice-journey-regression.log)",
+        "test_composition_root + test_practice_v09 + test_v095f6d_practice_boundary_narrowing + test_v097b_wu2_priority_mapping + test_v097b_wu3_target_creation + test_v097b_wu4_practice_task + test_v097b_wu5_completion + test_v097b_wu6_journey_projection + test_journey_v093c"
+      ]
+    },
+    {
+      "name": "Learner/History regression",
+      "result": "PASS",
+      "evidence": [
+        "63 passed, 0 failed, exit 0 (evidence: pytest-learner-history-regression.log)",
+        "test_learner_model_v07 + test_learner_model_task_type_v1 + test_history + test_longitudinal_v03 + test_revision_v05"
+      ]
+    },
+    {
+      "name": "Wave-adjacent regression (v0.9.7-C/D + revision capability)",
+      "result": "PASS",
+      "evidence": [
+        "177 passed, 0 failed, exit 0 (evidence: pytest-waveadjacent-regression.log)",
+        "test_v097c_wu1_journey_cycles + test_v097c_wu2_journey_navigation + test_v097c_wu3_journey_ui + test_v097d_wu1_writing_feedback + test_v097d_wu2_revision_practice + test_v095f6a0_revision_capability_completion + test_v095f6d_practice_boundary_narrowing"
+      ]
+    },
+    {
+      "name": "Route-surface pin regeneration check (INT-owned pins)",
+      "result": "FAIL",
+      "evidence": [
+        "18 passed, 7 failed, exit 1 (evidence: pytest-route-pins.log, route-delta-facts.json)",
+        "Expected delta on the L2 candidate: wave2 sub-router surface 19 -> 27 pairs and full-app surface 100 -> 108 pairs; 19 pre-existing wave2 pairs preserved exactly; added set is exactly the 8 authorized WU3 routes; zero unexpected delta (route-delta-facts.json, full-app-route-census.json)",
+        "Not a product defect and not in L2 write scope: these three files are INT-owned cross-cutting route/endpoint pins. The accepted LEARNER WU2 handoff records the identical dependency ('INT regeneration/qualification of the unowned cross-cutting route-contract pins at the WU5 gate'); the L2 candidate does not edit INT-owned pins.",
+        "Verdict remains department-scope GREEN because the affected L2/Wave-2 product regression is fully green and this FAIL is confined to the documented INT-owned pin regeneration item with a proven exact delta."
+      ]
+    },
+    {
+      "name": "Composition fail-closed probe (503 / composed 200)",
+      "result": "PASS",
+      "evidence": [
+        "PROBE_OK: adaptive-practice recommend returns 503 without composition-root services and 200 with real services attached",
+        "Recorded in the verification probe run within this run"
+      ]
+    }
+  ],
+  "artifacts": [
+    "A:\\EAP Agent Project\\worktrees\\l2-writing\\docs\\integration\\pdw3-wu3-l2-adaptive-practice-tutor-20260812\\L2-WU3-ADAPTIVE-PRACTICE-TUTOR-REPORT.md",
+    "A:\\EAP Agent Project\\worktrees\\l2-writing\\docs\\integration\\pdw3-wu3-l2-adaptive-practice-tutor-20260812\\L2-WU3-ADAPTIVE-PRACTICE-TUTOR-HANDOFF.json",
+    "A:\\EAP Agent Project\\worktrees\\l2-writing\\app\\l2\\wave3\\__init__.py",
+    "A:\\EAP Agent Project\\worktrees\\l2-writing\\app\\l2\\wave3\\models.py",
+    "A:\\EAP Agent Project\\worktrees\\l2-writing\\app\\l2\\wave3\\protocols.py",
+    "A:\\EAP Agent Project\\worktrees\\l2-writing\\app\\l2\\wave3\\adaptive_practice.py",
+    "A:\\EAP Agent Project\\worktrees\\l2-writing\\app\\l2\\wave3\\mini_writing.py",
+    "A:\\EAP Agent Project\\worktrees\\l2-writing\\app\\l2\\wave3\\tutor.py",
+    "A:\\EAP Agent Project\\worktrees\\l2-writing\\app\\l2\\wave3\\adapters.py",
+    "A:\\EAP Agent Project\\worktrees\\l2-writing\\app\\api\\routers\\wave2_modules\\personalized_api.py",
+    "A:\\EAP Agent Project\\worktrees\\l2-writing\\tests\\wave3\\test_wave3_models.py",
+    "A:\\EAP Agent Project\\worktrees\\l2-writing\\tests\\wave3\\test_adaptive_practice.py",
+    "A:\\EAP Agent Project\\worktrees\\l2-writing\\tests\\wave3\\test_mini_writing.py",
+    "A:\\EAP Agent Project\\worktrees\\l2-writing\\tests\\wave3\\test_tutor.py",
+    "A:\\EAP Agent Project\\worktrees\\l2-writing\\tests\\wave3\\test_isolation.py",
+    "A:\\EAP Agent Project\\worktrees\\l2-writing\\tests\\wave3\\test_prohibited_claims.py",
+    "A:\\EAP Agent Project\\worktrees\\l2-writing\\tests\\test_wave3_l2_adaptive_practice_tutor.py",
+    "A:\\EAP Agent Project\\worktrees\\l2-writing\\verification\\pdw3-wu3-l2-adaptive-practice-tutor-20260812\\pytest-wave3-focused.log",
+    "A:\\EAP Agent Project\\worktrees\\l2-writing\\verification\\pdw3-wu3-l2-adaptive-practice-tutor-20260812\\pytest-wave2-regression.log",
+    "A:\\EAP Agent Project\\worktrees\\l2-writing\\verification\\pdw3-wu3-l2-adaptive-practice-tutor-20260812\\pytest-practice-journey-regression.log",
+    "A:\\EAP Agent Project\\worktrees\\l2-writing\\verification\\pdw3-wu3-l2-adaptive-practice-tutor-20260812\\pytest-learner-history-regression.log",
+    "A:\\EAP Agent Project\\worktrees\\l2-writing\\verification\\pdw3-wu3-l2-adaptive-practice-tutor-20260812\\pytest-waveadjacent-regression.log",
+    "A:\\EAP Agent Project\\worktrees\\l2-writing\\verification\\pdw3-wu3-l2-adaptive-practice-tutor-20260812\\pytest-route-pins.log",
+    "A:\\EAP Agent Project\\worktrees\\l2-writing\\verification\\pdw3-wu3-l2-adaptive-practice-tutor-20260812\\route-delta-facts.json",
+    "A:\\EAP Agent Project\\worktrees\\l2-writing\\verification\\pdw3-wu3-l2-adaptive-practice-tutor-20260812\\full-app-route-census.json",
+    "A:\\EAP Agent Project\\worktrees\\l2-writing\\verification\\pdw3-wu3-l2-adaptive-practice-tutor-20260812\\git-status-initial.txt",
+    "A:\\EAP Agent Project\\worktrees\\l2-writing\\verification\\pdw3-wu3-l2-adaptive-practice-tutor-20260812\\git-status-final.txt"
+  ],
+  "findings": [
+    "WU3 is additive and bounded: one composition root, one API namespace, one SQLite family, no new migration, no second runtime/database/connection manager.",
+    "Deterministic explainable recommendation default plus explicit learner choice are implemented and tested; qualified subset is derived only from the existing practice capability (rule-based, student-eligible exercise specs).",
+    "Provenance and deterministic evaluation criteria are preserved on every activity; no evidence is ever fabricated (insufficient_history is first-class and honest).",
+    "Mini-writing re-enters the existing Writing Intelligence pipeline through the wave2 RevisionLoopService/WritingPipelinePort; no disconnected analysis or essay-generation service exists.",
+    "Tutor execution requires explicit learner consent (granted, non-revoked, correct scope/version, learner-matching, non-future); decline and unavailable states are side-effect safe with no consent or practice/review writes.",
+    "Practice/review evidence is structurally distinct from authentic-writing observation (PositiveObservation.evidence_kind); all composed outputs pass the shared NormativeClaimsScanner strict scan.",
+    "CORE/LEARNER WU2 contracts are consumed through narrow structural protocols (ReviewEvidencePort, LearnerConsentStorePort) because the L2 branch does not physically contain that product code; branch-local in-memory adapters are test-only and never become a second store.",
+    "All 25 pre-existing untracked L2 evidence paths are preserved; HEAD unchanged 7a9e4b47; no Program Control write; no other worktree touched; no raw SWECCL access.",
+    "The wave2 sub-router surface grows 19 -> 27 pairs with exactly the 8 authorized WU3 endpoints and zero unexpected delta (route-delta-facts.json)."
+  ],
+  "blocking_findings": [],
+  "dependencies_unlocked": [
+    "L2 WU3 Adaptive Practice + Proactive Tutor domain is DEPARTMENT GREEN over the existing shared contracts: deterministic recommendation + learner choice, provenance-preserving activity selection, real-pipeline mini-writing, and consented side-effect-safe Tutor orchestration.",
+    "UX WU4 can consume the documented WU3 endpoints (adaptive-practice recommend/select/evaluate, mini-writing, tutor recommend/accept/decline/observation) with explicit consent and honest states.",
+    "INT can qualify the L2 candidate at the consolidated Wave-3 gate with a route delta exactly equal to the 8 authorized WU3 endpoints."
+  ],
+  "dependencies_remaining": [
+    "INT regeneration/qualification of the unowned cross-cutting route-contract pins (tests/test_v095b_router_contract.py exact-route pin, tests/test_v095d_api_contract.py endpoint pin, tests/test_wave2_router_assembly.py wave2 sub-router surface pin) at the WU5 consolidated gate; the L2 candidate delta is exactly the 8 authorized WU3 endpoints (route-delta-facts.json).",
+    "INT composition-root injection of the real CORE ReviewService and LEARNER consent persistence behind the WU3 narrow protocols (ReviewEvidencePort, LearnerConsentStorePort); branch-local in-memory adapters are test-only.",
+    "UX WU4 (frontend adaptive learning experience) remains a separate owner Goal.",
+    "Exact-SHA promotion decision remains WAITING_USER; no promotion authority granted."
+  ],
+  "repair_owner": null,
+  "integration_required": true,
+  "promotion_eligible": false,
+  "user_decision_required": false,
+  "researcher_decision_required": false,
+  "returned_at": "2026-08-12T19:55:00Z",
+  "gate_authority": null,
+  "gate_evidence": [
+    "Focused WU3 suite: 70 passed / 0 failed / exit 0; red phase captured before implementation (ModuleNotFoundError app.l2.wave3)",
+    "Affected regression: 172 (Wave-2/L2) + 278 (Practice/Journey) + 63 (Learner/History) + 177 (Wave-adjacent) passed; all exit 0",
+    "Route-delta facts: 19 baseline wave2 pairs preserved exactly; +8 = exactly the authorized WU3 routes; zero unexpected delta",
+    "Route-pin files fail with the expected additive delta (INT-owned pin regeneration at WU5, same as accepted LEARNER WU2 handoff)",
+    "Composition probe: 503 without composition-root services, 200 with real services (fail-closed contract verified)",
+    "git status initial vs final: only the authorized WU3 files changed; all 25 pre-existing untracked evidence paths preserved; HEAD unchanged"
+  ],
+  "notes": "Handoff state after submission: HANDOFF_PENDING_ACCEPTANCE. The parent remains open until PROGRAM/INT explicitly accepts or rejects; no self-close. final_sha == starting_sha because no commit was created (candidate remains uncommitted in the authorized worktree per packet constraints). Verdict is department-scope GREEN: focused and affected regression are green and the only non-green items are the three INT-owned route-surface pin files whose expected delta is exactly the 8 authorized WU3 endpoints, matching the accepted LEARNER WU2 precedent (INT regenerates the unowned cross-cutting route-contract pins at the WU5 gate). DEPARTMENT GREEN is not INTEGRATION GREEN or promotion; no promotion authority was granted. The dispatch record's legacy mimo-v2.5 launch spec was recorded honestly by the dispatch layer; this executor ran under the mandated opencode-go/deepseek-v4-flash route with ultra reasoning and PLANNING_DISABLED=1 semantics; no global planning file was created or modified. pytest basetemp was routed to writable dedicated temp directories under the authorized verification path because the shared default pytest temp root is not writable in this sandbox (environment limitation, not a product defect); transient test SQLite files are confined to those temp roots."
+}
