@@ -1,16 +1,28 @@
-"""Wave-2 Goal A router-assembly tests (F-2 integration-aware refresh).
+"""INT-owned wave2 sub-router surface pin (PDW3-WU5 re-gate 20260812).
 
-The ``app/api/routers/wave2.py`` assembly statically imports the sub-routers
-(learner_api, revision_api, personalized_api) from
+This pin is maintained by INT and reflects the COMPOSED Wave-3 surface:
+the Wave-2 sub-router assembly now mounts 27 (method, path) pairs across
+26 unique paths (19 pairs / 18 paths at the promoted Wave-2 master plus
+the EXACT +8 authorized L2 WU3 delta). The delta was proven route-by-route
+by the re-gate ENUMERATE -> COMPARE -> CLASSIFY -> QUALIFY audit
+(verification/pdw3-wu5-int-consolidated-wave3-integration-gate/
+re-gate-20260812/wave2_assembly_pin_delta_facts_RE-GATE.json): the eight
+added pairs are precisely the adaptive-practice (evaluate/recommend/
+select), mini-writing, and tutor (accept/decline/observation/recommend)
+POST routes; zero unexpected additions and zero removals.
+
+The ``app/api/routers/wave2.py`` assembly statically imports the
+sub-routers (learner_api, revision_api, personalized_api) from
 ``app/api/routers/wave2_modules/`` with graceful ImportError tolerance, and
 ``app/api/main.py`` registers the wave2 router with exactly one additive
 registration line.
 
 Integration-aware expectations: when the real sub-router modules exist, the
-product mounts exactly the intended Wave-2 route surface (18 unique paths /
-19 method+path pairs, verified on the merged Wave-2 composition). Absent
-modules are tolerated, but the empty-mount state is an implementation detail,
-not a contract -- stale empty-mount assertions are deliberately removed.
+product mounts exactly the intended Wave-2 + Wave-3 route surface (27
+method+path pairs / 26 unique paths, verified on the composed re-gate
+preview). Absent modules are tolerated, but the empty-mount state is an
+implementation detail, not a contract -- stale empty-mount assertions are
+deliberately removed.
 """
 
 from __future__ import annotations
@@ -29,9 +41,9 @@ from app.api.routers import wave2_modules
 
 SUBROUTER_NAMES = ("learner_api", "revision_api", "personalized_api")
 
-# Exact Wave-2 route surface as mounted by the merged composition
-# (verified from the real learner/revision/personalized sub-routers):
-# 18 unique paths, 19 (method, path) pairs.
+# Exact composed Wave-2 + Wave-3 route surface as mounted by the composed
+# product (verified from the real learner/revision/personalized sub-routers
+# in the re-gate preview): 26 unique paths, 27 (method, path) pairs.
 REAL_WAVE2_ROUTE_TABLE: dict[str, list[tuple[str, str]]] = {
     "revision_api": [
         ("POST", "/api/v1/wave2/revision/tasks"),
@@ -56,6 +68,14 @@ REAL_WAVE2_ROUTE_TABLE: dict[str, list[tuple[str, str]]] = {
         ("GET", "/api/v1/wave2/personalized/learning-items"),
         ("POST", "/api/v1/wave2/personalized/learning-items"),
         ("PATCH", "/api/v1/wave2/personalized/learning-items/{learning_item_id}"),
+        ("POST", "/api/v1/wave2/personalized/adaptive-practice/evaluate"),
+        ("POST", "/api/v1/wave2/personalized/adaptive-practice/recommend"),
+        ("POST", "/api/v1/wave2/personalized/adaptive-practice/select"),
+        ("POST", "/api/v1/wave2/personalized/mini-writing"),
+        ("POST", "/api/v1/wave2/personalized/tutor/accept"),
+        ("POST", "/api/v1/wave2/personalized/tutor/decline"),
+        ("POST", "/api/v1/wave2/personalized/tutor/observation"),
+        ("POST", "/api/v1/wave2/personalized/tutor/recommend"),
     ],
     "learner_api": [
         ("GET", "/api/v1/wave2/learner/observations"),
@@ -73,8 +93,8 @@ REAL_WAVE2_PAIRS = frozenset(
 )
 REAL_WAVE2_PATHS = frozenset(path for _, path in REAL_WAVE2_PAIRS)
 
-assert len(REAL_WAVE2_PAIRS) == 19, "merged Wave-2 route surface changed"
-assert len(REAL_WAVE2_PATHS) == 18, "merged Wave-2 route surface changed"
+assert len(REAL_WAVE2_PAIRS) == 27, "composed Wave-2/Wave-3 surface changed"
+assert len(REAL_WAVE2_PATHS) == 26, "composed Wave-2/Wave-3 surface changed"
 
 
 def _real_modules_present() -> bool:
@@ -134,14 +154,14 @@ def _restore(fakes: dict[str, types.ModuleType]) -> None:
         delattr(wave2_modules, name)
     importlib.reload(wave2_module)
     # Self-consistency, not an empty-mount contract: whatever the assembly
-    # currently mounts must stay inside the intended Wave-2 route surface.
+    # currently mounts must stay inside the intended composed surface.
     assert _mounted_pairs() <= REAL_WAVE2_PAIRS
 
 
 def _expected_pairs(fakes: dict[str, types.ModuleType]) -> frozenset[tuple[str, str]]:
     """Surface the assembly must mount after ``_inject(fakes)``: the fakes'
     routes plus any real sub-router modules that are importable on this tree
-    (in the merged composition the real modules exist alongside fakes)."""
+    (in the composed product the real modules exist alongside fakes)."""
     expected = set()
     for name in SUBROUTER_NAMES:
         if name in fakes or importlib.util.find_spec(
@@ -152,9 +172,8 @@ def _expected_pairs(fakes: dict[str, types.ModuleType]) -> frozenset[tuple[str, 
 
 
 def test_assembly_mounts_only_the_intended_wave2_route_surface():
-    # Replaces the stale empty-mount assertion: absent sub-router modules are
-    # tolerated (no ImportError), and anything mounted stays within the
-    # intended Wave-2 route surface (in this branch that is the empty set).
+    # Absent sub-router modules are tolerated (no ImportError), and anything
+    # mounted stays within the intended composed Wave-2/Wave-3 surface.
     assert wave2_module.router is not None
     assert _mounted_pairs() <= REAL_WAVE2_PAIRS
 
@@ -212,6 +231,6 @@ def test_full_app_builds_and_mounts_wave2_routes_when_submodules_present(tmp_pat
 )
 def test_real_subrouter_modules_mount_the_full_wave2_surface():
     """Integration contract: with the real sub-routers present, the product
-    mounts exactly the intended Wave-2 route surface."""
+    mounts exactly the intended composed Wave-2/Wave-3 route surface."""
     assert _mounted_pairs() == REAL_WAVE2_PAIRS
     assert _mounted_paths() == REAL_WAVE2_PATHS
