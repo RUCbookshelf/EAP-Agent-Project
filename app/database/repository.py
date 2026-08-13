@@ -11,9 +11,11 @@ from app.infrastructure.sqlite.repositories import (
     SQLiteLearnerRepository,
     SQLitePracticeRepository,
     SQLiteResearchRepository,
+    SQLiteReviewRepository,
     SQLiteRevisionRepository,
     SQLiteSubmissionRepository,
     SQLiteSystemRepository,
+    SQLiteWave2Repository,
 )
 
 
@@ -141,6 +143,8 @@ class Database:
         )
         self._practice_repository = SQLitePracticeRepository(self._connection_manager)
         self._research_repository = SQLiteResearchRepository(self._connection_manager)
+        self._wave2_repository = SQLiteWave2Repository(self._connection_manager)
+        self._review_repository = SQLiteReviewRepository(self._connection_manager)
 
     def connect(self) -> sqlite3.Connection:
         return self._system_repository.connect()

@@ -28,6 +28,7 @@ from app.api.routers import (
     journey,
     practice,
     research,
+    review,
     revisions,
     students,
     submissions,
@@ -37,12 +38,17 @@ from app.api.routers import (
 from app.config import Settings, load_settings
 from app.version import PLATFORM_APPLICATION_VERSION
 from app.database import Database
+from app.infrastructure.sqlite.repositories.review import (
+    SQLiteReviewEvidenceLookup,
+)
 from app.journey.service import JourneyService
 from app.practice.completion import PracticeTargetCompletionService
 from app.practice.service import PracticeService
 from app.practice.target_creation import PracticeTargetCreationService
 from app.lifecycle import ServiceState, lifecycle
 from app.research.service import ResearchDataService
+from app.review.scheduler import FSRSSchedulerAdapter
+from app.review.service import ReviewService
 from app.services import (
     AdminReanalysisService,
     CalfService,
@@ -75,6 +81,7 @@ _BUSINESS_ROUTERS = (
     practice,
     journey,
     research,
+    review,  # Wave-3 WU1: shared Review/Scheduling Foundation surface
     writing_intelligence,
     wave2,  # Wave-2 assembly: mounts wave2_modules sub-routers when present
 )
@@ -180,6 +187,11 @@ def _build_services(
         review_repository=repository._research_repository,
         export_reader=repository._research_repository,
     )
+    review_svc = ReviewService(
+        repository=repository._review_repository,
+        scheduler=FSRSSchedulerAdapter(),
+        learning_item_reader=repository._wave2_repository,
+    )
 
     # Lifecycle metadata
     lifecycle.application_version = settings.application_version
@@ -213,6 +225,8 @@ def _build_services(
         "revisions": rvs,
         "calf": clf,
         "research": research_svc,
+        "review_service": review_svc,
+        "review_repository": repository._review_repository,
     }
 
 
@@ -234,6 +248,12 @@ def _apply_service_state(api: FastAPI, services: dict) -> None:
     api.state.calf = services["calf"]
     api.state.research = services["research"]
     api.state.journey_service = services["journey"]
+    api.state.review_service = services["review_service"]
+    api.state.review_repository = services["review_repository"]
+    api.state.review_evidence_lookup = SQLiteReviewEvidenceLookup(
+        repository._connection_manager
+    )
+    api.state.review_learning_item_reader = repository._wave2_repository
     api.state.practice_submission_reader = repository._submission_repository
     api.state.practice_reader = repository._practice_repository
     api.state.practice_writer = repository._practice_repository

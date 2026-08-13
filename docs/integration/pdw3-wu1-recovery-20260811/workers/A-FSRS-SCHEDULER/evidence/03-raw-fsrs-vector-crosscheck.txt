@@ -1,0 +1,21 @@
+Worker A - Raw fsrs 6.3.2 direct computation (no app code), 2026-08-11
+Scheduler(enable_fuzzing=False, desired_retention=0.9), T0 = 2026-01-01 08:00 UTC
+
+first Good on fresh Card(card_id=1, due=T0):
+  state=Learning step=1 stability=2.3065 difficulty=2.118103970459016
+  due=2026-01-01 08:10:00+00:00 last_review=T0
+second Good at first.due:
+  state=Review step=None stability=2.3065 difficulty=2.111214235785395
+  due=2026-01-03 08:10:00+00:00 last_review=2026-01-01 08:10:00+00:00
+Again on Review card:
+  state=Relearning step=0 stability=0.6077016626638644 difficulty=7.392238132342694
+  due=2026-01-03 08:20:00+00:00
+fresh card + rating on first review:
+  Again -> Learning step 0, due +60s,  stability 0.212
+  Hard  -> Learning step 0, due +330s, stability 1.2931
+  Good  -> Learning step 1, due +600s, stability 2.3065
+  Easy  -> Review   step None, due +8d, stability 8.2956
+
+Cross-check result: every asserted value in
+tests/review/test_scheduler_determinism.py matches the raw library output
+exactly (see evidence/pytest-targeted-001.log and pytest-review-suite-002.log).

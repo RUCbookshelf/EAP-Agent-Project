@@ -1,0 +1,14 @@
+**Status: DONE — verdict PASS**
+
+1. 最终完成结果：Migration 15 审计通过（PASS）。Migration 15 (`review_scheduling_foundation`) 严格追加于 Migration 14 之后（仅新增 `practice_activities`、`review_events`、`learning_item_scheduler_states` 三表及 5 个索引，全部 `CREATE ... IF NOT EXISTS`；`_migration_14` 无任何改动）；版本单一来源一致（`app/version.py:47` == `migrations.py:44` == 15）；Review 仓库经同一 SQLite 文件往返并可在关闭/重开后存活，LearningItem 身份稳定；ReviewEvent 与 LearningItem 调度状态分离（`learning_items` 无 FSRS 状态列，`no_fsrs_note` 契约保持）；未发现核心服务绕过 Repository 协议直连 sqlite3 或引入第二数据库/引擎；未执行任何 reset/clean/restore/commit。完整报告：[findings.md](A:/EAP%20Agent%20Project/worktrees/shared-core/docs/integration/pdw3-wu1-recovery-20260811/workers/B-MIGRATION-PERSISTENCE/findings.md)。
+
+2. 修改的文件路径：None（仅在本 worker 目录下创建了 findings.md 与 evidence/ 下的日志、探针脚本及临时 DB；工作树受保护文件与 git 状态未动）。
+
+3. 测试或验证结果：
+   - pytest `tests/review/test_migration_15.py` + `test_review_repository.py`：**10 passed** → [pytest-review.log](A:/EAP%20Agent%20Project/worktrees/shared-core/docs/integration/pdw3-wu1-recovery-20260811/workers/B-MIGRATION-PERSISTENCE/evidence/pytest-review.log)
+   - pytest `tests/shared/test_version_single_sourcing.py`（版本漂移不变量）：**13 passed** → [pytest-version-single-sourcing.log](A:/EAP%20Agent%20Project/worktrees/shared-core/docs/integration/pdw3-wu1-recovery-20260811/workers/B-MIGRATION-PERSISTENCE/evidence/pytest-version-single-sourcing.log)
+   - 只读探针（fresh / 真实 14 带数据升级到 15 无数据丢失 / 幂等重跑 / 关闭重开持久化 / 单文件单引擎）：**5/5 OK** → [probe_results.txt](A:/EAP%20Agent%20Project/worktrees/shared-core/docs/integration/pdw3-wu1-recovery-20260811/workers/B-MIGRATION-PERSISTENCE/evidence/probe_results.txt)、[probe-run.log](A:/EAP%20Agent%20Project/worktrees/shared-core/docs/integration/pdw3-wu1-recovery-20260811/workers/B-MIGRATION-PERSISTENCE/evidence/probe-run.log)、[probe_migration15.py](A:/EAP%20Agent%20Project/worktrees/shared-core/docs/integration/pdw3-wu1-recovery-20260811/workers/B-MIGRATION-PERSISTENCE/evidence/probe_migration15.py)
+   - 模式区分探针：learning_items 无 stability/difficulty/due/state/step 列 → [probe-distinctness.log](A:/EAP%20Agent%20Project/worktrees/shared-core/docs/integration/pdw3-wu1-recovery-20260811/workers/B-MIGRATION-PERSISTENCE/evidence/probe-distinctness.log)
+
+4. 尚未解决的阻塞项或风险：无阻塞项。备注（非阻塞）：`app/l2/wave2/sqlite_repository.py:70` 与 `app/learner/wave2/sqlite_repository.py:68` 存在先于本 WU1 的 TEST-ONLY 直连 `sqlite3.connect`，未接入组合根，不违反契约，建议集成门禁确认其保持根外；`_next_suffix_id` 使用内部常量的 SQL 插值，当前无注入面，保持内部私有即可；`record_review_event` 使用 INSERT OR REPLACE，重复事件 ID 会覆盖，调用方需管理 ID 复用。
+

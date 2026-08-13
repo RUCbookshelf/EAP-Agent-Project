@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0.0",
+  "handoff_id": "PDW3-WU1-CORE-DECOMPOSITION-RECOVERY-20260811__20260811T150744Z__ad2fdd",
+  "goal_id": "PDW3-WU1-CORE-DECOMPOSITION-RECOVERY-20260811",
+  "owner": "CORE",
+  "starting_sha": "7a9e4b470c41c0453a3795233f1bdd5c483d80ae",
+  "final_sha": "7a9e4b470c41c0453a3795233f1bdd5c483d80ae",
+  "branch": "dept/shared-core",
+  "worktree": "A:\\EAP Agent Project\\worktrees\\shared-core",
+  "verdict": "GREEN",
+  "tests": [
+    {"name":"phase1_worker_a_fsrs_scheduler_audit","result":"PASS","evidence":["23 targeted + 53 full tests/review passed","raw fsrs 6.3.2 vector cross-check exact (next + repeat review)","9 fail-closed rating probes rejected invalid values","workers/A-FSRS-SCHEDULER/findings.md"]},
+    {"name":"phase1_worker_b_migration_persistence_audit","result":"PASS","evidence":["10/10 migration+repository tests","13/13 version single-sourcing","5/5 fresh/existing/idempotent/close-reopen/single-file probes","workers/B-MIGRATION-PERSISTENCE/findings.md"]},
+    {"name":"phase1_worker_c_contracts_composition_evidence_audit","result":"PASS","evidence":["10 required + 47 extended tests passed","21-check composition probe (1 probe-shape fix)","D1 FK->500, D2 ownership gap, D3 duplicate overwrite confirmed","workers/C-CONTRACTS-COMPOSITION-EVIDENCE/findings.md"]},
+    {"name":"phase1_worker_d_tests_cases_ai_audit","result":"FAIL","evidence":["tests/review 53/53 passed at Phase 1","1 modified root test + 4 stale-14 root tests failed at Phase 1","coverage gaps C2-C5 identified","workers/D-TESTS-CASES-AI/findings.md"]},
+    {"name":"repair_r1_review_robustness","result":"PASS","evidence":["53/53 tests/review retained after R1","10/10 fail-closed probes (404/409/403/422 with no writes)","inventory D3/D4/D5/C9 resolved","repairs/R1-REVIEW-ROBUSTNESS/findings.md"]},
+    {"name":"repair_r2_root_test_reconciliation","result":"PASS","evidence":["110/110 targeted tests","22/22 stale-14 probe set","96/96 adjacent suites","rg sweep clean of hard-coded v14 latest semantics","repairs/R2-ROOT-TESTS-MIGRATION15/findings.md"]},
+    {"name":"repair_r3_tests_review_coverage","result":"PASS","evidence":["82/82 tests/review (53 + 29 new)","inventory C2-C5 closed with real-behavior tests","R1 404/409/403/422 regression asserted with no-write checks","repairs/R3-TESTS-REVIEW-COVERAGE/findings.md"]},
+    {"name":"v1_independent_review_suite","result":"PASS","evidence":["82/82 (49.32s)","repairs/V1-VERIFIER/evidence/v1-review-suite.log"]},
+    {"name":"v1_independent_root_shared_surface","result":"PASS","evidence":["206/206 (199.10s)","repairs/V1-VERIFIER/evidence/v1-root-reconciled-suite.log"]},
+    {"name":"v1_independent_probes","result":"PASS","evidence":["11/11 fsrs vectors","15/15 migration/persistence","14/14 fail-closed API","10/10 composition/semantics","rollback-gate probe PASS","all probes exit 0"]},
+    {"name":"v1_cases_a_i","result":"PASS","evidence":["per-case matrix in repairs/V1-VERIFIER/verification-report.md section 4"]},
+    {"name":"v1_resource_hygiene","result":"PASS","evidence":["git status identical before/after (35 entries)","no stray processes attributable to this work","repairs/V1-VERIFIER/evidence/git-status-initial.txt / git-status-final.txt"]}
+  ],
+  "artifacts": [
+    "A:\\EAP Agent Project\\worktrees\\shared-core\\docs\\integration\\pdw3-wu1-recovery-20260811\\CHECKPOINT-001-PREDISPATCH.md",
+    "A:\\EAP Agent Project\\worktrees\\shared-core\\docs\\integration\\pdw3-wu1-recovery-20260811\\inventory\\A-B-C-D-E-PARTIAL-DIFF-INVENTORY.md",
+    "A:\\EAP Agent Project\\worktrees\\shared-core\\docs\\integration\\pdw3-wu1-recovery-20260811\\inventory\\REPAIR-STATUS.md",
+    "A:\\EAP Agent Project\\worktrees\\shared-core\\docs\\integration\\pdw3-wu1-recovery-20260811\\workers\\A-FSRS-SCHEDULER\\findings.md",
+    "A:\\EAP Agent Project\\worktrees\\shared-core\\docs\\integration\\pdw3-wu1-recovery-20260811\\workers\\B-MIGRATION-PERSISTENCE\\findings.md",
+    "A:\\EAP Agent Project\\worktrees\\shared-core\\docs\\integration\\pdw3-wu1-recovery-20260811\\workers\\C-CONTRACTS-COMPOSITION-EVIDENCE\\findings.md",
+    "A:\\EAP Agent Project\\worktrees\\shared-core\\docs\\integration\\pdw3-wu1-recovery-20260811\\workers\\D-TESTS-CASES-AI\\findings.md",
+    "A:\\EAP Agent Project\\worktrees\\shared-core\\docs\\integration\\pdw3-wu1-recovery-20260811\\repairs\\R1-REVIEW-ROBUSTNESS\\findings.md",
+    "A:\\EAP Agent Project\\worktrees\\shared-core\\docs\\integration\\pdw3-wu1-recovery-20260811\\repairs\\R2-ROOT-TESTS-MIGRATION15\\findings.md",
+    "A:\\EAP Agent Project\\worktrees\\shared-core\\docs\\integration\\pdw3-wu1-recovery-20260811\\repairs\\R3-TESTS-REVIEW-COVERAGE\\findings.md",
+    "A:\\EAP Agent Project\\worktrees\\shared-core\\docs\\integration\\pdw3-wu1-recovery-20260811\\repairs\\V1-VERIFIER\\verification-report.md",
+    "A:\\EAP Agent Project\\worktrees\\shared-core\\docs\\integration\\pdw3-wu1-recovery-20260811\\CORE-WU1-DEPARTMENT-HANDOFF.md",
+    "A:\\EAP Agent Project\\worktrees\\shared-core\\docs\\integration\\pdw3-wu1-recovery-20260811\\CORE-WU1-DEPARTMENT-HANDOFF.json"
+  ],
+  "findings": [
+    "Preserved partial diff used as recovery input; four read-only audits completed and the A/B/C/D/E inventory produced before any repair.",
+    "R1 resolved inventory D3 (nonexistent practice_activity_id -> 404, no write), D4 (duplicate PA/RE IDs -> 409, original rows intact), D5 (student/ownership binding -> 403), C9 (naive/non-UTC datetime -> 422; no 500/traceback).",
+    "R2 reconciled all rg-verified hard-coded migration-14 assertions in root tests (8 files) including the test_calf_v08 rollback chain and the pinned route contract; Wave-2 regression green.",
+    "R3 closed inventory C2-C5 with real-behavior tests and asserted R1's final 404/409/403/422 boundaries with no-write checks; tests/review grew from 53 to 82, all green.",
+    "V1 independently verified real fsrs==6.3.2 behavior and identity, rating/state lifecycle, Migration 15 fresh + genuine v14-data + idempotence + one-step rollback, close/reopen persistence with stable LearningItem identity, provenance reconstruction, evidence separation, fail-closed inputs, single composition root, Wave-2 compatibility, explicit Cases A-I, and resource hygiene.",
+    "DEPARTMENT GREEN is not promotion; no commit/push/PR/merge/promotion was performed."
+  ],
+  "blocking_findings": [],
+  "dependencies_unlocked": [
+    "CORE WU1 DEPARTMENT GREEN candidate qualified for the consolidated INT Wave-3 integration gate (INT retains gate authority)"
+  ],
+  "dependencies_remaining": [
+    "INT consolidated Wave-3 integration gate (INT)",
+    "LEARNER/L2/UX Wave-3 implementation (gated behind CORE/INT)",
+    "Exact-SHA promotion decision (WAITING_USER; no promotion authority granted)"
+  ],
+  "repair_owner": null,
+  "integration_required": true,
+  "promotion_eligible": false,
+  "user_decision_required": false,
+  "researcher_decision_required": false,
+  "returned_at": "2026-08-11T16:00:41Z",
+  "gate_authority": null,
+  "gate_evidence": [
+    "Inventory-001 before any repair; disjoint R1/R2 parallel repair; R3 after R1; V1 independent read-only after final state",
+    "tests/review 82/82; root/shared reconciled surface 206/206; independent probes 50/50 + rollback-gate probe, all exit 0",
+    "Fail-closed boundaries 404/409/403/422 with zero writes (V1 probe 3 + R3 tests)",
+    "Migration 15 fresh/existing-v14-data/idempotent/one-step-rollback verified (V1 probe 2 + tests)",
+    "Close/reopen persistence with stable LearningItem identity and separate ReviewEvent rows (V1 probe 2 + test_review_repository.py:152)",
+    "Deterministic provenance reconstruction replay equals state_after (test_review_service.py:135)",
+    "No semantic leakage in app/review AST or live API response keys (V1 probe 4 + semantic tests)",
+    "Single composition root; 5 review routes registered once; 18 Wave-2 routes coexist; single SQLite file (V1 probe 4)",
+    "git status identical before/after V1 (35 entries); no commit/push/PR/merge/promotion"
+  ],
+  "notes": "DEPARTMENT GREEN only. final_sha == starting_sha because no commit was created; the preserved partial diff plus R1/R2/R3 repairs remain the uncommitted candidate state in the authorized worktree for INT. Non-blocking observations carried for INT: (1) an impossible persisted scheduler state (never written by the product path) would surface as raw 500 if ever reached at the API boundary, with service-level fail-closed-with-no-write asserted; (2) card_id=None wall-clock id non-determinism is unreachable through ReviewService; (3) the platform error envelope exposes message text rather than the stable ReviewError kind string, with kinds asserted at service level; (4) pre-existing TEST-ONLY sqlite3.connect in L2/LEARNER wave2 modules remains outside the composition root."
+}

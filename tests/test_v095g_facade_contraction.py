@@ -32,7 +32,7 @@ from app.api.ports import (
     SubmissionCalibrationReadPort,
     SystemMigrationPort,
 )
-from app.database import Database
+from app.database import Database, LATEST_MIGRATION_VERSION
 from tests.test_v095f2_service_narrowing import _restore_lifecycle, _snapshot_lifecycle
 
 
@@ -225,7 +225,7 @@ class TestMigratedRouterBehavior:
         with TestClient(create_app(settings)) as client:
             response = client.get("/api/v1/system/version")
             assert response.status_code == 200
-            assert response.json()["database_migration_version"] == 14
+            assert response.json()["database_migration_version"] == LATEST_MIGRATION_VERSION
 
     def test_student_and_history_endpoints_use_narrow_readers(self, tmp_path):
         settings = _settings(tmp_path)

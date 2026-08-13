@@ -21,6 +21,8 @@ from app.api.ports import (
     SubmissionCalibrationReadPort,
     SystemMigrationPort,
 )
+from app.review.protocols import ReviewEvidenceLookupProtocol
+from app.review.service import ReviewService
 
 
 def get_settings(request: Request):
@@ -93,6 +95,28 @@ def get_reanalysis(request: Request):
 
 def get_journey_service(request: Request):
     return request.app.state.journey_service
+
+
+def get_review_service(request: Request) -> ReviewService:
+    service = getattr(request.app.state, "review_service", None)
+    if service is None:
+        raise HTTPException(
+            status_code=503,
+            detail="Review service is not available in this composition.",
+        )
+    return service
+
+
+def get_review_evidence_lookup(
+    request: Request,
+) -> ReviewEvidenceLookupProtocol:
+    lookup = getattr(request.app.state, "review_evidence_lookup", None)
+    if lookup is None:
+        raise HTTPException(
+            status_code=503,
+            detail="Review evidence lookup is not available in this composition.",
+        )
+    return lookup
 
 
 def get_revisions(request: Request):

@@ -1,0 +1,16 @@
+**DONE_WITH_CONCERNS**
+
+**最终完成结果 (1):** Worker D 审计已完成。`tests/review` 套件本身完整且全绿（53/53 通过），Cases A/C/E/F/I 有明确覆盖，B/D/G/H 为部分覆盖；但测试层存在已确认的红色结果：被修改的根测试 `tests/test_calf_v08.py::test_migration_10_...` 因 Migration 15 下 `rollback(connection, 13)` 违反单步回滚约束而失败（LATEST=15 引入），且至少 7 个未修改根测试文件仍硬编码版本 14（探针确认 2 个文件、4 个测试失败）。保存的部分 diff 不满足“所有测试必须运行通过”的版本门。审计判定：**FAIL**（针对测试层）。
+
+**修改的文件路径 (2):** None（产品/Program Control/git 状态零改动；基线 28 条 status 条目与运行前一致）。仅写入 `findings.md` 与 `evidence/` 日志。
+
+**测试或验证结果 (3):**
+- 收集：53 tests collected（0 错误）→ `evidence/collect-review.log`
+- review 套件：**53 passed** (45.27s) → `evidence/run-review-suite.log`
+- 六个修改根测试文件：**1 failed, 84 passed**（失败=test_calf_v08.py:183 回滚链）→ `evidence/run-modified-root-tests.log`
+- 探针（未修改根测试）：`test_wave2_migration_v14.py`、`test_v06_configuration_dashboard.py` → **4 failed, 18 passed**（`assert 15 == 14` 及单步回滚 ValueError）→ `evidence/run-stale-14-probes.log`
+- 环境核验：venv 内安装 `fsrs==6.3.2`，tests/review 无任何 mock/stub；确定性向量与 `library_version=="6.3.2"` 身份断言均走真实库。
+
+**尚未解决的阻塞项或风险 (4):** 无阻塞项（本 worker 交付完成）。风险：① 修改的根测试更新不完整（test_calf_v08 回滚链未适配 15，D-1）；② 未修改根测试残留 v14 硬编码断言 ≥7 个文件（D-2，已确认 4 例失败，另列 test_snapshot_repository_v03、test_v071_reliability_ui、test_v095b_router_contract、test_v095g_facade_contraction、test_v097b_wu3_target_creation）；③ 未直接覆盖项：Case D 的真实 v14→15 Wave-2 数据升级路径、Case B 无效状态转移、Case H 畸形 provenance 及 API 层 422 负例、Case G 四类证据语义直接断言。详见 [findings.md](A:/EAP Agent Project/worktrees/shared-core/docs/integration/pdw3-wu1-recovery-20260811/workers/D-TESTS-CASES-AI/findings.md)。
+
+返回内容必须包含：1.最终完成结果；2.修改的文件路径（无则写None）；3.测试或验证结果；4.尚未解决的阻塞项或风险（没有则写"无"）。不要返回完整日志；只返回最终结果与修改文件路径。

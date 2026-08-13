@@ -1,0 +1,81 @@
+{
+  "schema_version": "1.0.0",
+  "handoff_id": "PDW3-WU2-CORE-GLOBAL-LEDGER-GUARD-OPTION-A-20260812__20260812T044607Z__439e0b",
+  "goal_id": "PDW3-WU2-CORE-GLOBAL-LEDGER-GUARD-OPTION-A-20260812",
+  "owner": "CORE",
+  "starting_sha": "7a9e4b470c41c0453a3795233f1bdd5c483d80ae",
+  "final_sha": "7a9e4b470c41c0453a3795233f1bdd5c483d80ae",
+  "branch": "dept/shared-core",
+  "worktree": "A:\\EAP Agent Project\\worktrees\\shared-core",
+  "verdict": "GREEN",
+  "tests": [
+    {
+      "name": "Option-A global ledger guard/consumer seam tests (new)",
+      "result": "PASS",
+      "evidence": [
+        "7 passed in 2.12s: tests/review/test_migration_15_global_ledger_guard.py",
+        "Covers: identity constants (CORE/15/review_scheduling_foundation), unique ledger identity at 15, fresh DB exactly one schema_migrations row at 15, guard rejects rename at 15, guard rejects LATEST drift, guard rejects duplicate identity at 16, and single runner/single database consumer seam with rollback 15->14 and idempotent re-apply"
+      ]
+    },
+    {
+      "name": "Focused migration/ledger regression set",
+      "result": "PASS",
+      "evidence": [
+        "30 passed, 2 warnings in 17.02s, PYTEST_EXIT=0",
+        "tests/review/test_migration_15_global_ledger_guard.py + tests/review/test_migration_15.py + tests/test_wave2_migration_v14.py + tests/shared/test_version_single_sourcing.py",
+        "evidence/pytest-focused.log and evidence/junit-focused.xml"
+      ]
+    },
+    {
+      "name": "Option-A probe (real migrations, temporary SQLite files)",
+      "result": "PASS",
+      "evidence": [
+        "PROBE_OK, PROBE_EXIT=0; evidence/probe-global-ledger-option-a.log",
+        "fresh upgrade()=15 with three review table families; v14-era DB upgrade preserves Wave-2 rows and adds the three families; rollback 15->14 is ledger-only with re-apply restoring exactly one row at 15; assert_global_migration_15_identity()=(15,'review_scheduling_foundation')"
+      ]
+    }
+  ],
+  "artifacts": [
+    "A:\\EAP Agent Project\\worktrees\\shared-core\\docs\\integration\\pdw3-wu2-core-global-ledger-guard-option-a-20260812\\CORE-WU2-GLOBAL-LEDGER-GUARD-REPORT.md",
+    "A:\\EAP Agent Project\\worktrees\\shared-core\\docs\\integration\\pdw3-wu2-core-global-ledger-guard-option-a-20260812\\CORE-WU2-GLOBAL-LEDGER-GUARD-HANDOFF.json",
+    "A:\\EAP Agent Project\\worktrees\\shared-core\\docs\\integration\\pdw3-wu2-core-global-ledger-guard-option-a-20260812\\WU2-CHANGED-FILES.md",
+    "A:\\EAP Agent Project\\worktrees\\shared-core\\docs\\integration\\pdw3-wu2-core-global-ledger-guard-option-a-20260812\\evidence\\probe_global_ledger_option_a.py",
+    "A:\\EAP Agent Project\\worktrees\\shared-core\\docs\\integration\\pdw3-wu2-core-global-ledger-guard-option-a-20260812\\evidence\\probe-global-ledger-option-a.log",
+    "A:\\EAP Agent Project\\worktrees\\shared-core\\docs\\integration\\pdw3-wu2-core-global-ledger-guard-option-a-20260812\\evidence\\pytest-focused.log",
+    "A:\\EAP Agent Project\\worktrees\\shared-core\\docs\\integration\\pdw3-wu2-core-global-ledger-guard-option-a-20260812\\evidence\\junit-focused.xml",
+    "A:\\EAP Agent Project\\worktrees\\shared-core\\docs\\integration\\pdw3-wu2-core-global-ledger-guard-option-a-20260812\\evidence\\git-status-initial.txt",
+    "A:\\EAP Agent Project\\worktrees\\shared-core\\docs\\integration\\pdw3-wu2-core-global-ledger-guard-option-a-20260812\\evidence\\git-status-final.txt"
+  ],
+  "findings": [
+    "CORE retains global integer Migration 15 uniquely named review_scheduling_foundation; LATEST_MIGRATION_VERSION=15 and PLATFORM_DATABASE_MIGRATION_VERSION=15 are both proven by tests and the probe.",
+    "Fresh and genuine v14-era databases apply the real _migration_15 body: practice_activities, review_events, learning_item_scheduler_states; Wave-2 rows survive the v14-era upgrade.",
+    "Rollback 15->14 is ledger-only and non-destructive: tables/data preserved, ledger row at 15 removed, idempotent re-apply restores exactly one row at 15.",
+    "Canonical CORE-owned consumer seam added at app/database/migrations.py:1120-1162 (GLOBAL_MIGRATION_LEDGER_OWNER/VERSION_15/VERSION_15_NAME + assert_global_migration_15_identity), backed by the single MIGRATIONS registry and app.database.upgrade/rollback; no second migration runner or second database.",
+    "Existing Migration 15 body, numbering, version.py=15, and prior fresh/v14/rollback tests were already correct and were preserved, not rewritten.",
+    "All pre-existing dirty/untracked shared-core files are preserved; final_sha==starting_sha because the candidate remains uncommitted."
+  ],
+  "blocking_findings": [],
+  "dependencies_unlocked": [
+    "LEARNER can later implement acknowledgement persistence as global Migration 16 against the same MIGRATIONS registry and app.database.upgrade/rollback, using the CORE guard (assert_global_migration_15_identity) as the seam; no second runner or database is authorized or needed",
+    "INT can verify the Option-A ledger composition in the consolidated Wave-3 integration gate"
+  ],
+  "dependencies_remaining": [
+    "LEARNER-owned renumbering of acknowledgement persistence to global Migration 16 plus its stale ==14 pin repair per INT adjudication Section 5",
+    "INT consolidated Wave-3 integration gate",
+    "Exact-SHA promotion decision (WAITING_USER; no promotion authority granted)"
+  ],
+  "repair_owner": null,
+  "integration_required": true,
+  "promotion_eligible": false,
+  "user_decision_required": false,
+  "researcher_decision_required": false,
+  "returned_at": "2026-08-12T04:46:07Z",
+  "gate_authority": null,
+  "gate_evidence": [
+    "Red-first: new guard tests failed at collection with ImportError (GLOBAL_MIGRATION_LEDGER_OWNER missing) before implementation",
+    "Green: 7/7 new guard tests passed; 30/30 focused migration/ledger tests passed with PYTEST_EXIT=0",
+    "Probe: fresh upgrade=15 + unique ledger row + three table families; v14-era upgrade preserves Wave-2 rows and adds the families; rollback 15->14 and idempotent re-apply verified; PROBE_EXIT=0",
+    "git status initial vs final delta limited to app/database/migrations.py seam, the new guard test, and the new evidence directory; HEAD unchanged 7a9e4b470c41c0453a3795233f1bdd5c483d80ae"
+  ],
+  "notes": "Handoff state after submission: HANDOFF_PENDING_ACCEPTANCE. The parent remains open until PROGRAM accepts or rejects; no self-close. final_sha == starting_sha because no commit was created (preserved WU1/WU2 candidate + bounded WU2 guard repair). pytest basetemp was routed to a writable dedicated temp directory because the shared default pytest temp root is not readable in this sandbox; this is an environment limitation, not a product defect. No promotion authority granted; DEPARTMENT GREEN is not INTEGRATION GREEN or promotion."
+}

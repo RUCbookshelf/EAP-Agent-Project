@@ -4,6 +4,7 @@ from .configuration import SQLiteConfigurationRepository
 from .learner import SQLiteLearnerRepository
 from .practice import SQLitePracticeRepository
 from .research import SQLiteResearchRepository
+from .review import SQLiteReviewRepository
 from .revision import SQLiteRevisionRepository
 from .submission import SQLiteSubmissionRepository
 from .system import SQLiteSystemRepository
@@ -16,6 +17,7 @@ __all__ = [
     "SQLiteLearnerRepository",
     "SQLitePracticeRepository",
     "SQLiteResearchRepository",
+    "SQLiteReviewRepository",
     "SQLiteRevisionRepository",
     "SQLiteSubmissionRepository",
     "SQLiteSystemRepository",

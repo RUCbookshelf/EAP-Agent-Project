@@ -1,0 +1,8 @@
+== Probe start: LATEST=15 version.py=15
+1. FRESH path: user_version=15, versions=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15] -> True
+2. EXISTING path (14 with data -> 15): v=15, rows_before=[('LI000001', 'S1', 'grammar'), ('LI000002', 'S1', 'vocabulary')], rows_after=[('LI000001', 'S1', 'grammar'), ('LI000002', 'S1', 'vocabulary')] -> True
+3. IDEMPOTENT re-run: v=15, tables_equal=True, versions_equal=True -> True
+4. CLOSE/REOPEN: event_id=RE000001, activity_id=PA000001, events=1, state_state=review, li_identity_stable=True -> True
+5. SINGLE FILE: db_files=['existing.db', 'fresh.db', 'reopen.db'], before==after=True, attached_dbs=1 -> True
+== RESULT: {'fresh': True, 'existing': True, 'idempotent': True, 'close_reopen': True, 'single_file': True}
+== PROBE OK ==

@@ -13,7 +13,7 @@ from app.analysis.metric_confidence import assess_metric_confidence
 from app.calibration import DiagnosticCalibrationService, EvidenceRelevanceValidator
 from app.config import load_settings
 from app.configuration import ConfigurationPayload
-from app.database import Database
+from app.database import Database, LATEST_MIGRATION_VERSION
 from app.database.migrations import MIGRATIONS, upgrade
 from app.diagnosis import NlpHeuristicDiagnoser
 from app.feedback import FeedbackValidationError, FeedbackValidator
@@ -305,7 +305,7 @@ def test_feedback_validator_cannot_restore_monitored_diagnosis(tmp_path):
 def test_migration_7_and_append_only_calibration_repository(tmp_path):
     repository, service = local_stack(tmp_path)
     result = service.submit(EssaySubmission.model_validate(payload()))
-    assert repository._system_repository.migration_version() == 14
+    assert repository._system_repository.migration_version() == LATEST_MIGRATION_VERSION
     with repository.connect() as connection:
         columns = {row[1] for row in connection.execute("PRAGMA table_info(metric_results)")}
         count = connection.execute("SELECT COUNT(*) FROM diagnostic_calibrations WHERE essay_id=?", (result.essay_id,)).fetchone()[0]
@@ -326,7 +326,7 @@ def test_v06_database_upgrades_without_losing_historical_essay(tmp_path):
         ("LEGACY", "Legacy prompt", "argumentative essay", "first draft", 0, "none", "Preserved historical essay.", "2026-07-29T00:01:00+00:00"),
     )
     connection.commit()
-    assert upgrade(connection) == 14
+    assert upgrade(connection) == LATEST_MIGRATION_VERSION
     assert connection.execute("SELECT essay_text FROM essays WHERE student_id='LEGACY'").fetchone()[0] == "Preserved historical essay."
     assert connection.execute("SELECT version FROM configuration_versions WHERE status='active'").fetchone()[0] == "config-v0.9.0"
     connection.close()

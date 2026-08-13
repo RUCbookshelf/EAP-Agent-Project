@@ -1,0 +1,22 @@
+Verification complete. All evidence is in place and git state is untouched (35 entries, identical before/after).
+
+**Return contract**
+
+- **Status:** DONE
+- **Overall verdict:** PASS (verification-report.md + evidence written under `repairs\V1-VERIFIER\`)
+- **Per-item summary (all verified with direct evidence, no worker claims trusted):**
+  1. Real fsrs==6.3.2 — PASS (importlib.metadata=6.3.2; raw-library vector cross-check exact for next + repeat review; identity recorded)
+  2. Rating/state lifecycle — PASS (3 channels, conservative resolution; New→Learning→Review→Relearning→Review via real scheduler; invalid transitions fail closed)
+  3. Migration 15 fresh — PASS (empty DB→15, tables, ledger 1..15, version single-source)
+  4. Migration 15 existing — PASS (genuine v14 DB with Wave-2 rows→15, byte-identical preservation, idempotent, one-step rollback gate honored)
+  5. Close/reopen — PASS (same file, stable LearningItem identity, separate ReviewEvent rows)
+  6. Provenance — PASS (rule version + scheduler identity/params + state_before/after; replay == state_after exactly)
+  7. Evidence separation — PASS (PracticeActivity/LearningItem v1/ReviewEvent distinct; practice vs authentic; no mastery/proficiency/ability tokens in AST or API keys)
+  8. Fail-closed inputs — PASS (422/404/409/403 with zero writes; no 500s)
+  9. Real composition — PASS (one root, 5 review routes once, 18 Wave-2 routes, fsrs only in app/review, single SQLite file)
+  10. Wave-2 compatibility — PASS (206/206 reconciled root/shared tests; route pin includes 5 review routes; LearningItem v1 untouched)
+  11. Cases A-I — all PASS (test:file:line matrix in report section 4)
+  12. Hygiene — PASS (git status identical before/after; diff scoped to 7 product/config + 13 root tests; no stray servers)
+- **Runs:** tests/review 82/82; root/shared reconciliation surface 206/206; independent probes 50/50 (11+15+14+10) + rollback-gate probe, all exit 0.
+- **Evidence paths:** [verification-report.md](A:\EAP Agent Project\worktrees\shared-core\docs\integration\pdw3-wu1-recovery-20260811\repairs\V1-VERIFIER\verification-report.md) and `repairs\V1-VERIFIER\evidence\` (suite logs, 4 probe scripts+logs, rollback-gate log, git-status before/after snapshots, temp DBs).
+- **Blockers:** 无. **Risks (non-blocking, unchanged from R3 observations):** (1) impossible persisted scheduler state would surface as raw 500 at API if ever reached — product never writes such states, service-level fail-closed asserted; (2) `card_id=None` wall-clock id non-determinism — unreachable through `ReviewService`; (3) platform error envelope carries message text, not the stable kind string (kinds asserted at service level). Nothing repaired, as instructed.
