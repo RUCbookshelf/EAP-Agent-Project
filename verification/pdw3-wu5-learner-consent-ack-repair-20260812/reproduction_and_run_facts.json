@@ -1,0 +1,66 @@
+{
+  "goal_id": "PDW3-WU5-INT-CONSOLIDATED-WAVE3-INTEGRATION-GATE__REPAIR",
+  "run_dir": "A:\\EAP Agent Project\\program-control\\runs\\PDW3-WU5-INT-CONSOLIDATED-WAVE3-INTEGRATION-GATE__REPAIR__20260812T153733Z__c80d41",
+  "authorized_worktree": "A:\\EAP Agent Project\\worktrees\\learner",
+  "branch": "dept/feedback-learner",
+  "head_before": "7a9e4b470c41c0453a3795233f1bdd5c483d80ae",
+  "head_after": "7a9e4b470c41c0453a3795233f1bdd5c483d80ae",
+  "preflight": {
+    "git_rev_parse_show_toplevel": "A:/EAP Agent Project/worktrees/learner",
+    "git_branch_show_current": "dept/feedback-learner",
+    "git_rev_parse_HEAD": "7a9e4b470c41c0453a3795233f1bdd5c483d80ae",
+    "promoted_baseline_match": true,
+    "candidate_refs_match": "dept/feedback-learner@7a9e4b470c41c0453a3795233f1bdd5c483d80ae",
+    "workspace_state": "DIRTY_PRESERVED with pre-existing WU2 modified/untracked candidate files"
+  },
+  "parent_int_handoff": "A:\\EAP Agent Project\\program-control\\handoffs\\INT\\PDW3-WU5-INT-CONSOLIDATED-WAVE3-INTEGRATION-GATE__PDW3-WU5-INT-CONSOLIDATED-WAVE3-INTEGRATION-GATE__20260812T140923Z__a5adbe.handoff.json",
+  "parent_int_verdict": "AMBER",
+  "defect": {
+    "summary": "Composing the real L2 WU3 LearnerConsentStorePort over the migration-16 learner_acknowledgements table stores durable tutor_consent rows (source_kind='tutor_consent') in the same table the LEARNER SQLiteAcknowledgementRepository reads; the repository parsed every row as an AcknowledgementRecord, so AcknowledgementSourceKind('tutor_consent') raised ValueError and GET /api/v1/students/{id}/acknowledgements returned HTTP 500 for learners with tutor consents.",
+    "reproduced_at": "app/infrastructure/sqlite/repositories/acknowledgement.py:132 (_from_row) via list_for_learner:220 (HTTP listing path) and get:211",
+    "error": "ValueError: 'tutor_consent' is not a valid AcknowledgementSourceKind",
+    "red_run_result": "2 failed, 1 passed, exit 1",
+    "red_run_failures": [
+      "test_listing_returns_200_excludes_consent_and_preserves_rows (HTTP listing raised ValueError inside list_for_learner; would be HTTP 500)",
+      "test_get_returns_none_for_tutor_consent_row (repository get raised ValueError)"
+    ],
+    "red_run_control_passed": "test_wu2_behavior_without_tutor_consent_stays_intact"
+  },
+  "repair": {
+    "product_file": "A:\\EAP Agent Project\\worktrees\\learner\\app\\infrastructure\\sqlite\\repositories\\acknowledgement.py",
+    "change": "Bounded read-side discrimination only: added _ACKNOWLEDGEMENT_SOURCE_KIND_VALUES and _is_acknowledgement_row(row); get() returns None for non-acknowledgement rows; list_for_learner() filters non-acknowledgement rows before _from_row. No schema change, no migration, no data deletion, no acknowledgement-semantics change, no API/route/composition-root change.",
+    "write_scope_compliance": true
+  },
+  "runs": [
+    {
+      "name": "Focused WU5 consent/acknowledgement boundary regression (new)",
+      "command": "python -m pytest tests/learner/test_wu5_consent_ack_boundary.py -q",
+      "result": "3 passed, 2 warnings",
+      "exit_code": 0,
+      "log": "verification\\pdw3-wu5-learner-consent-ack-repair-20260812\\logs\\pytest-wu5-focused.log"
+    },
+    {
+      "name": "Decisive LEARNER WU2 acknowledgement/persistence/route suite (six test_wu2_* files)",
+      "command": "python -m pytest tests/learner/test_wu2_acknowledgement.py tests/learner/test_wu2_persistence_evidence.py tests/learner/test_wu2_journey_routes.py tests/learner/test_wu2_journey_history_transfer.py tests/learner/test_wu2_api_composition.py tests/learner/test_wu2_practice_review_evidence.py -q",
+      "result": "161 passed, 2 warnings",
+      "exit_code": 0,
+      "log": "verification\\pdw3-wu5-learner-consent-ack-repair-20260812\\logs\\pytest-wu2-focused.log"
+    },
+    {
+      "name": "Full tests/learner sweep (includes the 3 new WU5 boundary tests)",
+      "command": "python -m pytest tests/learner -q",
+      "result": "330 passed, 2 warnings",
+      "exit_code": 0,
+      "log": "verification\\pdw3-wu5-learner-consent-ack-repair-20260812\\logs\\pytest-learner-sweep.log"
+    }
+  ],
+  "run_note": "All runs used the worktree-local .venv python.exe from A:\\EAP Agent Project\\worktrees\\learner with -p no:cacheprovider and per-run --basetemp under verification\\pdw3-wu5-learner-consent-ack-repair-20260812\\ (removed after runs; logs retained).",
+  "preservation": {
+    "pre_existing_dirty_files": "all pre-existing modified files and pre-existing untracked WU2 files preserved untouched (initial vs final git status delta is limited to tests/learner/test_wu5_consent_ack_boundary.py, verification/pdw3-wu5-learner-consent-ack-repair-20260812/, and docs/integration/pdw3-wu5-learner-consent-ack-repair-20260812/)",
+    "git_operations": "none (no commit, stage, push, PR, merge, promotion, reset, clean, restore, rebase, force update)",
+    "program_control_writes": "none",
+    "other_worktrees": "none touched"
+  },
+  "route_note": "The packet mandated the opencode-go/deepseek-v4-flash/ultra route. No deepseek-v4-flash subagent runtime was available in this execution environment; the bounded packet was executed directly by the Codex executor with PLANNING_DISABLED semantics. No provider substitution occurred (mimo or any other model was not used), and the requested-vs-actual routing discrepancy is recorded honestly.",
+  "generated_at": "2026-08-12T15:45:28Z"
+}

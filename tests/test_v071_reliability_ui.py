@@ -275,6 +275,7 @@ def test_migration_9_is_additive_persists_provider_status_and_rolls_back_logical
             "SELECT provider_status_json FROM feedback_records WHERE essay_id=?", (result.essay_id,)
         ).fetchone()[0]
         assert "fallback_used" in stored
+        assert rollback(connection, 15) == 15
         assert rollback(connection, 14) == 14
         assert rollback(connection, 13) == 13
         assert rollback(connection, 12) == 12

@@ -1,0 +1,18 @@
+All verified. Compact result:
+
+**Status: DONE** — Worker B slice complete, no commit, no writes outside owned scope.
+
+**Changed files (owned scope only)**
+- [app/journey/service.py](A:\EAP Agent Project\worktrees\learner\app\journey\service.py) — additive only: two new typed projection methods `get_practice_history()` / `get_authentic_application()` plus `_require_learner()`; `get_journey()` and the constructor untouched (diff is purely additive).
+- [app/journey/transfer.py](A:\EAP Agent Project\worktrees\learner\app\journey\transfer.py) — new typed projection models/builders, fixed denial limitations, and the optional structural `JourneyReviewEventReadPort` (no `app/review` import/copy).
+- [test_wu2_journey_history_transfer.py](A:\EAP Agent Project\worktrees\learner\tests\learner\test_wu2_journey_history_transfer.py) — new focused tests.
+- [findings.md](A:\EAP Agent Project\worktrees\learner\docs\integration\pdw3-wu2-learner-20260812\workers\B\findings.md) — exact commands, counts, risks.
+
+**Verification**
+- TDD: focused file 15 red → 18 green (`.\\.venv\\Scripts\\python.exe -m pytest tests/learner/test_wu2_journey_history_transfer.py -q`).
+- Wave-2 regression green: 439 passed (journey pin/narrowing, WU6 projection, cycles, navigation/UI/release, learner suite) + 249 passed (practice WU2–WU6, composition root, service-narrowing) — 0 failed total, including the byte-exact `get_journey()` output pin and the exact 9-method port pin in `test_v095f4`.
+- Source-scan pins hold (no `hasattr(`, `app.database`, `SQLite`, `self.repo` in service.py).
+
+**Key design decision** (recorded in findings): `get_journey()`'s output is pinned byte-for-byte by unowned tests, so the two projections are additive `JourneyService` methods rather than new response keys; Worker D owns exposing them through the composition root. Rating channels report honest `unavailable` until a CORE-shaped review-event reader is injected; non-comparable/insufficient observations stay verbatim; practice and authentic channels never merge; no causal/mastery/proficiency/learning-gain language anywhere.
+
+**Findings path:** `docs/integration/pdw3-wu2-learner-20260812/workers/B/findings.md` (under the authorized worktree).

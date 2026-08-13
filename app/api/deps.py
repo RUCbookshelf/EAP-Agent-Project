@@ -21,10 +21,10 @@ from app.api.ports import (
     SubmissionCalibrationReadPort,
     SystemMigrationPort,
 )
+
+
 from app.review.protocols import ReviewEvidenceLookupProtocol
 from app.review.service import ReviewService
-
-
 def get_settings(request: Request):
     return request.app.state.settings
 
@@ -137,6 +137,14 @@ def get_admin_reanalysis(request: Request):
 
 def get_research(request: Request):
     return request.app.state.research
+
+
+def get_acknowledgement_service(request: Request):
+    return request.app.state.acknowledgement_service
+
+
+def get_practice_review_transfer(request: Request):
+    return request.app.state.practice_review_transfer
 
 
 def get_practice_submission_reader(request: Request):

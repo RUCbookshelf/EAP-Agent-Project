@@ -1,0 +1,22 @@
+**Status: DONE** — RETRY-2 Worker A complete, focused suite green, no commits or writes outside owned scope.
+
+**Changed files** (all new, inside owned scope)
+- [review_bridge.py](/A:/EAP%20Agent%20Project/worktrees/learner/app/learner/review_bridge.py) — structural CORE-consumption bridge: learner-owned `PracticeActivityRecord` / `ReviewRequestRecord` (field-identical to CORE contracts), `CoreReviewServicePort` Protocol, rating-space mirror, fail-closed provenance validation, stable-kind `ReviewBridgeError`.
+- [review_transfer.py](/A:/EAP%20Agent%20Project/worktrees/learner/app/practice/review_transfer.py) — `PracticeReviewTransferOrchestrator` with two entry points: practice activity recording (always `evidence_kind="practice"`, never implies review/transfer) and explicitly requested review recording through the injected CORE service.
+- [test_wu2_practice_review_evidence.py](/A:/EAP%20Agent%20Project/worktrees/learner/tests/learner/test_wu2_practice_review_evidence.py) — 40 focused tests.
+- [findings.md](/A:/EAP%20Agent%20Project/worktrees/learner/docs/integration/pdw3-wu2-learner-20260812/workers/A/findings.md) — exact commands, red/green counts, design, risks, INT handoff notes.
+
+**TDD evidence**
+- Red: collection error `ModuleNotFoundError: No module named 'app.learner.review_bridge'` (1 error).
+- Green: `A:\EAP Agent Project\worktrees\learner\.venv\Scripts\python.exe -m pytest tests/learner/test_wu2_practice_review_evidence.py -q --no-header` → `40 passed in 0.13s` (stable across reruns; py_compile clean).
+
+**Key decisions**
+- The CORE `app/review` package is uncommitted in shared-core and not importable here, so the bridge is structural: records mirror CORE field-for-field, and I verified against CORE's service/repository source that the raw CORE `ReviewService` can consume them via attribute access — so INT can inject the real service directly, with no second scheduler/store/database/migration and no `app/infrastructure/learner_review.py` adapter (not needed, per the "if needed" scope).
+- Three rating channels stay separate: LEARNER forwards system-provisional + learner-self verbatim, never computes the final scheduler rating, and carries `rating_rule_version` plus scheduler implementation/version/parameters in provenance; missing/incomplete identity or rule version fails closed.
+- All required fail-closed paths are covered (missing service/item, ownership, invalid rating/status/authentic status, non-UTC time, malformed provenance, conflicts) plus no-normative-language scanning of emitted payloads.
+
+**Risks**
+- Parallel workers B and C write in this same worktree; while they were mid-write, full-directory runs transiently failed in *their* files. Worker A's file is isolated and stable; the quiet-worktree full `tests/learner` run was 250 passed. Findings note this for the coordinator.
+- LearningItem existence/ownership/conflict checks live in the injected CORE service (by design — LEARNER must not duplicate CORE); the fail-closed guarantee is as strong as the injected service, which I verified against CORE source runs its checks before any write.
+
+Findings file: [workers/A/findings.md](/A:/EAP%20Agent%20Project/worktrees/learner/docs/integration/pdw3-wu2-learner-20260812/workers/A/findings.md)

@@ -39,10 +39,5 @@ PLATFORM_API_VERSION: str = "v1"
 # -- Database migration version -------------------------------------
 # This must match migrations.LATEST_MIGRATION_VERSION; drift tests
 # enforce the invariant.
-#
-# 15 = ``review_scheduling_foundation`` (Wave-3 WU1 CORE Review/Scheduling
-# Foundation, additive tables: practice_activities, review_events,
-# learning_item_scheduler_states; Migration 14 remains the protected
-# Wave-2 baseline and is never rewritten).
-PLATFORM_DATABASE_MIGRATION_VERSION: int = 15
+PLATFORM_DATABASE_MIGRATION_VERSION: int = 16
 

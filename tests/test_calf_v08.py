@@ -180,6 +180,7 @@ def test_migration_10_is_additive_and_logical_rollback_preserves_rows(tmp_path):
             row[0] for row in connection.execute("SELECT name FROM sqlite_master WHERE type='table'")
         }
         assert "active_writing_duration_seconds" in {row[1] for row in connection.execute("PRAGMA table_info(essays)")}
+        assert rollback(connection, 15) == 15
         assert rollback(connection, 14) == 14
         assert rollback(connection, 13) == 13
         assert rollback(connection, 12) == 12

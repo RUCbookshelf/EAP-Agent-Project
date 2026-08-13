@@ -31,7 +31,9 @@ def test_build_services_returns_expected_keys(tmp_path):
         "settings", "repository", "analyzer", "submission_service",
         "learner_profiles", "metrics", "configurations", "dashboards",
         "reanalysis", "journey", "revisions", "calf", "research",
-        "review_service", "review_repository",
+        # WU2 learner slices (RETRY-2 Worker D): acknowledgement service and
+        # practice/review bridge are part of the single service graph.
+        "acknowledgement", "practice_review_transfer",
     }
     assert set(svc.keys()) == expected_keys
     assert svc["settings"] is settings
@@ -60,3 +62,12 @@ def test_boots_without_corpus(tmp_path):
     settings = _make_settings(tmp_path)
     api = main_module.create_app(settings)
     assert api.state.repository is not None
+
+
+def test_service_state_assigns_wu2_composition_services(tmp_path):
+    """The WU2 acknowledgement service and practice/review bridge are
+    assigned to app state through the single assignment point."""
+    settings = _make_settings(tmp_path)
+    api = main_module.create_app(settings)
+    assert api.state.acknowledgement_service is not None
+    assert api.state.practice_review_transfer is not None

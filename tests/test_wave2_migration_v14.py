@@ -1,19 +1,22 @@
-"""Wave-2 Goal A migration tests: additive migration 14 under LATEST=15.
+"""Wave-2 Goal A migration tests: additive migration 14 under LATEST=16.
 
 Covers: fresh-DB upgrade to LATEST (15) with the four Wave-2 table families,
 non-destructive one-step logical rollback chain 15->14->13 (ledger only;
 tables and data preserved), idempotent re-apply, legacy-DB upgrade without
 history loss, DEFAULT coverage for minimal inserts, and the v14-era upgrade
-path (a genuine migration-14 database with Wave-2 rows upgraded to 15)
+path (a genuine migration-14 database with Wave-2 rows upgraded to 16)
 preserving data.
 
 Contract (Goal PDW2-A-CORE-PERSISTENCE): migration 14 is additive and
 non-destructive: it creates only new tables (writing_tasks,
 submission_revisions, learning_observations, learning_items) plus indexes.
 It does not alter existing table DDL and does not touch the deferred
-``essays.domain`` discriminator / D-09 lanes. Migration 15 (Wave-3 review
-foundation) is the current LATEST; historical v14-era upgrade paths must
-still prove data preservation.
+``essays.domain`` discriminator / D-09 lanes. Under the user-authorized
+Option A ledger (PDW3-WU2-LEARNER-MIGRATION16-PINS-OPTION-A-20260812),
+Migration 15 is CORE-owned ``review_scheduling_foundation`` and Migration 16
+is LEARNER acknowledgement persistence (``learner_acknowledgement_persistence``);
+16 is the current LATEST. Historical v14-era upgrade paths must still prove
+data preservation.
 """
 
 from __future__ import annotations
@@ -24,11 +27,17 @@ from app.database import Database, LATEST_MIGRATION_VERSION, rollback
 
 MIGRATION_14_NAME = "wave2_revision_loop_and_learner_model"
 MIGRATION_15_NAME = "review_scheduling_foundation"
+MIGRATION_16_NAME = "learner_acknowledgement_persistence"
 WAVE2_TABLES = (
     "writing_tasks",
     "submission_revisions",
     "learning_observations",
     "learning_items",
+)
+CORE_REVIEW_TABLES = (
+    "practice_activities",
+    "review_events",
+    "learning_item_scheduler_states",
 )
 
 
@@ -69,14 +78,24 @@ def test_fresh_db_upgrades_to_latest_with_wave2_tables(tmp_path):
         ).fetchone()
         assert ledger_15 is not None
         assert ledger_15["name"] == MIGRATION_15_NAME
+        ledger_16 = connection.execute(
+            "SELECT name FROM schema_migrations WHERE version=16"
+        ).fetchone()
+        assert ledger_16 is not None
+        assert ledger_16["name"] == MIGRATION_16_NAME
+        assert set(CORE_REVIEW_TABLES) <= names
+        assert "learner_acknowledgements" in names
 
 
-def test_v14_era_wave2_data_survives_one_step_rollbacks_and_latest_upgrade(tmp_path):
+def test_v14_era_wave2_data_survives_one_step_rollbacks_and_latest_upgrade(
+    tmp_path,
+):
     repository = Database(tmp_path / "rollback14.db")
     repository.initialize()
     with repository.connect() as connection:
-        # Construct a genuine migration-14-era database: one-step rollback
-        # from LATEST (15) to 14, then seed Wave-2 rows at version 14.
+        # Construct a genuine migration-14-era database: one-step rollbacks
+        # from LATEST (16) to 15 then 14, then seed Wave-2 rows at version 14.
+        assert rollback(connection, 15) == 15
         assert rollback(connection, 14) == 14
         assert int(connection.execute("PRAGMA user_version").fetchone()[0]) == 14
         _seed_student_and_essays(connection)
@@ -104,7 +123,7 @@ def test_v14_era_wave2_data_survives_one_step_rollbacks_and_latest_upgrade(tmp_p
             ).fetchone()
             is not None
         )
-    # Re-apply: the v14-era Wave-2 rows must survive the 13 -> 14 -> 15
+    # Re-apply: the v14-era Wave-2 rows must survive the 13 -> 14 -> 15 -> 16
     # upgrade (v14-era upgrade path to LATEST preserves data).
     repository.initialize()
     assert repository._system_repository.migration_version() == LATEST_MIGRATION_VERSION

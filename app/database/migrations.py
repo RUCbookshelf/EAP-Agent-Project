@@ -16,19 +16,14 @@ Migration-version note (supersedes the pre-Wave-2 numbering plan):
   learning_observations, learning_items) plus indexes. It is additive and
   non-destructive; rollback 14->13 is a logical ledger-only rollback that
   preserves the new tables and their data.
-- Version 15 is the Wave-3 WU1 shared Review/Scheduling Foundation migration
-  (``review_scheduling_foundation``, Goal PDW3-WU1-CORE-REVIEW-SCHEDULING-
-  FOUNDATION-RESUME-20260811__RETRY-1): additive, non-destructive, creates
-  only NEW tables (practice_activities, review_events,
-  learning_item_scheduler_states) plus indexes. Rollback 15->14 is a logical
-  ledger-only rollback that preserves the new tables and their data; the
-  FSRS memory-scheduling state stays OUTSIDE LearningItem v1 (which keeps
-  its no-FSRS contract) in its own scheduler-state table.
-- Option A (user-authorized 2026-08-12): CORE retains the single global
-  integer Migration 15 identity ``review_scheduling_foundation``. LEARNER
-  acknowledgement persistence will be added later as global Migration 16 in
-  this same runner/ledger; CORE Migration 15 numbering/body must not be
-  changed to accommodate LEARNER (see
+- Option A (user-authorized 2026-08-12): the project keeps ONE shared
+  integer migration ledger. Global Migration 15 is CORE-owned as
+  ``review_scheduling_foundation`` (Wave-3 WU1 shared Review/Scheduling
+  Foundation; body consumed byte-identical from the accepted CORE candidate
+  per PDW3-WU2-CORE-GLOBAL-LEDGER-GUARD-OPTION-A-20260812). LEARNER
+  acknowledgement persistence is global Migration 16
+  (``learner_acknowledgement_persistence``) in this same runner/ledger; the
+  CORE-15 seam must not be renumbered or renamed (see
   ``assert_global_migration_15_identity`` below).
 - The previously planned ``essays.domain`` discriminator (recorded at
   CORE-MIGRATION14-AMENDMENTS, design-review finding F-6) remains DEFERRED
@@ -47,7 +42,7 @@ Asserted by ``tests/test_migration_drop_column_rollback_note.py``.
 """
 
 
-LATEST_MIGRATION_VERSION = 15
+LATEST_MIGRATION_VERSION = 16
 
 
 def _add_column_if_missing(
@@ -1087,6 +1082,64 @@ def _migration_15(connection: sqlite3.Connection) -> None:
     connection.execute("PRAGMA user_version = 15")
 
 
+def _migration_16_learner_acknowledgement_persistence(
+    connection: sqlite3.Connection,
+) -> None:
+    """Additive LEARNER acknowledgement persistence (global Migration 16).
+
+    Goal PDW3-WU2-LEARNER-MIGRATION16-PINS-OPTION-A-20260812 (user-authorized
+    Option A): LEARNER acknowledgement persistence is the global integer
+    Migration 16 after the CORE-owned Migration 15 seam
+    (``review_scheduling_foundation``). Body moved from the former 15 lane
+    unchanged: creates ONE new table (``learner_acknowledgements``) plus two
+    indexes. Strictly additive and non-destructive: no existing
+    table/column/index is altered or dropped, so rollback 16->15 is
+    ledger-only (data preserved) and re-apply is idempotent.
+
+    The ``learning_item_id``, ``practice_activity_id``, and
+    ``review_event_id`` columns are loose structural links (no FK): the
+    CORE ``review_events`` and learner ``learning_items`` tables are
+    integration-owned; ``review_events`` now exists through the CORE-15
+    seam, while learner ``learning_items`` exists through Wave-2.
+    """
+    connection.executescript(
+        """
+        CREATE TABLE IF NOT EXISTS learner_acknowledgements (
+            acknowledgement_id TEXT PRIMARY KEY,
+            learner_id TEXT NOT NULL REFERENCES students(student_id),
+            source_kind TEXT NOT NULL,
+            source_evidence_ids_json TEXT NOT NULL,
+            source_event_ids_json TEXT NOT NULL DEFAULT '[]',
+            learning_item_id TEXT,
+            authentic_evidence_status TEXT
+                CHECK(authentic_evidence_status IN ('insufficient','present')),
+            practice_activity_id TEXT,
+            review_event_id TEXT,
+            evidence_status TEXT NOT NULL,
+            epistemic_status TEXT NOT NULL,
+            outcome_claim TEXT NOT NULL DEFAULT 'none',
+            provenance_json TEXT NOT NULL,
+            policy_version TEXT,
+            model_version TEXT,
+            config_version TEXT,
+            record_version TEXT NOT NULL,
+            acknowledgement_text TEXT NOT NULL,
+            limitations_json TEXT NOT NULL DEFAULT '[]',
+            consent_json TEXT NOT NULL,
+            observed_span_start TEXT,
+            observed_span_end TEXT,
+            recorded_at TEXT NOT NULL,
+            created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+        );
+        CREATE INDEX IF NOT EXISTS idx_learner_acknowledgements_learner
+            ON learner_acknowledgements(learner_id, recorded_at, acknowledgement_id);
+        CREATE INDEX IF NOT EXISTS idx_learner_acknowledgements_kind
+            ON learner_acknowledgements(learner_id, source_kind, recorded_at);
+        """
+    )
+    connection.execute("PRAGMA user_version = 16")
+
+
 MIGRATIONS: dict[int, tuple[str, Callable[[sqlite3.Connection], None]]] = {
     1: ("preserve_v0_1_1_schema", _migration_1),
     2: ("cloud_ready_repository_indexes", _migration_2),
@@ -1103,39 +1156,42 @@ MIGRATIONS: dict[int, tuple[str, Callable[[sqlite3.Connection], None]]] = {
     13: ("practice_target_priority_key_uniqueness", _migration_13),
     14: ("wave2_revision_loop_and_learner_model", _migration_14),
     15: ("review_scheduling_foundation", _migration_15),
+    16: ("learner_acknowledgement_persistence", _migration_16_learner_acknowledgement_persistence),
 }
 
 
 # ---------------------------------------------------------------------------
-# CORE global integer ledger guard / consumer seam (Option A)
+# CORE global integer ledger guard / consumer seam (Option A, composed path)
 #
 # The project keeps ONE shared integer migration ledger:
 # ``schema_migrations.version INTEGER PRIMARY KEY``, the ``MIGRATIONS``
 # registry above, and the ``upgrade``/``rollback`` runners below. Global
-# Migration 15 is CORE-owned as ``review_scheduling_foundation``. The later
-# LEARNER Migration 16 runner MUST consume this same registry and the same
-# ``app.database.upgrade``/``rollback`` on the same sqlite3 connection -- no
+# Migration 15 is CORE-owned as ``review_scheduling_foundation``; its body
+# is consumed byte-identical from the accepted CORE candidate
+# (PDW3-WU2-CORE-GLOBAL-LEDGER-GUARD-OPTION-A-20260812,
+# app/database/migrations.py:1120-1162 seam). LEARNER acknowledgement
+# persistence is global Migration 16 in the SAME registry and the SAME
+# ``app.database.upgrade``/``rollback`` on the SAME sqlite3 connection -- no
 # second migration runner, no second SQLite database, no renumbering of 15.
 # ---------------------------------------------------------------------------
 GLOBAL_MIGRATION_LEDGER_OWNER: str = "CORE"
 GLOBAL_MIGRATION_LEDGER_VERSION_15: int = 15
 GLOBAL_MIGRATION_LEDGER_VERSION_15_NAME: str = "review_scheduling_foundation"
 
+LEARNER_MIGRATION_ACK_PERSISTENCE_VERSION: int = 16
+LEARNER_MIGRATION_ACK_PERSISTENCE_NAME: str = "learner_acknowledgement_persistence"
+
 
 def assert_global_migration_15_identity() -> tuple[int, str]:
-    """Guard that the single global integer ledger still owns version 15.
+    """Guard the CORE-owned version-15 identity in the composed product path.
 
     Returns ``(version, name)`` for the CORE-owned Migration 15 identity.
-    Raises ``RuntimeError`` on any drift (renumbering, rename, duplicate
-    identity, or a missing registry entry), which would break the
-    one-runner/one-ledger contract the later LEARNER Migration 16 consumes.
+    Raises ``RuntimeError`` on any drift (missing registry entry, rename, or
+    duplicate identity). Unlike the CORE-lane guard, this composed-path guard
+    does not require ``LATEST_MIGRATION_VERSION == 15``: in the LEARNER
+    product path the shared ledger intentionally continues to 16, and the
+    version-16 guard below enforces the composed LATEST pin instead.
     """
-    if LATEST_MIGRATION_VERSION != GLOBAL_MIGRATION_LEDGER_VERSION_15:
-        raise RuntimeError(
-            "Global ledger guard failed: LATEST_MIGRATION_VERSION="
-            f"{LATEST_MIGRATION_VERSION}, expected "
-            f"{GLOBAL_MIGRATION_LEDGER_VERSION_15} (CORE Option A)"
-        )
     if GLOBAL_MIGRATION_LEDGER_VERSION_15 not in MIGRATIONS:
         raise RuntimeError(
             "Global ledger guard failed: version "
@@ -1160,6 +1216,46 @@ def assert_global_migration_15_identity() -> tuple[int, str]:
             f"(found at {duplicates})"
         )
     return GLOBAL_MIGRATION_LEDGER_VERSION_15, name
+
+
+def assert_global_migration_16_identity() -> tuple[int, str]:
+    """Guard the LEARNER-owned version-16 identity in the composed path.
+
+    Returns ``(version, name)`` for the LEARNER acknowledgement persistence
+    migration. Raises ``RuntimeError`` if the composed LATEST pin is not 16,
+    the registry entry at 16 is missing/renamed, or the LEARNER identity is
+    duplicated anywhere in the shared ledger.
+    """
+    if LATEST_MIGRATION_VERSION != LEARNER_MIGRATION_ACK_PERSISTENCE_VERSION:
+        raise RuntimeError(
+            "Global ledger guard failed: LATEST_MIGRATION_VERSION="
+            f"{LATEST_MIGRATION_VERSION}, expected "
+            f"{LEARNER_MIGRATION_ACK_PERSISTENCE_VERSION} (LEARNER Option A)"
+        )
+    if LEARNER_MIGRATION_ACK_PERSISTENCE_VERSION not in MIGRATIONS:
+        raise RuntimeError(
+            "Global ledger guard failed: version "
+            f"{LEARNER_MIGRATION_ACK_PERSISTENCE_VERSION} missing from MIGRATIONS"
+        )
+    name = MIGRATIONS[LEARNER_MIGRATION_ACK_PERSISTENCE_VERSION][0]
+    if name != LEARNER_MIGRATION_ACK_PERSISTENCE_NAME:
+        raise RuntimeError(
+            "Global ledger guard failed: MIGRATIONS[16] name="
+            f"{name!r}, expected {LEARNER_MIGRATION_ACK_PERSISTENCE_NAME!r}"
+        )
+    duplicates = [
+        version
+        for version, (migration_name, _) in MIGRATIONS.items()
+        if migration_name == LEARNER_MIGRATION_ACK_PERSISTENCE_NAME
+    ]
+    if duplicates != [LEARNER_MIGRATION_ACK_PERSISTENCE_VERSION]:
+        raise RuntimeError(
+            "Global ledger guard failed: identity "
+            f"{LEARNER_MIGRATION_ACK_PERSISTENCE_NAME!r} is not unique at "
+            f"version {LEARNER_MIGRATION_ACK_PERSISTENCE_VERSION} "
+            f"(found at {duplicates})"
+        )
+    return LEARNER_MIGRATION_ACK_PERSISTENCE_VERSION, name
 
 
 def upgrade(connection: sqlite3.Connection) -> int:
@@ -1187,15 +1283,20 @@ def rollback(connection: sqlite3.Connection, target_version: int) -> int:
     current = int(connection.execute("PRAGMA user_version").fetchone()[0])
     if current == target_version:
         return current
-    if (current, target_version) not in {
-        (15, 14), (14, 13), (13, 12), (12, 11), (11, 10), (10, 9), (9, 8),
-    }:
+    if (current, target_version) not in {(16, 15), (15, 14), (14, 13), (13, 12), (12, 11), (11, 10), (10, 9), (9, 8)}:
         raise ValueError("Only non-destructive one-step rollback is supported.")
     with connection:
-        if current == 15:
-            # Logical rollback: migration 15 only added tables/indexes, so the
-            # rollback is ledger-only; tables and data are preserved and
-            # re-apply (CREATE IF NOT EXISTS) is idempotent.
+        if current == 16:
+            # Logical rollback: migration 16 only added one table and two
+            # indexes, so the rollback is ledger-only; table and data are
+            # preserved and re-apply (CREATE IF NOT EXISTS) is idempotent.
+            # The common ledger DELETE below removes the version-16 row.
+            pass
+        elif current == 15:
+            # Logical rollback: CORE migration 15 only added tables/indexes,
+            # so the rollback is ledger-only; tables and data are preserved
+            # and re-apply (CREATE IF NOT EXISTS) is idempotent. The common
+            # ledger DELETE below removes the version-15 row.
             pass
         elif current == 14:
             # Logical rollback: migration 14 only added tables/indexes, so the

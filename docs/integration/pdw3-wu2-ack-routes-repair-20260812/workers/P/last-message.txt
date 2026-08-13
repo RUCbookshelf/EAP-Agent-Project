@@ -1,0 +1,23 @@
+**Status: DONE** — Repair Worker P completed within the authorized write scope on `dept/feedback-learner` @ `7a9e4b47` (verified; no Git mutation, no Program Control write, no edits outside the eight owned paths).
+
+**Verification** (worktree `.venv`, `PYTHONDONTWRITEBYTECODE=1`, `-p no:cacheprovider`):
+
+```
+pytest tests/learner/test_wu2_persistence_evidence.py tests/learner/test_wu2_acknowledgement.py -q --no-header -p no:cacheprovider
+```
+→ exit 0, **80 passed** (52 new + 28 existing `test_wu2_acknowledgement.py` unchanged and green).
+
+**Files changed (exact scope):**
+- [migrations.py](A:\EAP Agent Project\worktrees\learner\app\database\migrations.py) — additive migration 15 (`learner_acknowledgements` table + 2 indexes, `CREATE ... IF NOT EXISTS` only), registry entry, ledger-only `(15, 14)` rollback; migrations 1–14 untouched.
+- [version.py](A:\EAP Agent Project\worktrees\learner\app\version.py) — `PLATFORM_DATABASE_MIGRATION_VERSION = 15` (single-source invariant confirmed by passing drift tests).
+- [acknowledgement.py](A:\EAP Agent Project\worktrees\learner\app\infrastructure\sqlite\repositories\acknowledgement.py) — new append-only `SQLiteAcknowledgementRepository` + fail-closed `SQLiteAcknowledgementEvidenceLookup` (no status mapping; `submitted` fails closed; versions only from stored fields; missing tables via `sqlite_master` → `None`).
+- [repositories/__init__.py](A:\EAP Agent Project\worktrees\learner\app\infrastructure\sqlite\repositories\__init__.py) — additive exports.
+- [acknowledgement_contracts.py](A:\EAP Agent Project\worktrees\learner\app\learner\acknowledgement_contracts.py) — additive link fields on Request and Record with strip/blank-reject validators.
+- [acknowledgement.py](A:\EAP Agent Project\worktrees\learner\app\learner\acknowledgement.py) — `_check_links` gate (after source records, before text), store-conflict translation, docstring gate list updated.
+- [test_wu2_persistence_evidence.py](A:\EAP Agent Project\worktrees\learner\tests\learner\test_wu2_persistence_evidence.py) — new focused tests.
+- [findings.md](A:\EAP Agent Project\worktrees\learner\docs\integration\pdw3-wu2-ack-routes-repair-20260812\workers\P\findings.md) — durable findings with exact commands, exit codes, pass counts, changed-file list.
+
+**Key decisions (in findings):** `AcknowledgementStoreConflictError` is defined once in the learner core module and imported by the repository (mirroring CORE's protocols pattern) so the service translation actually catches it; loose links have no FK; observed-evidence/review branches fail closed on this branch.
+
+**Compatibility risk for the parent:** bumping the migration version breaks exactly six pre-existing root `== 14` pins in `tests/test_wave2_migration_v14.py`, `tests/test_learner_model_v07.py`, and `tests/test_snapshot_repository_v03.py` (verified: only those six, 30 other migration/version drift tests pass). Those files are outside my packet scope, so reconciliation is the parent's/INT's call — same pattern as CORE WU1. No API/composition wiring was done (packet says the parent composes after I return); the POST route remains fail-closed `503 evidence_unavailable` until then.
+

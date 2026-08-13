@@ -22,13 +22,13 @@ from fastapi.responses import JSONResponse
 from app.analysis import default_metric_registry
 from app.api.routers import system
 from app.api.routers import (
+    acknowledgement,
     admin,
     analysis,
     calf,
     journey,
     practice,
     research,
-    review,
     revisions,
     students,
     submissions,
@@ -38,17 +38,19 @@ from app.api.routers import (
 from app.config import Settings, load_settings
 from app.version import PLATFORM_APPLICATION_VERSION
 from app.database import Database
-from app.infrastructure.sqlite.repositories.review import (
-    SQLiteReviewEvidenceLookup,
+from app.infrastructure.sqlite.repositories import (
+    SQLiteAcknowledgementEvidenceLookup,
+    SQLiteAcknowledgementRepository,
 )
 from app.journey.service import JourneyService
+from app.learner.acknowledgement import AcknowledgementService
+from app.learner.review_bridge import CoreReviewServicePort
+from app.practice.review_transfer import PracticeReviewTransferOrchestrator
 from app.practice.completion import PracticeTargetCompletionService
 from app.practice.service import PracticeService
 from app.practice.target_creation import PracticeTargetCreationService
 from app.lifecycle import ServiceState, lifecycle
 from app.research.service import ResearchDataService
-from app.review.scheduler import FSRSSchedulerAdapter
-from app.review.service import ReviewService
 from app.services import (
     AdminReanalysisService,
     CalfService,
@@ -80,8 +82,8 @@ _BUSINESS_ROUTERS = (
     admin,
     practice,
     journey,
+    acknowledgement,  # WU2-C learner-owned acknowledgement routes (exactly once)
     research,
-    review,  # Wave-3 WU1: shared Review/Scheduling Foundation surface
     writing_intelligence,
     wave2,  # Wave-2 assembly: mounts wave2_modules sub-routers when present
 )
@@ -117,6 +119,7 @@ def _build_services(
     *,
     repository: Database | None = None,
     submission_service: SubmissionService | None = None,
+    core_review_service: CoreReviewServicePort | None = None,
 ) -> dict:
     """Single parameterized service-graph builder.
 
@@ -187,10 +190,24 @@ def _build_services(
         review_repository=repository._research_repository,
         export_reader=repository._research_repository,
     )
-    review_svc = ReviewService(
-        repository=repository._review_repository,
-        scheduler=FSRSSchedulerAdapter(),
-        learning_item_reader=repository._wave2_repository,
+
+    # WU2 learner slices (RETRY-2 Workers A/C + repair workers P/R). The
+    # acknowledgement service is composed with the durable append-only
+    # SQLite store and the learner-scoped evidence lookup over the single
+    # shared database (migration 15). The CORE review service is consumed
+    # only through the typed optional boundary: INT injects the integrated
+    # CORE ReviewService here (never copied, no second store); until then
+    # practice/review writes fail closed with ``core_review_service_missing``.
+    acknowledgement_svc = AcknowledgementService(
+        store=SQLiteAcknowledgementRepository(
+            repository._connection_manager
+        ),
+        evidence_port=SQLiteAcknowledgementEvidenceLookup(
+            repository._connection_manager
+        ),
+    )
+    practice_review_transfer = PracticeReviewTransferOrchestrator(
+        core_review_service=core_review_service,
     )
 
     # Lifecycle metadata
@@ -225,8 +242,8 @@ def _build_services(
         "revisions": rvs,
         "calf": clf,
         "research": research_svc,
-        "review_service": review_svc,
-        "review_repository": repository._review_repository,
+        "acknowledgement": acknowledgement_svc,
+        "practice_review_transfer": practice_review_transfer,
     }
 
 
@@ -248,12 +265,8 @@ def _apply_service_state(api: FastAPI, services: dict) -> None:
     api.state.calf = services["calf"]
     api.state.research = services["research"]
     api.state.journey_service = services["journey"]
-    api.state.review_service = services["review_service"]
-    api.state.review_repository = services["review_repository"]
-    api.state.review_evidence_lookup = SQLiteReviewEvidenceLookup(
-        repository._connection_manager
-    )
-    api.state.review_learning_item_reader = repository._wave2_repository
+    api.state.acknowledgement_service = services["acknowledgement"]
+    api.state.practice_review_transfer = services["practice_review_transfer"]
     api.state.practice_submission_reader = repository._submission_repository
     api.state.practice_reader = repository._practice_repository
     api.state.practice_writer = repository._practice_repository
@@ -486,6 +499,7 @@ def _build_full_app(
     *,
     repository: Database | None = None,
     submission_service: SubmissionService | None = None,
+    core_review_service: CoreReviewServicePort | None = None,
 ) -> FastAPI:
     """Build a fully-initialized app immediately (used by tests).
 
@@ -495,7 +509,12 @@ def _build_full_app(
     if settings is None:
         settings = load_settings()
 
-    svc = _build_services(settings, repository=repository, submission_service=submission_service)
+    svc = _build_services(
+        settings,
+        repository=repository,
+        submission_service=submission_service,
+        core_review_service=core_review_service,
+    )
     services = dict(svc)
 
     lifecycle.transition(ServiceState.READY)
@@ -538,6 +557,7 @@ def create_app(
     *,
     repository: Database | None = None,
     submission_service: SubmissionService | None = None,
+    core_review_service: CoreReviewServicePort | None = None,
 ) -> FastAPI:
     """Create the FastAPI application.
 
@@ -545,8 +565,18 @@ def create_app(
     When settings is provided (test mode): builds fully immediately.
     Optional repository and submission_service allow dependency injection.
     """
-    if settings is not None or repository is not None or submission_service is not None:
-        return _build_full_app(settings, repository=repository, submission_service=submission_service)
+    if (
+        settings is not None
+        or repository is not None
+        or submission_service is not None
+        or core_review_service is not None
+    ):
+        return _build_full_app(
+            settings,
+            repository=repository,
+            submission_service=submission_service,
+            core_review_service=core_review_service,
+        )
 
     api = FastAPI(
         title="Writing Feedback API",

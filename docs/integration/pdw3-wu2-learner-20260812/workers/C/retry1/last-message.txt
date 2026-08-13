@@ -1,0 +1,23 @@
+Worker C complete. Compact result:
+
+**Result: DONE** — `PDW3-WU2-LEARNER-PRACTICE-REVIEW-TRANSFER-20260812__RETRY-2` slice C (positive longitudinal acknowledgement / safety).
+
+What was delivered (all within owned scope, additive-only):
+
+- [acknowledgement_contracts.py](A:/EAP%20Agent%20Project/worktrees/learner/app/learner/acknowledgement_contracts.py) — consent, request, append-only record, result contracts; source-kind discriminator (event/evidence/inference/recommendation/practice activity/result/history signal/outcome); records structurally non-claiming (`epistemic_status` locked to `observed_descriptive`, `outcome_claim` locked to `"none"`).
+- [acknowledgement.py](A:/EAP%20Agent%20Project/worktrees/learner/app/learner/acknowledgement.py) — fail-closed `AcknowledgementService` with 10 fixed gates (port present → consent → evidence ids → source kind → evidence status → provenance → versions → source records incl. ownership/admission/L0 → normative/causal text → duplicate/conflict), injected append-only store + evidence-lookup ports, deterministic record ids. No DB/migration/scheduler/runtime.
+- [acknowledgement.py (router)](A:/EAP%20Agent%20Project/worktrees/learner/app/api/routers/acknowledgement.py) — additive `POST/GET /api/v1/students/{student_id}/acknowledgements`, resolving `request.app.state.acknowledgement_service` (503 when absent); `main.py`/`deps.py` untouched for Worker D.
+- [test_wu2_acknowledgement.py](A:/EAP%20Agent%20Project/worktrees/learner/tests/learner/test_wu2_acknowledgement.py) — 51 tests, TDD (red → green); every failure path asserts no write.
+
+Verification (exact commands recorded in findings):
+
+- Focused: `51 passed` (0 failed)
+- `tests/learner` full suite: `250 passed`
+- Adjacent `tests/shared tests/wave2`: `265 passed`
+- Live router smoke: POST 200; response scans clean; supplied text scans clean in strict mode
+- Baseline re-verified: HEAD still `7a9e4b47` on `dept/feedback-learner`; zero tracked modifications; pre-existing untracked evidence (incl. Workers A/B outputs) untouched; no commit/Program Control action.
+
+Findings: [workers/C/findings.md](A:/EAP%20Agent%20Project/worktrees/learner/docs/integration/pdw3-wu2-learner-20260812/workers/C/findings.md)
+
+Handoff note for Worker D: compose `AcknowledgementService(store, evidence_port=...)` onto `app.state.acknowledgement_service`; learner-facing display of corpus content remains under the FAIL-CLOSED D-08 exposure gate, which this slice does not bypass.
+

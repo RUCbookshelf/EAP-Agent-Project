@@ -329,6 +329,7 @@ class TestMigration13:
             "SELECT target_json FROM practice_targets WHERE practice_target_id='PT000001'"
         ).fetchone()
         assert json.loads(row[0])["source_priority_id"] == "PRIO-18"
+        assert rollback(connection, 15) == 15
         assert rollback(connection, 14) == 14
         assert rollback(connection, 13) == 13
         assert rollback(connection, 12) == 12
