@@ -16,6 +16,20 @@ Migration-version note (supersedes the pre-Wave-2 numbering plan):
   learning_observations, learning_items) plus indexes. It is additive and
   non-destructive; rollback 14->13 is a logical ledger-only rollback that
   preserves the new tables and their data.
+- Version 15 is the Wave-3 WU1 shared Review/Scheduling Foundation migration
+  (``review_scheduling_foundation``, Goal PDW3-WU1-CORE-REVIEW-SCHEDULING-
+  FOUNDATION-RESUME-20260811__RETRY-1): additive, non-destructive, creates
+  only NEW tables (practice_activities, review_events,
+  learning_item_scheduler_states) plus indexes. Rollback 15->14 is a logical
+  ledger-only rollback that preserves the new tables and their data; the
+  FSRS memory-scheduling state stays OUTSIDE LearningItem v1 (which keeps
+  its no-FSRS contract) in its own scheduler-state table.
+- Option A (user-authorized 2026-08-12): CORE retains the single global
+  integer Migration 15 identity ``review_scheduling_foundation``. LEARNER
+  acknowledgement persistence will be added later as global Migration 16 in
+  this same runner/ledger; CORE Migration 15 numbering/body must not be
+  changed to accommodate LEARNER (see
+  ``assert_global_migration_15_identity`` below).
 - The previously planned ``essays.domain`` discriminator (recorded at
   CORE-MIGRATION14-AMENDMENTS, design-review finding F-6) remains DEFERRED
   and trigger-gated; it was NOT implemented. When its implementation Goal
@@ -33,7 +47,7 @@ Asserted by ``tests/test_migration_drop_column_rollback_note.py``.
 """
 
 
-LATEST_MIGRATION_VERSION = 14
+LATEST_MIGRATION_VERSION = 15
 
 
 def _add_column_if_missing(
@@ -958,6 +972,121 @@ def _migration_14(connection: sqlite3.Connection) -> None:
     connection.execute("PRAGMA user_version = 14")
 
 
+def _migration_15(connection: sqlite3.Connection) -> None:
+    """Wave-3 WU1 additive persistence: shared Review/Scheduling Foundation.
+
+    Goal PDW3-WU1-CORE-REVIEW-SCHEDULING-FOUNDATION (final operational
+    retry). Additive and non-destructive: creates only NEW tables and
+    indexes; no existing-table DDL is altered; Migration 14 (the protected
+    Wave-2 baseline) is untouched and historical data is never reinterpreted.
+
+    Entities (minimum qualified set for the Wave-3 learning loop
+    LearningItem -> Practice -> Review Evidence -> FSRS Scheduling):
+
+    - practice_activities: shared activity representation DISTINCT from
+      LearningItem (stable activity identity, learner and LearningItem
+      identity, activity type, creation/source, status, timestamps,
+      provenance, evaluator/evaluation linkage). ``evidence_kind`` keeps
+      practice evidence distinguishable from authentic writing evidence;
+      practice completion never implies authentic transfer
+      (``authentic_evidence_status`` defaults to 'insufficient').
+    - review_events: durable review events preserving learner, LearningItem,
+      relevant PracticeActivity link, system provisional rating, learner
+      self-rating, final scheduler rating, rating-rule version, review
+      timestamp, scheduling result, and provenance. The three rating
+      channels are separate columns: no collapse and no weighted average.
+    - learning_item_scheduler_states: ONE durable FSRS memory-scheduling
+      state per LearningItem (due/stability/difficulty/state/step/last
+      review -- the py-fsrs Card "true equivalent"). FSRS state is strictly
+      memory scheduling state; it is never named or exposed as proficiency,
+      mastery, ability, validated acquisition, or learning gain, and it is
+      never stored inside LearningItem v1 (whose no-FSRS contract is
+      preserved).
+
+    Every review_events row stores scheduler implementation/version,
+    scheduler parameters, rating-rule version, input ratings, prior and
+    resulting scheduler state, and the scheduling result so historical
+    scheduling behavior can be reconstructed deterministically.
+
+    Rollback 15->14 is a logical ledger-only rollback (see ``rollback``);
+    tables and data are preserved and re-apply is idempotent.
+    """
+    connection.executescript(
+        """
+        CREATE TABLE IF NOT EXISTS practice_activities (
+            activity_id TEXT PRIMARY KEY,
+            student_id TEXT NOT NULL,
+            learning_item_id TEXT NOT NULL
+                REFERENCES learning_items(learning_item_id),
+            activity_type TEXT NOT NULL,
+            source TEXT NOT NULL DEFAULT 'practice',
+            status TEXT NOT NULL,
+            occurred_at TEXT NOT NULL,
+            completed_at TEXT,
+            created_at TEXT NOT NULL,
+            provenance_json TEXT NOT NULL DEFAULT '{}',
+            evaluator TEXT,
+            evaluation_id TEXT,
+            evaluator_version TEXT,
+            evidence_kind TEXT NOT NULL DEFAULT 'practice',
+            authentic_evidence_status TEXT NOT NULL DEFAULT 'insufficient'
+                CHECK(authentic_evidence_status IN ('insufficient','present')),
+            limitations_json TEXT NOT NULL DEFAULT '[]'
+        );
+        CREATE INDEX IF NOT EXISTS idx_practice_activities_item
+            ON practice_activities(learning_item_id, created_at, activity_id);
+        CREATE INDEX IF NOT EXISTS idx_practice_activities_student
+            ON practice_activities(student_id, created_at, activity_id);
+        CREATE TABLE IF NOT EXISTS review_events (
+            review_event_id TEXT PRIMARY KEY,
+            student_id TEXT NOT NULL,
+            learning_item_id TEXT NOT NULL
+                REFERENCES learning_items(learning_item_id),
+            practice_activity_id TEXT
+                REFERENCES practice_activities(activity_id),
+            reviewed_at TEXT NOT NULL,
+            system_provisional_rating TEXT NOT NULL
+                CHECK(system_provisional_rating IN ('again','hard','good','easy')),
+            learner_self_rating TEXT
+                CHECK(learner_self_rating IN ('again','hard','good','easy')),
+            final_scheduler_rating TEXT NOT NULL
+                CHECK(final_scheduler_rating IN ('again','hard','good','easy')),
+            rating_rule_version TEXT NOT NULL,
+            scheduler_implementation TEXT NOT NULL,
+            scheduler_version TEXT NOT NULL,
+            scheduler_parameters_json TEXT NOT NULL DEFAULT '{}',
+            state_before_json TEXT NOT NULL,
+            state_after_json TEXT NOT NULL,
+            scheduling_result_json TEXT NOT NULL DEFAULT '{}',
+            authentic_evidence_status TEXT NOT NULL DEFAULT 'insufficient'
+                CHECK(authentic_evidence_status IN ('insufficient','present')),
+            provenance_json TEXT NOT NULL DEFAULT '{}',
+            limitations_json TEXT NOT NULL DEFAULT '[]',
+            recorded_at TEXT NOT NULL
+        );
+        CREATE INDEX IF NOT EXISTS idx_review_events_item
+            ON review_events(learning_item_id, reviewed_at, review_event_id);
+        CREATE INDEX IF NOT EXISTS idx_review_events_student
+            ON review_events(student_id, reviewed_at, review_event_id);
+        CREATE INDEX IF NOT EXISTS idx_review_events_activity
+            ON review_events(practice_activity_id);
+        CREATE TABLE IF NOT EXISTS learning_item_scheduler_states (
+            learning_item_id TEXT PRIMARY KEY
+                REFERENCES learning_items(learning_item_id),
+            student_id TEXT NOT NULL,
+            scheduler_implementation TEXT NOT NULL,
+            scheduler_version TEXT NOT NULL,
+            scheduler_parameters_json TEXT NOT NULL DEFAULT '{}',
+            state_json TEXT NOT NULL,
+            rating_rule_version TEXT NOT NULL,
+            updated_at TEXT NOT NULL,
+            last_review_event_id TEXT NOT NULL
+        );
+        """
+    )
+    connection.execute("PRAGMA user_version = 15")
+
+
 MIGRATIONS: dict[int, tuple[str, Callable[[sqlite3.Connection], None]]] = {
     1: ("preserve_v0_1_1_schema", _migration_1),
     2: ("cloud_ready_repository_indexes", _migration_2),
@@ -973,7 +1102,64 @@ MIGRATIONS: dict[int, tuple[str, Callable[[sqlite3.Connection], None]]] = {
     12: ("practice_and_transfer_foundation", _migration_12),
     13: ("practice_target_priority_key_uniqueness", _migration_13),
     14: ("wave2_revision_loop_and_learner_model", _migration_14),
+    15: ("review_scheduling_foundation", _migration_15),
 }
+
+
+# ---------------------------------------------------------------------------
+# CORE global integer ledger guard / consumer seam (Option A)
+#
+# The project keeps ONE shared integer migration ledger:
+# ``schema_migrations.version INTEGER PRIMARY KEY``, the ``MIGRATIONS``
+# registry above, and the ``upgrade``/``rollback`` runners below. Global
+# Migration 15 is CORE-owned as ``review_scheduling_foundation``. The later
+# LEARNER Migration 16 runner MUST consume this same registry and the same
+# ``app.database.upgrade``/``rollback`` on the same sqlite3 connection -- no
+# second migration runner, no second SQLite database, no renumbering of 15.
+# ---------------------------------------------------------------------------
+GLOBAL_MIGRATION_LEDGER_OWNER: str = "CORE"
+GLOBAL_MIGRATION_LEDGER_VERSION_15: int = 15
+GLOBAL_MIGRATION_LEDGER_VERSION_15_NAME: str = "review_scheduling_foundation"
+
+
+def assert_global_migration_15_identity() -> tuple[int, str]:
+    """Guard that the single global integer ledger still owns version 15.
+
+    Returns ``(version, name)`` for the CORE-owned Migration 15 identity.
+    Raises ``RuntimeError`` on any drift (renumbering, rename, duplicate
+    identity, or a missing registry entry), which would break the
+    one-runner/one-ledger contract the later LEARNER Migration 16 consumes.
+    """
+    if LATEST_MIGRATION_VERSION != GLOBAL_MIGRATION_LEDGER_VERSION_15:
+        raise RuntimeError(
+            "Global ledger guard failed: LATEST_MIGRATION_VERSION="
+            f"{LATEST_MIGRATION_VERSION}, expected "
+            f"{GLOBAL_MIGRATION_LEDGER_VERSION_15} (CORE Option A)"
+        )
+    if GLOBAL_MIGRATION_LEDGER_VERSION_15 not in MIGRATIONS:
+        raise RuntimeError(
+            "Global ledger guard failed: version "
+            f"{GLOBAL_MIGRATION_LEDGER_VERSION_15} missing from MIGRATIONS"
+        )
+    name = MIGRATIONS[GLOBAL_MIGRATION_LEDGER_VERSION_15][0]
+    if name != GLOBAL_MIGRATION_LEDGER_VERSION_15_NAME:
+        raise RuntimeError(
+            "Global ledger guard failed: MIGRATIONS[15] name="
+            f"{name!r}, expected {GLOBAL_MIGRATION_LEDGER_VERSION_15_NAME!r}"
+        )
+    duplicates = [
+        version
+        for version, (migration_name, _) in MIGRATIONS.items()
+        if migration_name == GLOBAL_MIGRATION_LEDGER_VERSION_15_NAME
+    ]
+    if duplicates != [GLOBAL_MIGRATION_LEDGER_VERSION_15]:
+        raise RuntimeError(
+            "Global ledger guard failed: identity "
+            f"{GLOBAL_MIGRATION_LEDGER_VERSION_15_NAME!r} is not unique at "
+            f"version {GLOBAL_MIGRATION_LEDGER_VERSION_15} "
+            f"(found at {duplicates})"
+        )
+    return GLOBAL_MIGRATION_LEDGER_VERSION_15, name
 
 
 def upgrade(connection: sqlite3.Connection) -> int:
@@ -1001,10 +1187,17 @@ def rollback(connection: sqlite3.Connection, target_version: int) -> int:
     current = int(connection.execute("PRAGMA user_version").fetchone()[0])
     if current == target_version:
         return current
-    if (current, target_version) not in {(14, 13), (13, 12), (12, 11), (11, 10), (10, 9), (9, 8)}:
+    if (current, target_version) not in {
+        (15, 14), (14, 13), (13, 12), (12, 11), (11, 10), (10, 9), (9, 8),
+    }:
         raise ValueError("Only non-destructive one-step rollback is supported.")
     with connection:
-        if current == 14:
+        if current == 15:
+            # Logical rollback: migration 15 only added tables/indexes, so the
+            # rollback is ledger-only; tables and data are preserved and
+            # re-apply (CREATE IF NOT EXISTS) is idempotent.
+            pass
+        elif current == 14:
             # Logical rollback: migration 14 only added tables/indexes, so the
             # rollback is ledger-only; tables and data are preserved and
             # re-apply (CREATE IF NOT EXISTS) is idempotent.

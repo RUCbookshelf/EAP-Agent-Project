@@ -1,0 +1,37 @@
+# Captured at preflight before any WU2 edit (2026-08-12, dept/shared-core @ 7a9e4b47)
+# from `git status --short` in A:\EAP Agent Project\worktrees\shared-core.
+ M app/api/main.py
+ M app/database/migrations.py
+ M app/database/repository.py
+ M app/infrastructure/sqlite/repositories/__init__.py
+ M app/version.py
+ M pyproject.toml
+ M tests/test_analysis_runs_v04.py
+ M tests/test_calf_v08.py
+ M tests/test_composition_root.py
+ M tests/test_diagnostic_calibration_v061.py
+ M tests/test_learner_model_v07.py
+ M tests/test_revision_v05.py
+ M tests/test_snapshot_repository_v03.py
+ M tests/test_v06_configuration_dashboard.py
+ M tests/test_v071_reliability_ui.py
+ M tests/test_v095b_router_contract.py
+ M tests/test_v095g_facade_contraction.py
+ M tests/test_v097b_wu3_target_creation.py
+ M tests/test_wave2_migration_v14.py
+ M uv.lock
+ ?? app/api/routers/review.py
+ ?? app/infrastructure/sqlite/repositories/review.py
+ ?? app/review/
+ ?? docs/architecture/ADR-01-single-runtime-extension-contract.md
+ ?? docs/architecture/ADR-02-registry-federation-contract.md
+ ?? docs/architecture/ADR-08-skills-mcp-security-contract.md
+ ?? docs/integration/D09-EPISTEMIC-STATUS-MIGRATION-DESIGN.md
+ ?? docs/integration/PDW1-ALIGN-CORE-B6FCE9-20260809.md
+ ?? docs/integration/PDW1-CORE-RUNTIME-CAPABILITY-V1-REPAIR-2-20260810.md
+ ?? docs/integration/PDW1-CORE-RUNTIME-CAPABILITY-V1-REPAIR-20260810.md
+ ?? docs/integration/PDW2-ALIGN-CORE-59500127-20260810.md
+ ?? docs/integration/PDW2-CORE-PERSISTENCE-REPAIR-PINS-2-20260811.md
+ ?? docs/integration/PDW2-WU2-F1-F3-CORE-COMPOSITION-20260811.md
+ ?? docs/integration/pdw3-wu1-recovery-20260811/
+ ?? tests/review/

@@ -1,0 +1,19 @@
+**Status: DONE**
+
+**Final result:** All Phase-1 tests/review coverage gaps (inventory C2–C5) are closed with real-behavior tests (real fsrs==6.3.2, real SQLite, real composition root — no mocks/stubs/monkeypatch), and R1's fail-closed behavior (D3/D4/D5/C9) is asserted as the final 404/409/403/422 behavior. Suite grew from 53 to 82 tests, all green. No product code, root tests, Program Control, or git state touched; HEAD unchanged at `7a9e4b47`.
+
+**Modified files (exact paths, all under tests/review):**
+- `tests/review/test_scheduler_invalid_transitions.py` (new, 10 tests — Case B/C3; real-library vectors pinned to identity `py-fsrs/6.3.2`, impossible vectors asserted fail-closed, corrupted-persisted-state no-write path)
+- `tests/review/test_review_fail_closed_api.py` (new, 14 tests — R1 regression for D3/D4/D5/C9 + Case H API 422 negatives: invalid rating, invalid authentic_evidence_status, unknown fields, malformed provenance, all with no-write assertions; happy path unchanged)
+- `tests/review/test_migration_15.py` (+1 test — Case D/C2: genuine migration-14 DB via real `MIGRATIONS` 1–14, seeded learning_items/writing_tasks, real `upgrade` to 15, rows and review tables coexist)
+- `tests/review/test_semantic_boundaries.py` (+1 test, AST scan extended with `ability` token after verification — Case G/C5)
+- `tests/review/test_models_and_boundaries.py` (+3 tests — four-way evidence-semantics distinction for ReviewEvent/PracticeActivity, malformed-provenance model rejection — Case G/H/C4/C5)
+
+**Verification results:**
+- Packet command (`PYTHONDONTWRITEBYTECODE=1`): `.venv\Scripts\python.exe -m pytest -p no:cacheprovider --basetemp ... -q tests/review` → **82 passed, 0 failed** (53 pre-existing + 29 added; 2 third-party warnings). Log: `docs/integration/pdw3-wu1-recovery-20260811/repairs/R3-TESTS-REVIEW-COVERAGE/evidence/pytest-review-suite.log`
+- Real-fsrs transition probe (pinned-vector source): `evidence/probe-real-fsrs-transitions.py` / `.log` (exit 0)
+- Ability AST-scan pre-verification: `evidence/probe-ability-ast.log`
+- C2–C5 file:test:line map and findings: `docs/integration/pdw3-wu1-recovery-20260811/repairs/R3-TESTS-REVIEW-COVERAGE/findings.md`
+- git status re-verified after all runs: identical to pre-dispatch baseline; delta limited to `tests/review/**` + this repair directory
+
+**Blockers or risks:** 无. Two non-blocking observations recorded in findings.md: (1) a corrupted scheduler-state row raises the real library's raw `AssertionError` through the service with no write — not yet a stable `ReviewError` kind at the API boundary (would be 500 if ever reached; converting is a product change for a later slice); (2) `card_id=None` gets a wall-clock-derived id from the real library (non-deterministic), so it is documented in the probe but not pinned in tests.

@@ -1,0 +1,31 @@
+Worker A - FSRS version verification (2026-08-11)
+Worktree: A:\EAP Agent Project\worktrees\shared-core
+Runtime: .venv\Scripts\python.exe
+
+1) Packet-mandated command:
+   python -c "import fsrs; print(fsrs.__version__)"
+   Result: FAILS with AttributeError
+     Traceback (most recent call last):
+       File "<string>", line 1, in <module>
+       File "A:\EAP Agent Project\worktrees\shared-core\.venv\Lib\site-packages\fsrs\__init__.py", line 27, in __getattr__
+         raise AttributeError
+   Cause: fsrs 6.3.2 has NO `__version__` attribute; its module-level
+   __getattr__ only lazily provides `Optimizer` and raises AttributeError
+   for everything else (including __version__).
+
+2) Authoritative installed-version check:
+   python -c "import fsrs, importlib.metadata as m; print(m.version('fsrs')); print(fsrs.__file__)"
+   Result:
+     metadata version: 6.3.2
+     file: A:\EAP Agent Project\worktrees\shared-core\.venv\Lib\site-packages\fsrs\__init__.py
+
+3) Pins:
+   pyproject.toml:14  -> "fsrs==6.3.2"
+   uv.lock:249-257    -> name = "fsrs", version = "6.3.2",
+                         source = pypi, sdist/wheel hashes for 6.3.2
+   uv.lock:1494       -> { name = "fsrs", specifier = "==6.3.2" }
+
+Conclusion: installed package IS fsrs 6.3.2. The packet's probe command is
+unusable as written (no __version__ attribute in this package); the app
+adapter reads the version via importlib.metadata (scheduler.py:38-43),
+which returns "6.3.2".

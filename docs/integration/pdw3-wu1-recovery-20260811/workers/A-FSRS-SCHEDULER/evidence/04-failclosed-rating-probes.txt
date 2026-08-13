@@ -1,0 +1,25 @@
+Worker A - Fail-closed probes against app.review.service._coerce_rating, 2026-08-11
+
+probe                   result
+'good'                  -> good (valid)
+<Rating.GOOD: 'good'>   -> good (valid member passthrough)
+'excellent'             -> REJECTED ValueError
+'3'                     -> REJECTED ValueError
+3 (int)                 -> REJECTED ValueError
+None                    -> REJECTED ValueError
+<fsrs.Rating.Good: 3>   -> REJECTED ValueError (foreign enum not coerced)
+''                      -> REJECTED ValueError
+'GOOD'                  -> REJECTED ValueError (case-sensitive, fail-closed)
+
+Additional fail-closed paths verified by tests:
+- unknown learning_item_id -> ReviewError kind=learning_item_not_found,
+  nothing written (test_case_h)
+- authentic_evidence_status not in {insufficient, present} ->
+  ReviewError kind=invalid_authentic_evidence_status (test_case_h)
+- Pydantic extra="forbid" on all review models; SchedulerStateSnapshot
+  state Literal["learning","review","relearning"], step ge=0
+  (test_models_and_boundaries.py)
+- naive/non-UTC reviewed_at: rejected by fsrs review_card itself
+  (ValueError: datetime must be timezone-aware and set to UTC), which
+  raises before any persistence write (service.record_review order:
+  scheduler.review -> repository.record_review_event).

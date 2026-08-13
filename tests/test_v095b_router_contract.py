@@ -23,6 +23,7 @@ from app.api.routers import (
     submissions,
 )
 from app.config import Settings
+from app.database import LATEST_MIGRATION_VERSION
 from app.version import PLATFORM_APPLICATION_VERSION
 from app.lifecycle import ServiceState, lifecycle
 
@@ -117,6 +118,9 @@ EXPECTED_ROUTE_CONTRACT = {
     ("GET", "/api/v1/revisions/{revision_group_id}"),
     ("GET", "/api/v1/revisions/{revision_group_id}/comparison"),
     ("GET", "/api/v1/revisions/{revision_group_id}/trajectory"),
+    ("GET", "/api/v1/review/events/{learning_item_id}"),
+    ("GET", "/api/v1/review/practice-activities/{learning_item_id}"),
+    ("GET", "/api/v1/review/schedule/{learning_item_id}"),
     ("GET", "/api/v1/students/{student_id}"),
     ("GET", "/api/v1/students/{student_id}/calf-trajectories"),
     ("GET", "/api/v1/students/{student_id}/dashboard"),
@@ -188,6 +192,8 @@ EXPECTED_ROUTE_CONTRACT = {
     ("POST", "/api/v1/research/export/run"),
     ("POST", "/api/v1/research/reviews"),
     ("POST", "/api/v1/revisions"),
+    ("POST", "/api/v1/review/events"),
+    ("POST", "/api/v1/review/practice-activities"),
     ("POST", "/api/v1/students/{student_id}/learner-model/preview"),
     ("POST", "/api/v1/students/{student_id}/learner-model/rebuild"),
     ("POST", "/api/v1/submissions"),
@@ -258,7 +264,7 @@ def test_health_contract_healthy_state(tmp_path):
     app = make_test_app(tmp_path)
     lifecycle.transition(ServiceState.READY)
     lifecycle.database_status = "connected"
-    lifecycle.migration_version = 14
+    lifecycle.migration_version = LATEST_MIGRATION_VERSION
     lifecycle.active_configuration = "config-v0.9.0"
     with TestClient(app) as client:
         response = client.get("/api/v1/system/health")
@@ -267,7 +273,7 @@ def test_health_contract_healthy_state(tmp_path):
         body = response.json()
         assert body["status"] == "ok"
         assert body["database_status"] == "connected"
-        assert body["database_migration_version"] == 14
+        assert body["database_migration_version"] == LATEST_MIGRATION_VERSION
         assert body["application_version"] == PLATFORM_APPLICATION_VERSION
         assert "deepseek_api_key" not in response.text.casefold()
 

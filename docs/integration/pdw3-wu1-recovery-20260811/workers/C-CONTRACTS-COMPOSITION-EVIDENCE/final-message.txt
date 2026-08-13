@@ -1,0 +1,18 @@
+**status: DONE_WITH_CONCERNS**
+
+**1. 最终完成结果**：只读审计完成。契约/组合/证据分离核验总体成立，结论 **PASS_WITH_CONCERNS**。审计产物：
+- 发现报告：[findings.md](A:/EAP%20Agent%20Project/worktrees/shared-core/docs/integration/pdw3-wu1-recovery-20260811/workers/C-CONTRACTS-COMPOSITION-EVIDENCE/findings.md)（含 scope、文件行号、A–E 分项结论、blocker、verdict）
+- 证据目录：`docs/integration/pdw3-wu1-recovery-20260811/workers/C-CONTRACTS-COMPOSITION-EVIDENCE/evidence/`（6 份日志 + pytest tmp）
+
+**2. 修改的文件路径**：None（未改动任何产品文件、Program Control 文件或 git 状态；仅在本 worker 目录内新增 findings.md 与 evidence/ 日志）。
+
+**3. 测试或验证结果**：
+- 必测三件套 `test_review_composition.py` / `test_semantic_boundaries.py` / `test_wave2_regression.py`：**10 passed**（`evidence/pytest-required-3files.log`）
+- 扩展套件 + `tests/test_composition_root.py`：**47 passed**（`evidence/pytest-extended-7files.log`）
+- 只读 TestClient 组合探针：5 条 review 路由恰注册一次、18 条 wave2 路由共存、三通道独立、`rating-rule-v1.0.0`/py-fsrs@6.3.2 版本化、422 fail-closed、响应键无语义泄漏、wave2 端点正常 —— 21 项检查全部通过（1 项为探针自身格式误判，复核后通过；`evidence/probe-composition-readonly.log`、`probe-wave2-shape.log`）
+- 边界探针（`evidence/probe-edge-cases*.log`）：不存在 `practice_activity_id` → 未处理 `sqlite3.IntegrityError` 500；重复活动 ID 被 `INSERT OR REPLACE` 静默覆盖；跨学生活动/学习项引用均被接受（200）
+
+**4. 尚未解决的阻塞项或风险**：无 blocker。三项中危关切（详见 findings D1–D3）：① 外键违例未映射为 4xx 而抛 500；② `_require_learning_item` 仅校验存在性，未校验 student/归属一致性（可跨学生记录事件/关联活动）；③ `save_practice_activity` 重复 ID 静默覆盖既往证据。另有一项观察：WU1 中"系统临时评级"与 `authentic_evidence_status` 均由客户端直接提供，暂无服务端评估/真实证据来源，仅可经 provenance 追溯。
+
+不要返回完整日志；只返回最终结果与修改文件路径——已按上述结构返回。
+

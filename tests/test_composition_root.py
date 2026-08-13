@@ -31,6 +31,7 @@ def test_build_services_returns_expected_keys(tmp_path):
         "settings", "repository", "analyzer", "submission_service",
         "learner_profiles", "metrics", "configurations", "dashboards",
         "reanalysis", "journey", "revisions", "calf", "research",
+        "review_service", "review_repository",
     }
     assert set(svc.keys()) == expected_keys
     assert svc["settings"] is settings

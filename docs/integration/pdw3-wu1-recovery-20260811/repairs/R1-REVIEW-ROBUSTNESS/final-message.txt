@@ -1,0 +1,18 @@
+**Status: DONE**
+
+**Final result:** All four confirmed findings repaired on the preserved WU1 partial implementation: D3 (nonexistent `practice_activity_id` → 404 `practice_activity_not_found`, zero rows written), D4 (`save_practice_activity` and the `review_events` insert are now append-only plain INSERTs; duplicates → 409 `practice_activity_already_exists` / `review_event_already_exists`, original rows intact; scheduler-state upsert intentionally remains last-write-wins), D5 (event `student_id` must match the LearningItem owner; `practice_activity_id` must exist and belong to the same student; activity `student_id` must match the owner → 403 kinds), C9 (naive/non-UTC datetimes → 422 via service `invalid_reviewed_at` + router boundary validation, plus narrow `except ValueError → 422` fallback; no 500/traceback). Router stays thin with stable kind→status mapping; no FSRS/migration/composition changes.
+
+**Modified files (exact paths, in-scope only):**
+- `app/api/routers/review.py`
+- `app/review/service.py`
+- `app/review/protocols.py` (additive `ReviewRepositoryConflictError` contract signal)
+- `app/infrastructure/sqlite/repositories/review.py`
+
+No tests, migrations, Program Control, git state, or out-of-scope files touched (R2's parallel root-test edits are its disjoint owned set, observed only).
+
+**Verification results:**
+- `tests/review` full suite (packet command, `PYTHONDONTWRITEBYTECODE=1`): **53 passed, 0 failed** — `docs/integration/pdw3-wu1-recovery-20260811/repairs/R1-REVIEW-ROBUSTNESS/evidence/pytest-review-suite-final.log` (and `pytest-review-suite.log` for the first run).
+- Fail-closed probes via TestClient (`raise_server_exceptions=False`, isolated temp DB): **10/10 passed** (exit 0): happy path 200 with three channels + provenance; FK-nonexistent activity → 404 no write; duplicate PA ID → 409 original row intact; duplicate RE ID → 409 signal original row intact; cross-student event/activity link/mismatched activity owner → 403 no write; naive and non-UTC datetimes → 422 no write; service-level kind checks — `evidence/probe-failclosed.log`, `evidence/probe-failclosed.py`.
+- Findings record: `docs/integration/pdw3-wu1-recovery-20260811/repairs/R1-REVIEW-ROBUSTNESS/findings.md`.
+
+**Blockers or risks:** 无 — no test asserted the old permissive behavior, so no conflicts were recorded for R3; R3 can add regression coverage for the new D3–D5/C9 behavior.

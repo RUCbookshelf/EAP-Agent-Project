@@ -1,0 +1,16 @@
+**status: DONE** (audit verdict **PASS**, no blockers)
+
+**1. 最终完成结果**
+对保存的 CORE WU1 部分实现完成了只读 FSRS/scheduler 审计：调度器调用的是真实安装的 fsrs 6.3.2 API（`Scheduler.review_card(card, rating, review_datetime)`，签名逐项核对通过）；确定性向量与原始 fsrs 6.3.2 直接计算完全一致（如首次 Good → Learning/step1/2.3065/2.118103970459016/+600s）；状态机（New→Learning→Review→Relearning）与 4 级评分映射正确；三个评分通道（系统/学习者/最终）独立存储、保守取小且不做加权平均；rating-rule 与 scheduler 版本/参数作为 provenance 持久化并可确定性重建；非法 rating/state/identity 均 fail-closed（含外部 fsrs 枚举、数字、大写等 9 项探针全部拒绝）；无语义泄漏（快照字段仅为调度字段，AST 扫描通过）；全仓库仅一个 `FSRSSchedulerAdapter`/`ReviewService`（app/api/main.py:187-191）。详细 A/B/C/D/E 分级结论见 [findings.md](A:/EAP Agent Project/worktrees/shared-core/docs/integration/pdw3-wu1-recovery-20260811/workers/A-FSRS-SCHEDULER/findings.md)。
+
+**2. 修改的文件路径**
+None（仅按授权在 worker 目录内创建了 findings.md 与 evidence/；未改动任何产品文件、Program Control 或 git 状态）。
+
+**3. 测试或验证结果**
+- 指定 3 个测试文件：23 passed（evidence/pytest-targeted-001.log）
+- tests/review 全量：53 passed, 2 warnings（evidence/pytest-review-suite-002.log）
+- 版本：`importlib.metadata.version("fsrs")` = 6.3.2，pyproject/uv.lock 均锁 `==6.3.2`（注意：fsrs 6.3.2 无 `__version__` 属性，packet 中的探针命令会抛 AttributeError，已记录于 evidence/01）
+- API 签名核对（evidence/02）、原始库向量交叉验证（evidence/03）、fail-closed 探针（evidence/04）、git/组合根证据（evidence/05）
+
+**4. 尚未解决的阻塞项或风险**
+无阻塞。非阻塞观察：`app/learning_items/` 目录在本 worktree 不存在（范围项 N/A，契约经 `LearningItemReaderProtocol`+Wave-2 仓库满足）；已转交 Worker B/C 的观察项——仓库层 `INSERT OR REPLACE` 覆盖语义、router 对非 `ReviewError`（如 naive datetime）会返回 500 而非 4xx（但均不会产生写入）。

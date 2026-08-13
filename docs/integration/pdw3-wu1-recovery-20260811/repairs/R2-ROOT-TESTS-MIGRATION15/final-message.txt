@@ -1,0 +1,25 @@
+**Status: DONE**
+
+Final result: All 8 in-scope root test files reconciled to LATEST=15 (migration-14 one-step rollback chains extended with the 15→14 step; literal-14 latest assertions replaced with `LATEST_MIGRATION_VERSION`; v14-era Wave-2 data preservation proven by constructing a genuine migration-14 DB via product rollback, seeding, then upgrading to 15). No mocks, no weakened assertions, no product/tests-review/Program Control/git changes.
+
+Modified files (exact paths):
+
+- [test_calf_v08.py](A:/EAP%20Agent%20Project/worktrees/shared-core/tests/test_calf_v08.py)
+- [test_wave2_migration_v14.py](A:/EAP%20Agent%20Project/worktrees/shared-core/tests/test_wave2_migration_v14.py)
+- [test_v06_configuration_dashboard.py](A:/EAP%20Agent%20Project/worktrees/shared-core/tests/test_v06_configuration_dashboard.py)
+- [test_snapshot_repository_v03.py](A:/EAP%20Agent%20Project/worktrees/shared-core/tests/test_snapshot_repository_v03.py)
+- [test_v071_reliability_ui.py](A:/EAP%20Agent%20Project/worktrees/shared-core/tests/test_v071_reliability_ui.py)
+- [test_v095b_router_contract.py](A:/EAP%20Agent%20Project/worktrees/shared-core/tests/test_v095b_router_contract.py)
+- [test_v095g_facade_contraction.py](A:/EAP%20Agent%20Project/worktrees/shared-core/tests/test_v095g_facade_contraction.py)
+- [test_v097b_wu3_target_creation.py](A:/EAP%20Agent%20Project/worktrees/shared-core/tests/test_v097b_wu3_target_creation.py)
+
+Verification (`.venv` pytest, `PYTHONDONTWRITEBYTECODE=1`, basetemp under evidence dir), evidence under `docs/integration/pdw3-wu1-recovery-20260811/repairs/R2-ROOT-TESTS-MIGRATION15/evidence/`:
+
+- Baseline pre-change: 5 failed / 33 passed (`baseline-targeted.log`)
+- All 8 touched files: 110 passed (`run-targeted.log`)
+- Worker D stale-14 probe set: 22 passed (`run-stale-14-probes.log`)
+- Adjacent suites (six pre-updated root files + version single-sourcing + service-narrowing + drop-column note): 96 passed (`run-adjacent-suites.log`)
+
+`rg` sweep: no remaining hard-coded migration-14 latest-semantics expectations in root tests; remaining literal-14 hits are intentional (one-step 15→14 rollback steps, v14-era construction, ledger-name checks, non-migration counts, historical note). Git status delta vs. baseline: only the eight test files plus my evidence/findings; no product file touched.
+
+Blockers or risks: 无 (one non-migration secondary breakage found and fixed in-scope: the pinned route contract in test_v095b_router_contract.py had not been refreshed for the preserved WU1 review router; five review routes added to `EXPECTED_ROUTE_CONTRACT`).

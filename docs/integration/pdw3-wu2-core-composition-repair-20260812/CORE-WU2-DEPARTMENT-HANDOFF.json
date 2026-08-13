@@ -1,0 +1,120 @@
+{
+  "schema_version": "1.0.0",
+  "handoff_id": "PDW3-WU2-CORE-COMPOSITION-REPAIR-20260812__20260812T021212Z__c96b5c",
+  "goal_id": "PDW3-WU2-CORE-COMPOSITION-REPAIR-20260812",
+  "owner": "CORE",
+  "starting_sha": "7a9e4b470c41c0453a3795233f1bdd5c483d80ae",
+  "final_sha": "7a9e4b470c41c0453a3795233f1bdd5c483d80ae",
+  "branch": "dept/shared-core",
+  "worktree": "A:\\EAP Agent Project\\worktrees\\shared-core",
+  "verdict": "GREEN",
+  "tests": [
+    {
+      "name": "focused CORE review composition/repository/fail-closed tests",
+      "result": "PASS",
+      "evidence": [
+        "29 passed across tests/review/test_review_composition.py, test_review_repository.py, test_review_fail_closed_api.py after WU2 edits (42.93s)",
+        "Includes: deps getters resolve composed instances; ReviewService satisfies the LEARNER CoreReviewServicePort structural mirror; learner-shaped record consumed by shared service; learner-scoped evidence lookup; owner/record round trip; close/reopen durability; 503 fail-closed when not composed"
+      ]
+    },
+    {
+      "name": "full tests/review suite after WU2",
+      "result": "PASS",
+      "evidence": [
+        "89 passed (82 baseline + 7 new), 59.25s",
+        "Closure rerun with tests/test_composition_root.py: 93 passed, PYTEST_EXIT=0 (77.47s), evidence/pytest-review-final.log"
+      ]
+    },
+    {
+      "name": "affected Wave-2 regression",
+      "result": "PASS",
+      "evidence": [
+        "206 passed, PYTEST_EXIT=0 (203.17s), evidence/pytest-wave2-final.log",
+        "13 modified root tests + tests/shared/test_version_single_sourcing.py + tests/test_v095f2_service_narrowing.py + tests/test_migration_drop_column_rollback_note.py",
+        "Includes test_composition_root exact-key pin (frozen graph keys unchanged) and test_v095b router-contract pin (5 review routes, no new routes)"
+      ]
+    },
+    {
+      "name": "composition probe",
+      "result": "PASS",
+      "evidence": [
+        "PROBE_EXIT=0, evidence/probe-composition-persistence.log",
+        "graph_keys=15 (frozen pin preserved); state_review_attrs all true; deps_getters_resolve_state=true; review_routes_count=5; single database path; ReviewService exported from app.review; evidence lookup satisfies shared protocol"
+      ]
+    },
+    {
+      "name": "persistence adapter behavior",
+      "result": "PASS",
+      "evidence": [
+        "owner_of resolves PA*/RE* to the owner; unknown/empty/non-review ids -> None; get_record returns the durable model only to its owner (cross-student -> None)",
+        "Close/reopen of the same SQLite file preserves ownership and record lookup",
+        "No migration, no second database/runtime; reads migration-15 families through the single connection manager"
+      ]
+    },
+    {
+      "name": "LEARNER-consumption proof",
+      "result": "PASS",
+      "evidence": [
+        "test_review_service_satisfies_learner_core_review_service_port: isinstance ReviewService against the LEARNER CoreReviewServicePort structural mirror",
+        "test_learner_shaped_practice_record_is_consumed_by_shared_service: LEARNER-shaped PracticeActivityRecord persisted through the real shared service/repository with evidence_kind=practice",
+        "SQLiteReviewEvidenceLookup matches the LEARNER AcknowledgementEvidencePort shape (owner_of/get_record) and satisfies the shared ReviewEvidenceLookupProtocol"
+      ]
+    },
+    {
+      "name": "resource hygiene",
+      "result": "PASS",
+      "evidence": [
+        "git-status-initial.txt vs git-status-final.txt: only in-scope API edits and the new bounded evidence directory differ; every inherited dirty/untracked file preserved",
+        "HEAD unchanged 7a9e4b470c41c0453a3795233f1bdd5c483d80ae; no commit/stage/push/PR/merge/promotion/reset/clean/restore",
+        "No Program Control writes, no other worktree touched, no raw SWECCL access, no stray processes"
+      ]
+    }
+  ],
+  "artifacts": [
+    "A:\\EAP Agent Project\\worktrees\\shared-core\\docs\\integration\\pdw3-wu2-core-composition-repair-20260812\\CORE-WU2-DEPARTMENT-HANDOFF.md",
+    "A:\\EAP Agent Project\\worktrees\\shared-core\\docs\\integration\\pdw3-wu2-core-composition-repair-20260812\\CORE-WU2-DEPARTMENT-HANDOFF.json",
+    "A:\\EAP Agent Project\\worktrees\\shared-core\\docs\\integration\\pdw3-wu2-core-composition-repair-20260812\\evidence\\probe_composition_persistence.py",
+    "A:\\EAP Agent Project\\worktrees\\shared-core\\docs\\integration\\pdw3-wu2-core-composition-repair-20260812\\evidence\\probe-composition-persistence.log",
+    "A:\\EAP Agent Project\\worktrees\\shared-core\\docs\\integration\\pdw3-wu2-core-composition-repair-20260812\\evidence\\pytest-review-final.log",
+    "A:\\EAP Agent Project\\worktrees\\shared-core\\docs\\integration\\pdw3-wu2-core-composition-repair-20260812\\evidence\\pytest-wave2-final.log",
+    "A:\\EAP Agent Project\\worktrees\\shared-core\\docs\\integration\\pdw3-wu2-core-composition-repair-20260812\\evidence\\git-status-initial.txt",
+    "A:\\EAP Agent Project\\worktrees\\shared-core\\docs\\integration\\pdw3-wu2-core-composition-repair-20260812\\evidence\\git-status-final.txt",
+    "A:\\EAP Agent Project\\worktrees\\shared-core\\docs\\integration\\pdw3-wu2-core-composition-repair-20260812\\evidence\\WU2-CHANGED-FILES.md"
+  ],
+  "findings": [
+    "ReviewService availability is real and composed: single _build_services/_apply_service_state path, api.state.review_service/review_repository/review_learning_item_reader/review_evidence_lookup all present; canonical deps getters resolve the same instances and fail closed 503 when not composed.",
+    "Shared persistence boundary provided: SQLiteReviewEvidenceLookup is learner-scoped and fail-closed over PA*/RE* migration-15 families, survives close/reopen, returns CORE PracticeActivity/ReviewEvent models only to owners, and matches the LEARNER AcknowledgementEvidencePort shape without copying LEARNER acknowledgement wording, consent policy, admission semantics, or Journey behavior.",
+    "Downstream LEARNER injection is consumable as stated: ReviewService satisfies the LEARNER CoreReviewServicePort structural mirror and consumes LEARNER-shaped practice records; INT still performs the final composition (core_review_service= in PracticeReviewTransferOrchestrator, evidence_port= in AcknowledgementService).",
+    "Frozen composition contract preserved: the WU1 exact service-graph key pin in tests/test_composition_root.py is untouched (out of write scope); the adapter is composed at the state-assignment point, consistent with existing repository-derived state attributes.",
+    "No new routes, no migration, no second database/runtime/composition root; 5 review routes registered once; route-contract pin passes inside the Wave-2 regression.",
+    "Nested-worker dispatch tooling was unavailable in this session; scopes were kept disjoint and executed directly by the parent under the mandated deepseek/deepseek-v4-flash + ultra routing with PLANNING_DISABLED=1.",
+    "DEPARTMENT GREEN is not integration or promotion; final_sha == starting_sha because no commit was created."
+  ],
+  "blocking_findings": [],
+  "dependencies_unlocked": [
+    "CORE WU2 DEPARTMENT GREEN candidate: shared ReviewService is consumable by LEARNER's typed CoreReviewServicePort and the shared SQLiteReviewEvidenceLookup supplies the acknowledgement evidence-lookup persistence boundary",
+    "INT can now compose core_review_service= and evidence_port= without CORE-side blockers"
+  ],
+  "dependencies_remaining": [
+    "INT composition of the CORE ReviewService into the LEARNER PracticeReviewTransferOrchestrator and the shared evidence lookup into AcknowledgementService",
+    "INT/LEARNER/GOV decision for durable acknowledgement store persistence and migration (no migration authorized in CORE WU2)",
+    "Owner/INT decisions for LEARNER Journey projection route exposure and v095b/v095d route-contract regeneration",
+    "Consolidated INT Wave-3 integration gate",
+    "Exact-SHA promotion decision (WAITING_USER; no promotion authority granted)"
+  ],
+  "repair_owner": null,
+  "integration_required": true,
+  "promotion_eligible": false,
+  "user_decision_required": false,
+  "researcher_decision_required": false,
+  "returned_at": "2026-08-12T02:12:41Z",
+  "gate_authority": null,
+  "gate_evidence": [
+    "89 passed full tests/review (82 baseline + 7 new); closure 93 passed with composition root; 206 passed affected Wave-2 regression",
+    "Composition probe PROBE_EXIT=0: graph keys frozen at 15, state review attrs present, deps getters resolve composed instances, 5 review routes, single SQLite file",
+    "Persistence probe/tests: owner_of/get_record round trips, cross-student and unknown-id fail closed, close/reopen durable",
+    "LEARNER-consumption proof: structural CoreReviewServicePort match + LEARNER-shaped record consumed by the real shared service",
+    "git status initial vs final delta limited to in-scope files; HEAD unchanged 7a9e4b47; no Program Control or other-worktree writes"
+  ],
+  "notes": "Handoff state after submission: HANDOFF_PENDING_ACCEPTANCE. The parent remains open until PROGRAM accepts or rejects; no self-close. final_sha == starting_sha because the candidate remains uncommitted in the authorized worktree (preserved WU1 candidate + bounded WU2 repair). Durable acknowledgement storage itself remains LEARNER/INT-owned (needs a migration, not authorized here); CORE supplies the mechanical shared evidence-lookup adapter only. No promotion authority granted."
+}
