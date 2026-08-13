@@ -1,9 +1,9 @@
 """v0.9.5-D endpoint/client/feature contract enforcement tests.
 
 Validates the approved tests/contracts/api_surface_contract.py against the
-live runtime: the 81 endpoint path+method set, the 56 public client methods,
-their classifications, the Feature -> Port allowance, and the facade
-private-helper import policy.
+live runtime: the 112 endpoint path+method set (reconciled by PDW3-WU5-INT-CONSOLIDATED-WAVE3-INTEGRATION-GATE from the composed merge-preview runtime: 80 INT-baseline + 20 promoted master + 2 approved Journey projections + 2 LEARNER WU2 acknowledgement routes + 8 L2 WU3 adaptive-practice/Tutor routes), the 56 public client
+methods, their classifications, the Feature -> Port allowance, and the
+facade private-helper import policy.
 """
 
 from __future__ import annotations
@@ -154,7 +154,7 @@ def _feature_calls() -> dict[str, set[str]]:
 
 def test_endpoint_set_matches_runtime_and_is_fully_classified():
     runtime = _runtime_endpoints()
-    assert len(runtime) == 81
+    assert len(runtime) == 112
     assert runtime == set(ENDPOINT_CLASSIFICATION)
     for endpoint, classification in ENDPOINT_CLASSIFICATION.items():
         assert classification in {"A", "B", "C"}
