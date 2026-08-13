@@ -17,6 +17,7 @@ Public renderer imports through this facade remain supported.
 
 from __future__ import annotations
 
+from app.ui.features.student.adaptive import render_adaptive_learning_page
 from app.ui.features.student.feedback import render_feedback_content, render_feedback_page
 from app.ui.features.student.formatting import _feedback_category_label, _short_timestamp
 from app.ui.features.student.home import _home_action_contract, render_student_home
@@ -44,6 +45,7 @@ from app.ui.features.student.session import _writing_saved_for_learner
 from app.ui.features.student.writing import render_writing_page
 
 __all__ = [
+    "render_adaptive_learning_page",
     "render_student_home",
     "render_writing_page",
     "render_feedback_content",

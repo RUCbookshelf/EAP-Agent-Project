@@ -479,7 +479,7 @@ class TestJourneyContractsPreserved:
         en = _json.loads((ROOT / "locales/en.json").read_text(encoding="utf-8"))
         zh = _json.loads((ROOT / "locales/zh_CN.json").read_text(encoding="utf-8"))
         assert set(en) == set(zh)
-        assert len(en) == 605
+        assert len(en) == 668
         for key in ("task_type_opinion", "task_type_argumentative",
                     "task_type_discussion", "task_type_problem_solution",
                     "task_type_general_eap"):

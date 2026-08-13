@@ -169,6 +169,104 @@ class Wave2Gateway:
             return {"available": False}
         return build_observation_view(self._wave2.revision_observation(task_id, submission_id))
 
+    # -- Wave-3 WU3 adaptive practice (student-safe views) --------------------
+
+    def adaptive_recommend(self, learner_id: str) -> dict[str, Any]:
+        """Deterministic recommendation + learner choice over qualified
+        activities, rendered as a student-safe view."""
+        if not self.available():
+            return {"available": False, "state": "unavailable"}
+        try:
+            payload = self._wave2.adaptive_recommend(learner_id)
+        except (Wave2ApiClientError, Wave2ApiUnavailable):
+            return {"available": False, "state": "unavailable"}
+        return _build_adaptive_recommendation_view(payload)
+
+    def adaptive_select(
+        self, learner_id: str, recommendation_id: str, activity_id: str,
+    ) -> dict[str, Any]:
+        """Explicit (or default) learner choice; student-safe selection view."""
+        if not self.available():
+            return {"available": False}
+        try:
+            payload = self._wave2.adaptive_select(
+                learner_id, recommendation_id, activity_id,
+            )
+        except (Wave2ApiClientError, Wave2ApiUnavailable):
+            return {"available": False}
+        return _build_adaptive_selection_view(payload)
+
+    def adaptive_evaluate(
+        self, learner_id: str, activity_id: str, response_text: str,
+    ) -> dict[str, Any]:
+        """Deterministic rule-based evaluation; student-safe evaluation view."""
+        if not self.available():
+            return {"available": False}
+        try:
+            payload = self._wave2.adaptive_evaluate(
+                learner_id, activity_id, response_text,
+            )
+        except (Wave2ApiClientError, Wave2ApiUnavailable):
+            return {"available": False}
+        return _build_adaptive_evaluation_view(payload)
+
+    def mini_writing(self, learner_id: str, task_id: str, text: str) -> dict[str, Any]:
+        """Bounded mini-writing through the real pipeline; student-safe view."""
+        if not self.available():
+            return {"available": False}
+        try:
+            payload = self._wave2.mini_writing(learner_id, task_id, text)
+        except (Wave2ApiClientError, Wave2ApiUnavailable):
+            return {"available": False}
+        return _build_mini_writing_view(payload)
+
+    # -- Wave-3 WU3 proactive tutor (student-safe views) ----------------------
+
+    def tutor_recommend(self, learner_id: str) -> dict[str, Any]:
+        """History/due-item grounded Tutor suggestion; student-safe view."""
+        if not self.available():
+            return {"available": False, "state": "unavailable"}
+        try:
+            payload = self._wave2.tutor_recommend(learner_id)
+        except (Wave2ApiClientError, Wave2ApiUnavailable):
+            return {"available": False, "state": "unavailable"}
+        return _build_tutor_recommendation_view(payload)
+
+    def tutor_accept(
+        self, learner_id: str, recommendation_id: str,
+        consent: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        """Accept a Tutor suggestion with explicit consent; student-safe view."""
+        if not self.available():
+            return {"available": False}
+        try:
+            payload = self._wave2.tutor_accept(
+                learner_id, recommendation_id, consent,
+            )
+        except (Wave2ApiClientError, Wave2ApiUnavailable):
+            return {"available": False}
+        return _build_tutor_decision_view(payload)
+
+    def tutor_decline(self, learner_id: str, recommendation_id: str) -> dict[str, Any]:
+        """Decline a Tutor suggestion (side-effect safe); student-safe view."""
+        if not self.available():
+            return {"available": False}
+        try:
+            payload = self._wave2.tutor_decline(learner_id, recommendation_id)
+        except (Wave2ApiClientError, Wave2ApiUnavailable):
+            return {"available": False}
+        return _build_tutor_decision_view(payload)
+
+    def tutor_observation(self, learner_id: str, category: str) -> dict[str, Any]:
+        """Bounded positive observation; student-safe view."""
+        if not self.available():
+            return {"available": False}
+        try:
+            payload = self._wave2.tutor_observation(learner_id, category)
+        except (Wave2ApiClientError, Wave2ApiUnavailable):
+            return {"available": False}
+        return _build_tutor_observation_view(payload)
+
     # -- history / learning --------------------------------------------------
 
     def learning_items(self, learner_id: str) -> dict[str, Any]:
@@ -327,6 +425,180 @@ class Wave2Gateway:
         view["mode"] = "standard"
         view["events"] = events
         return view
+
+
+# ---------------------------------------------------------------------------
+# Wave-3 WU3 student-safe view builders (allowlist only).
+#
+# These map the accepted L2 WU3 payload shapes into display-safe student
+# views. Raw technical internals (target codes, evidence ids, scheduler
+# internals, version labels, provenance ids) never pass through; the same
+# allowlist policy documented in ``contracts.STUDENT_INTERNAL_KEYS`` is
+# enforced here and guarded by the WU4 tests.
+# ---------------------------------------------------------------------------
+
+def _safe_str(value: Any, default: str = "") -> str:
+    return str(value) if value is not None else default
+
+
+def _build_qualified_activity_view(activity: dict[str, Any] | None) -> dict[str, Any]:
+    """One qualified practice activity, allowlisted for the student surface."""
+    activity = activity or {}
+    criteria = activity.get("evaluation_criteria") or {}
+    return {
+        "activity_id": _safe_str(activity.get("activity_id")),
+        "target_label": _safe_str(
+            activity.get("target_label"), _safe_str(activity.get("category"))
+        ),
+        "category": _safe_str(activity.get("category")),
+        "instructions": _safe_str(activity.get("instructions")),
+        "source_text": _safe_str(activity.get("source_text")),
+        "source_submission_id": (
+            int(activity["source_submission_id"])
+            if activity.get("source_submission_id") is not None else None
+        ),
+        "evaluation_criteria": {
+            "completion_criteria": _safe_str(criteria.get("completion_criteria")),
+            "observable_target_criteria": _safe_str(
+                criteria.get("observable_target_criteria")
+            ),
+        },
+        "limitations": list(activity.get("limitations") or []),
+    }
+
+
+def _build_adaptive_recommendation_view(payload: dict[str, Any] | None) -> dict[str, Any]:
+    payload = payload or {}
+    state = payload.get("state")
+    if state not in {"recommended", "insufficient_history", "unavailable"}:
+        state = "unavailable"
+    return {
+        "available": True,
+        "state": state,
+        "recommendation_id": _safe_str(payload.get("recommendation_id")),
+        "default_activity_id": (
+            _safe_str(payload.get("default_activity_id"))
+            if payload.get("default_activity_id") is not None else None
+        ),
+        "learner_choice_allowed": bool(payload.get("learner_choice_allowed", True)),
+        "reasons": list(payload.get("reasons") or []),
+        "qualified_activities": [
+            _build_qualified_activity_view(item)
+            for item in (payload.get("qualified_activities") or [])
+        ],
+        "limitations": list(payload.get("limitations") or []),
+    }
+
+
+def _build_adaptive_selection_view(payload: dict[str, Any] | None) -> dict[str, Any]:
+    payload = payload or {}
+    return {
+        "available": True,
+        "selection_id": _safe_str(payload.get("selection_id")),
+        "recommendation_id": _safe_str(payload.get("recommendation_id")),
+        "activity": _build_qualified_activity_view(payload.get("activity")),
+        "choice_kind": (
+            "default" if payload.get("choice_kind") == "default" else "explicit"
+        ),
+        "limitations": list(payload.get("limitations") or []),
+    }
+
+
+def _build_adaptive_evaluation_view(payload: dict[str, Any] | None) -> dict[str, Any]:
+    payload = payload or {}
+    return {
+        "available": True,
+        "evaluation_id": _safe_str(payload.get("evaluation_id")),
+        "activity_id": _safe_str(payload.get("activity_id")),
+        "completion_status": _safe_str(payload.get("completion_status")),
+        "target_action_status": _safe_str(payload.get("target_action_status")),
+        "evidence_statements": [
+            _safe_str(item) for item in (payload.get("evidence") or [])
+        ],
+        "limitations": list(payload.get("limitations") or []),
+    }
+
+
+def _build_mini_writing_view(payload: dict[str, Any] | None) -> dict[str, Any]:
+    payload = payload or {}
+    return {
+        "available": True,
+        "result_id": _safe_str(payload.get("result_id")),
+        "task_id": _safe_str(payload.get("task_id")),
+        "submission_id": (
+            int(payload["submission_id"])
+            if payload.get("submission_id") is not None else None
+        ),
+        "word_count": int(payload.get("word_count") or 0),
+        "bounded": bool(payload.get("bounded", True)),
+        "limitations": list(payload.get("limitations") or []),
+    }
+
+
+def _build_positive_observation_view(
+    observation: dict[str, Any] | None,
+) -> dict[str, Any] | None:
+    if not observation:
+        return None
+    return {
+        "statement": _safe_str(observation.get("statement")),
+        "non_causal_note": _safe_str(observation.get("non_causal_note")),
+        "evidence_kind": (
+            "authentic_writing"
+            if observation.get("evidence_kind") == "authentic_writing"
+            else "practice"
+        ),
+        "limitations": list(observation.get("limitations") or []),
+    }
+
+
+def _build_tutor_recommendation_view(payload: dict[str, Any] | None) -> dict[str, Any]:
+    payload = payload or {}
+    state = payload.get("state")
+    valid_states = {
+        "due_item", "history_grounded", "insufficient_history",
+        "positive_observation", "unavailable",
+    }
+    if state not in valid_states:
+        state = "unavailable"
+    return {
+        "available": True,
+        "state": state,
+        "recommendation_id": _safe_str(payload.get("recommendation_id")),
+        "categories": [_safe_str(item) for item in (payload.get("categories") or [])],
+        "suggestion": _safe_str(payload.get("suggestion")),
+        "observations": [
+            item for item in (
+                _build_positive_observation_view(obs)
+                for obs in (payload.get("positive_observations") or [])
+            ) if item is not None
+        ],
+        "limitations": list(payload.get("limitations") or []),
+    }
+
+
+def _build_tutor_decision_view(payload: dict[str, Any] | None) -> dict[str, Any]:
+    payload = payload or {}
+    decision = "decline" if payload.get("decision") == "decline" else "accept"
+    return {
+        "available": True,
+        "decision_id": _safe_str(payload.get("decision_id")),
+        "recommendation_id": _safe_str(payload.get("recommendation_id")),
+        "decision": decision,
+        "consent_applied": bool(payload.get("consent_applied", False)),
+        "executed": bool(payload.get("executed", False)),
+        "action": payload.get("action"),
+        "limitations": list(payload.get("limitations") or []),
+    }
+
+
+def _build_tutor_observation_view(payload: dict[str, Any] | None) -> dict[str, Any]:
+    payload = payload or {}
+    return {
+        "available": True,
+        "observation": _build_positive_observation_view(payload.get("observation")),
+        "limitations": list(payload.get("limitations") or []),
+    }
 
 
 __all__ = ["Wave2Gateway"]
